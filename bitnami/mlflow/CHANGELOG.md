@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.6 (2024-06-14)
+## 1.4.7 (2024-06-14)
 
-* [bitnami/mlflow] Release 1.4.6 ([#27176](https://github.com/bitnami/charts/pull/27176))
+* [bitnami/mlflow] Add wait before starting the tests ([#27178](https://github.com/bitnami/charts/pull/27178))
+
+## <small>1.4.6 (2024-06-14)</small>
+
+* [bitnami/mlflow] Release 1.4.6 (#27176) ([7a481b5](https://github.com/bitnami/charts/commit/7a481b5a18c4f62a2fae53d67921a5d28e03dbc4)), closes [#27176](https://github.com/bitnami/charts/issues/27176)
 
 ## <small>1.4.5 (2024-06-12)</small>
 
