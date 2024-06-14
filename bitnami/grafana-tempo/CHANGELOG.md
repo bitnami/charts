@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.5.3 (2024-06-06)
+## 3.5.3 (2024-06-14)
 
 * [bitnami/grafana-tempo] Release 3.5.3 ([#26958](https://github.com/bitnami/charts/pull/26958))
 
