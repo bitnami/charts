@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.6 (2024-06-10)
+## 15.6.7 (2024-06-17)
 
-* [bitnami/mongodb] Add securityContext to generate-tls in replicaset ([#26606](https://github.com/bitnami/charts/pull/26606))
+* [bitnami/mongodb] add space back so script works again ([#27183](https://github.com/bitnami/charts/pull/27183))
+
+## <small>15.6.6 (2024-06-10)</small>
+
+* [bitnami/mongodb] Add securityContext to generate-tls in replicaset (#26606) ([34ff09b](https://github.com/bitnami/charts/commit/34ff09b6e8f797163172059c194250961869e034)), closes [#26606](https://github.com/bitnami/charts/issues/26606)
 
 ## <small>15.6.5 (2024-06-06)</small>
 
