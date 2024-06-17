@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.5 (2024-06-17)
+## 8.2.6 (2024-06-17)
 
-* [bitnami/milvus] Do not expose externalKafka.tls.keyPassword ([#27145](https://github.com/bitnami/charts/pull/27145))
+* [bitnami/milvus] Release 8.2.6 ([#27249](https://github.com/bitnami/charts/pull/27249))
+
+## <small>8.2.5 (2024-06-17)</small>
+
+* [bitnami/milvus] Do not expose externalKafka.tls.keyPassword (#27145) ([c16f98a](https://github.com/bitnami/charts/commit/c16f98a612a9ab4173894bb8c68b069ea74ec1cf)), closes [#27145](https://github.com/bitnami/charts/issues/27145)
 
 ## <small>8.2.4 (2024-06-14)</small>
 
