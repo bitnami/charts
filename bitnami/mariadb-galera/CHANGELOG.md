@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.2.3 (2024-06-06)
+## 13.2.4 (2024-06-17)
 
-* [bitnami/mariadb-galera] Release 13.2.3 ([#26975](https://github.com/bitnami/charts/pull/26975))
+* [bitnami/mariadb-galera] Release 13.2.4 ([#27242](https://github.com/bitnami/charts/pull/27242))
+
+## <small>13.2.3 (2024-06-06)</small>
+
+* [bitnami/mariadb-galera] Release 13.2.3 (#26975) ([684b554](https://github.com/bitnami/charts/commit/684b5549827f85ae8e2adc5b8e6984451f62aa34)), closes [#26975](https://github.com/bitnami/charts/issues/26975)
 
 ## <small>13.2.2 (2024-06-06)</small>
 
