@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.4 (2024-06-14)
+## 2.2.5 (2024-06-17)
 
-* [bitnami/pinniped] Release 2.2.4 ([#27163](https://github.com/bitnami/charts/pull/27163))
+* [bitnami/pinniped] Release 2.2.5 ([#27264](https://github.com/bitnami/charts/pull/27264))
+
+## <small>2.2.4 (2024-06-14)</small>
+
+* [bitnami/pinniped] Release 2.2.4 (#27163) ([4b75c1b](https://github.com/bitnami/charts/commit/4b75c1b43460318c613be9d70d1e743d5566005f)), closes [#27163](https://github.com/bitnami/charts/issues/27163)
 
 ## <small>2.2.3 (2024-06-06)</small>
 
