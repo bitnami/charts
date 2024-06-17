@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.5.4 (2024-06-12)
+## 6.5.5 (2024-06-17)
 
-* [bitnami/fluentd] make initContainer fail if extra gems fail to install ([#27114](https://github.com/bitnami/charts/pull/27114))
+* [bitnami/fluentd] Release 6.5.5 ([#27219](https://github.com/bitnami/charts/pull/27219))
+
+## <small>6.5.4 (2024-06-13)</small>
+
+* [bitnami/fluentd] make initContainer fail if extra gems fail to install (#27114) ([9b88f52](https://github.com/bitnami/charts/commit/9b88f527b1fcd478238daf26780c845acb94ce17)), closes [#27114](https://github.com/bitnami/charts/issues/27114)
 
 ## <small>6.5.3 (2024-06-06)</small>
 
