@@ -58,7 +58,7 @@ Create a container for checking cassandra availability
       . /opt/bitnami/scripts/libos.sh
 
       check_cassandra_keyspace_schema() {
-          echo "SELECT 1" | cqlsh -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD -e "SELECT COUNT(*) FROM ${CASSANDRA_KEYSPACE}.traces"
+          echo "SELECT 1" | cqlsh -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD -e "SELECT keyspace_name FROM system_schema.keyspaces WHERE keyspace_name='${CASSANDRA_KEYSPACE}';"
       }
 
       info "Connecting to the Cassandra instance $CQLSH_HOST:$CQLSH_PORT"

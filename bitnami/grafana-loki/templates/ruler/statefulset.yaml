@@ -73,6 +73,7 @@ spec:
       {{- if .Values.ruler.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ruler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.ruler.enableServiceLinks }}
       initContainers:
         {{- if .Values.ruler.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.ruler.initContainers "context" $) | nindent 8 }}

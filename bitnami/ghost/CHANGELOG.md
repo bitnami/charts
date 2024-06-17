@@ -1,8 +1,20 @@
 # Changelog
 
-## 21.1.7 (2024-06-07)
+## 21.1.10 (2024-06-17)
 
-* [bitnami/ghost] Release 21.1.7 ([#27060](https://github.com/bitnami/charts/pull/27060))
+* [bitnami/ghost] Release 21.1.10 ([#27221](https://github.com/bitnami/charts/pull/27221))
+
+## <small>21.1.9 (2024-06-14)</small>
+
+* [bitnami/ghost] Release 21.1.9 (#27181) ([54c5c6a](https://github.com/bitnami/charts/commit/54c5c6a812760052c84bb47db0d25736f56a026d)), closes [#27181](https://github.com/bitnami/charts/issues/27181)
+
+## <small>21.1.8 (2024-06-11)</small>
+
+* [bitnami/ghost] Release 21.1.8 (#27085) ([45e037e](https://github.com/bitnami/charts/commit/45e037e3de4988c8b92821a3f60afce594a91d54)), closes [#27085](https://github.com/bitnami/charts/issues/27085)
+
+## <small>21.1.7 (2024-06-07)</small>
+
+* [bitnami/ghost] Release 21.1.7 (#27060) ([a4f42c1](https://github.com/bitnami/charts/commit/a4f42c1fe99cd72a3bde5a677229ccafb3308e60)), closes [#27060](https://github.com/bitnami/charts/issues/27060)
 
 ## <small>21.1.6 (2024-06-06)</small>
 

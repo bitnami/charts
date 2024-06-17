@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.3.7 (2024-06-06)
+## 0.3.10 (2024-06-17)
 
-* [bitnami/janusgraph] Release 0.3.7 ([#26963](https://github.com/bitnami/charts/pull/26963))
+* [bitnami/janusgraph] Release 0.3.10 ([#27235](https://github.com/bitnami/charts/pull/27235))
+
+## <small>0.3.9 (2024-06-14)</small>
+
+* [bitnami/janusgraph] Release 0.3.9 (#27170) ([38b4c59](https://github.com/bitnami/charts/commit/38b4c598b430d95d1fe5513490321ffcfcbe1721)), closes [#27170](https://github.com/bitnami/charts/issues/27170)
+
+## <small>0.3.8 (2024-06-12)</small>
+
+* [bitnami/janusgraph] Fix storage password secretName helper function (#27074) ([049dc02](https://github.com/bitnami/charts/commit/049dc029ebcb909073aef82189e29aba73746fc9)), closes [#27074](https://github.com/bitnami/charts/issues/27074)
+
+## <small>0.3.7 (2024-06-06)</small>
+
+* [bitnami/janusgraph] Release 0.3.7 (#26963) ([0ee8a5b](https://github.com/bitnami/charts/commit/0ee8a5bac4ea4b18d6828e7fcfa43259d31d48ca)), closes [#26963](https://github.com/bitnami/charts/issues/26963)
 
 ## <small>0.3.6 (2024-06-06)</small>
 

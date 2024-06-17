@@ -1,8 +1,24 @@
 # Changelog
 
-## 0.1.8 (2024-06-06)
+## 1.0.2 (2024-06-17)
 
-* [bitnami/scylladb] Release 0.1.8 ([#27017](https://github.com/bitnami/charts/pull/27017))
+* [bitnami/scylladb] Release 1.0.2 ([#27279](https://github.com/bitnami/charts/pull/27279))
+
+## <small>1.0.1 (2024-06-14)</small>
+
+* [bitnami/scylladb] Release 1.0.1 (#27167) ([cd3773d](https://github.com/bitnami/charts/commit/cd3773d377c38090f5404866df1321517f1aaf55)), closes [#27167](https://github.com/bitnami/charts/issues/27167)
+
+## 1.0.0 (2024-06-13)
+
+* [bitnami/scylladb] Release 1.0.0 (#27090) ([e576962](https://github.com/bitnami/charts/commit/e5769627c16a06e3a87e4d4d68dee8519f1bdfcd)), closes [#27090](https://github.com/bitnami/charts/issues/27090)
+
+## <small>0.1.9 (2024-06-10)</small>
+
+* [bitnami/scylladb] Release 0.1.9 (#27069) ([fd078f0](https://github.com/bitnami/charts/commit/fd078f0de0947450f4402d7abfd1a0b615babc20)), closes [#27069](https://github.com/bitnami/charts/issues/27069)
+
+## <small>0.1.8 (2024-06-06)</small>
+
+* [bitnami/scylladb] Release 0.1.8 (#27017) ([31b62dd](https://github.com/bitnami/charts/commit/31b62dd5fb41072fe0ac163d9245a48fb6947a00)), closes [#27017](https://github.com/bitnami/charts/issues/27017)
 
 ## <small>0.1.7 (2024-06-05)</small>
 
