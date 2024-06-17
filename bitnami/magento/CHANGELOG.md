@@ -1,8 +1,12 @@
 # Changelog
 
-## 27.2.4 (2024-06-07)
+## 27.2.5 (2024-06-17)
 
-* [bitnami/magento] Release 27.2.4 ([#27045](https://github.com/bitnami/charts/pull/27045))
+* [bitnami/magento] Release 27.2.5 ([#27241](https://github.com/bitnami/charts/pull/27241))
+
+## <small>27.2.4 (2024-06-07)</small>
+
+* [bitnami/magento] Release 27.2.4 (#27045) ([b48165b](https://github.com/bitnami/charts/commit/b48165be80373517f18c7a545b45250a7e3de94f)), closes [#27045](https://github.com/bitnami/charts/issues/27045)
 
 ## <small>27.2.3 (2024-06-06)</small>
 
