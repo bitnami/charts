@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.4 (2024-06-13)
+## 18.2.5 (2024-06-17)
 
-* [bitnami/contour] Release 18.2.4 ([#27152](https://github.com/bitnami/charts/pull/27152))
+* [bitnami/contour] Release 18.2.5 ([#27210](https://github.com/bitnami/charts/pull/27210))
+
+## <small>18.2.4 (2024-06-13)</small>
+
+* [bitnami/contour] Release 18.2.4 (#27152) ([874e69a](https://github.com/bitnami/charts/commit/874e69aba60cb47333de699741e0a61005ff1c6c)), closes [#27152](https://github.com/bitnami/charts/issues/27152)
 
 ## <small>18.2.3 (2024-06-11)</small>
 
