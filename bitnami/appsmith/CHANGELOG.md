@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.3.7 (2024-06-14)
+## 3.3.7 (2024-06-17)
 
 * [bitnami/appsmith] Release 3.3.7 ([#27168](https://github.com/bitnami/charts/pull/27168))
 
