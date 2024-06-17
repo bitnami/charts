@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.7 (2024-06-14)
+## 1.4.8 (2024-06-17)
 
-* [bitnami/mlflow] Add wait before starting the tests ([#27178](https://github.com/bitnami/charts/pull/27178))
+* [bitnami/mlflow] Increase tracking memory ([#27194](https://github.com/bitnami/charts/pull/27194))
+
+## <small>1.4.7 (2024-06-14)</small>
+
+* [bitnami/mlflow] Add wait before starting the tests (#27178) ([10d0f98](https://github.com/bitnami/charts/commit/10d0f984612a0b5fe9b411bc6fec36879823a188)), closes [#27178](https://github.com/bitnami/charts/issues/27178)
 
 ## <small>1.4.6 (2024-06-14)</small>
 
