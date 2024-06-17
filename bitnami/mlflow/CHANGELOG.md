@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.8 (2024-06-17)
+## 1.4.9 (2024-06-17)
 
-* [bitnami/mlflow] Increase tracking memory ([#27194](https://github.com/bitnami/charts/pull/27194))
+* [bitnami/mlflow] Release 1.4.9 ([#27251](https://github.com/bitnami/charts/pull/27251))
+
+## <small>1.4.8 (2024-06-17)</small>
+
+* [bitnami/mlflow] Increase tracking memory (#27194) ([79745a3](https://github.com/bitnami/charts/commit/79745a3cb79a2c249d4653cb9aa666dc692aa84b)), closes [#27194](https://github.com/bitnami/charts/issues/27194)
 
 ## <small>1.4.7 (2024-06-14)</small>
 
