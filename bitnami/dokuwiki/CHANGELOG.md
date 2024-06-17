@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.3 (2024-06-06)
+## 16.2.4 (2024-06-17)
 
-* [bitnami/dokuwiki] Release 16.2.3 ([#26947](https://github.com/bitnami/charts/pull/26947))
+* [bitnami/dokuwiki] Release 16.2.4 ([#27211](https://github.com/bitnami/charts/pull/27211))
+
+## <small>16.2.3 (2024-06-06)</small>
+
+* [bitnami/dokuwiki] Release 16.2.3 (#26947) ([80be9f2](https://github.com/bitnami/charts/commit/80be9f2a9cfd1622c377548bbd42cb927336c579)), closes [#26947](https://github.com/bitnami/charts/issues/26947)
 
 ## <small>16.2.2 (2024-06-04)</small>
 
