@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.9 (2024-06-17)
+## 1.4.10 (2024-06-17)
 
-* [bitnami/mlflow] Release 1.4.9 ([#27251](https://github.com/bitnami/charts/pull/27251))
+* [bitnami/mlflow] Release 1.4.10 ([#27311](https://github.com/bitnami/charts/pull/27311))
+
+## <small>1.4.9 (2024-06-17)</small>
+
+* [bitnami/mlflow] Release 1.4.9 (#27251) ([2e581c1](https://github.com/bitnami/charts/commit/2e581c17d559f6b295d9ccd5b87785220b1a0e4b)), closes [#27251](https://github.com/bitnami/charts/issues/27251)
 
 ## <small>1.4.8 (2024-06-17)</small>
 
