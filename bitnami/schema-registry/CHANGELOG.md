@@ -1,8 +1,16 @@
 # Changelog
 
-## 19.1.3 (2024-06-06)
+## 19.1.5 (2024-06-14)
 
-* [bitnami/schema-registry] Release 19.1.3 ([#27015](https://github.com/bitnami/charts/pull/27015))
+* [bitnami/schema-registry] Release 19.1.5 ([#27169](https://github.com/bitnami/charts/pull/27169))
+
+## <small>19.1.4 (2024-06-13)</small>
+
+* [bitnami/schema-registry] Render imagePullSecrets (#27129) ([155d842](https://github.com/bitnami/charts/commit/155d842a9517619077f82e2589d0104027a4a004)), closes [#27129](https://github.com/bitnami/charts/issues/27129)
+
+## <small>19.1.3 (2024-06-06)</small>
+
+* [bitnami/schema-registry] Release 19.1.3 (#27015) ([9624f24](https://github.com/bitnami/charts/commit/9624f24d3cc8eaf0704ac828729ec486ab0779ac)), closes [#27015](https://github.com/bitnami/charts/issues/27015)
 
 ## <small>19.1.2 (2024-06-05)</small>
 

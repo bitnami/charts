@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.1 (2024-06-06)
+## 11.3.2 (2024-06-14)
 
-* [bitnami/consul] Release 11.3.1 ([#26941](https://github.com/bitnami/charts/pull/26941))
+* [bitnami/consul] Release 11.3.2 ([#27165](https://github.com/bitnami/charts/pull/27165))
+
+## <small>11.3.1 (2024-06-06)</small>
+
+* [bitnami/consul] Release 11.3.1 (#26941) ([7cf8eff](https://github.com/bitnami/charts/commit/7cf8eff87df202faca3442e2eec13eaf0eae9cb2)), closes [#26941](https://github.com/bitnami/charts/issues/26941)
 
 ## 11.3.0 (2024-06-06)
 

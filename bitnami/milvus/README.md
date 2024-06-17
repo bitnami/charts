@@ -172,12 +172,12 @@ externalEtcd:
 
 ### External S3 support
 
-You may want to have mastodon connect to an external storage streaming rather than installing MiniIO(TM) inside your cluster. To achieve this, the chart allows you to specify credentials for an external storage streaming with the [`externalS3` parameter](#parameters). You should also disable the MinIO(TM) installation with the `minio.enabled` option. Here is an example:
+You may want to have Milvus connect to an external storage streaming rather than installing MiniIO(TM) inside your cluster. To achieve this, the chart allows you to specify credentials for an external storage streaming with the [`externalS3` parameter](#parameters). You should also disable the MinIO(TM) installation with the `minio.enabled` option. Here is an example:
 
 ```console
 minio.enabled=false
 externalS3.host=myexternalhost
-exterernalS3.accessKeyID=accesskey
+externalS3.accessKeyID=accesskey
 externalS3.accessKeySecret=secret
 ```
 

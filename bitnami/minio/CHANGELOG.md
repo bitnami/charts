@@ -1,8 +1,16 @@
 # Changelog
 
-## 14.6.7 (2024-06-06)
+## 14.6.9 (2024-06-14)
 
-* [bitnami/minio] Release 14.6.7 ([#27036](https://github.com/bitnami/charts/pull/27036))
+* [bitnami/minio] Release 14.6.9 ([#27179](https://github.com/bitnami/charts/pull/27179))
+
+## <small>14.6.8 (2024-06-14)</small>
+
+* [bitnami/minio] Release 14.6.8 (#27089) ([516eabc](https://github.com/bitnami/charts/commit/516eabc88458967e5c015c3e0dd9672df0345b88)), closes [#27089](https://github.com/bitnami/charts/issues/27089)
+
+## <small>14.6.7 (2024-06-06)</small>
+
+* [bitnami/minio] Release 14.6.7 (#27036) ([d29e462](https://github.com/bitnami/charts/commit/d29e462be37c28d527619b0c9b44c76d1dbaae2c)), closes [#27036](https://github.com/bitnami/charts/issues/27036)
 
 ## <small>14.6.6 (2024-06-06)</small>
 
