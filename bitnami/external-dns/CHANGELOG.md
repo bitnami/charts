@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.5.6 (2024-06-17)
+## 7.5.7 (2024-06-18)
 
-* [bitnami/external-dns] Release 7.5.6 ([#27216](https://github.com/bitnami/charts/pull/27216))
+* [bitnami/external-dns] Release 7.5.7 ([#27341](https://github.com/bitnami/charts/pull/27341))
+
+## <small>7.5.6 (2024-06-17)</small>
+
+* [bitnami/external-dns] Release 7.5.6 (#27216) ([cfe95c9](https://github.com/bitnami/charts/commit/cfe95c9c1d2c0e6b8e3f1b574f992f47486bc91a)), closes [#27216](https://github.com/bitnami/charts/issues/27216)
 
 ## <small>7.5.5 (2024-06-06)</small>
 
