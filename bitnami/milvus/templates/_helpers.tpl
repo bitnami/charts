@@ -816,13 +816,13 @@ Init container definition for waiting for the database to be ready
           local -r s3_host="${1:-?missing s3}"
           local params_cert=""
 
-          if echo $s3_host | grep https; then
-             {{- if and .Values.externalS3.tls.existingSecret .Values.externalS3.tls.caCert }}
-             params_cert="--cacert /bitnami/milvus/conf/cert/minio/client/{{ .Values.externalS3.tls.caCert }}"
-             {{- else }}
-             params_cert="-k"
-             {{- end }}
-          fi
+          {{- if .Values.externalS3.tls.enabled }}
+          {{- if and .Values.externalS3.tls.existingSecret .Values.externalS3.tls.caCert }}
+          params_cert="--cacert /bitnami/milvus/conf/cert/minio/client/{{ .Values.externalS3.tls.caCert }}"
+          {{- else }}
+          params_cert="-k"
+          {{- end }}
+          {{- end }}
 
           if curl --max-time 5 "${s3_host}" $params_cert | grep "RequestId"; then
              return 0
