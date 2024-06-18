@@ -139,7 +139,7 @@ auth:
   ##
   annotations: {}
 ## Custom Certificates
-## @param customCaExistingSecret define a secret for merging certificates to the system trustore like custom ca-certs (pem, pkcs12)
+## @param customCaExistingSecret Name of the secret containing the Keycloak custom CA certificates. The secret will be mounted as a directory and configured using KC_TRUSTSTORE_PATHS.
 ## https://www.keycloak.org/server/keycloak-truststore
 ## Could be created like this: kubectl create secret generic secretName --from-file=./certificateToMerge.pem
 customCaExistingSecret: ""
