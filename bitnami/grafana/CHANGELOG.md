@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.4 (2024-06-17)
+## 11.3.5 (2024-06-18)
 
-* [bitnami/grafana] Release 11.3.4 ([#27230](https://github.com/bitnami/charts/pull/27230))
+* [bitnami/grafana] Release 11.3.5 ([#27354](https://github.com/bitnami/charts/pull/27354))
+
+## <small>11.3.4 (2024-06-17)</small>
+
+* [bitnami/grafana] Release 11.3.4 (#27230) ([d288b6d](https://github.com/bitnami/charts/commit/d288b6dda4e9d3b63e20f28f3765d706cd2dc7d7)), closes [#27230](https://github.com/bitnami/charts/issues/27230)
 
 ## <small>11.3.3 (2024-06-06)</small>
 
