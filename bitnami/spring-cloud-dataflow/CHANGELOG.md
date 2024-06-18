@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.0.7 (2024-06-17)
+## 29.0.8 (2024-06-18)
 
-* [bitnami/spring-cloud-dataflow] Release 29.0.7 ([#27290](https://github.com/bitnami/charts/pull/27290))
+* [bitnami/spring-cloud-dataflow] Release 29.0.8 ([#27420](https://github.com/bitnami/charts/pull/27420))
+
+## <small>29.0.7 (2024-06-17)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 29.0.7 (#27290) ([0863e11](https://github.com/bitnami/charts/commit/0863e113a246c93e3143a9ec6838f43f8adf6df3)), closes [#27290](https://github.com/bitnami/charts/issues/27290)
 
 ## <small>29.0.6 (2024-06-14)</small>
 
