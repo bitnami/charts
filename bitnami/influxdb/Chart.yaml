@@ -10,7 +10,7 @@ annotations:
     - name: azure-cli
       image: docker.io/bitnami/azure-cli:2.61.0-debian-12-r0
     - name: google-cloud-sdk
-      image: docker.io/bitnami/google-cloud-sdk:0.479.0-debian-12-r0
+      image: docker.io/bitnami/google-cloud-sdk:0.480.0-debian-12-r0
     - name: influxdb
       image: docker.io/bitnami/influxdb:2.7.6-debian-12-r12
     - name: os-shell
@@ -37,4 +37,4 @@ maintainers:
 name: influxdb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/influxdb
-version: 6.3.5
+version: 6.3.6

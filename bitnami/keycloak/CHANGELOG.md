@@ -2,7 +2,7 @@
 
 ## 21.4.2 (2024-06-17)
 
-* [bitnami/keycloak] Add custom certs to system truststore ([#27197](https://github.com/bitnami/charts/pull/27197))
+* [bitnami/keycloak] Release 21.4.2 ([#27237](https://github.com/bitnami/charts/pull/27237))
 
 ## <small>21.4.1 (2024-06-06)</small>
 
