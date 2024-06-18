@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.7 (2024-06-17)
+## 15.7.8 (2024-06-17)
 
-* [bitnami/thanos] Release 15.7.7 ([#27294](https://github.com/bitnami/charts/pull/27294))
+* [bitnami/thanos] fix thanos dual-stack receive monitoring ([#27112](https://github.com/bitnami/charts/pull/27112))
+
+## <small>15.7.7 (2024-06-17)</small>
+
+* [bitnami/thanos] Release 15.7.7 (#27294) ([7e339f1](https://github.com/bitnami/charts/commit/7e339f15ac83263c386d63e2bf68cfd82fca7deb)), closes [#27294](https://github.com/bitnami/charts/issues/27294)
 
 ## <small>15.7.6 (2024-06-12)</small>
 
