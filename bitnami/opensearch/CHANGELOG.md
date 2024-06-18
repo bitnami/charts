@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.3 (2024-06-17)
+## 1.2.4 (2024-06-18)
 
-* [bitnami/opensearch] Release 1.2.3 ([#27258](https://github.com/bitnami/charts/pull/27258))
+* [bitnami/opensearch] Release 1.2.4 ([#27395](https://github.com/bitnami/charts/pull/27395))
+
+## <small>1.2.3 (2024-06-17)</small>
+
+* [bitnami/opensearch] Release 1.2.3 (#27258) ([e5cf96c](https://github.com/bitnami/charts/commit/e5cf96cc6883fb8af869740ad2bf3eea1a45b343)), closes [#27258](https://github.com/bitnami/charts/issues/27258)
 
 ## <small>1.2.2 (2024-06-06)</small>
 
