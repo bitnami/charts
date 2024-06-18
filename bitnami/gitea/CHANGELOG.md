@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.5 (2024-06-17)
+## 2.3.6 (2024-06-18)
 
-* [bitnami/gitea] Release 2.3.5 ([#27223](https://github.com/bitnami/charts/pull/27223))
+* [bitnami/gitea] Release 2.3.6 ([#27348](https://github.com/bitnami/charts/pull/27348))
+
+## <small>2.3.5 (2024-06-17)</small>
+
+* [bitnami/gitea] Release 2.3.5 (#27223) ([8933668](https://github.com/bitnami/charts/commit/893366838219b710030bd39c047cf64bdd7cdf6b)), closes [#27223](https://github.com/bitnami/charts/issues/27223)
 
 ## <small>2.3.4 (2024-06-06)</small>
 
