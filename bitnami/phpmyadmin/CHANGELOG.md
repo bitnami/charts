@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.6 (2024-06-17)
+## 16.2.7 (2024-06-18)
 
-* [bitnami/phpmyadmin] Release 16.2.6 ([#27262](https://github.com/bitnami/charts/pull/27262))
+* [bitnami/phpmyadmin] Release 16.2.7 ([#27398](https://github.com/bitnami/charts/pull/27398))
+
+## <small>16.2.6 (2024-06-17)</small>
+
+* [bitnami/phpmyadmin] Release 16.2.6 (#27262) ([f0067a0](https://github.com/bitnami/charts/commit/f0067a0867f5268d7aeea13e99bcbcc550919590)), closes [#27262](https://github.com/bitnami/charts/issues/27262)
 
 ## <small>16.2.5 (2024-06-06)</small>
 
