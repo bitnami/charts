@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.6 (2024-06-17)
+## 0.3.7 (2024-06-18)
 
-* [bitnami/valkey] Release 0.3.6 ([#27296](https://github.com/bitnami/charts/pull/27296))
+* [bitnami/valkey] Release 0.3.7 ([#27425](https://github.com/bitnami/charts/pull/27425))
+
+## <small>0.3.6 (2024-06-17)</small>
+
+* [bitnami/valkey] Release 0.3.6 (#27296) ([96136a1](https://github.com/bitnami/charts/commit/96136a1fef1e0725892d5831490ece7546a2713d)), closes [#27296](https://github.com/bitnami/charts/issues/27296)
 
 ## <small>0.3.5 (2024-06-06)</small>
 
