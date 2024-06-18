@@ -43,7 +43,7 @@ it('allows to use the API to retrieve analytics', () => {
   cy.get('[type="submit"]').click();
   cy.contains('Token successfully generated', {timeout: 60000});
   // Record a new visit in order to generate analytics beforehand
-  cy.request(`${baseURL()}/matomo.php?idsite=1&rec=1`).then((response) => {
+  cy.request('/matomo.php?idsite=1&rec=1').then((response) => {
     expect(response.status).to.eq(200);
   });
   cy.wait(1000);
@@ -52,7 +52,7 @@ it('allows to use the API to retrieve analytics', () => {
     .invoke('text')
     .then((apiToken) => {
       cy.request({
-        url: `${baseURL()}/index.php`,
+        url: '/index.php',
         method: 'GET',
         qs: {
           module: 'API',
