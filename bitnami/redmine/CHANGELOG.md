@@ -1,8 +1,12 @@
 # Changelog
 
-## 28.2.5 (2024-06-17)
+## 28.2.6 (2024-06-18)
 
-* [bitnami/redmine] Release 28.2.5 ([#27278](https://github.com/bitnami/charts/pull/27278))
+* [bitnami/redmine] Release 28.2.6 ([#27412](https://github.com/bitnami/charts/pull/27412))
+
+## <small>28.2.5 (2024-06-17)</small>
+
+* [bitnami/redmine] Release 28.2.5 (#27278) ([ee9bd13](https://github.com/bitnami/charts/commit/ee9bd132bd5b3ecd2929ce1721d5eb6ffe20ef43)), closes [#27278](https://github.com/bitnami/charts/issues/27278)
 
 ## <small>28.2.4 (2024-06-12)</small>
 
