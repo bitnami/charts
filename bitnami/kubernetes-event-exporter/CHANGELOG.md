@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.4 (2024-06-17)
+## 3.2.5 (2024-06-18)
 
-* [bitnami/kubernetes-event-exporter] Release 3.2.4 ([#27239](https://github.com/bitnami/charts/pull/27239))
+* [bitnami/kubernetes-event-exporter] Release 3.2.5 ([#27369](https://github.com/bitnami/charts/pull/27369))
+
+## <small>3.2.4 (2024-06-17)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.4 (#27239) ([60fb9e5](https://github.com/bitnami/charts/commit/60fb9e5b00c0a2f808b598ae9f89e3789b773e52)), closes [#27239](https://github.com/bitnami/charts/issues/27239)
 
 ## <small>3.2.3 (2024-06-06)</small>
 
