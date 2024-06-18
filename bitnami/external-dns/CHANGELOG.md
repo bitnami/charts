@@ -2,7 +2,7 @@
 
 ## 7.5.8 (2024-06-18)
 
-* Fix crd.create=true ([#27434](https://github.com/bitnami/charts/pull/27434))
+* [bitnami/external-dns]  Fix crd.create=true ([#27434](https://github.com/bitnami/charts/pull/27434))
 
 ## <small>7.5.7 (2024-06-18)</small>
 
