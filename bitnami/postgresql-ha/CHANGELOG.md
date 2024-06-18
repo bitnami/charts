@@ -1,8 +1,13 @@
 # Changelog
 
-## 14.2.6 (2024-06-17)
+## 14.2.7 (2024-06-18)
 
-* [bitnami/postgresql-ha] Release 14.2.6 ([#27266](https://github.com/bitnami/charts/pull/27266))
+* [bitnami/postgresql-ha] Release 14.2.7 ([#27400](https://github.com/bitnami/charts/pull/27400))
+
+## <small>14.2.6 (2024-06-17)</small>
+
+* [bitnami/postgresql-ha] Clarify postgresql-ha upgrading (#27124) ([d9f1b37](https://github.com/bitnami/charts/commit/d9f1b3799e265fdb63f823e496045abb1557c05a)), closes [#27124](https://github.com/bitnami/charts/issues/27124)
+* [bitnami/postgresql-ha] Release 14.2.6 (#27266) ([ab2fc07](https://github.com/bitnami/charts/commit/ab2fc0750a6c73368babb261ec68835aeb37c76f)), closes [#27266](https://github.com/bitnami/charts/issues/27266)
 
 ## <small>14.2.5 (2024-06-12)</small>
 
