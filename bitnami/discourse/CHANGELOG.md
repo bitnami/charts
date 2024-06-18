@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.2.5 (2024-06-17)
+## 13.2.6 (2024-06-18)
 
-* [bitnami/discourse] Release 13.2.5 ([#27209](https://github.com/bitnami/charts/pull/27209))
+* [bitnami/discourse] Release 13.2.6 ([#27337](https://github.com/bitnami/charts/pull/27337))
+
+## <small>13.2.5 (2024-06-17)</small>
+
+* [bitnami/discourse] Release 13.2.5 (#27209) ([3d6a8e6](https://github.com/bitnami/charts/commit/3d6a8e6083dfc386e4707ad1c9876395c4dafe54)), closes [#27209](https://github.com/bitnami/charts/issues/27209)
 
 ## <small>13.2.4 (2024-06-06)</small>
 
