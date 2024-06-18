@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.6 (2024-06-17)
+## 18.2.7 (2024-06-18)
 
-* [bitnami/phpbb] Release 18.2.6 ([#27263](https://github.com/bitnami/charts/pull/27263))
+* [bitnami/phpbb] Release 18.2.7 ([#27397](https://github.com/bitnami/charts/pull/27397))
+
+## <small>18.2.6 (2024-06-17)</small>
+
+* [bitnami/phpbb] Release 18.2.6 (#27263) ([91e4d47](https://github.com/bitnami/charts/commit/91e4d47f65563d0bfb3c0610bd780b3cfdfcf083)), closes [#27263](https://github.com/bitnami/charts/issues/27263)
 
 ## <small>18.2.5 (2024-06-06)</small>
 

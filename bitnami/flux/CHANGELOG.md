@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.5 (2024-06-17)
+## 2.3.6 (2024-06-18)
 
-* [bitnami/flux] Release 2.3.5 ([#27220](https://github.com/bitnami/charts/pull/27220))
+* [bitnami/flux] Release 2.3.6 ([#27347](https://github.com/bitnami/charts/pull/27347))
+
+## <small>2.3.5 (2024-06-17)</small>
+
+* [bitnami/flux] Release 2.3.5 (#27220) ([d6a55e1](https://github.com/bitnami/charts/commit/d6a55e1f60c24b69ba980c0e4b1fbe98ddd1ddb6)), closes [#27220](https://github.com/bitnami/charts/issues/27220)
 
 ## <small>2.3.4 (2024-06-06)</small>
 
