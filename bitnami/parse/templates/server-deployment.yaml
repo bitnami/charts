@@ -190,12 +190,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: {{ .Values.server.mountPath }}/users
+            tcpSocket:
               port: http-server
-              httpHeaders:
-                - name: X-Parse-Application-Id
-                  value: {{ .Values.server.appId }}
           {{- end }}
           {{- if .Values.server.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}

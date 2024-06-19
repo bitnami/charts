@@ -80,3 +80,4 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- $passwordValidationErrors = append $passwordValidationErrors $requiredWildflyPasswordError -}}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 {{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

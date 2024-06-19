@@ -120,8 +120,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryFrontend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
           {{- if .Values.queryFrontend.customReadinessProbe }}
@@ -217,7 +216,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryFrontend.query.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /
               port: jaeger-ui
           {{- end }}
           {{- if .Values.queryFrontend.query.customStartupProbe }}

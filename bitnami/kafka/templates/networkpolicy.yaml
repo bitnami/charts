@@ -55,8 +55,8 @@ spec:
         {{- if .Values.externalAccess.enabled }}
         - port: {{ .Values.listeners.external.containerPort }}
         {{- end }}
-        {{- if .Values.metrics.kafka.enabled }}
-        - port: {{ .Values.metrics.kafka.containerPorts.metrics }}
+        {{- if .Values.metrics.jmx.enabled }}
+        - port: {{ .Values.metrics.jmx.containerPorts.metrics }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:

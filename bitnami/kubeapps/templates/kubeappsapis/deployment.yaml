@@ -189,8 +189,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.kubeappsapis.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command: ["grpc_health_probe", "-addr=:{{ .Values.kubeappsapis.containerPorts.http }}"]
+            tcpSocket:
+              port: grpc-http
           {{- end }}
           {{- if .Values.kubeappsapis.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customReadinessProbe "context" $) | nindent 12 }}
@@ -289,8 +289,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ociCatalog.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command: ["grpc_health_probe", "-addr=:{{ .Values.ociCatalog.containerPorts.grpc }}"]
+            tcpSocket:
+              port: grpc-http
           {{- end }}
           {{- if .Values.ociCatalog.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customReadinessProbe "context" $) | nindent 12 }}

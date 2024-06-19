@@ -140,12 +140,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: {{ .Values.server.containerPorts.web }}
-              {{- if .Values.server.secure }}
-              scheme: HTTPS
-              {{- end }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}

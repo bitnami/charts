@@ -119,8 +119,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.vulture.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: {{ .Values.vulture.containerPorts.http }}
           {{- end }}
           {{- if .Values.vulture.customReadinessProbe }}

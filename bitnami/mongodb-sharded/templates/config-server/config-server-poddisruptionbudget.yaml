@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and (not .Values.configsvr.external.host) .Values.configsvr.pdb.create -}}
+{{- if and (not .Values.configsvr.external.host) .Values.configsvr.pdb.create }}
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:

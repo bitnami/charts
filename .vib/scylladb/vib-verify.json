@@ -1,0 +1,66 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/scylladb"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/scylladb"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "scylladb/goss/goss.yaml",
+            "vars_file": "scylladb/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "sts-scylladb"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/scylladb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "scylladb",
+              "username": "test_scylladb",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

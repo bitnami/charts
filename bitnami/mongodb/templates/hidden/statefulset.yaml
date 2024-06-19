@@ -309,7 +309,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hidden.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bitnami/scripts/ping-mongodb.sh
+                - /bitnami/scripts/readiness-probe.sh
           {{- end }}
           {{- if .Values.hidden.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customStartupProbe "context" $) | nindent 12 }}
@@ -436,8 +436,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}

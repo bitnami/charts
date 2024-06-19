@@ -272,6 +272,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Ghost container(s)                                                                                                                                   | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the Ghost pod                                                                                                                                                                | `[]`             |
 | `initContainers`                                    | Add additional init containers to the Ghost pods                                                                                                                                                                  | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
 | `lifecycleHooks`                                    | Add lifecycle hooks to the Ghost deployment                                                                                                                                                                       | `{}`             |
 | `podLabels`                                         | Extra labels for Ghost pods                                                                                                                                                                                       | `{}`             |
 | `podAnnotations`                                    | Annotations for Ghost pods                                                                                                                                                                                        | `{}`             |
@@ -464,6 +467,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/ghost
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 21.0.0
+
+This major updates the MySQL subchart to its newest major, 11.0.0. For more information on this subchart's major, please refer to [Mysql upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1100).
 
 ### To 20.0.0
 

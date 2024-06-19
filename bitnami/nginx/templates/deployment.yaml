@@ -53,6 +53,12 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
+      {{- if .Values.dnsPolicy  }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       hostIPC: {{ .Values.hostIPC }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
@@ -269,8 +275,9 @@ spec:
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled" "path") "context" $) | nindent 12 }}
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
               port: {{ ternary "https" "http" (and (empty .Values.containerPorts.http) (not (empty .Values.containerPorts.https))) }}
           {{- end }}
           {{- if .Values.customStartupProbe }}

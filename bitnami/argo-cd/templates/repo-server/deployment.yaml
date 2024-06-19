@@ -216,8 +216,9 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.repoServer.startupProbe.enabled }}
           startupProbe:
-            tcpSocket:
-              port: {{ .Values.repoServer.containerPorts.repoServer }}
+            httpGet:
+              path: /healthz?full=true
+              port: metrics
             initialDelaySeconds: {{ .Values.repoServer.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.repoServer.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.repoServer.startupProbe.timeoutSeconds }}
@@ -228,8 +229,9 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.repoServer.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              port: {{ .Values.repoServer.containerPorts.repoServer }}
+            httpGet:
+              path: /healthz?full=true
+              port: metrics
             initialDelaySeconds: {{ .Values.repoServer.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.repoServer.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.repoServer.livenessProbe.timeoutSeconds }}
@@ -240,8 +242,9 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.repoServer.readinessProbe.enabled }}
           readinessProbe:
-            tcpSocket:
-              port: {{ .Values.repoServer.containerPorts.repoServer }}
+            httpGet:
+              path: /healthz
+              port: metrics
             initialDelaySeconds: {{ .Values.repoServer.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.repoServer.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.repoServer.readinessProbe.timeoutSeconds }}

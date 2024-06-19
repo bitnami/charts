@@ -152,3 +152,4 @@ From inside the cluster:
 {{- include "grafana-mimir.checkRollingTags" . }}
 {{- include "grafana-mimir.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "alertmanager" "compactor" "distributor" "gateway" "ingester" "overridesExporter" "querier" "queryFrontend" "queryScheduler" "ruler" "storeGateway" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.mimir.image .Values.gateway.image .Values.volumePermissions.image .Values.memcachedchunks.image .Values.memcachedfrontend.image .Values.memcachedindex.image .Values.memcachedmetadata.image) "context" $) }}

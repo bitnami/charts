@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.imageAutomationController.pdb.create }}
+{{- if and .Values.imageAutomationController.enabled .Values.imageAutomationController.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -21,8 +21,8 @@ spec:
   {{- if .Values.imageAutomationController.pdb.minAvailable }}
   minAvailable: {{ .Values.imageAutomationController.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.imageAutomationController.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.imageAutomationController.pdb.maxUnavailable }}
+  {{- if or .Values.imageAutomationController.pdb.maxUnavailable ( not .Values.imageAutomationController.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.imageAutomationController.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.imageAutomationController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

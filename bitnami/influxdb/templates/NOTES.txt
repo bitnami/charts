@@ -141,3 +141,4 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" (list "influxdb") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.backup.uploadProviders.google.image .Values.backup.uploadProviders.azure.image .Values.backup.uploadProviders.aws.image) "context" $) }}

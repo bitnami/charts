@@ -129,3 +129,4 @@ To access the Monitoring svc from outside the cluster, follow the steps below:
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "nats.validateValues" . -}}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.metrics.image) "context" $) }}

@@ -242,8 +242,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /doku.php
+            tcpSocket:
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -294,7 +293,7 @@ spec:
               subPath: apache-logs-dir
             - name: empty-dir
               mountPath: /opt/bitnami/apache/var/run
-              subPath: apcahe-tmp-dir
+              subPath: apache-tmp-dir
             - name: empty-dir
               mountPath: /opt/bitnami/php/etc
               subPath: php-conf-dir

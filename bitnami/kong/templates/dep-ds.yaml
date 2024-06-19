@@ -206,9 +206,9 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kong.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/bash
-                - -ec
-                - /health/kong-container-health.sh
+                - pgrep
+                - -f
+                - 'kong start'
           {{- end }}
           {{- if .Values.kong.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customReadinessProbe "context" $) | nindent 12 }}
@@ -336,10 +336,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ingressController.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressController.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: "/healthz"
+            tcpSocket:
               port: http-health
-              scheme: HTTP
           {{- end }}
           {{- if .Values.ingressController.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customReadinessProbe "context" $) | nindent 12 }}

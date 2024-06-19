@@ -263,41 +263,29 @@ extraConfiguration: |
   log.console.formatter = json
 ```
 
-### Recover the cluster from complete shutdown
+### How to Avoid Deadlocked Deployments After a Cluster-Wide Restart
 
-> IMPORTANT: Some of these procedures can lead to data loss. Always make a backup beforehand.
+RabbitMQ nodes assume their peers come back online within five minutes (by default). When the `OrderedReady` pod management policy is used with a readiness probe that implicitly requires a fully booted node, the deployment can deadlock:
 
-The RabbitMQ cluster is able to support multiple node failures but, in a situation in which all the nodes are brought down at the same time, the cluster might not be able to self-recover.
+- Kubernetes will expect the first node to pass a readiness probe
+- The readiness probe may require a fully booted node
+- The node will fully boot after it detects that its peers have come online
+- Kubernetes will not start any more pods until the first one boots
 
-This happens if the pod management policy of the statefulset is not `Parallel` and the last pod to be running wasn't the first pod of the statefulset. If that happens, update the pod management policy to recover a healthy state:
+The following combination of deployment settings avoids the problem:
 
-```console
-$ kubectl delete statefulset STATEFULSET_NAME --cascade=false
-helm upgrade RELEASE_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq \
-    --set podManagementPolicy=Parallel \
-    --set replicaCount=NUMBER_OF_REPLICAS \
-    --set auth.password=PASSWORD \
-    --set auth.erlangCookie=ERLANG_COOKIE
-```
+- Use `podManagementPolicy: "Parallel"` to boot multiple cluster nodes in parallel
+- Use `rabbitmq-diagnostics ping` for readiness probe
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+To learn more, please consult RabbitMQ documentation guides:
 
-For a faster resyncronization of the nodes, you can temporarily disable the readiness probe by setting `readinessProbe.enabled=false`. Bear in mind that the pods will be exposed before they are actually ready to process requests.
+- [RabbitMQ Clustering guide: Node Restarts](https://www.rabbitmq.com/docs/clustering#restarting)
+- [RabbitMQ Clustering guide: Restarts and Readiness Probes](https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes)
+- [Recommendations](https://www.rabbitmq.com/docs/cluster-formation#peer-discovery-k8s) for Operator-less (DIY) deployments to Kubernetes
 
-If the steps above don't bring the cluster to a healthy state, it could be possible that none of the RabbitMQ nodes think they were the last node to be up during the shutdown. In those cases, you can force the boot of the nodes by specifying the `clustering.forceBoot=true` parameter (which will execute [`rabbitmqctl force_boot`](https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot) in each pod):
+#### Do Not Force Boot Nodes on a Regular Basis
 
-```console
-helm upgrade RELEASE_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq \
-    --set podManagementPolicy=Parallel \
-    --set clustering.forceBoot=true \
-    --set replicaCount=NUMBER_OF_REPLICAS \
-    --set auth.password=PASSWORD \
-    --set auth.erlangCookie=ERLANG_COOKIE
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-More information: [Clustering Guide: Restarting](https://www.rabbitmq.com/clustering.html#restarting).
+Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**. Forced booting is a last resort mechanism in RabbitMQ that helps make remaining cluster nodes recover and rejoin each other after a permanent loss of some of their former peers. In other words, forced booting a node is an emergency event recovery procedure.
 
 ### Known issues
 
@@ -398,7 +386,7 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `auth.tls.existingSecretFullChain`           | Whether or not the existing secret contains the full chain in the certificate (`tls.crt`). Will be used in place of `ca.cert` if `true`.                                | `false`                                           |
 | `auth.tls.overrideCaCertificate`             | Existing secret with certificate content be mounted instead of the `ca.crt` coming from caCertificate or existingSecret/existingSecretFullChain.                        | `""`                                              |
 | `logs`                                       | Path of the RabbitMQ server's Erlang log file. Value for the `RABBITMQ_LOGS` environment variable                                                                       | `-`                                               |
-| `ulimitNofiles`                              | RabbitMQ Max File Descriptors                                                                                                                                           | `65536`                                           |
+| `ulimitNofiles`                              | RabbitMQ Max File Descriptors                                                                                                                                           | `65535`                                           |
 | `maxAvailableSchedulers`                     | RabbitMQ maximum available scheduler threads                                                                                                                            | `""`                                              |
 | `onlineSchedulers`                           | RabbitMQ online scheduler threads                                                                                                                                       | `""`                                              |
 | `memoryHighWatermark.enabled`                | Enable configuring Memory high watermark on RabbitMQ                                                                                                                    | `false`                                           |
@@ -531,9 +519,9 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `customStartupProbe`                                | Define a custom startup probe                                                                                                                                                                                     | `{}`             |
 | `initContainers`                                    | Add init containers to the RabbitMQ pod                                                                                                                                                                           | `[]`             |
 | `sidecars`                                          | Add sidecar containers to the RabbitMQ pod                                                                                                                                                                        | `[]`             |
-| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `false`          |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `1`              |
-| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                    | `""`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### RBAC parameters
 
@@ -623,10 +611,12 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                     |
 | `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.                        | `true`                   |
 | `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.                              | `{}`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                        | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                    | `{}`                     |
 
 ### Metrics Parameters
 

@@ -74,7 +74,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.webdav.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.webdav.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.webdav.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.webdav.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.webdav.terminationGracePeriodSeconds }}
@@ -147,8 +147,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.webdav.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - webdav
           {{- end }}
           {{- if .Values.webdav.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customReadinessProbe "context" $) | nindent 12 }}

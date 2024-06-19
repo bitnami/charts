@@ -44,8 +44,13 @@ data:
     log.dir={{ printf "%s/data" .Values.broker.persistence.mountPath }}
     # Kafka application logs directory
     logs.dir={{ .Values.broker.logPersistence.mountPath }}
+
+    # Common Kafka Configuration
     {{- include "kafka.commonConfig" . | nindent 4 }}
+
+    # Custom Kafka Configuration
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraConfig "context" $ ) | nindent 4 }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.broker.extraConfig "context" $ ) | nindent 4 }}
+    {{- include "kafka.properties.render" (merge .Values.broker.extraConfigYaml .Values.extraConfigYaml ) | nindent 4 }}
   {{- end }}
 {{- end }}

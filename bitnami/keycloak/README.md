@@ -152,13 +152,15 @@ adminIngress:
   enabled: true
   hostname: keycloak-admin.example.com
 keycloakConfigCli:
-  configuration: |
-    {
-      "realm" : "master",
-      "attributes": {
-        "frontendUrl": "https://keycloak-admin.example.com"
+  enabled: true
+  configuration:
+    master.json: |
+      {
+        "realm" : "master",
+        "attributes": {
+          "frontendUrl": "https://keycloak-admin.example.com"
+        }
       }
-    }
 ```
 
 ### Configure TLS Secrets for use with Ingress
@@ -207,12 +209,11 @@ If your ingress controller has the SSL Termination, you should set `proxy` to `e
 
 This chart provides several ways to manage passwords:
 
-- Values passed to the chart: In this scenario, a new secret including all the passwords will be created during the chart installation. When upgrading, it is necessary to provide the secrets to the chart as shown below. Replace the KEYCLOAK_ADMIN_PASSWORD, KEYCLOAK_MANAGEMENT_PASSWORD, POSTGRESQL_PASSWORD and POSTGRESQL_PVC placeholders with the correct passwords and PVC name.
+- Values passed to the chart: In this scenario, a new secret including all the passwords will be created during the chart installation. When upgrading, it is necessary to provide the secrets to the chart as shown below. Replace the KEYCLOAK_ADMIN_PASSWORD, POSTGRESQL_PASSWORD and POSTGRESQL_PVC placeholders with the correct passwords and PVC name.
 
 ```console
 helm upgrade keycloak bitnami/keycloak \
   --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD \
-  --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD \
   --set postgresql.postgresqlPassword=POSTGRESQL_PASSWORD \
   --set postgresql.persistence.existingClaim=POSTGRESQL_PVC
 ```
@@ -513,8 +514,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 | Name                                                        | Description                                                                                  | Value   |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------- |
-| `pdb.create`                                                | Enable/disable a Pod Disruption Budget creation                                              | `false` |
-| `pdb.minAvailable`                                          | Minimum number/percentage of pods that should remain scheduled                               | `1`     |
+| `pdb.create`                                                | Enable/disable a Pod Disruption Budget creation                                              | `true`  |
+| `pdb.minAvailable`                                          | Minimum number/percentage of pods that should remain scheduled                               | `""`    |
 | `pdb.maxUnavailable`                                        | Maximum number/percentage of pods that may be made unavailable                               | `""`    |
 | `autoscaling.enabled`                                       | Enable autoscaling for Keycloak                                                              | `false` |
 | `autoscaling.minReplicas`                                   | Minimum number of Keycloak replicas                                                          | `1`     |

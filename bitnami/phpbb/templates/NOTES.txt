@@ -88,3 +88,4 @@ WARNING: Review values for the following password in the command, if they are co
   {{- include "common.validations.values.multiple.empty" (dict "required" (list $requiredExternalPassword) "context" $) -}}
 {{- end -}}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

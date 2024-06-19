@@ -303,8 +303,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.master.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: {{ .Values.master.containerPorts.http }}
           {{- end }}
           {{- if .Values.master.customReadinessProbe }}

@@ -81,6 +81,7 @@ spec:
             - -c
           args:
             - |-
+              set -e
               cd /tmp
 
               # install extra gems
@@ -222,9 +223,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.aggregator.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.aggregator.livenessProbe.httpGet.path }}
-              port: {{ .Values.aggregator.livenessProbe.httpGet.port }}
+            tcpSocket:
+              port: {{ .Values.aggregator.livenessProbe.tcpSocket.port }}
             initialDelaySeconds: {{ .Values.aggregator.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.aggregator.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.aggregator.livenessProbe.timeoutSeconds }}

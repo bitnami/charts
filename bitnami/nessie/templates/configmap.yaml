@@ -1,0 +1,46 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/* Adding the helper in configmap.yaml for better readability */}}
+{{- define "nessie.config.default" -}}
+{{/* Common configuration */}}
+quarkus.log.level: {{ .Values.logLevel }}
+quarkus.http.port: {{ .Values.containerPorts.http }}
+quarkus.management.port: {{ .Values.containerPorts.management }}
+{{/* Version store configuration */}}
+{{- if eq .Values.versionStoreType "ROCKSDB" }}
+nessie.version_store.type: "ROCKSDB"
+nessie.version_store.persist.rocks.database_path: {{ .Values.persistence.mountPath }}
+{{- else if eq .Values.versionStoreType "JDBC_POSTGRESQL" }}
+nessie.version_store.type: "JDBC"
+nessie.version_store.persist.jdbc.datasource: "postgresql"
+quarkus.datasource.postgresql.jdbc_url: {{ include "nessie.database.url" . }}
+quarkus.datasource.postgresql.username: {{ include "nessie.database.user" . }}
+{{- else }}
+nessie.version_store.type: {{ .Values.versionStoreType }}
+{{- end }}
+{{- end }}
+
+{{- if not .Values.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: nessie
+    app.kubernetes.io/part-of: nessie
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+{{- /* Convert the default configuration and extra overrides to environment variables */ -}}
+{{- $defaultConfiguration := include "nessie.config.default" . | fromYaml -}}
+{{- $defaultConfiguration = include "nessie.config.convertToEnv" (dict "config" $defaultConfiguration "prefix" "" "secret" false "context" $) | fromYaml -}}
+{{- $overrideConfiguration := include "nessie.config.convertToEnv" (dict "config" .Values.configOverrides "prefix" "" "secret" false "context" $) | fromYaml -}}
+
+{{/* Merge both maps and render the list of env vars */}}
+{{- mergeOverwrite $defaultConfiguration $overrideConfiguration | toYaml | nindent 2 }}
+{{- end }}

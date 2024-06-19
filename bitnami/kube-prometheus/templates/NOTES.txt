@@ -116,3 +116,4 @@ To access Alertmanager from outside the cluster execute the following commands:
 {{- include "common.warnings.rollingTag" .Values.alertmanager.image }}
 {{- include "kube-prometheus.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "alertmanager" "blackboxExporter" "operator" "prometheus" "prometheus.thanos") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.operator.image .Values.prometheus.image .Values.prometheus.thanos.image .Values.alertmanager.image .Values.blackboxExporter.image) "context" $) }}

@@ -74,3 +74,4 @@ To access the MySQL Prometheus metrics from outside the cluster execute the foll
 {{ include "mysql.checkRollingTags" . }}
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "primary" "secondary" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

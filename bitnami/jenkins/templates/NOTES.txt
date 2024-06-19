@@ -46,3 +46,4 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 {{- include "jenkins.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "agent" "" "tls" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.agent.image .Values.volumePermissions.image) "context" $) }}

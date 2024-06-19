@@ -75,3 +75,4 @@ To connect to your ZooKeeper server from outside the cluster execute the followi
 {{- include "zookeeper.validateValues" . }}
 {{- include "zookeeper.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "" "tls" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

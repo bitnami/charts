@@ -53,3 +53,4 @@ Follow the official instructions to configure an OIDC provider: https://pinniped
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "pinniped.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "concierge" "supervisor") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

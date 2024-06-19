@@ -46,3 +46,4 @@ https://docs.ray.io/en/latest/cluster/kubernetes/getting-started.html
 {{- include "common.warnings.rollingTag" .Values.rayImage }}
 {{- include "kuberay.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "apiserver" "cluster.head" "cluster.worker.common" "operator") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.rayImage .Values.operator.image .Values.apiserver.image) "context" $) }}

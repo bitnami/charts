@@ -267,8 +267,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
-            httpGet:
-              path: {{ .Values.httpRelativePath }}
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}

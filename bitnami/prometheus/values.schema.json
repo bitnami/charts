@@ -20,6 +20,21 @@
                     "type": "string",
                     "description": "Global StorageClass for Persistent Volume(s)",
                     "default": ""
+                },
+                "compatibility": {
+                    "type": "object",
+                    "properties": {
+                        "openshift": {
+                            "type": "object",
+                            "properties": {
+                                "adaptSecurityContext": {
+                                    "type": "string",
+                                    "description": "Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)",
+                                    "default": "auto"
+                                }
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -118,17 +133,12 @@
                         "registry": {
                             "type": "string",
                             "description": "Alertmanager image registry",
-                            "default": "docker.io"
+                            "default": "REGISTRY_NAME"
                         },
                         "repository": {
                             "type": "string",
                             "description": "Alertmanager image repository",
-                            "default": "bitnami/alertmanager"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "Alertmanager image tag (immutable tags are recommended)",
-                            "default": "0.25.0-debian-11-r48"
+                            "default": "REPOSITORY_NAME/alertmanager"
                         },
                         "digest": {
                             "type": "string",
@@ -151,7 +161,7 @@
                 "configuration": {
                     "type": "string",
                     "description": "Alertmanager configuration. This content will be stored in the the alertmanager.yaml file and the content can be a template.",
-                    "default": "receivers:\n  - name: default-receiver\nroute:\n  group_wait: 10s\n  group_interval: 5m\n  receiver: default-receiver\n  repeat_interval: 3h\n"
+                    "default": "\"\""
                 },
                 "replicaCount": {
                     "type": "number",
@@ -293,20 +303,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if alertmanager.resources is set (alertmanager.resources is recommended for production).",
+                    "default": "nano"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the Alertmanager containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the Alertmanager containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -315,6 +320,23 @@
                             "type": "boolean",
                             "description": "Enabled Alertmanager pods' Security Context",
                             "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
                         },
                         "fsGroup": {
                             "type": "number",
@@ -328,23 +350,63 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Alertmanager containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Alertmanager containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Alertmanager containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Alertmanager containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "List of capabilities to be dropped",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
                         }
                     }
                 },
@@ -375,6 +437,11 @@
                     "description": "Additional arguments passed to the Prometheus server container",
                     "default": [],
                     "items": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -408,17 +475,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -636,7 +693,43 @@
                         "automountServiceAccountToken": {
                             "type": "boolean",
                             "description": "Automount service account token for the server service account",
+                            "default": false
+                        }
+                    }
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Specifies whether a NetworkPolicy should be created",
                             "default": true
+                        },
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "Don't require alertmanager label for connections",
+                            "default": true
+                        },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
@@ -681,6 +774,11 @@
                         "loadBalancerIP": {
                             "type": "string",
                             "description": "Alertmanager service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerClass": {
+                            "type": "string",
+                            "description": "Alertmanager service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
                             "default": ""
                         },
                         "loadBalancerSourceRanges": {
@@ -778,17 +876,12 @@
                         "registry": {
                             "type": "string",
                             "description": "Prometheus image registry",
-                            "default": "docker.io"
+                            "default": "REGISTRY_NAME"
                         },
                         "repository": {
                             "type": "string",
                             "description": "Prometheus image repository",
-                            "default": "bitnami/prometheus"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "Prometheus image tag (immutable tags are recommended)",
-                            "default": "2.44.0-debian-11-r0"
+                            "default": "REPOSITORY_NAME/prometheus"
                         },
                         "digest": {
                             "type": "string",
@@ -811,7 +904,7 @@
                 "configuration": {
                     "type": "string",
                     "description": "Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.",
-                    "default": "global:\n  {{- if .Values.server.scrapeInterval }}\n  scrape_interval: {{ .Values.server.scrapeInterval }}\n  {{- end }}\n  {{- if .Values.server.scrapeTimeout }}\n  scrape_timeout: {{ .Values.server.scrapeTimeout }}\n  {{- end }}\n  {{- if .Values.server.evaluationInterval }}\n  evaluation_interval: {{ .Values.server.evaluationInterval }}\n  {{- end }}\n  external_labels:\n    monitor: {{ template \"common.names.fullname\" . }}\n    {{- if .Values.server.externalLabels }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.externalLabels \"context\" $) | nindent 4 }}\n    {{- end }}\n{{- if .Values.server.remoteWrite }}\nremote_write: {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.remoteWrite \"context\" $) | nindent 4 }}\n{{- end }}\nscrape_configs:\n  - job_name: prometheus\n  {{- include \"prometheus.scrape_config\" (dict \"component\" \"server\" \"context\" $) | nindent 4 }}\n{{- if .Values.alertmanager.enabled }}\n  - job_name: alertmanager\n    {{- include \"prometheus.scrape_config\" (dict \"component\" \"alertmanager\" \"context\" $) | nindent 4 }}\n{{- end }}\n{{- if .Values.server.extraScrapeConfigs}}\n{{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.extraScrapeConfigs \"context\" $) | nindent 2 }}\n{{- end }}\n{{- if or .Values.alertmanager.enabled .Values.server.alertingEndpoints}}\nalerting:\n  alertmanagers:\n    {{- if .Values.server.alertingEndpoints }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.alertingEndpoints \"context\" $) | nindent 4 }}\n    {{- end }}\n    - scheme: HTTP\n      static_configs:\n        - targets: [ {{ printf \"%s:%d\" (include \"prometheus.alertmanager.fullname\" .) (int .Values.alertmanager.service.ports.http) }}]\nrule_files:\n  - rules.yaml\n{{- end }}\n"
+                    "default": "\"\""
                 },
                 "alertingRules": {
                     "type": "object",
@@ -959,20 +1052,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).",
+                    "default": "nano"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the Prometheus containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the Prometheus containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -981,6 +1069,23 @@
                             "type": "boolean",
                             "description": "Enabled Prometheus pods' Security Context",
                             "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
                         },
                         "fsGroup": {
                             "type": "number",
@@ -994,23 +1099,63 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Prometheus containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Prometheus containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Prometheus containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Prometheus containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "List of capabilities to be dropped",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
                         }
                     }
                 },
@@ -1041,6 +1186,11 @@
                     "description": "Additional arguments passed to the Prometheus server container",
                     "default": [],
                     "items": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": true
                 },
                 "hostAliases": {
                     "type": "array",
@@ -1074,17 +1224,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -1288,17 +1428,12 @@
                                 "registry": {
                                     "type": "string",
                                     "description": "Thanos image registry",
-                                    "default": "docker.io"
+                                    "default": "REGISTRY_NAME"
                                 },
                                 "repository": {
                                     "type": "string",
                                     "description": "Thanos image name",
-                                    "default": "bitnami/thanos"
-                                },
-                                "tag": {
-                                    "type": "string",
-                                    "description": "Thanos image tag",
-                                    "default": "0.31.0-scratch-r3"
+                                    "default": "REPOSITORY_NAME/thanos"
                                 },
                                 "digest": {
                                     "type": "string",
@@ -1323,36 +1458,61 @@
                             "properties": {
                                 "enabled": {
                                     "type": "boolean",
-                                    "description": "Enable container security context",
+                                    "description": "Enabled containers' Security Context",
                                     "default": true
                                 },
-                                "readOnlyRootFilesystem": {
-                                    "type": "boolean",
-                                    "description": "mount / (root) as a readonly filesystem",
-                                    "default": false
+                                "runAsUser": {
+                                    "type": "number",
+                                    "description": "Set containers' Security Context runAsUser",
+                                    "default": 1001
                                 },
-                                "allowPrivilegeEscalation": {
-                                    "type": "boolean",
-                                    "description": "Switch privilegeEscalation possibility on or off",
-                                    "default": false
+                                "runAsGroup": {
+                                    "type": "number",
+                                    "description": "Set containers' Security Context runAsGroup",
+                                    "default": 1001
                                 },
                                 "runAsNonRoot": {
                                     "type": "boolean",
-                                    "description": "Force the container to run as a non root user",
+                                    "description": "Set container's Security Context runAsNonRoot",
                                     "default": true
+                                },
+                                "privileged": {
+                                    "type": "boolean",
+                                    "description": "Set container's Security Context privileged",
+                                    "default": false
+                                },
+                                "readOnlyRootFilesystem": {
+                                    "type": "boolean",
+                                    "description": "Set container's Security Context readOnlyRootFilesystem",
+                                    "default": true
+                                },
+                                "allowPrivilegeEscalation": {
+                                    "type": "boolean",
+                                    "description": "Set container's Security Context allowPrivilegeEscalation",
+                                    "default": false
                                 },
                                 "capabilities": {
                                     "type": "object",
                                     "properties": {
                                         "drop": {
                                             "type": "array",
-                                            "description": "Linux Kernel capabilities which should be dropped",
+                                            "description": "List of capabilities to be dropped",
                                             "default": [
                                                 "ALL"
                                             ],
                                             "items": {
                                                 "type": "string"
                                             }
+                                        }
+                                    }
+                                },
+                                "seccompProfile": {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "description": "Set container's Security Context seccomp profile",
+                                            "default": "RuntimeDefault"
                                         }
                                     }
                                 }
@@ -1390,20 +1550,15 @@
                             "default": [],
                             "items": {}
                         },
+                        "resourcesPreset": {
+                            "type": "string",
+                            "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if server.thanos.resources is set (server.thanos.resources is recommended for production).",
+                            "default": "nano"
+                        },
                         "resources": {
                             "type": "object",
-                            "properties": {
-                                "limits": {
-                                    "type": "object",
-                                    "description": "The resources limits for the Thanos sidecar container",
-                                    "default": {}
-                                },
-                                "requests": {
-                                    "type": "object",
-                                    "description": "The resources requests for the Thanos sidecar container",
-                                    "default": {}
-                                }
-                            }
+                            "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                            "default": {}
                         },
                         "livenessProbe": {
                             "type": "object",
@@ -1521,6 +1676,11 @@
                                 "loadBalancerIP": {
                                     "type": "string",
                                     "description": "`loadBalancerIP` if service type is `LoadBalancer`",
+                                    "default": ""
+                                },
+                                "loadBalancerClass": {
+                                    "type": "string",
+                                    "description": "Thanos service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
                                     "default": ""
                                 },
                                 "loadBalancerSourceRanges": {
@@ -1730,7 +1890,43 @@
                         "automountServiceAccountToken": {
                             "type": "boolean",
                             "description": "Automount service account token for the server service account",
+                            "default": false
+                        }
+                    }
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Specifies whether a NetworkPolicy should be created",
                             "default": true
+                        },
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "Don't require server label for connections",
+                            "default": true
+                        },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
@@ -1770,6 +1966,11 @@
                         "loadBalancerIP": {
                             "type": "string",
                             "description": "Prometheus service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerClass": {
+                            "type": "string",
+                            "description": "Prometheus service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
                             "default": ""
                         },
                         "loadBalancerSourceRanges": {
@@ -1856,7 +2057,7 @@
                         },
                         "selector": {
                             "type": "object",
-                            "description": "Selector to match an existing Persistent Volume for WordPress data PVC",
+                            "description": "Selector to match an existing Persistent Volume for Prometheus data PVC",
                             "default": {}
                         },
                         "dataSource": {
@@ -1898,17 +2099,12 @@
                         "registry": {
                             "type": "string",
                             "description": "OS Shell + Utility image registry",
-                            "default": "docker.io"
+                            "default": "REGISTRY_NAME"
                         },
                         "repository": {
                             "type": "string",
                             "description": "OS Shell + Utility image repository",
-                            "default": "bitnami/os-shell"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "OS Shell + Utility image tag (immutable tags are recommended)",
-                            "default": "11-debian-11-r2"
+                            "default": "REPOSITORY_NAME/os-shell"
                         },
                         "pullPolicy": {
                             "type": "string",
@@ -1923,20 +2119,15 @@
                         }
                     }
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).",
+                    "default": "nano"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the init container",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the init container",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "containerSecurityContext": {
                     "type": "object",

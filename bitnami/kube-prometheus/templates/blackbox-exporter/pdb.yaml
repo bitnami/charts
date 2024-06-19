@@ -1,0 +1,25 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.blackboxExporter.enabled .Values.blackboxExporter.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "kube-prometheus.blackboxExporter.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "kube-prometheus.blackboxExporter.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "kube-prometheus.blackboxExporter.matchLabels" . | nindent 6 }}
+  {{- if .Values.blackboxExporter.pdb.minAvailable }}
+  minAvailable: {{ .Values.blackboxExporter.pdb.minAvailable }}
+  {{- end }}
+  {{- if or .Values.blackboxExporter.pdb.maxUnavailable ( not .Values.blackboxExporter.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.blackboxExporter.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+{{- end }}

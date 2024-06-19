@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/schema-registry
-  tag: 7.6.1-debian-12-r3
+  tag: 7.6.1-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -452,11 +452,11 @@ sidecars: []
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ## @param pdb.create Enable/disable a Pod Disruption Budget creation
 ## @param pdb.minAvailable Minimum number/percentage of pods that must still be available after the eviction
-## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable after the eviction
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable after the eviction. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## Schema Registry Autoscaling parameters.
 ## @param autoscaling.enabled Enable autoscaling for replicas

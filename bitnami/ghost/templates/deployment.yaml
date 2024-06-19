@@ -267,15 +267,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /
-              port: {{ ternary "https" "http" .Values.ghostEnableHttps | quote }}
-              scheme: HTTP
-              {{- if .Values.ghostEnableHttps }}
-              httpHeaders:
-                - name: x-forwarded-proto
-                  value: https
-              {{- end }}
+            tcpSocket:
+              port: {{ ternary .Values.containerPorts.https .Values.containerPorts.http .Values.ghostEnableHttps }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}

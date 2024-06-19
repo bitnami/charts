@@ -222,7 +222,7 @@ data:
 
     SLEEP_PERIOD=10
 
-    {{- if and .Values.auth.enabled .Values.auth.rootPassword }}
+    {{- if and .Values.auth.enabled (or .Values.auth.rootPassword .Values.auth.existingSecret)}}
     usernameAndPassword="{{- if .Values.tls.enabled}} --tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert{{- end }} -u ${MONGODB_ROOT_USER} -p ${MONGODB_ROOT_PASSWORD}"
     {{- else }}
     usernameAndPassword=""
@@ -313,3 +313,4 @@ data:
     done
   {{- end }}
 {{- end }}
+  

@@ -114,3 +114,4 @@ WARNING: The configured password will be ignored on new installation in case whe
 {{- include "common.warnings.rollingTag" .Values.image -}}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "primary" "readReplicas" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

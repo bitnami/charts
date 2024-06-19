@@ -44,3 +44,4 @@ Get the application URL by running these commands:
 
 {{- include "oauth2-proxy.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

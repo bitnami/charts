@@ -57,7 +57,7 @@ Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgres
 
 {{- if and (.Values.pgpool.networkPolicy.enabled) (not .Values.pgpool.networkPolicy.allowExternal) }}
 
-Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.pgppol" . }}-client=true" can access postgresql will be able to connect PgPool.
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.pgpool" . }}-client=true" can access postgresql will be able to connect PgPool.
 
 {{- end }}
 
@@ -106,3 +106,4 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "pgpool" "postgresql" "volumePermissions" "witness") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.postgresql.image .Values.pgpool.image .Values.metrics.image .Values.volumePermissions.image) "context" $) }}

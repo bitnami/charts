@@ -18,6 +18,7 @@ spec:
   serviceAccountName: {{ template "kube-prometheus.alertmanager.serviceAccountName" . }}
   {{- if .Values.alertmanager.image }}
   image: {{ template "kube-prometheus.alertmanager.image" . }}
+  imagePullPolicy: {{ .Values.alertmanager.image.pullPolicy }}
   {{- end }}
   listenLocal: {{ .Values.alertmanager.listenLocal }}
   {{- if index .Values.alertmanager "externalUrl" }}

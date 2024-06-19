@@ -71,3 +71,4 @@ host. To configure Matomo to use and external database host:
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "common.warnings.rollingTag" .Values.certificates.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image .Values.certificates.image) "context" $) }}

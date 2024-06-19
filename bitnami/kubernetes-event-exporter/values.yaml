@@ -85,7 +85,7 @@ image:
   ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
-  tag: 1.7.0-debian-12-r4
+  tag: 1.7.0-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -181,6 +181,15 @@ podSecurityContext:
   sysctls: []
   supplementalGroups: []
   fsGroup: 1001
+## Pod disruption budget
+## @param pdb.create Create a pdb
+## @param pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+##
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser

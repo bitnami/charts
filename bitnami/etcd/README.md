@@ -140,7 +140,7 @@ The etcd chart can be configured with Role-based access control and TLS encrypti
 In order to enable Role-Based Access Control for etcd, set the following parameters:
 
 ```text
-auth.rbac.enabled=true
+auth.rbac.create=true
 auth.rbac.rootPassword=ETCD_ROOT_PASSWORD
 ```
 
