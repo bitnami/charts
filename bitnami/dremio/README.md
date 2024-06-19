@@ -561,6 +561,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the chart release                                 | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the chart release                                    | `["infinity"]`  |
+| `usePasswordFile`        | Mount secrets as files                                                                  | `true`          |
 
 ### Dremio common configuration settings
 
@@ -1200,7 +1201,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `metrics.containerSecurityContext.capabilities.drop`        | Set Prometheus JMX exporter containers' Security Context capabilities to be dropped                                                                                                                                        | `["ALL"]`                      |
 | `metrics.containerSecurityContext.seccompProfile.type`      | Set Prometheus JMX exporter container's Security Context seccomp profile                                                                                                                                                   | `RuntimeDefault`               |
 | `metrics.containerPorts.metrics`                            | Prometheus JMX exporter metrics container port                                                                                                                                                                             | `5556`                         |
-| `metrics.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `nano`                         |
+| `metrics.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `micro`                        |
 | `metrics.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                           |
 | `metrics.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                                       | `true`                         |
 | `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                    | `60`                           |
