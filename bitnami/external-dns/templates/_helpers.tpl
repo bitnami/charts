@@ -122,7 +122,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "ovh") .Values.ovh.consumerKey (not .Values.ovh.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "scaleway") .Values.scaleway.scwAccessKey -}}
+{{- else if and (eq .Values.provider "scaleway") .Values.scaleway.scwAccessKey (not .Values.scaleway.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "vinyldns") (or .Values.vinyldns.secretKey .Values.vinyldns.accessKey) -}}
     {{- true -}}
@@ -189,6 +189,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.civo.secretName }}
 {{- else if and (eq .Values.provider "pihole") .Values.pihole.secretName }}
 {{- .Values.pihole.secretName }}
+{{- else if and (eq .Values.provider "scaleway") .Values.scaleway.secretName }}
+{{- .Values.scaleway.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
@@ -807,7 +809,7 @@ Validate values of External DNS:
 - must provide the Scaleway access key when provider is "scaleway"
 */}}
 {{- define "external-dns.validateValues.scaleway.scwAccessKey" -}}
-{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwAccessKey) -}}
+{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwAccessKey) (not .Values.scaleway.secretName) -}}
 external-dns: scaleway.scwAccessKey
     You must provide the Scaleway access key when provider="scaleway".
     Please set the scwAccessKey parameter (--set scaleway.scwAccessKey="xxxx")
@@ -819,7 +821,7 @@ Validate values of External DNS:
 - must provide the scaleway secret key when provider is "scaleway"
 */}}
 {{- define "external-dns.validateValues.scaleway.scwSecretKey" -}}
-{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwSecretKey) -}}
+{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwSecretKey) (not .Values.scaleway.secretName) -}}
 external-dns: scaleway.scwSecretKey
     You must provide the scaleway secret key when provider="scaleway".
     Please set the scwSecretKey parameter (--set scaleway.scwSecretKey="xxxx")
