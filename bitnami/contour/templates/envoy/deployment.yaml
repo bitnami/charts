@@ -265,7 +265,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.envoy.livenessProbe.enabled }}
           livenessProbe:
-            tcpsocket:
+            tcpSocket:
               port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.livenessProbe.periodSeconds }}

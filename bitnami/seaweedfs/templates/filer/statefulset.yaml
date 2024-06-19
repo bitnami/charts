@@ -44,7 +44,7 @@ spec:
         app.kubernetes.io/component: filer
     spec:
       {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}    
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.filer.automountServiceAccountToken }}
       {{- if .Values.filer.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.filer.hostAliases "context" $) | nindent 8 }}
@@ -85,7 +85,9 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.filer.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
+        {{- if .Values.mariadb.enabled }}
         {{- include "seaweedfs.filer.waitForDBInitContainer" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.filer.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.filer.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -135,6 +137,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: WEED_CLUSTER_DEFAULT
               value: {{ .Values.clusterDefault | quote }}
+            {{- if .Values.mariadb.enabled }}
             - name: WEED_MYSQL_ENABLED
               value: "true"
             - name: WEED_MYSQL_HOSTNAME
@@ -153,11 +156,12 @@ spec:
             - name: WEED_MYSQL_CONNECTION_MAX_IDLE
               value: "5"
             - name: WEED_MYSQL_CONNECTION_MAX_OPEN
-              value: "75" 
+              value: "75"
             - name: WEED_MYSQL_CONNECTION_MAX_LIFETIME_SECONDS
               value: "600"
             - name: WEED_MYSQL_INTERPOLATEPARAMS
               value: "true"
+            {{- end }}
             {{- if .Values.filer.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

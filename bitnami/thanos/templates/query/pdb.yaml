@@ -18,8 +18,8 @@ spec:
   {{- if .Values.query.pdb.minAvailable }}
   minAvailable: {{ .Values.query.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.query.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.query.pdb.maxUnavailable }}
+  {{- if or .Values.query.pdb.maxUnavailable ( not .Values.query.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.query.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

@@ -17,9 +17,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.proxy.pdb.minAvailable }}
   minAvailable: {{ .Values.proxy.pdb.minAvailable }}
-  maxUnavailable: {{ .Values.proxy.pdb.maxUnavailable }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- end }}
+  {{- if or .Values.proxy.pdb.maxUnavailable ( not .Values.proxy.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.proxy.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: proxy

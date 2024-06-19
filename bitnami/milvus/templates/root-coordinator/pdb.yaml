@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.rootCoord.pdb.create }}
+{{- if and .Values.rootCoord.enabled .Values.rootCoord.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -19,8 +19,8 @@ spec:
   {{- if .Values.rootCoord.pdb.minAvailable }}
   minAvailable: {{ .Values.rootCoord.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.rootCoord.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.rootCoord.pdb.maxUnavailable }}
+  {{- if or .Values.rootCoord.pdb.maxUnavailable (not .Values.rootCoord.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.rootCoord.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.rootCoord.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

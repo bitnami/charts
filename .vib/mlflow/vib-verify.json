@@ -36,6 +36,9 @@
             "resources": {
               "path": "/.vib"
             },
+            "wait": {
+              "file": "mlflow/goss/goss-wait.yaml"
+            },
             "tests_file": "mlflow/goss/goss.yaml",
             "vars_file": "mlflow/runtime-parameters.yaml",
             "remote": {

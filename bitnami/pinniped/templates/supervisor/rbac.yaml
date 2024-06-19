@@ -109,6 +109,22 @@ rules:
       - patch
       - update
   - apiGroups:
+      - idp.supervisor.pinniped.dev
+    resources:
+      - githubidentityproviders
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - idp.supervisor.pinniped.dev
+    resources:
+      - githubidentityproviders/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
       - ""
     resources:
       - pods

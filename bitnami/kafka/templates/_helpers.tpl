@@ -1219,3 +1219,10 @@ kafka: Missing KRaft or Zookeeper mode settings
     Please configure 'kraft.enabled', 'zookeeper.enabled' or `externalZookeeper.servers` before proceeding.
 {{- end -}}
 {{- end -}}
+
+{{/* Render key, value as proprties format */}}
+{{- define "kafka.properties.render" -}}
+{{- range $key, $value := . }}
+{{ $key }}={{ include "common.tplvalues.render" (dict "value" $value "context" $) }}
+{{- end -}}
+{{- end -}}

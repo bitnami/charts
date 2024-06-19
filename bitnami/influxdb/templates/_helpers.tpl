@@ -93,6 +93,17 @@ Return the InfluxDB&trade; PVC name.
 {{- end -}}
 
 {{/*
+Return the InfluxDB&trade; backup PVC name.
+*/}}
+{{- define "influxdb.backup.claimName" -}}
+{{- if and .Values.backup.persistence.ownConfig .Values.backup.persistence.existingClaim }}
+    {{- printf "%s" (tpl .Values.backup.persistence.existingClaim $) -}}
+{{- else -}}
+    {{- printf "%s-backups" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the InfluxDB&trade; initialization scripts configmap.
 */}}
 {{- define "influxdb.initdbScriptsConfigmapName" -}}

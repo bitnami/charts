@@ -177,12 +177,17 @@ spec:
             - name: empty-dir
               mountPath: /bitnami/milvus/data
               subPath: app-data-dir
-            {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+            {{- if and .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
             - name: etcd-client-certs
               mountPath: /opt/bitnami/milvus/configs/cert/etcd/client
               readOnly: true
             {{- end }}
-            {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.proxy.tls.existingSecret)) }}
+            {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+            - name: kafka-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/kafka/client
+              readOnly: true
+            {{- end }}
+            {{- if and (ne (int .Values.proxy.tls.mode) 0) .Values.proxy.tls.existingSecret }}
             - name: milvus-certs
               mountPath: /opt/bitnami/milvus/configs/cert/milvus
               readOnly: true
@@ -212,16 +217,22 @@ spec:
           configMap:
             name: {{ template "milvus.proxy.extraConfigmapName" . }}
         {{- end }}
-        {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+        {{- if and .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
         - name: etcd-client-certs
           secret:
             secretName: {{ .Values.externalEtcd.tls.existingSecret }}
             defaultMode: 256
         {{- end }}
-        {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.proxy.tls.existingSecret)) }}
+        {{- if and (ne (int .Values.proxy.tls.mode) 0) .Values.proxy.tls.existingSecret }}
         - name: milvus-certs
           secret:
             secretName: {{ .Values.proxy.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+        - name: kafka-client-certs
+          secret:
+            secretName: {{ .Values.externalKafka.tls.existingSecret }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.proxy.extraVolumes }}

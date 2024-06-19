@@ -259,56 +259,59 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### Discourse Common parameters
 
-| Name                                     | Description                                                                                                              | Value                       |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
-| `image.registry`                         | Discourse image registry                                                                                                 | `REGISTRY_NAME`             |
-| `image.repository`                       | Discourse image repository                                                                                               | `REPOSITORY_NAME/discourse` |
-| `image.digest`                           | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                        |
-| `image.pullPolicy`                       | Discourse image pull policy                                                                                              | `IfNotPresent`              |
-| `image.pullSecrets`                      | Discourse image pull secrets                                                                                             | `[]`                        |
-| `image.debug`                            | Enable image debug mode                                                                                                  | `false`                     |
-| `auth.email`                             | Discourse admin user email                                                                                               | `user@example.com`          |
-| `auth.username`                          | Discourse admin user                                                                                                     | `user`                      |
-| `auth.password`                          | Discourse admin password. WARNING: Minimum length of 10 characters                                                       | `""`                        |
-| `auth.existingSecret`                    | Name of an existing secret to use for Discourse credentials                                                              | `""`                        |
-| `host`                                   | Hostname to create application URLs (include the port if =/= 80)                                                         | `""`                        |
-| `siteName`                               | Discourse site name                                                                                                      | `My Site!`                  |
-| `smtp.enabled`                           | Enable/disable SMTP                                                                                                      | `false`                     |
-| `smtp.host`                              | SMTP host name                                                                                                           | `""`                        |
-| `smtp.port`                              | SMTP port number                                                                                                         | `""`                        |
-| `smtp.user`                              | SMTP account user name                                                                                                   | `""`                        |
-| `smtp.password`                          | SMTP account password                                                                                                    | `""`                        |
-| `smtp.protocol`                          | SMTP protocol (Allowed values: tls, ssl)                                                                                 | `""`                        |
-| `smtp.auth`                              | SMTP authentication method                                                                                               | `""`                        |
-| `smtp.existingSecret`                    | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`                | `""`                        |
-| `replicaCount`                           | Number of Discourse & Sidekiq replicas                                                                                   | `1`                         |
-| `podSecurityContext.enabled`             | Enabled Discourse pods' Security Context                                                                                 | `true`                      |
-| `podSecurityContext.fsGroupChangePolicy` | Set filesystem group change policy                                                                                       | `Always`                    |
-| `podSecurityContext.sysctls`             | Set kernel settings using the sysctl interface                                                                           | `[]`                        |
-| `podSecurityContext.supplementalGroups`  | Set filesystem extra groups                                                                                              | `[]`                        |
-| `podSecurityContext.fsGroup`             | Set Discourse pod's Security Context fsGroup                                                                             | `0`                         |
-| `automountServiceAccountToken`           | Mount Service Account token in pod                                                                                       | `false`                     |
-| `hostAliases`                            | Add deployment host aliases                                                                                              | `[]`                        |
-| `podAnnotations`                         | Additional pod annotations                                                                                               | `{}`                        |
-| `podLabels`                              | Additional pod labels                                                                                                    | `{}`                        |
-| `podAffinityPreset`                      | Pod affinity preset. Allowed values: soft, hard                                                                          | `""`                        |
-| `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                      |
-| `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                        |
-| `nodeAffinityPreset.key`                 | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                        |
-| `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                        |
-| `affinity`                               | Affinity for pod assignment                                                                                              | `{}`                        |
-| `nodeSelector`                           | Node labels for pod assignment.                                                                                          | `{}`                        |
-| `tolerations`                            | Tolerations for pod assignment.                                                                                          | `[]`                        |
-| `topologySpreadConstraints`              | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                        |
-| `priorityClassName`                      | Priority Class Name                                                                                                      | `""`                        |
-| `schedulerName`                          | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                        |
-| `terminationGracePeriodSeconds`          | Seconds Discourse pod needs to terminate gracefully                                                                      | `""`                        |
-| `updateStrategy.type`                    | Discourse deployment strategy type                                                                                       | `RollingUpdate`             |
-| `updateStrategy.rollingUpdate`           | Discourse deployment rolling update configuration parameters                                                             | `{}`                        |
-| `sidecars`                               | Add additional sidecar containers to the Discourse pods                                                                  | `[]`                        |
-| `initContainers`                         | Add additional init containers to the Discourse pods                                                                     | `[]`                        |
-| `extraVolumeMounts`                      | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                        |
-| `extraVolumes`                           | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                        |
+| Name                                     | Description                                                                                                                                    | Value                       |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `image.registry`                         | Discourse image registry                                                                                                                       | `REGISTRY_NAME`             |
+| `image.repository`                       | Discourse image repository                                                                                                                     | `REPOSITORY_NAME/discourse` |
+| `image.digest`                           | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                      | `""`                        |
+| `image.pullPolicy`                       | Discourse image pull policy                                                                                                                    | `IfNotPresent`              |
+| `image.pullSecrets`                      | Discourse image pull secrets                                                                                                                   | `[]`                        |
+| `image.debug`                            | Enable image debug mode                                                                                                                        | `false`                     |
+| `auth.email`                             | Discourse admin user email                                                                                                                     | `user@example.com`          |
+| `auth.username`                          | Discourse admin user                                                                                                                           | `user`                      |
+| `auth.password`                          | Discourse admin password. WARNING: Minimum length of 10 characters                                                                             | `""`                        |
+| `auth.existingSecret`                    | Name of an existing secret to use for Discourse credentials                                                                                    | `""`                        |
+| `host`                                   | Hostname to create application URLs (include the port if =/= 80)                                                                               | `""`                        |
+| `siteName`                               | Discourse site name                                                                                                                            | `My Site!`                  |
+| `smtp.enabled`                           | Enable/disable SMTP                                                                                                                            | `false`                     |
+| `smtp.host`                              | SMTP host name                                                                                                                                 | `""`                        |
+| `smtp.port`                              | SMTP port number                                                                                                                               | `""`                        |
+| `smtp.user`                              | SMTP account user name                                                                                                                         | `""`                        |
+| `smtp.password`                          | SMTP account password                                                                                                                          | `""`                        |
+| `smtp.protocol`                          | SMTP protocol (Allowed values: tls, ssl)                                                                                                       | `""`                        |
+| `smtp.auth`                              | SMTP authentication method                                                                                                                     | `""`                        |
+| `smtp.existingSecret`                    | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`                                      | `""`                        |
+| `replicaCount`                           | Number of Discourse & Sidekiq replicas                                                                                                         | `1`                         |
+| `podSecurityContext.enabled`             | Enabled Discourse pods' Security Context                                                                                                       | `true`                      |
+| `podSecurityContext.fsGroupChangePolicy` | Set filesystem group change policy                                                                                                             | `Always`                    |
+| `podSecurityContext.sysctls`             | Set kernel settings using the sysctl interface                                                                                                 | `[]`                        |
+| `podSecurityContext.supplementalGroups`  | Set filesystem extra groups                                                                                                                    | `[]`                        |
+| `podSecurityContext.fsGroup`             | Set Discourse pod's Security Context fsGroup                                                                                                   | `0`                         |
+| `automountServiceAccountToken`           | Mount Service Account token in pod                                                                                                             | `false`                     |
+| `hostAliases`                            | Add deployment host aliases                                                                                                                    | `[]`                        |
+| `podAnnotations`                         | Additional pod annotations                                                                                                                     | `{}`                        |
+| `podLabels`                              | Additional pod labels                                                                                                                          | `{}`                        |
+| `podAffinityPreset`                      | Pod affinity preset. Allowed values: soft, hard                                                                                                | `""`                        |
+| `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                       | `soft`                      |
+| `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                      | `""`                        |
+| `nodeAffinityPreset.key`                 | Node label key to match Ignored if `affinity` is set.                                                                                          | `""`                        |
+| `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                                                                      | `[]`                        |
+| `affinity`                               | Affinity for pod assignment                                                                                                                    | `{}`                        |
+| `nodeSelector`                           | Node labels for pod assignment.                                                                                                                | `{}`                        |
+| `tolerations`                            | Tolerations for pod assignment.                                                                                                                | `[]`                        |
+| `topologySpreadConstraints`              | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                       | `[]`                        |
+| `priorityClassName`                      | Priority Class Name                                                                                                                            | `""`                        |
+| `schedulerName`                          | Use an alternate scheduler, e.g. "stork".                                                                                                      | `""`                        |
+| `terminationGracePeriodSeconds`          | Seconds Discourse pod needs to terminate gracefully                                                                                            | `""`                        |
+| `updateStrategy.type`                    | Discourse deployment strategy type                                                                                                             | `RollingUpdate`             |
+| `updateStrategy.rollingUpdate`           | Discourse deployment rolling update configuration parameters                                                                                   | `{}`                        |
+| `sidecars`                               | Add additional sidecar containers to the Discourse pods                                                                                        | `[]`                        |
+| `initContainers`                         | Add additional init containers to the Discourse pods                                                                                           | `[]`                        |
+| `pdb.create`                             | Enable/disable a Pod Disruption Budget creation                                                                                                | `true`                      |
+| `pdb.minAvailable`                       | Minimum number/percentage of pods that should remain scheduled                                                                                 | `""`                        |
+| `pdb.maxUnavailable`                     | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty. | `""`                        |
+| `extraVolumeMounts`                      | Optionally specify extra list of additional volumeMounts for the Discourse pods                                                                | `[]`                        |
+| `extraVolumes`                           | Optionally specify extra list of additional volumes for the Discourse pods                                                                     | `[]`                        |
 
 ### Discourse container parameters
 

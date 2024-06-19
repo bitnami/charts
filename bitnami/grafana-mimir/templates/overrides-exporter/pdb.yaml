@@ -19,8 +19,8 @@ spec:
   {{- if .Values.overridesExporter.pdb.minAvailable }}
   minAvailable: {{ .Values.overridesExporter.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.overridesExporter.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.overridesExporter.pdb.maxUnavailable }}
+  {{- if or .Values.overridesExporter.pdb.maxUnavailable ( not .Values.overridesExporter.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.overridesExporter.pdb.maxUnavailable | default 1 }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.overridesExporter.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

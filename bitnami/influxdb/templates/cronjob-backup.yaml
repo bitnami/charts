@@ -50,9 +50,9 @@ spec:
             {{- end }}
             {{- end }}
             - name: {{ include "common.names.fullname" . }}-backups
-            {{- if .Values.persistence.enabled }}
+            {{- if ternary .Values.backup.persistence.enabled .Values.persistence.enabled .Values.backup.persistence.ownConfig }}
               persistentVolumeClaim:
-                claimName: {{ include "common.names.fullname" . }}-backups
+                claimName: {{ include "influxdb.backup.claimName" . }}
             {{- else }}
               emptyDir: {}
             {{- end }}

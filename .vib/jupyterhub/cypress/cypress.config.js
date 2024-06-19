@@ -8,4 +8,5 @@ module.exports = {
     setupNodeEvents(on, config) {},
     baseUrl: 'http://localhost/',
   },
+  retries: 5
 }

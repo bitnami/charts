@@ -112,6 +112,13 @@ diagnosticMode:
   containerPorts:
     http: 80
     https: 443
+  ## @param %%MAIN_OBJECT_BLOCK%%.extraContainerPorts Optionally specify extra list of additional ports for %%MAIN_CONTAINER_NAME%% containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
   ## Configure extra options for %%MAIN_CONTAINER_NAME%% containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param %%MAIN_OBJECT_BLOCK%%.livenessProbe.enabled Enable livenessProbe on %%MAIN_CONTAINER_NAME%% containers
@@ -379,26 +386,46 @@ diagnosticMode:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param %%MAIN_OBJECT_BLOCK%%.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param %%MAIN_OBJECT_BLOCK%%.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param %%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param %%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `%%MAIN_OBJECT_BLOCK%%.pdb.minAvailable` and `%%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.enabled Enable autoscaling for %%MAIN_OBJECT_BLOCK%%
-  ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.minReplicas Minimum number of %%MAIN_OBJECT_BLOCK%% replicas
-  ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.maxReplicas Maximum number of %%MAIN_OBJECT_BLOCK%% replicas
-  ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.targetMemory Target Memory utilization percentage
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
-    enabled: false
-    minReplicas: ""
-    maxReplicas: ""
-    targetCPU: ""
-    targetMemory: ""
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.vpa.enabled Enable VPA for %%MAIN_CONTAINER_NAME%% pods
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.hpa.enabled Enable HPA for %%MAIN_CONTAINER_NAME%% pods
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param %%MAIN_OBJECT_BLOCK%%.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
 
 ## %%SECONDARY_CONTAINER/POD_DESCRIPTION%%
 ##
@@ -487,6 +514,9 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
+  ## @param networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  addExternalClientAccess: true
   ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
@@ -520,8 +550,14 @@ networkPolicy:
   ##                   - frontend
   ##
   extraEgress: []
-  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+  ## e.g:
+  ## ingressPodMatchLabels:
+  ##   my-client: "true"
+  #
+  ingressPodMatchLabels: {}
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}

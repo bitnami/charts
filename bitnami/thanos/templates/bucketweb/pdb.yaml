@@ -18,8 +18,8 @@ spec:
   {{- if .Values.bucketweb.pdb.minAvailable }}
   minAvailable: {{ .Values.bucketweb.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.bucketweb.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.bucketweb.pdb.maxUnavailable }}
+  {{- if or .Values.bucketweb.pdb.maxUnavailable ( not .Values.bucketweb.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.bucketweb.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.bucketweb.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

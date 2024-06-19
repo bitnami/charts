@@ -32,7 +32,7 @@ file:
     owner: root
 command:
   vulture-registered-traces:
-    exec: tempo-cli query api search-tags http://grafana-tempo-query-frontend:{{ .Vars.queryFrontend.service.ports.http }}
+    exec: tempo-cli query api search-tags grafana-tempo-query-frontend:{{ .Vars.queryFrontend.service.ports.http }}
     exit-status: 0
     stdout:
       - "vulture"

@@ -119,8 +119,13 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: foo
-              protocol: bar
+            - name: http
+              containerPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http }}
+            - name: https
+              containerPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.https }}
+            {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.resources }}
           resources: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.resources | nindent 12 }}
           {{- else if ne .Values.%%MAIN_OBJECT_BLOCK%%.resourcesPreset "none" }}

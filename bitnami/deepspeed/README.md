@@ -315,18 +315,21 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Deepspeed Client persistence paramaters
 
-| Name                               | Description                                                             | Value                     |
-| ---------------------------------- | ----------------------------------------------------------------------- | ------------------------- |
-| `client.persistence.enabled`       | Use a PVC to persist data                                               | `false`                   |
-| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class                | `""`                      |
-| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound          | `""`                      |
-| `client.persistence.mountPath`     | Path to mount the volume at                                             | `/bitnami/deepspeed/data` |
-| `client.persistence.accessModes`   | Persistent Volume Access Mode                                           | `["ReadWriteOnce"]`       |
-| `client.persistence.dataSource`    | Custom PVC data source                                                  | `{}`                      |
-| `client.persistence.selector`      | Selector to match an existing Persistent Volume for the client data PVC | `{}`                      |
-| `client.persistence.size`          | Size of data volume                                                     | `8Gi`                     |
-| `client.persistence.labels`        | Persistent Volume labels                                                | `{}`                      |
-| `client.persistence.annotations`   | Persistent Volume annotations                                           | `{}`                      |
+| Name                               | Description                                                                                                                                                  | Value                     |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
+| `client.persistence.enabled`       | Use a PVC to persist data                                                                                                                                    | `false`                   |
+| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class                                                                                                     | `""`                      |
+| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound                                                                                               | `""`                      |
+| `client.persistence.mountPath`     | Path to mount the volume at                                                                                                                                  | `/bitnami/deepspeed/data` |
+| `client.persistence.accessModes`   | Persistent Volume Access Mode                                                                                                                                | `["ReadWriteOnce"]`       |
+| `client.persistence.dataSource`    | Custom PVC data source                                                                                                                                       | `{}`                      |
+| `client.persistence.selector`      | Selector to match an existing Persistent Volume for the client data PVC                                                                                      | `{}`                      |
+| `client.persistence.size`          | Size of data volume                                                                                                                                          | `8Gi`                     |
+| `client.persistence.labels`        | Persistent Volume labels                                                                                                                                     | `{}`                      |
+| `client.persistence.annotations`   | Persistent Volume annotations                                                                                                                                | `{}`                      |
+| `client.pdb.create`                | Enable/disable a Pod Disruption Budget creation                                                                                                              | `true`                    |
+| `client.pdb.minAvailable`          | Minimum number/percentage of pods that should remain scheduled                                                                                               | `""`                      |
+| `client.pdb.maxUnavailable`        | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `client.pdb.minAvailable` and `client.pdb.maxUnavailable` are empty. | `""`                      |
 
 ### Worker Deployment Parameters
 
@@ -454,6 +457,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `worker.persistence.size`             | Size of data volume                                                                                                                                                                                                                                   | `8Gi`                      |
 | `worker.persistence.labels`           | Persistent Volume labels                                                                                                                                                                                                                              | `{}`                       |
 | `worker.persistence.annotations`      | Persistent Volume annotations                                                                                                                                                                                                                         | `{}`                       |
+| `worker.pdb.create`                   | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`                     |
+| `worker.pdb.minAvailable`             | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`                       |
+| `worker.pdb.maxUnavailable`           | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `worker.pdb.minAvailable` and `worker.pdb.maxUnavailable` are empty.                                                                                          | `""`                       |
 | `gitImage.registry`                   | Git image registry                                                                                                                                                                                                                                    | `REGISTRY_NAME`            |
 | `gitImage.repository`                 | Git image repository                                                                                                                                                                                                                                  | `REPOSITORY_NAME/git`      |
 | `gitImage.digest`                     | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                   | `""`                       |

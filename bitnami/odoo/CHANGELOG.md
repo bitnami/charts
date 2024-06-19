@@ -1,8 +1,40 @@
 # Changelog
 
-## 26.2.0 (2024-05-23)
+## 26.2.8 (2024-06-18)
 
-* [bitnami/odoo] Enable PodDisruptionBudgets ([#26177](https://github.com/bitnami/charts/pull/26177))
+* [bitnami/odoo] Release 26.2.8 ([#27393](https://github.com/bitnami/charts/pull/27393))
+
+## <small>26.2.7 (2024-06-17)</small>
+
+* [bitnami/odoo] Release 26.2.7 (#27257) ([066357d](https://github.com/bitnami/charts/commit/066357dfb61595d90fcba9b202375d15fa37d35b)), closes [#27257](https://github.com/bitnami/charts/issues/27257)
+
+## <small>26.2.6 (2024-06-14)</small>
+
+* [bitnami/odoo] Release 26.2.6 (#27180) ([066b94d](https://github.com/bitnami/charts/commit/066b94dbf8f3b03a6fe6173c905fdc7fb30e8a53)), closes [#27180](https://github.com/bitnami/charts/issues/27180)
+
+## <small>26.2.5 (2024-06-14)</small>
+
+* [bitnami/odoo] Release 26.2.5 (#27166) ([5cdeae1](https://github.com/bitnami/charts/commit/5cdeae10981e39e5318749dfe4cd5de405b0a632)), closes [#27166](https://github.com/bitnami/charts/issues/27166)
+
+## <small>26.2.4 (2024-06-06)</small>
+
+* [bitnami/odoo] Release 26.2.4 (#27000) ([c4edaee](https://github.com/bitnami/charts/commit/c4edaee4c2f47ebd24b6cea00a955818ad20de3f)), closes [#27000](https://github.com/bitnami/charts/issues/27000)
+
+## <small>26.2.3 (2024-06-05)</small>
+
+* [bitnami/odoo] Bump chart version (#26851) ([e92d9d2](https://github.com/bitnami/charts/commit/e92d9d271efda7175001253aa208830e13d57548)), closes [#26851](https://github.com/bitnami/charts/issues/26851)
+
+## <small>26.2.2 (2024-06-05)</small>
+
+* [bitnami/odoo] Release 26.2.2 (#26816) ([f234976](https://github.com/bitnami/charts/commit/f234976acec4e6a8d3d8d9998984c0cfb71bf420)), closes [#26816](https://github.com/bitnami/charts/issues/26816)
+
+## <small>26.2.1 (2024-06-05)</small>
+
+* [bitnami/odoo] Bump chart version (#26793) ([fe7a0ea](https://github.com/bitnami/charts/commit/fe7a0ea6e62403f1ad9893158ad74b71e59f3c1f)), closes [#26793](https://github.com/bitnami/charts/issues/26793)
+
+## 26.2.0 (2024-05-24)
+
+* [bitnami/odoo] Enable PodDisruptionBudgets (#26177) ([56c8c6a](https://github.com/bitnami/charts/commit/56c8c6a2c992b3cefe1d7630237dd49e295df801)), closes [#26177](https://github.com/bitnami/charts/issues/26177)
 
 ## 26.1.0 (2024-05-21)
 

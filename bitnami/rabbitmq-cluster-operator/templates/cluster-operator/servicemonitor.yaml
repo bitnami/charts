@@ -32,22 +32,6 @@ spec:
       - {{ include "common.names.namespace" . | quote }}
   endpoints:
     - port: http
-      {{- if .Values.clusterOperator.metrics.serviceMonitor.interval }}
-      interval: {{ .Values.clusterOperator.metrics.serviceMonitor.interval }}
-      {{- end }}
-      {{- if .Values.clusterOperator.metrics.serviceMonitor.honorLabels }}
-      honorLabels: {{ .Values.clusterOperator.metrics.serviceMonitor.honorLabels }}
-      {{- end }}
-      {{- if .Values.clusterOperator.metrics.serviceMonitor.scrapeTimeout }}
-      scrapeTimeout: {{ .Values.clusterOperator.metrics.serviceMonitor.scrapeTimeout }}
-      {{- end }}
-      {{- if .Values.clusterOperator.metrics.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{ toYaml .Values.clusterOperator.metrics.serviceMonitor.metricRelabelings | nindent 8 }}
-      {{- end }}
-      {{- if .Values.clusterOperator.metrics.serviceMonitor.relabelings }}
-      relabelings: {{ toYaml .Values.clusterOperator.metrics.serviceMonitor.relabelings | nindent 8 }}
-      {{- end }}
-    - port: metrics
       {{- if .Values.clusterOperator.metrics.serviceMonitor.path }}
       path: {{ .Values.clusterOperator.metrics.serviceMonitor.path }}
       {{- end }}
@@ -57,11 +41,11 @@ spec:
       {{- if .Values.clusterOperator.metrics.serviceMonitor.interval }}
       interval: {{ .Values.clusterOperator.metrics.serviceMonitor.interval }}
       {{- end }}
-      {{- if .Values.clusterOperator.metrics.serviceMonitor.scrapeTimeout }}
-      scrapeTimeout: {{ .Values.clusterOperator.metrics.serviceMonitor.scrapeTimeout }}
-      {{- end }}
       {{- if .Values.clusterOperator.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.clusterOperator.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.clusterOperator.metrics.serviceMonitor.scrapeTimeout }}
       {{- end }}
       {{- if .Values.clusterOperator.metrics.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}

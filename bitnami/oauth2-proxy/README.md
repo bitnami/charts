@@ -320,6 +320,7 @@ The [Bitnami OAuth2 Proxy](https://github.com/bitnami/containers/tree/main/bitna
 | `externalRedis.host`                      | External Redis&reg; server host                            | `""`   |
 | `externalRedis.password`                  | External Redis&reg; user password                          | `""`   |
 | `externalRedis.port`                      | External Redis&reg; server port                            | `6379` |
+| `externalRedis.databaseIndex`             | External Redis&reg; database index                         | `0`    |
 | `externalRedis.existingSecret`            | The name of an existing secret with Redis&reg; credentials | `""`   |
 | `externalRedis.existingSecretPasswordKey` | Key inside the existing secret with Redis&reg; credentials | `""`   |
 

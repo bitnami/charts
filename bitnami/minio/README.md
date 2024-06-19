@@ -476,7 +476,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | Name                 | Description                                                                       | Value  |
 | -------------------- | --------------------------------------------------------------------------------- | ------ |
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `true` |
-| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `1`    |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `""`   |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`   |
 
 ### Metrics parameters

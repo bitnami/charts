@@ -17,8 +17,8 @@ spec:
   {{- if .Values.scheduler.pdb.minAvailable }}
   minAvailable: {{ .Values.scheduler.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.scheduler.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.scheduler.pdb.maxUnavailable }}
+  {{- if or .Values.scheduler.pdb.maxUnavailable ( not .Values.scheduler.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.scheduler.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scheduler.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

@@ -320,9 +320,9 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for schema-registry container(s)                                                                                                                         | `[]`             |
 | `initContainers`                                    | Add additional init containers to the Schema Registry pods.                                                                                                                                                       | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the Schema Registry pods.                                                                                                                                                    | `[]`             |
-| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `false`          |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that must still be available after the eviction                                                                                                                                 | `1`              |
-| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable after the eviction                                                                                                                                 | `""`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that must still be available after the eviction                                                                                                                                 | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable after the eviction. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                 | `""`             |
 | `autoscaling.enabled`                               | Enable autoscaling for replicas                                                                                                                                                                                   | `false`          |
 | `autoscaling.minReplicas`                           | Minimum number of replicas                                                                                                                                                                                        | `1`              |
 | `autoscaling.maxReplicas`                           | Maximum number of replicas                                                                                                                                                                                        | `11`             |
@@ -426,6 +426,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/schem
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major updates the Kafka subchart to its newest major, 29.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2900).
 
 ### To 18.0.0
 

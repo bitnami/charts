@@ -11,6 +11,7 @@ it('allows to upload and execute a python notebook', () => {
     const notebookName = `notebook_template_${random}.ipynb`;
     const userName = Cypress.env('username');
 
+    cy.clearCookies()
     cy.login();
     cy.visit(`/user/${userName}/tree/tmp`);
     cy.contains('Upload').should('be.visible');
@@ -29,6 +30,7 @@ it('allows to upload and execute a python notebook', () => {
 
 it('allows generating an API token', () => {
   cy.session('test_token', () => {
+    cy.clearCookies()
     cy.login();
     cy.visit('/hub/token');
     // We need to wait until the background API request is finished

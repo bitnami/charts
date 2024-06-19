@@ -1,8 +1,40 @@
 # Changelog
 
-## 1.4.0 (2024-05-23)
+## 1.4.8 (2024-06-18)
 
-* [bitnami/vault] Enable PodDisruptionBudgets ([#26383](https://github.com/bitnami/charts/pull/26383))
+* [bitnami/vault] Release 1.4.8 ([#27426](https://github.com/bitnami/charts/pull/27426))
+
+## <small>1.4.7 (2024-06-17)</small>
+
+* [bitnami/vault] Release 1.4.7 (#27297) ([639e5bb](https://github.com/bitnami/charts/commit/639e5bbd09945200ca8f5dad0533b7ca63dc3d45)), closes [#27297](https://github.com/bitnami/charts/issues/27297)
+
+## <small>1.4.6 (2024-06-13)</small>
+
+* [bitnami/vault] Release 1.4.6 (#27153) ([78db437](https://github.com/bitnami/charts/commit/78db4372105a9590e417458a8a3cf4a4d4beab02)), closes [#27153](https://github.com/bitnami/charts/issues/27153)
+
+## <small>1.4.5 (2024-06-10)</small>
+
+* [bitnami/vault] fix injector (#26611) ([28b0770](https://github.com/bitnami/charts/commit/28b07702601c9edab31da4a576abcf0886ddbb99)), closes [#26611](https://github.com/bitnami/charts/issues/26611)
+
+## <small>1.4.4 (2024-06-06)</small>
+
+* [bitnami/vault] Release 1.4.4 (#27025) ([fcd0b92](https://github.com/bitnami/charts/commit/fcd0b92e3b494126addbb22070d43ac4975287b5)), closes [#27025](https://github.com/bitnami/charts/issues/27025)
+
+## <small>1.4.3 (2024-06-05)</small>
+
+* [bitnami/vault] Release 1.4.3 (#26756) ([9169b39](https://github.com/bitnami/charts/commit/9169b39f5e279174c737736ff75bbd8920850c77)), closes [#26756](https://github.com/bitnami/charts/issues/26756)
+
+## <small>1.4.2 (2024-06-04)</small>
+
+* [bitnami/vault] Bump chart version (#26672) ([e3b98d1](https://github.com/bitnami/charts/commit/e3b98d1ee873fc13fcf304401d2e7562f5263488)), closes [#26672](https://github.com/bitnami/charts/issues/26672)
+
+## <small>1.4.1 (2024-05-30)</small>
+
+* [bitnami/vault] Release 1.4.1 (#26557) ([5271fa0](https://github.com/bitnami/charts/commit/5271fa03b5ac44955cb59ef684cb336f8a5720d1)), closes [#26557](https://github.com/bitnami/charts/issues/26557)
+
+## 1.4.0 (2024-05-24)
+
+* [bitnami/vault] Enable PodDisruptionBudgets (#26383) ([e94387a](https://github.com/bitnami/charts/commit/e94387a3f24d5a4f920b31dbe83997e3a524be2e)), closes [#26383](https://github.com/bitnami/charts/issues/26383)
 
 ## 1.3.0 (2024-05-21)
 

@@ -12,6 +12,14 @@ before(() => {
 });
 
 it('allows uploading data', () => {
+  // Wait for DOM content to load
+  cy.wait(2000);
+  cy.get('body').then(($body) => {
+    // Close welcome tutorial pop-up if present
+    if ($body.find('[data-test-subj="skipWelcomeScreen"]').is(':visible')) {
+      cy.get('[data-test-subj="skipWelcomeScreen"]').click();
+    }
+  });
   cy.get('[data-test-subj="uploadFile"]').click();
   cy.get('[type=file]').selectFile(
     'cypress/fixtures/test-data-to-import.ndjson',

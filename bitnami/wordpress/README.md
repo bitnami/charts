@@ -467,20 +467,20 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                    | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
-| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                | `false` |
-| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled         | `1`     |
-| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable         | `""`    |
-| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for WordPress                        | `false` |
-| `autoscaling.minReplicas`                     | Minimum number of WordPress replicas                                   | `1`     |
-| `autoscaling.maxReplicas`                     | Maximum number of WordPress replicas                                   | `11`    |
-| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
-| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
+| Name                                          | Description                                                                                                                                    | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                                                                                            | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                         | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                         | `false` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                           | `{}`    |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                        | `true`  |
+| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                 | `""`    |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty. | `""`    |
+| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for WordPress                                                                                                | `false` |
+| `autoscaling.minReplicas`                     | Minimum number of WordPress replicas                                                                                                           | `1`     |
+| `autoscaling.maxReplicas`                     | Maximum number of WordPress replicas                                                                                                           | `11`    |
+| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                                                                                              | `50`    |
+| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                                                                                           | `50`    |
 
 ### Metrics Parameters
 

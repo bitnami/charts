@@ -91,7 +91,7 @@ var _ = Describe("Postgresql", Ordered, func() {
 			By("creating a job to drop the test database")
 			deleteDBJobName := fmt.Sprintf("%s-deletedb-%s",
 				releaseName, jobSuffix)
-			err = createJob(ctx, c, deleteDBJobName, pgPoolName, port, image, fmt.Sprintf("DROP DATABASE %s;", dbName))
+			err = createJob(ctx, c, deleteDBJobName, pgPoolName, port, image, fmt.Sprintf("DROP DATABASE %s WITH (FORCE);", dbName))
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {

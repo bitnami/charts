@@ -36,8 +36,10 @@ metadata:
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq
   annotations:
-    {{- if .Values.useCertManager }}
+    {{- if and (.Values.useCertManager) (not .Values.msgTopologyOperator.existingWebhookCertSecret)}}
     cert-manager.io/inject-ca-from: {{ printf "%s/%s" (include "common.names.namespace" .) ( include "rmqco.msgTopologyOperator.webhook.secretName" . ) }}
+    {{- else if and (.Values.useCertManager) (.Values.msgTopologyOperator.existingWebhookCertSecret)}}
+    cert-manager.io/inject-ca-from-secret: {{ printf "%s/%s" (include "common.names.namespace" .) ( include "rmqco.msgTopologyOperator.webhook.secretName" . ) }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}

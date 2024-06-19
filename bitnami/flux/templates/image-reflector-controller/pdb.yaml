@@ -21,8 +21,8 @@ spec:
   {{- if .Values.imageReflectorController.pdb.minAvailable }}
   minAvailable: {{ .Values.imageReflectorController.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.imageReflectorController.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.imageReflectorController.pdb.maxUnavailable }}
+  {{- if or .Values.imageReflectorController.pdb.maxUnavailable ( not .Values.imageReflectorController.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.imageReflectorController.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.imageReflectorController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

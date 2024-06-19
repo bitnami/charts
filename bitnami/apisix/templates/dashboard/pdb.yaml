@@ -21,8 +21,8 @@ spec:
   {{- if .Values.dashboard.pdb.minAvailable }}
   minAvailable: {{ .Values.dashboard.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.dashboard.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.dashboard.pdb.maxUnavailable }}
+  {{- if or .Values.dashboard.pdb.maxUnavailable ( not .Values.dashboard.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.dashboard.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboard.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

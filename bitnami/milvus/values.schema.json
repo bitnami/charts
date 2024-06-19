@@ -20,6 +20,21 @@
                     "type": "string",
                     "description": "Global StorageClass for Persistent Volume(s)",
                     "default": ""
+                },
+                "compatibility": {
+                    "type": "object",
+                    "properties": {
+                        "openshift": {
+                            "type": "object",
+                            "properties": {
+                                "adaptSecurityContext": {
+                                    "type": "string",
+                                    "description": "Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)",
+                                    "default": "auto"
+                                }
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -62,7 +77,7 @@
         "enableServiceLinks": {
             "type": "boolean",
             "description": "Whether information about services should be injected into all pods' environment variable",
-            "default": true
+            "default": false
         },
         "diagnosticMode": {
             "type": "object",
@@ -103,17 +118,12 @@
                         "registry": {
                             "type": "string",
                             "description": "Milvus image registry",
-                            "default": "docker.io"
+                            "default": "REGISTRY_NAME"
                         },
                         "repository": {
                             "type": "string",
                             "description": "Milvus image repository",
-                            "default": "bitnami/milvus"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "Milvus image tag (immutable tags are recommended)",
-                            "default": "2.2.10-debian-11-r3"
+                            "default": "REPOSITORY_NAME/milvus"
                         },
                         "digest": {
                             "type": "string",
@@ -165,13 +175,18 @@
                             "type": "string",
                             "description": "Name of a secret containing the Milvus password",
                             "default": ""
+                        },
+                        "existingSecretPasswordKey": {
+                            "type": "string",
+                            "description": "Name of the secret key containing the Milvus password",
+                            "default": ""
                         }
                     }
                 },
                 "defaultConfig": {
                     "type": "string",
                     "description": "Milvus components default configuration",
-                    "default": "# etcd configuration\netcd:\n  endpoints:\n    {{- if .Values.etcd.enabled  }}\n      {{- $replicas := $.Values.etcd.replicaCount | int }}\n      {{- range $i, $_e := until $replicas }}\n    - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"milvus.etcd.fullname\" $ ) $i (include \"milvus.etcd.headlessServiceName\" $) ( include \"milvus.etcd.port\" $ ) }}          {{- end }}\n    {{- else }}\n    {{- range $node := .Values.externalEtcd.servers }}\n    - {{ ternary \"https\" \"http\" $.Values.externalEtcd.secureTransport }}://{{ printf \"%s:%v\" $node (include \"milvus.etcd.port\" $) }}\n    {{- end }}\n    {{- end }}\nmetastore:\n  type: etcd\n\n# S3 configuration\nminio:\n  address: {{ include \"milvus.s3.host\" . }}\n  port: {{ include \"milvus.s3.port\" . }}\n  accessKeyID: {{ print \"{{ MILVUS_S3_ACCESS_ID }}\" | quote }}\n  secretAccessKey: {{ print \"{{ MILVUS_S3_SECRET_ACCESS_KEY }}\" | quote }}\n  useSSL: {{ include \"milvus.s3.useSSL\" . }}\n  bucketName: {{ include \"milvus.s3.bucket\" . }}\n  rootPath: {{ include \"milvus.s3.rootPath\" . }}\n  useIAM: {{ include \"milvus.s3.useIAM\" . }}\n  {{- if not .Values.minio.enabled }}\n  cloudProvider: {{ .Values.externalS3.cloudProvider }}\n  iamEndpoint: {{ .Values.externalS3.iamEndpoint }}\n  {{- end }}\n\n# Kafka configuration\nkafka:\n  brokerList:\n    {{- if .Values.kafka.enabled  }}\n      {{- $replicas := $.Values.kafka.replicaCount | int }}\n      {{- range $i, $_e := until $replicas }}\n    - {{ printf \"%s-%d.%s:%v\" (include \"milvus.kafka.fullname\" $ ) $i (include \"milvus.kafka.headlessServiceName\" $) ( include \"milvus.kafka.port\" $ ) }}\n      {{- end }}\n    {{- else }}\n    {{- range $node := .Values.kafka.servers }}\n    - {{ printf \"%s:%v\" $node (include \"milvus.kafka.port\" $) }}\n    {{- end }}\n    {{- end }}\n  securityProtocol: {{ include \"milvus.kafka.securityProtocol\" . }}\n  {{- if include \"milvus.kafka.authEnabled\" . }}\n  saslMechanisms: {{ include \"milvus.kafka.saslMechanisms\" . }}\n  saslUsername: {{ include \"milvus.kafka.user\" . }}\n  saslPassword: {{ print \"{{ MILVUS_KAFKA_PASSWORD }}\" | quote }}\n  {{- end }}\n\n# Data coordinator\ndataCoord:\n  address: {{ include \"milvus.data-coordinator.fullname\" . }}\n  port: {{ .Values.dataCoord.service.ports.grpc }}\n\n# Root coordinator\nrootCoord:\n  address: {{ include \"milvus.root-coordinator.fullname\" . }}\n  port: {{ .Values.rootCoord.service.ports.grpc }}\n\n# Index coordinator\nindexCoord:\n  address: {{ include \"milvus.index-coordinator.fullname\" . }}\n  port: {{ .Values.indexCoord.service.ports.grpc }}\n\n# Query coordinator\nqueryCoord:\n  address: {{ include \"milvus.query-coordinator.fullname\" . }}\n  port: {{ .Values.queryCoord.service.ports.grpc }}\n\n# Data node\ndataNode:\n  port: {{ .Values.dataNode.service.ports.grpc }}\n\n# Index node\nindexNode:\n  port: {{ .Values.indexNode.service.ports.grpc }}\n\n# Query node\nqueryNode:\n  port: {{ .Values.queryNode.service.ports.grpc }}\n\nproxy:\n  port: {{ .Values.proxy.service.ports.grpc }}\n  accessLog:\n    localPath: /dev\n    filename: stdout\n  http:\n    enabled: true\n\n# Log configuration\nlog:\n  level: {{ ternary \"debug\" \"info\" .Values.milvus.image.debug }}\n  stdout: true\n\n# Common configuration\ncommon:\n  storageType: minio\n  security:\n    authorizationEnabled: {{ .Values.milvus.auth.enabled }}\n    {{- if .Values.milvus.auth.enabled }}\n    superUsers:\n      - {{ .Values.milvus.auth.username }}\n    {{- end }}\n"
+                    "default": "\"\""
                 },
                 "extraConfig": {
                     "type": "object",
@@ -204,17 +219,12 @@
                         "registry": {
                             "type": "string",
                             "description": "PyMilvus image registry",
-                            "default": "docker.io"
+                            "default": "REGISTRY_NAME"
                         },
                         "repository": {
                             "type": "string",
                             "description": "PyMilvus image repository",
-                            "default": "bitnami/pymilvus"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "PyMilvus image tag (immutable tags are recommended)",
-                            "default": "2.2.13-debian-11-r1"
+                            "default": "REPOSITORY_NAME/pymilvus"
                         },
                         "digest": {
                             "type": "string",
@@ -244,27 +254,27 @@
                     "properties": {
                         "existingSecret": {
                             "type": "string",
-                            "description": "Name of the existing secret containing the TLS certificates for initJob",
+                            "description": "Name of the existing secret containing the TLS certificates for initJob.",
                             "default": ""
                         },
                         "cert": {
                             "type": "string",
                             "description": "The secret key from the existingSecret if 'cert' key different from the default (client.pem)",
-                            "default": "tls.crt"
+                            "default": "client.pem"
                         },
                         "key": {
                             "type": "string",
                             "description": "The secret key from the existingSecret if 'key' key different from the default (client.key)",
-                            "default": "tls.key"
+                            "default": "client.key"
                         },
                         "caCert": {
                             "type": "string",
                             "description": "The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)",
-                            "default": "ca.crt"
+                            "default": "ca.pem"
                         },
                         "keyPassword": {
                             "type": "string",
-                            "description": "Password to access the password-protected PEM key if necessary",
+                            "description": "Password to access the password-protected PEM key if necessary.",
                             "default": ""
                         }
                     }
@@ -290,27 +300,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled credential init job containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set credential init job containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set credential init job containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set credential init job containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -318,13 +338,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -338,20 +368,27 @@
                             "description": "Enabled credential init job pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set credential init job pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -377,51 +414,146 @@
                     "default": [],
                     "items": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "livenessProbe": {
+                    "type": "object",
                     "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the container",
-                            "default": {}
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on init job",
+                            "default": true
                         },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the container",
-                            "default": {}
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
                         }
                     }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on init job",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Data Coordinator containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
                     "description": "Add deployment host aliases",
                     "default": [],
                     "items": {}
-                },
-                "annotations": {
-                    "type": "object",
-                    "properties": {
-                        "helm": {
-                            "type": "object",
-                            "properties": {
-                                "sh/hook": {
-                                    "type": "string",
-                                    "description": "",
-                                    "default": "post-install"
-                                },
-                                "sh/hook-delete-policy": {
-                                    "type": "string",
-                                    "description": "",
-                                    "default": "before-hook-creation,hook-succeeded"
-                                },
-                                "sh/hook-weight": {
-                                    "type": "string",
-                                    "description": "",
-                                    "default": "10"
-                                }
-                            }
-                        }
-                    }
                 },
                 "podLabels": {
                     "type": "object",
@@ -432,6 +564,37 @@
                     "type": "object",
                     "description": "Additional pod annotations",
                     "default": {}
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable creation of NetworkPolicy resources",
+                            "default": true
+                        },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -462,7 +625,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "# Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)\ndataCoord:\n  port: {{ .Values.dataCoord.containerPorts.grpc }}\n  enableActiveStandby: true\n"
+                    "default": "\"\""
                 },
                 "existingConfigMap": {
                     "type": "string",
@@ -631,20 +794,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dataCoord.resources is set (dataCoord.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the data coordinator containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the data coordinator containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -654,20 +812,27 @@
                             "description": "Enabled Data Coordinator pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set Data Coordinator pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Data Coordinator container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -676,27 +841,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Data Coordinator containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Data Coordinator containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Data Coordinator containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Data Coordinator containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Data Coordinator container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -704,13 +879,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Data Coordinator container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -725,6 +910,11 @@
                     "type": "string",
                     "description": "Name of the runtime class to be used by pod(s)",
                     "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -855,7 +1045,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable creation of ServiceAccount for Data Coordinator pods",
-                            "default": false
+                            "default": true
                         },
                         "name": {
                             "type": "string",
@@ -880,17 +1070,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -1063,24 +1243,33 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
+                            "default": true
                         },
                         "allowExternal": {
                             "type": "boolean",
                             "description": "The Policy model to apply",
                             "default": true
                         },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
@@ -1091,26 +1280,6 @@
                             "type": "boolean",
                             "description": "Enable metrics",
                             "default": false
-                        },
-                        "annotations": {
-                            "type": "object",
-                            "properties": {
-                                "prometheus": {
-                                    "type": "object",
-                                    "properties": {
-                                        "io/scrape": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "true"
-                                        },
-                                        "io/port": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "{{ .Values.dataCoord.service.ports.grpc }}"
-                                        }
-                                    }
-                                }
-                            }
                         },
                         "serviceMonitor": {
                             "type": "object",
@@ -1205,7 +1374,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "# Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)\nrootCoord:\n  port: {{ .Values.rootCoord.containerPorts.grpc }}\n  enableActiveStandby: true\n"
+                    "default": "\"\""
                 },
                 "existingConfigMap": {
                     "type": "string",
@@ -1374,20 +1543,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if rootCoord.resources is set (rootCoord.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the data coordinator containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the data coordinator containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -1397,20 +1561,27 @@
                             "description": "Enabled Root Coordinator pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set Root Coordinator pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Root Coordinator container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -1419,27 +1590,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Root Coordinator containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Root Coordinator containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Root Coordinator containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Root Coordinator containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Root Coordinator container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -1447,13 +1628,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Root Coordinator container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -1468,6 +1659,11 @@
                     "type": "string",
                     "description": "Name of the runtime class to be used by pod(s)",
                     "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -1598,7 +1794,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable creation of ServiceAccount for Root Coordinator pods",
-                            "default": false
+                            "default": true
                         },
                         "name": {
                             "type": "string",
@@ -1623,17 +1819,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -1806,50 +1992,39 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
+                            "default": true
                         },
                         "allowExternal": {
                             "type": "boolean",
                             "description": "The Policy model to apply",
                             "default": true
                         },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
                 "metrics": {
                     "type": "object",
                     "properties": {
-                        "annotations": {
-                            "type": "object",
-                            "properties": {
-                                "prometheus": {
-                                    "type": "object",
-                                    "properties": {
-                                        "io/scrape": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "true"
-                                        },
-                                        "io/port": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "{{ .Values.rootCoord.service.ports.grpc }}"
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable metrics",
@@ -1948,7 +2123,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "# Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)\nqueryCoord:\n  port: {{ .Values.queryCoord.containerPorts.grpc }}\n  enableActiveStandby: true\n"
+                    "default": "\"\""
                 },
                 "existingConfigMap": {
                     "type": "string",
@@ -2117,20 +2292,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryCoord.resources is set (queryCoord.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the data coordinator containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the data coordinator containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -2140,20 +2310,27 @@
                             "description": "Enabled Query Coordinator pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set Query Coordinator pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Query Coordinator container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -2162,27 +2339,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Query Coordinator containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Query Coordinator containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Query Coordinator containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Query Coordinator containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Query Coordinator container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -2190,13 +2377,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Query Coordinator container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -2211,6 +2408,11 @@
                     "type": "string",
                     "description": "Name of the runtime class to be used by pod(s)",
                     "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -2341,7 +2543,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable creation of ServiceAccount for Query Coordinator pods",
-                            "default": false
+                            "default": true
                         },
                         "name": {
                             "type": "string",
@@ -2366,17 +2568,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -2549,50 +2741,39 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
+                            "default": true
                         },
                         "allowExternal": {
                             "type": "boolean",
                             "description": "The Policy model to apply",
                             "default": true
                         },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
                 "metrics": {
                     "type": "object",
                     "properties": {
-                        "annotations": {
-                            "type": "object",
-                            "properties": {
-                                "prometheus": {
-                                    "type": "object",
-                                    "properties": {
-                                        "io/scrape": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "true"
-                                        },
-                                        "io/port": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "{{ .Values.queryCoord.service.ports.grpc }}"
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable metrics",
@@ -2691,7 +2872,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "# Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)\nindexCoord:\n  port: {{ .Values.indexCoord.containerPorts.grpc }}\n  enableActiveStandby: true\n"
+                    "default": "\"\""
                 },
                 "existingConfigMap": {
                     "type": "string",
@@ -2860,20 +3041,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexCoord.resources is set (indexCoord.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the data coordinator containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the data coordinator containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -2883,20 +3059,27 @@
                             "description": "Enabled Index Coordinator pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set Index Coordinator pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Index Coordinator container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -2905,27 +3088,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Index Coordinator containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Index Coordinator containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Index Coordinator containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Index Coordinator containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Index Coordinator container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -2933,13 +3126,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Index Coordinator container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -2954,6 +3157,11 @@
                     "type": "string",
                     "description": "Name of the runtime class to be used by pod(s)",
                     "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -3084,7 +3292,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable creation of ServiceAccount for Index Coordinator pods",
-                            "default": false
+                            "default": true
                         },
                         "name": {
                             "type": "string",
@@ -3109,17 +3317,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -3292,50 +3490,39 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
+                            "default": true
                         },
                         "allowExternal": {
                             "type": "boolean",
                             "description": "The Policy model to apply",
                             "default": true
                         },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
                 "metrics": {
                     "type": "object",
                     "properties": {
-                        "annotations": {
-                            "type": "object",
-                            "properties": {
-                                "prometheus": {
-                                    "type": "object",
-                                    "properties": {
-                                        "io/scrape": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "true"
-                                        },
-                                        "io/port": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "{{ .Values.indexCoord.service.ports.grpc }}"
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable metrics",
@@ -3434,7 +3621,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "# Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)\ndataNode:\n  port: {{ .Values.dataNode.containerPorts.grpc }}\n  enableDisk: true\n"
+                    "default": "\"\""
                 },
                 "existingConfigMap": {
                     "type": "string",
@@ -3603,20 +3790,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dataNode.resources is set (dataNode.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the data node containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the data node containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -3626,20 +3808,27 @@
                             "description": "Enabled Data Node pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set Data Node pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Data Node container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -3648,27 +3837,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Data Node containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Data Node containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Data Node containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Data Node containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Data Node container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -3676,13 +3875,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Data Node container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -3697,6 +3906,11 @@
                     "type": "string",
                     "description": "Name of the runtime class to be used by pod(s)",
                     "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -3827,7 +4041,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable creation of ServiceAccount for Data Node pods",
-                            "default": false
+                            "default": true
                         },
                         "name": {
                             "type": "string",
@@ -3852,17 +4066,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -4035,50 +4239,39 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
+                            "default": true
                         },
                         "allowExternal": {
                             "type": "boolean",
                             "description": "The Policy model to apply",
                             "default": true
                         },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
                 "metrics": {
                     "type": "object",
                     "properties": {
-                        "annotations": {
-                            "type": "object",
-                            "properties": {
-                                "prometheus": {
-                                    "type": "object",
-                                    "properties": {
-                                        "io/scrape": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "true"
-                                        },
-                                        "io/port": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "{{ .Values.dataNode.service.ports.grpc }}"
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable metrics",
@@ -4177,7 +4370,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "# Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)\nqueryNode:\n  port: {{ .Values.queryNode.containerPorts.grpc }}\n  enableDisk: true\n"
+                    "default": "\"\""
                 },
                 "existingConfigMap": {
                     "type": "string",
@@ -4346,20 +4539,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryNode.resources is set (queryNode.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the data node containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the data node containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -4369,20 +4557,27 @@
                             "description": "Enabled Query Node pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set Query Node pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Query Node container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -4391,27 +4586,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Query Node containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Query Node containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Query Node containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Query Node containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Query Node container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -4419,13 +4624,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Query Node container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -4440,6 +4655,11 @@
                     "type": "string",
                     "description": "Name of the runtime class to be used by pod(s)",
                     "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -4570,7 +4790,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable creation of ServiceAccount for Query Node pods",
-                            "default": false
+                            "default": true
                         },
                         "name": {
                             "type": "string",
@@ -4595,17 +4815,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -4778,50 +4988,39 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
+                            "default": true
                         },
                         "allowExternal": {
                             "type": "boolean",
                             "description": "The Policy model to apply",
                             "default": true
                         },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
                 "metrics": {
                     "type": "object",
                     "properties": {
-                        "annotations": {
-                            "type": "object",
-                            "properties": {
-                                "prometheus": {
-                                    "type": "object",
-                                    "properties": {
-                                        "io/scrape": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "true"
-                                        },
-                                        "io/port": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "{{ .Values.queryNode.service.ports.grpc }}"
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable metrics",
@@ -4920,7 +5119,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "# Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)\nindexNode:\n  port: {{ .Values.indexNode.containerPorts.grpc }}\n  enableDisk: true\n"
+                    "default": "\"\""
                 },
                 "existingConfigMap": {
                     "type": "string",
@@ -5089,20 +5288,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexNode.resources is set (indexNode.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the data node containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the data node containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -5112,20 +5306,27 @@
                             "description": "Enabled Index Node pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set Index Node pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Index Node container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -5134,27 +5335,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Index Node containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Index Node containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Index Node containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Index Node containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Index Node container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -5162,13 +5373,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Index Node container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -5183,6 +5404,11 @@
                     "type": "string",
                     "description": "Name of the runtime class to be used by pod(s)",
                     "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -5313,7 +5539,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable creation of ServiceAccount for Index Node pods",
-                            "default": false
+                            "default": true
                         },
                         "name": {
                             "type": "string",
@@ -5338,17 +5564,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -5521,50 +5737,39 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
+                            "default": true
                         },
                         "allowExternal": {
                             "type": "boolean",
                             "description": "The Policy model to apply",
                             "default": true
                         },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
                 "metrics": {
                     "type": "object",
                     "properties": {
-                        "annotations": {
-                            "type": "object",
-                            "properties": {
-                                "prometheus": {
-                                    "type": "object",
-                                    "properties": {
-                                        "io/scrape": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "true"
-                                        },
-                                        "io/port": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "{{ .Values.indexNode.service.ports.grpc }}"
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable metrics",
@@ -5648,33 +5853,33 @@
                     "type": "object",
                     "properties": {
                         "mode": {
-                            "type": "integer",
+                            "type": "number",
                             "description": "TLS mode for proxy. Allowed values: `0`, `1`, `2`",
-                            "default": false
+                            "default": 0
                         },
                         "existingSecret": {
                             "type": "string",
-                            "description": "Name of the existing secret containing the TLS certificates for proxy",
+                            "description": "Name of the existing secret containing the TLS certificates for proxy.",
                             "default": ""
                         },
                         "cert": {
                             "type": "string",
                             "description": "The secret key from the existingSecret if 'cert' key different from the default (server.pem)",
-                            "default": "tls.crt"
+                            "default": "server.pem"
                         },
                         "key": {
                             "type": "string",
                             "description": "The secret key from the existingSecret if 'key' key different from the default (server.key)",
-                            "default": "tls.key"
+                            "default": "server.key"
                         },
                         "caCert": {
                             "type": "string",
                             "description": "The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)",
-                            "default": "ca.crt"
+                            "default": "ca.pem"
                         },
                         "keyPassword": {
                             "type": "string",
-                            "description": "Password to access the password-protected PEM key if necessary",
+                            "description": "Password to access the password-protected PEM key if necessary.",
                             "default": ""
                         }
                     }
@@ -5698,7 +5903,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "# Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)\nproxy:\n  port: {{ .Values.proxy.containerPorts.grpc }}\n  internalPort: {{ .Values.proxy.containerPorts.grpcInternal }}\n"
+                    "default": "\"\""
                 },
                 "existingConfigMap": {
                     "type": "string",
@@ -5872,20 +6077,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if proxy.resources is set (proxy.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the proxy containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the proxy containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -5895,20 +6095,27 @@
                             "description": "Enabled Proxy pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set Proxy pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Proxy container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -5917,27 +6124,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Proxy containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Proxy containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Proxy containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Proxy containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Proxy container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -5945,13 +6162,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Proxy container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -5966,6 +6193,11 @@
                     "type": "string",
                     "description": "Name of the runtime class to be used by pod(s)",
                     "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -6096,7 +6328,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable creation of ServiceAccount for Proxy pods",
-                            "default": false
+                            "default": true
                         },
                         "name": {
                             "type": "string",
@@ -6121,17 +6353,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -6298,29 +6520,45 @@
                         }
                     }
                 },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable creation of NetworkPolicy resources",
+                            "default": true
+                        },
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "The Policy model to apply",
+                            "default": true
+                        },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
                 "metrics": {
                     "type": "object",
                     "properties": {
-                        "annotations": {
-                            "type": "object",
-                            "properties": {
-                                "prometheus": {
-                                    "type": "object",
-                                    "properties": {
-                                        "io/scrape": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "true"
-                                        },
-                                        "io/port": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "{{ .Values.proxy.service.ports.grpc }}"
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable metrics",
@@ -6389,33 +6627,6 @@
                             }
                         }
                     }
-                },
-                "networkPolicy": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
-                        },
-                        "allowExternal": {
-                            "type": "boolean",
-                            "description": "The Policy model to apply",
-                            "default": true
-                        },
-                        "extraIngress": {
-                            "type": "array",
-                            "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
-                        },
-                        "extraEgress": {
-                            "type": "array",
-                            "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
                 }
             }
         },
@@ -6433,17 +6644,12 @@
                         "registry": {
                             "type": "string",
                             "description": "Attu image registry",
-                            "default": "docker.io"
+                            "default": "REGISTRY_NAME"
                         },
                         "repository": {
                             "type": "string",
                             "description": "Attu image repository",
-                            "default": "bitnami/attu"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "Attu image tag (immutable tags are recommended)",
-                            "default": "2.2.6-debian-11-r1"
+                            "default": "REPOSITORY_NAME/attu"
                         },
                         "digest": {
                             "type": "string",
@@ -6631,20 +6837,15 @@
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if attu.resources is set (attu.resources is recommended for production).",
+                    "default": "micro"
+                },
                 "resources": {
                     "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the attu containers",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the attu containers",
-                            "default": {}
-                        }
-                    }
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 },
                 "podSecurityContext": {
                     "type": "object",
@@ -6654,20 +6855,27 @@
                             "description": "Enabled Attu pods' Security Context",
                             "default": true
                         },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
                         "fsGroup": {
                             "type": "number",
                             "description": "Set Attu pod's Security Context fsGroup",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Attu container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -6676,27 +6884,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Attu containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Attu containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Attu containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Attu containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Attu container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -6704,13 +6922,23 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Attu container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -6725,6 +6953,11 @@
                     "type": "string",
                     "description": "Name of the runtime class to be used by pod(s)",
                     "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
                 },
                 "hostAliases": {
                     "type": "array",
@@ -6855,7 +7088,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable creation of ServiceAccount for Attu pods",
-                            "default": false
+                            "default": true
                         },
                         "name": {
                             "type": "string",
@@ -6880,17 +7113,7 @@
                         "create": {
                             "type": "boolean",
                             "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
+                            "default": true
                         }
                     }
                 },
@@ -7133,24 +7356,33 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
+                            "default": true
                         },
                         "allowExternal": {
                             "type": "boolean",
                             "description": "The Policy model to apply",
                             "default": true
                         },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -7165,17 +7397,12 @@
                         "registry": {
                             "type": "string",
                             "description": "Init container wait-container image registry",
-                            "default": "docker.io"
+                            "default": "REGISTRY_NAME"
                         },
                         "repository": {
                             "type": "string",
                             "description": "Init container wait-container image name",
-                            "default": "bitnami/os-shell"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "Init container wait-container image tag",
-                            "default": "11-debian-11-r2"
+                            "default": "REPOSITORY_NAME/os-shell"
                         },
                         "digest": {
                             "type": "string",
@@ -7190,8 +7417,10 @@
                         "pullSecrets": {
                             "type": "array",
                             "description": "Specify docker-registry secret names as an array",
-                            "default": [],
-                            "items": {}
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 },
@@ -7200,27 +7429,37 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Milvus containers' Security Context",
+                            "description": "Enabled containers' Security Context",
                             "default": true
                         },
                         "runAsUser": {
                             "type": "number",
-                            "description": "Set Milvus containers' Security Context runAsUser",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
                             "default": 1001
                         },
                         "runAsNonRoot": {
                             "type": "boolean",
-                            "description": "Set Milvus containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context runAsNonRoot",
                             "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
                         },
                         "readOnlyRootFilesystem": {
                             "type": "boolean",
-                            "description": "Set Milvus containers' Security Context runAsNonRoot",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
                             "default": true
                         },
                         "allowPrivilegeEscalation": {
                             "type": "boolean",
-                            "description": "Set Milvus container's privilege escalation",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
                             "default": false
                         },
                         "capabilities": {
@@ -7228,7 +7467,7 @@
                             "properties": {
                                 "drop": {
                                     "type": "array",
-                                    "description": "Set Milvus container's Security Context runAsNonRoot",
+                                    "description": "List of capabilities to be dropped",
                                     "default": [
                                         "ALL"
                                     ],
@@ -7237,8 +7476,28 @@
                                     }
                                 }
                             }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
                         }
                     }
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).",
+                    "default": "micro"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
                 }
             }
         },
@@ -7256,37 +7515,57 @@
                     "description": "Port of the external etcd instance",
                     "default": 2379
                 },
+                "user": {
+                    "type": "string",
+                    "description": "User of the external etcd instance",
+                    "default": "root"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password of the external etcd instance",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Name of a secret containing the external etcd password",
+                    "default": ""
+                },
+                "existingSecretPasswordKey": {
+                    "type": "string",
+                    "description": "Key inside the secret containing the external etcd password",
+                    "default": "etcd-root-password"
+                },
                 "tls": {
                     "type": "object",
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable TLS for etcd client connections",
+                            "description": "Enable TLS for etcd client connections.",
                             "default": false
                         },
                         "existingSecret": {
                             "type": "string",
-                            "description": "Name of the existing secret containing the TLS certificates for external etcd client communications",
+                            "description": "Name of the existing secret containing the TLS certificates for external etcd client communications.",
                             "default": ""
                         },
                         "cert": {
                             "type": "string",
-                            "description": "The secret key from the existingSecret if 'cert' key different from the default",
+                            "description": "The secret key from the existingSecret if 'cert' key different from the default (tls.crt)",
                             "default": "tls.crt"
                         },
                         "key": {
                             "type": "string",
-                            "description": "The secret key from the existingSecret if 'key' key different from the default",
+                            "description": "The secret key from the existingSecret if 'key' key different from the default (tls.key)",
                             "default": "tls.key"
                         },
                         "caCert": {
                             "type": "string",
-                            "description": "The secret key from the existingSecret if 'caCert' key different from the default",
+                            "description": "The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)",
                             "default": "ca.crt"
                         },
                         "keyPassword": {
                             "type": "string",
-                            "description": "Password to access the password-protected PEM key if necessary",
+                            "description": "Password to access the password-protected PEM key if necessary.",
                             "default": ""
                         }
                     }
@@ -7375,6 +7654,46 @@
                     "type": "number",
                     "description": "External Kafka port",
                     "default": 9092
+                },
+                "listener": {
+                    "type": "object",
+                    "properties": {
+                        "protocol": {
+                            "type": "string",
+                            "description": "Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL",
+                            "default": "PLAINTEXT"
+                        }
+                    }
+                },
+                "sasl": {
+                    "type": "object",
+                    "properties": {
+                        "user": {
+                            "type": "string",
+                            "description": "User for SASL authentication",
+                            "default": "user"
+                        },
+                        "password": {
+                            "type": "string",
+                            "description": "Password for SASL authentication",
+                            "default": ""
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing a password for SASL authentication (under the key named \"client-passwords\")",
+                            "default": ""
+                        },
+                        "existingSecretPasswordKey": {
+                            "type": "string",
+                            "description": "Name of the secret key containing the Kafka client user password",
+                            "default": "kafka-root-password"
+                        },
+                        "enabledMechanisms": {
+                            "type": "string",
+                            "description": "Kafka enabled SASL mechanisms",
+                            "default": "PLAIN"
+                        }
+                    }
                 }
             }
         },
@@ -7526,10 +7845,15 @@
                     "description": "Enable/disable Kafka chart installation",
                     "default": true
                 },
-                "replicaCount": {
-                    "type": "number",
-                    "description": "Number of Kafka brokers",
-                    "default": 1
+                "controller": {
+                    "type": "object",
+                    "properties": {
+                        "replicaCount": {
+                            "type": "number",
+                            "description": "Number of Kafka controller eligible (controller+broker) nodes",
+                            "default": 1
+                        }
+                    }
                 },
                 "service": {
                     "type": "object",
@@ -7546,35 +7870,45 @@
                         }
                     }
                 },
-                "auth": {
+                "extraConfig": {
+                    "type": "string",
+                    "description": "Additional configuration to be appended at the end of the generated Kafka configuration file.",
+                    "default": "offsets.topic.replication.factor=1"
+                },
+                "listeners": {
                     "type": "object",
                     "properties": {
-                        "clientProtocol": {
-                            "type": "string",
-                            "description": "Kafka authentication protocol for the client",
-                            "default": "sasl"
-                        },
-                        "sasl": {
+                        "client": {
                             "type": "object",
                             "properties": {
-                                "mechanisms": {
+                                "protocol": {
                                     "type": "string",
-                                    "description": "Kafka authentication mechanisms for SASL",
-                                    "default": "plain"
-                                },
-                                "jaas": {
-                                    "type": "object",
-                                    "properties": {
-                                        "clientUsers": {
-                                            "type": "array",
-                                            "description": "Kafka client users",
-                                            "default": [
-                                                "user"
-                                            ],
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        }
+                                    "description": "Kafka authentication protocol for the client listener",
+                                    "default": "SASL_PLAINTEXT"
+                                }
+                            }
+                        }
+                    }
+                },
+                "sasl": {
+                    "type": "object",
+                    "properties": {
+                        "enabledMechanisms": {
+                            "type": "string",
+                            "description": "Kafka enabled SASL mechanisms",
+                            "default": "PLAIN"
+                        },
+                        "client": {
+                            "type": "object",
+                            "properties": {
+                                "users": {
+                                    "type": "array",
+                                    "description": "Kafka client users",
+                                    "default": [
+                                        "user"
+                                    ],
+                                    "items": {
+                                        "type": "string"
                                     }
                                 }
                             }

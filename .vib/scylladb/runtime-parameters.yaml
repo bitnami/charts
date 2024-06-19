@@ -26,3 +26,5 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   runAsUser: 1002
+sysctl:
+  enabled: true
