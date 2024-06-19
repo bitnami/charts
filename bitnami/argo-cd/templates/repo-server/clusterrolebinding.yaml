@@ -3,22 +3,21 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.rbac.create .Values.server.clusterAdminAccess -}}
+{{- if and .Values.repoServer.serviceAccount.create .Values.rbac.create .Values.repoServer.clusterAdminAccess }}
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ include "argocd.namespace.server" . }}
+  name: {{ include "argocd.repo-server" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: server
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "argocd.repo-server.serviceAccountName" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "argocd.namespace.server" . }}
-subjects:
-  - kind: ServiceAccount
-    name: {{ include "argocd.server.serviceAccountName" . }}
-    namespace: {{ include "common.names.namespace" . }}
+  name: {{ include "argocd.repo-server" . }}
 {{- end }}
