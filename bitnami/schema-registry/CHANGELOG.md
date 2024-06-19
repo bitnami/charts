@@ -1,8 +1,32 @@
 # Changelog
 
-## 19.1.0 (2024-05-28)
+## 19.1.6 (2024-06-17)
 
-* [bitnami/schema-registry] Enable PodDisruptionBudgets ([#26377](https://github.com/bitnami/charts/pull/26377))
+* [bitnami/schema-registry] Release 19.1.6 ([#27302](https://github.com/bitnami/charts/pull/27302))
+
+## <small>19.1.5 (2024-06-14)</small>
+
+* [bitnami/schema-registry] Release 19.1.5 (#27169) ([d1fc70f](https://github.com/bitnami/charts/commit/d1fc70f5a2b6b02de8e161e5642f63df5d525f24)), closes [#27169](https://github.com/bitnami/charts/issues/27169)
+
+## <small>19.1.4 (2024-06-13)</small>
+
+* [bitnami/schema-registry] Render imagePullSecrets (#27129) ([155d842](https://github.com/bitnami/charts/commit/155d842a9517619077f82e2589d0104027a4a004)), closes [#27129](https://github.com/bitnami/charts/issues/27129)
+
+## <small>19.1.3 (2024-06-06)</small>
+
+* [bitnami/schema-registry] Release 19.1.3 (#27015) ([9624f24](https://github.com/bitnami/charts/commit/9624f24d3cc8eaf0704ac828729ec486ab0779ac)), closes [#27015](https://github.com/bitnami/charts/issues/27015)
+
+## <small>19.1.2 (2024-06-05)</small>
+
+* [bitnami/schema-registry] Bump chart version (#26859) ([cc07701](https://github.com/bitnami/charts/commit/cc07701f428b486e8c4f35fae719e1a513ee56ef)), closes [#26859](https://github.com/bitnami/charts/issues/26859)
+
+## <small>19.1.1 (2024-06-05)</small>
+
+* [bitnami/schema-registry] Bump chart version (#26801) ([90a1ef0](https://github.com/bitnami/charts/commit/90a1ef0fbe9545af302d682ac2b51adc3e6a9be9)), closes [#26801](https://github.com/bitnami/charts/issues/26801)
+
+## 19.1.0 (2024-05-29)
+
+* [bitnami/schema-registry] Enable PodDisruptionBudgets (#26377) ([5337d8a](https://github.com/bitnami/charts/commit/5337d8ab354416b64a55994f5a2f838cea83f083)), closes [#26377](https://github.com/bitnami/charts/issues/26377)
 
 ## 19.0.0 (2024-05-27)
 

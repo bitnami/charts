@@ -1,8 +1,36 @@
 # Changelog
 
-## 6.2.1 (2024-05-28)
+## 6.2.8 (2024-06-18)
 
-* [bitnami/logstash] Enable PodDisruptionBudgets ([#26504](https://github.com/bitnami/charts/pull/26504))
+* [bitnami/logstash] Release 6.2.8 ([#27371](https://github.com/bitnami/charts/pull/27371))
+
+## <small>6.2.7 (2024-06-17)</small>
+
+* [bitnami/logstash] Release 6.2.7 (#27240) ([e51e6ce](https://github.com/bitnami/charts/commit/e51e6cea0b8a80f6d55f4775c3b47e851915d70c)), closes [#27240](https://github.com/bitnami/charts/issues/27240)
+
+## <small>6.2.6 (2024-06-12)</small>
+
+* [bitnami/logstash] Release 6.2.6 (#27132) ([e2e5d5f](https://github.com/bitnami/charts/commit/e2e5d5f7ff623382dfabe527a6517069fcdae56d)), closes [#27132](https://github.com/bitnami/charts/issues/27132)
+
+## <small>6.2.5 (2024-06-12)</small>
+
+* [bitnami/logstash] Release 6.2.5 (#27120) ([38a0c2d](https://github.com/bitnami/charts/commit/38a0c2d71bebb2e3a91f36ffb1065c75700e1a32)), closes [#27120](https://github.com/bitnami/charts/issues/27120)
+
+## <small>6.2.4 (2024-06-06)</small>
+
+* [bitnami/logstash] Release 6.2.4 (#26976) ([56dfcc5](https://github.com/bitnami/charts/commit/56dfcc599d3edad3dcca3b2e4e7d6feac6f0f51e)), closes [#26976](https://github.com/bitnami/charts/issues/26976)
+
+## <small>6.2.3 (2024-06-05)</small>
+
+* [bitnami/logstash] Release 6.2.3 (#26876) ([6fc7bdc](https://github.com/bitnami/charts/commit/6fc7bdcb0b026bdc31c03db07aad1d26d19da3ac)), closes [#26876](https://github.com/bitnami/charts/issues/26876)
+
+## <small>6.2.2 (2024-06-04)</small>
+
+* [bitnami/logstash] Bump chart version (#26643) ([13d1fde](https://github.com/bitnami/charts/commit/13d1fded62b03d215410e5aeea46b74a794ccaf5)), closes [#26643](https://github.com/bitnami/charts/issues/26643)
+
+## <small>6.2.1 (2024-05-29)</small>
+
+* [bitnami/logstash] Enable PodDisruptionBudgets (#26504) ([4a3aee4](https://github.com/bitnami/charts/commit/4a3aee4de029074aec8427875d07fe191a9e82a7)), closes [#26504](https://github.com/bitnami/charts/issues/26504)
 
 ## 6.2.0 (2024-05-21)
 

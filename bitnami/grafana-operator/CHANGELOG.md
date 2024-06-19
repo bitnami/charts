@@ -1,8 +1,40 @@
 # Changelog
 
-## 4.4.0 (2024-05-28)
+## 4.4.8 (2024-06-18)
 
-* [bitnami/grafana-operator] Enable PodDisruptionBudgets ([#26476](https://github.com/bitnami/charts/pull/26476))
+* [bitnami/grafana-operator] Release 4.4.8 ([#27350](https://github.com/bitnami/charts/pull/27350))
+
+## <small>4.4.7 (2024-06-17)</small>
+
+* [bitnami/grafana-operator] Release 4.4.7 (#27225) ([824f2e9](https://github.com/bitnami/charts/commit/824f2e90a55e2e9c711f929388543e2eb4d9c46f)), closes [#27225](https://github.com/bitnami/charts/issues/27225)
+
+## <small>4.4.6 (2024-06-13)</small>
+
+* [bitnami/grafana-operator] Release 4.4.6 (#27147) ([1ea2b57](https://github.com/bitnami/charts/commit/1ea2b57fe98493a183f4404392bcdcf983485fcb)), closes [#27147](https://github.com/bitnami/charts/issues/27147)
+
+## <small>4.4.5 (2024-06-06)</small>
+
+* [bitnami/grafana-operator] Release 4.4.5 (#26957) ([cc013e9](https://github.com/bitnami/charts/commit/cc013e97ad91f2814ab70868019cca02bf2326bf)), closes [#26957](https://github.com/bitnami/charts/issues/26957)
+
+## <small>4.4.4 (2024-06-05)</small>
+
+* [bitnami/grafana-operator] Update content of grafanacontactpoints.integreatly.org.yaml (#26871) ([9d0f5e8](https://github.com/bitnami/charts/commit/9d0f5e8afdaf53fc9188b6ad56f70795442544a2)), closes [#26871](https://github.com/bitnami/charts/issues/26871)
+
+## <small>4.4.3 (2024-06-05)</small>
+
+* [bitnami/grafana-operator] Release 4.4.3 (#26729) ([2006fd0](https://github.com/bitnami/charts/commit/2006fd01f9161764e60efe7b79aa5f4dce7c9409)), closes [#26729](https://github.com/bitnami/charts/issues/26729)
+
+## <small>4.4.2 (2024-06-04)</small>
+
+* [bitnami/grafana-operator] Release 4.4.2 (#26714) ([3c4a705](https://github.com/bitnami/charts/commit/3c4a705b9f13946a5866f1371e4bfa40f72ebc3d)), closes [#26714](https://github.com/bitnami/charts/issues/26714)
+
+## <small>4.4.1 (2024-06-04)</small>
+
+* [bitnami/grafana-operator] Bump chart version (#26634) ([7db5c88](https://github.com/bitnami/charts/commit/7db5c88fae416e432d011c85cd7e44abef1590e4)), closes [#26634](https://github.com/bitnami/charts/issues/26634)
+
+## 4.4.0 (2024-05-29)
+
+* [bitnami/grafana-operator] Enable PodDisruptionBudgets (#26476) ([2cf771d](https://github.com/bitnami/charts/commit/2cf771d70c04a720db3b5cbbd0be65d0fd7f0bd3)), closes [#26476](https://github.com/bitnami/charts/issues/26476)
 
 ## <small>4.3.2 (2024-05-26)</small>
 

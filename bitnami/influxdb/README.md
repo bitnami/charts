@@ -118,6 +118,10 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 The allowed extensions are `.sh`, and `.txt`.
 
+### Migrating InfluxDB 1.x data into 2.x format
+
+The [Bitnami InfluxDB&trade;](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) image allows you to migrate your InfluxDB 1.x data into 2.x format by setting the `INFLUXDB_INIT_MODE=upgrade` environment variable, and mounting the InfluxDB 1.x data into the container (let the initialization logic know where it is located with the `INFLUXDB_INIT_V1_DIR` variable). Do not point `INFLUXDB_INIT_V1_DIR` into `INFLUXDB_VOLUME_DIR` (default: `/bitnami/influxdb`), or the upgrade process will fail.
+
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).

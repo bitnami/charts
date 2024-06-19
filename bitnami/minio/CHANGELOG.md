@@ -1,8 +1,44 @@
 # Changelog
 
-## 14.6.2 (2024-05-29)
+## 14.6.11 (2024-06-18)
 
-* [bitnami/minio] Release 14.6.2 ([#26522](https://github.com/bitnami/charts/pull/26522))
+* [bitnami/minio] Release 14.6.11 ([#27380](https://github.com/bitnami/charts/pull/27380))
+
+## <small>14.6.10 (2024-06-17)</small>
+
+* [bitnami/minio] Release 14.6.10 (#27250) ([cd8709b](https://github.com/bitnami/charts/commit/cd8709be4d0136e5cd17ce462c47719b0e2ae3bf)), closes [#27250](https://github.com/bitnami/charts/issues/27250)
+
+## <small>14.6.9 (2024-06-14)</small>
+
+* [bitnami/minio] Release 14.6.9 (#27179) ([9a2ff58](https://github.com/bitnami/charts/commit/9a2ff58b5c4e7cab3967281411e364ede8fe81b5)), closes [#27179](https://github.com/bitnami/charts/issues/27179)
+
+## <small>14.6.8 (2024-06-14)</small>
+
+* [bitnami/minio] Release 14.6.8 (#27089) ([516eabc](https://github.com/bitnami/charts/commit/516eabc88458967e5c015c3e0dd9672df0345b88)), closes [#27089](https://github.com/bitnami/charts/issues/27089)
+
+## <small>14.6.7 (2024-06-06)</small>
+
+* [bitnami/minio] Release 14.6.7 (#27036) ([d29e462](https://github.com/bitnami/charts/commit/d29e462be37c28d527619b0c9b44c76d1dbaae2c)), closes [#27036](https://github.com/bitnami/charts/issues/27036)
+
+## <small>14.6.6 (2024-06-06)</small>
+
+* [bitnami/minio] Release 14.6.6 (#26985) ([bf44ae0](https://github.com/bitnami/charts/commit/bf44ae00837ccb179036e288bf14c2575d05c6bd)), closes [#26985](https://github.com/bitnami/charts/issues/26985)
+
+## <small>14.6.5 (2024-06-05)</small>
+
+* [bitnami/minio] Align PodDisruptionBudgets with templates (#26705) ([d1abc21](https://github.com/bitnami/charts/commit/d1abc21034df460373c867422aea7bfe024bc769)), closes [#26705](https://github.com/bitnami/charts/issues/26705)
+
+## <small>14.6.4 (2024-06-05)</small>
+
+* [bitnami/minio] Release 14.6.4 (#26741) ([f8c8635](https://github.com/bitnami/charts/commit/f8c8635ec24d47e31a33cc488eb391bb745dca1d)), closes [#26741](https://github.com/bitnami/charts/issues/26741)
+
+## <small>14.6.3 (2024-06-04)</small>
+
+* [bitnami/minio] Bump chart version (#26649) ([89d3360](https://github.com/bitnami/charts/commit/89d336016b52703fa83758abb29e73d93beeca50)), closes [#26649](https://github.com/bitnami/charts/issues/26649)
+
+## <small>14.6.2 (2024-05-29)</small>
+
+* [bitnami/minio] Release 14.6.2 (#26522) ([096d86c](https://github.com/bitnami/charts/commit/096d86ccf56ec9c743dfeb883acc0e0933b90005)), closes [#26522](https://github.com/bitnami/charts/issues/26522)
 
 ## <small>14.6.1 (2024-05-28)</small>
 

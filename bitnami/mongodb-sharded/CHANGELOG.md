@@ -1,8 +1,32 @@
 # Changelog
 
-## 8.2.2 (2024-05-28)
+## 8.2.8 (2024-06-18)
 
-* [bitnami/mongodb-sharded] Release 8.2.2 ([#26480](https://github.com/bitnami/charts/pull/26480))
+* [bitnami/mongodb-sharded] Release 8.2.8 ([#27383](https://github.com/bitnami/charts/pull/27383))
+
+## <small>8.2.7 (2024-06-17)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.7 (#27316) ([89ef0cf](https://github.com/bitnami/charts/commit/89ef0cf930a22e4338ecf36fbb29221f00ca08cc)), closes [#27316](https://github.com/bitnami/charts/issues/27316)
+
+## <small>8.2.6 (2024-06-17)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.6 (#27252) ([cd07b41](https://github.com/bitnami/charts/commit/cd07b41777df273758467d3e3b8406d84650459e)), closes [#27252](https://github.com/bitnami/charts/issues/27252)
+
+## <small>8.2.5 (2024-06-06)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.5 (#26986) ([52cc943](https://github.com/bitnami/charts/commit/52cc943e0c09b75180611b2613a121ed724457dc)), closes [#26986](https://github.com/bitnami/charts/issues/26986)
+
+## <small>8.2.4 (2024-06-04)</small>
+
+* [bitnami/mongodb-sharded] Bump chart version (#26651) ([36e571f](https://github.com/bitnami/charts/commit/36e571fecd941a118f5605ba0ab9280cd4f67977)), closes [#26651](https://github.com/bitnami/charts/issues/26651)
+
+## <small>8.2.3 (2024-05-31)</small>
+
+* [bitnami/mongodb-sharded] Fix mongos livenessProbe (#26566) ([274aecb](https://github.com/bitnami/charts/commit/274aecb28ebecabbe5c7eaeb9fa7695af3d5b89f)), closes [#26566](https://github.com/bitnami/charts/issues/26566)
+
+## <small>8.2.2 (2024-05-28)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.2 (#26480) ([673962c](https://github.com/bitnami/charts/commit/673962cb934f1899372497ae3964a5c6913b42df)), closes [#26480](https://github.com/bitnami/charts/issues/26480)
 
 ## <small>8.2.1 (2024-05-22)</small>
 
