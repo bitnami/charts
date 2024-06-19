@@ -2733,7 +2733,7 @@ server:
   ## Enable admin clusterrole resources. Allows Argo CD server to have access to multiple namespaces
   ## @param server.clusterAdminAccess Enable K8s cluster admin access for the server
   ##
-  clusterAdminAccess: false
+  clusterAdminAccess: true
   ## Enable Custom Rules for Argo CD server cluster role
   ## @param server.clusterRoleRules Use custom rules for server's cluster role
   ##

@@ -196,7 +196,7 @@ controller:
   - --self-service-notification-enabled
 
 server:
-  # Default is false
+  # Default is true
   clusterAdminAccess: true
   # Refer to recommended documentation for config:
   # https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#switch-resource-tracking-method
