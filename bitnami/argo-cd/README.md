@@ -178,7 +178,8 @@ extraDeploy:
 
 In case you would like to allow applications / application sets in multiple namespaces, you can use the following to configure Argo-CD.
 
-Upstream docs
+Upstream docs:
+
 - [Reconfigure Argo CD to allow certain namespaces for apps](https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#reconfigure-argo-cd-to-allow-certain-namespaces)
 - [Reconfigure Argo CD to allow certain namespaces for appset](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#change-workload-startup-parameters)
 
