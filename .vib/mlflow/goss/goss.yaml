@@ -71,7 +71,7 @@ http:
       - /FINISHED/
       # The job uses RandomForestRegressor (which is used in the example)
       - /RandomForestRegressor/
-    timeout: 10000
+    timeout: 30000
   http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}/api/2.0/mlflow/runs/search:
     status: 200
     username: {{ .Vars.tracking.auth.username }}
@@ -87,7 +87,7 @@ http:
       - /FINISHED/
       # The job uses RandomForestRegressor (which is used in the example)
       - /RandomForestRegressor/
-    timeout: 10000
+    timeout: 30000
 command:
   {{- $uid := .Vars.tracking.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.tracking.podSecurityContext.fsGroup }}

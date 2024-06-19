@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.3 (2024-06-12)
+## 2.3.5 (2024-06-18)
 
-* [bitnami/fluent-bit] Release 2.3.3 ([#27125](https://github.com/bitnami/charts/pull/27125))
+* [bitnami/fluent-bit] Release 2.3.5 ([#27344](https://github.com/bitnami/charts/pull/27344))
+
+## <small>2.3.3 (2024-06-12)</small>
+
+* [bitnami/fluent-bit] Release 2.3.3 (#27125) ([6544466](https://github.com/bitnami/charts/commit/6544466a73d9ce96986a2829a6c245e1363d0e79)), closes [#27125](https://github.com/bitnami/charts/issues/27125)
 
 ## <small>2.3.2 (2024-06-08)</small>
 

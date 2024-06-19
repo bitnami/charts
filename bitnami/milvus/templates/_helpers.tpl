@@ -1007,7 +1007,7 @@ Init container definition for waiting for the database to be ready
       yq e -i '.kafka.ssl.tlsCaCert = "/opt/bitnami/milvus/configs/cert/kafka/client/{{ .context.Values.externalKafka.tls.caCert }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
       {{- end }}
       {{- if .context.Values.externalKafka.tls.keyPassword }}
-      yq e -i '.kafka.ssl.tlsKeyPassword = "{{ .context.Values.externalKafka.tls.keyPassword }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      yq e -i '.kafka.ssl.tlsKeyPassword = {{ print "{{ MILVUS_KAFKA_TLS_KEY_PASSWORD }}" | quote }}' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
       {{- end }}
       {{- end }}
       {{- else }}
@@ -1030,12 +1030,21 @@ Init container definition for waiting for the database to be ready
   env:
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .context.Values.milvus.image.debug .context.Values.diagnosticMode.enabled) | quote }}
-    {{- if and (include "milvus.kafka.deployed" .context) (include "milvus.kafka.authEnabled" .context) }}
+    {{- if (include "milvus.kafka.deployed" .context) }}
+    {{- if (include "milvus.kafka.authEnabled" .context) }}
     - name: MILVUS_KAFKA_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "milvus.kafka.secretName" .context }}
           key: {{ include "milvus.kafka.secretPasswordKey" .context }}
+    {{- end }}
+    {{- if and .context.Values.externalKafka.tls.enabled .context.Values.externalKafka.tls.keyPassword .context.Values.externalKafka.tls.existingSecret }}
+    - name: MILVUS_KAFKA_TLS_KEY_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: {{ printf "%s-external-kafka-tls-passwords" (include "common.names.fullname" .context) }}
+          key: key-password
+    {{- end }}
     {{- end }}
     {{- if and (include "milvus.s3.deployed" .context) }}
     - name: MILVUS_S3_ACCESS_ID

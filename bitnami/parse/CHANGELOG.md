@@ -1,8 +1,16 @@
 # Changelog
 
-## 23.2.5 (2024-06-06)
+## 23.2.7 (2024-06-18)
 
-* [bitnami/parse] Release 23.2.5 ([#27001](https://github.com/bitnami/charts/pull/27001))
+* [bitnami/parse] Release 23.2.7 ([#27396](https://github.com/bitnami/charts/pull/27396))
+
+## <small>23.2.6 (2024-06-17)</small>
+
+* [bitnami/parse] Release 23.2.6 (#27260) ([6d5d22e](https://github.com/bitnami/charts/commit/6d5d22e2a907828be451774f64e50be4af87b368)), closes [#27260](https://github.com/bitnami/charts/issues/27260)
+
+## <small>23.2.5 (2024-06-06)</small>
+
+* [bitnami/parse] Release 23.2.5 (#27001) ([e212a25](https://github.com/bitnami/charts/commit/e212a25c2b552f9cbfd47e9b5b44c467dfdbfff6)), closes [#27001](https://github.com/bitnami/charts/issues/27001)
 
 ## <small>23.2.4 (2024-06-06)</small>
 
