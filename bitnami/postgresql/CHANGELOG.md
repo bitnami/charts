@@ -1,12 +1,12 @@
 # Changelog
 
-## 15.5.8 (2024-05-29)
+## 15.5.8 (2024-06-19)
 
 * [bitnami/postgresql] Add pre-init scripts ([#26467](https://github.com/bitnami/charts/pull/26467))
 
 ## <small>15.5.7 (2024-06-18)</small>
 
-* [bitnami/postgresql] Release 15.5.7 ([#27401](https://github.com/bitnami/charts/pull/27401))
+* [bitnami/postgresql] Release 15.5.7 (#27401) ([2fff79d](https://github.com/bitnami/charts/commit/2fff79d0d54da3680cb8dac3652884c82c314e74)), closes [#27401](https://github.com/bitnami/charts/issues/27401)
 
 ## <small>15.5.6 (2024-06-17)</small>
 
