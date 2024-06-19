@@ -99,6 +99,9 @@ hubble-metrics: ~
 {{- if .Values.operator.metrics.enabled }}
 operator-prometheus-serve-addr: {{ printf ":%d" (int .Values.operator.containerPorts.metrics) | quote }}
 {{- end }}
+{{- if .Values.envoy.metrics.enabled }}
+proxy-prometheus-port: {{ printf "%d" (int .Values.envoy.containerPorts.metrics) | quote }}
+{{- end }}
 {{- end }}
 # Envoy configuration
 external-envoy-proxy: "true"

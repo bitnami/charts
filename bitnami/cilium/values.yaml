@@ -136,7 +136,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/cilium
-    tag: 1.15.5-debian-12-r6
+    tag: 1.15.6-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1087,7 +1087,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/cilium-operator
-    tag: 1.15.5-debian-12-r1
+    tag: 1.15.6-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1573,23 +1573,23 @@ operator:
       ##
       selector: {}
 
-## @section Envoy Parameters
+## @section Cilium Envoy Parameters
 ##
 envoy:
-  ## Bitnami Envoy image
-  ## ref: https://hub.docker.com/r/bitnami/cilium/tags/
-  ## @param envoy.image.registry [default: REGISTRY_NAME] Envoy image registry
-  ## @param envoy.image.repository [default: REPOSITORY_NAME/cilium] Envoy image repository
-  ## @skip envoy.image.tag Envoy image tag (immutable tags are recommended)
-  ## @param envoy.image.digest Envoy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
-  ## @param envoy.image.pullPolicy Envoy image pull policy
-  ## @param envoy.image.pullSecrets Envoy image pull secrets
-  ## @param envoy.image.debug Enable Envoy image debug mode
+  ## Bitnami Cilium Proxy image
+  ## ref: https://hub.docker.com/r/bitnami/cilium-proxy/tags/
+  ## @param envoy.image.registry [default: REGISTRY_NAME] Cilium Proxy image registry
+  ## @param envoy.image.repository [default: REPOSITORY_NAME/cilium] Cilium Proxy image repository
+  ## @skip envoy.image.tag Cilium Proxy image tag (immutable tags are recommended)
+  ## @param envoy.image.digest Cilium Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param envoy.image.pullPolicy Cilium Proxy image pull policy
+  ## @param envoy.image.pullSecrets Cilium Proxy image pull secrets
+  ## @param envoy.image.debug Enable Cilium Proxy image debug mode
   ##
   image:
     registry: docker.io
-    repository: bitnami/envoy
-    tag: 1.29.5-debian-12-r0
+    repository: bitnami/cilium-proxy
+    tag: 1.28.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1605,22 +1605,22 @@ envoy:
     ##
     pullSecrets: []
     debug: false
-  ## @param envoy.containerPorts.health Envoy health container port
-  ## @param envoy.containerPorts.metrics Envoy metrics container port
+  ## @param envoy.containerPorts.health Cilium Envoy health container port
+  ## @param envoy.containerPorts.metrics Cilium Envoy metrics container port
   ##
   containerPorts:
     health: 9878
     metrics: 9964
-  ## @param envoy.extraContainerPorts Optionally specify extra list of additional ports for Envoy containers
+  ## @param envoy.extraContainerPorts Optionally specify extra list of additional ports for Cilium Envoy containers
   ## e.g:
   ## extraContainerPorts:
   ##   - name: myservice
   ##     containerPort: 9090
   ##
   extraContainerPorts: []
-  ## Configure extra options for Envoy containers' liveness and readiness probes
+  ## Configure extra options for Cilium Envoy containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param envoy.livenessProbe.enabled Enable livenessProbe on Envoy containers
+  ## @param envoy.livenessProbe.enabled Enable livenessProbe on Cilium Envoy containers
   ## @param envoy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param envoy.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param envoy.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -1634,7 +1634,7 @@ envoy:
     timeoutSeconds: 5
     failureThreshold: 10
     successThreshold: 1
-  ## @param envoy.readinessProbe.enabled Enable readinessProbe on Envoy containers
+  ## @param envoy.readinessProbe.enabled Enable readinessProbe on Cilium Envoy containers
   ## @param envoy.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param envoy.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param envoy.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -1648,7 +1648,7 @@ envoy:
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
-  ## @param envoy.startupProbe.enabled Enable startupProbe on Envoy containers
+  ## @param envoy.startupProbe.enabled Enable startupProbe on Cilium Envoy containers
   ## @param envoy.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param envoy.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param envoy.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -1671,13 +1671,13 @@ envoy:
   ## @param envoy.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Envoy resource requests and limits
+  ## Cilium Envoy resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param envoy.resourcesPreset Set Envoy container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.resources is set (envoy.resources is recommended for production).
+  ## @param envoy.resourcesPreset Set Cilium Envoy container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.resources is set (envoy.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "micro"
-  ## @param envoy.resources Set Envoy container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## @param envoy.resources Set Cilium Envoy container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
   ##   requests:
@@ -1690,11 +1690,11 @@ envoy:
   resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param envoy.podSecurityContext.enabled Enable Envoy pods' Security Context
-  ## @param envoy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Envoy pods
-  ## @param envoy.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Envoy pods
-  ## @param envoy.podSecurityContext.supplementalGroups Set filesystem extra groups for Envoy pods
-  ## @param envoy.podSecurityContext.fsGroup Set fsGroup in Envoy pods' Security Context
+  ## @param envoy.podSecurityContext.enabled Enable Cilium Envoy pods' Security Context
+  ## @param envoy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Cilium Envoy pods
+  ## @param envoy.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Cilium Envoy pods
+  ## @param envoy.podSecurityContext.supplementalGroups Set filesystem extra groups for Cilium Envoy pods
+  ## @param envoy.podSecurityContext.fsGroup Set fsGroup in Cilium Envoy pods' Security Context
   ##
   podSecurityContext:
     enabled: true
@@ -1704,17 +1704,17 @@ envoy:
     fsGroup: 0
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param envoy.containerSecurityContext.enabled Enabled Envoy container' Security Context
-  ## @param envoy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Envoy container
-  ## @param envoy.containerSecurityContext.runAsUser Set runAsUser in Envoy container' Security Context
-  ## @param envoy.containerSecurityContext.runAsGroup Set runAsUser in Envoy container' Security Context
-  ## @param envoy.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Envoy container' Security Context
-  ## @param envoy.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Envoy container' Security Context
-  ## @param envoy.containerSecurityContext.privileged Set privileged in Envoy container' Security Context
-  ## @param envoy.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Envoy container' Security Context
-  ## @param envoy.containerSecurityContext.capabilities.add List of capabilities to be added in Envoy container
-  ## @param envoy.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Envoy container
-  ## @param envoy.containerSecurityContext.seccompProfile.type Set seccomp profile in Envoy container
+  ## @param envoy.containerSecurityContext.enabled Enabled Cilium Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Cilium Envoy container
+  ## @param envoy.containerSecurityContext.runAsUser Set runAsUser in Cilium Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.runAsGroup Set runAsUser in Cilium Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Cilium Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Cilium Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.privileged Set privileged in Cilium Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Cilium Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.capabilities.add List of capabilities to be added in Cilium Envoy container
+  ## @param envoy.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Cilium Envoy container
+  ## @param envoy.containerSecurityContext.seccompProfile.type Set seccomp profile in Cilium Envoy container
   ##
   containerSecurityContext:
     enabled: true
@@ -1739,43 +1739,43 @@ envoy:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param envoy.configuration Specify content for Envoy configuration (basic one auto-generated based on other values otherwise)
+  ## @param envoy.configuration Specify content for Cilium Envoy configuration (basic one auto-generated based on other values otherwise)
   ##
   configuration: {}
-  ## @param envoy.overrideConfiguration Envoy configuration override. Values defined here takes precedence over the ones defined at `envoy.configuration`
+  ## @param envoy.overrideConfiguration Cilium Envoy configuration override. Values defined here takes precedence over the ones defined at `envoy.configuration`
   ##
   overrideConfiguration: {}
-  ## @param envoy.existingConfigmap The name of an existing ConfigMap with your custom Envoy configuration
+  ## @param envoy.existingConfigmap The name of an existing ConfigMap with your custom Cilium Envoy configuration
   ##
   existingConfigmap: ""
-  ## @param envoy.logLevel Envoy log level
+  ## @param envoy.logLevel Cilium Envoy log level
   ##
   logLevel: info
-  ## @param envoy.command Override default Envoy container command (useful when using custom images)
+  ## @param envoy.command Override default Cilium Envoy container command (useful when using custom images)
   ##
   command: []
-  ## @param envoy.args Override default Envoy container args (useful when using custom images)
+  ## @param envoy.args Override default Cilium Envoy container args (useful when using custom images)
   ##
   args: []
-  ## @param envoy.extraArgs [array] Extra args passed to Envoy container
+  ## @param envoy.extraArgs [array] Extra args passed to Cilium Envoy container
   ##
   extraArgs: []
-  ## @param envoy.automountServiceAccountToken Mount Service Account token in Envoy pods
+  ## @param envoy.automountServiceAccountToken Mount Service Account token in Cilium Envoy pods
   ##
   automountServiceAccountToken: true
-  ## @param envoy.hostAliases Envoy pods host aliases
+  ## @param envoy.hostAliases Cilium Envoy pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param envoy.daemonsetAnnotations Annotations for Envoy daemonset
+  ## @param envoy.daemonsetAnnotations Annotations for Cilium Envoy daemonset
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   daemonsetAnnotations: {}
-  ## @param envoy.podLabels Extra labels for Envoy pods
+  ## @param envoy.podLabels Extra labels for Cilium Envoy pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param envoy.podAnnotations Annotations for Envoy pods
+  ## @param envoy.podAnnotations Annotations for Cilium Envoy pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -1796,56 +1796,56 @@ envoy:
     ##   - e2e-az2
     ##
     values: []
-  ## @param envoy.affinity Affinity for Envoy pods assignment
+  ## @param envoy.affinity Affinity for Cilium Envoy pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `envoy.podAffinityPreset`, `envoy.podAntiAffinityPreset`, and `envoy.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param envoy.nodeSelector [object] Node labels for Envoy pods assignment
+  ## @param envoy.nodeSelector [object] Node labels for Cilium Envoy pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector:
     kubernetes.io/os: linux
-  ## @param envoy.tolerations Tolerations for Envoy pods assignment
+  ## @param envoy.tolerations Tolerations for Cilium Envoy pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param envoy.updateStrategy.type Envoy daemonset update strategy type
+  ## @param envoy.updateStrategy.type Cilium Envoy daemonset update strategy type
   ## Can be set to RollingUpdate or OnDelete
   ## ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/
   ##
   updateStrategy:
     type: RollingUpdate
-  ## @param envoy.priorityClassName Envoy pods' priorityClassName
+  ## @param envoy.priorityClassName Cilium Envoy pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param envoy.terminationGracePeriodSeconds Seconds Envoy pods need to terminate gracefully
+  ## @param envoy.terminationGracePeriodSeconds Seconds Cilium Envoy pods need to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: 1
-  ## @param envoy.lifecycleHooks for Envoy containers to automate configuration before or after startup
+  ## @param envoy.lifecycleHooks for Cilium Envoy containers to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param envoy.extraEnvVars Array with extra environment variables to add to Envoy containers
+  ## @param envoy.extraEnvVars Array with extra environment variables to add to Cilium Envoy containers
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param envoy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Envoy containers
+  ## @param envoy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Cilium Envoy containers
   ##
   extraEnvVarsCM: ""
-  ## @param envoy.extraEnvVarsSecret Name of existing Secret containing extra env vars for Envoy containers
+  ## @param envoy.extraEnvVarsSecret Name of existing Secret containing extra env vars for Cilium Envoy containers
   ##
   extraEnvVarsSecret: ""
-  ## @param envoy.extraVolumes Optionally specify extra list of additional volumes for the Envoy pods
+  ## @param envoy.extraVolumes Optionally specify extra list of additional volumes for the Cilium Envoy pods
   ##
   extraVolumes: []
-  ## @param envoy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Envoy containers
+  ## @param envoy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Cilium Envoy containers
   ##
   extraVolumeMounts: []
-  ## @param envoy.sidecars Add additional sidecar containers to the Envoy pods
+  ## @param envoy.sidecars Add additional sidecar containers to the Cilium Envoy pods
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -1856,7 +1856,7 @@ envoy:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param envoy.initContainers Add additional init containers to the Envoy pods
+  ## @param envoy.initContainers Add additional init containers to the Cilium Envoy pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -1870,7 +1870,7 @@ envoy:
   ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
-    ## @param envoy.autoscaling.vpa.enabled Enable VPA for Envoy
+    ## @param envoy.autoscaling.vpa.enabled Enable VPA for Cilium Envoy
     ## @param envoy.autoscaling.vpa.annotations Annotations for VPA resource
     ## @param envoy.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
     ## @param envoy.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
@@ -1888,13 +1888,13 @@ envoy:
       ##
       updatePolicy:
         updateMode: Auto
-  ## @section Envoy ServiceAccount configuration
+  ## @section Cilium Envoy ServiceAccount configuration
   ##
   serviceAccount:
-    ## @param envoy.serviceAccount.create Specifies whether a ServiceAccount should be created for Envoy
+    ## @param envoy.serviceAccount.create Specifies whether a ServiceAccount should be created for Cilium Envoy
     ##
     create: true
-    ## @param envoy.serviceAccount.name The name of the ServiceAccount to use for Envoy
+    ## @param envoy.serviceAccount.name The name of the ServiceAccount to use for Cilium Envoy
     ## If not set and create is true, a name is generated using the cilium.envoy.fullname template
     ##
     name: ""
@@ -1905,11 +1905,11 @@ envoy:
     ##
     automountServiceAccountToken: true
 
-  ## @section Envoy Network Policies Parameters
+  ## @section Cilium Envoy Network Policies Parameters
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
   networkPolicy:
-    ## @param envoy.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for Envoy
+    ## @param envoy.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for Cilium Envoy
     ##
     enabled: true
     ## @param envoy.networkPolicy.allowExternal Don't require server label for connections
@@ -1919,7 +1919,7 @@ envoy:
     ## (with the correct destination port).
     ##
     allowExternal: true
-    ## @param envoy.networkPolicy.allowExternalEgress Allow the Envoy pods to access any range of port and all destinations.
+    ## @param envoy.networkPolicy.allowExternalEgress Allow the Cilium Envoy pods to access any range of port and all destinations.
     ##
     allowExternalEgress: true
     ## @param envoy.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `envoy.networkPolicy.allowExternal` is true.
@@ -1970,19 +1970,19 @@ envoy:
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
 
-  ## @section Envoy Metrics Parameters
+  ## @section Cilium Envoy Metrics Parameters
   ##
   metrics:
-    ## @param envoy.metrics.enabled Enable the export of Prometheus metrics for Envoy
+    ## @param envoy.metrics.enabled Enable the export of Prometheus metrics for Cilium Envoy
     ##
     enabled: false
     ## Metrics service properties
     ##
     service:
-      ## @param envoy.metrics.service.port Envoy metrics service port
+      ## @param envoy.metrics.service.port Cilium Envoy metrics service port
       ##
       port: 9964
-      ## @param envoy.metrics.service.annotations [object] Annotations for the Envoy metrics service.
+      ## @param envoy.metrics.service.annotations [object] Annotations for the Cilium Envoy metrics service.
       ##
       annotations:
         prometheus.io/scrape: "true"

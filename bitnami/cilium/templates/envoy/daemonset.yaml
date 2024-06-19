@@ -28,7 +28,7 @@ spec:
     metadata:
       annotations:
         {{- if semverCompare "<1.30-0" (include "common.capabilities.kubeVersion" .) }}
-        container.apparmor.security.beta.kubernetes.io/envoy: "unconfined"
+        container.apparmor.security.beta.kubernetes.io/cilium-envoy: "unconfined"
         {{- end }}
         {{- if not .Values.envoy.existingConfigmap }}
         checksum/config: {{ include (print $.Template.BasePath "/envoy/configmap.yaml") . | sha256sum }}
@@ -74,7 +74,7 @@ spec:
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
-        - name: envoy
+        - name: cilium-envoy
           image: {{ include "cilium.envoy.image" . }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           {{- if .Values.envoy.containerSecurityContext.enabled }}
@@ -86,7 +86,7 @@ spec:
           {{- else if .Values.envoy.command }}
             {{- include "common.tplvalues.render" (dict "value" .Values.envoy.command "context" $) | nindent 12 }}
           {{- else }}
-            - envoy
+            - cilium-envoy-starter
           {{- end }}
           args:
           {{- if .Values.diagnosticMode.enabled }}

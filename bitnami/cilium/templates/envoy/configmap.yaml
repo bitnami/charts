@@ -146,6 +146,31 @@ Return the Envoy configuration.
         "cleanupInterval": "2.500s"
       },
       {
+        "name": "ingress-cluster-tls",
+        "type": "ORIGINAL_DST",
+        "connectTimeout": "2s",
+        "lbPolicy": "CLUSTER_PROVIDED",
+        "typedExtensionProtocolOptions": {
+          "envoy.extensions.upstreams.http.v3.HttpProtocolOptions": {
+            "@type": "type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions",
+            "commonHttpProtocolOptions": {
+              "idleTimeout": "60s",
+              "maxConnectionDuration": "0s",
+              "maxRequestsPerConnection": 0
+            },
+            "upstreamHttpProtocolOptions": {},
+            "useDownstreamProtocolConfig": {}
+          }
+        },
+        "cleanupInterval": "2.500s",
+        "transportSocket": {
+          "name": "cilium.tls_wrapper",
+          "typedConfig": {
+            "@type": "type.googleapis.com/cilium.UpstreamTlsWrapperContext"
+          }
+        }
+      },
+      {
         "name": "egress-cluster",
         "type": "ORIGINAL_DST",
         "connectTimeout": "2s",
@@ -162,6 +187,31 @@ Return the Envoy configuration.
           }
         },
         "cleanupInterval": "2.500s"
+      },
+      {
+        "name": "egress-cluster-tls",
+        "type": "ORIGINAL_DST",
+        "connectTimeout": "2s",
+        "lbPolicy": "CLUSTER_PROVIDED",
+        "typedExtensionProtocolOptions": {
+          "envoy.extensions.upstreams.http.v3.HttpProtocolOptions": {
+            "@type": "type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions",
+            "commonHttpProtocolOptions": {
+              "idleTimeout": "60s",
+              "maxConnectionDuration": "0s",
+              "maxRequestsPerConnection": 0
+            },
+            "upstreamHttpProtocolOptions": {},
+            "useDownstreamProtocolConfig": {}
+          }
+        },
+        "cleanupInterval": "2.500s",
+        "transportSocket": {
+          "name": "cilium.tls_wrapper",
+          "typedConfig": {
+            "@type": "type.googleapis.com/cilium.UpstreamTlsWrapperContext"
+          }
+        }
       },
       {
         "name": "xds-grpc-cilium",
