@@ -174,6 +174,63 @@ extraDeploy:
         (...)
 ```
 
+### Allowing multi namespace tendancy
+In case you would like to allow applications / application sets in multiple namespaces, you can use the following to configure Argo-CD.
+
+Upstream docs
+- [Reconfigure Argo CD to allow certain namespaces for apps](https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#reconfigure-argo-cd-to-allow-certain-namespaces)
+- [Reconfigure Argo CD to allow certain namespaces for appset](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#change-workload-startup-parameters)
+
+```yaml
+controller:
+  # Default is true
+  clusterAdminAccess: true
+  extraArgs:
+  # Refer to documentation to allow specific namespaces:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#change-workload-startup-parameters
+  - --application-namespaces=*
+  # Refer to documentation if you are enabling notifications
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/#namespace-based-configuration
+  - --self-service-notification-enabled
+
+server:
+  # Default is false
+  clusterAdminAccess: true
+  # Refer to recommended documentation for config:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#switch-resource-tracking-method
+  config:
+    application.resourceTrackingMethod: annotation
+
+repoServer:
+  # Default is false
+  clusterAdminAccess: true
+
+notifications:
+  # Enable if you would like notifications to be used, default false
+  enabled: true
+  # Default is false
+  clusterAdminAccess: true
+
+applicationSet:
+  # Enable if you would like applicationSets to be used, default false
+  enabled: true
+  # Default is false
+  clusterAdminAccess: true
+
+  # Refer to documentation for SCM providers:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#scm-providers-secrets-consideration
+  extraEnv:
+  - name: ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_SCM_PROVIDERS
+    value: true
+  - name: ARGOCD_APPLICATIONSET_CONTROLLER_ALLOWED_SCM_PROVIDERS
+    value: https://git.mydomain.com/,https://gitlab.mydomain.com/
+
+  # Refer to documentation to allow specific namespaces:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#change-workload-startup-parameters
+  extraArgs:
+  - --applicationset-namespaces=*
+```
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
