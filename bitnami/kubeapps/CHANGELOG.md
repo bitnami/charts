@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.3.3 (2024-06-12)
+## 15.3.5 (2024-06-12)
 
 * [bitnami/kubeapps] Render imagePullSecrets ([#27127](https://github.com/bitnami/charts/pull/27127))
+
+## <small>15.3.4 (2024-06-18)</small>
+
+* [bitnami/kubeapps] Release 15.3.4 ([#27370](https://github.com/bitnami/charts/pull/27370))
+
+## <small>15.3.3 (2024-06-17)</small>
+
+* [bitnami/kubeapps] Release 15.3.3 (#27270) ([3770923](https://github.com/bitnami/charts/commit/3770923925b87e06d7689be4d40457ce2b86e367)), closes [#27270](https://github.com/bitnami/charts/issues/27270)
 
 ## <small>15.3.2 (2024-06-07)</small>
 

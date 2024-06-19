@@ -38,6 +38,8 @@ rules:
     resources:
       - validatingwebhookconfigurations
       - mutatingwebhookconfigurations
+      - validatingadmissionpolicies
+      - validatingadmissionpolicybindings
     verbs:
       - get
       - list
@@ -91,6 +93,16 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - authentication.concierge.pinniped.dev
+    resources:
+      - jwtauthenticators/status
+      - webhookauthenticators/status
+    verbs:
+      - get
+      - list
+      - watch
+      - update
 ---
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}

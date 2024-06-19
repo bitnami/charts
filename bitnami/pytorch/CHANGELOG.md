@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.2.4 (2024-06-06)
+## 4.2.7 (2024-06-18)
 
-* [bitnami/pytorch] Release 4.2.4 ([#27039](https://github.com/bitnami/charts/pull/27039))
+* [bitnami/pytorch] Release 4.2.7 ([#27407](https://github.com/bitnami/charts/pull/27407))
+
+## <small>4.2.6 (2024-06-17)</small>
+
+* [bitnami/pytorch] Release 4.2.6 (#27273) ([281f3dd](https://github.com/bitnami/charts/commit/281f3dd46bac4d089feab12fc6a47acdbd0d2616)), closes [#27273](https://github.com/bitnami/charts/issues/27273)
+
+## <small>4.2.5 (2024-06-12)</small>
+
+* [bitnami/pytorch] Release 4.2.5 (#27123) ([44fd8bb](https://github.com/bitnami/charts/commit/44fd8bb63d5eea0252649499b7b47602ab6306ac)), closes [#27123](https://github.com/bitnami/charts/issues/27123)
+
+## <small>4.2.4 (2024-06-06)</small>
+
+* [bitnami/pytorch] Release 4.2.4 (#27039) ([65e5331](https://github.com/bitnami/charts/commit/65e533122ab44daee1fcc6cd0c794aa9e3424721)), closes [#27039](https://github.com/bitnami/charts/issues/27039)
 
 ## <small>4.2.3 (2024-06-06)</small>
 

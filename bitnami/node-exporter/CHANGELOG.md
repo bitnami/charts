@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.4.3 (2024-06-06)
+## 4.4.5 (2024-06-18)
 
-* [bitnami/node-exporter] Release 4.4.3 ([#26993](https://github.com/bitnami/charts/pull/26993))
+* [bitnami/node-exporter] Release 4.4.5 ([#27391](https://github.com/bitnami/charts/pull/27391))
+
+## <small>4.4.4 (2024-06-17)</small>
+
+* [bitnami/node-exporter] Release 4.4.4 (#27255) ([ef9d1bb](https://github.com/bitnami/charts/commit/ef9d1bbfe4959730013f5eddccd88f268defd6a5)), closes [#27255](https://github.com/bitnami/charts/issues/27255)
+
+## <small>4.4.3 (2024-06-06)</small>
+
+* [bitnami/node-exporter] Release 4.4.3 (#26993) ([9ffacbf](https://github.com/bitnami/charts/commit/9ffacbfc73233b8c8b5eda941b3a3c6d1cda3f34)), closes [#26993](https://github.com/bitnami/charts/issues/26993)
 
 ## <small>4.4.2 (2024-06-05)</small>
 

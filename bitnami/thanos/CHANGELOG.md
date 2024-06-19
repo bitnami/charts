@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.7.5 (2024-06-11)
+## 15.7.9 (2024-06-18)
 
-* [bitnami/thanos] only deploy networkPolicy when component is enabled ([#27070](https://github.com/bitnami/charts/pull/27070))
+* [bitnami/thanos] Release 15.7.9 ([#27424](https://github.com/bitnami/charts/pull/27424))
+
+## <small>15.7.8 (2024-06-18)</small>
+
+* [bitnami/thanos] fix thanos dual-stack receive monitoring (#27112) ([017b2fb](https://github.com/bitnami/charts/commit/017b2fbec6acfa382a1cf08968b5cb676ba42b8d)), closes [#27112](https://github.com/bitnami/charts/issues/27112)
+
+## <small>15.7.7 (2024-06-17)</small>
+
+* [bitnami/thanos] Release 15.7.7 (#27294) ([7e339f1](https://github.com/bitnami/charts/commit/7e339f15ac83263c386d63e2bf68cfd82fca7deb)), closes [#27294](https://github.com/bitnami/charts/issues/27294)
+
+## <small>15.7.6 (2024-06-12)</small>
+
+*  [bitnami/thanos] Fix sharded storegateway cache configs (again) (#27101) ([e6d16b4](https://github.com/bitnami/charts/commit/e6d16b4256f027adbb3610b4e66ee2c05039618f)), closes [#27101](https://github.com/bitnami/charts/issues/27101)
+
+## <small>15.7.5 (2024-06-11)</small>
+
+* [bitnami/thanos] only deploy networkPolicy when component is enabled (#27070) ([1bd3b34](https://github.com/bitnami/charts/commit/1bd3b342399ed142ef26f060f63d058e393435c2)), closes [#27070](https://github.com/bitnami/charts/issues/27070)
 
 ## <small>15.7.4 (2024-06-11)</small>
 
