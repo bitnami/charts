@@ -1,12 +1,12 @@
 # Changelog
 
-## 7.6.0 (2024-05-27)
+## 7.6.0 (2024-06-19)
 
 * [bitnami/external-dns] feat: Add support for provider scaleway secretName ([#24630](https://github.com/bitnami/charts/pull/24630))
 
 ## <small>7.5.7 (2024-06-18)</small>
 
-* [bitnami/external-dns] Release 7.5.7 ([#27341](https://github.com/bitnami/charts/pull/27341))
+* [bitnami/external-dns] Release 7.5.7 (#27341) ([6668b3c](https://github.com/bitnami/charts/commit/6668b3c1ae632eb90b6e825fedddc39637aec137)), closes [#27341](https://github.com/bitnami/charts/issues/27341)
 
 ## <small>7.5.6 (2024-06-17)</small>
 
