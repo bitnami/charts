@@ -514,8 +514,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 | Name                                                        | Description                                                                                  | Value   |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------- |
-| `pdb.create`                                                | Enable/disable a Pod Disruption Budget creation                                              | `false` |
-| `pdb.minAvailable`                                          | Minimum number/percentage of pods that should remain scheduled                               | `1`     |
+| `pdb.create`                                                | Enable/disable a Pod Disruption Budget creation                                              | `true`  |
+| `pdb.minAvailable`                                          | Minimum number/percentage of pods that should remain scheduled                               | `""`    |
 | `pdb.maxUnavailable`                                        | Maximum number/percentage of pods that may be made unavailable                               | `""`    |
 | `autoscaling.enabled`                                       | Enable autoscaling for Keycloak                                                              | `false` |
 | `autoscaling.minReplicas`                                   | Minimum number of Keycloak replicas                                                          | `1`     |

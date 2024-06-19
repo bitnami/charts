@@ -1,8 +1,24 @@
 # Changelog
 
-## 7.4.3 (2024-06-04)
+## 7.4.7 (2024-06-18)
 
-* [bitnami/memcached] Bump chart version ([#26646](https://github.com/bitnami/charts/pull/26646))
+* [bitnami/memcached] Release 7.4.7 ([#27378](https://github.com/bitnami/charts/pull/27378))
+
+## <small>7.4.6 (2024-06-17)</small>
+
+* [bitnami/memcached] Release 7.4.6 (#27245) ([ed69bf2](https://github.com/bitnami/charts/commit/ed69bf299f647c67b34d4e7994b77495b3b1867a)), closes [#27245](https://github.com/bitnami/charts/issues/27245)
+
+## <small>7.4.5 (2024-06-06)</small>
+
+* [bitnami/memcached] Release 7.4.5 (#26981) ([2368223](https://github.com/bitnami/charts/commit/2368223b5c78de347156e1a5c466a1f685d19638)), closes [#26981](https://github.com/bitnami/charts/issues/26981)
+
+## <small>7.4.4 (2024-06-06)</small>
+
+* [bitnami/memcached] Align PodDisruptionBudgets with templates (#26703) ([760dc65](https://github.com/bitnami/charts/commit/760dc656e1e2dafe68ca7025a1d3538e16fd18f1)), closes [#26703](https://github.com/bitnami/charts/issues/26703)
+
+## <small>7.4.3 (2024-06-04)</small>
+
+* [bitnami/memcached] Bump chart version (#26646) ([466704c](https://github.com/bitnami/charts/commit/466704cfdc681cb9cce81225e7e59c1e0bb7a0d0)), closes [#26646](https://github.com/bitnami/charts/issues/26646)
 
 ## <small>7.4.2 (2024-05-31)</small>
 

@@ -1,8 +1,36 @@
 # Changelog
 
-## 3.1.1 (2024-05-22)
+## 3.2.4 (2024-06-18)
 
-* [bitnami/apisix] Use different liveness/readiness probes ([#26337](https://github.com/bitnami/charts/pull/26337))
+* [bitnami/apisix] Release 3.2.4 ([#27329](https://github.com/bitnami/charts/pull/27329))
+
+## <small>3.2.3 (2024-06-17)</small>
+
+* [bitnami/apisix] Release 3.2.3 (#27199) ([1a6ef72](https://github.com/bitnami/charts/commit/1a6ef72e257eae3a9445085614ad7083d3f37930)), closes [#27199](https://github.com/bitnami/charts/issues/27199)
+
+## <small>3.2.2 (2024-06-06)</small>
+
+* [bitnami/apisix] Release 3.2.2 (#26936) ([b67410a](https://github.com/bitnami/charts/commit/b67410a9a295dd0ee8b81369acfe29dbfe3e5d50)), closes [#26936](https://github.com/bitnami/charts/issues/26936)
+
+## <small>3.2.1 (2024-06-06)</small>
+
+* [bitnami/apisix] Release 3.2.1 (#26891) ([50be215](https://github.com/bitnami/charts/commit/50be215d066511e6181ee874e51c5496a1b7a72c)), closes [#26891](https://github.com/bitnami/charts/issues/26891)
+
+## 3.2.0 (2024-06-06)
+
+* [bitnami/apisix] Enable PodDisruptionBudgets (#26711) ([72db65f](https://github.com/bitnami/charts/commit/72db65ff343d7522b8836bc2f112c43588c83912)), closes [#26711](https://github.com/bitnami/charts/issues/26711)
+
+## <small>3.1.3 (2024-06-05)</small>
+
+* [bitnami/apisix] Bump chart version (#26819) ([a68d34d](https://github.com/bitnami/charts/commit/a68d34d6314f9f2de578969146e62b33f42dc4a0)), closes [#26819](https://github.com/bitnami/charts/issues/26819)
+
+## <small>3.1.2 (2024-06-05)</small>
+
+* [bitnami/apisix] Bump chart version (#26761) ([85c6bf2](https://github.com/bitnami/charts/commit/85c6bf23151bdd8fc4a651152959fb05fed024ec)), closes [#26761](https://github.com/bitnami/charts/issues/26761)
+
+## <small>3.1.1 (2024-05-23)</small>
+
+* [bitnami/apisix] Use different liveness/readiness probes (#26337) ([b9e533c](https://github.com/bitnami/charts/commit/b9e533cb5bc8ee31882457136c00e4d253941797)), closes [#26337](https://github.com/bitnami/charts/issues/26337)
 
 ## 3.1.0 (2024-05-21)
 

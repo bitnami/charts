@@ -19,7 +19,7 @@ spec:
   {{- if .Values.blackboxExporter.pdb.minAvailable }}
   minAvailable: {{ .Values.blackboxExporter.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.blackboxExporter.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.blackboxExporter.pdb.maxUnavailable }}
+  {{- if or .Values.blackboxExporter.pdb.maxUnavailable ( not .Values.blackboxExporter.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.blackboxExporter.pdb.maxUnavailable | default 1 }}
   {{- end }}
 {{- end }}

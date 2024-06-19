@@ -213,8 +213,8 @@ As an alternative, you can use  the preset configurations for pod affinity, pod 
 
 | Name                       | Description                                                    | Value   |
 | -------------------------- | -------------------------------------------------------------- | ------- |
-| `pdb.create`               | Enable a Pod Disruption Budget creation                        | `false` |
-| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
+| `pdb.create`               | Enable a Pod Disruption Budget creation                        | `true`  |
+| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `""`    |
 | `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
 | `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Apache                   | `false` |
 | `autoscaling.minReplicas`  | Minimum number of Apache replicas                              | `1`     |

@@ -1,8 +1,40 @@
 # Changelog
 
-## 2.3.1 (2024-06-05)
+## 2.3.9 (2024-06-18)
 
-* [bitnami/jaeger] Release 2.3.1 ([#26735](https://github.com/bitnami/charts/pull/26735))
+* [bitnami/jaeger] Release 2.3.9 ([#27357](https://github.com/bitnami/charts/pull/27357))
+
+## <small>2.3.8 (2024-06-17)</small>
+
+* [bitnami/jaeger] Release 2.3.8 (#27231) ([b2b3f5d](https://github.com/bitnami/charts/commit/b2b3f5d8750a9219037a5a4a7abbf0e2d00e2078)), closes [#27231](https://github.com/bitnami/charts/issues/27231)
+
+## <small>2.3.7 (2024-06-17)</small>
+
+* [bitnami/jaeger] Release 2.3.7 (#27192) ([d3f69e6](https://github.com/bitnami/charts/commit/d3f69e6c610f0b560bcfdaf165e43ccb45ae7be6)), closes [#27192](https://github.com/bitnami/charts/issues/27192)
+
+## <small>2.3.6 (2024-06-14)</small>
+
+* [bitnami/jaeger] Update query for check_cassandra_keyspace_schema (#27160) ([ad20b5b](https://github.com/bitnami/charts/commit/ad20b5befc669a241afee5795c2928e37af16f7d)), closes [#27160](https://github.com/bitnami/charts/issues/27160)
+
+## <small>2.3.5 (2024-06-12)</small>
+
+* [bitnami/jaeger] Release 2.3.5 (#27118) ([a6ec3ea](https://github.com/bitnami/charts/commit/a6ec3eaf341ed6bd42874bd896d072ec92d7faf6)), closes [#27118](https://github.com/bitnami/charts/issues/27118)
+
+## <small>2.3.4 (2024-06-06)</small>
+
+* [bitnami/jaeger] Release 2.3.4 (#26959) ([d8e4eb8](https://github.com/bitnami/charts/commit/d8e4eb885d9f68dd0b731d33c0d90ee382f29698)), closes [#26959](https://github.com/bitnami/charts/issues/26959)
+
+## <small>2.3.3 (2024-06-05)</small>
+
+* [bitnami/jaeger] Bump chart version (#26835) ([2d0c1d7](https://github.com/bitnami/charts/commit/2d0c1d7b1599e89a141300f39e29658700958562)), closes [#26835](https://github.com/bitnami/charts/issues/26835)
+
+## <small>2.3.2 (2024-06-05)</small>
+
+* [bitnami/jaeger] Bump chart version (#26777) ([dd25238](https://github.com/bitnami/charts/commit/dd252384d4ffa24ffc9429f557f70e99ab26bed3)), closes [#26777](https://github.com/bitnami/charts/issues/26777)
+
+## <small>2.3.1 (2024-06-05)</small>
+
+* [bitnami/jaeger] Release 2.3.1 (#26735) ([d0f5e2e](https://github.com/bitnami/charts/commit/d0f5e2e0f99d2508cae0cf7dee09c165295650b9)), closes [#26735](https://github.com/bitnami/charts/issues/26735)
 
 ## 2.3.0 (2024-06-03)
 

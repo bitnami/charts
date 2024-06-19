@@ -1,8 +1,28 @@
 # Changelog
 
-## 9.1.1 (2024-06-04)
+## 9.2.4 (2024-06-18)
 
-* [bitnami/spark] Bump chart version ([#26669](https://github.com/bitnami/charts/pull/26669))
+* [bitnami/spark] Release 9.2.4 ([#27419](https://github.com/bitnami/charts/pull/27419))
+
+## <small>9.2.3 (2024-06-17)</small>
+
+* [bitnami/spark] Release 9.2.3 (#27304) ([1b43ea1](https://github.com/bitnami/charts/commit/1b43ea1a272812f29abefc0374544ca1f4d3e519)), closes [#27304](https://github.com/bitnami/charts/issues/27304)
+
+## <small>9.2.2 (2024-06-06)</small>
+
+* [bitnami/spark] Release 9.2.2 (#27021) ([ff645d7](https://github.com/bitnami/charts/commit/ff645d76d78913c2afbce282f89a40cb795d8ffe)), closes [#27021](https://github.com/bitnami/charts/issues/27021)
+
+## <small>9.2.1 (2024-06-06)</small>
+
+* [bitnami/spark] Release 9.2.1 (#26921) ([0183af4](https://github.com/bitnami/charts/commit/0183af4fbccb89cebcfb1f6a476a9c32ef13a7e3)), closes [#26921](https://github.com/bitnami/charts/issues/26921)
+
+## 9.2.0 (2024-06-05)
+
+* [bitnami/spark] Enable PodDisruptionBudgets (#26536) ([8b090f2](https://github.com/bitnami/charts/commit/8b090f2591afe979c746d463c14cd2355e3f3d7f)), closes [#26536](https://github.com/bitnami/charts/issues/26536)
+
+## <small>9.1.1 (2024-06-04)</small>
+
+* [bitnami/spark] Bump chart version (#26669) ([484cd76](https://github.com/bitnami/charts/commit/484cd761e8b4d7cf597c74af4f065d40b6cce7c9)), closes [#26669](https://github.com/bitnami/charts/issues/26669)
 
 ## 9.1.0 (2024-05-21)
 

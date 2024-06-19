@@ -269,8 +269,8 @@ externalMemcachedChunks.port=11211
 | `alertmanager.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`        |
 | `alertmanager.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                         | `{}`        |
 | `alertmanager.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                     | `{}`        |
-| `alertmanager.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                | `false`     |
-| `alertmanager.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                 | `1`         |
+| `alertmanager.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                | `true`      |
+| `alertmanager.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                 | `""`        |
 | `alertmanager.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                 | `""`        |
 | `alertmanager.blockStorage.backend`                  | Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.                     | `s3`        |
 | `alertmanager.blockStorage.config`                   | Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored. | `{}`        |
@@ -380,8 +380,8 @@ externalMemcachedChunks.port=11211
 | `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `compactor.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `compactor.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `compactor.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `compactor.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `compactor.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Distributor Deployment Parameters
@@ -482,8 +482,8 @@ externalMemcachedChunks.port=11211
 | `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `distributor.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `distributor.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `distributor.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `distributor.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `distributor.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Gateway Deployment Parameters
@@ -605,8 +605,8 @@ externalMemcachedChunks.port=11211
 | `gateway.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `gateway.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `gateway.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `gateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                  |
-| `gateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                      |
+| `gateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                                  | `true`                   |
+| `gateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                                   | `""`                     |
 | `gateway.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                     |
 
 ### Ingester Deployment Parameters
@@ -715,8 +715,8 @@ externalMemcachedChunks.port=11211
 | `ingester.networkPolicy.extraEgress`                                  | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                          | `[]`             |
 | `ingester.networkPolicy.ingressNSMatchLabels`                         | Labels to match to allow traffic from other namespaces                                                                                                                                                                                                | `{}`             |
 | `ingester.networkPolicy.ingressNSPodMatchLabels`                      | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                            | `{}`             |
-| `ingester.pdb.create`                                                 | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `false`          |
-| `ingester.pdb.minAvailable`                                           | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `1`              |
+| `ingester.pdb.create`                                                 | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`           |
+| `ingester.pdb.minAvailable`                                           | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`             |
 | `ingester.pdb.maxUnavailable`                                         | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                                        | `""`             |
 | `overridesExporter.enabled`                                           | Enable overrides-exporter deployment                                                                                                                                                                                                                  | `false`          |
 | `overridesExporter.extraEnvVars`                                      | Array with extra environment variables to add to overrides-exporter nodes                                                                                                                                                                             | `[]`             |
@@ -813,8 +813,8 @@ externalMemcachedChunks.port=11211
 | `overridesExporter.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `overridesExporter.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `overridesExporter.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `overridesExporter.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `overridesExporter.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `overridesExporter.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `overridesExporter.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `overridesExporter.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Querier Deployment Parameters
@@ -915,8 +915,8 @@ externalMemcachedChunks.port=11211
 | `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `querier.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `querier.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `querier.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `querier.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `querier.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Query Frontend Deployment Parameters
@@ -1017,8 +1017,8 @@ externalMemcachedChunks.port=11211
 | `queryFrontend.networkPolicy.extraEgress`                          | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                    | `[]`             |
 | `queryFrontend.networkPolicy.ingressNSMatchLabels`                 | Labels to match to allow traffic from other namespaces                                                                                                                                                                                          | `{}`             |
 | `queryFrontend.networkPolicy.ingressNSPodMatchLabels`              | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                      | `{}`             |
-| `queryFrontend.pdb.create`                                         | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                 | `false`          |
-| `queryFrontend.pdb.minAvailable`                                   | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                  | `1`              |
+| `queryFrontend.pdb.create`                                         | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                 | `true`           |
+| `queryFrontend.pdb.minAvailable`                                   | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                  | `""`             |
 | `queryFrontend.pdb.maxUnavailable`                                 | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                                  | `""`             |
 | `queryScheduler.enabled`                                           | Enable query-scheduler deployment                                                                                                                                                                                                               | `false`          |
 | `queryScheduler.extraEnvVars`                                      | Array with extra environment variables to add to query-scheduler nodes                                                                                                                                                                          | `[]`             |
@@ -1115,8 +1115,8 @@ externalMemcachedChunks.port=11211
 | `queryScheduler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryScheduler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `queryScheduler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `queryScheduler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `queryScheduler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `queryScheduler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `queryScheduler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `queryScheduler.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Store Gateway Deployment Parameters
@@ -1226,8 +1226,8 @@ externalMemcachedChunks.port=11211
 | `storeGateway.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `storeGateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `storeGateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
-| `storeGateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `storeGateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `storeGateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                  | `true`      |
+| `storeGateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled   | `""`        |
 | `storeGateway.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 ### Ruler Deployment Parameters
@@ -1340,8 +1340,8 @@ externalMemcachedChunks.port=11211
 | `ruler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`        |
 | `ruler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                         | `{}`        |
 | `ruler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                     | `{}`        |
-| `ruler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                | `false`     |
-| `ruler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                 | `1`         |
+| `ruler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                | `true`      |
+| `ruler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                 | `""`        |
 | `ruler.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                 | `""`        |
 | `ruler.blockStorage.backend`                  | Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.                     | `s3`        |
 | `ruler.blockStorage.config`                   | Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored. | `{}`        |

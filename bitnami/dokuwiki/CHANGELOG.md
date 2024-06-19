@@ -1,8 +1,20 @@
 # Changelog
 
-## 16.2.2 (2024-06-04)
+## 16.2.5 (2024-06-18)
 
-* [bitnami/dokuwiki] Fix typo in deployment.yaml template ([#26678](https://github.com/bitnami/charts/pull/26678))
+* [bitnami/dokuwiki] Release 16.2.5 ([#27339](https://github.com/bitnami/charts/pull/27339))
+
+## <small>16.2.4 (2024-06-17)</small>
+
+* [bitnami/dokuwiki] Release 16.2.4 (#27211) ([51985a6](https://github.com/bitnami/charts/commit/51985a6d5048e9a977160267c0dada0bda37625a)), closes [#27211](https://github.com/bitnami/charts/issues/27211)
+
+## <small>16.2.3 (2024-06-06)</small>
+
+* [bitnami/dokuwiki] Release 16.2.3 (#26947) ([80be9f2](https://github.com/bitnami/charts/commit/80be9f2a9cfd1622c377548bbd42cb927336c579)), closes [#26947](https://github.com/bitnami/charts/issues/26947)
+
+## <small>16.2.2 (2024-06-04)</small>
+
+* [bitnami/dokuwiki] Fix typo in deployment.yaml template (#26678) ([481a103](https://github.com/bitnami/charts/commit/481a10354381ae43b4c48988f8371bef693fe55a)), closes [#26678](https://github.com/bitnami/charts/issues/26678)
 
 ## <small>16.2.1 (2024-06-04)</small>
 

@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.2.1 (2024-06-04)
+## 1.2.4 (2024-06-18)
 
-* [bitnami/opensearch] Bump chart version ([#26658](https://github.com/bitnami/charts/pull/26658))
+* [bitnami/opensearch] Release 1.2.4 ([#27395](https://github.com/bitnami/charts/pull/27395))
+
+## <small>1.2.3 (2024-06-17)</small>
+
+* [bitnami/opensearch] Release 1.2.3 (#27258) ([e5cf96c](https://github.com/bitnami/charts/commit/e5cf96cc6883fb8af869740ad2bf3eea1a45b343)), closes [#27258](https://github.com/bitnami/charts/issues/27258)
+
+## <small>1.2.2 (2024-06-06)</small>
+
+* [bitnami/opensearch] Release 1.2.2 (#26997) ([40c2a5a](https://github.com/bitnami/charts/commit/40c2a5a82f557a448d2002746d3b2d290e1120f9)), closes [#26997](https://github.com/bitnami/charts/issues/26997)
+
+## <small>1.2.1 (2024-06-04)</small>
+
+* [bitnami/opensearch] Bump chart version (#26658) ([a050ba8](https://github.com/bitnami/charts/commit/a050ba89e3df9e1f80260fc925fab4f099161885)), closes [#26658](https://github.com/bitnami/charts/issues/26658)
 
 ## 1.2.0 (2024-05-23)
 

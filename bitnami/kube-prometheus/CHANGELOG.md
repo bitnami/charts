@@ -1,8 +1,36 @@
 # Changelog
 
-## 9.3.1 (2024-06-05)
+## 9.5.2 (2024-06-18)
 
-* [bitnami/kube-prometheus] Release 9.3.1 ([#26749](https://github.com/bitnami/charts/pull/26749))
+* [bitnami/kube-prometheus] Release 9.5.2 ([#27405](https://github.com/bitnami/charts/pull/27405))
+
+## <small>9.5.1 (2024-06-17)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.1 (#27268) ([1d26cbd](https://github.com/bitnami/charts/commit/1d26cbd913ed9dd676525e7efca59e7475b384ec)), closes [#27268](https://github.com/bitnami/charts/issues/27268)
+
+## 9.5.0 (2024-06-10)
+
+* [bitnami/kube-prometheus] Add keepDroppedTargets parameter kube-prometheus configuration (#26409) ([8aa5fc8](https://github.com/bitnami/charts/commit/8aa5fc87d5e401a4625f4dfa829416cdebc83f0d)), closes [#26409](https://github.com/bitnami/charts/issues/26409)
+
+## <small>9.4.1 (2024-06-06)</small>
+
+* [bitnami/kube-prometheus] Release 9.4.1 (#27007) ([40c13fe](https://github.com/bitnami/charts/commit/40c13fe226aafbd7c200274871005f4eb36b00c7)), closes [#27007](https://github.com/bitnami/charts/issues/27007)
+
+## 9.4.0 (2024-06-06)
+
+* [bitnami/kube-prometheus] Enable PodDisruptionBudgets (part 2) (#26700) ([2b1b982](https://github.com/bitnami/charts/commit/2b1b98268f24a059ecf745fbe6a9c7ed9b742a2e)), closes [#26700](https://github.com/bitnami/charts/issues/26700)
+
+## <small>9.3.3 (2024-06-05)</small>
+
+* [bitnami/kube-prometheus] Bump chart version (#26857) ([12075c6](https://github.com/bitnami/charts/commit/12075c61aa7fd641337d67943dabb235e5c6e789)), closes [#26857](https://github.com/bitnami/charts/issues/26857)
+
+## <small>9.3.2 (2024-06-05)</small>
+
+* [bitnami/kube-prometheus] Bump chart version (#26799) ([77f0f79](https://github.com/bitnami/charts/commit/77f0f79df8c04433af3c50c8db9bfa5bb8091b2c)), closes [#26799](https://github.com/bitnami/charts/issues/26799)
+
+## <small>9.3.1 (2024-06-05)</small>
+
+* [bitnami/kube-prometheus] Release 9.3.1 (#26749) ([4b4247e](https://github.com/bitnami/charts/commit/4b4247e600914e7ca4f89e01cd97e8b4ee5a56a9)), closes [#26749](https://github.com/bitnami/charts/issues/26749)
 
 ## 9.3.0 (2024-06-01)
 

@@ -1,8 +1,44 @@
 # Changelog
 
-## 18.21.1 (2024-06-04)
+## 18.21.10 (2024-06-18)
 
-* [bitnami/drupal] Fix typo in deployment.yaml template ([#26679](https://github.com/bitnami/charts/pull/26679))
+* [bitnami/drupal] Release 18.21.10 ([#27336](https://github.com/bitnami/charts/pull/27336))
+
+## <small>18.21.9 (2024-06-17)</small>
+
+* [bitnami/drupal] Release 18.21.9 (#27212) ([52e56bf](https://github.com/bitnami/charts/commit/52e56bf1a405dc11af61ab6f0371839c2921f31f)), closes [#27212](https://github.com/bitnami/charts/issues/27212)
+
+## <small>18.21.8 (2024-06-13)</small>
+
+* [bitnami/drupal] Release 18.21.8 (#27157) ([c550d7d](https://github.com/bitnami/charts/commit/c550d7d40a10c1bdfc1f604725bdaa559d472322)), closes [#27157](https://github.com/bitnami/charts/issues/27157)
+
+## <small>18.21.7 (2024-06-13)</small>
+
+* [bitnami/drupal] Release 18.21.7 (#27148) ([202becc](https://github.com/bitnami/charts/commit/202becc0cc9cdbf32032c68b262443b34caa19cc)), closes [#27148](https://github.com/bitnami/charts/issues/27148)
+
+## <small>18.21.6 (2024-06-13)</small>
+
+* [bitnami/drupal] Release 18.21.6 (#27144) ([4ee8ce7](https://github.com/bitnami/charts/commit/4ee8ce7fe4a77814f8a9bdba5c7e5bdbf42fcd4a)), closes [#27144](https://github.com/bitnami/charts/issues/27144)
+
+## <small>18.21.5 (2024-06-06)</small>
+
+* [bitnami/drupal] Release 18.21.5 (#26945) ([6abbd26](https://github.com/bitnami/charts/commit/6abbd266239e2585b135218b675b6ffa91740869)), closes [#26945](https://github.com/bitnami/charts/issues/26945)
+
+## <small>18.21.4 (2024-06-06)</small>
+
+* [bitnami/drupal] Release 18.21.4 (#26884) ([ad57d57](https://github.com/bitnami/charts/commit/ad57d571a069edbc036d121a91dd340c6dfeca98)), closes [#26884](https://github.com/bitnami/charts/issues/26884)
+
+## <small>18.21.3 (2024-06-05)</small>
+
+* [bitnami/drupal] Bump chart version (#26826) ([d043062](https://github.com/bitnami/charts/commit/d04306223932c525c0df2b5b0f742366f5606e73)), closes [#26826](https://github.com/bitnami/charts/issues/26826)
+
+## <small>18.21.2 (2024-06-05)</small>
+
+* [bitnami/drupal] Bump chart version (#26768) ([01766d5](https://github.com/bitnami/charts/commit/01766d58adf0c0e3f6e0ac3cb1dd6e5c06639953)), closes [#26768](https://github.com/bitnami/charts/issues/26768)
+
+## <small>18.21.1 (2024-06-04)</small>
+
+* [bitnami/drupal] Fix typo in deployment.yaml template (#26679) ([5d83a69](https://github.com/bitnami/charts/commit/5d83a69dd3168a476a8edb9ea2d85c23b97cea13)), closes [#26679](https://github.com/bitnami/charts/issues/26679)
 
 ## 18.21.0 (2024-06-03)
 

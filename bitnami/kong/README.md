@@ -287,7 +287,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `autoscaling.minReplicas`                           | Minimum number of replicas to scale back                                                                                           | `2`              |
 | `autoscaling.maxReplicas`                           | Maximum number of replicas to scale out                                                                                            | `5`              |
 | `autoscaling.metrics`                               | Metrics to use when deciding to scale the deployment (evaluated as a template)                                                     | `[]`             |
-| `pdb.create`                                        | Deploy a PodDisruptionBudget object for Kong deployment                                                                            | `false`          |
+| `pdb.create`                                        | Deploy a PodDisruptionBudget object for Kong deployment                                                                            | `true`           |
 | `pdb.minAvailable`                                  | Minimum available Kong replicas (expressed in percentage)                                                                          | `""`             |
 | `pdb.maxUnavailable`                                | Maximum unavailable Kong replicas (expressed in percentage)                                                                        | `50%`            |
 

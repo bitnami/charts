@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.1.3 (2024-06-05)
+## 1.2.3 (2024-06-18)
 
-* [bitnami/kuberay] Release 1.1.3 ([#26737](https://github.com/bitnami/charts/pull/26737))
+* [bitnami/kuberay] Release 1.2.3 ([#27368](https://github.com/bitnami/charts/pull/27368))
+
+## <small>1.2.2 (2024-06-17)</small>
+
+* [bitnami/kuberay] Release 1.2.2 (#27271) ([10e6c3d](https://github.com/bitnami/charts/commit/10e6c3dea944b779e7ad8048f895fbd937a09c1f)), closes [#27271](https://github.com/bitnami/charts/issues/27271)
+
+## <small>1.2.1 (2024-06-06)</small>
+
+* [bitnami/kuberay] Release 1.2.1 (#26972) ([d75ae0a](https://github.com/bitnami/charts/commit/d75ae0a678ead0d9b894a64db3ce5861cc1f6685)), closes [#26972](https://github.com/bitnami/charts/issues/26972)
+
+## 1.2.0 (2024-06-06)
+
+* [bitnami/kuberay] Enable PodDisruptionBudgets (#26702) ([e7d7dec](https://github.com/bitnami/charts/commit/e7d7dec7af82e9d5e82ae33ed0aac569ace03e7b)), closes [#26702](https://github.com/bitnami/charts/issues/26702)
+
+## <small>1.1.3 (2024-06-05)</small>
+
+* [bitnami/kuberay] Release 1.1.3 (#26737) ([e53a993](https://github.com/bitnami/charts/commit/e53a993a5de7f9f4c9bd16cf69ee1fe75db5d0a5)), closes [#26737](https://github.com/bitnami/charts/issues/26737)
 
 ## <small>1.1.2 (2024-06-04)</small>
 

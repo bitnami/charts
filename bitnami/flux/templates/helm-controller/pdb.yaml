@@ -21,8 +21,8 @@ spec:
   {{- if .Values.helmController.pdb.minAvailable }}
   minAvailable: {{ .Values.helmController.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.helmController.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.helmController.pdb.maxUnavailable }}
+  {{- if or .Values.helmController.pdb.maxUnavailable ( not .Values.helmController.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.helmController.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.helmController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

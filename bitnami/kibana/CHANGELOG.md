@@ -1,8 +1,36 @@
 # Changelog
 
-## 11.2.1 (2024-06-04)
+## 11.2.8 (2024-06-18)
 
-* [bitnami/kibana] Bump chart version ([#26639](https://github.com/bitnami/charts/pull/26639))
+* [bitnami/kibana] Release 11.2.8 ([#27364](https://github.com/bitnami/charts/pull/27364))
+
+## <small>11.2.7 (2024-06-17)</small>
+
+* [bitnami/kibana] Release 11.2.7 (#27238) ([441dd4f](https://github.com/bitnami/charts/commit/441dd4f5aa11d8d339a7370f7dc3baa1e22d0327)), closes [#27238](https://github.com/bitnami/charts/issues/27238)
+
+## <small>11.2.6 (2024-06-12)</small>
+
+* [bitnami/kibana] Release 11.2.6 (#27134) ([29859b8](https://github.com/bitnami/charts/commit/29859b8862360aae8fcd63a7f25bc9db9d46b009)), closes [#27134](https://github.com/bitnami/charts/issues/27134)
+
+## <small>11.2.5 (2024-06-12)</small>
+
+* [bitnami/kibana] Release 11.2.5 (#27111) ([133c50b](https://github.com/bitnami/charts/commit/133c50bc2231cbdb8d727c82f147454288421746)), closes [#27111](https://github.com/bitnami/charts/issues/27111)
+
+## <small>11.2.4 (2024-06-06)</small>
+
+* [bitnami/kibana] Fix cypress test to skip welcome page (#26929) ([b204a6a](https://github.com/bitnami/charts/commit/b204a6a8421bc378ac7586a0555075cfd0330a00)), closes [#26929](https://github.com/bitnami/charts/issues/26929)
+
+## <small>11.2.3 (2024-06-06)</small>
+
+* [bitnami/kibana] Release 11.2.3 (#26969) ([fadb6f8](https://github.com/bitnami/charts/commit/fadb6f809c3dd8bd8b94fea96f5ca52d28d5d1ab)), closes [#26969](https://github.com/bitnami/charts/issues/26969)
+
+## <small>11.2.2 (2024-06-05)</small>
+
+* [bitnami/kibana] Release 11.2.2 (#26878) ([7c612da](https://github.com/bitnami/charts/commit/7c612da45bc7f7ef5f87c9343a4819e25c903e3f)), closes [#26878](https://github.com/bitnami/charts/issues/26878)
+
+## <small>11.2.1 (2024-06-04)</small>
+
+* [bitnami/kibana] Bump chart version (#26639) ([cc1b630](https://github.com/bitnami/charts/commit/cc1b630cabdfa605ce7c0ad80efaa9ac2fbe6111)), closes [#26639](https://github.com/bitnami/charts/issues/26639)
 
 ## 11.2.0 (2024-06-03)
 
