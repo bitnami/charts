@@ -109,7 +109,7 @@ func createAPIMockService(ctx context.Context, c kubernetes.Interface) error {
 			Type: v1.ServiceTypeClusterIP,
 			Ports: []v1.ServicePort{{
 				Name:       "http",
-				Port:       int32(80),
+				Port:       int32(8080),
 				TargetPort: intstr.IntOrString{Type: intstr.String, StrVal: "http"},
 			}},
 			Selector: map[string]string{
@@ -147,7 +147,7 @@ func createAPIMockCiliumNetworkPolicy(ctx context.Context, dC dynamic.Interface)
 					"toPorts": []map[string]interface{}{{
 						"ports": []interface{}{
 							map[string]interface{}{
-								"port":     "80",
+								"port":     "8080",
 								"protocol": "TCP",
 							},
 						},
