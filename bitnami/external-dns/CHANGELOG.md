@@ -1,12 +1,12 @@
 # Changelog
 
-## 8.0.0 (2024-06-05)
+## 8.0.0 (2024-06-19)
 
 * [bitnami/external-dns] Major release: drop support for multiple replicas and DaemonSet ([#26759](https://github.com/bitnami/charts/pull/26759))
 
 ## <small>7.5.7 (2024-06-18)</small>
 
-* [bitnami/external-dns] Release 7.5.7 ([#27341](https://github.com/bitnami/charts/pull/27341))
+* [bitnami/external-dns] Release 7.5.7 (#27341) ([6668b3c](https://github.com/bitnami/charts/commit/6668b3c1ae632eb90b6e825fedddc39637aec137)), closes [#27341](https://github.com/bitnami/charts/issues/27341)
 
 ## <small>7.5.6 (2024-06-17)</small>
 
