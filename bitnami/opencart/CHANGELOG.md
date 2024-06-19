@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.6 (2024-06-17)
+## 18.2.7 (2024-06-18)
 
-* [bitnami/opencart] Release 18.2.6 ([#27259](https://github.com/bitnami/charts/pull/27259))
+* [bitnami/opencart] Release 18.2.7 ([#27394](https://github.com/bitnami/charts/pull/27394))
+
+## <small>18.2.6 (2024-06-17)</small>
+
+* [bitnami/opencart] Release 18.2.6 (#27259) ([1737826](https://github.com/bitnami/charts/commit/17378267e55d5d564dcae8474a8d007876145cae)), closes [#27259](https://github.com/bitnami/charts/issues/27259)
 
 ## <small>18.2.5 (2024-06-07)</small>
 

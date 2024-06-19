@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.5 (2024-06-17)
+## 6.2.6 (2024-06-18)
 
-* [bitnami/mastodon] Release 6.2.5 ([#27244](https://github.com/bitnami/charts/pull/27244))
+* [bitnami/mastodon] Release 6.2.6 ([#27374](https://github.com/bitnami/charts/pull/27374))
+
+## <small>6.2.5 (2024-06-17)</small>
+
+* [bitnami/mastodon] Release 6.2.5 (#27244) ([6b0c126](https://github.com/bitnami/charts/commit/6b0c126c64627fee7ffd27764b9523a56179960c)), closes [#27244](https://github.com/bitnami/charts/issues/27244)
 
 ## <small>6.2.4 (2024-06-06)</small>
 

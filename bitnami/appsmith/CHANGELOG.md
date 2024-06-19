@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.8 (2024-06-17)
+## 3.3.9 (2024-06-18)
 
-* [bitnami/appsmith] Release 3.3.8 ([#27308](https://github.com/bitnami/charts/pull/27308))
+* [bitnami/appsmith] Release 3.3.9 ([#27332](https://github.com/bitnami/charts/pull/27332))
+
+## <small>3.3.8 (2024-06-17)</small>
+
+* [bitnami/appsmith] Release 3.3.8 (#27308) ([c2a8bdd](https://github.com/bitnami/charts/commit/c2a8bdd71c89a2ffa746339d96f18c939777b9b3)), closes [#27308](https://github.com/bitnami/charts/issues/27308)
 
 ## <small>3.3.7 (2024-06-17)</small>
 

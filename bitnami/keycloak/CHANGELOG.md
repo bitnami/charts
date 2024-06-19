@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.4.2 (2024-06-17)
+## 21.4.3 (2024-06-18)
 
-* [bitnami/keycloak] Release 21.4.2 ([#27237](https://github.com/bitnami/charts/pull/27237))
+* [bitnami/keycloak] Release 21.4.3 ([#27361](https://github.com/bitnami/charts/pull/27361))
+
+## <small>21.4.2 (2024-06-17)</small>
+
+* [bitnami/keycloak] Release 21.4.2 (#27237) ([2b574d0](https://github.com/bitnami/charts/commit/2b574d09f54adb8a9175775e6c90c7a3befa9395)), closes [#27237](https://github.com/bitnami/charts/issues/27237)
 
 ## <small>21.4.1 (2024-06-06)</small>
 

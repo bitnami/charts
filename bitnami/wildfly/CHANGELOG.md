@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.6 (2024-06-17)
+## 20.2.7 (2024-06-18)
 
-* [bitnami/wildfly] Release 20.2.6 ([#27299](https://github.com/bitnami/charts/pull/27299))
+* [bitnami/wildfly] Release 20.2.7 ([#27429](https://github.com/bitnami/charts/pull/27429))
+
+## <small>20.2.6 (2024-06-17)</small>
+
+* [bitnami/wildfly] Release 20.2.6 (#27299) ([0f41f6c](https://github.com/bitnami/charts/commit/0f41f6cce112d02e557b25ba17da637ae03a5127)), closes [#27299](https://github.com/bitnami/charts/issues/27299)
 
 ## <small>20.2.5 (2024-06-10)</small>
 

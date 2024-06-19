@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.3.3 (2024-06-17)
+## 18.3.4 (2024-06-18)
 
-* [bitnami/airflow] Release 18.3.3 ([#27200](https://github.com/bitnami/charts/pull/27200))
+* [bitnami/airflow] Release 18.3.4 ([#27326](https://github.com/bitnami/charts/pull/27326))
+
+## <small>18.3.3 (2024-06-17)</small>
+
+* [bitnami/airflow] Release 18.3.3 (#27200) ([f77d4a4](https://github.com/bitnami/charts/commit/f77d4a426aecf13854ed33aa9ab8450091780658)), closes [#27200](https://github.com/bitnami/charts/issues/27200)
 
 ## <small>18.3.2 (2024-06-13)</small>
 

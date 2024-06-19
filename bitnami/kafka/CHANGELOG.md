@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.3.3 (2024-06-17)
+## 29.3.4 (2024-06-18)
 
-* [bitnami/kafka] Release 29.3.3 ([#27236](https://github.com/bitnami/charts/pull/27236))
+* [bitnami/kafka] Release 29.3.4 ([#27362](https://github.com/bitnami/charts/pull/27362))
+
+## <small>29.3.3 (2024-06-17)</small>
+
+* [bitnami/kafka] Release 29.3.3 (#27236) ([b53ec15](https://github.com/bitnami/charts/commit/b53ec15d13c1536492058c6527b5698254135696)), closes [#27236](https://github.com/bitnami/charts/issues/27236)
 
 ## <small>29.3.2 (2024-06-14)</small>
 

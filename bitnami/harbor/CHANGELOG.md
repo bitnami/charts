@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.4.5 (2024-06-17)
+## 21.4.6 (2024-06-18)
 
-* [bitnami/harbor] Release 21.4.5 ([#27229](https://github.com/bitnami/charts/pull/27229))
+* [bitnami/harbor] Release 21.4.6 ([#27355](https://github.com/bitnami/charts/pull/27355))
+
+## <small>21.4.5 (2024-06-17)</small>
+
+* [bitnami/harbor] Release 21.4.5 (#27229) ([30571f4](https://github.com/bitnami/charts/commit/30571f4896c7874347d2a194a21f7d5d2b41688d)), closes [#27229](https://github.com/bitnami/charts/issues/27229)
 
 ## <small>21.4.4 (2024-06-12)</small>
 

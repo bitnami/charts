@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.6 (2024-06-17)
+## 5.2.7 (2024-06-18)
 
-* [bitnami/sonarqube] Release 5.2.6 ([#27303](https://github.com/bitnami/charts/pull/27303))
+* [bitnami/sonarqube] Release 5.2.7 ([#27418](https://github.com/bitnami/charts/pull/27418))
+
+## <small>5.2.6 (2024-06-17)</small>
+
+* [bitnami/sonarqube] Release 5.2.6 (#27303) ([be65c2b](https://github.com/bitnami/charts/commit/be65c2bfb6f4120eb9109676a21572f9a4f1b4b1)), closes [#27303](https://github.com/bitnami/charts/issues/27303)
 
 ## <small>5.2.5 (2024-06-14)</small>
 

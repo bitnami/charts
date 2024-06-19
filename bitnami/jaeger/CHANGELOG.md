@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.8 (2024-06-17)
+## 2.3.9 (2024-06-18)
 
-* [bitnami/jaeger] Release 2.3.8 ([#27231](https://github.com/bitnami/charts/pull/27231))
+* [bitnami/jaeger] Release 2.3.9 ([#27357](https://github.com/bitnami/charts/pull/27357))
+
+## <small>2.3.8 (2024-06-17)</small>
+
+* [bitnami/jaeger] Release 2.3.8 (#27231) ([b2b3f5d](https://github.com/bitnami/charts/commit/b2b3f5d8750a9219037a5a4a7abbf0e2d00e2078)), closes [#27231](https://github.com/bitnami/charts/issues/27231)
 
 ## <small>2.3.7 (2024-06-17)</small>
 

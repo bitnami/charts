@@ -605,7 +605,7 @@ Return the S3 protocol
     {{- if .Values.minio.enabled -}}
         {{- ternary "https" "http" .Values.minio.tls.enabled  -}}
     {{- else -}}
-        {{- print .Values.externalS3.protocol -}}
+        {{- ternary "https" "http" .Values.externalS3.tls.enabled  -}}
     {{- end -}}
 {{- end -}}
 
@@ -637,10 +637,8 @@ Return true if TLS is used
 {{- define "milvus.s3.useSSL" -}}
     {{- if .Values.minio.enabled -}}
         {{- .Values.minio.tls.enabled  -}}
-    {{- else if (eq .Values.externalS3.protocol "https") -}}
-        {{- print "true" -}}
     {{- else -}}
-        {{- print "false" -}}
+        {{- .Values.externalS3.tls.enabled  -}}
     {{- end -}}
 {{- end -}}
 
@@ -772,7 +770,7 @@ Init container definition for waiting for the database to be ready
 
       echo "Connection success"
       exit 0
-  {{- if and .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
+  {{- if and (not .Values.etcd.enabled) .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
   volumeMounts:
     - name: etcd-client-certs
       mountPath: /bitnami/milvus/conf/cert/etcd/client
@@ -816,14 +814,24 @@ Init container definition for waiting for the database to be ready
 
       check_s3() {
           local -r s3_host="${1:-?missing s3}"
-          if curl --max-time 5 "${s3_host}" | grep "RequestId"; then
+          local params_cert=""
+
+          {{- if .Values.externalS3.tls.enabled }}
+          {{- if and .Values.externalS3.tls.existingSecret .Values.externalS3.tls.caCert }}
+          params_cert="--cacert /bitnami/milvus/conf/cert/minio/client/{{ .Values.externalS3.tls.caCert }}"
+          {{- else }}
+          params_cert="-k"
+          {{- end }}
+          {{- end }}
+
+          if curl --max-time 5 "${s3_host}" $params_cert | grep "RequestId"; then
              return 0
           else
              return 1
           fi
       }
 
-      host={{ printf "%v:%v" (include "milvus.s3.host" .) (include "milvus.s3.port" .) }}
+      host={{ template "milvus.s3.protocol" . }}://{{ printf "%v:%v" (include "milvus.s3.host" .) (include "milvus.s3.port" .) }}
 
       echo "Checking connection to $host"
       if retry_while "check_s3 $host"; then
@@ -835,6 +843,12 @@ Init container definition for waiting for the database to be ready
 
       echo "Connection success"
       exit 0
+  {{- if and (not .Values.minio.enabled) .Values.externalS3.tls.enabled .Values.externalS3.tls.existingSecret }}
+  volumeMounts:
+    - name: minio-client-certs
+      mountPath: /bitnami/milvus/conf/cert/minio/client
+      readOnly: true
+  {{- end }}
 {{- end -}}
 
 {{/*
@@ -1014,17 +1028,28 @@ Init container definition for waiting for the database to be ready
       mv /bitnami/milvus/rendered-conf/pre-render-config_00.yaml /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
       {{- end }}
 
+      # Minio TLS settings
+      {{- if and (not .context.Values.minio.enabled) .context.Values.externalS3.tls.enabled }}
+      {{- if and .context.Values.externalS3.tls.existingSecret .context.Values.externalS3.tls.caCert }}
+      yq e '.minio.ssl.tlsCACert = "/opt/bitnami/milvus/configs/cert/minio/client/{{ .context.Values.externalS3.tls.caCert }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml > /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      {{- else }}
+      yq e '.minio.ssl.tlsCACert = ""' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml > /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      {{- end }}
+      {{- else }}
+      mv /bitnami/milvus/rendered-conf/pre-render-config_01.yaml /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      {{- end }}
+
       # Milvus server TLS settings
-      yq e '.common.security.tlsMode = {{ .context.Values.proxy.tls.mode }}' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml > /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      yq e '.common.security.tlsMode = {{ .context.Values.proxy.tls.mode }}' /bitnami/milvus/rendered-conf/pre-render-config_02.yaml > /bitnami/milvus/rendered-conf/pre-render-config_03.yaml
       {{- if ne (int .context.Values.proxy.tls.mode) 0 }}
-      yq e -i '.tls.serverPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.cert }}"' /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
-      yq e -i '.tls.serverKeyPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.key }}"' /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      yq e -i '.tls.serverPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.cert }}"' /bitnami/milvus/rendered-conf/pre-render-config_03.yaml
+      yq e -i '.tls.serverKeyPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.key }}"' /bitnami/milvus/rendered-conf/pre-render-config_03.yaml
       {{- if eq (int .context.Values.proxy.tls.mode) 2 }}
-      yq e -i '.tls.caPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.caCert }}"' /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      yq e -i '.tls.caPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.caCert }}"' /bitnami/milvus/rendered-conf/pre-render-config_03.yaml
       {{- end }}
       {{- end }}
 
-      render-template /bitnami/milvus/rendered-conf/pre-render-config_02.yaml > /bitnami/milvus/rendered-conf/milvus.yaml
+      render-template /bitnami/milvus/rendered-conf/pre-render-config_03.yaml > /bitnami/milvus/rendered-conf/milvus.yaml
       rm /bitnami/milvus/rendered-conf/pre-render-config*
       chmod 644 /bitnami/milvus/rendered-conf/milvus.yaml
   env:

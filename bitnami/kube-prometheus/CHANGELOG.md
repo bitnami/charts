@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.5.1 (2024-06-17)
+## 9.5.2 (2024-06-18)
 
-* [bitnami/kube-prometheus] Release 9.5.1 ([#27268](https://github.com/bitnami/charts/pull/27268))
+* [bitnami/kube-prometheus] Release 9.5.2 ([#27405](https://github.com/bitnami/charts/pull/27405))
+
+## <small>9.5.1 (2024-06-17)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.1 (#27268) ([1d26cbd](https://github.com/bitnami/charts/commit/1d26cbd913ed9dd676525e7efca59e7475b384ec)), closes [#27268](https://github.com/bitnami/charts/issues/27268)
 
 ## 9.5.0 (2024-06-10)
 

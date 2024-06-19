@@ -7610,10 +7610,25 @@
                     "description": "Name of an existing secret key containing the S3 access key secret",
                     "default": "root-password"
                 },
-                "protocol": {
-                    "type": "string",
-                    "description": "External S3 protocol",
-                    "default": "https"
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS for external S3 client connections.",
+                            "default": false
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing the TLS certificates for external S3 client communications.",
+                            "default": ""
+                        },
+                        "caCert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)",
+                            "default": "ca.crt"
+                        }
+                    }
                 },
                 "bucket": {
                     "type": "string",
@@ -7692,6 +7707,41 @@
                             "type": "string",
                             "description": "Kafka enabled SASL mechanisms",
                             "default": "PLAIN"
+                        }
+                    }
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS for external Kafka client connections.",
+                            "default": false
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing the TLS certificates for external Kafka client communications.",
+                            "default": ""
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'cert' key different from the default (tls.crt)",
+                            "default": "tls.crt"
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'key' key different from the default (tls.key)",
+                            "default": "tls.key"
+                        },
+                        "caCert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)",
+                            "default": "ca.crt"
+                        },
+                        "keyPassword": {
+                            "type": "string",
+                            "description": "Password to access the password-protected PEM key if necessary.",
+                            "default": ""
                         }
                     }
                 }

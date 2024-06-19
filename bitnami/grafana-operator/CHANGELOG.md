@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.7 (2024-06-17)
+## 4.4.8 (2024-06-18)
 
-* [bitnami/grafana-operator] Release 4.4.7 ([#27225](https://github.com/bitnami/charts/pull/27225))
+* [bitnami/grafana-operator] Release 4.4.8 ([#27350](https://github.com/bitnami/charts/pull/27350))
+
+## <small>4.4.7 (2024-06-17)</small>
+
+* [bitnami/grafana-operator] Release 4.4.7 (#27225) ([824f2e9](https://github.com/bitnami/charts/commit/824f2e90a55e2e9c711f929388543e2eb4d9c46f)), closes [#27225](https://github.com/bitnami/charts/issues/27225)
 
 ## <small>4.4.6 (2024-06-13)</small>
 
