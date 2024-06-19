@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.4 (2024-06-17)
+## 2.2.5 (2024-06-18)
 
-* [bitnami/kiam] Release 2.2.4 ([#27265](https://github.com/bitnami/charts/pull/27265))
+* [bitnami/kiam] Release 2.2.5 ([#27365](https://github.com/bitnami/charts/pull/27365))
+
+## <small>2.2.4 (2024-06-17)</small>
+
+* [bitnami/kiam] Release 2.2.4 (#27265) ([aae30c3](https://github.com/bitnami/charts/commit/aae30c35857f82f20d9edf45e20316991f687ddf)), closes [#27265](https://github.com/bitnami/charts/issues/27265)
 
 ## <small>2.2.3 (2024-06-06)</small>
 

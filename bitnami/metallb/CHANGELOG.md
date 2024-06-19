@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.4 (2024-06-17)
+## 6.3.5 (2024-06-18)
 
-* [bitnami/metallb] Release 6.3.4 ([#27247](https://github.com/bitnami/charts/pull/27247))
+* [bitnami/metallb] Release 6.3.5 ([#27377](https://github.com/bitnami/charts/pull/27377))
+
+## <small>6.3.4 (2024-06-17)</small>
+
+* [bitnami/metallb] Release 6.3.4 (#27247) ([2638922](https://github.com/bitnami/charts/commit/2638922ed758bc4f30795d11f7bb555715f3fbdc)), closes [#27247](https://github.com/bitnami/charts/issues/27247)
 
 ## <small>6.3.3 (2024-06-06)</small>
 

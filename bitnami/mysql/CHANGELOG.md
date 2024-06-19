@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.3 (2024-06-17)
+## 11.1.4 (2024-06-18)
 
-* [bitnami/mysql] Release 11.1.3 ([#27284](https://github.com/bitnami/charts/pull/27284))
+* [bitnami/mysql] Release 11.1.4 ([#27387](https://github.com/bitnami/charts/pull/27387))
+
+## <small>11.1.3 (2024-06-17)</small>
+
+* [bitnami/mysql] Release 11.1.3 (#27284) ([65299d0](https://github.com/bitnami/charts/commit/65299d08fd11cea43155177446faa709b6995301)), closes [#27284](https://github.com/bitnami/charts/issues/27284)
 
 ## <small>11.1.2 (2024-06-06)</small>
 

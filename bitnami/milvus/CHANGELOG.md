@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.0 (2024-06-18)
+## 8.3.0 (2024-06-19)
 
 * [bitnami/milvus] feat: config external S3 tls client certs settings (… ([#27068](https://github.com/bitnami/charts/pull/27068))
+
+## 8.2.7 (2024-06-18)
+
+* [bitnami/milvus] Release 8.2.7 ([#27403](https://github.com/bitnami/charts/pull/27403))
 
 ## <small>8.2.6 (2024-06-17)</small>
 
