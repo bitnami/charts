@@ -175,6 +175,7 @@ extraDeploy:
 ```
 
 ### Allowing multi namespace tendancy
+
 In case you would like to allow applications / application sets in multiple namespaces, you can use the following to configure Argo-CD.
 
 Upstream docs
