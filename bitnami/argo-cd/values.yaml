@@ -910,6 +910,14 @@ applicationSet:
     ## @param applicationSet.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
+  ## Enable admin clusterrole resources. Allows Argo CD applicationSet controller to have access to multiple namespaces
+  ## @param applicationSet.clusterAdminAccess Enable K8s cluster admin access for the application controller
+  ##
+  clusterAdminAccess: false
+  ## Enable Custom Rules for Argo CD applicationSet controller cluster role
+  ## @param applicationSet.clusterRoleRules Use custom rules for Argo CD applicationSet controller's cluster role
+  ##
+  clusterRoleRules: []
   ## @param applicationSet.podAffinityPreset Pod affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -1345,6 +1353,14 @@ notifications:
     ## @param notifications.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
+  ## Enable admin clusterrole resources. Allows Argo CD notifications controller to have access to multiple namespaces
+  ## @param notifications.clusterAdminAccess Enable K8s cluster admin access for the notifications controller
+  ##
+  clusterAdminAccess: false
+  ## Enable Custom Rules for Argo CD notifications controller cluster role
+  ## @param notifications.clusterRoleRules Use custom rules for notifications controller's cluster role
+  ##
+  clusterRoleRules: []
   ## @param notifications.podAffinityPreset Pod affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -2714,6 +2730,15 @@ server:
     ## @param server.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
+  ## Enable admin clusterrole resources. Allows Argo CD server to have access to multiple namespaces
+  ## @param server.clusterAdminAccess Enable K8s cluster admin access for the server
+  ##
+  clusterAdminAccess: false
+  ## Enable Custom Rules for Argo CD server cluster role
+  ## @param server.clusterRoleRules Use custom rules for server's cluster role
+  ##
+  clusterRoleRules: []
+
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -3090,6 +3115,14 @@ repoServer:
     ## @param repoServer.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
+  ## Enable admin clusterrole resources. Allows Argo CD repo server to have access to multiple namespaces
+  ## @param repoServer.clusterAdminAccess Enable K8s cluster admin access for the repo server
+  ##
+  clusterAdminAccess: false
+  ## Enable Custom Rules for Argo CD server cluster role
+  ## @param repoServer.clusterRoleRules Use custom rules for repo server's cluster role
+  ##
+  clusterRoleRules: []
   ## @param repoServer.command Override default container command (useful when using custom images)
   ##
   command: []
