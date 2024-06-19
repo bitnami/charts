@@ -29,6 +29,13 @@ Create the name of the query deployment
 {{- end -}}
 
 {{/*
+Create the name of the query deployment
+*/}}
+{{- define "jaeger.cassandra.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "jaeger.imagePullSecrets" -}}
@@ -142,10 +149,10 @@ ref. https://github.com/jaegertracing/jaeger-operator/issues/1158
 Create the cassandra secret name
 */}}
 {{- define "jaeger.cassandra.secretName" -}}
-    {{- if (not .Values.cassandra.enabled) -}}
+    {{- if not .Values.cassandra.enabled -}}
         {{- tpl .Values.externalDatabase.existingSecret $ -}}
     {{- else -}}
-        {{- default (printf "%s-cassandra" .Release.Name) .Values.cassandra.dbUser.existingSecret -}}
+        {{- default (include "jaeger.cassandra.fullname" .) .Values.cassandra.dbUser.existingSecret -}}
     {{- end -}}
 {{- end -}}
 
