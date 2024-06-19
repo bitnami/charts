@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.7 (2024-06-18)
+## 14.2.8 (2024-06-19)
 
-* [bitnami/postgresql-ha] Release 14.2.7 ([#27400](https://github.com/bitnami/charts/pull/27400))
+* [bitnami/postgresql-ha] Fix issue where  user password is not set when a different username is provided ([#24593](https://github.com/bitnami/charts/pull/24593))
+
+## <small>14.2.7 (2024-06-18)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.7 (#27400) ([81649d9](https://github.com/bitnami/charts/commit/81649d936fa5d17214cc171b35b876d971fd1dc0)), closes [#27400](https://github.com/bitnami/charts/issues/27400)
 
 ## <small>14.2.6 (2024-06-17)</small>
 
