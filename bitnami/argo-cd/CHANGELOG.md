@@ -2,11 +2,11 @@
 
 ## 6.4.9 (2024-06-19)
 
-* [bitnami/argo-cd] Allow cluster role configuration or application-controller, notifications, repoSever, server, applicationSet ([#27450](https://github.com/bitnami/charts/pull/27450)), closes [#27449](https://github.com/bitnami/charts/issues/27449)
+* [bitnami/argo-cd] Fix #27108, #27108 ([#27450](https://github.com/bitnami/charts/pull/27450))
 
-## 6.4.8 (2024-06-18)
+## <small>6.4.8 (2024-06-18)</small>
 
-* [bitnami/argo-cd] Release 6.4.8 ([#27328](https://github.com/bitnami/charts/pull/27328))
+* [bitnami/argo-cd] Release 6.4.8 (#27328) ([5764b48](https://github.com/bitnami/charts/commit/5764b4815b5ad230ea1aa617d939be96e04d1d81)), closes [#27328](https://github.com/bitnami/charts/issues/27328)
 
 ## <small>6.4.7 (2024-06-17)</small>
 
