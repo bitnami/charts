@@ -234,7 +234,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `autoscaling.targetMemory`                          | memcached statefulset autoscaling target CPU memory                                                                                                                                                               | `50`             |
 | `pdb.create`                                        | Deploy a pdb object for the Memcached pod                                                                                                                                                                         | `true`           |
 | `pdb.minAvailable`                                  | Minimum available Memcached replicas                                                                                                                                                                              | `""`             |
-| `pdb.maxUnavailable`                                | Maximum unavailable Memcached replicas                                                                                                                                                                            | `1`              |
+| `pdb.maxUnavailable`                                | Maximum unavailable Memcached replicas                                                                                                                                                                            | `""`             |
 
 ### Traffic Exposure parameters
 

@@ -9,9 +9,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "grafana-loki.compactor.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.loki.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: compactor
    {{- if or .Values.commonAnnotations .Values.metrics.serviceMonitor.annotations }}

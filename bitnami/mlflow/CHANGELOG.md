@@ -1,8 +1,76 @@
 # Changelog
 
-## 1.2.2 (2024-05-28)
+## 1.4.11 (2024-06-18)
 
-* [bitnami/mlflow] Add chart source URL to sources list ([#26495](https://github.com/bitnami/charts/pull/26495))
+* [bitnami/mlflow] Release 1.4.11 ([#27381](https://github.com/bitnami/charts/pull/27381))
+
+## <small>1.4.10 (2024-06-17)</small>
+
+* [bitnami/mlflow] Release 1.4.10 (#27311) ([889aeb0](https://github.com/bitnami/charts/commit/889aeb05dbc702c615faa94052e67d8aae737f2e)), closes [#27311](https://github.com/bitnami/charts/issues/27311)
+
+## <small>1.4.9 (2024-06-17)</small>
+
+* [bitnami/mlflow] Release 1.4.9 (#27251) ([2e581c1](https://github.com/bitnami/charts/commit/2e581c17d559f6b295d9ccd5b87785220b1a0e4b)), closes [#27251](https://github.com/bitnami/charts/issues/27251)
+
+## <small>1.4.8 (2024-06-17)</small>
+
+* [bitnami/mlflow] Increase tracking memory (#27194) ([79745a3](https://github.com/bitnami/charts/commit/79745a3cb79a2c249d4653cb9aa666dc692aa84b)), closes [#27194](https://github.com/bitnami/charts/issues/27194)
+
+## <small>1.4.7 (2024-06-14)</small>
+
+* [bitnami/mlflow] Add wait before starting the tests (#27178) ([10d0f98](https://github.com/bitnami/charts/commit/10d0f984612a0b5fe9b411bc6fec36879823a188)), closes [#27178](https://github.com/bitnami/charts/issues/27178)
+
+## <small>1.4.6 (2024-06-14)</small>
+
+* [bitnami/mlflow] Release 1.4.6 (#27176) ([7a481b5](https://github.com/bitnami/charts/commit/7a481b5a18c4f62a2fae53d67921a5d28e03dbc4)), closes [#27176](https://github.com/bitnami/charts/issues/27176)
+
+## <small>1.4.5 (2024-06-12)</small>
+
+* [bitnami/mlflow] Render imagePullSecrets (#27126) ([3c75b41](https://github.com/bitnami/charts/commit/3c75b4159defefb892eed325a3383ca2c9c76aea)), closes [#27126](https://github.com/bitnami/charts/issues/27126)
+
+## <small>1.4.4 (2024-06-06)</small>
+
+* [bitnami/mlflow] Release 1.4.4 (#27035) ([017a475](https://github.com/bitnami/charts/commit/017a4756394b9c887853f961d7c5e9437282dee0)), closes [#27035](https://github.com/bitnami/charts/issues/27035)
+
+## <small>1.4.3 (2024-06-06)</small>
+
+* [bitnami/mlflow] Release 1.4.3 (#26987) ([2f07b57](https://github.com/bitnami/charts/commit/2f07b57791e3651cd60d9e98a0d4bef31f633ad6)), closes [#26987](https://github.com/bitnami/charts/issues/26987)
+
+## <small>1.4.2 (2024-06-06)</small>
+
+* [bitnami/mlflow] Fix tests definition and remove legacy code from PDBs (#26895) ([00bd196](https://github.com/bitnami/charts/commit/00bd196165d80375faff351e6920cac6736ebcd2)), closes [#26895](https://github.com/bitnami/charts/issues/26895)
+
+## <small>1.4.1 (2024-06-05)</small>
+
+* [bitnami/mlflow] Bump chart version (#26848) ([c01d8ed](https://github.com/bitnami/charts/commit/c01d8edce57340a0f0b2a386ad2480162f7249f4)), closes [#26848](https://github.com/bitnami/charts/issues/26848)
+
+## 1.4.0 (2024-06-05)
+
+* [bitnami/mlflow] Align PodDisruptionBudgets with templates (#26706) ([bef7a6a](https://github.com/bitnami/charts/commit/bef7a6a2ba60ebcc400fe447965e73272b9dcc21)), closes [#26706](https://github.com/bitnami/charts/issues/26706)
+
+## <small>1.3.3 (2024-06-05)</small>
+
+* [bitnami/mlflow] Bump chart version (#26790) ([c8e65b0](https://github.com/bitnami/charts/commit/c8e65b02bb411a40468790386cf6c6eebba8ecf8)), closes [#26790](https://github.com/bitnami/charts/issues/26790)
+
+## <small>1.3.2 (2024-06-04)</small>
+
+* [bitnami/mlflow] Release 1.3.2 (#26571) ([cd67157](https://github.com/bitnami/charts/commit/cd67157cf8ce156e779046b1eb9404ce903deda7)), closes [#26571](https://github.com/bitnami/charts/issues/26571)
+
+## <small>1.3.1 (2024-06-04)</small>
+
+* [bitnami/mlflow] Fix missing '-' option in the liveness execution command (#26526) ([e0d5dd1](https://github.com/bitnami/charts/commit/e0d5dd144e9ac10903e72f51f3adbbeabd976126)), closes [#26526](https://github.com/bitnami/charts/issues/26526)
+
+## 1.3.0 (2024-06-04)
+
+* [bitnami/mlflow] feat: Allow database dialects of external database to be configured (#25965) ([6e2e370](https://github.com/bitnami/charts/commit/6e2e37046ed6d20c3142a202db43a0ee459b177e)), closes [#25965](https://github.com/bitnami/charts/issues/25965) [#25964](https://github.com/bitnami/charts/issues/25964)
+
+## <small>1.2.3 (2024-06-04)</small>
+
+* [bitnami/mlflow] fix always image warning (#26472) ([0b7d009](https://github.com/bitnami/charts/commit/0b7d009b3736199f12a708b946d7e90b2383ce94)), closes [#26472](https://github.com/bitnami/charts/issues/26472)
+
+## <small>1.2.2 (2024-05-28)</small>
+
+* [bitnami/mlflow] Add chart source URL to sources list (#26495) ([b1f8a0c](https://github.com/bitnami/charts/commit/b1f8a0ce113b6fc8bb32df54c9b9c11f79ae8b5e)), closes [#26495](https://github.com/bitnami/charts/issues/26495)
 
 ## <small>1.2.1 (2024-05-28)</small>
 

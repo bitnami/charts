@@ -175,9 +175,14 @@ spec:
             - name: empty-dir
               mountPath: /bitnami/milvus/data
               subPath: app-data-dir
-            {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+            {{- if and .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
             - name: etcd-client-certs
               mountPath: /opt/bitnami/milvus/configs/cert/etcd/client
+              readOnly: true
+            {{- end }}
+            {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+            - name: kafka-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/kafka/client
               readOnly: true
             {{- end }}
           {{- if .Values.queryNode.extraVolumeMounts }}
@@ -205,10 +210,16 @@ spec:
           configMap:
             name: {{ template "milvus.query-node.extraConfigmapName" . }}
         {{- end }}
-        {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+        {{- if and .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
         - name: etcd-client-certs
           secret:
             secretName: {{ .Values.externalEtcd.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+        - name: kafka-client-certs
+          secret:
+            secretName: {{ .Values.externalKafka.tls.existingSecret }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.queryNode.extraVolumes }}

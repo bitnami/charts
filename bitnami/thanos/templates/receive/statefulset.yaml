@@ -309,6 +309,13 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.receive.persistence.enabled (not .Values.receive.persistence.existingClaim) }}
+  {{- if semverCompare ">=1.23-0" (include "common.capabilities.kubeVersion" .) -}}
+  {{- if .Values.receive.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.receive.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.receive.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data

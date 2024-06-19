@@ -207,8 +207,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - pegrep
-                - mongod
+                - pgrep
+                - mongos
           {{- end }}
           {{- if .Values.mongos.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customReadinessProbe "context" $) | nindent 12 }}
@@ -216,8 +216,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/sh 
-                - -c 
+                - /bin/sh
+                - -c
                 - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
           {{- end }}
           {{- if .Values.mongos.customStartupProbe }}
@@ -225,7 +225,7 @@ spec:
           {{- else if .Values.mongos.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: mongodb 
+              port: mongodb
           {{- end }}
           {{- end }}
           {{- if .Values.mongos.lifecycleHooks }}

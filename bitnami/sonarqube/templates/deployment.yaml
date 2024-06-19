@@ -183,7 +183,6 @@ spec:
           volumeMounts:
             - name: sonarqube
               mountPath: /bitnami/sonarqube
-              subPath: data
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir

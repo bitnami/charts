@@ -1,0 +1,54 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: nessie
+    app.kubernetes.io/part-of: nessie
+  {{- if or .Values.service.server.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.service.server.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.server.type }}
+  {{- if and .Values.service.server.clusterIP (eq .Values.service.server.type "ClusterIP") }}
+  clusterIP: {{ .Values.service.server.clusterIP }}
+  {{- end }}
+  {{- if .Values.service.server.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.server.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.server.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.server.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.service.server.type "LoadBalancer") (eq .Values.service.server.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.service.server.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.service.server.type "LoadBalancer") (not (empty .Values.service.server.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.service.server.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.service.server.type "LoadBalancer") (not (empty .Values.service.server.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.service.server.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http-server
+      port: {{ .Values.service.server.ports.http }}
+      targetPort: http-server
+      protocol: TCP
+      {{- if and (or (eq .Values.service.server.type "NodePort") (eq .Values.service.server.type "LoadBalancer")) (not (empty .Values.service.server.nodePorts.http)) }}
+      nodePort: {{ .Values.service.server.nodePorts.http }}
+      {{- else if eq .Values.service.server.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.service.server.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.server.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: nessie
+    app.kubernetes.io/part-of: nessie

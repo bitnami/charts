@@ -53,6 +53,12 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
+      {{- if .Values.dnsPolicy  }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       hostIPC: {{ .Values.hostIPC }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
