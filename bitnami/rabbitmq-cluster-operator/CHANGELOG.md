@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.8 (2024-06-18)
+## 4.3.9 (2024-06-19)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.3.8 ([#27408](https://github.com/bitnami/charts/pull/27408))
+* [bitnami/rabbitmq-cluster-operator] Adding TopicPermission webhook missing configuration in Topology Operator ([#27195](https://github.com/bitnami/charts/pull/27195))
+
+## <small>4.3.8 (2024-06-18)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.8 (#27408) ([0ee7816](https://github.com/bitnami/charts/commit/0ee7816b52e298a0861c38ef4e86109f6067f7a8)), closes [#27408](https://github.com/bitnami/charts/issues/27408)
 
 ## <small>4.3.7 (2024-06-17)</small>
 
