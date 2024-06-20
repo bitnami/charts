@@ -193,7 +193,7 @@ func createAPIMockClientJob(ctx context.Context, c kubernetes.Interface, fsGroup
 							Name:            "curl",
 							Image:           "docker.io/bitnami/os-shell:latest",
 							Command:         []string{"bash", "-ec"},
-							Args:            []string{"curl --connect-timeout 5 -X GET -H 'Accept: application/json' http://api-mock/v1/mock/foo"},
+							Args:            []string{"curl --connect-timeout 5 -X GET -H 'Accept: application/json' http://api-mock:8080/v1/mock/foo"},
 							SecurityContext: containerSecurityContext,
 						},
 					},

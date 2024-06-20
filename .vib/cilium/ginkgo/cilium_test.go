@@ -88,6 +88,12 @@ var _ = Describe("Cilium", Ordered, func() {
 
 			By("deleting the CiliumNetworkPolicy")
 			dC.Resource(ciliumNetworkPolicyType).Namespace(namespace).Delete(ctx, "api-mock", metav1.DeleteOptions{})
+
+			By("deleting the mock API deployment and services")
+			err = c.CoreV1().Services(namespace).Delete(ctx, "api-mock", metav1.DeleteOptions{})
+			Expect(err).NotTo(HaveOccurred())
+			err = c.AppsV1().Deployments(namespace).Delete(ctx, "api-mock", metav1.DeleteOptions{})
+			Expect(err).NotTo(HaveOccurred())
 		})
 	})
 })
