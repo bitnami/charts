@@ -1,12 +1,12 @@
 # Changelog
 
-## 15.6.10 (2024-06-17)
+## 15.6.10 (2024-06-20)
 
 * [bitnami/mongodb] add space back so script works again ([#27183](https://github.com/bitnami/charts/pull/27183))
 
-## 15.6.9 (2024-06-18)
+## <small>15.6.9 (2024-06-18)</small>
 
-* [bitnami/mongodb] Release 15.6.9 ([#27382](https://github.com/bitnami/charts/pull/27382))
+* [bitnami/mongodb] Release 15.6.9 (#27382) ([d59a4b1](https://github.com/bitnami/charts/commit/d59a4b1346d607d82a68d59c6c162197b2305858)), closes [#27382](https://github.com/bitnami/charts/issues/27382)
 
 ## <small>15.6.8 (2024-06-17)</small>
 
