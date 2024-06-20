@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.6.0 (2024-06-19)
+## 3.6.0 (2024-06-20)
 
 * [bitnami/grafana-tempo] Add option to disable tempo-query sidecar ([#27447](https://github.com/bitnami/charts/pull/27447))
 
