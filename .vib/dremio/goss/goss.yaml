@@ -77,10 +77,10 @@ file:
   /opt/bitnami/dremio/conf/dremio.conf:
     exists: true
     contents:
-      - /services.coordinator.web.tokens.cache.size.*120/
-      - /services.conduit.ssl.trustStorePassword.*test/
-      - /services.fabric.memory.reservation.*150M/
-      - /services.coordinator.web.ssl.trustStorePassword.*password123/
+      - /services.coordinator.web.tokens.cache.size.*{{ .Vars.masterCoordinator.dremioConf.configOverrides.services.coordinator.web.tokens.cache.size }}/
+      - /services.conduit.ssl.trustStorePassword.*{{ .Vars.masterCoordinator.dremioConf.secretConfigOverrides.services.conduit.ssl.trustStorePassword }}/
+      - /services.fabric.memory.reservation.*{{ .Vars.dremio.dremioConf.configOverrides.services.fabric.memory.reservation }}/
+      - /services.coordinator.web.ssl.trustStorePassword.*{{ .Vars.dremio.dremioConf.secretConfigOverrides.services.coordinator.web.ssl.trustStorePassword }}/
       - /services.web-admin.port.*{{ .Vars.dremio.containerPorts.liveness }}/
       - /services.coordinator.web.port.*{{ .Vars.dremio.containerPorts.web }}/
       - /services.conduit.port.*{{ .Vars.dremio.containerPorts.conduit }}/

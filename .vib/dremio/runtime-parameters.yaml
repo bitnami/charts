@@ -6,11 +6,21 @@ masterCoordinator:
   persistence:
     enabled: true
     mountPath: /bitnami/dremio/data
+  # Add specific overrides to dremio.conf
   dremioConf:
     configOverrides:
-      services.coordinator.web.tokens.cache.size: 120
+      services:
+        coordinator:
+          web:
+            tokens:
+              cache:
+                size: 120
     secretConfigOverrides:
-      services.conduit.ssl.trustStorePassword: "test"
+      services:
+        conduit:
+          ssl:
+            trustStorePassword: "test"
+  # Add extra files to the configmap
     extraFiles:
       vib.conf: |
         IT WORKS
@@ -26,11 +36,20 @@ dremio:
     conduit: 45679
     jmx: 50001
     liveness: 44350
+  # Add common overrides to dremio.conf
   dremioConf:
     configOverrides:
-      services.fabric.memory.reservation: 150M
+      services:
+        fabric:
+          memory:
+            reservation: 150M
     secretConfigOverrides:
-      services.coordinator.web.ssl.trustStorePassword: "password123"
+      services:
+        coordinator:
+          web:
+            ssl:
+              trustStorePassword: "password123"
+  # Add extra configuration to core-site.xml
   coreSite:
     appendConfiguration: |
       <property>
@@ -58,6 +77,8 @@ metrics:
       metrics: 41881
   containerPorts:
     metrics: 41884
+# We deploy a PostgreSQL instance so we can use it in Dremio as a data source. We create a database
+# that we can verify in the Cypress test
 extraDeploy:
   - |
     apiVersion: v1
