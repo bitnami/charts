@@ -130,7 +130,7 @@ metadata:
 {{- $configuration := include "cilium.configuration" . | fromYaml -}}
 {{- if .Values.overrideConfiguration }}
 {{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.overrideConfiguration "context" .) | fromYaml }}
-{{- $configuration = mergeOverwrite $configuration $overrideConfiguration }}
+{{- $configuration = mustMergeOverwrite $configuration $overrideConfiguration }}
 {{- end }}
 data: {{- $configuration | toYaml | nindent 2 }}
 {{- end }}

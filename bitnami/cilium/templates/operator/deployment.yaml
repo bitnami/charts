@@ -86,9 +86,9 @@ spec:
       {{- if .Values.operator.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.operator.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.operator.extraInitContainers }}
+      {{- if .Values.operator.initContainers }}
       initContainers:
-        {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraInitContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.operator.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: cilium-operator

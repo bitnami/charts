@@ -123,11 +123,11 @@ agent:
       targetPort: 11311
 ```
 
-If additional init containers are needed in the same pod, they can be defined using the `agent.extraInitContainers` parameter. Here is an example:
+If additional init containers are needed in the same pod, they can be defined using the `agent.initContainers` parameter. Here is an example:
 
 ```yaml
 agent:
-  extraInitContainers:
+  initContainers:
   - name: your-image-name
     image: your-image
     imagePullPolicy: Always
@@ -254,6 +254,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `agent.cniPlugin.uninstall`                                                                      | Remove the CNI plugin from the host on agent shutdown                                                                                                                                                                                                                       | `false`                                                                                                                                               |
 | `agent.cniPlugin.hostCNIBinDir`                                                                  | Path to the host's CNI bin directory                                                                                                                                                                                                                                        | `/opt/cni/bin`                                                                                                                                        |
 | `agent.cniPlugin.hostCNINetDir`                                                                  | Path to the host's CNI net configuration directory                                                                                                                                                                                                                          | `/etc/cni/net.d`                                                                                                                                      |
+| `agent.waitForKubeProxy`                                                                         | Wait for kube-proxy to be ready before starting Cilium Agent                                                                                                                                                                                                                | `false`                                                                                                                                               |
 | `agent.enablePprof`                                                                              | Enable pprof for Cilium Agent                                                                                                                                                                                                                                               | `false`                                                                                                                                               |
 | `agent.command`                                                                                  | Override default Cilium Agent container command (useful when using custom images)                                                                                                                                                                                           | `[]`                                                                                                                                                  |
 | `agent.args`                                                                                     | Override default Cilium Agent container args (useful when using custom images)                                                                                                                                                                                              | `[]`                                                                                                                                                  |
