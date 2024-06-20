@@ -1,12 +1,12 @@
 # Changelog
 
-## 21.5.0 (2024-06-12)
+## 21.5.0 (2024-06-20)
 
 * [bitnami/harbor] Add service account for Harbor resources ([#27067](https://github.com/bitnami/charts/pull/27067))
 
-## 21.4.6 (2024-06-18)
+## <small>21.4.6 (2024-06-18)</small>
 
-* [bitnami/harbor] Release 21.4.6 ([#27355](https://github.com/bitnami/charts/pull/27355))
+* [bitnami/harbor] Release 21.4.6 (#27355) ([9867f13](https://github.com/bitnami/charts/commit/9867f138b7a9597f772510d0996818776fb5c079)), closes [#27355](https://github.com/bitnami/charts/issues/27355)
 
 ## <small>21.4.5 (2024-06-17)</small>
 
