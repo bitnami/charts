@@ -40,7 +40,7 @@
             "vars_file": "dremio/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-dremio"
+                "workload": "sts-dremio-master-coordinator"
               }
             }
           }
@@ -51,7 +51,7 @@
             "resources": {
               "path": "/.vib/dremio/cypress"
             },
-            "endpoint": "lb-dremio-http-server",
+            "endpoint": "lb-dremio-http-web",
             "app_protocol": "HTTP"
           }
         }
