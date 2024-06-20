@@ -185,11 +185,9 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" $executorValues.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if $executorValues.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $executorValues.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - pgrep
-                - -f
-                - java
+            {{- /* Using the fabric port because of a strange issue in which the liveness port is working but not the fabric one, in which case we want to restart the executor */}}
+            tcpSocket:
+              port: server-fabric
           {{- end }}
           {{- if $executorValues.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" $executorValues.customReadinessProbe "context" $) | nindent 12 }}
