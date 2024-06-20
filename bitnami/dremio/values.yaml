@@ -2406,7 +2406,7 @@ metrics:
     enabled: true
     initialDelaySeconds: 60
     periodSeconds: 10
-    timeoutSeconds: 10
+    timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 3
   ## Configure extra options for readiness probe
@@ -2422,7 +2422,23 @@ metrics:
     enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
-    timeoutSeconds: 10
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 3
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-startup-probes/#configure-probes
+  ## @param metrics.startupProbe.enabled Enable startupProbe
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 3
   ## Prometheus JMX exporter service configuration

@@ -277,7 +277,13 @@ spec:
           {{- if .Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.metrics.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: /metrics
+              path: /
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.metrics.startupProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /
               port: metrics
           {{- end }}
           {{- end }}

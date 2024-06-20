@@ -422,6 +422,27 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 - If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
 - If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
+### Dremio Executor configuration
+
+The charts deploys a default executor using the configuration inside the `executor.common` section. It is possible to define extra group of executor nodes using the `executor.engines` parameter. Each element inside the `executor.engines` array has the following parameters:
+
+-`name`: Name of the group of executors (engine).
+-`overrides`: Perform overrides over the parameters in the `executor.common` section.
+
+In the following example we define an extra group of executors, modifying the default `replicaCount` set in the `common` section:
+
+```yaml
+executor:
+  common:
+    replicaCount: 1
+  engines:
+    - name: default # This group will have 1 replica
+      overrides: {}
+    - name: special # This group will have 3 replicas
+      overrides:
+        replicaCount: 3
+```
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
