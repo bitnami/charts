@@ -34,6 +34,10 @@ spec:
   {{- end }}
   template:
     metadata:
+      annotations:
+        checksum/dremio-conf-cm: {{ include (print $.Template.BasePath "/master-coordinator/configmap-dremio-conf.yaml") . | sha256sum }}
+        checksum/dremio-conf-secret: {{ include (print $.Template.BasePath "/master-coordinator/secret-dremio-conf.yaml") . | sha256sum }}
+        checksum/core-site-secret: {{ include (print $.Template.BasePath "/secret-core-site.yaml") . | sha256sum }}
       {{- if .Values.masterCoordinator.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}

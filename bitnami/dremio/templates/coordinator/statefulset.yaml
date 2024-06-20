@@ -34,8 +34,12 @@ spec:
   {{- end }}
   template:
     metadata:
+      annotations:
+        checksum/dremio-conf-cm: {{ include (print $.Template.BasePath "/coordinator/configmap-dremio-conf.yaml") . | sha256sum }}
+        checksum/dremio-conf-secret: {{ include (print $.Template.BasePath "/coordinator/secret-dremio-conf.yaml") . | sha256sum }}
+        checksum/core-site-secret: {{ include (print $.Template.BasePath "/secret-core-site.yaml") . | sha256sum }}
       {{- if .Values.coordinator.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.coordinator.podAnnotations "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.coordinator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" (dict "customLabels" $podLabels "context" $) | nindent 8 }}
         app.kubernetes.io/part-of: dremio
