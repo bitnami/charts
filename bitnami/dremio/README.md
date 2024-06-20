@@ -1268,7 +1268,6 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `zookeeper.resourcesPreset`       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro` |
 | `zookeeper.resources`             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`    |
 
-
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## License
