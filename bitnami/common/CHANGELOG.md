@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.20.2 (2024-06-10)
+## 2.20.3 (2024-06-17)
 
-* [bitnami/common] remove trailing spaces from imagePullSecrets rendering ([#26882](https://github.com/bitnami/charts/pull/26882))
+* [bitnami/common] chore: :wrench: Relax large and xlarge presets resource requests ([#27312](https://github.com/bitnami/charts/pull/27312))
+
+## <small>2.20.2 (2024-06-10)</small>
+
+* [bitnami/common] remove trailing spaces from imagePullSecrets rendering (#26882) ([362d4ac](https://github.com/bitnami/charts/commit/362d4ac94dd69be1b607fc531ceac4d67d8d57ef)), closes [#26882](https://github.com/bitnami/charts/issues/26882)
 
 ## <small>2.20.1 (2024-06-10)</small>
 
