@@ -69,6 +69,7 @@ spec:
       {{- if .Values.promtail.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.promtail.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.promtail.enableServiceLinks }}
       initContainers:
         {{- if .Values.promtail.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.promtail.initContainers "context" $) | nindent 8 }}

@@ -10,7 +10,7 @@ annotations:
     - name: redis-cluster
       image: docker.io/bitnami/redis-cluster:7.2.5-debian-12-r0
     - name: redis-exporter
-      image: docker.io/bitnami/redis-exporter:1.60.0-debian-12-r1
+      image: docker.io/bitnami/redis-exporter:1.61.0-debian-12-r0
 apiVersion: v2
 appVersion: 7.2.5
 dependencies:
@@ -32,4 +32,4 @@ maintainers:
 name: redis-cluster
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster
-version: 10.2.3
+version: 10.2.5

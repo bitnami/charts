@@ -1,8 +1,24 @@
 # Changelog
 
-## 4.3.5 (2024-06-06)
+## 4.3.9 (2024-06-19)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.3.5 ([#27008](https://github.com/bitnami/charts/pull/27008))
+* [bitnami/rabbitmq-cluster-operator] Adding TopicPermission webhook missing configuration in Topology Operator ([#27195](https://github.com/bitnami/charts/pull/27195))
+
+## <small>4.3.8 (2024-06-18)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.8 (#27408) ([0ee7816](https://github.com/bitnami/charts/commit/0ee7816b52e298a0861c38ef4e86109f6067f7a8)), closes [#27408](https://github.com/bitnami/charts/issues/27408)
+
+## <small>4.3.7 (2024-06-17)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.7 (#27274) ([d9f5434](https://github.com/bitnami/charts/commit/d9f5434b9db84044240fba44a31a8aef6697d5bd)), closes [#27274](https://github.com/bitnami/charts/issues/27274)
+
+## <small>4.3.6 (2024-06-10)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Fix cert-manager injection when existing secret is used (#26521) ([f6ef7b5](https://github.com/bitnami/charts/commit/f6ef7b5cafb40bb731ded54ae1d196234ed66535)), closes [#26521](https://github.com/bitnami/charts/issues/26521)
+
+## <small>4.3.5 (2024-06-06)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.5 (#27008) ([3c86e62](https://github.com/bitnami/charts/commit/3c86e621a23bc1082de077463ac1c997c2d59a61)), closes [#27008](https://github.com/bitnami/charts/issues/27008)
 
 ## <small>4.3.4 (2024-06-05)</small>
 

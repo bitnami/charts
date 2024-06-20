@@ -4,11 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 apiVersion: apps/v1
-{{- if .Values.useDaemonset }}
-kind: DaemonSet
-{{- else }}
 kind: Deployment
-{{- end }}
 metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -17,10 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.useDaemonset }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
-  replicas: {{ coalesce .Values.replicas .Values.replicaCount }}
-  {{- end }}
+  replicas: 1
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}

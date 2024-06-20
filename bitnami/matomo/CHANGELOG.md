@@ -1,8 +1,16 @@
 # Changelog
 
-## 7.3.4 (2024-06-06)
+## 7.3.6 (2024-06-19)
 
-* [bitnami/matomo] Release 7.3.4 ([#26978](https://github.com/bitnami/charts/pull/26978))
+* [bitnami/matomo] Release 7.3.6 ([#27437](https://github.com/bitnami/charts/pull/27437))
+
+## <small>7.3.5 (2024-06-12)</small>
+
+* [bitnami/matomo] Release 7.3.5 (#27122) ([912f116](https://github.com/bitnami/charts/commit/912f116808785950399e785226fa55bd0b8eb654)), closes [#27122](https://github.com/bitnami/charts/issues/27122)
+
+## <small>7.3.4 (2024-06-06)</small>
+
+* [bitnami/matomo] Release 7.3.4 (#26978) ([caa5db4](https://github.com/bitnami/charts/commit/caa5db42df5512717049072b6f988f35d33ae7d1)), closes [#26978](https://github.com/bitnami/charts/issues/26978)
 
 ## <small>7.3.3 (2024-06-06)</small>
 

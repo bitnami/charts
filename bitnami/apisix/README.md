@@ -91,6 +91,8 @@ ingressController:
   enabled: false
 etcd:
   enabled: false
+dashboard:
+  enabled: false
 dataPlane:
   extraConfig:
     deployment:
@@ -102,7 +104,7 @@ dataPlane:
         name: apisix-routes
   extraVolumeMounts:
     - name: routes
-      mountPath: /opt/bitnami/apisix/conf/apisix.yaml
+      mountPath: /usr/local/apisix/conf/apisix.yaml
       subPath: apisix.yaml
 extraDeploy:
   - apiVersion: v1
@@ -118,6 +120,7 @@ extraDeploy:
                 nodes:
                     "127.0.0.1:1980": 1
                 type: roundrobin
+        #END
 ```
 
 ### Ingress
@@ -174,7 +177,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### External etcd support
 
-You may want to have Mastodon connect to an external etcd rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalEtcd` parameter](#parameters). You should also disable the etcd installation with the `etcd.enabled` option. Here is an example:
+You may want to have APISIX connect to an external etcd rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalEtcd` parameter](#parameters). You should also disable the etcd installation with the `etcd.enabled` option. Here is an example:
 
 ```yaml
 etcd:

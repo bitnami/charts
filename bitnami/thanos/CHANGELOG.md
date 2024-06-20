@@ -1,8 +1,36 @@
 # Changelog
 
-## 15.7.2 (2024-06-06)
+## 15.7.9 (2024-06-18)
 
-* [bitnami/thanos] Release 15.7.2 ([#27020](https://github.com/bitnami/charts/pull/27020))
+* [bitnami/thanos] Release 15.7.9 ([#27424](https://github.com/bitnami/charts/pull/27424))
+
+## <small>15.7.8 (2024-06-18)</small>
+
+* [bitnami/thanos] fix thanos dual-stack receive monitoring (#27112) ([017b2fb](https://github.com/bitnami/charts/commit/017b2fbec6acfa382a1cf08968b5cb676ba42b8d)), closes [#27112](https://github.com/bitnami/charts/issues/27112)
+
+## <small>15.7.7 (2024-06-17)</small>
+
+* [bitnami/thanos] Release 15.7.7 (#27294) ([7e339f1](https://github.com/bitnami/charts/commit/7e339f15ac83263c386d63e2bf68cfd82fca7deb)), closes [#27294](https://github.com/bitnami/charts/issues/27294)
+
+## <small>15.7.6 (2024-06-12)</small>
+
+*  [bitnami/thanos] Fix sharded storegateway cache configs (again) (#27101) ([e6d16b4](https://github.com/bitnami/charts/commit/e6d16b4256f027adbb3610b4e66ee2c05039618f)), closes [#27101](https://github.com/bitnami/charts/issues/27101)
+
+## <small>15.7.5 (2024-06-11)</small>
+
+* [bitnami/thanos] only deploy networkPolicy when component is enabled (#27070) ([1bd3b34](https://github.com/bitnami/charts/commit/1bd3b342399ed142ef26f060f63d058e393435c2)), closes [#27070](https://github.com/bitnami/charts/issues/27070)
+
+## <small>15.7.4 (2024-06-11)</small>
+
+* [bitnami/thanos] Fix sharded storegateway cache configs (#26490) ([54afe30](https://github.com/bitnami/charts/commit/54afe30e41e8f5ec81b8bd0c7e523a9d218bded3)), closes [#26490](https://github.com/bitnami/charts/issues/26490)
+
+## <small>15.7.3 (2024-06-10)</small>
+
+* [bitnami/thanos] add service monitor labels (#26880) ([162d466](https://github.com/bitnami/charts/commit/162d466ef79df488b418ec184952e04615ed8ec6)), closes [#26880](https://github.com/bitnami/charts/issues/26880)
+
+## <small>15.7.2 (2024-06-06)</small>
+
+* [bitnami/thanos] Release 15.7.2 (#27020) ([63e189e](https://github.com/bitnami/charts/commit/63e189e67eca6e03ddeac7957c11f008f2676f91)), closes [#27020](https://github.com/bitnami/charts/issues/27020)
 
 ## <small>15.7.1 (2024-06-05)</small>
 

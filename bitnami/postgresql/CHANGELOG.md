@@ -1,8 +1,28 @@
 # Changelog
 
-## 15.5.4 (2024-06-06)
+## 15.5.9 (2024-06-20)
 
-* [bitnami/postgresql] Release 15.5.4 ([#27006](https://github.com/bitnami/charts/pull/27006))
+* [bitnami/postgresql] Remove deprecated (and removed) annotation ([#27463](https://github.com/bitnami/charts/pull/27463))
+
+## <small>15.5.8 (2024-06-20)</small>
+
+* [bitnami/postgresql] Add pre-init scripts (#26467) ([0cdafb8](https://github.com/bitnami/charts/commit/0cdafb8a29c7bfe22c1781ef10154e11e3a7bd09)), closes [#26467](https://github.com/bitnami/charts/issues/26467)
+
+## <small>15.5.7 (2024-06-18)</small>
+
+* [bitnami/postgresql] Release 15.5.7 (#27401) ([2fff79d](https://github.com/bitnami/charts/commit/2fff79d0d54da3680cb8dac3652884c82c314e74)), closes [#27401](https://github.com/bitnami/charts/issues/27401)
+
+## <small>15.5.6 (2024-06-17)</small>
+
+* [bitnami/postgresql] Release 15.5.6 (#27293) ([d36be80](https://github.com/bitnami/charts/commit/d36be805cdc81aaa34d197072c112360a7ce99f5)), closes [#27293](https://github.com/bitnami/charts/issues/27293)
+
+## <small>15.5.5 (2024-06-11)</small>
+
+* [bitnami/postgresql] Release 15.5.5 (#27096) ([c84850a](https://github.com/bitnami/charts/commit/c84850a09c75ce557f87d33fe9c400f66d3a8d1e)), closes [#27096](https://github.com/bitnami/charts/issues/27096)
+
+## <small>15.5.4 (2024-06-06)</small>
+
+* [bitnami/postgresql] Release 15.5.4 (#27006) ([613a7a4](https://github.com/bitnami/charts/commit/613a7a431aa8752cb28ee634c4db0c83ef98e827)), closes [#27006](https://github.com/bitnami/charts/issues/27006)
 
 ## <small>15.5.3 (2024-06-06)</small>
 
