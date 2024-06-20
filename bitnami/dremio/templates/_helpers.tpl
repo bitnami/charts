@@ -247,7 +247,7 @@ Return the Dremio auth credentials secret
 Return true if the init job should be created
 */}}
 {{- define "dremio.bootstrap-user-job.create" -}}
-{{- if and .Values.bootstrapUserJob.enabled .Values.dremio.auth.enabled (or .Release.IsInstall .Values.initJob.forceRun) -}}
+{{- if and .Values.bootstrapUserJob.enabled .Values.dremio.auth.enabled (or .Release.IsInstall .Values.bootstrapUserJob.forceRun) -}}
     {{- true -}}
 {{- else -}}
     {{/* Do not return anything */}}
