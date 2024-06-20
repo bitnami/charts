@@ -40,6 +40,11 @@ spec:
           {{- if .Values.migration.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.migration.initContainer.resources }}
+          resources: {{- toYaml .Values.migration.initContainer.resources | nindent 12 }}
+          {{- else if ne .Values.migration.initContainer.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.migration.initContainer.resourcesPreset) | nindent 12 }}
+          {{- end }}
       containers:
         - name: jaeger-cassandra-migrator
           image: {{ include "jaeger.cqlshImage" . }}
