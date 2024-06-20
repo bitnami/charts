@@ -1,6 +1,6 @@
 # Changelog
 
-## 29.3.5 (2024-06-19)
+## 29.3.5 (2024-06-20)
 
 * [bitnami/kafka] fix jmx-servicemonitor by using JMX Exporter's default metrics path ([#27455](https://github.com/bitnami/charts/pull/27455))
 
