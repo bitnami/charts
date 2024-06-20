@@ -165,7 +165,7 @@ func createAPIMockCiliumNetworkPolicy(ctx context.Context, dC dynamic.Interface)
 	return err
 }
 
-func createAPIMockClientJob(ctx context.Context, c kubernetes.Interface, fsGroup, user *int64, podLabels map[string]string) error {
+func createAPIMockClientJob(ctx context.Context, c kubernetes.Interface, jobName string, fsGroup, user *int64, podLabels map[string]string) error {
 	podSecurityContext := &v1.PodSecurityContext{
 		FSGroup: fsGroup,
 	}
@@ -175,7 +175,7 @@ func createAPIMockClientJob(ctx context.Context, c kubernetes.Interface, fsGroup
 
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: "api-mock-client",
+			Name: jobName,
 		},
 		TypeMeta: metav1.TypeMeta{
 			Kind: "Job",

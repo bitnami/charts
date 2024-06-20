@@ -61,29 +61,31 @@ var _ = Describe("Cilium", Ordered, func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			By("creating a job to access the mock API with required labels")
-			err = createAPIMockClientJob(ctx, c, fsGroup, runAsUser, map[string]string{"api-mock-client": "true"})
+			jobName := "api-client-labelled"
+			err = createAPIMockClientJob(ctx, c, jobName, fsGroup, runAsUser, map[string]string{"api-mock-client": "true"})
 			Expect(err).NotTo(HaveOccurred())
 
 			By("waiting for the job to succeed")
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(namespace).Get(ctx, "api-mock-client", getOpts)
+				return c.BatchV1().Jobs(namespace).Get(ctx, jobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			By("deleting the job once it has succeeded")
-			err = c.BatchV1().Jobs(namespace).Delete(ctx, "api-mock-client", metav1.DeleteOptions{})
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, jobName, metav1.DeleteOptions{})
 			Expect(err).NotTo(HaveOccurred())
 
-			By("creating a job to access the mock API without required labels")
-			err = createAPIMockClientJob(ctx, c, fsGroup, runAsUser, map[string]string{})
+			By("creating a 2nd job to access the mock API without required labels")
+			jobName = "api-client-no-labels"
+			err = createAPIMockClientJob(ctx, c, jobName, fsGroup, runAsUser, map[string]string{})
 			Expect(err).NotTo(HaveOccurred())
 
 			By("waiting for the job to fail")
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(namespace).Get(ctx, "api-mock-client", getOpts)
+				return c.BatchV1().Jobs(namespace).Get(ctx, jobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getFailedJobs, Equal(int32(1))))
 
 			By("deleting the job once it has failed")
-			err = c.BatchV1().Jobs(namespace).Delete(ctx, "api-mock-client", metav1.DeleteOptions{})
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, jobName, metav1.DeleteOptions{})
 			Expect(err).NotTo(HaveOccurred())
 
 			By("deleting the CiliumNetworkPolicy")
