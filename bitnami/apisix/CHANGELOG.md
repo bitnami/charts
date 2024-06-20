@@ -1,8 +1,8 @@
 # Changelog
 
-## 3.2.5 (2024-06-19)
+## 3.2.5 (2024-06-18)
 
-* [bitnami/apisix] Updated jsonschema to allow string values for fields passed to tpl ([#27441](https://github.com/bitnami/charts/pull/27441))
+* [bitnami/apisix] Fixes to support running Apisix in standalone mode ([#27062](https://github.com/bitnami/charts/pull/27062))
 
 ## <small>3.2.4 (2024-06-18)</small>
 
