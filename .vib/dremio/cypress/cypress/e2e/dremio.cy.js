@@ -25,7 +25,7 @@ it('Allows to import a PostgreSQL database and perform a query', () => {
     // Does not have text as it is an icon, so we need to use the href selector
     cy.get('[href*="new_query"]').click();
     cy.get('.sql-part').find('input').first().type(`${d.database.queryStart} ${d.database.name}${random}.${d.database.queryEnd}`, {force: true});
-    cy.contains('Run').click();
+    cy.contains('Run').should('be.enabled').click();
     cy.contains(d.database.expectedRes);
   });
 });

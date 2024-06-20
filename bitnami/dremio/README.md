@@ -56,12 +56,12 @@ It is possible to add custom information in both files
 
 #### Customizing the dremio.conf file
 
-The `dremio.conf` file gets overridden using the following values:
+The `dremio.conf` file gets overridden using the following parameters:
 
 - `dremio.dremioConf.configOverrides`: non-sensitive settings to be applied to *all Dremio nodes*.
 - `dremio.dremioConf.secretConfigOverrides`: sensitive settings to be applied to *all Dremio nodes*.
 
-The values above are applied to all Dremio nodes. For more specific settings, the chart uses the following values:
+The parameters above are applied to all Dremio nodes. For more specific node settings, the chart uses the following parameters:
 
 -`masterCoordinator.dremioConf.configOverrides`: non-sensitive settings to be applied to *Dremio master coordinator nodes*.
 -`masterCoordinator.dremioConf.secretConfigOverrides`: sensitive settings to be applied to *Dremio master coordinator nodes*.
@@ -70,9 +70,9 @@ The values above are applied to all Dremio nodes. For more specific settings, th
 -`executor.common.dremioConf.configOverrides`: non-sensitive settings to be applied to *Dremio executor nodes*.
 -`executor.common.dremioConf.secretConfigOverrides`: sensitive settings to be applied to *Dremio executor nodes*.
 
-Using these values, the chart will generate ConfigMaps (with the non-sensitive settings) and Secrets (with the sensitive settings) for each Dremio component. Afterwards, an init-container will merge the information from the ConfigMap and the Secret generating the final `dremio.conf` file which gets mounted in `/opt/bitnami/dremio/conf`.
+Using these parameters, the chart will generate ConfigMaps (with the non-sensitive settings) and Secrets (with the sensitive settings) for each Dremio component. Afterwards, an init-container will merge the information from the ConfigMap and the Secret generating the final `dremio.conf` file which gets mounted in `/opt/bitnami/dremio/conf`.
 
-> NOTE: The settings in the values above must be inserted in YAML format, which will get translated into HOCON-compatible flattened YAML.
+> NOTE: The settings in the parameters above must be inserted in YAML format, which will get translated into HOCON-compatible flattened YAML.
 
 In the example below we override the upload path for all Dremio nodes and increase the token expiration time in master-coordinator nodes:
 
@@ -90,11 +90,11 @@ masterCoordinator:
 
 Check the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/dremio-conf/) for the list of allowed settings.
 
-As an alternative, it is possible to provide existing ConfigMaps and Secrets with the `dremio.conf` configuration. This is done using the `*.dremioConf.existingSecret` and `*.dremioConf.existingConfigmap` values.
+As an alternative, it is possible to provide existing ConfigMaps and Secrets with the `dremio.conf` configuration. This is done using the `*.dremioConf.existingSecret` and `*.dremioConf.existingConfigmap` parameters.
 
 #### Customizing the core-site.xml file
 
-The `core-site.xml` file can be customized with the follownig value:
+The `core-site.xml` file can be customized with the follownig parameter:
 
 - `dremio.coreSite.appendConfiguration`: XML string that gets appended inside the `<configuration>` section of the core-site.xml file.
 
@@ -111,17 +111,17 @@ dremio:
       </property>
 ```
 
-As an alternative, it is possible to provide an existing Secret with the `core-site.xml` configuration. This is done using the `dremio.coreSite.existingSecret` value.
+As an alternative, it is possible to provide an existing Secret with the `core-site.xml` configuration. This is done using the `dremio.coreSite.existingSecret` parameter.
 
 Check the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/dremio-conf/dist-store-config/) for the list of available settings in the `core-site.xml` file.
 
 #### Environment variables inside configuration files
 
-The chart allows setting values relative to environment vars. This is done by enclosing the environment variable inside `{{ }}`. An init container will render the environment variable using the [render-template](https://github.com/bitnami/render-template) tool. This is useful when having rotating secrets.
+The chart allows adding Dremio configuration settings relative to environment vars. This is done by enclosing the environment variable inside `{{ }}`. An init container will render the environment variable using the [render-template](https://github.com/bitnami/render-template) tool. This is useful when having rotating secrets.
 
-For adding extra environment variables for rendering set the `defaultInitContainers.generateConf.extraEnvVars` value.
+For adding extra environment variables for rendering, set the `defaultInitContainers.generateConf.extraEnvVars` parameter.
 
-In the following example we add a property in the `core-site.xml` dependant to an environment variabe called `AZURE_TOKEN`, which is part of a secret called `azure-secret` with key `token`.
+In the following example we add a property in the `core-site.xml` dependant to `AZURE_TOKEN` environment variable, which is part of a secret named `azure-secret` with key `token`.
 
 ```yaml
 dremio:
@@ -145,12 +145,12 @@ defaultInitContainers:
 
 #### Adding extra configuration files
 
-For advanced configurations like editing files like `logback.xml`, it is possible to include extra configuration files in the dremio.conf ConfigMap and Secret using the following values:
+For advanced configurations such as editing files like `logback.xml`, it is possible to include extra configuration files in the `dremio.conf` ConfigMap or Secret using the following values:
 
 - `dremio.dremioConf.extraFiles`: Adds extra non-sensitive files.
 - `dremio.dremioConf.extraSecretFiles`: Add extra sensitive files.
 
-In the following example we include a modified version of the logback.xml file:
+In the following example we include a modified version of the `logback.xml` file:
 
 ```yaml
 dremio:
@@ -168,19 +168,19 @@ dremio:
         </configuration>
 ```
 
-> NOTE: Adding dremio.conf in `extraFiles` or `extraSecretFiles` fully overwrites the default dremio.conf file generated by the chart
+> NOTE: Adding `dremio.conf` in `extraFiles` or `extraSecretFiles` fully overwrites the default dremio.conf file generated by the chart
 
 ### Distributed Storage configuration
 
-The Bitnami Dremio chart natively supports `s3` as backend, either using AWS or MinIO(TM). This is configured using the following value:
+The Bitnami Dremio chart natively supports `s3` as backend, either using AWS or MinIO(TM). This is configured using `dremio.distStorageType`, possible values are: `aws` or `minio`. E.g.:
 
-- `dremio.distStorageType`: Natively supports `aws` and `minio`.
+- `dremio.distStorageType`: `aws`
 
 It is possible to configure other distributed storage backends, but these require add extra configuration settings using the `*.dremioConf` and `*.coreSite`. In the sections below we detail some example distributed storage backends. Check the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/dremio-conf/dist-store-config/) for the required settings in the `dremio.conf` and `core-site.xml` files.
 
 #### MinIO(TM) subchart as storage backend (default)
 
-Set the following values for using the embedded subchart:
+Set the following parameters for using the embedded subchart:
 
 ```yaml
 dremio:
@@ -192,7 +192,7 @@ minio:
 
 #### External MinIO(TM) as distributed storage
 
-For configuring an external MinIO(TM) installation use the `externalS3` section (replace the `DREMIO_*` placeholders)
+For configuring an external MinIO(TM) installation, use the `externalS3` section (replace the `DREMIO_*` placeholders)
 
 ```yaml
 dremio:
@@ -211,7 +211,7 @@ externalS3:
 
 #### AWS as distributed storage using access key authentication
 
-For configuring AWS as distributed storage use the `externalS3` section (replace the `DREMIO_*` placeholders):
+For configuring AWS as distributed storage, use the `externalS3` section (replace the `DREMIO_*` placeholders):
 
 ```yaml
 dremio:
@@ -229,7 +229,7 @@ externalS3:
 
 #### Azure Storage as distributed storage
 
-For configuring Azure Storage as distributed storage following the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/dremio-conf/dist-store-config/#azure-storage), use the `dremio.dremioConf` and `dremio.coreSite` values (replace the `DREMIO_*` placeholders):
+For configuring Azure Storage as distributed storage following the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/dremio-conf/dist-store-config/#azure-storage), use the `dremio.dremioConf` and `dremio.coreSite` parameters (replace the `DREMIO_*` placeholders):
 
 ```yaml
 dremio:
@@ -271,7 +271,7 @@ minio:
 
 #### Google Cloud Storage as distributed storage
 
-For configuring Google Cloud Storage as distributed storage following the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/dremio-conf/dist-store-config/#google-cloud-storage), use the `dremio.dremioConf` and `dremio.coreSite` values (replace the `DREMIO_*` placeholders):
+For configuring Google Cloud Storage as distributed storage following the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/dremio-conf/dist-store-config/#google-cloud-storage), use the `dremio.dremioConf` and `dremio.coreSite` parameters (replace the `DREMIO_*` placeholders):
 
 ```yaml
 dremio:
@@ -303,7 +303,7 @@ minio:
 
 ### User authentication
 
-When the `dremio.auth.enabled` value is set to true, the chart will create a Job that automatically bootstraps a user using Dremio internal authentication mechanisms. The user is customized with the following values:
+When the `dremio.auth.enabled` parameter is set to true, the chart will create a Job that automatically bootstraps a user using Dremio internal authentication mechanisms. The user is customized with the following parameters:
 
 - `dremio.auth.username`: Bootstrap username
 - `dremio.auth.password`: Bootstrap password
@@ -311,54 +311,9 @@ When the `dremio.auth.enabled` value is set to true, the chart will create a Job
 - `dremio.auth.firstName`: Bootstrap first name
 - `dremio.auth.lastName`: Bootstrap last name
 
-It is possible to provide the password using an existing secret with the `dremio.auth.existingSecret` value.
+Also, it is possible to provide the password using an existing secret with the `dremio.auth.existingSecret` value.
 
-Other authentication mechanisms can be configured following the [upstream Dremio documentation](https://docs.dremio.com/current/security/authentication/) and using the `dremioConf` and `coreSite` values. In the following sections we will show some examples:
-
-#### LDAP Authentication
-
-The following example configures LDAP following the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/ldap/). We use the `dremio.dremioConf.extraSecretFiles` values to include the `ad.json` file:
-
-```yaml
-dremio:
-  auth:
-    enabled: false
-  dremioConf:
-    configOverrides:
-      coordinator.web.auth.type: "ldap"
-      coordinator.web.auth.config: "ad.json"
-      extraSecretFiles:
-        ad.json: |
-          <your ad.json configuration>
-```
-
-#### SSO Authentication with Azure AD
-
-The following example configures LDAP following the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/ldap/). We use the `dremio.dremioConf.extraSecretFiles` values to include the `azuread.json` file (replace the placeholders):
-
-```yaml
-dremio:
-  auth:
-    enabled: false
-  dremioConf:
-    configOverrides:
-      services.coordinator.web.auth.type: "azuread"
-      services.coordinator.web.auth.config: "/opt/bitnami/dremio/conf/azuread.json"
-      extraSecretFiles:
-        azuread.json: |
-          {
-            "oAuthConfig": {
-              "clientId": "<clientId>",
-              "clientSecret": "<clientSecret>",
-              "redirectUrl": "https://<dremio.host>:9047/sso",
-              "authorityUrl": "https://login.microsoftonline.com/<directory.id>/v2.0",
-              "scope": "openid profile",
-              "jwtClaims": {
-                "userName": "preferred_username"
-              }
-            }
-          }
-```
+Other authentication mechanisms can be configured using the `dremioConf` and `coreSite` values. You could check [upstream Dremio documentation](https://docs.dremio.com/current/security/authentication/) for all the available options.
 
 ### External Zookeeper support
 
@@ -372,25 +327,27 @@ externalZookeeper.port=2181
 
 ### TLS secrets
 
-TLS support for the Web interface can be enabled in the chart by specifying the `dremio.tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the cluster:
+TLS support for the Web interface can be enabled in the chart by specifying the `dremio.tls.enabled=true`while creating a release. Two possible options are available:
 
-- `dremio.tls.enabled`: Enable TLS support. Defaults to `false`
-- `dremio.tls.usePemCerts`: Use PEM certificates instead of a JKS file.
-- `dremio.tls.existingSecret`: Name of the secret that contains the certificates. No defaults.
+- Provide your own secret with the PEM or JKS certificates
+- Have the chart auto-generate the certificates.
 
-When `dremio.tls.usePemCerts=true`:
+#### Providing your own TLS secret
 
-- `dremio.tls.certFilename`: Certificate filename. No defaults.
-- `dremio.tls.certKeyFilename`: Certificate key filename. No defaults.
-- `dremio.tls.certCAFilename`: CA Certificate filename. No defaults.
+To provide your own secret set the `dremio.tls.existingSecret` value. It is possible to use PEM or JKS.
 
-When `dremio.tls.usePemCerts=false`:
+To use PEM Certs:
 
-- `dremio.tls.keystoreFilename`: Certificate filename. No defaults.
+- `dremio.tls.usePemCerts=true`: Use PEM certificates instead of a JKS file.
+- `dremio.tls.certFilename`: Certificate filename. Defaults to `tls.crt`.
+- `dremio.tls.certKeyFilename`: Certificate key filename. Defaults to `tls.key`
 
-For example:
+To use JKS keystore:
 
-First, create the secret with the certificates files:
+- `dremio.tls.usePemCerts=false`: Use JKS file.
+- `dremio.tls.keystoreFilename`: Certificate filename. Defaults to `dremio.jks`.
+
+In the following example we will use PEM certificates. First, create the secret with the certificates files:
 
 ```console
 kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
@@ -404,8 +361,9 @@ dremio.tls.existingSecret="certificates-tls-secret"
 dremio.tls.usePemCerts="true"
 dremio.tls.certFilename="cert.pem"
 dremio.tls.certKeyFilename="cert.key"
-dremio.tls.certCAFilename="ca.pem"
 ```
+
+#### Auto-generation of TLS certificates
 
 It is also possible to rely on the chart certificate auto-generation capabilities. The chart supports two different ways to auto-generate the required certificates:
 
@@ -414,7 +372,7 @@ It is also possible to rely on the chart certificate auto-generation capabilitie
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize it to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
 
 The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
 
@@ -459,7 +417,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 -----END RSA PRIVATE KEY-----
 ```
 
-- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` parameters for a given `*.ingress.secrets` entry.
 - If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
 - If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
 - If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
@@ -475,7 +433,7 @@ masterCoordinator:
       value: error
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` parameters.
 
 ### Sidecars
 

@@ -968,8 +968,49 @@ Compile all warnings into a single message.
 {{- $messages := list -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
-
+{{- $messages := append $messages (include "dremio.validateValues.minio" .) -}}
+{{- $messages := append $messages (include "dremio.validateValues.extraVolumes" .) -}}
+{{- $messages := append $messages (include "dremio.validateValues.executor" .) -}}
+{{- $messages := append $messages (include "dremio.validateValues.master-coordinator" .) -}}
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of dremio - MinIO is properly configured */}}
+{{- define "dremio.validateValues.minio" -}}
+{{- if and (eq .Values.dremio.distStoreType "minio") (not .Values.minio.enabled) (not .Values.externalS3.host) -}}
+dremio: minio
+    Distributed store type is set to minio but endpoint is not configured. Please set minio.enabled=true or configure the externalS3 section.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of dremio - Incorrect extra volume settings */}}
+{{- define "dremio.validateValues.extraVolumes" -}}
+{{- $componentList := list "masterCoordinator" "coordinator" "executor.common" }}
+{{- $values := .Values -}}
+{{- range $component := $componentList }}
+{{- $componentValues := index $values $component }}
+{{- if and $componentValues.extraVolumes (not $componentValues.extraVolumeMounts) }}
+dremio: missing-extra-volume-mounts
+    You specified {{ $component }}.extraVolumes but not mount points for them. Please set
+    the {{ $component }}.extraVolumeMounts value
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{/* Validate values of dremio - MinIO is properly configured */}}
+{{- define "dremio.validateValues.executor" -}}
+{{- if not .Values.executor.engines  -}}
+dremio: missing-engines
+    You did not specify any engine for the executors. Please set the executor.engines section.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of dremio - MinIO is properly configured */}}
+{{- define "dremio.validateValues.master-coordinator" -}}
+{{- if le (int .Values.masterCoordinator.replicaCount) 0  -}}
+dremio: master-coordinator
+    Dremio requires a master coordinator. Please set masterCoordinator.replicaCount to a minimum value of 1.
 {{- end -}}
 {{- end -}}

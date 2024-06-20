@@ -35,12 +35,12 @@ http:
   {{- if .Vars.metrics.enabled }}
   http://127.0.0.1:{{ .Vars.metrics.containerPorts.metrics }}/metrics:
     status: 200
-    timeout: 20000
+    timeout: 30000
     body:
       - /metrics_com_dremio/
   http://dremio-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
     status: 200
-    timeout: 20000
+    timeout: 30000
     body:
       - /metrics_com_dremio/
   {{- end }}
