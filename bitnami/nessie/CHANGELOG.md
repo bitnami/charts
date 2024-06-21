@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.9 (2024-06-21)
+## 0.1.10 (2024-06-21)
 
-* [bitnami/nessie] fix: :bug: Set correct context in HPA and VPA api helper ([#27475](https://github.com/bitnami/charts/pull/27475))
+* [bitnami/nessie] fix: :bug: Add missing reference to POSTGRESQL_PORT in wait-for-db ([#27477](https://github.com/bitnami/charts/pull/27477))
+
+## <small>0.1.9 (2024-06-21)</small>
+
+* [bitnami/nessie] fix: :bug: Set correct context in HPA and VPA api helper (#27475) ([865e3cd](https://github.com/bitnami/charts/commit/865e3cd27cb25fdc012dcc7d968da3e311d9b4d3)), closes [#27475](https://github.com/bitnami/charts/issues/27475)
 
 ## <small>0.1.8 (2024-06-18)</small>
 
