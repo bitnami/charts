@@ -204,10 +204,8 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.masterCoordinator.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.masterCoordinator.startupProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
-              port: web
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.dremio.tls.enabled }}
+            tcpSocket:
+              port: liveness
           {{- end }}
           {{- end }}
           {{- if .Values.masterCoordinator.lifecycleHooks }}

@@ -1169,6 +1169,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `metrics.image.digest`                                      | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                               | `""`                           |
 | `metrics.image.pullPolicy`                                  | JMX exporter image pull policy                                                                                                                                                                                             | `IfNotPresent`                 |
 | `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                           | `[]`                           |
+| `metrics.extraArgs`                                         | Add extra arguments to the default container args section                                                                                                                                                                  | `[]`                           |
 | `metrics.containerSecurityContext.enabled`                  | Enable Prometheus JMX exporter containers' Security Context                                                                                                                                                                | `true`                         |
 | `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `{}`                           |
 | `metrics.containerSecurityContext.runAsUser`                | Set Prometheus JMX exporter containers' Security Context runAsUser                                                                                                                                                         | `1001`                         |
@@ -1253,7 +1254,18 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `zookeeper.resourcesPreset`       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro` |
 | `zookeeper.resources`             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`    |
 
-Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
+
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
+
+```console
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/dremio
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/template/dremio/values.yaml)
+
+## Troubleshooting
 
 ## License
 

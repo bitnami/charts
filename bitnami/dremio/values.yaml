@@ -2340,6 +2340,9 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param metrics.extraArgs Add extra arguments to the default container args section
+  ##
+  extraArgs: []
   ## Prometheus JMX exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable Prometheus JMX exporter containers' Security Context

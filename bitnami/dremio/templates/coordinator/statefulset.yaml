@@ -200,10 +200,8 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinator.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.coordinator.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.coordinator.startupProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
-              port: web
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.dremio.tls.enabled }}
+            tcpSocket:
+              port: liveness
           {{- end }}
           {{- end }}
           {{- if .Values.coordinator.lifecycleHooks }}
@@ -263,6 +261,9 @@ spec:
             - jmx_prometheus_httpserver.jar
             - {{ .Values.metrics.containerPorts.metrics | quote }}
             - /etc/jmx-dremio/jmx-prometheus.yml
+            {{- if .Values.metrics.extraArgs }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraArgs "context" $) | nindent 12 }}
+            {{- end -}}
           {{- end }}
           ports:
             - name: metrics

@@ -13,10 +13,10 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: dremio
     app.kubernetes.io/component: bootstrap-user
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.bootstrapUserJob.annotations "context" $ ) | nindent 4 }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.bootstrapUserJob.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.coordinator.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   backoffLimit: {{ .Values.bootstrapUserJob.backoffLimit }}
   template:
