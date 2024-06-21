@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.1.7 (2024-06-18)
+## 19.1.7 (2024-06-21)
 
 * [bitnami/schema-registry] Release 19.1.7 ([#27414](https://github.com/bitnami/charts/pull/27414))
 
