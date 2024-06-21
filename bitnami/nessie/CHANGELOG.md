@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.8 (2024-06-18)
+## 0.1.9 (2024-06-21)
 
-* [bitnami/nessie] Release 0.1.8 ([#27388](https://github.com/bitnami/charts/pull/27388))
+* [bitnami/nessie] fix: :bug: Set correct context in HPA and VPA api helper ([#27475](https://github.com/bitnami/charts/pull/27475))
+
+## <small>0.1.8 (2024-06-18)</small>
+
+* [bitnami/nessie] Release 0.1.8 (#27388) ([b3982cc](https://github.com/bitnami/charts/commit/b3982cc0f8cd7ad444e2589c1a9c09564e2bc1c4)), closes [#27388](https://github.com/bitnami/charts/issues/27388)
 
 ## <small>0.1.7 (2024-06-17)</small>
 
