@@ -41,9 +41,9 @@ Init container definition for generating the configuration
 
       # Files different from dremio.conf -> Here we only apply render-template to expand the env vars
       for file in $(find /bitnami/dremio/input-dremio -type f -not -name dremio.conf); do
-        filename="$(basename $file)"
-        echo "Expanding env vars from $filename"
-        render-template "$file" > /bitnami/dremio/rendered-conf/$filename
+          filename="$(basename $file)"
+          echo "Expanding env vars from $filename"
+          render-template "$file" > /bitnami/dremio/rendered-conf/$filename
       done
       echo "Configuration generated"
   env:
@@ -168,25 +168,25 @@ Init container definition for waiting for the database to be ready
     - -ec
     - |
       retry_while() {
-        local -r cmd="${1:?cmd is missing}"
-        local -r retries="${2:-12}"
-        local -r sleep_time="${3:-5}"
-        local return_value=1
+          local -r cmd="${1:?cmd is missing}"
+          local -r retries="${2:-12}"
+          local -r sleep_time="${3:-5}"
+          local return_value=1
 
-        read -r -a command <<< "$cmd"
-        for ((i = 1 ; i <= retries ; i+=1 )); do
-            "${command[@]}" && return_value=0 && break
-            sleep "$sleep_time"
-        done
-        return $return_value
+          read -r -a command <<< "$cmd"
+          for ((i = 1 ; i <= retries ; i+=1 )); do
+              "${command[@]}" && return_value=0 && break
+              sleep "$sleep_time"
+          done
+          return $return_value
       }
 
       zookeeper_hosts=(
       {{- if .Values.zookeeper.enabled  }}
-        {{ include "dremio.zookeeper.fullname" . | quote }}
+          {{ include "dremio.zookeeper.fullname" . | quote }}
       {{- else }}
       {{- range $node :=.Values.externalZookeeper.servers }}
-        {{ print $node | quote }}
+          {{ print $node | quote }}
       {{- end }}
       {{- end }}
       )
@@ -194,9 +194,9 @@ Init container definition for waiting for the database to be ready
       check_zookeeper() {
           local -r zookeeper_host="${1:-?missing zookeeper}"
           if wait-for-port --timeout=5 --host=${zookeeper_host} --state=inuse {{ include "dremio.zookeeper.port" . }}; then
-             return 0
+              return 0
           else
-             return 1
+              return 1
           fi
       }
 
@@ -245,16 +245,16 @@ Init container definition for waiting for the database to be ready
       {{- end }}
       {{- if .Values.dremio.tls.usePemCerts }}
       if [[ -f "/certs/tls.key" ]] && [[ -f "/certs/tls.crt" ]]; then
-        openssl pkcs12 -export -in "/certs/tls.crt" \
-            -passout pass:"${DREMIO_KEYSTORE_PASSWORD}" \
-            -inkey "/certs/tls.key" \
-            -out "/tmp/keystore.p12"
-        keytool -importkeystore -srckeystore "/tmp/keystore.p12" \
-            -srcstoretype PKCS12 \
-            -srcstorepass "${DREMIO_KEYSTORE_PASSWORD}" \
-            -deststorepass "${DREMIO_KEYSTORE_PASSWORD}" \
-            -destkeystore "/opt/bitnami/dremio/certs/dremio.jks"
-        rm "/tmp/keystore.p12"
+          openssl pkcs12 -export -in "/certs/tls.crt" \
+              -passout pass:"${DREMIO_KEYSTORE_PASSWORD}" \
+              -inkey "/certs/tls.key" \
+              -out "/tmp/keystore.p12"
+          keytool -importkeystore -srckeystore "/tmp/keystore.p12" \
+              -srcstoretype PKCS12 \
+              -srcstorepass "${DREMIO_KEYSTORE_PASSWORD}" \
+              -deststorepass "${DREMIO_KEYSTORE_PASSWORD}" \
+              -destkeystore "/opt/bitnami/dremio/certs/dremio.jks"
+          rm "/tmp/keystore.p12"
       else
           echo "Couldn't find the expected PEM certificates! They are mandatory when encryption via TLS is enabled."
           exit 1
@@ -400,25 +400,25 @@ Init container definition for waiting for the database to be ready
     - -ec
     - |
       retry_while() {
-        local -r cmd="${1:?cmd is missing}"
-        local -r retries="${2:-12}"
-        local -r sleep_time="${3:-5}"
-        local return_value=1
+          local -r cmd="${1:?cmd is missing}"
+          local -r retries="${2:-12}"
+          local -r sleep_time="${3:-5}"
+          local return_value=1
 
-        read -r -a command <<< "$cmd"
-        for ((i = 1 ; i <= retries ; i+=1 )); do
-            "${command[@]}" && return_value=0 && break
-            sleep "$sleep_time"
-        done
-        return $return_value
+          read -r -a command <<< "$cmd"
+          for ((i = 1 ; i <= retries ; i+=1 )); do
+              "${command[@]}" && return_value=0 && break
+              sleep "$sleep_time"
+          done
+          return $return_value
       }
 
       check_s3() {
           local -r s3_host="${1:-?missing s3}"
           if curl -k --max-time 5 "${s3_host}" | grep "RequestId"; then
-             return 0
+              return 0
           else
-             return 1
+              return 1
           fi
       }
 
@@ -426,10 +426,10 @@ Init container definition for waiting for the database to be ready
 
       echo "Checking connection to $host"
       if retry_while "check_s3 $host"; then
-        echo "Connected to $host"
+          echo "Connected to $host"
       else
-        echo "Error connecting to $host"
-        exit 1
+          echo "Error connecting to $host"
+          exit 1
       fi
 
       echo "Connection success"
@@ -457,25 +457,25 @@ Init container definition for waiting for the database to be ready
     - -ec
     - |
       retry_while() {
-        local -r cmd="${1:?cmd is missing}"
-        local -r retries="${2:-12}"
-        local -r sleep_time="${3:-5}"
-        local return_value=1
+          local -r cmd="${1:?cmd is missing}"
+          local -r retries="${2:-12}"
+          local -r sleep_time="${3:-5}"
+          local return_value=1
 
-        read -r -a command <<< "$cmd"
-        for ((i = 1 ; i <= retries ; i+=1 )); do
-            "${command[@]}" && return_value=0 && break
-            sleep "$sleep_time"
-        done
-        return $return_value
+          read -r -a command <<< "$cmd"
+          for ((i = 1 ; i <= retries ; i+=1 )); do
+              "${command[@]}" && return_value=0 && break
+              sleep "$sleep_time"
+          done
+          return $return_value
       }
 
       check_master_coordinator() {
           local -r master_coordinator_host="${1:-?missing master_coordinator}"
           if curl -k --max-time 5 "${master_coordinator_host}" | grep dremio; then
-             return 0
+              return 0
           else
-             return 1
+              return 1
           fi
       }
 
@@ -483,10 +483,10 @@ Init container definition for waiting for the database to be ready
 
       echo "Checking connection to $host"
       if retry_while "check_master_coordinator $host"; then
-        echo "Connected to $host"
+          echo "Connected to $host"
       else
-        echo "Error connecting to $host"
-        exit 1
+          echo "Error connecting to $host"
+          exit 1
       fi
 
       echo "Connection success"
