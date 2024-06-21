@@ -172,11 +172,11 @@ dremio:
 
 ### Distributed Storage configuration
 
-The Bitnami Dremio chart natively supports `s3` as backend, either using AWS or MinIO(TM). This is configured using `dremio.distStorageType`, possible values are: `aws` or `minio`. E.g.:
+The Bitnami Dremio chart natively supports `s3` as backend, either using AWS or MinIO(TM). This is configured using `dremio.distStorageType`, possible values are: `aws`,  `minio` or `other`. E.g.:
 
 - `dremio.distStorageType`: `aws`
 
-It is possible to configure other distributed storage backends, but these require add extra configuration settings using the `*.dremioConf` and `*.coreSite`. In the sections below we detail some example distributed storage backends. Check the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/dremio-conf/dist-store-config/) for the required settings in the `dremio.conf` and `core-site.xml` files.
+It is possible to configure other distributed storage backends when setting `dremio.distStorageType` to `other`, but these require add extra configuration settings using the `*.dremioConf` and `*.coreSite`. In the sections below we detail some example distributed storage backends. Check the [upstream Dremio documentation](https://docs.dremio.com/current/get-started/cluster-deployments/customizing-configuration/dremio-conf/dist-store-config/) for the required settings in the `dremio.conf` and `core-site.xml` files.
 
 #### MinIO(TM) subchart as storage backend (default)
 
@@ -233,7 +233,7 @@ For configuring Azure Storage as distributed storage following the [upstream Dre
 
 ```yaml
 dremio:
-  distStorageType: azure
+  distStorageType: other
   dremioConf:
     configOverrides:
       paths.dist: "dremioAzureStorage://:///DREMIO_FILE_SYSTEM_NAME/DREMIO_ALTERNATIVE_STORAGE_ROOT_DIRECTORY"
@@ -275,7 +275,7 @@ For configuring Google Cloud Storage as distributed storage following the [upstr
 
 ```yaml
 dremio:
-  distStorageType: gcs
+  distStorageType: other
   dremioConf:
     configOverrides:
       paths.dist: "dremiogcs:///DREMIO_BUCKET_NAME/DREMIO_BUCKET_FOLDER"

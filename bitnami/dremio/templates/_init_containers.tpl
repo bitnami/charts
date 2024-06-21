@@ -399,7 +399,6 @@ Init container definition for waiting for the database to be ready
   args:
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -457,7 +456,6 @@ Init container definition for waiting for the database to be ready
   args:
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"

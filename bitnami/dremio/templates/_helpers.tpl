@@ -476,6 +476,7 @@ Compile all warnings into a single message.
 {{- $messages := append $messages (include "dremio.validateValues.extraVolumes" .) -}}
 {{- $messages := append $messages (include "dremio.validateValues.executor" .) -}}
 {{- $messages := append $messages (include "dremio.validateValues.master-coordinator" .) -}}
+{{- $messages := append $messages (include "dremio.validateValues.dist-storage" .) -}}
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
 {{- end -}}
@@ -516,5 +517,14 @@ dremio: missing-engines
 {{- if le (int .Values.masterCoordinator.replicaCount) 0  -}}
 dremio: master-coordinator
     Dremio requires a master coordinator. Please set masterCoordinator.replicaCount to a minimum value of 1.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of dremio - MinIO is properly configured */}}
+{{- define "dremio.validateValues.dist-storage" -}}
+{{- $allowedValues := list "aws" "minio" "other" -}}
+{{- if not (has .Values.dremio.distStorageType $allowedValues) -}}
+dremio: dist-storage
+    Allowed values for `distStorageType` are {{ join "," $allowedValues }}.
 {{- end -}}
 {{- end -}}

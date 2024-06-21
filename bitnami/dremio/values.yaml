@@ -162,7 +162,7 @@ dremio:
         keyAlgorithm: RSA
         duration: 2160h
         renewBefore: 360h
-  ## @param dremio.distStorageType Dremio distributed storage type ("minio" and "aws" natively supported, the rest of the types requires adding extra configuration parameters in the "dremio.dremioConf" and "dremio.coreSite" sections)
+  ## @param dremio.distStorageType Dremio distributed storage type. Allowed values: "minio", "aws" and "others" ("minio" and "aws" natively supported, the rest of the types requires adding extra configuration parameters in the "dremio.dremioConf" and "dremio.coreSite" sections)
   ##
   distStorageType: "minio"
   ## @param dremio.dremioConf.configOverrides Add configuration overrides in dremio.conf applied to all components (using YAML format)
