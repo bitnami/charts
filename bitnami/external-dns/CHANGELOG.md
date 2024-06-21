@@ -1,8 +1,8 @@
 # Changelog
 
-## 8.0.1 (2024-06-20)
+## 8.0.1 (2024-06-21)
 
-* bitnami/external-dns Disable pod disruption budget per default value ([#27467](https://github.com/bitnami/charts/pull/27467))
+* [bitnami/external-dns] Disable pod disruption budget per default value ([#27467](https://github.com/bitnami/charts/pull/27467))
 
 ## 8.0.0 (2024-06-19)
 
