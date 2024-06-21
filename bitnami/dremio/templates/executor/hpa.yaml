@@ -15,7 +15,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $executorValues := mustMergeOverwrite $.Values.executor.common $engine.overrides }}
 {{- if $executorValues.autoscaling.hpa.enabled }}
 ---
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" $ }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" (dict "context" $) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "dremio.executor.fullname" (dict "context" $ "engine" $engine.name) }}
