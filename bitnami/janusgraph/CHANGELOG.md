@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.12 (2024-06-19)
+## 0.3.12 (2024-06-21)
 
 * [bitnami/janusgraph] Fix fullname resolution for cassandra subchart ([#27151](https://github.com/bitnami/charts/pull/27151))
 
