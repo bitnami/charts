@@ -91,6 +91,8 @@ ingressController:
   enabled: false
 etcd:
   enabled: false
+dashboard:
+  enabled: false
 dataPlane:
   extraConfig:
     deployment:
@@ -102,7 +104,7 @@ dataPlane:
         name: apisix-routes
   extraVolumeMounts:
     - name: routes
-      mountPath: /opt/bitnami/apisix/conf/apisix.yaml
+      mountPath: /usr/local/apisix/conf/apisix.yaml
       subPath: apisix.yaml
 extraDeploy:
   - apiVersion: v1
@@ -118,6 +120,7 @@ extraDeploy:
                 nodes:
                     "127.0.0.1:1980": 1
                 type: roundrobin
+        #END
 ```
 
 ### Ingress

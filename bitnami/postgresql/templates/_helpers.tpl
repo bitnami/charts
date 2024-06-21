@@ -268,6 +268,17 @@ Return true if a configmap should be mounted with PostgreSQL configuration
 {{- end -}}
 
 {{/*
+Get the pre-initialization scripts ConfigMap name.
+*/}}
+{{- define "postgresql.v1.preInitDb.scriptsCM" -}}
+{{- if .Values.primary.preInitDb.scriptsConfigMap -}}
+    {{- printf "%s" (tpl .Values.primary.preInitDb.scriptsConfigMap $) -}}
+{{- else -}}
+    {{- printf "%s-preinit-scripts" (include "postgresql.v1.primary.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the initialization scripts ConfigMap name.
 */}}
 {{- define "postgresql.v1.initdb.scriptsCM" -}}
