@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.9 (2024-06-18)
+## 2.4.0 (2024-06-19)
 
-* [bitnami/jaeger] Release 2.3.9 ([#27357](https://github.com/bitnami/charts/pull/27357))
+* [bitnami/jaeger] Add support for cassandra existingSecret ([#26563](https://github.com/bitnami/charts/pull/26563))
+
+## <small>2.3.9 (2024-06-18)</small>
+
+* [bitnami/jaeger] Release 2.3.9 (#27357) ([a11df55](https://github.com/bitnami/charts/commit/a11df5597f3a252e7405f2f2beae81347c0d7d89)), closes [#27357](https://github.com/bitnami/charts/issues/27357)
 
 ## <small>2.3.8 (2024-06-17)</small>
 
