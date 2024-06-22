@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.5 (2024-06-18)
+## 21.2.6 (2024-06-22)
 
-* [bitnami/elasticsearch] Release 21.2.5 ([#27340](https://github.com/bitnami/charts/pull/27340))
+* [bitnami/elasticsearch] fix: Unable to run the image using the root user ([#27491](https://github.com/bitnami/charts/pull/27491))
+
+## <small>21.2.5 (2024-06-18)</small>
+
+* [bitnami/elasticsearch] Release 21.2.5 (#27340) ([f1f3c46](https://github.com/bitnami/charts/commit/f1f3c46bc01faa198ecb624831a7a1aa8cf15bd4)), closes [#27340](https://github.com/bitnami/charts/issues/27340)
 
 ## <small>21.2.4 (2024-06-17)</small>
 
