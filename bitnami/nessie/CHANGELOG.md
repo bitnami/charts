@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.10 (2024-06-21)
+## 0.1.11 (2024-06-22)
 
-* [bitnami/nessie] fix: :bug: Add missing reference to POSTGRESQL_PORT in wait-for-db ([#27477](https://github.com/bitnami/charts/pull/27477))
+* [bitnami/nessie] Release 0.1.11 ([#27496](https://github.com/bitnami/charts/pull/27496))
+
+## <small>0.1.10 (2024-06-21)</small>
+
+* [bitnami/nessie] fix: :bug: Add missing reference to POSTGRESQL_PORT in wait-for-db (#27477) ([bb85a66](https://github.com/bitnami/charts/commit/bb85a669cbead15f57f382c0c030e696fbd14009)), closes [#27477](https://github.com/bitnami/charts/issues/27477)
 
 ## <small>0.1.9 (2024-06-21)</small>
 
