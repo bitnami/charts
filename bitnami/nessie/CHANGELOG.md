@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.11 (2024-06-22)
+## 0.1.12 (2024-06-22)
 
-* [bitnami/nessie] Release 0.1.11 ([#27496](https://github.com/bitnami/charts/pull/27496))
+* [bitnami/nessie] Release 0.1.12 ([#27499](https://github.com/bitnami/charts/pull/27499))
+
+## <small>0.1.11 (2024-06-22)</small>
+
+* [bitnami/nessie] docs: :memo: Add tracing documentation (#27478) ([dccab90](https://github.com/bitnami/charts/commit/dccab90db451835923882e055b7e5ded12d24fad)), closes [#27478](https://github.com/bitnami/charts/issues/27478)
+* [bitnami/nessie] Release 0.1.11 (#27496) ([5ca9bb1](https://github.com/bitnami/charts/commit/5ca9bb1f424d188715c1db82a9cdb28ada528936)), closes [#27496](https://github.com/bitnami/charts/issues/27496)
 
 ## <small>0.1.10 (2024-06-21)</small>
 
