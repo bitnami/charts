@@ -1,6 +1,6 @@
 # Changelog
 
-## <small>15.7.8 (2024-06-23)</small>
+## <small>15.7.10 (2024-06-23)</small>
 
 * [bitnami/thanos] add validation for thanos receive autoscaling ([#27501](https://github.com/bitnami/charts/pull/27501))
 
