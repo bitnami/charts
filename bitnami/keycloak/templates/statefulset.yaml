@@ -227,12 +227,26 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-env-vars" (include "common.names.fullname" .) }}
             {{- if .Values.extraEnvVarsCM }}
+            {{- if kindIs "slice" .Values.extraEnvVarsCM }}
+            {{- range $configMap := .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" $configMap "context" $) }}
+            {{- end }}
+            {{- else }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
             {{- end }}
+            {{- end }}
             {{- if .Values.extraEnvVarsSecret }}
+            {{- if kindIs "slice" .Values.extraEnvVarsSecret }}
+            {{- range $secret := .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" $secret "context" $) }}
+            {{- end }}
+            {{- else }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
             {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}

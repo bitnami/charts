@@ -262,12 +262,12 @@ args: []
 ##     value: "bar"
 ##
 extraEnvVars: []
-## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+## @param extraEnvVarsCM Name of existing ConfigMaps containing extra env vars
 ##
-extraEnvVarsCM: ""
-## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
+extraEnvVarsCM: []
+## @param extraEnvVarsSecret Name of existing Secrets containing extra env vars
 ##
-extraEnvVarsSecret: ""
+extraEnvVarsSecret: []
 ## @section Keycloak statefulset parameters
 
 ## @param replicaCount Number of Keycloak replicas to deploy
