@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.6.0 (2024-06-22)
+## 19.6.0 (2024-06-24)
 
 * [bitnami/redis] Allow setting revisionHistoryLimit ([#27498](https://github.com/bitnami/charts/pull/27498))
 
