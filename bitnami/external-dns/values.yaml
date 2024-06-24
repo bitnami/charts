@@ -779,7 +779,7 @@ logFormat: text
 ##
 policy: upsert-only
 ## @param registry Registry method to use (options: txt, aws-sd, dynamodb, noop)
-## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/proposal/registry.md
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/registry.md
 ##
 registry: "txt"
 ## @param txtPrefix When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)<CNAME record> (Mutual exclusive with txt-suffix)
