@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.6 (2024-06-18)
+## 21.2.7 (2024-06-24)
 
-* [bitnami/prestashop] Release 21.2.6 ([#27404](https://github.com/bitnami/charts/pull/27404))
+* [bitnami/prestashop] Release 21.2.7 ([#27515](https://github.com/bitnami/charts/pull/27515))
+
+## <small>21.2.6 (2024-06-18)</small>
+
+* [bitnami/prestashop] Release 21.2.6 (#27404) ([f1d8fd7](https://github.com/bitnami/charts/commit/f1d8fd7645eb108e34078f16caaac5f8a128d410)), closes [#27404](https://github.com/bitnami/charts/issues/27404)
 
 ## <small>21.2.5 (2024-06-17)</small>
 
