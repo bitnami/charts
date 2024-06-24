@@ -1,8 +1,8 @@
 # Changelog
 
-## 14.6.12 (2024-06-22)
+## 14.6.13 (2024-06-24)
 
-* [bitnami/minio] Release 14.6.12 ([#27495](https://github.com/bitnami/charts/pull/27495))
+* [bitnami/minio] getValueFromSecret missing key bug fix ([#27517](https://github.com/bitnami/charts/pull/27517))
 
 ## <small>14.6.11 (2024-06-18)</small>
 
