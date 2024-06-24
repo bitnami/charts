@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2024-06-24)
+## 0.2.0 (2024-06-24)
 
-* [bitnami/cilium] Support for ENI integration ([#27507](https://github.com/bitnami/charts/pull/27507))
+* [bitnami/cilium]: Simplify installation for main cloud providers ([#27509](https://github.com/bitnami/charts/pull/27509))
+
+## <small>0.1.2 (2024-06-24)</small>
+
+* [bitnami/cilium] Support for ENI integration (#27507) ([f032900](https://github.com/bitnami/charts/commit/f032900c2c5f56375801e75fca26f93d44e8a4ab)), closes [#27507](https://github.com/bitnami/charts/issues/27507)
 
 ## <small>0.1.1 (2024-06-21)</small>
 
