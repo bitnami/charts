@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.7.10 (2024-06-23)
+## 15.7.10 (2024-06-24)
 
 * [bitnami/thanos] Add validation for Thanos receive configuration ([#27501](https://github.com/bitnami/charts/pull/27501))
 
