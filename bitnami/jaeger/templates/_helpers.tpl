@@ -29,6 +29,13 @@ Create the name of the query deployment
 {{- end -}}
 
 {{/*
+Create the name of the query deployment
+*/}}
+{{- define "jaeger.cassandra.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "jaeger.imagePullSecrets" -}}
@@ -58,7 +65,7 @@ Create a container for checking cassandra availability
       . /opt/bitnami/scripts/libos.sh
 
       check_cassandra_keyspace_schema() {
-          echo "SELECT 1" | cqlsh -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD -e "SELECT COUNT(*) FROM ${CASSANDRA_KEYSPACE}.traces"
+          echo "SELECT 1" | cqlsh -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD -e "SELECT keyspace_name FROM system_schema.keyspaces WHERE keyspace_name='${CASSANDRA_KEYSPACE}';"
       }
 
       info "Connecting to the Cassandra instance $CQLSH_HOST:$CQLSH_PORT"
@@ -143,9 +150,9 @@ Create the cassandra secret name
 */}}
 {{- define "jaeger.cassandra.secretName" -}}
     {{- if not .Values.cassandra.enabled -}}
-        {{- .Values.externalDatabase.existingSecret -}}
+        {{- tpl .Values.externalDatabase.existingSecret $ -}}
     {{- else -}}
-        {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
+        {{- default (include "jaeger.cassandra.fullname" .) .Values.cassandra.dbUser.existingSecret -}}
     {{- end -}}
 {{- end -}}
 

@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.3.3 (2024-06-06)
+## 2.3.6 (2024-06-20)
 
-* [bitnami/sealed-secrets] Release 2.3.3 ([#27013](https://github.com/bitnami/charts/pull/27013))
+* [bitnami/sealed-secrets] Release 2.3.6 ([#27466](https://github.com/bitnami/charts/pull/27466))
+
+## <small>2.3.5 (2024-06-18)</small>
+
+* [bitnami/sealed-secrets] Release 2.3.5 (#27416) ([45883f7](https://github.com/bitnami/charts/commit/45883f7cbbea768eb35ee457a6750a74d2af5340)), closes [#27416](https://github.com/bitnami/charts/issues/27416)
+
+## <small>2.3.4 (2024-06-17)</small>
+
+* [bitnami/sealed-secrets] Release 2.3.4 (#27280) ([9bb5e9b](https://github.com/bitnami/charts/commit/9bb5e9b04eb5c04976be2c697e4ff12635bc0fc0)), closes [#27280](https://github.com/bitnami/charts/issues/27280)
+
+## <small>2.3.3 (2024-06-06)</small>
+
+* [bitnami/sealed-secrets] Release 2.3.3 (#27013) ([4cea59e](https://github.com/bitnami/charts/commit/4cea59e72fe8829639bdc49bb7f52bc811449264)), closes [#27013](https://github.com/bitnami/charts/issues/27013)
 
 ## <small>2.3.2 (2024-06-05)</small>
 

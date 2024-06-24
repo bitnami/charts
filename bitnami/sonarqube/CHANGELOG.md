@@ -1,8 +1,20 @@
 # Changelog
 
-## 5.2.4 (2024-06-13)
+## 5.2.7 (2024-06-18)
 
-* [bitnami/sonarqube] Fix issue with volume-permissions ([#27113](https://github.com/bitnami/charts/pull/27113))
+* [bitnami/sonarqube] Release 5.2.7 ([#27418](https://github.com/bitnami/charts/pull/27418))
+
+## <small>5.2.6 (2024-06-17)</small>
+
+* [bitnami/sonarqube] Release 5.2.6 (#27303) ([be65c2b](https://github.com/bitnami/charts/commit/be65c2bfb6f4120eb9109676a21572f9a4f1b4b1)), closes [#27303](https://github.com/bitnami/charts/issues/27303)
+
+## <small>5.2.5 (2024-06-14)</small>
+
+* [bitnami/sonarqube] Release 5.2.5 (#27174) ([707e7c8](https://github.com/bitnami/charts/commit/707e7c882fd5eb9af962e26d5e1a797e44f3e153)), closes [#27174](https://github.com/bitnami/charts/issues/27174)
+
+## <small>5.2.4 (2024-06-13)</small>
+
+* [bitnami/sonarqube] Fix issue with volume-permissions (#27113) ([d265a6f](https://github.com/bitnami/charts/commit/d265a6fda5dd4492b7154b961d9112c4d0fc0c61)), closes [#27113](https://github.com/bitnami/charts/issues/27113)
 
 ## <small>5.2.3 (2024-06-07)</small>
 

@@ -1,8 +1,24 @@
 # Changelog
 
-## 3.5.2 (2024-06-05)
+## 3.6.0 (2024-06-20)
 
-* [bitnami/grafana-tempo] Bump chart version ([#26833](https://github.com/bitnami/charts/pull/26833))
+* [bitnami/grafana-tempo] Add option to disable tempo-query sidecar ([#27447](https://github.com/bitnami/charts/pull/27447))
+
+## <small>3.5.5 (2024-06-18)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.5 (#27352) ([bda5da9](https://github.com/bitnami/charts/commit/bda5da981a74094a9802d419ec77e87995177250)), closes [#27352](https://github.com/bitnami/charts/issues/27352)
+
+## <small>3.5.4 (2024-06-17)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.4 (#27227) ([2846858](https://github.com/bitnami/charts/commit/28468587f7c7760cf24be63e6b47c1c45b613ed1)), closes [#27227](https://github.com/bitnami/charts/issues/27227)
+
+## <small>3.5.3 (2024-06-14)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.3 (#26958) ([793e0ac](https://github.com/bitnami/charts/commit/793e0acb0bd52f2d19449c7bbc8f9649f7b84ccb)), closes [#26958](https://github.com/bitnami/charts/issues/26958)
+
+## <small>3.5.2 (2024-06-05)</small>
+
+* [bitnami/grafana-tempo] Bump chart version (#26833) ([37e9569](https://github.com/bitnami/charts/commit/37e956938ddd3a8eb999a519146e7ac6220125ee)), closes [#26833](https://github.com/bitnami/charts/issues/26833)
 
 ## <small>3.5.1 (2024-06-05)</small>
 

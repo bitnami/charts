@@ -100,14 +100,14 @@ jobs:
     if: needs.get-chart.outputs.result == 'ok'
     steps:
       - name: Checkout bitnami/charts
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           path: charts
       - name: Clone upstream bitnami/charts repository
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         with:
           path: upstream-charts
       - name: Setup git configuration
@@ -129,7 +129,7 @@ jobs:
         name: Generate changelog
         env:
           PULL_REQUEST_NUMBER: "${{ github.event.pull_request.number }}"
-          PULL_REQUEST_URL: "${{ github.event.pull_request.url }}"
+          PULL_REQUEST_URL: "${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}"
           GITHUB_TOKEN: "${{ github.token }}"
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
@@ -321,7 +321,7 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
