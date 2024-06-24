@@ -102,6 +102,8 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.operator.command }}
             {{- include "common.tplvalues.render" (dict "value" .Values.operator.command "context" $) | nindent 12 }}
+          {{- else if .Values.agent.enableENI }}
+            - cilium-operator-aws
           {{- else }}
             - cilium-operator-generic
           {{- end }}

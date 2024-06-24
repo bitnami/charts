@@ -324,6 +324,9 @@ agent:
     uninstall: false
     hostCNIBinDir: /opt/cni/bin
     hostCNINetDir: /etc/cni/net.d
+  ## @param agent.enableENI Elastic Network Interface (ENI) integration
+  ##
+  enableENI: false
   ## @param agent.waitForKubeProxy Wait for kube-proxy to be ready before starting Cilium Agent
   ##
   waitForKubeProxy: false

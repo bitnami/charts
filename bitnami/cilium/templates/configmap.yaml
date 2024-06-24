@@ -34,9 +34,15 @@ enable-ipv4: "true"
 enable-ipv6: "false"
 # IP Address Management (IPAM)
 # https://docs.cilium.io/en/stable/network/concepts/ipam
+{{- if .Values.agent.enableENI }}
+routing-mode: "native"
+enable-endpoint-routes: "true"
+auto-create-cilium-node-resource: "true"
+{{- else }}
 routing-mode: "tunnel"
 tunnel-protocol: "vxlan"
 tunnel-port: "8472"
+{{- end }}
 # Health checking and Pprof
 enable-endpoint-health-checking: "true"
 enable-health-checking: "true"
@@ -69,9 +75,13 @@ operator-api-serve-addr: {{ printf ":%d" (int .Values.operator.containerPorts.ap
 disable-endpoint-crd: "false"
 skip-crd-creation: "false"
 identity-allocation-mode: crd
+{{- if .Values.agent.enableENI }}
+ipam: "eni"
+{{- else }}
 ipam: "cluster-pool"
 cluster-pool-ipv4-cidr: "10.0.0.0/8"
 cluster-pool-ipv4-mask-size: "24"
+{{- end }}
 # Hubble configuration
 enable-hubble: "true"
 hubble-socket-path: "/opt/bitnami/cilium/var/run/hubble.sock"
