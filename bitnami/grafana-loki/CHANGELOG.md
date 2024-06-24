@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.6.2 (2024-06-18)
+## 4.6.3 (2024-06-20)
 
-* [bitnami/grafana-loki] Release 4.6.2 ([#27349](https://github.com/bitnami/charts/pull/27349))
+* [bitnami/grafana-loki] Disable Promtail secret creation if existing secret is provided ([#27465](https://github.com/bitnami/charts/pull/27465))
+
+## <small>4.6.2 (2024-06-18)</small>
+
+* [bitnami/grafana-loki] Release 4.6.1 (#27222) ([7118ee1](https://github.com/bitnami/charts/commit/7118ee1b62b2d1d0ceebfabd6523a89b8c1cd2eb)), closes [#27222](https://github.com/bitnami/charts/issues/27222)
+* [bitnami/grafana-loki] Release 4.6.2 (#27349) ([c4e8932](https://github.com/bitnami/charts/commit/c4e89322d597eedccff4abb793489a30897385c8)), closes [#27349](https://github.com/bitnami/charts/issues/27349)
 
 ## 4.6.0 (2024-06-10)
 
