@@ -264,6 +264,8 @@ Init container definition to change/establish volume permissions.
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
+    - name: {{ .Values.persistence.name | default "datadir" }}
+      mountPath: {{ .Values.persistence.mountPath }}
 {{- end -}}
 
 {{/*
