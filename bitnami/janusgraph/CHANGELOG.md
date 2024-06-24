@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.3.9 (2024-06-14)
+## 0.3.12 (2024-06-21)
 
-* [bitnami/janusgraph] Release 0.3.9 ([#27170](https://github.com/bitnami/charts/pull/27170))
+* [bitnami/janusgraph] Fix fullname resolution for cassandra subchart ([#27151](https://github.com/bitnami/charts/pull/27151))
+
+## <small>0.3.11 (2024-06-18)</small>
+
+* [bitnami/janusgraph] Release 0.3.11 (#27358) ([da2f1b0](https://github.com/bitnami/charts/commit/da2f1b06d8cb23a1668f1a1a6b848eddfa502fcb)), closes [#27358](https://github.com/bitnami/charts/issues/27358)
+
+## <small>0.3.10 (2024-06-17)</small>
+
+* [bitnami/janusgraph] Release 0.3.10 (#27235) ([b446901](https://github.com/bitnami/charts/commit/b44690149f00ce2915debf8e060ccfe598ba5383)), closes [#27235](https://github.com/bitnami/charts/issues/27235)
+
+## <small>0.3.9 (2024-06-14)</small>
+
+* [bitnami/janusgraph] Release 0.3.9 (#27170) ([38b4c59](https://github.com/bitnami/charts/commit/38b4c598b430d95d1fe5513490321ffcfcbe1721)), closes [#27170](https://github.com/bitnami/charts/issues/27170)
 
 ## <small>0.3.8 (2024-06-12)</small>
 

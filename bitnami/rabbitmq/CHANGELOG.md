@@ -1,8 +1,17 @@
 # Changelog
 
-## 14.4.2 (2024-06-12)
+## 14.4.4 (2024-06-18)
 
-* [bitnami/rabbitmq] Align ulimitNofiles default value on containerd runc runtime default ulimit -n value ([#27052](https://github.com/bitnami/charts/pull/27052))
+* [bitnami/rabbitmq] Release 14.4.4 ([#27409](https://github.com/bitnami/charts/pull/27409))
+
+## <small>14.4.3 (2024-06-17)</small>
+
+* [bitnami/rabbitmq] Release 14.4.3 (#27276) ([7fc3346](https://github.com/bitnami/charts/commit/7fc3346f8835f684a1e87c763e9f37c69834eba2)), closes [#27276](https://github.com/bitnami/charts/issues/27276)
+
+## <small>14.4.2 (2024-06-13)</small>
+
+* [bitnami/rabbitmq] Align ulimitNofiles default value on containerd runc runtime default ulimit -n va ([34a4923](https://github.com/bitnami/charts/commit/34a4923799d19456818466a6ca3f42b207071868)), closes [#27052](https://github.com/bitnami/charts/issues/27052)
+* RabbitMQ: explain how to safely avoid a deployment deadlock (#25931) ([3117b57](https://github.com/bitnami/charts/commit/3117b573147401387321a2a0e1f587978cef0ed2)), closes [#25931](https://github.com/bitnami/charts/issues/25931)
 
 ## <small>14.4.1 (2024-06-06)</small>
 

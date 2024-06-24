@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.4.6 (2024-06-07)
+## 6.4.8 (2024-06-18)
 
-* [bitnami/argo-cd] Typo in notifications service ([#27054](https://github.com/bitnami/charts/pull/27054))
+* [bitnami/argo-cd] Release 6.4.8 ([#27328](https://github.com/bitnami/charts/pull/27328))
+
+## <small>6.4.7 (2024-06-17)</small>
+
+* [bitnami/argo-cd] Release 6.4.7 (#27202) ([0704678](https://github.com/bitnami/charts/commit/0704678902cff3c340e2e1998151acc9ba993256)), closes [#27202](https://github.com/bitnami/charts/issues/27202)
+
+## <small>6.4.6 (2024-06-11)</small>
+
+* [bitnami/argo-cd] Typo in notifications service (#27054) ([9012640](https://github.com/bitnami/charts/commit/901264004c90fda66a5ea024235b28ecc03b4a21)), closes [#27054](https://github.com/bitnami/charts/issues/27054)
 
 ## <small>6.4.5 (2024-06-06)</small>
 

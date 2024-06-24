@@ -1,8 +1,16 @@
 # Changelog
 
-## 26.2.6 (2024-06-14)
+## 26.2.8 (2024-06-18)
 
-* [bitnami/odoo] Release 26.2.6 ([#27180](https://github.com/bitnami/charts/pull/27180))
+* [bitnami/odoo] Release 26.2.8 ([#27393](https://github.com/bitnami/charts/pull/27393))
+
+## <small>26.2.7 (2024-06-17)</small>
+
+* [bitnami/odoo] Release 26.2.7 (#27257) ([066357d](https://github.com/bitnami/charts/commit/066357dfb61595d90fcba9b202375d15fa37d35b)), closes [#27257](https://github.com/bitnami/charts/issues/27257)
+
+## <small>26.2.6 (2024-06-14)</small>
+
+* [bitnami/odoo] Release 26.2.6 (#27180) ([066b94d](https://github.com/bitnami/charts/commit/066b94dbf8f3b03a6fe6173c905fdc7fb30e8a53)), closes [#27180](https://github.com/bitnami/charts/issues/27180)
 
 ## <small>26.2.5 (2024-06-14)</small>
 
