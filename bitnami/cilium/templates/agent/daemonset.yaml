@@ -136,9 +136,9 @@ spec:
                   divisor: '1'
             # Required for uninstalling the CNI plugin in lifecycle preStop hook
             - name: HOST_CNI_BIN_DIR
-              value: {{ .Values.agent.cniPlugin.hostCNIBinDir }}
+              value: {{ template "cilium.agent.hostCNIBinDir" . }}
             - name: HOST_CNI_CONF_DIR
-              value: {{ .Values.agent.cniPlugin.hostCNINetDir }}
+              value: {{ template "cilium.agent.hostCNINetDir" . }}
             {{- if .Values.agent.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -257,9 +257,9 @@ spec:
             - name: envoy-sockets
               mountPath: /opt/bitnami/cilium/var/run/envoy/sockets
             - name: host-cni-bin
-              mountPath: {{ printf "/host%s" .Values.agent.cniPlugin.hostCNIBinDir }}
+              mountPath: {{ printf "/host%s" (include "cilium.agent.hostCNIBinDir" .) }}
             - name: host-cni-conf
-              mountPath: {{ printf "/host%s" .Values.agent.cniPlugin.hostCNINetDir }}
+              mountPath: {{ printf "/host%s" (include "cilium.agent.hostCNINetDir" .) }}
             {{- if .Values.agent.bpf.autoMount }}
             - name: bpf-maps
               mountPath: {{ .Values.agent.bpf.hostRoot }}
@@ -316,12 +316,12 @@ spec:
         # To install cilium CNI plugin in the host
         - name: host-cni-bin
           hostPath:
-            path: {{ .Values.agent.cniPlugin.hostCNIBinDir }}
+            path: {{ template "cilium.agent.hostCNIBinDir" . }}
             type: DirectoryOrCreate
         # To install cilium CNI plugin configuration in the host
         - name: host-cni-conf
           hostPath:
-            path: {{ .Values.agent.cniPlugin.hostCNINetDir }}
+            path: {{ template "cilium.agent.hostCNINetDir" . }}
             type: DirectoryOrCreate
         # To mount cgroup2 filesystem on the host
         {{- if .Values.agent.cgroup2.autoMount }}
