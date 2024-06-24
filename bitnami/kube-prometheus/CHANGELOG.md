@@ -1,6 +1,10 @@
 # Changelog
 
-## 9.5.2 (2024-06-18)
+## 9.5.3 (2024-06-24)
+
+* [bitnami/kube-prometheus] :bug: Render imagePullSecrets ([#27511](https://github.com/bitnami/charts/pull/27511))
+
+## <small>9.5.2 (2024-06-18)</small>
 
 * [bitnami/kube-prometheus] Release 9.5.2 (#27405) ([2d55dee](https://github.com/bitnami/charts/commit/2d55dee40c46cd4faf8f05e7772530e6545f690f)), closes [#27405](https://github.com/bitnami/charts/issues/27405)
 
