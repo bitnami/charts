@@ -1,8 +1,20 @@
 # Changelog
 
+## 9.5.1 (2024-06-24)
+
+* [bitnami/kube-prometheus] :bug: Render imagePullSecrets ([#27511](https://github.com/bitnami/charts/pull/27511))
+
+## <small>9.5.2 (2024-06-18)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.2 (#27405) ([2d55dee](https://github.com/bitnami/charts/commit/2d55dee40c46cd4faf8f05e7772530e6545f690f)), closes [#27405](https://github.com/bitnami/charts/issues/27405)
+
+## <small>9.5.1 (2024-06-17)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.1 (#27268) ([1d26cbd](https://github.com/bitnami/charts/commit/1d26cbd913ed9dd676525e7efca59e7475b384ec)), closes [#27268](https://github.com/bitnami/charts/issues/27268)
+
 ## 9.5.0 (2024-06-10)
 
-* [bitnami/kube-prometheus] Add keepDroppedTargets parameter kube-prometheus configuration ([#26409](https://github.com/bitnami/charts/pull/26409))
+* [bitnami/kube-prometheus] Add keepDroppedTargets parameter kube-prometheus configuration (#26409) ([8aa5fc8](https://github.com/bitnami/charts/commit/8aa5fc87d5e401a4625f4dfa829416cdebc83f0d)), closes [#26409](https://github.com/bitnami/charts/issues/26409)
 
 ## <small>9.4.1 (2024-06-06)</small>
 
