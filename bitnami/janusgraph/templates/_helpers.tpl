@@ -221,7 +221,7 @@ Returns the hostname of the configured storage backend
 */}}
 {{- define "janusgraph.storage.hostname" -}}
 {{- if .Values.storageBackend.cassandra.enabled -}}
-{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.storageBackend.cassandra "context" $) -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}
 {{- else if .Values.storageBackend.external.hostname -}}
 {{- print .Values.storageBackend.external.hostname -}}
 {{- end -}}
@@ -254,7 +254,7 @@ Create the storage password secret name
 */}}
 {{- define "janusgraph.storage.password.secretName" -}}
 {{- if .Values.storageBackend.cassandra.enabled -}}
-{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.storageBackend.cassandra "context" $) -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}
 {{- else if .Values.storageBackend.external.existingSecret -}}
 {{- print (tpl .Values.storageBackend.external.existingSecret .) -}}
 {{- end -}}

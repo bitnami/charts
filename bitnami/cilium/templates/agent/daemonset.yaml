@@ -212,12 +212,27 @@ spec:
           lifecycle:
           {{- if .Values.agent.lifecycleHooks }}
             {{- include "common.tplvalues.render" (dict "value" .Values.agent.lifecycleHooks "context" $) | nindent 12 }}
-          {{- else if .Values.agent.cniPlugin.uninstall }}
+          {{- else }}
+            {{- if .Values.agent.enableENI }}
+            postStart:
+              exec:
+                command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                      if [[ "$(iptables-save | grep -E -c 'AWS-SNAT-CHAIN|AWS-CONNMARK-CHAIN')" != "0" ]]; then
+                          echo 'Deleting iptables rules created by the AWS CNI VPC plugin'
+                          iptables-save | grep -E -v 'AWS-SNAT-CHAIN|AWS-CONNMARK-CHAIN' | iptables-restore
+                      fi
+                      echo 'Done!'
+            {{- end }}
+            {{- if .Values.agent.cniPlugin.uninstall }}
             preStop:
               exec:
                 command:
                   - /opt/bitnami/scripts/cilium/uninstall-cni-plugin.sh
                   - /host
+            {{- end }}
           {{- end }}
           volumeMounts:
             - name: empty-dir

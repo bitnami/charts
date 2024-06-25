@@ -1,8 +1,21 @@
 # Changelog
 
-## 0.1.10 (2024-06-21)
+## 0.1.13 (2024-06-24)
 
-* [bitnami/nessie] fix: :bug: Add missing reference to POSTGRESQL_PORT in wait-for-db ([#27477](https://github.com/bitnami/charts/pull/27477))
+* [bitnami/nessie] Release 0.1.13 ([#27519](https://github.com/bitnami/charts/pull/27519))
+
+## <small>0.1.12 (2024-06-22)</small>
+
+* [bitnami/nessie] Release 0.1.12 (#27499) ([c333918](https://github.com/bitnami/charts/commit/c333918cd3468af041bdf925ad3fd7a152b629b1)), closes [#27499](https://github.com/bitnami/charts/issues/27499)
+
+## <small>0.1.11 (2024-06-22)</small>
+
+* [bitnami/nessie] docs: :memo: Add tracing documentation (#27478) ([dccab90](https://github.com/bitnami/charts/commit/dccab90db451835923882e055b7e5ded12d24fad)), closes [#27478](https://github.com/bitnami/charts/issues/27478)
+* [bitnami/nessie] Release 0.1.11 (#27496) ([5ca9bb1](https://github.com/bitnami/charts/commit/5ca9bb1f424d188715c1db82a9cdb28ada528936)), closes [#27496](https://github.com/bitnami/charts/issues/27496)
+
+## <small>0.1.10 (2024-06-21)</small>
+
+* [bitnami/nessie] fix: :bug: Add missing reference to POSTGRESQL_PORT in wait-for-db (#27477) ([bb85a66](https://github.com/bitnami/charts/commit/bb85a669cbead15f57f382c0c030e696fbd14009)), closes [#27477](https://github.com/bitnami/charts/issues/27477)
 
 ## <small>0.1.9 (2024-06-21)</small>
 

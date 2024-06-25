@@ -1,8 +1,11 @@
 # Changelog
 
-## 21.2.6 (2024-06-22)
 
+## 21.2.6 (2024-06-24)
+
+* [bitnami/elasticsearch] Fix ingress backend declaration name ([#27149](https://github.com/bitnami/charts/pull/27149))
 * [bitnami/elasticsearch] fix: Unable to run the image using the root user ([#27491](https://github.com/bitnami/charts/pull/27491))
+
 
 ## <small>21.2.5 (2024-06-18)</small>
 
