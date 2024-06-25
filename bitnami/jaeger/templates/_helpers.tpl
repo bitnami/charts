@@ -94,10 +94,10 @@ Create a container for checking cassandra availability
   {{- if $block.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
-  {{- if .context.Values.waitForDBInitContainer.resources }}
-  resources: {{- toYaml .context.Values.waitForDBInitContainer.resources | nindent 4 }}
-  {{- else if ne .context.Values.waitForDBInitContainer.resourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .context.Values.waitForDBInitContainer.resourcesPreset) | nindent 4 }}
+  {{- if .context.Values.cqlshImage.resources }}
+  resources: {{- toYaml .context.Values.cqlshImage.resources | nindent 4 }}
+  {{- else if ne .context.Values.cqlshImage.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .context.Values.cqlshImage.resourcesPreset) | nindent 4 }}
   {{- end }}
 {{- end -}}
 
