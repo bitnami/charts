@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.0.1 (2024-06-24)
+## 8.0.1 (2024-06-25)
 
 * [bitnami/external-dns] docs: update registry doc url ([#27505](https://github.com/bitnami/charts/pull/27505))
 
