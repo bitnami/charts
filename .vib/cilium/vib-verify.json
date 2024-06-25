@@ -64,7 +64,7 @@
             "resources": {
               "path": "/.vib/cilium/cypress"
             },
-            "endpoint": "lb-hubble-ui-http",
+            "endpoint": "lb-cilium-hubble-ui-http",
             "app_protocol": "HTTP"
           }
         }
