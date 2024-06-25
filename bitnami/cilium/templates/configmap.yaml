@@ -91,13 +91,13 @@ hubble-socket-path: "/opt/bitnami/cilium/var/run/hubble.sock"
 hubble-export-file-max-size-mb: "10"
 hubble-export-file-max-backups: "5"
 hubble-listen-address: {{ printf ":%d" (int .Values.agent.containerPorts.hubblePeer) | quote }}
-hubble-disable-tls: {{ ternary "false" "true" .Values.tls.enabled | quote }}
-{{- if .Values.tls.enabled }}
+hubble-disable-tls: {{ ternary "false" "true" .Values.hubble.tls.enabled | quote }}
+{{- if .Values.hubble.tls.enabled }}
 hubble-tls-cert-file: /certs/hubble/tls.crt
 hubble-tls-key-file: /certs/hubble/tls.key
 hubble-tls-client-ca-files: /certs/hubble/ca.crt
 {{- end }}
-{{- if or .Values.agent.metrics.enabled .Values.agent.hubbleMetrics.enabled .Values.operator.metrics.enabled }}
+{{- if or .Values.agent.metrics.enabled .Values.hubble.peers.metrics.enabled .Values.operator.metrics.enabled }}
 # Prometheus metrics
 enable-metrics: "true"
 {{- if .Values.agent.metrics.enabled }}
@@ -105,7 +105,7 @@ prometheus-serve-addr: {{ printf ":%d" (int .Values.agent.containerPorts.metrics
 controllerGroupMetrics: all
 metrics: ~
 {{- end }}
-{{- if .Values.agent.hubbleMetrics.enabled }}
+{{- if .Values.hubble.peers.metrics.enabled }}
 hubble-metrics-server: {{ printf ":%d" (int .Values.agent.containerPorts.hubbleMetrics) | quote }}
 hubble-metrics: ~
 {{- end }}

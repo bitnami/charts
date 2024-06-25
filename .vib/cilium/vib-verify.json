@@ -57,6 +57,16 @@
               "releaseName": "cilium"
             }
           }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/cilium/cypress"
+            },
+            "endpoint": "lb-hubble-ui-http",
+            "app_protocol": "HTTP"
+          }
         }
       ]
     }

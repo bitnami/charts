@@ -171,7 +171,7 @@ spec:
             - name: metrics
               containerPort: {{ .Values.agent.containerPorts.metrics }}
             {{- end }}
-            {{- if .Values.agent.hubbleMetrics.enabled }}
+            {{- if .Values.hubble.peers.metrics.enabled }}
             - name: hubble-metrics
               containerPort: {{ .Values.agent.containerPorts.hubbleMetrics }}
             {{- end }}
@@ -274,8 +274,8 @@ spec:
               mountPath: /host/proc/sys/kernel
             - name: host-xtables-lock
               mountPath: /run/xtables.lock
-            {{- if .Values.tls.enabled  }}
-            - name: hubble-cert
+            {{- if .Values.hubble.tls.enabled  }}
+            - name: hubble-peers-cert
               readOnly: true
               mountPath: /certs/hubble
             {{- end }}
@@ -351,10 +351,10 @@ spec:
           hostPath:
             path: /run/xtables.lock
             type: FileOrCreate
-        {{- if .Values.tls.enabled  }}
-        - name: hubble-cert
+        {{- if .Values.hubble.tls.enabled  }}
+        - name: hubble-peers-cert
           secret:
-            secretName: {{ template "cilium.tls.hubble.secretName" . }}
+            secretName: {{ template "cilium.hubble.tls.peers.secretName" . }}
             items:
               - key: ca.crt
                 path: ca.crt
