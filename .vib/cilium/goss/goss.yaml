@@ -64,7 +64,7 @@ file:
     exists: true
     filetype: symlink
   # Cilium CNI configuration files should be present in the host
-  /host{{ .Vars.agent.cniPlugin.hostCNINetDir }}/05-cilium.conflist:
+  /host/etc/cni/net.d/05-cilium.conflist:
     exists: true
     filetype: file
     mode: '0644'

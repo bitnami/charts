@@ -1,8 +1,8 @@
 # Changelog
 
-## 15.6.10 (2024-06-20)
+## 15.6.11 (2024-06-24)
 
-* [bitnami/mongodb] add space back so script works again ([#27183](https://github.com/bitnami/charts/pull/27183))
+* [bitnami/mongodb] Recover logging to stdout ([#27510](https://github.com/bitnami/charts/pull/27510))
 
 ## <small>15.6.9 (2024-06-18)</small>
 

@@ -4,6 +4,10 @@
 
 * [bitnami/jaeger] Add init containers resources to Jaeger chart ([#27462](https://github.com/bitnami/charts/pull/27462))
 
+## 2.4.1 (2024-06-22)
+
+* [bitnami/jaeger] Release 2.4.1 ([#27500](https://github.com/bitnami/charts/pull/27500))
+
 ## 2.4.0 (2024-06-21)
 
 * [bitnami/jaeger] Add support for cassandra existingSecret (#26563) ([175b933](https://github.com/bitnami/charts/commit/175b933346aaf2cdef7842394806cba75fa8f078)), closes [#26563](https://github.com/bitnami/charts/issues/26563)

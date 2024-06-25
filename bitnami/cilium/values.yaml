@@ -76,6 +76,32 @@ overrideConfiguration: {}
 ## @param existingConfigmap The name of an existing ConfigMap with your custom Cilium configuration
 ##
 existingConfigmap: ""
+## @param azure.enabled Enable Azure integration
+## @param azure.resourceGroup When enabling Azure integration, set the Azure Resource Group
+## @param azure.tenantId When enabling Azure integration, set the Azure Tenant ID
+## @param azure.subscriptionId When enabling Azure integration, set the Azure Subscription ID
+## @param azure.clientID When enabling Azure integration, set the Azure Client ID
+## @param azure.clientSecret When enabling Azure integration, set the Azure Client Secret
+##
+azure:
+  enabled: false
+  resourceGroup: ""
+  tenantId: ""
+  subscriptionId: ""
+  clientID: ""
+  clientSecret: ""
+## @param aws.enabled Enable AWS integration
+## @param aws.accessKeyID When enabling AWS integration, set the AWS Access Key ID
+## @param aws.secretAccessKey When enabling AWS integration, set the AWS Secret Access Key
+##
+aws:
+  enabled: false
+  accessKeyID: ""
+  secretAccessKey: ""
+## @param gcp.enabled Enable GCP integration
+##
+gcp:
+  enabled: false
 ## TLS configuration
 ##
 tls:
@@ -316,14 +342,21 @@ agent:
     hostRoot: /run/cilium/cgroupv2
   ## @param agent.cniPlugin.install Enable Cilium CNI plugin installation on the host
   ## @param agent.cniPlugin.uninstall Remove the CNI plugin from the host on agent shutdown
-  ## @param agent.cniPlugin.hostCNIBinDir Path to the host's CNI bin directory
-  ## @param agent.cniPlugin.hostCNINetDir Path to the host's CNI net configuration directory
+  ## @param agent.cniPlugin.hostCNIBinDir Path to the host's CNI bin directory (default: /opt/cni/bin)
+  ## @param agent.cniPlugin.hostCNINetDir Path to the host's CNI net configuration directory (default: /etc/cni/net.d)
   ##
   cniPlugin:
     install: true
     uninstall: false
-    hostCNIBinDir: /opt/cni/bin
-    hostCNINetDir: /etc/cni/net.d
+    hostCNIBinDir: ""
+    hostCNINetDir: ""
+  ## @param agent.enableENI Elastic Network Interface (ENI) integration
+  ##
+  enableENI: false
+  ## @param agent.byoCNI Integration with Azure clusters using Bring Your Own CNI
+  ## Ref: https://learn.microsoft.com/en-us/azure/aks/use-byo-cni?tabs=azure-cli
+  ##
+  byoCNI: false
   ## @param agent.waitForKubeProxy Wait for kube-proxy to be ready before starting Cilium Agent
   ##
   waitForKubeProxy: false

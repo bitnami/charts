@@ -34,9 +34,16 @@ enable-ipv4: "true"
 enable-ipv6: "false"
 # IP Address Management (IPAM)
 # https://docs.cilium.io/en/stable/network/concepts/ipam
+{{- if or .Values.aws.enabled (and .Values.azure.enabled (not .Values.agent.byoCNI)) }}
+routing-mode: "native"
+enable-endpoint-routes: "true"
+ipv4-native-routing-cidr: "10.0.0.0/8"
+auto-create-cilium-node-resource: "true"
+{{- else }}
 routing-mode: "tunnel"
 tunnel-protocol: "vxlan"
 tunnel-port: "8472"
+{{- end }}
 # Health checking and Pprof
 enable-endpoint-health-checking: "true"
 enable-health-checking: "true"
@@ -62,16 +69,22 @@ preallocate-bpf-maps: "false"
 cni-exclusive: "true"
 custom-cni-conf: "false"
 cni-log-file: "/opt/bitnami/cilium/var/run/cni.log"
-write-cni-conf-when-ready: {{ printf "/host%s/05-cilium.conflist" .Values.agent.cniPlugin.hostCNINetDir }}
+write-cni-conf-when-ready: {{ printf "/host%s/05-cilium.conflist" (include "cilium.agent.hostCNINetDir" .) }}
 cni-uninstall: {{ ternary "true" "false" .Values.agent.cniPlugin.uninstall | quote }}
 # Operator configuration
 operator-api-serve-addr: {{ printf ":%d" (int .Values.operator.containerPorts.api) | quote }}
 disable-endpoint-crd: "false"
 skip-crd-creation: "false"
 identity-allocation-mode: crd
+{{- if .Values.agent.enableENI }}
+ipam: "eni"
+{{- else if and .Values.azure.enabled (not .Values.agent.byoCNI) }}
+ipam: "azure"
+{{- else }}
 ipam: "cluster-pool"
 cluster-pool-ipv4-cidr: "10.0.0.0/8"
 cluster-pool-ipv4-mask-size: "24"
+{{- end }}
 # Hubble configuration
 enable-hubble: "true"
 hubble-socket-path: "/opt/bitnami/cilium/var/run/hubble.sock"
@@ -107,6 +120,9 @@ proxy-prometheus-port: {{ printf "%d" (int .Values.envoy.containerPorts.metrics)
 external-envoy-proxy: "true"
 disable-envoy-version-check: "true"
 # Other configuration
+{{- if or .Values.azure.enabled .Values.aws.enabled .Values.gcp.enabled }}
+install-no-conntrack-iptables-rules: "false"
+{{- end }}
 enable-k8s-networkpolicy: "true"
 synchronize-k8s-nodes: "true"
 remove-cilium-node-taints: "true"

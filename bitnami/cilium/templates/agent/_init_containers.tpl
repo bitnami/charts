@@ -95,10 +95,10 @@ Returns an init-container that installs Cilium CNI plugin in the host
     - /host
   env:
     - name: HOST_CNI_BIN_DIR
-      value: {{ .Values.agent.cniPlugin.hostCNIBinDir }}
+      value: {{ template "cilium.agent.hostCNIBinDir" . }}
   volumeMounts:
     - name: host-cni-bin
-      mountPath: {{ printf "/host%s" .Values.agent.cniPlugin.hostCNIBinDir }}
+      mountPath: {{ printf "/host%s" (include "cilium.agent.hostCNIBinDir" .) }}
 {{- end -}}
 
 {{/*
@@ -149,10 +149,10 @@ Returns an init-container that mount cgroup2 filesystem in the host
     - {{ .Values.agent.cgroup2.hostRoot }}
   env:
     - name: HOST_CNI_BIN_DIR
-      value: {{ .Values.agent.cniPlugin.hostCNIBinDir }}
+      value: {{ template "cilium.agent.hostCNIBinDir" . }}
   volumeMounts:
     - name: host-cni-bin
-      mountPath: {{ printf "/host%s" .Values.agent.cniPlugin.hostCNIBinDir }}
+      mountPath: {{ printf "/host%s" (include "cilium.agent.hostCNIBinDir" .) }}
     - name: host-proc
       mountPath: /host/proc
 {{- end -}}

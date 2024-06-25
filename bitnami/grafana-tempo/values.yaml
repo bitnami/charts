@@ -2424,6 +2424,8 @@ queryFrontend:
   ## Query sidecar settings
   ##
   query:
+    ## @param queryFrontend.query.enabled Whether to enable the query container for legacy Grafana compatibility with jaeger-ui.  Only required for grafana version <7.5
+    enabled: false
     ## Bitnami Grafana Tempo Query image
     ## ref: https://hub.docker.com/r/bitnami/grafana-tempo-query/tags/
     ## @param queryFrontend.query.image.registry [default: REGISTRY_NAME] Grafana Tempo Query image registry
