@@ -333,7 +333,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 ### Exposure Parameters
 
 | Name                                    | Description                                                                                           | Value                    |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+|-----------------------------------------|-------------------------------------------------------------------------------------------------------| ------------------------ |
 | `service.type`                          | Kubernetes service type                                                                               | `ClusterIP`              |
 | `service.ports.http`                    | Service HTTP port                                                                                     | `8081`                   |
 | `service.nodePorts.http`                | Service HTTP node port                                                                                | `""`                     |
@@ -342,6 +342,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `service.loadBalancerIP`                | loadBalancerIP if service type is LoadBalancer                                                        | `""`                     |
 | `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                 | `[]`                     |
 | `service.annotations`                   | Annotations for Schema Registry service                                                               | `{}`                     |
+| `service.labels`                        | Labels for Schema Registry service                                                                    | `{}`                     |
 | `service.extraPorts`                    | Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)            | `[]`                     |
 | `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                           | `{}`                     |
