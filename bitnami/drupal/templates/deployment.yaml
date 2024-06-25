@@ -1,6 +1,6 @@
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
@@ -191,9 +191,9 @@ spec:
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
-            - name: APACHE_HTTP_PORT_NUMBER
+            - name: Apache_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
-            - name: APACHE_HTTPS_PORT_NUMBER
+            - name: Apache_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
             - name: DRUPAL_DATABASE_HOST
               value: {{ include "drupal.databaseHost" . | quote }}

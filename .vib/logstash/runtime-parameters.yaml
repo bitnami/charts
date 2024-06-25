@@ -8,7 +8,7 @@ input: |-
   }
 filter: |-
   grok {
-    match => { "message" => "%{COMBINEDAPACHELOG}" }
+    match => { "message" => "%{COMBINEDApacheLOG}" }
   }
   date {
     match => [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]

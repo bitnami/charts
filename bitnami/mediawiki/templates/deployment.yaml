@@ -1,6 +1,6 @@
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 
 {{- if and (include "mediawiki.host" .) (or .Values.mariadb.enabled .Values.externalDatabase.host) -}}
@@ -174,9 +174,9 @@ spec:
                   name: {{ include "mediawiki.secretName" . }}
                   key: smtp-password
             {{- end }}
-            - name: APACHE_HTTP_PORT_NUMBER
+            - name: Apache_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
-            - name: APACHE_HTTPS_PORT_NUMBER
+            - name: Apache_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}

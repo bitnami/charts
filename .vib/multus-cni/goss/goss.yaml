@@ -1,5 +1,5 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
-# SPDX-License-Identifier: APACHE-2.0
+# SPDX-License-Identifier: Apache-2.0
 
 # This application performs modifications at host-level, injecting new configuration files. Therefore the
 # container has root user and is privileged. In order to properly test multus-cni, we would need to access the host and

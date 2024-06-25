@@ -1,6 +1,6 @@
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 
 {{ if and (and .Values.rbac.create .Values.rbac.clusterRole) (not .Values.rbac.namespacedRoles) }}

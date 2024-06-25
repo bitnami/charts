@@ -1,6 +1,6 @@
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 {{- $pdb := coalesce .Values.pdb .Values.master.pdb }}
 {{- if and $pdb.create (gt (int64 .Values.master.count) 0) (or (not (eq .Values.architecture "replication")) (not .Values.sentinel.enabled)) }}

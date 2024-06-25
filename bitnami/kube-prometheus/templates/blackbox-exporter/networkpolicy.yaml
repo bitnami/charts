@@ -1,6 +1,6 @@
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 
 # Based on upstream configuration: https://github.com/prometheus-operator/kube-prometheus/commit/a472b19428859c25f83f6cdfd6f4375fc61c7583

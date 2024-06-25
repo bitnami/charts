@@ -1,5 +1,5 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
-# SPDX-License-Identifier: APACHE-2.0
+# SPDX-License-Identifier: Apache-2.0
 
 command:
   {{- $auth := printf "SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS=-Dbasicauth=%s:%s" .Vars.auth.adminUsername .Vars.auth.adminPassword }}

@@ -1727,7 +1727,7 @@
 
 ## <small>12.0.3 (2021-08-05)</small>
 
-* [bitnami/wordpress] Set APACHE_HTTP_PORT_NUMBER (#7131) ([fd81243](https://github.com/bitnami/charts/commit/fd812430e063e3418dfd057b1e31087bfbf8e69b)), closes [#7131](https://github.com/bitnami/charts/issues/7131)
+* [bitnami/wordpress] Set Apache_HTTP_PORT_NUMBER (#7131) ([fd81243](https://github.com/bitnami/charts/commit/fd812430e063e3418dfd057b1e31087bfbf8e69b)), closes [#7131](https://github.com/bitnami/charts/issues/7131)
 
 ## <small>12.0.2 (2021-08-04)</small>
 

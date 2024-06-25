@@ -1,6 +1,6 @@
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 
 {{- if (or (eq .Values.executor "LocalExecutor") (eq .Values.executor "LocalKubernetesExecutor") (eq .Values.executor "SequentialExecutor")) }}

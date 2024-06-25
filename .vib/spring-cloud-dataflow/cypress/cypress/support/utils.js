@@ -1,6 +1,6 @@
 /*
  * Copyright Broadcom, Inc. All Rights Reserved.
- * SPDX-License-Identifier: APACHE-2.0
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 export let random = (Math.random() + 1).toString(36).substring(7);

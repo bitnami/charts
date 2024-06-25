@@ -1,6 +1,6 @@
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 
 {{- if and .Values.dashboards.persistence.enabled (not .Values.dashboards.persistence.existingClaim) -}}

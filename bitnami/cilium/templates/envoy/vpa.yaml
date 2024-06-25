@@ -1,6 +1,6 @@
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 
 {{- if and (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") .Values.envoy.autoscaling.vpa.enabled }}

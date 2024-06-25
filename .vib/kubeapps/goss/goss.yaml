@@ -1,5 +1,5 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
-# SPDX-License-Identifier: APACHE-2.0
+# SPDX-License-Identifier: Apache-2.0
 
 http:
   http://kubeapps-internal-kubeappsapis:{{ .Vars.kubeappsapis.service.ports.http }}/core/plugins/v1alpha1/configured-plugins:

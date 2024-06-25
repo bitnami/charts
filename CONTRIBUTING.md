@@ -23,7 +23,7 @@ When submitting a PR make sure that it:
 ```yaml
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 ```
 
@@ -88,7 +88,7 @@ There are five major technical requirements to add a new Helm chart to our catal
 ```yaml
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 ```
 
@@ -96,7 +96,7 @@ SPDX-License-Identifier: APACHE-2.0
 
 ```yaml
 # Copyright Broadcom, Inc. All Rights Reserved.
-# SPDX-License-Identifier: APACHE-2.0
+# SPDX-License-Identifier: Apache-2.0
 ```
 
 Please, note we will need to check internally and evaluate the feasibility of adding the new solution to the catalog. Due to limited resources this step could take some time.

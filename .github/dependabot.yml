@@ -1,5 +1,5 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
-# SPDX-License-Identifier: APACHE-2.0
+# SPDX-License-Identifier: Apache-2.0
 
 version: 2
 # Check for updates to GitHub Actions every week

@@ -1,6 +1,6 @@
 {{- /*
 Copyright Broadcom, Inc. All Rights Reserved.
-SPDX-License-Identifier: APACHE-2.0
+SPDX-License-Identifier: Apache-2.0
 */}}
 
 {{- if or .Release.IsUpgrade (ne .Values.sentinel.service.type "NodePort")  .Values.sentinel.service.nodePorts.valkey -}}
