@@ -153,7 +153,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.relay.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.hubble.relay.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hubble.relay.livenessProbe "enabled") "context" $) | nindent 12 }}
-            grpc:
+            tcpSocket:
               port: {{ .Values.hubble.relay.containerPorts.grpc }}
           {{- end }}
           {{- if .Values.hubble.relay.customReadinessProbe }}
@@ -162,21 +162,16 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hubble.relay.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - grpc-health-probe
-                - -addr=127.0.0.1:{{ .Values.hubble.relay.containerPorts.grpc }}
-                {{- if .Values.hubble.tls.enabled }}
-                - -tls
-                - -tls-ca-cert=/certs/client/ca.crt
-                - -tls-client-cert=/certs/client/tls.crt
-                - -tls-client-key=/certs/client/tls.key
-                - -tls-server-name={{ include "cilium.hubble.relay.fullname" . }}
-               {{- end }}
+                - /bin/bash
+                - -ec
+                - |
+                  grpc-health-probe -addr=127.0.0.1:{{ .Values.hubble.relay.containerPorts.grpc }} -rpc-timeout=2s {{- if .Values.hubble.tls.enabled }} -tls -tls-ca-cert=/certs/client/ca.crt -tls-client-cert=/certs/client/tls.crt -tls-client-key=/certs/client/tls.key -tls-server-name="*.hubble-relay.cilium.io"{{- end }}
           {{- end }}
           {{- if .Values.hubble.relay.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.relay.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.hubble.relay.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hubble.relay.startupProbe "enabled") "context" $) | nindent 12 }}
-            grpc:
+            tcpSocket:
               port: {{ .Values.hubble.relay.containerPorts.grpc }}
           {{- end }}
           {{- end }}
@@ -226,7 +221,7 @@ spec:
                 path: tls.key
         - name: client-cert
           secret:
-            secretName: {{ template "cilium.hubble.tls.client.secretName" . }}
+            secretName: {{ template "cilium.hubble.tls.relayClient.secretName" . }}
             items:
               - key: ca.crt
                 path: ca.crt

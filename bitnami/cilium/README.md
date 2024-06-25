@@ -187,6 +187,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `configuration`          | Specify content for Cilium common configuration (basic one auto-generated based on other values otherwise)          | `{}`            |
 | `overrideConfiguration`  | Cilium common configuration override. Values defined here takes precedence over the ones defined at `configuration` | `{}`            |
 | `existingConfigmap`      | The name of an existing ConfigMap with your custom Cilium configuration                                             | `""`            |
+| `clusterName`            | Name of the Cilium cluster                                                                                          | `default`       |
 | `azure.enabled`          | Enable Azure integration                                                                                            | `false`         |
 | `azure.resourceGroup`    | When enabling Azure integration, set the Azure Resource Group                                                       | `""`            |
 | `azure.tenantId`         | When enabling Azure integration, set the Azure Tenant ID                                                            | `""`            |
@@ -726,9 +727,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `hubble.tls.relay.cert`                                   | TLS certificate for Hubble relay. Ignored if `hubble.tls.relay.existingSecret` is set                  | `""`    |
 | `hubble.tls.relay.key`                                    | TLS key for Hubble relay. Ignored if `hubble.tls.relay.existingSecret` is set                          | `""`    |
 | `hubble.tls.relay.existingSecret`                         | The name of an existing Secret containing the Hubble relay certificates for TLS                        | `""`    |
-| `hubble.tls.client.cert`                                  | TLS certificate for Hubble client(s). Ignored if `hubble.tls.client.existingSecret` is set             | `""`    |
-| `hubble.tls.client.key`                                   | TLS key for Hubble client(s). Ignored if `hubble.tls.client.existingSecret` is set                     | `""`    |
-| `hubble.tls.client.existingSecret`                        | The name of an existing Secret containing the Hubble client(s) certificates for TLS                    | `""`    |
+| `hubble.tls.relayClient.cert`                             | TLS certificate for Hubble Relay client(s). Ignored if `hubble.tls.relayClient.existingSecret` is set  | `""`    |
+| `hubble.tls.relayClient.key`                              | TLS key for Hubble Relay client(s). Ignored if `hubble.tls.relayClient.existingSecret` is set          | `""`    |
+| `hubble.tls.relayClient.existingSecret`                   | The name of an existing Secret containing the Hubble Relay client(s) certificates for TLS              | `""`    |
 
 ### Hubble Peers Service Parameters
 

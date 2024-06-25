@@ -76,6 +76,9 @@ overrideConfiguration: {}
 ## @param existingConfigmap The name of an existing ConfigMap with your custom Cilium configuration
 ##
 existingConfigmap: ""
+## @param clusterName Name of the Cilium cluster
+##
+clusterName: default
 ## @param azure.enabled Enable Azure integration
 ## @param azure.resourceGroup When enabling Azure integration, set the Azure Resource Group
 ## @param azure.tenantId When enabling Azure integration, set the Azure Tenant ID
@@ -1980,9 +1983,9 @@ hubble:
     ## @param hubble.tls.relay.cert TLS certificate for Hubble relay. Ignored if `hubble.tls.relay.existingSecret` is set
     ## @param hubble.tls.relay.key TLS key for Hubble relay. Ignored if `hubble.tls.relay.existingSecret` is set
     ## @param hubble.tls.relay.existingSecret The name of an existing Secret containing the Hubble relay certificates for TLS
-    ## @param hubble.tls.client.cert TLS certificate for Hubble client(s). Ignored if `hubble.tls.client.existingSecret` is set
-    ## @param hubble.tls.client.key TLS key for Hubble client(s). Ignored if `hubble.tls.client.existingSecret` is set
-    ## @param hubble.tls.client.existingSecret The name of an existing Secret containing the Hubble client(s) certificates for TLS
+    ## @param hubble.tls.relayClient.cert TLS certificate for Hubble Relay client(s). Ignored if `hubble.tls.relayClient.existingSecret` is set
+    ## @param hubble.tls.relayClient.key TLS key for Hubble Relay client(s). Ignored if `hubble.tls.relayClient.existingSecret` is set
+    ## @param hubble.tls.relayClient.existingSecret The name of an existing Secret containing the Hubble Relay client(s) certificates for TLS
     ##
     ca: ""
     existingCASecret: ""
@@ -1994,7 +1997,7 @@ hubble:
       cert: ""
       key: ""
       existingSecret: ""
-    client:
+    relayClient:
       cert: ""
       key: ""
       existingSecret: ""

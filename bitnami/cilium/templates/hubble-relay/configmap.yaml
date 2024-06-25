@@ -26,9 +26,9 @@ pprof-listen-address: "localhost"
 pprof-port: {{ printf "%d" (int .Values.hubble.relay.containerPorts.pprof) | quote }}
 {{- end }}
 {{- if .Values.hubble.tls.enabled }}
-tls-hubble-client-cert-file: /certs/client/tls.crt
-tls-hubble-client-key-file: /certs/client/tls.key
-tls-hubble-server-ca-files: /certs/client/ca.crt
+tls-hubble-client-cert-file: /certs/relay/tls.crt
+tls-hubble-client-key-file: /certs/relay/tls.key
+tls-hubble-server-ca-files: /certs/relay/ca.crt
 tls-relay-server-cert-file: /certs/relay/tls.crt
 tls-relay-server-key-file: /certs/relay/tls.key
 tls-relay-client-ca-files: /certs/relay/ca.crt

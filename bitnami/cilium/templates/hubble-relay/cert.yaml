@@ -17,14 +17,15 @@ metadata:
   {{- end }}
 spec:
   secretName: {{ template "cilium.hubble.tls.relay.secretName" . }}
-  commonName: {{ printf "%s.%s.svc.%s" (include "cilium.hubble.relay.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain }}
+  commonName: "*.hubble-relay.cilium.io"
   issuerRef:
     name: {{ printf "%s-ca-issuer" (include "common.names.fullname" .) }}
     kind: Issuer
   subject:
     organizations:
-      - "Hubble"
+      - "Cilium"
   dnsNames:
+    - '*.hubble-relay.cilium.io'
     - '*.{{ include "common.names.namespace" . }}'
     - '*.{{ include "common.names.namespace" . }}.svc'
     - '*.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}'

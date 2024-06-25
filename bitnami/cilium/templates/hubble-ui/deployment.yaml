@@ -311,7 +311,7 @@ spec:
         {{- if .Values.hubble.tls.enabled  }}
         - name: client-cert
           secret:
-            secretName: {{ template "cilium.hubble.tls.client.secretName" . }}
+            secretName: {{ template "cilium.hubble.tls.relayClient.secretName" . }}
             items:
               - key: ca.crt
                 path: ca.crt
