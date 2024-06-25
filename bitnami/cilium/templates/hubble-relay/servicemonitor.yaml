@@ -9,8 +9,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "cilium.hubble.relay.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.hubble.relay.metrics.serviceMonitor.namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.hubble.relay.image "chart" .Chart ) ) }}  
-  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.hubble.relay.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" .) }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.hubble.relay.metrics.serviceMonitor.labels .Values.commonLabels ) "context" .) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
     app.kubernetes.io/component: hubble-relay
