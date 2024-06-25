@@ -31,7 +31,7 @@ Watch the Cilium Agent daemonset status using the command:
 {{- end }}
 
 {{- if .Values.agent.cniPlugin.install }}
-IMPORTANT: Please ensure that {{ .Values.agent.cniPlugin.hostCNIBinDir }} and {{ .Values.agent.cniPlugin.hostCNINetDir }} are where the CNI binary and configuration files are located in the Kubernetes nodes, otherwise the deployment will fail.
+IMPORTANT: Please ensure that {{ include "cilium.agent.hostCNIBinDir" . }} and {{ include "cilium.agent.hostCNINetDir" . }} are where the CNI binary and configuration files are located in the Kubernetes nodes, otherwise the deployment will fail.
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.agent.image }}

@@ -97,13 +97,10 @@ spec:
           {{- if .Values.operator.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
-          command:
           {{- if .Values.diagnosticMode.enabled }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.operator.command }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.operator.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else }}
-            - cilium-operator-generic
+          command: {{- include "cilium.operator.command" . | nindent 12 }}
           {{- end }}
           args:
           {{- if .Values.diagnosticMode.enabled }}
@@ -126,6 +123,46 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
+            {{- if .Values.azure.enabled }}
+            {{- if .Values.azure.subscriptionID }}
+            - name: AZURE_SUBSCRIPTION_ID
+              value: {{ .Values.azure.subscriptionID }}
+            {{- end }}
+            {{- if .Values.azure.tenantID }}
+            - name: AZURE_TENANT_ID
+              value: {{ .Values.azure.tenantID }}
+            {{- end }}
+            {{- if .Values.azure.resourceGroup }}
+            - name: AZURE_RESOURCE_GROUP
+              value: {{ .Values.azure.resourceGroup }}
+            {{- end }}
+            - name: AZURE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-azure" (include "cilium.operator.fullname" .) | trunc 63 | trimSuffix "-" }}
+                  key: client-id
+            - name: AZURE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-azure" (include "cilium.operator.fullname" .) | trunc 63 | trimSuffix "-" }}
+                  key: client-secret
+            {{- end }}
+            {{- if .Values.aws.enabled }}
+            {{- if .Values.aws.region }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .Values.aws.region }}
+            {{- end }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-aws" (include "cilium.operator.fullname" .) | trunc 63 | trimSuffix "-" }}
+                  key: access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-aws" (include "cilium.operator.fullname" .) | trunc 63 | trimSuffix "-" }}
+                  key: secret-access-key
+            {{- end }}
             {{- if .Values.operator.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -151,6 +151,41 @@ Return the name of the secret containing the TLS certificates for Hubble client(
 {{- end -}}
 
 {{/*
+Return the host's CNI bin directory
+*/}}
+{{- define "cilium.agent.hostCNIBinDir" -}}
+{{- if .Values.agent.cniPlugin.hostCNIBinDir -}}
+    {{- print .Values.agent.cniPlugin.hostCNIBinDir -}}
+{{- else if .Values.gcp.enabled -}}
+    {{- print "/home/kubernetes/bin" -}}
+{{- else -}}
+    {{- print "/opt/cni/bin" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the host's CNI net configuration directory
+*/}}
+{{- define "cilium.agent.hostCNINetDir" -}}
+{{- default "/etc/cni/net.d" .Values.agent.cniPlugin.hostCNINetDir -}}
+{{- end -}}
+
+{{/*
+Return the default Cilium Operator command
+*/}}
+{{- define "cilium.operator.command" -}}
+{{- if .Values.operator.command -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.operator.command "context" .) -}}
+{{- else if .Values.azure.enabled -}}
+- cilium-operator-azure
+{{- else if .Values.aws.enabled -}}
+- cilium-operator-aws
+{{- else -}}
+- cilium-operator-generic
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the key-value store endpoints
 */}}
 {{- define "cilium.kvstore.endpoints" -}}
@@ -182,6 +217,7 @@ Compile all warnings into a single message.
 {{- define "cilium.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "cilium.validateValues.kvstore" .) -}}
+{{- $messages := append $messages (include "cilium.validateValues.provider" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -199,3 +235,23 @@ etcd.enabled and externalKvstore.enabled
     Both etcd and externalKvstore are enabled. Please enable only one key-value store.
 {{- end -}}
 {{- end -}}
+
+{{/*
+Validate values of Cilium - Cloud Provider
+*/}}
+{{- define "cilium.validateValues.provider" -}}
+{{- if and .Values.azure.enabled .Values.aws.enabled .Values.gcp.enabled -}}
+azure.enabled, aws.enabled and gcp.enabled
+    All cloud providers are enabled. Please enable only one cloud provider.
+{{- else if and .Values.azure.enabled .Values.aws.enabled -}}
+azure.enabled and aws.enabled
+    Both AWS and Azure are enabled. Please enable only one cloud provider.
+{{- else if and .Values.azure.enabled .Values.gcp.enabled -}}
+azure.enabled amd gcp.enabled
+    Both gcp and Azure are enabled. Please enable only one cloud provider.
+{{- else if and .Values.aws.enabled .Values.gcp.enabled -}}
+aws.enabled and gcp.enabled
+    Both gcp and AWS are enabled. Please enable only one cloud provider.
+{{- end -}}
+{{- end -}}
+
