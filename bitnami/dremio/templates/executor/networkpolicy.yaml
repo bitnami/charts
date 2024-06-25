@@ -91,6 +91,7 @@ spec:
         - port: {{ $.Values.dremio.containerPorts.fabric }}
         {{- if $.Values.metrics.enabled }}
         - port: {{ $.Values.dremio.containerPorts.jmx }}
+        - port: {{ $.Values.metrics.containerPorts.metrics }}
         {{- end }}
         {{- range $executorValues.extraContainerPorts }}
         - port: {{ . }}

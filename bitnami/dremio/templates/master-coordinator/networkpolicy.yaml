@@ -85,6 +85,7 @@ spec:
         - port: {{ .Values.dremio.containerPorts.conduit }}
         {{- if .Values.metrics.enabled }}
         - port: {{ .Values.dremio.containerPorts.jmx }}
+        - port: {{ .Values.metrics.containerPorts.metrics }}
         {{- end }}
         {{- range .Values.masterCoordinator.extraContainerPorts }}
         - port: {{ . }}
