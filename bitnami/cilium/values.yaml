@@ -1980,9 +1980,9 @@ hubble:
     ## @param hubble.tls.relay.cert TLS certificate for Hubble relay. Ignored if `hubble.tls.relay.existingSecret` is set
     ## @param hubble.tls.relay.key TLS key for Hubble relay. Ignored if `hubble.tls.relay.existingSecret` is set
     ## @param hubble.tls.relay.existingSecret The name of an existing Secret containing the Hubble relay certificates for TLS
-    ## @param hubble.tls.clients.cert TLS certificate for Hubble client(s). Ignored if `hubble.tls.clients.existingSecret` is set
-    ## @param hubble.tls.clients.key TLS key for Hubble client(s). Ignored if `hubble.tls.clients.existingSecret` is set
-    ## @param hubble.tls.clients.existingSecret The name of an existing Secret containing the Hubble client(s) certificates for TLS
+    ## @param hubble.tls.client.cert TLS certificate for Hubble client(s). Ignored if `hubble.tls.client.existingSecret` is set
+    ## @param hubble.tls.client.key TLS key for Hubble client(s). Ignored if `hubble.tls.client.existingSecret` is set
+    ## @param hubble.tls.client.existingSecret The name of an existing Secret containing the Hubble client(s) certificates for TLS
     ##
     ca: ""
     existingCASecret: ""
@@ -1994,7 +1994,7 @@ hubble:
       cert: ""
       key: ""
       existingSecret: ""
-    clients:
+    client:
       cert: ""
       key: ""
       existingSecret: ""
@@ -2647,7 +2647,7 @@ hubble:
       image:
         registry: docker.io
         repository: bitnami/hubble-ui
-        tag: 0.13.0-debian-12-r0
+        tag: 0.13.1-debian-12-r0
         digest: ""
         ## Specify a imagePullPolicy
         ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2814,7 +2814,7 @@ hubble:
       image:
         registry: docker.io
         repository: bitnami/hubble-ui-backend
-        tag: 0.13.0-debian-12-r0
+        tag: 0.13.1-debian-12-r0
         digest: ""
         ## Specify a imagePullPolicy
         ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

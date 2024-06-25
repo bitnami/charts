@@ -726,9 +726,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `hubble.tls.relay.cert`                                   | TLS certificate for Hubble relay. Ignored if `hubble.tls.relay.existingSecret` is set                  | `""`    |
 | `hubble.tls.relay.key`                                    | TLS key for Hubble relay. Ignored if `hubble.tls.relay.existingSecret` is set                          | `""`    |
 | `hubble.tls.relay.existingSecret`                         | The name of an existing Secret containing the Hubble relay certificates for TLS                        | `""`    |
-| `hubble.tls.clients.cert`                                 | TLS certificate for Hubble client(s). Ignored if `hubble.tls.clients.existingSecret` is set            | `""`    |
-| `hubble.tls.clients.key`                                  | TLS key for Hubble client(s). Ignored if `hubble.tls.clients.existingSecret` is set                    | `""`    |
-| `hubble.tls.clients.existingSecret`                       | The name of an existing Secret containing the Hubble client(s) certificates for TLS                    | `""`    |
+| `hubble.tls.client.cert`                                  | TLS certificate for Hubble client(s). Ignored if `hubble.tls.client.existingSecret` is set             | `""`    |
+| `hubble.tls.client.key`                                   | TLS key for Hubble client(s). Ignored if `hubble.tls.client.existingSecret` is set                     | `""`    |
+| `hubble.tls.client.existingSecret`                        | The name of an existing Secret containing the Hubble client(s) certificates for TLS                    | `""`    |
 
 ### Hubble Peers Service Parameters
 

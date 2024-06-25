@@ -11,7 +11,7 @@ Return the Hubbley Relay configuration.
 {{- include "common.tplvalues.render" (dict "value" .Values.hubble.relay.configuration .) }}
 {{- else }}
 cluster-name: default
-peer-service: {{ printf "%s:%d" (printf "%s-hubble-peers" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") (int .Values.hubble.peers.service.port) | quote }}
+peer-service: {{ printf "%s.%s.svc.%s:%d" (printf "%s-hubble-peers" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") (include "common.names.namespace" .) .Values.clusterDomain (int .Values.hubble.peers.service.port) | quote }}
 listen-address: {{ printf ":%d" (int .Values.hubble.relay.containerPorts.grpc) | quote }}
 {{- if .Values.hubble.relay.metrics.enabled }}
 metrics-listen-address: {{ printf ":%d" (int .Values.hubble.relay.containerPorts.metrics) | quote }}
@@ -52,9 +52,14 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
+{{- $configuration := include "cilium.hubble.relay.configuration" . | fromYaml -}}
+{{- if .Values.hubble.relay.overrideConfiguration }}
+{{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.hubble.relay.overrideConfiguration "context" .) | fromYaml }}
+{{- $configuration = mustMergeOverwrite $configuration $overrideConfiguration }}
+{{- end }}
   # Hubble relay configuration to be mounted at /etc/hubble-relay/config.yaml (hardcoded value)
   # ref: https://github.com/cilium/cilium/blob/main/hubble-relay/cmd/root.go#L18
   # ref: https://github.com/cilium/cilium/blob/main/hubble-relay/cmd/serve/serve.go
   config.yaml: |
-{{- mustMergeOverwrite (include "cilium.hubble.relay.configuration" . | fromYaml) .Values.hubble.relay.overrideConfiguration | toYaml | nindent 4 }}
+{{- $configuration | toYaml | nindent 4 }}
 {{- end }}

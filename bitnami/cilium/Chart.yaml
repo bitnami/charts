@@ -14,9 +14,9 @@ annotations:
     - name: hubble-relay
       image: docker.io/bitnami/hubble-relay:1.15.6-debian-12-r0
     - name: hubble-ui
-      image: docker.io/bitnami/hubble-ui:0.13.0-debian-12-r0
+      image: docker.io/bitnami/hubble-ui:0.13.1-debian-12-r0
     - name: hubble-ui-backend
-      image: docker.io/bitnami/hubble-ui-backend:0.13.0-debian-12-r0
+      image: docker.io/bitnami/hubble-ui-backend:0.13.1-debian-12-r0
 apiVersion: v2
 appVersion: 1.15.6
 dependencies:
