@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.2.0 (2024-06-24)
+## 1.0.0 (2024-06-25)
 
-* [bitnami/cilium]: Simplify installation for main cloud providers ([#27509](https://github.com/bitnami/charts/pull/27509))
+* [bitnami/cilium] Add support for Hubble ([#27526](https://github.com/bitnami/charts/pull/27526))
+
+## 0.2.0 (2024-06-25)
+
+* [bitnami/cilium]: Simplify installation for main cloud providers (#27509) ([6d60b9e](https://github.com/bitnami/charts/commit/6d60b9ed4f952ef73dda286aff3c97db36d20105)), closes [#27509](https://github.com/bitnami/charts/issues/27509)
 
 ## <small>0.1.2 (2024-06-24)</small>
 
