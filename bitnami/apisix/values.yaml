@@ -294,6 +294,7 @@ dataPlane:
           prefix: /apisix
           timeout: 30
         {{- end }}
+      {{- if or .Values.etcd.enabled .Values.externalEtcd.servers }}
       etcd:
         host:
           {{- if .Values.etcd.enabled  }}
@@ -314,6 +315,7 @@ dataPlane:
         user: "{{ print "{{APISIX_ETCD_USER}}" }}"
         password: "{{ print "{{APISIX_ETCD_PASSWORD}}" }}"
         {{- end }}
+      {{- end }}
       {{- if .Values.dataPlane.tls.enabled }}
       certs:
         {{- if .Values.dataPlane.tls.enabled }}

@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 1.58.0-debian-12-r0
+  tag: 1.58.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1494,7 +1494,7 @@ migration:
 cqlshImage:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.13-debian-12-r0
+  tag: 4.0.13-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1555,10 +1555,12 @@ cassandra:
   ## Database credentials
   ## @param cassandra.dbUser.user Cassandra admin user
   ## @param cassandra.dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ## @param cassandra.dbUser.existingSecret Name of an existing secret containing the user password.
   ##
   dbUser:
     user: bn_jaeger
     password: ""
+    existingSecret: ""
   ## Cassandra service port
   ## @param cassandra.service.ports.cql Cassandra cql port
   service:

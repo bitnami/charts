@@ -330,5 +330,7 @@ rules:
     - operatorpolicies/status
     verbs:
     - get
+    - patch
+    - update
   {{- end }}
 {{- end }}

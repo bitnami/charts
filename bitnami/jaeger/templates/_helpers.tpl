@@ -29,6 +29,13 @@ Create the name of the query deployment
 {{- end -}}
 
 {{/*
+Create the name of the query deployment
+*/}}
+{{- define "jaeger.cassandra.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "jaeger.imagePullSecrets" -}}
@@ -143,9 +150,9 @@ Create the cassandra secret name
 */}}
 {{- define "jaeger.cassandra.secretName" -}}
     {{- if not .Values.cassandra.enabled -}}
-        {{- .Values.externalDatabase.existingSecret -}}
+        {{- tpl .Values.externalDatabase.existingSecret $ -}}
     {{- else -}}
-        {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
+        {{- default (include "jaeger.cassandra.fullname" .) .Values.cassandra.dbUser.existingSecret -}}
     {{- end -}}
 {{- end -}}
 

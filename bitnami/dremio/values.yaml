@@ -88,8 +88,7 @@ dremio:
   ##
   image:
     registry: docker.io
-    # TODO: Change testing image
-    repository: javsalgar/dremio
+    repository: bitnami/dremio
     tag: 25.0.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
