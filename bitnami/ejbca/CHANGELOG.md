@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.5 (2024-06-18)
+## 14.2.6 (2024-06-25)
 
-* [bitnami/ejbca] Release 14.2.5 ([#27338](https://github.com/bitnami/charts/pull/27338))
+* [bitnami/ejbca] Release 14.2.6 ([#27524](https://github.com/bitnami/charts/pull/27524))
+
+## <small>14.2.5 (2024-06-18)</small>
+
+* [bitnami/ejbca] Release 14.2.5 (#27338) ([a184db3](https://github.com/bitnami/charts/commit/a184db3b758b8f65c8a650dbf6d91016e87d0196)), closes [#27338](https://github.com/bitnami/charts/issues/27338)
 
 ## <small>14.2.4 (2024-06-17)</small>
 
