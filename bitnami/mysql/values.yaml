@@ -427,7 +427,7 @@ primary:
   ##
   startupProbe:
     enabled: true
-    initialDelaySeconds: 15
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 1
     failureThreshold: 10
@@ -856,7 +856,7 @@ secondary:
   ##
   startupProbe:
     enabled: true
-    initialDelaySeconds: 15
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 1
     failureThreshold: 15
