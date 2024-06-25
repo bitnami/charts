@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.1 (2024-06-22)
+## 2.5.0 (2024-06-25)
 
-* [bitnami/jaeger] Release 2.4.1 ([#27500](https://github.com/bitnami/charts/pull/27500))
+* [bitnami/jaeger] Add init containers resources to Jaeger chart ([#27462](https://github.com/bitnami/charts/pull/27462))
+
+## <small>2.4.1 (2024-06-22)</small>
+
+* [bitnami/jaeger] Release 2.4.1 (#27500) ([7dc1439](https://github.com/bitnami/charts/commit/7dc14399f43185a57254bfe91552eb28c3556527)), closes [#27500](https://github.com/bitnami/charts/issues/27500)
 
 ## 2.4.0 (2024-06-21)
 
