@@ -2,7 +2,7 @@
 
 ## 29.3.5 (2024-06-26)
 
-* [bitnami/kafka] Release 29.3.5 ()
+* [bitnami/kafka] Release 29.3.5 ([#27534](https://github.com/bitnami/charts/pull/27534))
 
 ## 29.3.4 (2024-06-18)
 
