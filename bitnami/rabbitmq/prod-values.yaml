@@ -613,7 +613,7 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: 
-    - waslaappstgworker2v
+    - waslaappstgworker1v
 
 
 ## @param affinity Affinity for pod assignment. Evaluated as a template
