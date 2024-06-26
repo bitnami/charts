@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.4.4 (2024-06-18)
+## 21.5.0 (2024-06-26)
 
-* [bitnami/keycloak] fix Keycloak HTTP schema for edge proxy mode ([#27436](https://github.com/bitnami/charts/pull/27436))
+* [bitnami/keycloak] Add support for minReadySeconds ([#27550](https://github.com/bitnami/charts/pull/27550))
+
+## <small>21.4.4 (2024-06-20)</small>
+
+* [bitnami/keycloak] fix Keycloak HTTP schema for edge proxy mode (#27436) ([f04548a](https://github.com/bitnami/charts/commit/f04548a1dbae55d5dbad34cea87e6972f97c9bb7)), closes [#27436](https://github.com/bitnami/charts/issues/27436)
 
 ## <small>21.4.3 (2024-06-18)</small>
 
