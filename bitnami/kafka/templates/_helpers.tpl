@@ -753,6 +753,9 @@ Init container definition for Kafka initialization
     {{- if and $externalAccess.service.externalIPs (empty $externalAccess.service.nodePorts)}}
     - name: EXTERNAL_ACCESS_PORT
       value: {{ $externalAccess.service.ports.external | quote }}
+    {{- else if $externalAccess.service.advertisedExternalPort }}
+    - name: EXTERNAL_ACCESS_PORT
+      value: {{ $externalAccess.service.advertisedExternalPort | quote }}
     {{- else }}
     - name: EXTERNAL_ACCESS_PORTS_LIST
       value: {{ join "," $externalAccess.service.nodePorts | quote }}
