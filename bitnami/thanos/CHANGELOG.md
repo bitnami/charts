@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.9 (2024-06-18)
+## 15.7.10 (2024-06-24)
 
-* [bitnami/thanos] Release 15.7.9 ([#27424](https://github.com/bitnami/charts/pull/27424))
+* [bitnami/thanos] Add validation for Thanos receive configuration ([#27501](https://github.com/bitnami/charts/pull/27501))
+
+## <small>15.7.9 (2024-06-18)</small>
+
+* [bitnami/thanos] Release 15.7.9 (#27424) ([ef0b51e](https://github.com/bitnami/charts/commit/ef0b51e43f2de5b48901baca609aeac475513d8c)), closes [#27424](https://github.com/bitnami/charts/issues/27424)
 
 ## <small>15.7.8 (2024-06-18)</small>
 
