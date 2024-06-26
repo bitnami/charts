@@ -305,16 +305,13 @@ jobs:
           fi
   chart-score:
     runs-on: ubuntu-latest
-    needs: [get-chart, update-pr]
+    needs: [get-chart]
     name: Get chart latest Kubescape score
+    permissions:
+      contents: read
     outputs:
       threshold: ${{ steps.set-output.outputs.threshold }}
-    if: |
-      needs.get-chart.outputs.result == 'ok' &&
-      needs.update-pr.outputs.result == 'skip' &&
-      (
-        contains(github.event.pull_request.labels.*.name, 'verify') || (github.event.action == 'labeled' && github.event.label.name == 'verify')
-      )
+    if: needs.get-chart.outputs.result == 'ok'
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         name: Checkout 'main' branch
