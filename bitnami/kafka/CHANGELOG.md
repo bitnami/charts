@@ -2,11 +2,11 @@
 
 ## 29.3.5 (2024-06-26)
 
-* [bitnami/kafka] Release 29.3.5 ([#27534](https://github.com/bitnami/charts/pull/27534))
+* [bitnami/kafka] Add custom port for advertised listeners ([#27534](https://github.com/bitnami/charts/pull/27534))
 
-## 29.3.4 (2024-06-18)
+## <small>29.3.4 (2024-06-18)</small>
 
-* [bitnami/kafka] Release 29.3.4 ([#27362](https://github.com/bitnami/charts/pull/27362))
+* [bitnami/kafka] Release 29.3.4 (#27362) ([39074dc](https://github.com/bitnami/charts/commit/39074dcf4c92f7b875f1ddb2bc87443b05e7592d)), closes [#27362](https://github.com/bitnami/charts/issues/27362)
 
 ## <small>29.3.3 (2024-06-17)</small>
 
