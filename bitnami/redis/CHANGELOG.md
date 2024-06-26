@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.5.5 (2024-06-18)
+## 19.6.0 (2024-06-24)
 
-* [bitnami/redis] Release 19.5.5 ([#27411](https://github.com/bitnami/charts/pull/27411))
+* [bitnami/redis] Allow setting revisionHistoryLimit ([#27498](https://github.com/bitnami/charts/pull/27498))
+
+## <small>19.5.5 (2024-06-18)</small>
+
+* [bitnami/redis] Release 19.5.5 (#27411) ([ea96081](https://github.com/bitnami/charts/commit/ea96081967711fbb45815b51363a9c5818623a6f)), closes [#27411](https://github.com/bitnami/charts/issues/27411)
 
 ## <small>19.5.4 (2024-06-17)</small>
 
