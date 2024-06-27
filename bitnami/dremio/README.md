@@ -6,6 +6,8 @@ Dremio is an open-source self-service data access tool that provides high-perfor
 
 [Overview of Dremio](https://www.dremio.com/)
 
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+
 ## TL;DR
 
 ```console
