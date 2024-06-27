@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.8 (2024-06-18)
+## 1.4.9 (2024-06-27)
 
-* [bitnami/vault] Release 1.4.8 ([#27426](https://github.com/bitnami/charts/pull/27426))
+* [bitnami/vault] Release 1.4.9 ([#27552](https://github.com/bitnami/charts/pull/27552))
+
+## <small>1.4.8 (2024-06-18)</small>
+
+* [bitnami/vault] Release 1.4.8 (#27426) ([b9253d6](https://github.com/bitnami/charts/commit/b9253d6545981ad6235bff2b838a8664cc62d9d6)), closes [#27426](https://github.com/bitnami/charts/issues/27426)
 
 ## <small>1.4.7 (2024-06-17)</small>
 
