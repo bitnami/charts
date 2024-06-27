@@ -69,12 +69,6 @@
             "endpoint": "lb-concourse-web-http",
             "app_protocol": "HTTP"
           }
-        },
-        {
-          "action_id": "kubescape",
-          "params": {
-            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
-          }
         }
       ]
     }
