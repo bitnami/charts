@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2024-06-27)
+## 0.1.3 (2024-06-27)
 
-* [bitnami/dremio] Release 0.1.2 ([#27557](https://github.com/bitnami/charts/pull/27557))
+* [bitnami/dremio] Release 0.1.3 ([#27563](https://github.com/bitnami/charts/pull/27563))
+
+## <small>0.1.2 (2024-06-27)</small>
+
+* [bitnami/dremio] Release 0.1.2 (#27557) ([a5ef5bd](https://github.com/bitnami/charts/commit/a5ef5bdd57f8d641e5ba2ab0553af2ec0eec45aa)), closes [#27557](https://github.com/bitnami/charts/issues/27557)
 
 ## <small>0.1.1 (2024-06-25)</small>
 
