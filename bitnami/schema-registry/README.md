@@ -122,7 +122,7 @@ kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.
 In case you want to add extra environment variables to Schema Registry, you can use `extraEnvs` parameter. For instance:
 
 ```yaml
-extraEnvs:
+extraEnvVars:
   - name: FOO
     value: BAR
 ```
