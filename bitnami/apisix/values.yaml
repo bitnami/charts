@@ -2676,6 +2676,12 @@ ingressController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ingressController.ingressClass.name IngressClass that will be be used to implement the APISIX Ingress
+  ## @param ingressController.ingressClass.annotations Additional annotations for the APISIX IngressClass
+  ##
+  ingressClass:
+    name: "apisix"
+    annotations: {}
   ## @param ingressController.defaultConfig [string] APISIX Dashboard configuration (evaluated as a template)
   ##
   defaultConfig: |
@@ -2695,8 +2701,8 @@ ingressController:
       kubeconfig: ""
       resync_interval: "6h"
       election_id: "{{ include "apisix.ingress-controller.fullname" . }}-leader"
-      ingress_class: "apisix"
-      ingress_version: "networking/v1"
+      ingress_class: {{ .Values.ingressController.ingressClass.name | quote }}
+      ingress_version: {{ include "common.capabilities.ingress.apiVersion" . | quote }}
       watch_endpointslices: false
       apisix_route_version: "apisix.apache.org/v2"
       enable_gateway_api: false
