@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.5.0 (2024-06-26)
+## 21.5.0 (2024-06-27)
 
 * [bitnami/keycloak] Add support for minReadySeconds ([#27550](https://github.com/bitnami/charts/pull/27550))
 
