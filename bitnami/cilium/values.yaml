@@ -81,24 +81,26 @@ existingConfigmap: ""
 clusterName: default
 ## @param azure.enabled Enable Azure integration
 ## @param azure.resourceGroup When enabling Azure integration, set the Azure Resource Group
-## @param azure.tenantId When enabling Azure integration, set the Azure Tenant ID
-## @param azure.subscriptionId When enabling Azure integration, set the Azure Subscription ID
+## @param azure.tenantID When enabling Azure integration, set the Azure Tenant ID
+## @param azure.subscriptionID When enabling Azure integration, set the Azure Subscription ID
 ## @param azure.clientID When enabling Azure integration, set the Azure Client ID
 ## @param azure.clientSecret When enabling Azure integration, set the Azure Client Secret
 ##
 azure:
   enabled: false
   resourceGroup: ""
-  tenantId: ""
-  subscriptionId: ""
+  tenantID: ""
+  subscriptionID: ""
   clientID: ""
   clientSecret: ""
 ## @param aws.enabled Enable AWS integration
+## @param aws.region When enabling AWS integration, set the AWS region
 ## @param aws.accessKeyID When enabling AWS integration, set the AWS Access Key ID
 ## @param aws.secretAccessKey When enabling AWS integration, set the AWS Secret Access Key
 ##
 aws:
   enabled: false
+  region: ""
   accessKeyID: ""
   secretAccessKey: ""
 ## @param gcp.enabled Enable GCP integration

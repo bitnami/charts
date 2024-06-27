@@ -190,11 +190,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `clusterName`            | Name of the Cilium cluster                                                                                          | `default`       |
 | `azure.enabled`          | Enable Azure integration                                                                                            | `false`         |
 | `azure.resourceGroup`    | When enabling Azure integration, set the Azure Resource Group                                                       | `""`            |
-| `azure.tenantId`         | When enabling Azure integration, set the Azure Tenant ID                                                            | `""`            |
-| `azure.subscriptionId`   | When enabling Azure integration, set the Azure Subscription ID                                                      | `""`            |
+| `azure.tenantID`         | When enabling Azure integration, set the Azure Tenant ID                                                            | `""`            |
+| `azure.subscriptionID`   | When enabling Azure integration, set the Azure Subscription ID                                                      | `""`            |
 | `azure.clientID`         | When enabling Azure integration, set the Azure Client ID                                                            | `""`            |
 | `azure.clientSecret`     | When enabling Azure integration, set the Azure Client Secret                                                        | `""`            |
 | `aws.enabled`            | Enable AWS integration                                                                                              | `false`         |
+| `aws.region`             | When enabling AWS integration, set the AWS region                                                                   | `""`            |
 | `aws.accessKeyID`        | When enabling AWS integration, set the AWS Access Key ID                                                            | `""`            |
 | `aws.secretAccessKey`    | When enabling AWS integration, set the AWS Secret Access Key                                                        | `""`            |
 | `gcp.enabled`            | Enable GCP integration                                                                                              | `false`         |
