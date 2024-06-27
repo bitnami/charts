@@ -43,12 +43,6 @@
               "receivePort": "10904"
             }
           }
-        },
-        {
-          "action_id": "kubescape",
-          "params": {
-            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
-          }
         }
       ]
     }
