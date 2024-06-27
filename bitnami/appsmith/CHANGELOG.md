@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.9 (2024-06-18)
+## 3.3.10 (2024-06-26)
 
-* [bitnami/appsmith] Release 3.3.9 ([#27332](https://github.com/bitnami/charts/pull/27332))
+* [bitnami/appsmith] Increase test retries for Appsmith ([#27535](https://github.com/bitnami/charts/pull/27535))
+
+## <small>3.3.9 (2024-06-18)</small>
+
+* [bitnami/appsmith] Release 3.3.9 (#27332) ([93debb6](https://github.com/bitnami/charts/commit/93debb6e5062b8303660d62f63f4b3472ffff890)), closes [#27332](https://github.com/bitnami/charts/issues/27332)
 
 ## <small>3.3.8 (2024-06-17)</small>
 
