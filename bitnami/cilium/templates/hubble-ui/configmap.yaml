@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.hubble.relay.enabled .Values.hubble.ui.enabled -}}
+{{- if and .Values.hubble.relay.enabled .Values.hubble.ui.enabled (not .Values.hubble.ui.frontend.existingServerBlockConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -19,6 +19,9 @@ metadata:
   {{- end }}
 data:
   server-block.conf: |-
+  {{- if .Values.hubble.ui.frontend.serverBlock }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.hubble.ui.frontend.serverBlock "context" $ ) | nindent 4 }}
+  {{- else }}
     server {
       listen {{ .Values.hubble.ui.frontend.containerPorts.http }};
   {{- if .Values.hubble.ui.frontend.enableIPv6 }}
@@ -63,4 +66,5 @@ data:
         }
       }
     }
+  {{- end }}
 {{- end }}

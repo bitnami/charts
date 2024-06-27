@@ -12,10 +12,12 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
     app.kubernetes.io/component: hubble-relay
-  {{- if or .Values.hubble.relay.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.hubble.relay.service.annotations .Values.commonAnnotations) "context" .) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- $defaultAnnotations := dict }}
+  {{- if .Values.hubble.relay.metrics.enabled }}
+  {{- $defaultAnnotations = dict "prometheus.io/scrape" "true" "prometheus.io/port" (.Values.hubble.relay.service.ports.metrics | quote) }}
   {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list $defaultAnnotations .Values.hubble.relay.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
 spec:
   type: {{ .Values.hubble.relay.service.type }}
   {{- if and .Values.hubble.relay.service.clusterIP (eq .Values.hubble.relay.service.type "ClusterIP") }}

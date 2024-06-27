@@ -840,7 +840,7 @@ agent:
     annotations: {}
     ## @param agent.serviceAccount.automountServiceAccountToken Automount ServiceAccount token
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   rbac:
     ## @param agent.rbac.create Specifies whether RBAC resources should be created for Cilium Agent
     ##
@@ -940,9 +940,7 @@ agent:
       port: 9962
       ## @param agent.metrics.service.annotations [object] Annotations for the Cilium Agent metrics service.
       ##
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.agent.metrics.service.port }}"
+      annotations: {}
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -1040,6 +1038,7 @@ operator:
   extraContainerPorts: []
   ## @param operator.hostNetwork Enable Host Network
   ## If hostNetwork true -> dnsPolicy is set to ClusterFirstWithHostNet
+  ## true by default as upstream does
   ##
   hostNetwork: true
   ## Configure extra options for Cilium Operator containers' liveness and readiness probes
@@ -1342,7 +1341,7 @@ operator:
     annotations: {}
     ## @param operator.serviceAccount.automountServiceAccountToken Automount ServiceAccount token
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   rbac:
     ## @param operator.rbac.create Specifies whether RBAC resources should be created for Cilium Operator
     ##
@@ -1441,9 +1440,7 @@ operator:
       port: 9963
       ## @param operator.metrics.service.annotations [object] Annotations for the metrics service.
       ##
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.operator.metrics.service.port }}"
+      annotations: {}
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -1823,7 +1820,7 @@ envoy:
     annotations: {}
     ## @param envoy.serviceAccount.automountServiceAccountToken Automount ServiceAccount token
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Cilium Envoy Network Policies Parameters
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -1904,9 +1901,7 @@ envoy:
       port: 9964
       ## @param envoy.metrics.service.annotations [object] Annotations for the Cilium Envoy metrics service.
       ##
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.envoy.metrics.service.port }}"
+      annotations: {}
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -2043,9 +2038,7 @@ hubble:
         port: 9965
         ## @param hubble.peers.metrics.service.annotations [object] Annotations for the Hubble peers metrics service.
         ##
-        annotations:
-          prometheus.io/scrape: "true"
-          prometheus.io/port: "{{ .Values.hubble.peers.metrics.service.port }}"
+        annotations: {}
       ## Prometheus Operator ServiceMonitor configuration
       ##
       serviceMonitor:
@@ -2280,7 +2273,7 @@ hubble:
     args: []
     ## @param hubble.relay.automountServiceAccountToken Mount Service Account token in Hubble Relay pods
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param hubble.relay.hostAliases Hubble Relay pods host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -2458,7 +2451,7 @@ hubble:
       annotations: {}
       ## @param hubble.relay.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     ## @section Hubble Relay Traffic Exposure Parameters
     ## Hubble Relay service parameters
     ##
@@ -2781,6 +2774,21 @@ hubble:
       ## @param hubble.ui.frontend.enableIPv6 Enable IPv6 for Hubble UI frontend
       ##
       enableIPv6: false
+      ## @param hubble.ui.frontend.serverBlock Custom server block to be used to configure NGINX (ignored if existingServerBlockConfigmap is set)
+      ## Example:
+      ## serverBlock: |-
+      ##   server {
+      ##     listen 0.0.0.0:8080;
+      ##     root /app;
+      ##     location / {
+      ##       index index.html index.php;
+      ##     }
+      ##   }
+      ##
+      serverBlock: ""
+      ## @param hubble.ui.frontend.existingServerBlockConfigmap ConfigMap with custom server block to be used to configure NGINX
+      ##
+      existingServerBlockConfigmap: ""
       ## @param hubble.ui.frontend.command Override default Hubble UI frontend container command (useful when using custom images)
       ##
       command: []
@@ -2817,7 +2825,6 @@ hubble:
       ## @param hubble.ui.backend.image.digest Hubble UI Backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
       ## @param hubble.ui.backend.image.pullPolicy Hubble UI Backend image pull policy
       ## @param hubble.ui.backend.image.pullSecrets Hubble UI Backend image pull secrets
-      ## @param hubble.ui.backend.image.debug Enable Hubble UI Backend image debug mode
       ##
       image:
         registry: docker.io
@@ -2837,7 +2844,6 @@ hubble:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
-        debug: false
       ## @param hubble.ui.backend.containerPorts.http Hubble UI backend HTTP container port
       ##
       containerPorts:
@@ -3367,7 +3373,7 @@ hubble:
       annotations: {}
       ## @param hubble.ui.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     rbac:
       ## @param hubble.ui.rbac.create Specifies whether RBAC resources should be created for Hubble UI
       ##

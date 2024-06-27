@@ -224,9 +224,12 @@ spec:
           {{- else if .Values.hubble.ui.frontend.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.hubble.ui.frontend.extraEnvVars }}
-          env: {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.extraEnvVars "context" $) | nindent 12 }}
-          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.hubble.ui.frontend.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.hubble.ui.frontend.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.frontend.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           {{- if or .Values.hubble.ui.frontend.extraEnvVarsCM .Values.hubble.ui.frontend.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.hubble.ui.frontend.extraEnvVarsCM }}
@@ -304,7 +307,7 @@ spec:
           emptyDir: {}
         - name: server-block
           configMap:
-            name: {{ printf "%s-server-block" (include "cilium.hubble.ui.fullname" .) | trunc 63 | trimSuffix "-" }}
+            name: {{ template "cilium.hubble.ui.frontend.configmapName" . }}
             items:
               - key: server-block.conf
                 path: server-block.conf

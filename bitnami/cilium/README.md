@@ -391,14 +391,14 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Cilium Agent RBAC configuration
 
-| Name                                                | Description                                                           | Value  |
-| --------------------------------------------------- | --------------------------------------------------------------------- | ------ |
-| `agent.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Cilium Agent | `true` |
-| `agent.serviceAccount.name`                         | The name of the ServiceAccount to use for Cilium Agent                | `""`   |
-| `agent.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)      | `{}`   |
-| `agent.serviceAccount.automountServiceAccountToken` | Automount ServiceAccount token                                        | `true` |
-| `agent.rbac.create`                                 | Specifies whether RBAC resources should be created for Cilium Agent   | `true` |
-| `agent.rbac.rules`                                  | Custom RBAC rules to set for Cilium Agent                             | `[]`   |
+| Name                                                | Description                                                           | Value   |
+| --------------------------------------------------- | --------------------------------------------------------------------- | ------- |
+| `agent.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Cilium Agent | `true`  |
+| `agent.serviceAccount.name`                         | The name of the ServiceAccount to use for Cilium Agent                | `""`    |
+| `agent.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)      | `{}`    |
+| `agent.serviceAccount.automountServiceAccountToken` | Automount ServiceAccount token                                        | `false` |
+| `agent.rbac.create`                                 | Specifies whether RBAC resources should be created for Cilium Agent   | `true`  |
+| `agent.rbac.rules`                                  | Custom RBAC rules to set for Cilium Agent                             | `[]`    |
 
 ### Cilium Agent Network Policies Parameters
 
@@ -534,14 +534,14 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Cilium Operator RBAC configuration
 
-| Name                                                   | Description                                                              | Value  |
-| ------------------------------------------------------ | ------------------------------------------------------------------------ | ------ |
-| `operator.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Cilium Operator | `true` |
-| `operator.serviceAccount.name`                         | The name of the ServiceAccount to use for Cilium Operator                | `""`   |
-| `operator.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)         | `{}`   |
-| `operator.serviceAccount.automountServiceAccountToken` | Automount ServiceAccount token                                           | `true` |
-| `operator.rbac.create`                                 | Specifies whether RBAC resources should be created for Cilium Operator   | `true` |
-| `operator.rbac.rules`                                  | Custom RBAC rules to set for Cilium Operator                             | `[]`   |
+| Name                                                   | Description                                                              | Value   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------ | ------- |
+| `operator.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Cilium Operator | `true`  |
+| `operator.serviceAccount.name`                         | The name of the ServiceAccount to use for Cilium Operator                | `""`    |
+| `operator.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)         | `{}`    |
+| `operator.serviceAccount.automountServiceAccountToken` | Automount ServiceAccount token                                           | `false` |
+| `operator.rbac.create`                                 | Specifies whether RBAC resources should be created for Cilium Operator   | `true`  |
+| `operator.rbac.rules`                                  | Custom RBAC rules to set for Cilium Operator                             | `[]`    |
 
 ### Cilium Operator Network Policies Parameters
 
@@ -668,12 +668,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Cilium Envoy ServiceAccount configuration
 
-| Name                                                | Description                                                                                                                     | Value  |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `envoy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Cilium Envoy (only applies when `envoy.useDaemonSet` is set to `true`) | `true` |
-| `envoy.serviceAccount.name`                         | The name of the ServiceAccount to use for Cilium Envoy                                                                          | `""`   |
-| `envoy.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                | `{}`   |
-| `envoy.serviceAccount.automountServiceAccountToken` | Automount ServiceAccount token                                                                                                  | `true` |
+| Name                                                | Description                                                                                                                     | Value   |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `envoy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Cilium Envoy (only applies when `envoy.useDaemonSet` is set to `true`) | `true`  |
+| `envoy.serviceAccount.name`                         | The name of the ServiceAccount to use for Cilium Envoy                                                                          | `""`    |
+| `envoy.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                | `{}`    |
+| `envoy.serviceAccount.automountServiceAccountToken` | Automount ServiceAccount token                                                                                                  | `false` |
 
 ### Cilium Envoy Network Policies Parameters
 
@@ -824,7 +824,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `hubble.relay.enablePprof`                                       | Enable pprof for Hubble Relay                                                                                                                                                                                                                     | `false`                        |
 | `hubble.relay.command`                                           | Override default Hubble Relay container command (useful when using custom images)                                                                                                                                                                 | `[]`                           |
 | `hubble.relay.args`                                              | Override default Hubble Relay container args (useful when using custom images)                                                                                                                                                                    | `[]`                           |
-| `hubble.relay.automountServiceAccountToken`                      | Mount Service Account token in Hubble Relay pods                                                                                                                                                                                                  | `true`                         |
+| `hubble.relay.automountServiceAccountToken`                      | Mount Service Account token in Hubble Relay pods                                                                                                                                                                                                  | `false`                        |
 | `hubble.relay.hostAliases`                                       | Hubble Relay pods host aliases                                                                                                                                                                                                                    | `[]`                           |
 | `hubble.relay.deploymentAnnotations`                             | Annotations for Hubble Relay deployment                                                                                                                                                                                                           | `{}`                           |
 | `hubble.relay.podLabels`                                         | Extra labels for Hubble Relay pods                                                                                                                                                                                                                | `{}`                           |
@@ -867,7 +867,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `hubble.relay.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created for Hubble Relay                                                                                                                                                                             | `true`                         |
 | `hubble.relay.serviceAccount.name`                               | The name of the ServiceAccount to use for Hubble Relay                                                                                                                                                                                            | `""`                           |
 | `hubble.relay.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                                                                                                                  | `{}`                           |
-| `hubble.relay.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                                    | `true`                         |
+| `hubble.relay.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                                    | `false`                        |
 
 ### Hubble Relay Traffic Exposure Parameters
 
@@ -960,6 +960,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `hubble.ui.frontend.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped in Hubble UI frontend container                                                                                                                                                                                                  | `["ALL"]`                           |
 | `hubble.ui.frontend.containerSecurityContext.seccompProfile.type`      | Set seccomp profile in Hubble UI frontend container                                                                                                                                                                                                                 | `RuntimeDefault`                    |
 | `hubble.ui.frontend.enableIPv6`                                        | Enable IPv6 for Hubble UI frontend                                                                                                                                                                                                                                  | `false`                             |
+| `hubble.ui.frontend.serverBlock`                                       | Custom server block to be used to configure NGINX (ignored if existingServerBlockConfigmap is set)                                                                                                                                                                  | `""`                                |
+| `hubble.ui.frontend.existingServerBlockConfigmap`                      | ConfigMap with custom server block to be used to configure NGINX                                                                                                                                                                                                    | `""`                                |
 | `hubble.ui.frontend.command`                                           | Override default Hubble UI frontend container command (useful when using custom images)                                                                                                                                                                             | `[]`                                |
 | `hubble.ui.frontend.args`                                              | Override default Hubble UI frontend container args (useful when using custom images)                                                                                                                                                                                | `[]`                                |
 | `hubble.ui.frontend.lifecycleHooks`                                    | for Hubble UI frontend containers to automate configuration before or after startup                                                                                                                                                                                 | `{}`                                |
@@ -972,7 +974,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `hubble.ui.backend.image.digest`                                       | Hubble UI Backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)                                                                                                        | `""`                                |
 | `hubble.ui.backend.image.pullPolicy`                                   | Hubble UI Backend image pull policy                                                                                                                                                                                                                                 | `IfNotPresent`                      |
 | `hubble.ui.backend.image.pullSecrets`                                  | Hubble UI Backend image pull secrets                                                                                                                                                                                                                                | `[]`                                |
-| `hubble.ui.backend.image.debug`                                        | Enable Hubble UI Backend image debug mode                                                                                                                                                                                                                           | `false`                             |
 | `hubble.ui.backend.containerPorts.http`                                | Hubble UI backend HTTP container port                                                                                                                                                                                                                               | `8090`                              |
 | `hubble.ui.backend.extraContainerPorts`                                | Optionally specify extra list of additional ports for Hubble UI backend containers                                                                                                                                                                                  | `[]`                                |
 | `hubble.ui.backend.livenessProbe.enabled`                              | Enable livenessProbe on Hubble UI backend containers                                                                                                                                                                                                                | `true`                              |
@@ -1097,14 +1098,14 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Hubble UI RBAC configuration
 
-| Name                                                    | Description                                                        | Value  |
-| ------------------------------------------------------- | ------------------------------------------------------------------ | ------ |
-| `hubble.ui.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Hubble UI | `true` |
-| `hubble.ui.serviceAccount.name`                         | The name of the ServiceAccount to use for Hubble UI                | `""`   |
-| `hubble.ui.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)   | `{}`   |
-| `hubble.ui.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account     | `true` |
-| `hubble.ui.rbac.create`                                 | Specifies whether RBAC resources should be created for Hubble UI   | `true` |
-| `hubble.ui.rbac.rules`                                  | Custom RBAC rules to set for Hubble UI                             | `[]`   |
+| Name                                                    | Description                                                        | Value   |
+| ------------------------------------------------------- | ------------------------------------------------------------------ | ------- |
+| `hubble.ui.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Hubble UI | `true`  |
+| `hubble.ui.serviceAccount.name`                         | The name of the ServiceAccount to use for Hubble UI                | `""`    |
+| `hubble.ui.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)   | `{}`    |
+| `hubble.ui.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account     | `false` |
+| `hubble.ui.rbac.create`                                 | Specifies whether RBAC resources should be created for Hubble UI   | `true`  |
+| `hubble.ui.rbac.rules`                                  | Custom RBAC rules to set for Hubble UI                             | `[]`    |
 
 ### Key-Value Store Parameters
 

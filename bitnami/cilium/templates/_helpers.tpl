@@ -142,6 +142,17 @@ Return the Hubble Relay configuration configmap.
 {{- end -}}
 
 {{/*
+Return the Hubble UI frontend configuration configmap.
+*/}}
+{{- define "cilium.hubble.ui.frontend.configmapName" -}}
+{{- if .Values.hubble.ui.frontend.existingServerBlockConfigmap -}}
+    {{- print (tpl .Values.hubble.ui.frontend.existingServerBlockConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-server-block" (include "cilium.hubble.ui.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use for Cilium Agent
 */}}
 {{- define "cilium.agent.serviceAccountName" -}}
