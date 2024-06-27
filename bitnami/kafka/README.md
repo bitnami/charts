@@ -239,7 +239,7 @@ You have two alternatives to use NodePort services:
 
   Note: You need to know in advance the available IP of your cluster that will be exposed so each Kafka broker advertised listener is configured with it.
 
-You can also provide custom `externalAccess.controller.service.advertisedExternalPort` and `externalAccess.broker.service.advertisedExternalPort` to be set in `advertised.listeners`. It may be useful when you Kafka is behind reverse proxy.
+You can also provide custom `externalAccess.controller.service.advertisedExternalPort` and `externalAccess.broker.service.advertisedExternalPort` to be set in `advertised.listeners`. It may be useful when your Kafka is behind reverse proxy.
 
 #### Using ClusterIP services
 

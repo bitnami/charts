@@ -1,6 +1,6 @@
 # Changelog
 
-## 29.3.5 (2024-06-26)
+## 29.4.0 (2024-06-26)
 
 * [bitnami/kafka] Add custom port for advertised listeners ([#27534](https://github.com/bitnami/charts/pull/27534))
 
