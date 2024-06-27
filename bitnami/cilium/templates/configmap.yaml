@@ -16,6 +16,7 @@ certificates-directory: /certs
 lib-dir: /opt/bitnami/cilium/var/lib
 state-dir: /opt/bitnami/cilium/var/run
 socket-path: /opt/bitnami/cilium/var/run/cilium.sock
+procfs: /host/proc
 # Name & ID of the cluster
 cluster-name: {{ .Values.clusterName | quote }}
 cluster-id: "0"
@@ -46,6 +47,8 @@ tunnel-port: "8472"
 {{- end }}
 # Health checking and Pprof
 enable-endpoint-health-checking: "true"
+enable-health-check-loadbalancer-ip: "false"
+enable-health-check-nodeport: "false"
 enable-health-checking: "true"
 agent-health-port: {{ printf "%d" (int .Values.agent.containerPorts.health) | quote }}
 pprof: {{ ternary "true" "false" .Values.agent.enablePprof | quote }}
@@ -71,6 +74,7 @@ custom-cni-conf: "false"
 cni-log-file: "/opt/bitnami/cilium/var/run/cni.log"
 write-cni-conf-when-ready: {{ printf "/host%s/05-cilium.conflist" (include "cilium.agent.hostCNINetDir" .) }}
 cni-uninstall: {{ ternary "true" "false" .Values.agent.cniPlugin.uninstall | quote }}
+cgroup-root: {{ .Values.agent.cgroup2.hostRoot | quote }}
 # Operator configuration
 operator-api-serve-addr: {{ printf ":%d" (int .Values.operator.containerPorts.api) | quote }}
 disable-endpoint-crd: "false"
@@ -102,7 +106,7 @@ hubble-tls-client-ca-files: /certs/hubble/ca.crt
 enable-metrics: "true"
 {{- if .Values.agent.metrics.enabled }}
 prometheus-serve-addr: {{ printf ":%d" (int .Values.agent.containerPorts.metrics) | quote }}
-controllerGroupMetrics: all
+controller-group-metrics: all
 metrics: ~
 {{- end }}
 {{- if .Values.hubble.peers.metrics.enabled }}
@@ -123,7 +127,9 @@ disable-envoy-version-check: "true"
 {{- if or .Values.azure.enabled .Values.aws.enabled .Values.gcp.enabled }}
 install-no-conntrack-iptables-rules: "false"
 {{- end }}
+enable-policy: default
 enable-k8s-networkpolicy: "true"
+enable-well-known-identities: "false"
 synchronize-k8s-nodes: "true"
 remove-cilium-node-taints: "true"
 set-cilium-node-taints: "true"
