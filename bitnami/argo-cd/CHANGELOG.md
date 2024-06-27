@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.4.9 (2024-06-20)
+## 6.5.0 (2024-06-27)
 
 * [bitnami/argo-cd] Fix #27108, #27108 ([#27450](https://github.com/bitnami/charts/pull/27450))
 
