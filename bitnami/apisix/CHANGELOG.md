@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.2.5 (2024-06-18)
+## 3.3.0 (2024-06-27)
 
-* [bitnami/apisix] Fixes to support running Apisix in standalone mode ([#27062](https://github.com/bitnami/charts/pull/27062))
+* [bitnami/apisix] Add IngressClass for Ingress Controller ([#27568](https://github.com/bitnami/charts/pull/27568))
+
+## <small>3.2.5 (2024-06-20)</small>
+
+* [bitnami/apisix] Fix typo Mastodon -> APISIX (#27433) ([a5d7c12](https://github.com/bitnami/charts/commit/a5d7c12f999559bd982cf0516f93241f6db253a1)), closes [#27433](https://github.com/bitnami/charts/issues/27433)
+* [bitnami/apisix] Fixes to support running Apisix in standalone mode (#27062) ([272a58e](https://github.com/bitnami/charts/commit/272a58e82291f619fed91936bd117151e3d68db4)), closes [#27062](https://github.com/bitnami/charts/issues/27062)
 
 ## <small>3.2.4 (2024-06-18)</small>
 
