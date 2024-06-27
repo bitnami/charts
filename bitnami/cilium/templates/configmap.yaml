@@ -121,7 +121,7 @@ proxy-prometheus-port: {{ printf "%d" (int .Values.envoy.containerPorts.metrics)
 {{- end }}
 {{- end }}
 # Envoy configuration
-external-envoy-proxy: "true"
+external-envoy-proxy: {{ ternary "true" "false" .Values.envoy.useDaemonSet | quote }}
 disable-envoy-version-check: "true"
 # Other configuration
 {{- if or .Values.azure.enabled .Values.aws.enabled .Values.gcp.enabled }}

@@ -1493,6 +1493,9 @@ operator:
 ## @section Cilium Envoy Parameters
 ##
 envoy:
+  ## @param envoy.useDaemonSet Run Cilium Envoy as an independent DaemonSet instead of a sidecar in the Cilium Agent
+  ##
+  useDaemonSet: false
   ## Bitnami Cilium Proxy image
   ## ref: https://hub.docker.com/r/bitnami/cilium-proxy/tags/
   ## @param envoy.image.registry [default: REGISTRY_NAME] Cilium Proxy image registry
@@ -1607,7 +1610,7 @@ envoy:
   resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param envoy.podSecurityContext.enabled Enable Cilium Envoy pods' Security Context
+  ## @param envoy.podSecurityContext.enabled Enable Cilium Envoy pods' Security Context (only applies when `envoy.useDaemonSet` is set to `true`)
   ## @param envoy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Cilium Envoy pods
   ## @param envoy.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Cilium Envoy pods
   ## @param envoy.podSecurityContext.supplementalGroups Set filesystem extra groups for Cilium Envoy pods
@@ -1677,22 +1680,22 @@ envoy:
   ## @param envoy.extraArgs [array] Extra args passed to Cilium Envoy container
   ##
   extraArgs: []
-  ## @param envoy.automountServiceAccountToken Mount Service Account token in Cilium Envoy pods
+  ## @param envoy.automountServiceAccountToken Mount Service Account token in Cilium Envoy pods (only applies when `envoy.useDaemonSet` is set to `true`)
   ##
   automountServiceAccountToken: true
-  ## @param envoy.hostAliases Cilium Envoy pods host aliases
+  ## @param envoy.hostAliases Cilium Envoy pods host aliases (only applies when `envoy.useDaemonSet` is set to `true`)
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param envoy.daemonsetAnnotations Annotations for Cilium Envoy daemonset
+  ## @param envoy.daemonsetAnnotations Annotations for Cilium Envoy daemonset (only applies when `envoy.useDaemonSet` is set to `true`)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   daemonsetAnnotations: {}
-  ## @param envoy.podLabels Extra labels for Cilium Envoy pods
+  ## @param envoy.podLabels Extra labels for Cilium Envoy pods (only applies when `envoy.useDaemonSet` is set to `true`)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param envoy.podAnnotations Annotations for Cilium Envoy pods
+  ## @param envoy.podAnnotations Annotations for Cilium Envoy pods (only applies when `envoy.useDaemonSet` is set to `true`)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -1713,30 +1716,30 @@ envoy:
     ##   - e2e-az2
     ##
     values: []
-  ## @param envoy.affinity Affinity for Cilium Envoy pods assignment
+  ## @param envoy.affinity Affinity for Cilium Envoy pods assignment (only applies when `envoy.useDaemonSet` is set to `true`)
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `envoy.podAffinityPreset`, `envoy.podAntiAffinityPreset`, and `envoy.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param envoy.nodeSelector [object] Node labels for Cilium Envoy pods assignment
+  ## @param envoy.nodeSelector [object] Node labels for Cilium Envoy pods assignment (only applies when `envoy.useDaemonSet` is set to `true`)
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector:
     kubernetes.io/os: linux
-  ## @param envoy.tolerations Tolerations for Cilium Envoy pods assignment
+  ## @param envoy.tolerations Tolerations for Cilium Envoy pods assignment (only applies when `envoy.useDaemonSet` is set to `true`)
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param envoy.updateStrategy.type Cilium Envoy daemonset update strategy type
+  ## @param envoy.updateStrategy.type Cilium Envoy daemonset update strategy type (only applies when `envoy.useDaemonSet` is set to `true`)
   ## Can be set to RollingUpdate or OnDelete
   ## ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/
   ##
   updateStrategy:
     type: RollingUpdate
-  ## @param envoy.priorityClassName Cilium Envoy pods' priorityClassName
+  ## @param envoy.priorityClassName Cilium Envoy pods' priorityClassName (only applies when `envoy.useDaemonSet` is set to `true`)
   ##
   priorityClassName: ""
-  ## @param envoy.terminationGracePeriodSeconds Seconds Cilium Envoy pods need to terminate gracefully
+  ## @param envoy.terminationGracePeriodSeconds Seconds Cilium Envoy pods need to terminate gracefully (only applies when `envoy.useDaemonSet` is set to `true`)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: 1
@@ -1756,13 +1759,13 @@ envoy:
   ## @param envoy.extraEnvVarsSecret Name of existing Secret containing extra env vars for Cilium Envoy containers
   ##
   extraEnvVarsSecret: ""
-  ## @param envoy.extraVolumes Optionally specify extra list of additional volumes for the Cilium Envoy pods
+  ## @param envoy.extraVolumes Optionally specify extra list of additional volumes for the Cilium Envoy pods (only applies when `envoy.useDaemonSet` is set to `true`)
   ##
   extraVolumes: []
   ## @param envoy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Cilium Envoy containers
   ##
   extraVolumeMounts: []
-  ## @param envoy.sidecars Add additional sidecar containers to the Cilium Envoy pods
+  ## @param envoy.sidecars Add additional sidecar containers to the Cilium Envoy pods (only applies when `envoy.useDaemonSet` is set to `true`)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -1773,7 +1776,7 @@ envoy:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param envoy.initContainers Add additional init containers to the Cilium Envoy pods
+  ## @param envoy.initContainers Add additional init containers to the Cilium Envoy pods (only applies when `envoy.useDaemonSet` is set to `true`)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -1783,7 +1786,7 @@ envoy:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## Autoscaling configuration
+  ## Autoscaling configuration (only applies when `envoy.useDaemonSet` is set to `true`)
   ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
@@ -1808,7 +1811,7 @@ envoy:
   ## @section Cilium Envoy ServiceAccount configuration
   ##
   serviceAccount:
-    ## @param envoy.serviceAccount.create Specifies whether a ServiceAccount should be created for Cilium Envoy
+    ## @param envoy.serviceAccount.create Specifies whether a ServiceAccount should be created for Cilium Envoy (only applies when `envoy.useDaemonSet` is set to `true`)
     ##
     create: true
     ## @param envoy.serviceAccount.name The name of the ServiceAccount to use for Cilium Envoy
@@ -1826,7 +1829,7 @@ envoy:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
   networkPolicy:
-    ## @param envoy.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for Cilium Envoy
+    ## @param envoy.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for Cilium Envoy (only applies when `envoy.useDaemonSet` is set to `true`)
     ##
     enabled: true
     ## @param envoy.networkPolicy.allowExternal Don't require server label for connections

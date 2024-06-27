@@ -33,6 +33,9 @@ spec:
         {{- if .Values.agent.cgroup2.autoMount }}
         container.apparmor.security.beta.kubernetes.io/host-mount-cgroup2: "unconfined"
         {{- end }}
+        {{- if not .Values.envoy.useDaemonSet }}
+        container.apparmor.security.beta.kubernetes.io/cilium-envoy: "unconfined"
+        {{- end }}
         {{- end }}
         {{- if not .Values.existingConfigmap }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
@@ -282,6 +285,123 @@ spec:
             {{- if .Values.agent.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+       {{- if not .Values.envoy.useDaemonSet }}
+        - name: cilium-envoy
+          image: {{ include "cilium.envoy.image" . }}
+          imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+          {{- if .Values.envoy.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+          {{- if .Values.diagnosticMode.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.command }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.command "context" $) | nindent 12 }}
+          {{- else }}
+            - cilium-envoy-starter
+          {{- end }}
+          args:
+          {{- if .Values.diagnosticMode.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.args "context" $) | nindent 12 }}
+          {{- else }}
+            - -c
+            - /config/envoy.json
+            - --log-level
+            - {{ .Values.envoy.logLevel }}
+            {{- if .Values.envoy.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            - name: ENVOY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: CILIUM_K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            {{- if .Values.envoy.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.envoy.extraEnvVarsCM .Values.envoy.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.envoy.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.envoy.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.envoy.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.envoy.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.envoy.resources }}
+          resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
+          {{- else if ne .Values.envoy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: envoy-health
+              containerPort: {{ .Values.envoy.containerPorts.health }}
+            {{- if .Values.envoy.metrics.enabled }}
+            - name: envoy-metrics
+              containerPort: {{ .Values.envoy.containerPorts.metrics }}
+            {{- end }}
+            {{- if .Values.envoy.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.envoy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.envoy.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              host: "127.0.0.1"
+              port: envoy-health
+          {{- end }}
+          {{- if .Values.envoy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.envoy.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              host: "127.0.0.1"
+              path: /healthz
+              port: envoy-health
+          {{- end }}
+          {{- if .Values.envoy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.envoy.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              host: "127.0.0.1"
+              port: envoy-health
+          {{- end }}
+          {{- end }}
+          {{- if .Values.envoy.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: envoy-tmp-dir
+            - name: envoy-config
+              mountPath: /config
+              readOnly: true
+            - name: envoy-sockets
+              mountPath: /sockets
+            {{- if .Values.agent.bpf.autoMount }}
+            - name: bpf-maps
+              mountPath: {{ .Values.agent.bpf.hostRoot }}
+              mountPropagation: HostToContainer
+            {{- end }}
+            {{- if .Values.envoy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- end }}
         ## TODO: add support for "cilium-monitor" sidecar
         {{- if .Values.agent.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 8 }}
@@ -362,6 +482,11 @@ spec:
                 path: tls.crt
               - key: tls.key
                 path: tls.key
+        {{- end }}
+        {{- if not .Values.envoy.useDaemonSet }}
+        - name: envoy-config
+          configMap:
+            name: {{ template "cilium.envoy.configmapName" . }}
         {{- end }}
         {{- if .Values.agent.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraVolumes "context" $) | nindent 8 }}
