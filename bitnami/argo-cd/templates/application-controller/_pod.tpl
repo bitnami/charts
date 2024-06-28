@@ -143,6 +143,10 @@ containers:
   env:
     - name: ARGOCD_APPLICATION_CONTROLLER_NAME
       value: {{ include "argocd.application-controller" . }}
+    {{- if gt .Values.server.replicaCount 1 }}
+    - name: ARGOCD_CONTROLLER_REPLICAS
+      value: {{ .Values.controller.replicaCount | quote }}
+    {{- end }}
     {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
     - name: REDIS_PASSWORD
       valueFrom:
