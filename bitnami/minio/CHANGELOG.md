@@ -1,8 +1,13 @@
 # Changelog
 
-## 14.6.13 (2024-06-26)
+## 14.6.14 (2024-06-28)
 
-* [bitnami/minio] Release 14.6.13 ([#27542](https://github.com/bitnami/charts/pull/27542))
+* [bitnami/minio] fix: totalDrives calculation includes number of zones ([#26602](https://github.com/bitnami/charts/pull/26602))
+
+## <small>14.6.13 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/minio] Release 14.6.13 (#27542) ([effbee4](https://github.com/bitnami/charts/commit/effbee4927decf0da325f06469b54325897016b3)), closes [#27542](https://github.com/bitnami/charts/issues/27542)
 
 ## <small>14.6.12 (2024-06-22)</small>
 
