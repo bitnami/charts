@@ -1,6 +1,6 @@
 # Changelog
 
-## 29.3.5 (2024-06-27)
+## 29.3.5 (2024-06-28)
 
 * [bitnami/kafka] Fix jmx-exporter scrape path ([#27562](https://github.com/bitnami/charts/pull/27562))
 
