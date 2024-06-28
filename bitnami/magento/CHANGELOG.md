@@ -1,8 +1,12 @@
 # Changelog
 
-## 27.2.6 (2024-06-18)
+## 27.2.7 (2024-06-26)
 
-* [bitnami/magento] Release 27.2.6 ([#27372](https://github.com/bitnami/charts/pull/27372))
+* [bitnami/magento] Improve tests for Magento ([#27545](https://github.com/bitnami/charts/pull/27545))
+
+## <small>27.2.6 (2024-06-18)</small>
+
+* [bitnami/magento] Release 27.2.6 (#27372) ([c33143b](https://github.com/bitnami/charts/commit/c33143b91b6810512bac31b6d2a40a07e7ee5484)), closes [#27372](https://github.com/bitnami/charts/issues/27372)
 
 ## <small>27.2.5 (2024-06-17)</small>
 

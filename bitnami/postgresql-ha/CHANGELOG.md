@@ -1,8 +1,10 @@
 # Changelog
 
-## 14.2.8 (2024-06-26)
+## 14.2.9 (2024-06-26)
+* [bitnami/postgresql-ha] Release 14.2.9 ([#27547](https://github.com/bitnami/charts/pull/27547))
 
-* [bitnami/postgresql-ha] Release 14.2.8 ([#27547](https://github.com/bitnami/charts/pull/27547))
+## <small>14.2.8 (2024-06-26)</small>
+* [bitnami/postgresql-ha] Fix readiness probe when enabling TLS for PostgreSQL ([#27537](https://github.com/bitnami/charts/pull/27537))
 
 ## <small>14.2.7 (2024-06-18)</small>
 
