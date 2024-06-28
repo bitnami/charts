@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/haproxy
 ```
 
-Looking to use HAProxy in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use HAProxy in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -285,8 +285,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                         | `false`                   |
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                | `["ALL"]`                 |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                  | `RuntimeDefault`          |
-| `pdb.create`                                        | Enable a Pod Disruption Budget creation                                                                                                                                                                           | `false`                   |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `1`                       |
+| `pdb.create`                                        | Enable a Pod Disruption Budget creation                                                                                                                                                                           | `true`                    |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                      |
 | `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                    | `""`                      |
 | `autoscaling.enabled`                               | Enable Horizontal POD autoscaling for HAProxy                                                                                                                                                                     | `false`                   |
 | `autoscaling.minReplicas`                           | Minimum number of HAProxy replicas                                                                                                                                                                                | `1`                       |

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/solr
 ```
 
-Looking to use Apache Solr in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Solr in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -269,8 +269,8 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `updateStrategy.type`                               | Solr statefulset strategy type                                                                                                                                                                                    | `RollingUpdate`  |
 | `updateStrategy.rollingUpdate`                      | Solr statefulset rolling update configuration parameters                                                                                                                                                          | `{}`             |
 | `enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                             | `true`           |
-| `pdb.create`                                        | Enable a Pod Disruption Budget creation                                                                                                                                                                           | `false`          |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `1`              |
+| `pdb.create`                                        | Enable a Pod Disruption Budget creation                                                                                                                                                                           | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
 | `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                    | `""`             |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for the Solr pod(s)                                                                                                                                           | `[]`             |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Solr container(s)                                                                                                                                | `[]`             |

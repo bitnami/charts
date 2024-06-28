@@ -1,8 +1,48 @@
 # Changelog
 
-## 22.2.0 (2024-05-28)
+## 22.2.10 (2024-06-24)
 
-* [bitnami/moodle] Enable PodDisruptionBudgets ([#26513](https://github.com/bitnami/charts/pull/26513))
+* [bitnami/moodle] Release 22.2.10 ([#27516](https://github.com/bitnami/charts/pull/27516))
+
+## <small>22.2.9 (2024-06-18)</small>
+
+* [bitnami/moodle] Release 22.2.9 (#27384) ([a6c9335](https://github.com/bitnami/charts/commit/a6c933586984cf79a5407d9d67706c7015e86798)), closes [#27384](https://github.com/bitnami/charts/issues/27384)
+
+## <small>22.2.8 (2024-06-17)</small>
+
+* [bitnami/moodle] Release 22.2.8 (#27282) ([0d3ad94](https://github.com/bitnami/charts/commit/0d3ad94e673dcbb994678741d74426340fc654a6)), closes [#27282](https://github.com/bitnami/charts/issues/27282)
+
+## <small>22.2.7 (2024-06-14)</small>
+
+* [bitnami/moodle] Release 22.2.7 (#27164) ([59bb8d4](https://github.com/bitnami/charts/commit/59bb8d451d1318d2825a90d133a53e910851d58e)), closes [#27164](https://github.com/bitnami/charts/issues/27164)
+
+## <small>22.2.6 (2024-06-10)</small>
+
+* [bitnami/moodle] Release 22.2.6 (#27065) ([eb7d110](https://github.com/bitnami/charts/commit/eb7d1103f15bf6f756764e682c1e2bd739ce2bdf)), closes [#27065](https://github.com/bitnami/charts/issues/27065)
+
+## <small>22.2.5 (2024-06-07)</small>
+
+* [bitnami/moodle] Release 22.2.5 (#27051) ([b0620f8](https://github.com/bitnami/charts/commit/b0620f82ffdd6662b9a89265fb278e7d573b0166)), closes [#27051](https://github.com/bitnami/charts/issues/27051)
+
+## <small>22.2.4 (2024-06-06)</small>
+
+* [bitnami/moodle] Release 22.2.4 (#26992) ([c71f141](https://github.com/bitnami/charts/commit/c71f14156a8528d30424c1a49a332cdaccc6cbf9)), closes [#26992](https://github.com/bitnami/charts/issues/26992)
+
+## <small>22.2.3 (2024-06-06)</small>
+
+* [bitnami/moodle] Release 22.2.3 (#26908) ([e199e09](https://github.com/bitnami/charts/commit/e199e09be891ff99c2cb9eec1967430f45744f8c)), closes [#26908](https://github.com/bitnami/charts/issues/26908)
+
+## <small>22.2.2 (2024-06-05)</small>
+
+* [bitnami/moodle] Bump chart version (#26849) ([b79de37](https://github.com/bitnami/charts/commit/b79de37ed33e8ac59d7607c41b1e03f07b3bcd96)), closes [#26849](https://github.com/bitnami/charts/issues/26849)
+
+## <small>22.2.1 (2024-06-05)</small>
+
+* [bitnami/moodle] Bump chart version (#26791) ([d645f89](https://github.com/bitnami/charts/commit/d645f8935b71c658690d730d74eb4b5e04719844)), closes [#26791](https://github.com/bitnami/charts/issues/26791)
+
+## 22.2.0 (2024-05-29)
+
+* [bitnami/moodle] Enable PodDisruptionBudgets (#26513) ([a20c057](https://github.com/bitnami/charts/commit/a20c0579126898dcb3e282d66fe943ad8d350346)), closes [#26513](https://github.com/bitnami/charts/issues/26513)
 
 ## 22.1.0 (2024-05-21)
 

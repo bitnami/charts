@@ -19,8 +19,8 @@ spec:
   {{- if .Values.dataPlane.pdb.minAvailable }}
   minAvailable: {{ .Values.dataPlane.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.dataPlane.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.dataPlane.pdb.maxUnavailable }}
+  {{- if or .Values.dataPlane.pdb.maxUnavailable ( not .Values.dataPlane.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.dataPlane.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataPlane.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

@@ -1,8 +1,37 @@
 # Changelog
 
-## 1.1.2 (2024-06-04)
+## 1.2.5 (2024-06-28)
 
-* [bitnami/kuberay] Bump chart version ([#26641](https://github.com/bitnami/charts/pull/26641))
+* [bitnami/kuberay] Release 1.2.5 ([#27574](https://github.com/bitnami/charts/pull/27574))
+
+## <small>1.2.4 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kuberay] Release 1.2.4 (#27559) ([284f9aa](https://github.com/bitnami/charts/commit/284f9aa9ce8bf55d7872d77b20e1ebc70a7a2715)), closes [#27559](https://github.com/bitnami/charts/issues/27559)
+
+## <small>1.2.3 (2024-06-18)</small>
+
+* [bitnami/kuberay] Release 1.2.3 (#27368) ([40f17d6](https://github.com/bitnami/charts/commit/40f17d61d826ef9250289db5098262eb282ebf6e)), closes [#27368](https://github.com/bitnami/charts/issues/27368)
+
+## <small>1.2.2 (2024-06-17)</small>
+
+* [bitnami/kuberay] Release 1.2.2 (#27271) ([10e6c3d](https://github.com/bitnami/charts/commit/10e6c3dea944b779e7ad8048f895fbd937a09c1f)), closes [#27271](https://github.com/bitnami/charts/issues/27271)
+
+## <small>1.2.1 (2024-06-06)</small>
+
+* [bitnami/kuberay] Release 1.2.1 (#26972) ([d75ae0a](https://github.com/bitnami/charts/commit/d75ae0a678ead0d9b894a64db3ce5861cc1f6685)), closes [#26972](https://github.com/bitnami/charts/issues/26972)
+
+## 1.2.0 (2024-06-06)
+
+* [bitnami/kuberay] Enable PodDisruptionBudgets (#26702) ([e7d7dec](https://github.com/bitnami/charts/commit/e7d7dec7af82e9d5e82ae33ed0aac569ace03e7b)), closes [#26702](https://github.com/bitnami/charts/issues/26702)
+
+## <small>1.1.3 (2024-06-05)</small>
+
+* [bitnami/kuberay] Release 1.1.3 (#26737) ([e53a993](https://github.com/bitnami/charts/commit/e53a993a5de7f9f4c9bd16cf69ee1fe75db5d0a5)), closes [#26737](https://github.com/bitnami/charts/issues/26737)
+
+## <small>1.1.2 (2024-06-04)</small>
+
+* [bitnami/kuberay] Bump chart version (#26641) ([2f9071b](https://github.com/bitnami/charts/commit/2f9071b8fd86a5e6abcf6a91c2701abcc5edaabb)), closes [#26641](https://github.com/bitnami/charts/issues/26641)
 
 ## <small>1.1.1 (2024-05-22)</small>
 

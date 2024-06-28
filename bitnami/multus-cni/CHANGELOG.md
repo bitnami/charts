@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.1.1 (2024-06-04)
+## 2.1.5 (2024-06-18)
 
-* [bitnami/multus-cni] Bump chart version ([#26652](https://github.com/bitnami/charts/pull/26652))
+* [bitnami/multus-cni] Release 2.1.5 ([#27385](https://github.com/bitnami/charts/pull/27385))
+
+## <small>2.1.4 (2024-06-17)</small>
+
+* [bitnami/multus-cni] Release 2.1.4 (#27283) ([386c85f](https://github.com/bitnami/charts/commit/386c85fe7a4a0325e645a1ea1dd102d343e87d64)), closes [#27283](https://github.com/bitnami/charts/issues/27283)
+
+## <small>2.1.3 (2024-06-06)</small>
+
+* [bitnami/multus-cni] Release 2.1.3 (#26989) ([b7dc128](https://github.com/bitnami/charts/commit/b7dc1288b1e2771af53e50ea96744ea26a913d51)), closes [#26989](https://github.com/bitnami/charts/issues/26989)
+
+## <small>2.1.2 (2024-06-05)</small>
+
+* [bitnami/multus-cni] Release 2.1.2 (#26744) ([e0e241d](https://github.com/bitnami/charts/commit/e0e241daeb6885b0ca707aed31a90dc4b69f3f96)), closes [#26744](https://github.com/bitnami/charts/issues/26744)
+
+## <small>2.1.1 (2024-06-04)</small>
+
+* [bitnami/multus-cni] Bump chart version (#26652) ([0cc9fc4](https://github.com/bitnami/charts/commit/0cc9fc4124ed0b05158149082689e5a394dc791d)), closes [#26652](https://github.com/bitnami/charts/issues/26652)
 
 ## 2.1.0 (2024-05-21)
 

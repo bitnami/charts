@@ -1,8 +1,40 @@
 # Changelog
 
-## 18.1.2 (2024-06-04)
+## 18.2.6 (2024-06-18)
 
-* [bitnami/contour] Bump chart version ([#26625](https://github.com/bitnami/charts/pull/26625))
+* [bitnami/contour] Release 18.2.6 ([#27335](https://github.com/bitnami/charts/pull/27335))
+
+## <small>18.2.5 (2024-06-17)</small>
+
+* [bitnami/contour] Release 18.2.5 (#27210) ([21d95c8](https://github.com/bitnami/charts/commit/21d95c8b684a29e9be25154c706599643a4797d5)), closes [#27210](https://github.com/bitnami/charts/issues/27210)
+
+## <small>18.2.4 (2024-06-13)</small>
+
+* [bitnami/contour] Release 18.2.4 (#27152) ([874e69a](https://github.com/bitnami/charts/commit/874e69aba60cb47333de699741e0a61005ff1c6c)), closes [#27152](https://github.com/bitnami/charts/issues/27152)
+
+## <small>18.2.3 (2024-06-11)</small>
+
+* [bitnami/contour] Fix Envoy livenessProbe typo (#26525) ([e8c1156](https://github.com/bitnami/charts/commit/e8c1156ac6490f67db026c78290917b59a8e86a3)), closes [#26525](https://github.com/bitnami/charts/issues/26525)
+
+## <small>18.2.2 (2024-06-06)</small>
+
+* [bitnami/contour] Release 18.2.2 (#26943) ([df54b46](https://github.com/bitnami/charts/commit/df54b460deeb32892ef6762684db25f8f02900d1)), closes [#26943](https://github.com/bitnami/charts/issues/26943)
+
+## <small>18.2.1 (2024-06-06)</small>
+
+* [bitnami/contour] Release 18.2.1 (#26902) ([8b6fa17](https://github.com/bitnami/charts/commit/8b6fa174722bf6af2cd73f318038e35745eed913)), closes [#26902](https://github.com/bitnami/charts/issues/26902)
+
+## 18.2.0 (2024-06-05)
+
+* [bitnami/contour] Enable PodDisruptionBudgets (#26690) ([759085d](https://github.com/bitnami/charts/commit/759085d08c1a2d29f3baab5124b1387d94fdcea9)), closes [#26690](https://github.com/bitnami/charts/issues/26690)
+
+## <small>18.1.3 (2024-06-05)</small>
+
+* [bitnami/contour] Release 18.1.3 (#26726) ([9de7bb1](https://github.com/bitnami/charts/commit/9de7bb15e394bda4f2e4aa5ddaeaf464a2016d69)), closes [#26726](https://github.com/bitnami/charts/issues/26726)
+
+## <small>18.1.2 (2024-06-04)</small>
+
+* [bitnami/contour] Bump chart version (#26625) ([d25f2e3](https://github.com/bitnami/charts/commit/d25f2e3c56d17d3032ac828c2979f0f7dd9e78ed)), closes [#26625](https://github.com/bitnami/charts/issues/26625)
 
 ## <small>18.1.1 (2024-05-22)</small>
 

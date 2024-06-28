@@ -1,8 +1,44 @@
 # Changelog
 
-## 15.5.2 (2024-06-04)
+## 15.5.11 (2024-06-26)
 
-* [bitnami/postgresql] Bump chart version ([#26660](https://github.com/bitnami/charts/pull/26660))
+* [bitnami/postgresql] Release 15.5.11 ([#27548](https://github.com/bitnami/charts/pull/27548))
+
+## <small>15.5.10 (2024-06-25)</small>
+
+* [bitnami/postgresql] Release 15.5.10 (#27521) ([59f0aa2](https://github.com/bitnami/charts/commit/59f0aa2b948cdcd5a30f3f9111b2d422e0a8b81b)), closes [#27521](https://github.com/bitnami/charts/issues/27521)
+
+## <small>15.5.9 (2024-06-20)</small>
+
+* [bitnami/postgresql] Remove deprecated (and removed) annotation (#27463) ([2907ba0](https://github.com/bitnami/charts/commit/2907ba00566e8cc3675865fbf3e43b43702d4998)), closes [#27463](https://github.com/bitnami/charts/issues/27463)
+
+## <small>15.5.8 (2024-06-20)</small>
+
+* [bitnami/postgresql] Add pre-init scripts (#26467) ([0cdafb8](https://github.com/bitnami/charts/commit/0cdafb8a29c7bfe22c1781ef10154e11e3a7bd09)), closes [#26467](https://github.com/bitnami/charts/issues/26467)
+
+## <small>15.5.7 (2024-06-18)</small>
+
+* [bitnami/postgresql] Release 15.5.7 (#27401) ([2fff79d](https://github.com/bitnami/charts/commit/2fff79d0d54da3680cb8dac3652884c82c314e74)), closes [#27401](https://github.com/bitnami/charts/issues/27401)
+
+## <small>15.5.6 (2024-06-17)</small>
+
+* [bitnami/postgresql] Release 15.5.6 (#27293) ([d36be80](https://github.com/bitnami/charts/commit/d36be805cdc81aaa34d197072c112360a7ce99f5)), closes [#27293](https://github.com/bitnami/charts/issues/27293)
+
+## <small>15.5.5 (2024-06-11)</small>
+
+* [bitnami/postgresql] Release 15.5.5 (#27096) ([c84850a](https://github.com/bitnami/charts/commit/c84850a09c75ce557f87d33fe9c400f66d3a8d1e)), closes [#27096](https://github.com/bitnami/charts/issues/27096)
+
+## <small>15.5.4 (2024-06-06)</small>
+
+* [bitnami/postgresql] Release 15.5.4 (#27006) ([613a7a4](https://github.com/bitnami/charts/commit/613a7a431aa8752cb28ee634c4db0c83ef98e827)), closes [#27006](https://github.com/bitnami/charts/issues/27006)
+
+## <small>15.5.3 (2024-06-06)</small>
+
+* [bitnami/postgresql] Release 15.5.3 (#26914) ([f7df496](https://github.com/bitnami/charts/commit/f7df496fce1cb33658e68af08d382287487e5b0b)), closes [#26914](https://github.com/bitnami/charts/issues/26914)
+
+## <small>15.5.2 (2024-06-04)</small>
+
+* [bitnami/postgresql] Bump chart version (#26660) ([4269aa0](https://github.com/bitnami/charts/commit/4269aa0ee711838c59430d48825c58f34fbe674d)), closes [#26660](https://github.com/bitnami/charts/issues/26660)
 
 ## <small>15.5.1 (2024-05-29)</small>
 

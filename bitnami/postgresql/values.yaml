@@ -105,7 +105,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 16.3.0-debian-12-r12
+  tag: 16.3.0-debian-12-r16
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -357,6 +357,23 @@ primary:
     ## @param primary.initdb.password Specify the PostgreSQL password to execute the initdb scripts
     ##
     password: ""
+  ## Pre-init configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql/#on-container-start
+  preInitDb:
+    ## @param primary.preInitDb.scripts Dictionary of pre-init scripts
+    ## Specify dictionary of shell scripts to be run before db boot
+    ## e.g:
+    ## scripts:
+    ##   my_pre_init_script.sh: |
+    ##      #!/bin/sh
+    ##      echo "Do something."
+    scripts: {}
+    ## @param primary.preInitDb.scriptsConfigMap ConfigMap with pre-init scripts to be run
+    ## NOTE: This will override `primary.preInitDb.scripts`
+    scriptsConfigMap: ""
+    ## @param primary.preInitDb.scriptsSecret Secret with pre-init scripts to be run
+    ## NOTE: This can work along `primary.preInitDb.scripts` or `primary.preInitDb.scriptsConfigMap`
+    scriptsSecret: ""
   ## Configure current cluster's primary server to be the standby server in other cluster.
   ## This will allow cross cluster replication and provide cross cluster high availability.
   ## You will need to configure pgHbaConfiguration if you want to enable this feature with local cluster replication enabled.
@@ -1536,7 +1553,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-12-r32
+    tag: 0.15.0-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

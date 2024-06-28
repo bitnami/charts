@@ -1,8 +1,36 @@
 # Changelog
 
-## 27.2.0 (2024-05-28)
+## 27.2.7 (2024-06-26)
 
-* [bitnami/magento] Enable PodDisruptionBudgets ([#26507](https://github.com/bitnami/charts/pull/26507))
+* [bitnami/magento] Improve tests for Magento ([#27545](https://github.com/bitnami/charts/pull/27545))
+
+## <small>27.2.6 (2024-06-18)</small>
+
+* [bitnami/magento] Release 27.2.6 (#27372) ([c33143b](https://github.com/bitnami/charts/commit/c33143b91b6810512bac31b6d2a40a07e7ee5484)), closes [#27372](https://github.com/bitnami/charts/issues/27372)
+
+## <small>27.2.5 (2024-06-17)</small>
+
+* [bitnami/magento] Release 27.2.5 (#27241) ([57d4947](https://github.com/bitnami/charts/commit/57d4947d77888d1df2194f12b5560fbc24688640)), closes [#27241](https://github.com/bitnami/charts/issues/27241)
+
+## <small>27.2.4 (2024-06-07)</small>
+
+* [bitnami/magento] Release 27.2.4 (#27045) ([b48165b](https://github.com/bitnami/charts/commit/b48165be80373517f18c7a545b45250a7e3de94f)), closes [#27045](https://github.com/bitnami/charts/issues/27045)
+
+## <small>27.2.3 (2024-06-06)</small>
+
+* [bitnami/magento] Release 27.2.3 (#26905) ([0dcb580](https://github.com/bitnami/charts/commit/0dcb580cf12bac043a65021d983fabef7c4fe2d3)), closes [#26905](https://github.com/bitnami/charts/issues/26905)
+
+## <small>27.2.2 (2024-06-05)</small>
+
+* [bitnami/magento] Bump chart version (#26843) ([b286b5a](https://github.com/bitnami/charts/commit/b286b5afa35b01760496df6d350c8e5a2232b479)), closes [#26843](https://github.com/bitnami/charts/issues/26843)
+
+## <small>27.2.1 (2024-06-05)</small>
+
+* [bitnami/magento] Bump chart version (#26785) ([02fe0e1](https://github.com/bitnami/charts/commit/02fe0e1634b38812081f0b82b09078a3f9097b23)), closes [#26785](https://github.com/bitnami/charts/issues/26785)
+
+## 27.2.0 (2024-05-29)
+
+* [bitnami/magento] Enable PodDisruptionBudgets (#26507) ([8352e06](https://github.com/bitnami/charts/commit/8352e065fa0e51e78ec32fd527e3f8a2170d5834)), closes [#26507](https://github.com/bitnami/charts/issues/26507)
 
 ## 27.1.0 (2024-05-21)
 

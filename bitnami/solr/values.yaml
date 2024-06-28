@@ -382,8 +382,8 @@ enableServiceLinks: true
 ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## @param extraVolumes Optionally specify extra list of additional volumes for the Solr pod(s)
 ##

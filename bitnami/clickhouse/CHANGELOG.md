@@ -1,8 +1,36 @@
 # Changelog
 
-## 6.2.1 (2024-06-01)
+## 6.2.8 (2024-06-18)
 
-* [bitnami/clickhouse] Release 6.2.1 ([#26592](https://github.com/bitnami/charts/pull/26592))
+* [bitnami/clickhouse] Release 6.2.8 ([#27331](https://github.com/bitnami/charts/pull/27331))
+
+## <small>6.2.7 (2024-06-17)</small>
+
+* [bitnami/clickhouse] Release 6.2.7 (#27207) ([0d3ee20](https://github.com/bitnami/charts/commit/0d3ee2081bcf67ad253c6244da95b652fbde3818)), closes [#27207](https://github.com/bitnami/charts/issues/27207)
+
+## <small>6.2.6 (2024-06-13)</small>
+
+* [bitnami/clickhouse] Release 6.2.6 (#27159) ([81d78de](https://github.com/bitnami/charts/commit/81d78de0632ea9d4743632f923f08e68fd0ee365)), closes [#27159](https://github.com/bitnami/charts/issues/27159)
+
+## <small>6.2.5 (2024-06-13)</small>
+
+* [bitnami/clickhouse] Release 6.2.5 (#27155) ([d29cf9d](https://github.com/bitnami/charts/commit/d29cf9d7c5dd128a864b7b484635c945a6451041)), closes [#27155](https://github.com/bitnami/charts/issues/27155)
+
+## <small>6.2.4 (2024-06-06)</small>
+
+* [bitnami/clickhouse] Release 6.2.4 (#26937) ([bb285d0](https://github.com/bitnami/charts/commit/bb285d054bc3b8aaf4db8fbee1e08745bc0f64a8)), closes [#26937](https://github.com/bitnami/charts/issues/26937)
+
+## <small>6.2.3 (2024-06-05)</small>
+
+* [bitnami/clickhouse] Bump chart version (#26823) ([7ad12ad](https://github.com/bitnami/charts/commit/7ad12ada5314dda8790976f9951a59d224b8095e)), closes [#26823](https://github.com/bitnami/charts/issues/26823)
+
+## <small>6.2.2 (2024-06-05)</small>
+
+* [bitnami/clickhouse] Bump chart version (#26765) ([b3a9d2b](https://github.com/bitnami/charts/commit/b3a9d2bec8b12e76a570565d378c659dafd73906)), closes [#26765](https://github.com/bitnami/charts/issues/26765)
+
+## <small>6.2.1 (2024-06-01)</small>
+
+* [bitnami/clickhouse] Release 6.2.1 (#26592) ([f6b1de0](https://github.com/bitnami/charts/commit/f6b1de068bd96fa0e411171dc342c92e1fef9400)), closes [#26592](https://github.com/bitnami/charts/issues/26592)
 
 ## 6.2.0 (2024-05-28)
 

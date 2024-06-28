@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.1.1 (2024-06-04)
+## 1.1.5 (2024-06-18)
 
-* [bitnami/whereabouts] Bump chart version ([#26673](https://github.com/bitnami/charts/pull/26673))
+* [bitnami/whereabouts] Release 1.1.5 ([#27427](https://github.com/bitnami/charts/pull/27427))
+
+## <small>1.1.4 (2024-06-17)</small>
+
+* [bitnami/whereabouts] Release 1.1.4 (#27298) ([0253a00](https://github.com/bitnami/charts/commit/0253a00efddfc5666cd6dccb02e229166531c4c9)), closes [#27298](https://github.com/bitnami/charts/issues/27298)
+
+## <small>1.1.3 (2024-06-06)</small>
+
+* [bitnami/whereabouts] Release 1.1.3 (#27026) ([b06c004](https://github.com/bitnami/charts/commit/b06c004ee59a17d4fd9f3c7b86fa6b8c9e25d503)), closes [#27026](https://github.com/bitnami/charts/issues/27026)
+
+## <small>1.1.2 (2024-06-05)</small>
+
+* [bitnami/whereabouts] Release 1.1.2 (#26757) ([06991a2](https://github.com/bitnami/charts/commit/06991a2c4cc5e285fa58532edb169a0992f767ef)), closes [#26757](https://github.com/bitnami/charts/issues/26757)
+
+## <small>1.1.1 (2024-06-04)</small>
+
+* [bitnami/whereabouts] Bump chart version (#26673) ([02c7581](https://github.com/bitnami/charts/commit/02c7581e027023b7e3ddf01c58d178f3e2da806a)), closes [#26673](https://github.com/bitnami/charts/issues/26673)
 
 ## 1.1.0 (2024-05-21)
 

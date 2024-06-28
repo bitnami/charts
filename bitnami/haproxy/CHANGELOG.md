@@ -1,8 +1,44 @@
 # Changelog
 
-## 1.3.1 (2024-06-04)
+## 2.0.6 (2024-06-18)
 
-* [bitnami/haproxy] Bump chart version ([#26635](https://github.com/bitnami/charts/pull/26635))
+* [bitnami/haproxy] Release 2.0.6 ([#27353](https://github.com/bitnami/charts/pull/27353))
+
+## <small>2.0.5 (2024-06-17)</small>
+
+* [bitnami/haproxy] Release 2.0.5 (#27226) ([f18c8be](https://github.com/bitnami/charts/commit/f18c8be19ac4f08f88b3f2285b10e596c31d068a)), closes [#27226](https://github.com/bitnami/charts/issues/27226)
+
+## <small>2.0.4 (2024-06-14)</small>
+
+* [bitnami/haproxy] Release 2.0.4 (#27177) ([c83e566](https://github.com/bitnami/charts/commit/c83e56657f53697579bc3438df99e96bbbf5fe4d)), closes [#27177](https://github.com/bitnami/charts/issues/27177)
+
+## <small>2.0.3 (2024-06-11)</small>
+
+* [bitnami/haproxy] Release 2.0.3 (#27098) ([665d772](https://github.com/bitnami/charts/commit/665d772b05073797eebcf56767a931ac55db62fc)), closes [#27098](https://github.com/bitnami/charts/issues/27098)
+
+## <small>2.0.2 (2024-06-10)</small>
+
+* [bitnami/haproxy] Release 2.0.2 (#27077) ([7da93c0](https://github.com/bitnami/charts/commit/7da93c0379f6b820a38ef54194f7dfa7fe5408b0)), closes [#27077](https://github.com/bitnami/charts/issues/27077)
+
+## <small>2.0.1 (2024-06-06)</small>
+
+* [bitnami/haproxy] Release 2.0.1 (#26960) ([135f6eb](https://github.com/bitnami/charts/commit/135f6ebac2e2b61a49bbcd4aead0461e5dfbfbe0)), closes [#26960](https://github.com/bitnami/charts/issues/26960)
+
+## 2.0.0 (2024-06-05)
+
+* [bitnami/haproxy] Release 2.0.0 (#26812) ([ffc9fa6](https://github.com/bitnami/charts/commit/ffc9fa68b99a8465b83beabcd5ed828146693cce)), closes [#26812](https://github.com/bitnami/charts/issues/26812)
+
+## 1.4.0 (2024-06-05)
+
+* [bitnami/haproxy] Enable PodDisruptionBudgets (#26696) ([ba21fce](https://github.com/bitnami/charts/commit/ba21fcee507ce2cbf27c078b0d617ecbdfec98ff)), closes [#26696](https://github.com/bitnami/charts/issues/26696)
+
+## <small>1.3.2 (2024-06-05)</small>
+
+* [bitnami/haproxy] Release 1.3.2 (#26728) ([460da70](https://github.com/bitnami/charts/commit/460da705601a4877312e4bda9c4f9ec6d861e2ab)), closes [#26728](https://github.com/bitnami/charts/issues/26728)
+
+## <small>1.3.1 (2024-06-04)</small>
+
+* [bitnami/haproxy] Bump chart version (#26635) ([c5606bd](https://github.com/bitnami/charts/commit/c5606bde7ea0a8dadf941a44870a3cd4d23c6cff)), closes [#26635](https://github.com/bitnami/charts/issues/26635)
 
 ## 1.3.0 (2024-05-21)
 

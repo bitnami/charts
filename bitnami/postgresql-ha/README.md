@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql-ha
 ```
 
-Looking to use PostgreSQL HA in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use PostgreSQL HA in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -957,6 +957,25 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql-ha \
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Note: you need to substitute the placeholders *[POSTGRES_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
+
+If a message like the following appears in the logs:
+
+```log
+...
+postgresql-repmgr 13:57:07.50 INFO  ==> ** Starting repmgrd **
+[2024-06-12 13:57:07] [NOTICE] repmgrd (repmgrd 5.4.1) starting up
+[2024-06-12 13:57:07] [ERROR] an older version of the "repmgr" extension is installed
+[2024-06-12 13:57:07] [DETAIL] extension version 5.3 is installed but newer version 5.4 is available
+...
+```
+
+You will need to perform the following step first, and then continue with the upgrade:
+
+```console
+$ helm upgrade mypg oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
+  --set postgresql.replicaCount=1 \
+  --set postgresql.upgradeRepmgrExtension=true
+```
 
 ### To 14.0.0
 

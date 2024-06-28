@@ -1,8 +1,28 @@
 # Changelog
 
-## 2.3.1 (2024-06-04)
+## 2.3.6 (2024-06-18)
 
-* [bitnami/flux] Bump chart version ([#26632](https://github.com/bitnami/charts/pull/26632))
+* [bitnami/flux] Release 2.3.6 ([#27347](https://github.com/bitnami/charts/pull/27347))
+
+## <small>2.3.5 (2024-06-17)</small>
+
+* [bitnami/flux] Release 2.3.5 (#27220) ([d6a55e1](https://github.com/bitnami/charts/commit/d6a55e1f60c24b69ba980c0e4b1fbe98ddd1ddb6)), closes [#27220](https://github.com/bitnami/charts/issues/27220)
+
+## <small>2.3.4 (2024-06-06)</small>
+
+* [bitnami/flux] Release 2.3.4 (#26956) ([4e1e169](https://github.com/bitnami/charts/commit/4e1e1691fffeb8dde61ed07978876af2b8e187f6)), closes [#26956](https://github.com/bitnami/charts/issues/26956)
+
+## <small>2.3.3 (2024-06-05)</small>
+
+* [bitnami/flux] Align PodDisruptionBudgets with templates (#26694) ([328d102](https://github.com/bitnami/charts/commit/328d102cf4a18663989cf3b56c90c85319b30844)), closes [#26694](https://github.com/bitnami/charts/issues/26694)
+
+## <small>2.3.2 (2024-06-05)</small>
+
+* [bitnami/flux] Release 2.3.2 (#26725) ([53a66af](https://github.com/bitnami/charts/commit/53a66af5a59dbbd365c4d458f1ad5a95a62e5266)), closes [#26725](https://github.com/bitnami/charts/issues/26725)
+
+## <small>2.3.1 (2024-06-04)</small>
+
+* [bitnami/flux] Bump chart version (#26632) ([1b8fd97](https://github.com/bitnami/charts/commit/1b8fd97a13c1017a896191b930041ce8d0659b9d)), closes [#26632](https://github.com/bitnami/charts/issues/26632)
 
 ## 2.3.0 (2024-05-21)
 

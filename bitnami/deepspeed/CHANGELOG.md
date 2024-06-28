@@ -1,8 +1,33 @@
 # Changelog
 
-## 2.2.1 (2024-06-04)
+## 2.2.7 (2024-06-28)
 
-* [bitnami/deepspeed] Bump chart version ([#26626](https://github.com/bitnami/charts/pull/26626))
+* [bitnami/deepspeed] Release 2.2.7 ([#27577](https://github.com/bitnami/charts/pull/27577))
+
+## <small>2.2.6 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/deepspeed] Release 2.2.6 (#27560) ([7d6ffd7](https://github.com/bitnami/charts/commit/7d6ffd74d6721451e7d38ab860919965446c5b2b)), closes [#27560](https://github.com/bitnami/charts/issues/27560)
+
+## <small>2.2.5 (2024-06-21)</small>
+
+* [bitnami/deepspeed] Release 2.2.5 (#27438) ([fcf2330](https://github.com/bitnami/charts/commit/fcf2330d032796fc8d623ca22fb9fb25d379547d)), closes [#27438](https://github.com/bitnami/charts/issues/27438)
+
+## <small>2.2.4 (2024-06-07)</small>
+
+* [bitnami/deepspeed] Release 2.2.4 (#26889) ([f2ed42d](https://github.com/bitnami/charts/commit/f2ed42df98d83133969f27ba98c42c65b8db3b08)), closes [#26889](https://github.com/bitnami/charts/issues/26889)
+
+## <small>2.2.3 (2024-06-06)</small>
+
+* [bitnami/deepspeed] Release 2.2.3 (#26944) ([8e5aae2](https://github.com/bitnami/charts/commit/8e5aae2d4f2cc3699bac90a9f839860b216b49b1)), closes [#26944](https://github.com/bitnami/charts/issues/26944)
+
+## <small>2.2.2 (2024-06-06)</small>
+
+* [bitnami/deepspeed] Release 2.2.2 (#26886) ([b2cde8b](https://github.com/bitnami/charts/commit/b2cde8bc87440ef495d78a6c5b869c15d3c6cc71)), closes [#26886](https://github.com/bitnami/charts/issues/26886)
+
+## <small>2.2.1 (2024-06-04)</small>
+
+* [bitnami/deepspeed] Bump chart version (#26626) ([2b853bf](https://github.com/bitnami/charts/commit/2b853bf70babd73afbdca88ed4b617eaa6e23a21)), closes [#26626](https://github.com/bitnami/charts/issues/26626)
 
 ## 2.2.0 (2024-05-30)
 

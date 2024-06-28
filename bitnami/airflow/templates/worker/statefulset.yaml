@@ -200,7 +200,7 @@ spec:
                 - sh
                 - -c
                 - |
-                  source /opt/bitnami/airflow/venv/bin/activate && \
+                  . /opt/bitnami/airflow/venv/bin/activate && \
                   CONNECTION_CHECK_MAX_COUNT=0 python -m celery --app airflow.providers.celery.executors.celery_executor.app inspect ping -d celery@$(hostname)
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}

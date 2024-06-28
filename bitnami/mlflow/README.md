@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mlflow
 ```
 
-Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -116,7 +116,7 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 | `tracking.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                 | `{}`             |
 | `tracking.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                | `{}`             |
 | `tracking.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                  | `{}`             |
-| `tracking.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if tracking.resources is set (tracking.resources is recommended for production). | `small`          |
+| `tracking.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if tracking.resources is set (tracking.resources is recommended for production). | `medium`         |
 | `tracking.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                   | `{}`             |
 | `tracking.podSecurityContext.enabled`                        | Enabled mlflow pods' Security Context                                                                                                                                                                                               | `true`           |
 | `tracking.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                  | `Always`         |
@@ -157,8 +157,8 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 | `tracking.podAnnotations`                                    | Annotations for mlflow pods                                                                                                                                                                                                         | `{}`             |
 | `tracking.podAffinityPreset`                                 | Pod affinity preset. Ignored if `.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                | `""`             |
 | `tracking.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                           | `soft`           |
-| `tracking.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                     | `false`          |
-| `tracking.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                      | `1`              |
+| `tracking.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                     | `true`           |
+| `tracking.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                      | `""`             |
 | `tracking.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                      | `""`             |
 | `tracking.autoscaling.hpa.enabled`                           | Enable HPA                                                                                                                                                                                                                          | `false`          |
 | `tracking.autoscaling.hpa.minReplicas`                       | Minimum number of replicas                                                                                                                                                                                                          | `""`             |
@@ -416,6 +416,7 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 
 | Name                                         | Description                                                             | Value         |
 | -------------------------------------------- | ----------------------------------------------------------------------- | ------------- |
+| `externalDatabase.dialectDriver`             | Database Dialect(+Driver)                                               | `postgresql`  |
 | `externalDatabase.host`                      | Database host                                                           | `""`          |
 | `externalDatabase.port`                      | Database port number                                                    | `5432`        |
 | `externalDatabase.user`                      | Non-root username                                                       | `postgres`    |
