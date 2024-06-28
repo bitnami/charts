@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.3.0 (2024-06-27)
+## 3.3.0 (2024-06-28)
 
 * [bitnami/apisix] Add IngressClass for Ingress Controller ([#27568](https://github.com/bitnami/charts/pull/27568))
 
