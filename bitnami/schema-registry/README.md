@@ -333,7 +333,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 ### Exposure Parameters
 
 | Name                                    | Description                                                                                           | Value                    |
-|-----------------------------------------|-------------------------------------------------------------------------------------------------------| ------------------------ |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                          | Kubernetes service type                                                                               | `ClusterIP`              |
 | `service.ports.http`                    | Service HTTP port                                                                                     | `8081`                   |
 | `service.nodePorts.http`                | Service HTTP node port                                                                                | `""`                     |
