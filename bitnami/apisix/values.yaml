@@ -2702,7 +2702,7 @@ ingressController:
       resync_interval: "6h"
       election_id: "{{ include "apisix.ingress-controller.fullname" . }}-leader"
       ingress_class: {{ .Values.ingressController.ingressClass.name | quote }}
-      ingress_version: {{ include "common.capabilities.ingress.apiVersion" . | quote }}
+      ingress_version: "networking/v1"
       watch_endpointslices: false
       apisix_route_version: "apisix.apache.org/v2"
       enable_gateway_api: false
