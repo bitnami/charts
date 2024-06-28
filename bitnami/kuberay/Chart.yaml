@@ -8,7 +8,7 @@ annotations:
     - name: kuberay-apiserver
       image: docker.io/bitnami/kuberay-apiserver:1.1.1-debian-12-r4
     - name: kuberay-operator
-      image: docker.io/bitnami/kuberay-operator:1.1.1-debian-12-r4
+      image: docker.io/bitnami/kuberay-operator:1.1.1-debian-12-r5
     - name: ray
       image: docker.io/bitnami/ray:2.31.0-debian-12-r0
 apiVersion: v2
@@ -32,4 +32,4 @@ maintainers:
 name: kuberay
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kuberay
-version: 1.2.4
+version: 1.2.5
