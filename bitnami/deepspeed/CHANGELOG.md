@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.2.6 (2024-06-27)
+## 2.2.7 (2024-06-28)
 
-* [bitnami/deepspeed] Release 2.2.6 ([#27560](https://github.com/bitnami/charts/pull/27560))
+* [bitnami/deepspeed] Release 2.2.7 ([#27577](https://github.com/bitnami/charts/pull/27577))
+
+## <small>2.2.6 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/deepspeed] Release 2.2.6 (#27560) ([7d6ffd7](https://github.com/bitnami/charts/commit/7d6ffd74d6721451e7d38ab860919965446c5b2b)), closes [#27560](https://github.com/bitnami/charts/issues/27560)
 
 ## <small>2.2.5 (2024-06-21)</small>
 
