@@ -2,7 +2,7 @@
 
 ## 14.2.9 (2024-06-28)
 
-* [bitnami/postgresql-ha] Release 14.2.9 ([#27547](https://github.com/bitnami/charts/pull/27547))
+*  ([#27547](https://github.com/bitnami/charts/pull/27547))
 
 ## <small>14.2.8 (2024-06-27)</small>
 
