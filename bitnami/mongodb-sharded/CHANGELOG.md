@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.8 (2024-06-18)
+## 8.3.0 (2024-06-24)
 
-* [bitnami/mongodb-sharded] Release 8.2.8 ([#27383](https://github.com/bitnami/charts/pull/27383))
+* [bitnami/mongodb-sharded] Support for persistent volume retention policies ([#27512](https://github.com/bitnami/charts/pull/27512))
+
+## <small>8.2.8 (2024-06-18)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.8 (#27383) ([99030f3](https://github.com/bitnami/charts/commit/99030f353001393d321297c9295105b7c5c56ffb)), closes [#27383](https://github.com/bitnami/charts/issues/27383)
 
 ## <small>8.2.7 (2024-06-17)</small>
 
