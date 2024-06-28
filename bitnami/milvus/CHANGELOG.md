@@ -1,8 +1,13 @@
 # Changelog
 
-## 8.3.1 (2024-06-27)
+## 8.3.2 (2024-06-28)
 
-* [bitnami/milvus] Release 8.3.1 ([#27558](https://github.com/bitnami/charts/pull/27558))
+* [bitnami/milvus] Release 8.3.2 ([#27573](https://github.com/bitnami/charts/pull/27573))
+
+## <small>8.3.1 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/milvus] Release 8.3.1 (#27558) ([45be6d3](https://github.com/bitnami/charts/commit/45be6d3c5169f035356910e2a75d211922b9249a)), closes [#27558](https://github.com/bitnami/charts/issues/27558)
 
 ## 8.3.0 (2024-06-19)
 
