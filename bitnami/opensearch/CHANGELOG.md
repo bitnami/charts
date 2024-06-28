@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.6 (2024-06-27)
+## 1.2.6 (2024-06-28)
 
 * [bitnami/opensearch] Fix opensearch annotation templating indentation ([#27571](https://github.com/bitnami/charts/pull/27571))
 
