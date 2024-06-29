@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.6.12 (2024-06-28)
+## 15.6.12 (2024-06-29)
 
 * [bitnami/mongodb] Release 15.6.12 ([#27590](https://github.com/bitnami/charts/pull/27590))
 
