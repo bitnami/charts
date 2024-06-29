@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.5.9 (2024-06-20)
+## 15.5.11 (2024-06-26)
 
-* [bitnami/postgresql] Remove deprecated (and removed) annotation ([#27463](https://github.com/bitnami/charts/pull/27463))
+* [bitnami/postgresql] Release 15.5.11 ([#27548](https://github.com/bitnami/charts/pull/27548))
+
+## <small>15.5.10 (2024-06-25)</small>
+
+* [bitnami/postgresql] Release 15.5.10 (#27521) ([59f0aa2](https://github.com/bitnami/charts/commit/59f0aa2b948cdcd5a30f3f9111b2d422e0a8b81b)), closes [#27521](https://github.com/bitnami/charts/issues/27521)
+
+## <small>15.5.9 (2024-06-20)</small>
+
+* [bitnami/postgresql] Remove deprecated (and removed) annotation (#27463) ([2907ba0](https://github.com/bitnami/charts/commit/2907ba00566e8cc3675865fbf3e43b43702d4998)), closes [#27463](https://github.com/bitnami/charts/issues/27463)
 
 ## <small>15.5.8 (2024-06-20)</small>
 

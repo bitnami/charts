@@ -1,8 +1,16 @@
 # Changelog
 
-## 18.21.10 (2024-06-18)
+## 18.21.12 (2024-06-26)
 
-* [bitnami/drupal] Release 18.21.10 ([#27336](https://github.com/bitnami/charts/pull/27336))
+* [bitnami/drupal] Release 18.21.12 ([#27541](https://github.com/bitnami/charts/pull/27541))
+
+## <small>18.21.11 (2024-06-21)</small>
+
+* [bitnami/drupal] Release 18.21.11 (#27472) ([efb420b](https://github.com/bitnami/charts/commit/efb420b65a7b953689629f318c492ba3eb48750b)), closes [#27472](https://github.com/bitnami/charts/issues/27472)
+
+## <small>18.21.10 (2024-06-18)</small>
+
+* [bitnami/drupal] Release 18.21.10 (#27336) ([442561b](https://github.com/bitnami/charts/commit/442561b508578c24a6c60f4891bc852ab2a95aad)), closes [#27336](https://github.com/bitnami/charts/issues/27336)
 
 ## <small>18.21.9 (2024-06-17)</small>
 

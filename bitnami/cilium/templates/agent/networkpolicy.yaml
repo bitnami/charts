@@ -1,0 +1,102 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.agent.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "cilium.agent.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: agent
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.agent.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: cilium
+      app.kubernetes.io/component: agent
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    {{- if .Values.agent.networkPolicy.allowExternalEgress }}
+    - {}
+    {{- else }}
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.agent.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+    {{- if or .Values.etcd.enabled .Values.externalKvstore.enabled }}
+    # Allow outbound connections to key-value store
+    - ports:
+        - port: {{ include "cilium.kvstore.port" . }}
+          protocol: TCP
+      {{- if .Values.etcd.enabled }}
+      to:  
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: etcd
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.agent.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.agent.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.agent.containerPorts.hubblePeer }}
+        {{- if .Values.agent.metrics.enabled }}
+        - port: {{ .Values.agent.containerPorts.metrics }}
+        - port: {{ .Values.agent.containerPorts.hubbleMetrics }}
+        {{- end }}
+        {{- range .Values.agent.extraContainerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
+        {{- if not .Values.envoy.useDaemonSet }}
+        {{- if .Values.envoy.metrics.enabled }}
+        - port: {{ .Values.envoy.containerPorts.metrics }}
+        {{- end }}
+        {{- range .Values.envoy.extraContainerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
+        {{- end -}}
+      {{- if not .Values.agent.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if .Values.agent.networkPolicy.addExternalClientAccess }}
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+        {{- end }}
+        {{- if .Values.agent.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.agent.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
+        {{- if .Values.agent.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.agent.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
+          {{- if .Values.agent.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.agent.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.agent.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.agent.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

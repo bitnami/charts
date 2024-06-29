@@ -1,8 +1,8 @@
 # Changelog
 
-## 3.2.6 (2024-06-20)
+## 3.3.0 (2024-06-28)
 
-* [bitnami/apisix] Updated jsonschema to allow string values for fields passed to tpl ([#27441](https://github.com/bitnami/charts/pull/27441))
+* [bitnami/apisix] Add IngressClass for Ingress Controller ([#27568](https://github.com/bitnami/charts/pull/27568))
 
 ## <small>3.2.5 (2024-06-20)</small>
 
