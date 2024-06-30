@@ -213,8 +213,13 @@ spec:
             - name: JENKINS_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  {{- if not .Values.jenkinsPasswordSecret }}
                   name: {{ include "common.names.fullname" . }}
                   key: jenkins-password
+                  {{- else }}
+                  name: {{ .Values.jenkinsPasswordSecret }}
+                  key: {{ .Values.jenkinsPasswordSecretKey }}
+                  {{- end }}
             - name: JENKINS_HOME
               value: {{ .Values.jenkinsHome | quote }}
             - name: JENKINS_SKIP_BOOTSTRAP
