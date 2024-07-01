@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.5.12 (2024-06-28)
+## 15.5.12 (2024-07-01)
 
 * postgres exporter monitor all databases ([#27586](https://github.com/bitnami/charts/pull/27586))
 
