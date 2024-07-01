@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.4.7 (2024-06-30)
+## 13.4.7 (2024-07-01)
 
 * [bitnami/jenkins] Add Jenkins Password Secret and Secret Key Values ([#27603](https://github.com/bitnami/charts/pull/27603))
 
