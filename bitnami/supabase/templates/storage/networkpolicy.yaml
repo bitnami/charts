@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.storage.networkPolicy.enabled }}
+{{- if and .Values.storage.enabled .Values.storage.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
@@ -43,8 +43,8 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: postgresql
-              app.kubernetes.io/instance: {{ .Release.Name }}              
-      {{- end }}  
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end }}
     {{- if .Values.rest.enabled }}
     # Allow connection to Supabase Rest
     - ports:
