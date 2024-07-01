@@ -1649,6 +1649,9 @@ externalAccess:
       ## ClusterIP: Must be specified, ingress IP or domain where tcp for external ports is configured
       ##
       domain: ""
+      ## @param externalAccess.controller.service.advertisedExternalPort Overwrite port that would be used in advertised.listeners for domain set in externalAccess.controller.service.domain when service type is NodePort
+      ##
+      advertisedExternalPort: ""
       ## @param externalAccess.controller.service.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
       ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/
       ##
@@ -1735,6 +1738,9 @@ externalAccess:
       ## ClusterIP: Must be specified, ingress IP or domain where tcp for external ports is configured
       ##
       domain: ""
+      ## @param externalAccess.broker.service.advertisedExternalPort Overwrite port that would be used in advertised.listeners for domain set in externalAccess.broker.service.domain when service type is NodePort
+      ##
+      advertisedExternalPort: ""
       ## @param externalAccess.broker.service.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
       ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/
       ##
