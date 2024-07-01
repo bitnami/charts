@@ -361,8 +361,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `command`                        | Override default container command (useful when using custom images)                                                         | `[]`                          |
 | `args`                           | Override default container args (useful when using custom images)                                                            | `[]`                          |
 | `extraEnvVars`                   | Extra environment variables to be set on Keycloak container                                                                  | `[]`                          |
-| `extraEnvVarsCM`                 | Name of existing ConfigMap containing extra env vars                                                                         | `""`                          |
-| `extraEnvVarsSecret`             | Name of existing Secret containing extra env vars                                                                            | `""`                          |
+| `extraEnvVarsCM`                 | Name of existing ConfigMaps containing extra env vars                                                                        | `[]`                          |
+| `extraEnvVarsSecret`             | Name of existing Secrets containing extra env vars                                                                           | `[]`                          |
 
 ### Keycloak statefulset parameters
 
