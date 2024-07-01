@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.1.5 (2024-07-01)
+## 11.1.6 (2024-07-01)
 
-* [bitnami/mysql] Release 11.1.5 ([#27617](https://github.com/bitnami/charts/pull/27617))
+* [bitnami/mysql] Release 11.1.6 ([#27621](https://github.com/bitnami/charts/pull/27621))
+
+## <small>11.1.5 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mysql] Release 11.1.5 (#27617) ([8546156](https://github.com/bitnami/charts/commit/8546156c386f19577dfe1908a05c17396bb088c6)), closes [#27617](https://github.com/bitnami/charts/issues/27617)
 
 ## <small>11.1.4 (2024-06-18)</small>
 
