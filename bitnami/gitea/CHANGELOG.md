@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.7 (2024-06-30)
+## 2.3.7 (2024-07-01)
 
 * [bitnami/gitea] Update externaldb-secret logic ([#27596](https://github.com/bitnami/charts/pull/27596))
 
