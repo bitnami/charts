@@ -1,0 +1,177 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.flower.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ printf "%s-flower" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: celery-flower
+    app.kubernetes.io/part-of: superset
+  {{- if or .Values.flower.deploymentAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.flower.deploymentAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and (not .Values.flower.autoscaling.hpa.enabled) (not .Values.flower.autoscaling.vpa.enabled) }}
+  replicas: {{ .Values.flower.replicaCount }}
+  {{- end }}
+  {{- if .Values.flower.updateStrategy }}
+  strategy: {{- toYaml .Values.flower.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.flower.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: celery-flower
+      app.kubernetes.io/part-of: superset
+  template:
+    metadata:
+      {{- if .Values.flower.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.flower.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: celery-flower
+        app.kubernetes.io/part-of: superset
+    spec:
+      {{- include "superset.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "superset.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.flower.automountServiceAccountToken }}
+      {{- if .Values.flower.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.flower.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.flower.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.flower.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.flower.podAffinityPreset "component" "celery-flower" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.flower.podAntiAffinityPreset "component" "celery-flower" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.flower.nodeAffinityPreset.type "key" .Values.flower.nodeAffinityPreset.key "values" .Values.flower.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.flower.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.flower.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.flower.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.flower.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.flower.priorityClassName }}
+      priorityClassName: {{ .Values.flower.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.flower.schedulerName }}
+      schedulerName: {{ .Values.flower.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.flower.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.flower.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.flower.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.flower.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.flower.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.flower.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.waitForDB.enabled }}
+        {{- include "superset.initContainers.waitForDB" . | nindent 8}}
+        {{- end }}
+        {{- if .Values.waitForRedis.enabled }}
+        {{- include "superset.initContainers.waitForRedis" . | nindent 8}}
+        {{- end }}
+        {{- if .Values.flower.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.flower.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: celery-flower
+          image: {{ template "superset.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.flower.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.flower.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.flower.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.flower.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.flower.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.flower.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "superset.configure.common" . | nindent 12 }}
+            {{- include "superset.configure.database" . | nindent 12 }}
+            {{- include "superset.configure.redis" . | nindent 12 }}
+            - name: SUPERSET_ROLE
+              value: "celery-flower"
+            - name: FLOWER_UNAUTHENTICATED_API
+              value: "true"
+            {{- if .Values.flower.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.flower.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.flower.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.flower.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.flower.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.flower.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.flower.resources }}
+          resources: {{- toYaml .Values.flower.resources | nindent 12 }}
+          {{- else if ne .Values.flower.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.flower.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: flower
+              containerPort: {{ .Values.flower.containerPorts.flower }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.flower.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.flower.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.flower.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.flower.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: flower
+          {{- end }}
+          {{- if .Values.flower.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.flower.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.flower.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.flower.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /api/workers
+              port: flower
+          {{- end }}
+          {{- if .Values.flower.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.flower.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.flower.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.flower.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /api/workers
+              port: flower
+          {{- end }}
+          {{- end }}
+          {{- if .Values.flower.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.flower.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/superset/superset_home
+              subPath: superset-home
+          {{- if .Values.flower.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.flower.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.flower.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.flower.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.flower.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.flower.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
