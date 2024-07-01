@@ -218,32 +218,34 @@ s
 
 ### Jenkins Configuration parameters
 
-| Name                     | Description                                                                                                                                         | Value                   |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `jenkinsUser`            | Jenkins username                                                                                                                                    | `user`                  |
-| `jenkinsPassword`        | Jenkins user password                                                                                                                               | `""`                    |
-| `jenkinsHost`            | Jenkins host to create application URLs                                                                                                             | `""`                    |
-| `jenkinsHome`            | Jenkins home directory                                                                                                                              | `/bitnami/jenkins/home` |
-| `javaOpts`               | Custom JVM parameters                                                                                                                               | `[]`                    |
-| `disableInitialization`  | Skip performing the initial bootstrapping for Jenkins                                                                                               | `no`                    |
-| `command`                | Override default container command (useful when using custom images)                                                                                | `[]`                    |
-| `args`                   | Override default container args (useful when using custom images)                                                                                   | `[]`                    |
-| `extraEnvVars`           | Array with extra environment variables to add to the Jenkins container                                                                              | `[]`                    |
-| `extraEnvVarsCM`         | Name of existing ConfigMap containing extra env vars                                                                                                | `""`                    |
-| `extraEnvVarsSecret`     | Name of existing Secret containing extra env vars                                                                                                   | `""`                    |
-| `plugins`                | List of plugins to be installed during Jenkins first boot.                                                                                          | `[]`                    |
-| `extraPlugins`           | List of plugins to install in addition to those listed in `plugins`                                                                                 | `[]`                    |
-| `latestPlugins`          | Set to true to download the latest version of all dependencies, even if the version(s) of the requested plugin(s) are not the latest.               | `true`                  |
-| `latestSpecifiedPlugins` | Set to true download the latest dependencies of any plugin that is requested to have the latest version.                                            | `false`                 |
-| `skipImagePlugins`       | Set this value to true to skip installing plugins stored under /opt/bitnami/jenkins/plugins                                                         | `false`                 |
-| `overridePlugins`        | Setting this value to true will remove all plugins from the jenkinsHome directory and install new plugins from scratch.                             | `false`                 |
-| `overridePaths`          | Comma-separated list of relative paths to be removed from Jenkins home volume and/or mounted if present in the mounted content dir                  | `""`                    |
-| `initScripts`            | Dictionary of scripts to be mounted at `/docker-entrypoint-initdb.d`. Evaluated as a template. Allows .sh and .groovy formats.                      | `{}`                    |
-| `initScriptsCM`          | ConfigMap containing the `/docker-entrypoint-initdb.d` scripts. Evaluated as a template.                                                            | `""`                    |
-| `initScriptsSecret`      | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                    |
-| `initHookScripts`        | Dictionary of scripts to be mounted at `$JENKINS_HOME/init.groovy.d`. Evaluated as a template. Allows .sh and .groovy formats.                      | `{}`                    |
-| `initHookScriptsCM`      | ConfigMap containing the `$JENKINS_HOME/init.groovy.d` scripts. Evaluated as a template.                                                            | `""`                    |
-| `initHookScriptsSecret`  | Secret containing `$JENKINS_HOME/init.groovy.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                    |
+| Name                       | Description                                                                                                                                         | Value                   |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `jenkinsUser`              | Jenkins username                                                                                                                                    | `user`                  |
+| `jenkinsPassword`          | Jenkins user password                                                                                                                               | `""`                    |
+| `jenkinsPasswordSecret`    | Name of the existing secret containing the Jenkins user password, password must be in key jenkins-password                                          | `""`                    |
+| `jenkinsPasswordSecretKey` | Key containing the jenkins-password in the jenkinsPasswordSecret                                                                                    | `jenkins-password`      |
+| `jenkinsHost`              | Jenkins host to create application URLs                                                                                                             | `""`                    |
+| `jenkinsHome`              | Jenkins home directory                                                                                                                              | `/bitnami/jenkins/home` |
+| `javaOpts`                 | Custom JVM parameters                                                                                                                               | `[]`                    |
+| `disableInitialization`    | Skip performing the initial bootstrapping for Jenkins                                                                                               | `no`                    |
+| `command`                  | Override default container command (useful when using custom images)                                                                                | `[]`                    |
+| `args`                     | Override default container args (useful when using custom images)                                                                                   | `[]`                    |
+| `extraEnvVars`             | Array with extra environment variables to add to the Jenkins container                                                                              | `[]`                    |
+| `extraEnvVarsCM`           | Name of existing ConfigMap containing extra env vars                                                                                                | `""`                    |
+| `extraEnvVarsSecret`       | Name of existing Secret containing extra env vars                                                                                                   | `""`                    |
+| `plugins`                  | List of plugins to be installed during Jenkins first boot.                                                                                          | `[]`                    |
+| `extraPlugins`             | List of plugins to install in addition to those listed in `plugins`                                                                                 | `[]`                    |
+| `latestPlugins`            | Set to true to download the latest version of all dependencies, even if the version(s) of the requested plugin(s) are not the latest.               | `true`                  |
+| `latestSpecifiedPlugins`   | Set to true download the latest dependencies of any plugin that is requested to have the latest version.                                            | `false`                 |
+| `skipImagePlugins`         | Set this value to true to skip installing plugins stored under /opt/bitnami/jenkins/plugins                                                         | `false`                 |
+| `overridePlugins`          | Setting this value to true will remove all plugins from the jenkinsHome directory and install new plugins from scratch.                             | `false`                 |
+| `overridePaths`            | Comma-separated list of relative paths to be removed from Jenkins home volume and/or mounted if present in the mounted content dir                  | `""`                    |
+| `initScripts`              | Dictionary of scripts to be mounted at `/docker-entrypoint-initdb.d`. Evaluated as a template. Allows .sh and .groovy formats.                      | `{}`                    |
+| `initScriptsCM`            | ConfigMap containing the `/docker-entrypoint-initdb.d` scripts. Evaluated as a template.                                                            | `""`                    |
+| `initScriptsSecret`        | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                    |
+| `initHookScripts`          | Dictionary of scripts to be mounted at `$JENKINS_HOME/init.groovy.d`. Evaluated as a template. Allows .sh and .groovy formats.                      | `{}`                    |
+| `initHookScriptsCM`        | ConfigMap containing the `$JENKINS_HOME/init.groovy.d` scripts. Evaluated as a template.                                                            | `""`                    |
+| `initHookScriptsSecret`    | Secret containing `$JENKINS_HOME/init.groovy.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                    |
 
 ### Jenkins TLS configuration
 
