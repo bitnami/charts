@@ -285,7 +285,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                           | Value                    |
-|------------------------------------|-------------------------------------------------------------------------------------------------------| ------------------------ |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Sealed Secret service type                                                                            | `ClusterIP`              |
 | `service.ports.http`               | Sealed Secret service HTTP port number                                                                | `8080`                   |
 | `service.ports.name`               | Sealed Secret service HTTP port name                                                                  | `http`                   |
