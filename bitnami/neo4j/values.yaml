@@ -83,8 +83,8 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  repository: bitnami/neo4j
-  tag: 5.20.0-debian-12-r0
+  repository: miruiz145/neo4j
+  tag: development
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -174,7 +174,7 @@ customStartupProbe: {}
 ## @param resourcesPreset Set neo4j container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "small"
 ## @param resources Set neo4j container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -216,9 +216,9 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: {}
   runAsUser: 1001
-  runAsGroup: 0
+  runAsGroup: 1001
   runAsNonRoot: true
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   privileged: false
   allowPrivilegeEscalation: false
   capabilities:
