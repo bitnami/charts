@@ -733,8 +733,10 @@ envoy:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ## @param envoy.shutdownManager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## @param envoy.shutdownManager.containerPorts.http Specify Port for shutdown container
+  ## @param envoy.shutdownManager.lifecycleHooks lifecycleHooks for the container to automate configuration before or after startup.
   ##
   shutdownManager:
+    lifecycleHooks: {}
     extraArgs: []
     enabled: true
     resourcesPreset: "nano"

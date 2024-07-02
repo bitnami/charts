@@ -1,8 +1,20 @@
 # Changelog
 
-## 18.3.2 (2024-06-13)
+## 18.3.5 (2024-06-24)
 
-* [bitnami/airflow] Release 18.3.2 ([#27137](https://github.com/bitnami/charts/pull/27137))
+* [bitnami/airflow] liveness probe fail on worker pod ([#27514](https://github.com/bitnami/charts/pull/27514))
+
+## <small>18.3.4 (2024-06-18)</small>
+
+* [bitnami/airflow] Release 18.3.4 (#27326) ([f5b2497](https://github.com/bitnami/charts/commit/f5b24976e26efe2adb95b8a377cc21fc34d084c5)), closes [#27326](https://github.com/bitnami/charts/issues/27326)
+
+## <small>18.3.3 (2024-06-17)</small>
+
+* [bitnami/airflow] Release 18.3.3 (#27200) ([f77d4a4](https://github.com/bitnami/charts/commit/f77d4a426aecf13854ed33aa9ab8450091780658)), closes [#27200](https://github.com/bitnami/charts/issues/27200)
+
+## <small>18.3.2 (2024-06-13)</small>
+
+* [bitnami/airflow] Release 18.3.2 (#27137) ([8cf02f2](https://github.com/bitnami/charts/commit/8cf02f26f74c3450c4d7d6f79a1d101f1bc00f50)), closes [#27137](https://github.com/bitnami/charts/issues/27137)
 
 ## <small>18.3.1 (2024-06-10)</small>
 

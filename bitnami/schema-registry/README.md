@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/schema-registry
 ```
 
-Looking to use Confluent Schema Registry in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Confluent Schema Registry in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -342,6 +342,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `service.loadBalancerIP`                | loadBalancerIP if service type is LoadBalancer                                                        | `""`                     |
 | `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                 | `[]`                     |
 | `service.annotations`                   | Annotations for Schema Registry service                                                               | `{}`                     |
+| `service.labels`                        | Labels for Schema Registry service                                                                    | `{}`                     |
 | `service.extraPorts`                    | Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)            | `[]`                     |
 | `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                           | `{}`                     |

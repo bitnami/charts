@@ -1,8 +1,20 @@
 # Changelog
 
-## 21.4.1 (2024-06-06)
+## 21.4.4 (2024-06-18)
 
-* [bitnami/keycloak] Release 21.4.1 ([#26967](https://github.com/bitnami/charts/pull/26967))
+* [bitnami/keycloak] fix Keycloak HTTP schema for edge proxy mode ([#27436](https://github.com/bitnami/charts/pull/27436))
+
+## <small>21.4.3 (2024-06-18)</small>
+
+* [bitnami/keycloak] Release 21.4.3 (#27361) ([31f011c](https://github.com/bitnami/charts/commit/31f011cb89e56bd33db8e51a9e42f7cc533dcc14)), closes [#27361](https://github.com/bitnami/charts/issues/27361)
+
+## <small>21.4.2 (2024-06-17)</small>
+
+* [bitnami/keycloak] Release 21.4.2 (#27237) ([2b574d0](https://github.com/bitnami/charts/commit/2b574d09f54adb8a9175775e6c90c7a3befa9395)), closes [#27237](https://github.com/bitnami/charts/issues/27237)
+
+## <small>21.4.1 (2024-06-06)</small>
+
+* [bitnami/keycloak] Release 21.4.1 (#26967) ([79c19c6](https://github.com/bitnami/charts/commit/79c19c6d961be1fa1efe48de045f5a7070fdf57b)), closes [#26967](https://github.com/bitnami/charts/issues/26967)
 
 ## 21.4.0 (2024-06-06)
 

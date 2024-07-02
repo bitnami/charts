@@ -1,8 +1,20 @@
 # Changelog
 
-## 8.2.6 (2024-06-06)
+## 8.2.9 (2024-06-28)
 
-* [bitnami/nats] Release 8.2.6 ([#26990](https://github.com/bitnami/charts/pull/26990))
+* [bitnami/nats] Release 8.2.9 ([#27572](https://github.com/bitnami/charts/pull/27572))
+
+## <small>8.2.8 (2024-06-18)</small>
+
+* [bitnami/nats] Release 8.2.8 (#27386) ([e2627bb](https://github.com/bitnami/charts/commit/e2627bb64fda56838614ae653822536c506cf50a)), closes [#27386](https://github.com/bitnami/charts/issues/27386)
+
+## <small>8.2.7 (2024-06-17)</small>
+
+* [bitnami/nats] Release 8.2.7 (#27285) ([289e29b](https://github.com/bitnami/charts/commit/289e29b8b7af49addc31773516336b0dd5dcd37f)), closes [#27285](https://github.com/bitnami/charts/issues/27285)
+
+## <small>8.2.6 (2024-06-06)</small>
+
+* [bitnami/nats] Release 8.2.6 (#26990) ([ceb395f](https://github.com/bitnami/charts/commit/ceb395f4284e4425233a3f0916e1680cd48b3cc5)), closes [#26990](https://github.com/bitnami/charts/issues/26990)
 
 ## <small>8.2.5 (2024-06-06)</small>
 

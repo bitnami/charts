@@ -1,8 +1,36 @@
 # Changelog
 
-## 2.3.5 (2024-06-12)
+## 2.5.0 (2024-06-25)
 
-* [bitnami/jaeger] Release 2.3.5 ([#27118](https://github.com/bitnami/charts/pull/27118))
+* [bitnami/jaeger] Add init containers resources to Jaeger chart ([#27462](https://github.com/bitnami/charts/pull/27462))
+
+## <small>2.4.1 (2024-06-22)</small>
+
+* [bitnami/jaeger] Release 2.4.1 (#27500) ([7dc1439](https://github.com/bitnami/charts/commit/7dc14399f43185a57254bfe91552eb28c3556527)), closes [#27500](https://github.com/bitnami/charts/issues/27500)
+
+## 2.4.0 (2024-06-21)
+
+* [bitnami/jaeger] Add support for cassandra existingSecret (#26563) ([175b933](https://github.com/bitnami/charts/commit/175b933346aaf2cdef7842394806cba75fa8f078)), closes [#26563](https://github.com/bitnami/charts/issues/26563)
+
+## <small>2.3.9 (2024-06-18)</small>
+
+* [bitnami/jaeger] Release 2.3.9 (#27357) ([a11df55](https://github.com/bitnami/charts/commit/a11df5597f3a252e7405f2f2beae81347c0d7d89)), closes [#27357](https://github.com/bitnami/charts/issues/27357)
+
+## <small>2.3.8 (2024-06-17)</small>
+
+* [bitnami/jaeger] Release 2.3.8 (#27231) ([b2b3f5d](https://github.com/bitnami/charts/commit/b2b3f5d8750a9219037a5a4a7abbf0e2d00e2078)), closes [#27231](https://github.com/bitnami/charts/issues/27231)
+
+## <small>2.3.7 (2024-06-17)</small>
+
+* [bitnami/jaeger] Release 2.3.7 (#27192) ([d3f69e6](https://github.com/bitnami/charts/commit/d3f69e6c610f0b560bcfdaf165e43ccb45ae7be6)), closes [#27192](https://github.com/bitnami/charts/issues/27192)
+
+## <small>2.3.6 (2024-06-14)</small>
+
+* [bitnami/jaeger] Update query for check_cassandra_keyspace_schema (#27160) ([ad20b5b](https://github.com/bitnami/charts/commit/ad20b5befc669a241afee5795c2928e37af16f7d)), closes [#27160](https://github.com/bitnami/charts/issues/27160)
+
+## <small>2.3.5 (2024-06-12)</small>
+
+* [bitnami/jaeger] Release 2.3.5 (#27118) ([a6ec3ea](https://github.com/bitnami/charts/commit/a6ec3eaf341ed6bd42874bd896d072ec92d7faf6)), closes [#27118](https://github.com/bitnami/charts/issues/27118)
 
 ## <small>2.3.4 (2024-06-06)</small>
 

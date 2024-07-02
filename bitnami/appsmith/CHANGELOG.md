@@ -1,8 +1,29 @@
 # Changelog
 
-## 3.3.6 (2024-06-13)
+## 3.3.11 (2024-06-28)
 
-* [bitnami/appsmith] Release 3.3.6 ([#27141](https://github.com/bitnami/charts/pull/27141))
+* [bitnami/appsmith] Release 3.3.11 ([#27576](https://github.com/bitnami/charts/pull/27576))
+
+## <small>3.3.10 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/appsmith] Increase test retries for Appsmith (#27535) ([aeecba3](https://github.com/bitnami/charts/commit/aeecba3c132c3bc89a9877300f235222985287e7)), closes [#27535](https://github.com/bitnami/charts/issues/27535)
+
+## <small>3.3.9 (2024-06-18)</small>
+
+* [bitnami/appsmith] Release 3.3.9 (#27332) ([93debb6](https://github.com/bitnami/charts/commit/93debb6e5062b8303660d62f63f4b3472ffff890)), closes [#27332](https://github.com/bitnami/charts/issues/27332)
+
+## <small>3.3.8 (2024-06-17)</small>
+
+* [bitnami/appsmith] Release 3.3.8 (#27308) ([c2a8bdd](https://github.com/bitnami/charts/commit/c2a8bdd71c89a2ffa746339d96f18c939777b9b3)), closes [#27308](https://github.com/bitnami/charts/issues/27308)
+
+## <small>3.3.7 (2024-06-17)</small>
+
+* [bitnami/appsmith] Release 3.3.7 (#27168) ([77f8a5d](https://github.com/bitnami/charts/commit/77f8a5da4f469bd408814c4ed5bc4117d5086965)), closes [#27168](https://github.com/bitnami/charts/issues/27168)
+
+## <small>3.3.6 (2024-06-13)</small>
+
+* [bitnami/appsmith] Release 3.3.6 (#27141) ([1e01ab8](https://github.com/bitnami/charts/commit/1e01ab89e99e01de18643c28f78999a9b646b658)), closes [#27141](https://github.com/bitnami/charts/issues/27141)
 
 ## <small>3.3.5 (2024-06-06)</small>
 

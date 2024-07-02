@@ -192,6 +192,12 @@ APISIX Data Plane:
     {{- end }}
 {{- end }}
 
+{{- if .Values.ingressController.enabled }}
+
+The Ingress Class name to use the APISIX Ingress Controller is: {{ .Values.ingressController.ingressClass.name | quote }}
+
+{{- end }}
+
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.dashboard.image }}
 {{- include "common.warnings.rollingTag" .Values.ingressController.image }}

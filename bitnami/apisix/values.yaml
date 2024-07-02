@@ -294,6 +294,7 @@ dataPlane:
           prefix: /apisix
           timeout: 30
         {{- end }}
+      {{- if or .Values.etcd.enabled .Values.externalEtcd.servers }}
       etcd:
         host:
           {{- if .Values.etcd.enabled  }}
@@ -314,6 +315,7 @@ dataPlane:
         user: "{{ print "{{APISIX_ETCD_USER}}" }}"
         password: "{{ print "{{APISIX_ETCD_PASSWORD}}" }}"
         {{- end }}
+      {{- end }}
       {{- if .Values.dataPlane.tls.enabled }}
       certs:
         {{- if .Values.dataPlane.tls.enabled }}
@@ -2674,6 +2676,12 @@ ingressController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ingressController.ingressClass.name IngressClass that will be be used to implement the APISIX Ingress
+  ## @param ingressController.ingressClass.annotations Additional annotations for the APISIX IngressClass
+  ##
+  ingressClass:
+    name: "apisix"
+    annotations: {}
   ## @param ingressController.defaultConfig [string] APISIX Dashboard configuration (evaluated as a template)
   ##
   defaultConfig: |
@@ -2693,7 +2701,7 @@ ingressController:
       kubeconfig: ""
       resync_interval: "6h"
       election_id: "{{ include "apisix.ingress-controller.fullname" . }}-leader"
-      ingress_class: "apisix"
+      ingress_class: {{ .Values.ingressController.ingressClass.name | quote }}
       ingress_version: "networking/v1"
       watch_endpointslices: false
       apisix_route_version: "apisix.apache.org/v2"

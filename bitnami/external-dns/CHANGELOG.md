@@ -1,8 +1,20 @@
 # Changelog
 
-## 7.5.6 (2024-06-14)
+## 8.1.0 (2024-07-02)
 
 * [bitnami/external-dns] add default pihole.password value ([#27158](https://github.com/bitnami/charts/pull/27158))
+
+## 8.0.0 (2024-06-19)
+
+* [bitnami/external-dns] Major release: drop support for multiple replicas and DaemonSet ([#26759](https://github.com/bitnami/charts/pull/26759))
+
+## <small>7.5.7 (2024-06-18)</small>
+
+* [bitnami/external-dns] Release 7.5.7 (#27341) ([6668b3c](https://github.com/bitnami/charts/commit/6668b3c1ae632eb90b6e825fedddc39637aec137)), closes [#27341](https://github.com/bitnami/charts/issues/27341)
+
+## <small>7.5.6 (2024-06-17)</small>
+
+* [bitnami/external-dns] Release 7.5.6 (#27216) ([cfe95c9](https://github.com/bitnami/charts/commit/cfe95c9c1d2c0e6b8e3f1b574f992f47486bc91a)), closes [#27216](https://github.com/bitnami/charts/issues/27216)
 
 ## <small>7.5.5 (2024-06-06)</small>
 

@@ -12,7 +12,7 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 helm install my-release oci://registry-1.docker.io/bitnamicharts/sealed-secrets
 ```
 
-Looking to use Sealed Secrets in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Sealed Secrets in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 

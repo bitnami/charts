@@ -34,11 +34,11 @@ These presets are for basic testing and not meant to be used in production
       "limits" (dict "cpu" "1.5" "memory" "3072Mi" "ephemeral-storage" "1024Mi")
    )
   "xlarge" (dict 
-      "requests" (dict "cpu" "1.5" "memory" "4096Mi" "ephemeral-storage" "50Mi")
+      "requests" (dict "cpu" "1.0" "memory" "3072Mi" "ephemeral-storage" "50Mi")
       "limits" (dict "cpu" "3.0" "memory" "6144Mi" "ephemeral-storage" "1024Mi")
    )
   "2xlarge" (dict 
-      "requests" (dict "cpu" "1.5" "memory" "4096Mi" "ephemeral-storage" "50Mi")
+      "requests" (dict "cpu" "1.0" "memory" "3072Mi" "ephemeral-storage" "50Mi")
       "limits" (dict "cpu" "6.0" "memory" "12288Mi" "ephemeral-storage" "1024Mi")
    )
  }}

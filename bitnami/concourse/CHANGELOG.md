@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.2.5 (2024-06-06)
+## 4.2.7 (2024-06-18)
 
-* [bitnami/concourse] Release 4.2.5 ([#26931](https://github.com/bitnami/charts/pull/26931))
+* [bitnami/concourse] Release 4.2.7 ([#27432](https://github.com/bitnami/charts/pull/27432))
+
+## <small>4.2.6 (2024-06-17)</small>
+
+* [bitnami/concourse] Release 4.2.6 (#27301) ([7309c98](https://github.com/bitnami/charts/commit/7309c98e8bcb7d6a87c4fc1d79144ded24ae39a7)), closes [#27301](https://github.com/bitnami/charts/issues/27301)
+
+## <small>4.2.5 (2024-06-06)</small>
+
+* [bitnami/concourse] Release 4.2.5 (#26931) ([9c29ca0](https://github.com/bitnami/charts/commit/9c29ca041a09726337cd6e75e191ca6ba5290e52)), closes [#26931](https://github.com/bitnami/charts/issues/26931)
 
 ## <small>4.2.4 (2024-06-06)</small>
 
