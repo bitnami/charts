@@ -1,3 +1,4 @@
+advertisedHost: bitnami-neo4j.my
 auth:
   password: ComplicatedPassword123!4
 containerPorts:
