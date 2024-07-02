@@ -40,7 +40,9 @@ spec:
     - ports:
         - port: {{ .Values.containerPorts.bolt }}
         - port: {{ .Values.containerPorts.http }}
+        {{- if .Values.tls.https.enabled }}
         - port: {{ .Values.containerPorts.https }}
+        {{- end }}
         {{- range .Values.extraContainerPorts }}
         - port: {{ .containerPort }}
         {{- end }}

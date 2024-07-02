@@ -123,21 +123,29 @@ spec:
               value: {{ .Values.containerPorts.bolt | quote }}
             - name: NEO4J_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
-            - name: NEO4J_HTTPS_PORT_NUMBER
-              value: {{ .Values.containerPorts.https | quote }}
             - name: NEO4J_HOST
               value: {{ include "neo4j.host" . | quote }}
             - name: NEO4J_BOLT_ADVERTISED_PORT_NUMBER
               value: {{ .Values.service.ports.bolt | quote }}
             - name: NEO4J_HTTP_ADVERTISED_PORT_NUMBER
               value: {{ .Values.service.ports.http | quote }}
-            - name: NEO4J_HTTPS_ADVERTISED_PORT_NUMBER
-              value: {{ .Values.service.ports.https | quote }}
             - name: NEO4J_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "neo4j.secretName" . }}
                   key: password
+            {{- if (include "neo4j.tls.bolt.enabled" .) }}
+            - name: NEO4J_BOLT_TLS_LEVEL
+              value: {{ upper .Values.tls.bolt.level | quote }}
+            {{- end }}
+            {{- if .Values.tls.https.enabled }}
+            - name: NEO4J_HTTPS_ENABLED
+              value: "true"
+            - name: NEO4J_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
+            - name: NEO4J_HTTPS_ADVERTISED_PORT_NUMBER
+              value: {{ .Values.service.ports.https | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -160,8 +168,10 @@ spec:
               containerPort: {{ .Values.containerPorts.bolt }}
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
+            {{- if .Values.tls.https.enabled }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
+            {{- end }}
             {{- if .Values.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
@@ -220,6 +230,16 @@ spec:
             - name: plugins-dir
               mountPath: /bitnami/neo4j/plugins
             {{- end }}
+            {{- if (include "neo4j.tls.bolt.enabled" .) }}
+            - name: bolt-certs
+              mountPath: /opt/bitnami/neo4j/certificates/bolt
+              readOnly: true
+            {{- end }}
+            {{- if .Values.tls.https.enabled }}
+            - name: https-certs
+              mountPath: /opt/bitnami/neo4j/certificates/https
+              readOnly: true
+            {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -245,6 +265,30 @@ spec:
         - name: plugins-dir
           configMap:
             name: {{ tpl .Values.pluginsConfigMap $ }}
+        {{- end }}
+        {{- if (include "neo4j.tls.bolt.enabled" .) }}
+        - name: bolt-certs
+          secret:
+            secretName: {{ include "neo4j.tls.bolt.secretName" . }}
+            items:
+              - key: tls.crt
+                path: public.crt
+              - key: tls.key
+                path: private.key
+              - key: ca.crt
+                path: trusted/ca.crt
+        {{- end }}
+        {{- if .Values.tls.https.enabled }}
+        - name: https-certs
+          secret:
+            secretName: {{ include "neo4j.tls.https.secretName" . }}
+            items:
+              - key: tls.crt
+                path: public.crt
+              - key: tls.key
+                path: private.key
+              - key: ca.crt
+                path: trusted/ca.crt
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

@@ -57,6 +57,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.tls.https.enabled }}
     - name: https
       port: {{ .Values.service.ports.https }}
       {{- if not (eq .Values.service.ports.https .Values.containerPorts.https) }}
@@ -68,6 +69,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
