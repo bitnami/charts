@@ -60,7 +60,7 @@ spec:
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.repoServer.containerPorts.probe }}
+        - port: {{ .Values.repoServer.containerPorts.repoServer }}
         {{- if .Values.repoServer.metrics.enabled }}
         - port: {{ .Values.repoServer.containerPorts.metrics }}
         {{- end }}
