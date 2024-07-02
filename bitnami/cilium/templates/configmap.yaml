@@ -116,12 +116,9 @@ hubble-metrics: ~
 {{- if .Values.operator.metrics.enabled }}
 operator-prometheus-serve-addr: {{ printf ":%d" (int .Values.operator.containerPorts.metrics) | quote }}
 {{- end }}
-{{- if .Values.envoy.metrics.enabled }}
-proxy-prometheus-port: {{ printf "%d" (int .Values.envoy.containerPorts.metrics) | quote }}
-{{- end }}
 {{- end }}
 # Envoy configuration
-external-envoy-proxy: {{ ternary "true" "false" .Values.envoy.useDaemonSet | quote }}
+external-envoy-proxy: "true"
 disable-envoy-version-check: "true"
 # Other configuration
 {{- if or .Values.azure.enabled .Values.aws.enabled .Values.gcp.enabled }}
@@ -130,6 +127,7 @@ install-no-conntrack-iptables-rules: "false"
 enable-policy: default
 enable-k8s-networkpolicy: "true"
 enable-well-known-identities: "false"
+enable-l7-proxy: "true"
 synchronize-k8s-nodes: "true"
 remove-cilium-node-taints: "true"
 set-cilium-node-taints: "true"
