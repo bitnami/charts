@@ -1,0 +1,19 @@
+auth:
+  password: ComplicatedPassword123!4
+containerPorts:
+  bolt: 7688
+  http: 7475
+  https: 7476
+service:
+  ports:
+    bolt: 7689
+    http: 7477
+    https: 7478
+  type: LoadBalancer
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+  runAsGroup: 1002

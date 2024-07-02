@@ -57,6 +57,33 @@ Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
 {{- end -}}
 
 {{/*
+Get the user defined LoadBalancerIP for this release.
+Note, returns 127.0.0.1 if using ClusterIP.
+*/}}
+{{- define "neo4j.serviceIP" -}}
+{{- if eq .Values.service.type "ClusterIP" -}}
+127.0.0.1
+{{- else -}}
+{{- .Values.service.loadBalancerIP | default "" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Gets the host to be used for this application.
+If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+When using Ingress, it will be set to the Ingress hostname.
+*/}}
+{{- define "neo4j.host" -}}
+{{- if and .Values.ingress.enabled .Values.ingress.hostname }}
+{{- print .Values.ingress.hostname  -}}
+{{- else if .Values.advertisedHost -}}
+{{- print .Values.advertisedHost  -}}
+{{- else -}}
+{{- print (include "neo4j.serviceIP" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "neo4j.validateValues" -}}

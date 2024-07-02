@@ -3,6 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if (include "neo4j.host" .) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -124,6 +125,14 @@ spec:
               value: {{ .Values.containerPorts.http | quote }}
             - name: NEO4J_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
+            - name: NEO4J_HOST
+              value: {{ include "neo4j.host" . | quote }}
+            - name: NEO4J_BOLT_ADVERTISED_PORT_NUMBER
+              value: {{ .Values.service.ports.bolt | quote }}
+            - name: NEO4J_HTTP_ADVERTISED_PORT_NUMBER
+              value: {{ .Values.service.ports.http | quote }}
+            - name: NEO4J_HTTPS_ADVERTISED_PORT_NUMBER
+              value: {{ .Values.service.ports.https | quote }}
             - name: NEO4J_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -246,3 +255,4 @@ spec:
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
+{{- end }}
