@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.4 (2024-06-18)
+## 10.2.5 (2024-07-02)
 
-* [bitnami/etcd] Release 10.2.4 ([#27342](https://github.com/bitnami/charts/pull/27342))
+* [bitnami/etcd] Release 10.2.5 ([#27646](https://github.com/bitnami/charts/pull/27646))
+
+## <small>10.2.4 (2024-06-18)</small>
+
+* [bitnami/etcd] Release 10.2.4 (#27342) ([ddd960c](https://github.com/bitnami/charts/commit/ddd960cd73fedd20e4f5411c9a30d7d3be56e6ab)), closes [#27342](https://github.com/bitnami/charts/issues/27342)
 
 ## <small>10.2.3 (2024-06-17)</small>
 
