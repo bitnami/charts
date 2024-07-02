@@ -1,20 +1,28 @@
-<!--- app-name: %%CHART_NAME%% -->
+<!--- app-name: neo4j -->
 
-# %%CHART_NAME%%
+# neo4j
 
-%%DESCRIPTION%% (check existing examples)
+Neo4j is a high performance graph store with all the features expected of a mature and robust database, like a friendly query language and ACID transactions.
+
+[Overview of Neo4j](https://www.neo4j.com/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/%%CHART_NAME%%
+helm install my-release oci://registry-1.docker.io/bitnamicharts/neo4j
 ```
 
-Looking to use %%CHART_NAME%% in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+Looking to use neo4j in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
-%%INTRODUCTION%% (check existing examples)
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
+
+This chart bootstraps a [Neo4j](https://github.com/bitnami/containers/tree/main/bitnami/neo4j) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -28,12 +36,12 @@ Looking to use %%CHART_NAME%% in production? Try [VMware Tanzu Application Catal
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/%%CHART_NAME%%
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/neo4j
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-The command deploys %%CHART_NAME%% on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys neo4j on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -45,24 +53,7 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### External database support
-
-%%IF NEEDED%%
-
-You may want to have %%CHART_NAME%% connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MariaDB installation with the `mariadb.enabled` option. Here is an example:
-
-```console
-mariadb.enabled=false
-externalDatabase.host=myexternalhost
-externalDatabase.user=myuser
-externalDatabase.password=mypassword
-externalDatabase.database=mydatabase
-externalDatabase.port=3306
-```
-
 ### Ingress
-
-%%IF NEEDED%%
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
 
@@ -104,24 +95,21 @@ tls.certKeyFilename="cert.key"
 tls.certCAFilename="ca.pem"
 ```
 
-### %%OTHER_SECTIONS%%
-
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
 
 ```yaml
-%%CHART_NAME%%:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
+extraEnvVars:
+  - name: LOG_LEVEL
+    value: error
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
 ### Sidecars
 
-If additional containers are needed in the same pod as %%CHART_NAME%% (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+If additional containers are needed in the same pod as neo4j (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
 
 ```yaml
 sidecars:
@@ -167,7 +155,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## Persistence
 
-The [Bitnami %%CHART_NAME%%](https://github.com/bitnami/containers/tree/main/bitnami/%%CHART_NAME%%) image stores the %%CHART_NAME%% data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami neo4j](https://github.com/bitnami/containers/tree/main/bitnami/neo4j) image stores the neo4j data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
@@ -175,28 +163,27 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
-The above parameters map to the env variables defined in [bitnami/%%CHART_NAME%%](https://github.com/bitnami/containers/tree/main/bitnami/%%CHART_NAME%%). For more information please refer to the [bitnami/%%CHART_NAME%%](https://github.com/bitnami/containers/tree/main/bitnami/%%CHART_NAME%%) image documentation.
+The above parameters map to the env variables defined in [bitnami/neo4j](https://github.com/bitnami/containers/tree/main/bitnami/neo4j). For more information please refer to the [bitnami/neo4j](https://github.com/bitnami/containers/tree/main/bitnami/neo4j) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
-  --set %%CHART_NAME%%Username=admin \
-  --set %%CHART_NAME%%Password=password \
-  --set mariadb.auth.rootPassword=secretpassword \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/%%CHART_NAME%%
+  --set advertisedHost=localhost \
+  --set auth.password=password123 \
+    oci://REGISTRY_NAME/REPOSITORY_NAME/neo4j
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-The above command sets the %%CHART_NAME%% administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the 'neo4j' native username with password `password123`. Additionally, it sets the advertised host to `localhost`.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/%%CHART_NAME%%
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/neo4j
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.

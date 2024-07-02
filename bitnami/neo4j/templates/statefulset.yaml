@@ -64,7 +64,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -80,7 +80,7 @@ spec:
             - -ec
             - |
               mkdir -p /bitnami/neo4j
-              find /bitnami/neo4j -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.worker.containerSecurityContext.runAsUser }}:{{ .Values.worker.podSecurityContext.fsGroup }}
+              find /bitnami/neo4j -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -212,6 +212,14 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/neo4j/run
               subPath: app-run-dir
+            {{- if or .Values.existingConfigmap .Values.configuration .Values.apocConfiguration }}
+            - name: config-dir
+              mountPath: /bitnami/neo4j/conf
+            {{- end }}
+            {{- if .Values.pluginsConfigMap }}
+            - name: plugins-dir
+              mountPath: /bitnami/neo4j/plugins
+            {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -227,6 +235,16 @@ spec:
             claimName: {{ default (include "common.names.fullname" .) .Values.persistence.existingClaim }}
         {{- else }}
           emptyDir: {}
+        {{- end }}
+        {{- if or .Values.existingConfigmap .Values.configuration .Values.apocConfiguration }}
+        - name: config-dir
+          configMap:
+            name: {{ include "neo4j.configMapName" . }}
+        {{- end }}
+        {{- if .Values.pluginsConfigMap }}
+        - name: plugins-dir
+          configMap:
+            name: {{ tpl .Values.pluginsConfigMap $ }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

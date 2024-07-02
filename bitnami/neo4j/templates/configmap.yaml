@@ -3,6 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if and (or .Values.configuration .Values.apocConfiguration) (not .Values.existingConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,5 +15,12 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  test: |
-  # Config file
+  {{- if .Values.configuration }}
+  neo4j.conf: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.apocConfiguration }}
+  apoc.conf: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.apocConfiguration "context" .) | nindent 4 }}
+  {{- end }}
+{{- end }}

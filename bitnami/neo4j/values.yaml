@@ -225,14 +225,33 @@ containerSecurityContext:
     drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
-
+## @param auth.password Password for the 'neo4j' native user
+## @param auth.existingSecret Name of a secret containing the neo4j password. Password must be stored under the 'password' key.
+##
 auth:
   password: ""
   existingSecret: ""
-
+## @param advertisedHost Hostname used to configure Neo4j advertised address.
+##
+advertisedHost: ""
 ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for neo4j
 ##
-existingConfigmap:
+existingConfigmap: ""
+## @param configuration Specify content for Neo4j config file (auto-generated based on other env. vars otherwise). Omitted if existingConfigmap is provided.
+## e.g:
+## configuration: |-
+##   ...
+##
+configuration: ""
+## @param apocConfiguration Specify content for Neo4j apoc config file (auto-generated based on other env. vars otherwise). Omitted if existingConfigmap is provided.
+## e.g:
+## apocConfiguration: |-
+##   ...
+##
+apocConfiguration: ""
+## @param pluginsConfigMap The name of an existing ConfigMap with your custom plugins for neo4j
+##
+pluginsConfigMap: ""
 ## @param command Override default neo4j container command (useful when using custom images)
 ##
 command: []
@@ -411,6 +430,7 @@ service:
   ## @param service.type neo4j service type
   ##
   type: LoadBalancer
+  ## @param service.ports.bolt neo4j service bolt port
   ## @param service.ports.http neo4j service HTTP port
   ## @param service.ports.https neo4j service HTTPS port
   ##
@@ -419,11 +439,13 @@ service:
     http: 7474
     https: 7473
   ## Node ports to expose
+  ## @param service.nodePorts.http Node port for bolt connector
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
+    bolt: ""
     http: ""
     https: ""
   ## @param service.clusterIP neo4j service Cluster IP
@@ -677,9 +699,6 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
-  ## @param persistence.dataSource Custom PVC data source
-  ##
-  dataSource: {}
 ## @section Init Container Parameters
 ##
 
@@ -781,55 +800,3 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
   automountServiceAccountToken: true
-
-## Prometheus metrics
-##
-metrics:
-  ## @param metrics.enabled Enable the export of Prometheus metrics
-  ##
-  enabled: false
-  ## Prometheus Operator ServiceMonitor configuration
-  ##
-  serviceMonitor:
-    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
-    ##
-    enabled: false
-    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
-    ##
-    namespace: ""
-    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
-    ##
-    annotations: {}
-    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
-    ##
-    labels: {}
-    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
-    ##
-    jobLabel: ""
-    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
-    ##
-    honorLabels: false
-    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-    ## e.g:
-    ## interval: 10s
-    ##
-    interval: ""
-    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-    ## e.g:
-    ## scrapeTimeout: 10s
-    ##
-    scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
-    ##
-    metricRelabelings: []
-    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
-    ##
-    relabelings: []
-    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
-    ## selector:
-    ##   prometheus: my-prometheus
-    ##
-    selector: {}

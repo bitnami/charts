@@ -84,6 +84,17 @@ When using Ingress, it will be set to the Ingress hostname.
 {{- end -}}
 
 {{/*
+Return the Neo4j configuration configmap.
+*/}}
+{{- define "neo4j.configMapName" -}}
+{{- if .Values.existingConfigmap -}}
+    {{- print (tpl .Values.existingConfigmap $) -}}
+{{- else -}}
+    {{- print (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "neo4j.validateValues" -}}
