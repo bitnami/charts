@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.3.6 (2024-07-02)
+## 29.3.7 (2024-07-02)
 
-* [bitnami/kafka] fix: Mount kafka_jaas.conf in controller statefulset for kraft migration ([#27610](https://github.com/bitnami/charts/pull/27610))
+* [bitnami/kafka] Fix jmx-exporter scrape path ([#27562](https://github.com/bitnami/charts/pull/27562))
+
+## <small>29.3.6 (2024-07-02)</small>
+
+* [bitnami/kafka] fix: Mount kafka_jaas.conf in controller statefulset for kraft migration (#27610) ([fcf03f8](https://github.com/bitnami/charts/commit/fcf03f8314fc30401fa3712c90b0261f8f3b09db)), closes [#27610](https://github.com/bitnami/charts/issues/27610)
 
 ## <small>29.3.5 (2024-07-01)</small>
 
