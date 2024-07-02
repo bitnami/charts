@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.5.1 (2024-06-28)
+## 6.6.0 (2024-07-01)
 
-* [bitnami/argo-cd] Release 6.5.1 ([#27575](https://github.com/bitnami/charts/pull/27575))
+* [bitnami/argo-cd] Add replica env variables to app controller and server ([#27585](https://github.com/bitnami/charts/pull/27585))
+
+## <small>6.5.1 (2024-06-28)</small>
+
+* [bitnami/argo-cd] Release 6.5.1 (#27575) ([52adaa6](https://github.com/bitnami/charts/commit/52adaa699e5dd45ef38e03f583342ec384e4c1de)), closes [#27575](https://github.com/bitnami/charts/issues/27575)
 
 ## 6.5.0 (2024-06-27)
 
