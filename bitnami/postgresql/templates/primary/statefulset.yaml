@@ -257,8 +257,8 @@ spec:
             - name: POSTGRES_DATABASE
               value: {{ (include "postgresql.v1.database" .) | quote }}
             {{- end }}
-            # Replication
             {{- if or (eq .Values.architecture "replication") .Values.primary.standby.enabled }}
+            # Replication
             - name: POSTGRES_REPLICATION_MODE
               value: {{ ternary "slave" "master" .Values.primary.standby.enabled | quote }}
             - name: POSTGRES_REPLICATION_USER
@@ -282,8 +282,8 @@ spec:
             - name: POSTGRES_CLUSTER_APP_NAME
               value: {{ .Values.replication.applicationName }}
             {{- end }}
-            # Initdb
             {{- if .Values.primary.initdb.args }}
+            # Initdb
             - name: POSTGRES_INITDB_ARGS
               value: {{ .Values.primary.initdb.args | quote }}
             {{- end }}
@@ -299,8 +299,8 @@ spec:
             - name: POSTGRES_INITSCRIPTS_PASSWORD
               value: {{ .Values.primary.initdb.password | quote }}
             {{- end }}
-            # Standby
             {{- if .Values.primary.standby.enabled }}
+            # Standby
             - name: POSTGRES_MASTER_HOST
               value: {{ .Values.primary.standby.primaryHost }}
             - name: POSTGRES_MASTER_PORT_NUMBER
