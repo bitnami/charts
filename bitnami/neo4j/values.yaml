@@ -205,6 +205,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled neo4j container' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in neo4j container
 ## @param containerSecurityContext.runAsUser Set runAsUser in neo4j container' Security Context
+## @param containerSecurityContext.runAsGroup Set runAsGroup in neo4j container' Security Context
 ## @param containerSecurityContext.runAsNonRoot Set runAsNonRoot in neo4j container' Security Context
 ## @param containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in neo4j container' Security Context
 ## @param containerSecurityContext.privileged Set privileged in neo4j container' Security Context
@@ -439,7 +440,7 @@ service:
     http: 7474
     https: 7473
   ## Node ports to expose
-  ## @param service.nodePorts.http Node port for bolt connector
+  ## @param service.nodePorts.bolt Node port for bolt connector
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS
   ## NOTE: choose port between <30000-32767>
