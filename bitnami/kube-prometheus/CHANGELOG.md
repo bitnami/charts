@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.5.4 (2024-06-26)
+## 9.5.5 (2024-07-02)
 
-* [bitnami/kube-prometheus] Release 9.5.4 ([#27551](https://github.com/bitnami/charts/pull/27551))
+* [bitnami/kube-prometheus] Release 9.5.5 ([#27632](https://github.com/bitnami/charts/pull/27632))
+
+## <small>9.5.4 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kube-prometheus] Release 9.5.4 (#27551) ([73bdc54](https://github.com/bitnami/charts/commit/73bdc544c5046bc75dfb855a21939219ca929852)), closes [#27551](https://github.com/bitnami/charts/issues/27551)
 
 ## <small>9.5.3 (2024-06-24)</small>
 
