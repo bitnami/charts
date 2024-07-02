@@ -4,15 +4,14 @@
 
 * [bitnami/kafka] Fix jmx-exporter scrape path ([#27562](https://github.com/bitnami/charts/pull/27562))
 
-## 29.3.6 (2024-07-02)
+## <small>29.3.6 (2024-07-02)</small>
 
-* [bitnami/kafka] fix: Mount kafka_jaas.conf in controller statefulset for kraft migration ([#27610](https://github.com/bitnami/charts/pull/27610))
+* [bitnami/kafka] fix: Mount kafka_jaas.conf in controller statefulset for kraft migration (#27610) ([fcf03f8](https://github.com/bitnami/charts/commit/fcf03f8314fc30401fa3712c90b0261f8f3b09db)), closes [#27610](https://github.com/bitnami/charts/issues/27610)
 
 ## <small>29.3.5 (2024-07-01)</small>
 
 * [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
 * [bitnami/kafka] Release 29.3.5 (#27613) ([1ef0ca8](https://github.com/bitnami/charts/commit/1ef0ca867542f99b4e37ac3182727357a0fd17cf)), closes [#27613](https://github.com/bitnami/charts/issues/27613)
-
 
 ## <small>29.3.4 (2024-06-18)</small>
 
