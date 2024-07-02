@@ -3153,6 +3153,40 @@ repoServer:
   ## @param repoServer.extraArgs Add extra args to the default repo server args
   ##
   extraArgs: []
+
+  ## ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/
+  ##
+  configManagementPlugins:
+    ## @param repoServer.configManagementPlugins.enabled Whether the config management plugins are enabled or not.
+    enabled: false
+    ## @param repoServer.configManagementPlugins.additionalBinaries Additional binaries necessary for the config management plugins.
+    ## Will be downloaded from the given URL and made available as `name` in the configured `additionalBinariesDir` of the plugin.
+    ## If a custom script is used to download the binary, make sure to eventually provide your binary in an executable format in the
+    ## shared volume mounted to `/additional-binaries`.`
+    ## E.g.
+    ## additionalBinaries:
+    ##   - name: my-custom-binary
+    ##     url: https://www.example.com/my-custom-binary-1.2.3
+    ##     customScript: ""
+    additionalBinaries: []
+    ## @param repoServer.configManagementPlugins.plugins The config management plugins to be provided as sidecars alongside the repo server.
+    ## E.g.
+    ## plugins:
+    ##   - name: my-custom-helm-plugin
+    ##     existingConfigMap: "" # takes precedence over `spec`, if given
+    ##     existingConfigMapKey: "" # defaults to `plugin.yaml`
+    ##     additionalBinariesDir: "" # defaults to `/usr/local/bin/`
+    ##     spec:
+    ##       # ConfigManagementPlugin spec here
+    ##       # https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/#write-the-plugin-configuration-file
+    ##     sidecar:
+    ##       image:
+    ##         registry: docker.io
+    ##         repository: alpine/helm
+    ##         tag: latest
+    ##       # can also define a custom security context, a custom command, extra env variables, extra mounts, ...
+    plugins: []
+
   ## @param repoServer.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true

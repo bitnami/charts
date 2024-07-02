@@ -137,6 +137,45 @@ spec:
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
           {{- end }}
         {{- end }}
+        {{- if .Values.repoServer.configManagementPlugins.enabled }}
+        - name: copy-cmp-server-binary
+          image: {{ include "argocd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/cp
+            - -n
+            - /opt/bitnami/argo-cd/bin/argocd
+            - /additional-binaries/argocd-cmp-server
+          {{- if .Values.repoServer.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.repoServer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /additional-binaries
+              name: cmp-additional-binaries
+        {{- if .Values.repoServer.configManagementPlugins.additionalBinaries }}
+        - name: download-additional-binaries
+          image: {{ include "common.images.image" (dict "imageRoot" (dict "repository" "curlimages/curl" "tag" "latest") "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+          args:
+            - |-
+              {{- range $additionalBinary := .Values.repoServer.configManagementPlugins.additionalBinaries }}
+              {{- if $additionalBinary.customScript }}
+              # downloading {{ $additionalBinary.name }}
+              {{ $additionalBinary.customScript | nindent 14 }}
+              {{- else }}
+              # downloading {{ $additionalBinary.name }}
+              curl -L {{ $additionalBinary.url }} -o /additional-binaries/{{ $additionalBinary.name }}
+              chmod +x /additional-binaries/{{ $additionalBinary.name }}
+              {{- end }}
+              {{- end }}
+          volumeMounts:
+            - mountPath: /additional-binaries
+              name: cmp-additional-binaries
+        {{- end }}
+        {{- end }}
         {{- if .Values.repoServer.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -273,9 +312,82 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if .Values.repoServer.configManagementPlugins.enabled }}
+            # The sidecars register their sockets to this volume for the repo server to find them.
+            - name: cmp-server-plugins
+              mountPath: /home/argocd/cmp-server/plugins
+            {{- end }}
           {{- if .Values.repoServer.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        {{- if .Values.repoServer.configManagementPlugins.enabled }}
+        {{- range $plugin := .Values.repoServer.configManagementPlugins.plugins }}
+        {{- $additionalBinariesDir := $plugin.additionalBinariesDir | default "/usr/local/bin" | trimSuffix "/" }}
+        - name: {{ $plugin.name }}
+          image: {{ include "common.images.image" (dict "imageRoot" $plugin.sidecar.image "global" $.Values.global) }}
+          imagePullPolicy: {{ $plugin.sidecar.image.pullPolicy | default $.Values.image.pullPolicy }}
+          {{- if $plugin.sidecar.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" $plugin.sidecar.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- $cmpSidecarSecurityContext := include "argocd.tplvalues.merge-with-precedence" (dict "values" (list $.Values.repoServer.containerSecurityContext $plugin.sidecar.containerSecurityContext) "context" $) | fromYaml }}
+          {{- if $cmpSidecarSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $cmpSidecarSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if $plugin.sidecar.customCommand }}
+          command: {{- include "common.tplvalues.render" (dict "value" $plugin.sidecar.customCommand "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - {{ $additionalBinariesDir }}/argocd-cmp-server
+          {{- end }}
+          {{- if $plugin.sidecar.customArgs }}
+          args: {{- include "common.tplvalues.render" (dict "value" $plugin.sidecar.customArgs "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if $plugin.sidecar.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" $plugin.sidecar.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if $plugin.sidecar.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" $plugin.sidecar.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if $plugin.sidecar.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" $plugin.sidecar.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if $plugin.sidecar.resources }}
+          resources: {{- toYaml $plugin.sidecar.resources | nindent 12 }}
+          {{- else if and $plugin.sidecar.resourcePreset (ne $plugin.sidecar.resourcesPreset "none") }}
+          resources: {{- include "common.resources.preset" (dict "type" $plugin.sidecar.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if $plugin.sidecar.startupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" $plugin.sidecar.startupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if $plugin.sidecar.livenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $plugin.sidecar.livenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if $plugin.sidecar.readinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $plugin.sidecar.readinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: cmp-{{ $plugin.name }}
+              mountPath: /home/argocd/cmp-server/config/plugin.yaml
+              {{- if $plugin.existingConfigMap }}
+              subPath: {{ $plugin.existingConfigMapKey | default "plugin.yaml" }}
+              {{- else }}
+              subPath: plugin.yaml
+              {{- end }}
+            - name: cmp-server-plugins
+              mountPath: /home/argocd/cmp-server/plugins
+            - name: cmp-additional-binaries
+              mountPath: {{ $additionalBinariesDir }}/
+            - name: cmp-server-tmp-dir
+              mountPath: /tmp
+            {{- if $plugin.sidecar.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" $plugin.sidecar.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.repoServer.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -301,6 +413,23 @@ spec:
             secretName: argocd-repo-server-tls
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.repoServer.configManagementPlugins.enabled }}
+        - name: cmp-server-plugins
+          emptyDir: {}
+        - name: cmp-server-tmp-dir
+          emptyDir: {}
+        - name: cmp-additional-binaries
+          emptyDir: {}
+        {{- range $plugin := .Values.repoServer.configManagementPlugins.plugins }}
+        - name: cmp-{{ $plugin.name }}
+          configMap:
+            {{- if $plugin.existingConfigMap }}
+            name: {{ include "common.tplvalues.render" (dict "value" $plugin.existingConfigMap "context" $) }}
+            {{- else }}
+            name: {{ printf "%s-cmp-%s" (include "argocd.repo-server" $) $plugin.name | trunc 63 | trimSuffix "-" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.repoServer.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

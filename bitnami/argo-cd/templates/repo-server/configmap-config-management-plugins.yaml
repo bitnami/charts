@@ -1,0 +1,29 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.repoServer.configManagementPlugins.enabled }}
+{{- range $plugin := .Values.repoServer.configManagementPlugins.plugins }}
+{{- if not $plugin.existingConfigMap }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ printf "%s-cmp-%s" (include "argocd.repo-server" $) $plugin.name | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: repo-server
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  plugin.yaml: |
+    kind: ConfigManagementPlugin
+    apiVersion: argoproj.io/v1alpha1
+    metadata:
+      name: {{ $plugin.name }}
+    spec: {{- include "common.tplvalues.render" ( dict "value" $plugin.spec "context" $ ) | nindent 6 }}
+{{- end }}
+{{- end }}
+{{- end -}}
