@@ -37,6 +37,7 @@
               "path": "/.vib"
             },
             "tests_file": "neo4j/goss/goss.yaml",
+            "vars_file": "neo4j/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-neo4j"
