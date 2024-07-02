@@ -184,11 +184,11 @@ spec:
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
+            {{- end }}
             - name: MINIO_CONSOLE_PORT_NUMBER
               value: {{ .Values.containerPorts.console | quote }}
             - name: MINIO_API_PORT_NUMBER
               value: {{ .Values.containerPorts.api | quote }}
-            {{- end }}
             - name: MINIO_DATA_DIR
               value: {{ ternary (printf "%s-0" $mountPath) $mountPath (gt $drivesPerNode 1) | quote }}
             {{- if .Values.extraEnvVars }}
