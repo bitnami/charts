@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mediawiki
 ```
 
-Looking to use MediaWiki in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MediaWiki in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -238,6 +238,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for Mediawki pods                                                                                                                                             | `[]`                                              |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Mediawki container(s)                                                                                                                                | `[]`                                              |
 | `initContainers`                                    | Add additional init containers to the Mediawki pods                                                                                                                                                               | `[]`                                              |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`                                            |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                                              |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                                              |
 | `sidecars`                                          | Add additional sidecar containers to the Mediawki pods                                                                                                                                                            | `[]`                                              |
 | `persistence.enabled`                               | Enable persistence using PVC                                                                                                                                                                                      | `true`                                            |
 | `persistence.storageClass`                          | PVC Storage Class for MediaWiki volume                                                                                                                                                                            | `""`                                              |

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/consul
 ```
 
-Looking to use HashiCorp Consul in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use HashiCorp Consul in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -320,8 +320,8 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for Hashicorp Consul container                                                                                                                                | `[]`             |
 | `initContainers`                                    | Add additional init containers to the Hashicorp Consul pods                                                                                                                                                       | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the Hashicorp Consul pods                                                                                                                                                    | `[]`             |
-| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `false`          |
-| `pdb.minAvailable`                                  | Minimum number of pods that must still be available after the eviction                                                                                                                                            | `1`              |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number of pods that must still be available after the eviction                                                                                                                                            | `""`             |
 | `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                                                                                                                                                     | `""`             |
 | `serviceAccount.create`                             | Enable creation of ServiceAccount for HashiCorp Consul pod                                                                                                                                                        | `true`           |
 | `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                            | `""`             |

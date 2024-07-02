@@ -12,7 +12,7 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 helm install my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
-Looking to use Spring Cloud Data Flow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Spring Cloud Data Flow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -522,6 +522,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `deployer.secretRefs`                         | Streaming applications secretRefs                                                                                                                                                                                                   | `[]`           |
 | `deployer.entryPointStyle`                    | An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot                                                                                     | `exec`         |
 | `deployer.imagePullPolicy`                    | An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never                                                                                      | `IfNotPresent` |
+| `deployer.taskServiceAccountName`             | Custom service account for scheduled tasks                                                                                                                                                                                          | `""`           |
 
 ### RBAC parameters
 

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/jupyterhub
 ```
 
-Looking to use JupyterHub in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use JupyterHub in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -423,7 +423,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `hub.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Hub container(s)                                                                                                                                             | `[]`                         |
 | `hub.initContainers`                                    | Add additional init containers to the Hub pods                                                                                                                                                                            | `[]`                         |
 | `hub.sidecars`                                          | Add additional sidecar containers to the Hub pod                                                                                                                                                                          | `[]`                         |
-| `hub.pdb.create`                                        | Deploy Hub PodDisruptionBudget                                                                                                                                                                                            | `false`                      |
+| `hub.pdb.create`                                        | Deploy Hub PodDisruptionBudget                                                                                                                                                                                            | `true`                       |
 | `hub.pdb.minAvailable`                                  | Set minimum available hub instances                                                                                                                                                                                       | `""`                         |
 | `hub.pdb.maxUnavailable`                                | Set maximum available hub instances                                                                                                                                                                                       | `""`                         |
 
@@ -559,7 +559,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `proxy.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Proxy container(s)                                                                                                                                               | `[]`                                      |
 | `proxy.initContainers`                                    | Add additional init containers to the Proxy pods                                                                                                                                                                              | `[]`                                      |
 | `proxy.sidecars`                                          | Add additional sidecar containers to the Proxy pod                                                                                                                                                                            | `[]`                                      |
-| `proxy.pdb.create`                                        | Deploy Proxy PodDisruptionBudget                                                                                                                                                                                              | `false`                                   |
+| `proxy.pdb.create`                                        | Deploy Proxy PodDisruptionBudget                                                                                                                                                                                              | `true`                                    |
 | `proxy.pdb.minAvailable`                                  | Set minimum available proxy instances                                                                                                                                                                                         | `""`                                      |
 | `proxy.pdb.maxUnavailable`                                | Set maximum available proxy instances                                                                                                                                                                                         | `""`                                      |
 

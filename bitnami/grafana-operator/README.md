@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-operator
 ```
 
-Looking to use Grafana Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Grafana Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -226,6 +226,9 @@ extraDeploy:
 | `operator.extraVolumes`                                      | Optionally specify extra list of additional volumes for Grafana Operator pods                                                                                                                                                       | `[]`                               |
 | `operator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Grafana Operator container(s)                                                                                                                                          | `[]`                               |
 | `operator.initContainers`                                    | Add additional init containers to the Grafana Operator pods                                                                                                                                                                         | `[]`                               |
+| `operator.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                     | `true`                             |
+| `operator.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                      | `""`                               |
+| `operator.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `operator.pdb.minAvailable` and `operator.pdb.maxUnavailable` are empty.                                                                    | `""`                               |
 | `operator.sidecars`                                          | Add additional sidecar containers to the Grafana Operator pods                                                                                                                                                                      | `[]`                               |
 | `operator.namespaceScope`                                    | If the operator should run in namespace-scope mode or not,                                                                                                                                                                          | `false`                            |
 | `operator.watchNamespace`                                    | Override the namespace to watch                                                                                                                                                                                                     | `""`                               |

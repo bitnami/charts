@@ -1,8 +1,71 @@
 # Changelog
 
-## 29.0.3 (2024-05-24)
+## 29.3.6 (2024-07-02)
 
-* [bitnami/kafka] Fix linter rules after deprecating Kafka Exporter ([#26411](https://github.com/bitnami/charts/pull/26411))
+* [bitnami/kafka] fix: Mount kafka_jaas.conf in controller statefulset for kraft migration ([#27610](https://github.com/bitnami/charts/pull/27610))
+
+## <small>29.3.5 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kafka] Release 29.3.5 (#27613) ([1ef0ca8](https://github.com/bitnami/charts/commit/1ef0ca867542f99b4e37ac3182727357a0fd17cf)), closes [#27613](https://github.com/bitnami/charts/issues/27613)
+
+## <small>29.3.4 (2024-06-18)</small>
+
+* [bitnami/kafka] Release 29.3.4 (#27362) ([39074dc](https://github.com/bitnami/charts/commit/39074dcf4c92f7b875f1ddb2bc87443b05e7592d)), closes [#27362](https://github.com/bitnami/charts/issues/27362)
+
+## <small>29.3.3 (2024-06-17)</small>
+
+* [bitnami/kafka] Release 29.3.3 (#27236) ([b53ec15](https://github.com/bitnami/charts/commit/b53ec15d13c1536492058c6527b5698254135696)), closes [#27236](https://github.com/bitnami/charts/issues/27236)
+
+## <small>29.3.2 (2024-06-14)</small>
+
+* [bitnami/kafka] Release 29.3.2 (#27175) ([82f0e6c](https://github.com/bitnami/charts/commit/82f0e6c052c92a7e92460effe5efe3f88c3222cf)), closes [#27175](https://github.com/bitnami/charts/issues/27175)
+
+## <small>29.3.1 (2024-06-13)</small>
+
+* [bitnami/kafka] Fix 'sasl.client.passwords' not working during chart upgrade (#27097) ([5f2e38d](https://github.com/bitnami/charts/commit/5f2e38d88c5a5f94e3f578744858cc43450a77d1)), closes [#27097](https://github.com/bitnami/charts/issues/27097)
+
+## 29.3.0 (2024-06-12)
+
+* [bitnami/kafka] Custom SANs for auto-generated TLS certificates (#27092) ([45409ff](https://github.com/bitnami/charts/commit/45409ffe1541b04e012deae14ffa224f414937e6)), closes [#27092](https://github.com/bitnami/charts/issues/27092)
+
+## <small>29.2.4 (2024-06-06)</small>
+
+* [bitnami/kafka] Release 29.2.4 (#26966) ([92b9deb](https://github.com/bitnami/charts/commit/92b9debcd39ec036754fb3e33d9c171b53ced39f)), closes [#26966](https://github.com/bitnami/charts/issues/26966)
+
+## <small>29.2.3 (2024-06-06)</small>
+
+* [bitnami/kafka] Release 29.2.3 (#26896) ([0c5dfee](https://github.com/bitnami/charts/commit/0c5dfee96cce662656202789a23e5208e4da7c0d)), closes [#26896](https://github.com/bitnami/charts/issues/26896)
+
+## <small>29.2.2 (2024-06-05)</small>
+
+* [bitnami/kafka] Bump chart version (#26839) ([2061b0c](https://github.com/bitnami/charts/commit/2061b0cc26be9bf9bcfc99c920b6bdd80d33c022)), closes [#26839](https://github.com/bitnami/charts/issues/26839)
+
+## <small>29.2.1 (2024-06-05)</small>
+
+* [bitnami/kafka] Bump chart version (#26781) ([66f65f6](https://github.com/bitnami/charts/commit/66f65f6e5a20c7e8423b51606b051b472b4729c1)), closes [#26781](https://github.com/bitnami/charts/issues/26781)
+
+## 29.2.0 (2024-05-30)
+
+* [bitnami/kafka] #25646 Use parameter map for kafka config (#26342) ([4a023a2](https://github.com/bitnami/charts/commit/4a023a27e2bae7ea8779b667bc1e9a00cba925e1)), closes [#25646](https://github.com/bitnami/charts/issues/25646) [#26342](https://github.com/bitnami/charts/issues/26342)
+
+## <small>29.1.2 (2024-05-29)</small>
+
+* [bitnami/kafka] PDB review (#25938) ([568aafa](https://github.com/bitnami/charts/commit/568aafa1de85759ea2d90d2915970eefaa36dffd)), closes [#25938](https://github.com/bitnami/charts/issues/25938)
+
+## <small>29.1.1 (2024-05-28)</small>
+
+* [bitnami/kafka] Fixed Network-Policies for jmx metrics export (#26369) ([7f9445f](https://github.com/bitnami/charts/commit/7f9445f21003a77971d1e7d9c31cf952b6ba9554)), closes [#26369](https://github.com/bitnami/charts/issues/26369)
+
+## 29.1.0 (2024-05-27)
+
+* [bitnami/kafka] Restore value brokerRackAssignment (#26296) ([62968c1](https://github.com/bitnami/charts/commit/62968c1bcf75a374076e5161f57673faaee9a96d)), closes [#26296](https://github.com/bitnami/charts/issues/26296)
+
+## <small>29.0.3 (2024-05-24)</small>
+
+* [bitnami/kafka] Deprecate Kafka Exporter (#26395) ([bf9a653](https://github.com/bitnami/charts/commit/bf9a6535fabdd4c0ad3210920cdd6c4963c5511c)), closes [#26395](https://github.com/bitnami/charts/issues/26395)
+* [bitnami/kafka] Fix linter rules after deprecating Kafka Exporter (#26411) ([69856e9](https://github.com/bitnami/charts/commit/69856e985f1325b3e72cd126b6990647d35f1cbb)), closes [#26411](https://github.com/bitnami/charts/issues/26411)
+* [bitnami/kafka] Release 28.3.1 (#26403) ([0428ec7](https://github.com/bitnami/charts/commit/0428ec724a1e6b139b12e8c3a6ab489a6459660c)), closes [#26403](https://github.com/bitnami/charts/issues/26403)
 
 ## 28.3.0 (2024-05-21)
 

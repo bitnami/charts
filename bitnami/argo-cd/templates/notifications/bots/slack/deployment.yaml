@@ -96,7 +96,7 @@ spec:
           {{- else if .Values.notifications.bots.slack.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
-              path: /metrics
+              port: metrics
             initialDelaySeconds: {{ .Values.notifications.bots.slack.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.notifications.bots.slack.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.notifications.bots.slack.livenessProbe.timeoutSeconds }}

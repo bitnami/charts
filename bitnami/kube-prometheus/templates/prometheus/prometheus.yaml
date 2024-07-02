@@ -51,6 +51,7 @@ spec:
     {{- end }}
   {{- if .Values.prometheus.image }}
   image: {{ template "kube-prometheus.prometheus.image" . }}
+  imagePullPolicy: {{ .Values.prometheus.image.pullPolicy }}
   {{- end }}
   {{- if .Values.prometheus.additionalArgs }}
   additionalArgs: {{- toYaml .Values.prometheus.additionalArgs | nindent 4 }}
@@ -100,6 +101,9 @@ spec:
   {{- end }}
   {{- if .Values.prometheus.enforcedSampleLimit }}
   enforcedSampleLimit: {{ .Values.prometheus.enforcedSampleLimit }}
+  {{- end }}
+  {{- if .Values.prometheus.keepDroppedTargets }}
+  keepDroppedTargets: {{ .Values.prometheus.keepDroppedTargets }}
   {{- end }}
   {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
@@ -256,7 +260,7 @@ spec:
     name: {{ .Values.prometheus.additionalAlertManagerExternal.name }}
     key: {{ .Values.prometheus.additionalAlertManagerExternal.key }}
   {{- end -}}
-{{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
+{{- include "kube-prometheus.imagePullSecrets" . | nindent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   {{- if .Values.prometheus.initContainers }}
   initContainers:

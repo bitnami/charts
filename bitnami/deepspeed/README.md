@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/deepspeed
 ```
 
-Looking to use DeepSpeed in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use DeepSpeed in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -262,7 +262,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `client.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                             | `{}`             |
 | `client.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                            | `{}`             |
 | `client.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                              | `{}`             |
-| `client.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production). | `small`          |
+| `client.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production). | `medium`         |
 | `client.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                               | `{}`             |
 | `client.podSecurityContext.enabled`                        | Enabled Client pods' Security Context                                                                                                                                                                                           | `true`           |
 | `client.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                              | `Always`         |
@@ -315,18 +315,21 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Deepspeed Client persistence paramaters
 
-| Name                               | Description                                                             | Value                     |
-| ---------------------------------- | ----------------------------------------------------------------------- | ------------------------- |
-| `client.persistence.enabled`       | Use a PVC to persist data                                               | `false`                   |
-| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class                | `""`                      |
-| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound          | `""`                      |
-| `client.persistence.mountPath`     | Path to mount the volume at                                             | `/bitnami/deepspeed/data` |
-| `client.persistence.accessModes`   | Persistent Volume Access Mode                                           | `["ReadWriteOnce"]`       |
-| `client.persistence.dataSource`    | Custom PVC data source                                                  | `{}`                      |
-| `client.persistence.selector`      | Selector to match an existing Persistent Volume for the client data PVC | `{}`                      |
-| `client.persistence.size`          | Size of data volume                                                     | `8Gi`                     |
-| `client.persistence.labels`        | Persistent Volume labels                                                | `{}`                      |
-| `client.persistence.annotations`   | Persistent Volume annotations                                           | `{}`                      |
+| Name                               | Description                                                                                                                                                  | Value                     |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
+| `client.persistence.enabled`       | Use a PVC to persist data                                                                                                                                    | `false`                   |
+| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class                                                                                                     | `""`                      |
+| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound                                                                                               | `""`                      |
+| `client.persistence.mountPath`     | Path to mount the volume at                                                                                                                                  | `/bitnami/deepspeed/data` |
+| `client.persistence.accessModes`   | Persistent Volume Access Mode                                                                                                                                | `["ReadWriteOnce"]`       |
+| `client.persistence.dataSource`    | Custom PVC data source                                                                                                                                       | `{}`                      |
+| `client.persistence.selector`      | Selector to match an existing Persistent Volume for the client data PVC                                                                                      | `{}`                      |
+| `client.persistence.size`          | Size of data volume                                                                                                                                          | `8Gi`                     |
+| `client.persistence.labels`        | Persistent Volume labels                                                                                                                                     | `{}`                      |
+| `client.persistence.annotations`   | Persistent Volume annotations                                                                                                                                | `{}`                      |
+| `client.pdb.create`                | Enable/disable a Pod Disruption Budget creation                                                                                                              | `true`                    |
+| `client.pdb.minAvailable`          | Minimum number/percentage of pods that should remain scheduled                                                                                               | `""`                      |
+| `client.pdb.maxUnavailable`        | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `client.pdb.minAvailable` and `client.pdb.maxUnavailable` are empty. | `""`                      |
 
 ### Worker Deployment Parameters
 
@@ -363,7 +366,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `worker.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                             | `{}`             |
 | `worker.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                            | `{}`             |
 | `worker.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                              | `{}`             |
-| `worker.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production). | `small`          |
+| `worker.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production). | `medium`         |
 | `worker.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                               | `{}`             |
 | `worker.podSecurityContext.enabled`                        | Enabled Worker pods' Security Context                                                                                                                                                                                           | `true`           |
 | `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                              | `Always`         |
@@ -454,6 +457,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `worker.persistence.size`             | Size of data volume                                                                                                                                                                                                                                   | `8Gi`                      |
 | `worker.persistence.labels`           | Persistent Volume labels                                                                                                                                                                                                                              | `{}`                       |
 | `worker.persistence.annotations`      | Persistent Volume annotations                                                                                                                                                                                                                         | `{}`                       |
+| `worker.pdb.create`                   | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`                     |
+| `worker.pdb.minAvailable`             | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`                       |
+| `worker.pdb.maxUnavailable`           | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `worker.pdb.minAvailable` and `worker.pdb.maxUnavailable` are empty.                                                                                          | `""`                       |
 | `gitImage.registry`                   | Git image registry                                                                                                                                                                                                                                    | `REGISTRY_NAME`            |
 | `gitImage.repository`                 | Git image repository                                                                                                                                                                                                                                  | `REPOSITORY_NAME/git`      |
 | `gitImage.digest`                     | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                   | `""`                       |

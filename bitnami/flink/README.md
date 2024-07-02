@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/flink
 ```
 
-Looking to use Apache Flink in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Flink in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -260,6 +260,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `jobmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                                                                                                                                                                 | `[]`             |
 | `jobmanager.initContainers`                                    | Add additional init containers to the flink pods                                                                                                                                                                                        | `[]`             |
 | `jobmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                                                                                                                                                                     | `[]`             |
+| `jobmanager.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`           |
+| `jobmanager.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`             |
+| `jobmanager.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.                                                                       | `""`             |
 
 ### TaskManager deployment parameters
 
@@ -361,6 +364,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `taskmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                                                                                                                                                                   | `[]`             |
 | `taskmanager.initContainers`                                    | Add additional init containers to the flink pods                                                                                                                                                                                          | `[]`             |
 | `taskmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                                                                                                                                                                       | `[]`             |
+| `taskmanager.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                           | `true`           |
+| `taskmanager.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                            | `""`             |
+| `taskmanager.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.                                                                         | `""`             |
 
 ## Upgrading
 

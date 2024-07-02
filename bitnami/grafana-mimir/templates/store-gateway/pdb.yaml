@@ -19,8 +19,8 @@ spec:
   {{- if .Values.storeGateway.pdb.minAvailable }}
   minAvailable: {{ .Values.storeGateway.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.storeGateway.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.storeGateway.pdb.maxUnavailable }}
+  {{- if or .Values.storeGateway.pdb.maxUnavailable ( not .Values.storeGateway.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.storeGateway.pdb.maxUnavailable | default 1 }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storeGateway.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

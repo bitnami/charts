@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/metallb
 ```
 
-Looking to use MetalLB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MetalLB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -180,6 +180,9 @@ spec:
 | `controller.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MetalLB controller container(s)                                                                                                                                        | `[]`                                 |
 | `controller.sidecars`                                          | Add additional sidecar containers to the MetalLB Controller pod(s)                                                                                                                                                                      | `[]`                                 |
 | `controller.initContainers`                                    | Add additional init containers to the MetalLB Controller pod(s)                                                                                                                                                                         | `[]`                                 |
+| `controller.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`                               |
+| `controller.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`                                 |
+| `controller.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.                                                                    | `""`                                 |
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                                                                                                                    | `true`                               |
 | `controller.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                                                                                                                     | `""`                                 |
 | `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                          | `false`                              |

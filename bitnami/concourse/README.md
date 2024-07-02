@@ -12,7 +12,7 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 helm install my-release oci://registry-1.docker.io/bitnamicharts/concourse
 ```
 
-Looking to use Concourse in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Concourse in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -348,7 +348,7 @@ The [Bitnami Concourse](https://github.com/bitnami/containers/tree/main/bitnami/
 | `web.sidecars`                                          | Add additional sidecar containers to the Concourse web pod(s)                                                                                                                                                             | `[]`                                            |
 | `web.initContainers`                                    | Add additional init containers to the Concourse web pod(s)                                                                                                                                                                | `[]`                                            |
 | `web.pdb.create`                                        | Create Pod disruption budget object for Concourse worker nodes                                                                                                                                                            | `true`                                          |
-| `web.pdb.minAvailable`                                  | Minimum number / percentage of Concourse worker pods that should remain scheduled                                                                                                                                         | `1`                                             |
+| `web.pdb.minAvailable`                                  | Minimum number / percentage of Concourse worker pods that should remain scheduled                                                                                                                                         | `""`                                            |
 | `web.pdb.maxUnavailable`                                | Maximum number/percentage of Concourse worker pods that may be made unavailable                                                                                                                                           | `""`                                            |
 | `web.psp.create`                                        | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later                                                                               | `false`                                         |
 | `web.rbac.create`                                       | Specifies whether RBAC resources should be created                                                                                                                                                                        | `true`                                          |

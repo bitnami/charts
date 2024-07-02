@@ -500,12 +500,12 @@
                             "default": false
                         },
                         "minAvailable": {
-                            "type": "number",
+                            "type": [ "number", "string" ],
                             "description": "Minimum number/percentage of pods that should remain scheduled",
                             "default": 1
                         },
                         "maxUnavailable": {
-                            "type": "string",
+                            "type": [ "number", "string" ],
                             "description": "Maximum number/percentage of pods that may be made unavailable",
                             "default": ""
                         }
@@ -1402,12 +1402,12 @@
                             "default": false
                         },
                         "minAvailable": {
-                            "type": "number",
+                            "type": [ "number", "string" ],
                             "description": "Minimum number/percentage of pods that should remain scheduled",
                             "default": 1
                         },
                         "maxUnavailable": {
-                            "type": "string",
+                            "type": [ "number", "string" ],
                             "description": "Maximum number/percentage of pods that may be made unavailable",
                             "default": ""
                         }
@@ -3015,12 +3015,12 @@
                             "default": false
                         },
                         "minAvailable": {
-                            "type": "number",
+                            "type": [ "number", "string" ],
                             "description": "Minimum number/percentage of pods that should remain scheduled",
                             "default": 1
                         },
                         "maxUnavailable": {
-                            "type": "string",
+                            "type": [ "number", "string" ],
                             "description": "Maximum number/percentage of pods that may be made unavailable",
                             "default": ""
                         }

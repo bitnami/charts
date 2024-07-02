@@ -1,8 +1,32 @@
 # Changelog
 
-## 7.5.2 (2024-05-24)
+## 8.0.0 (2024-06-19)
 
-* [bitnami/external-dns] Use different liveness/readiness probes ([#26317](https://github.com/bitnami/charts/pull/26317))
+* [bitnami/external-dns] Major release: drop support for multiple replicas and DaemonSet ([#26759](https://github.com/bitnami/charts/pull/26759))
+
+## <small>7.5.7 (2024-06-18)</small>
+
+* [bitnami/external-dns] Release 7.5.7 (#27341) ([6668b3c](https://github.com/bitnami/charts/commit/6668b3c1ae632eb90b6e825fedddc39637aec137)), closes [#27341](https://github.com/bitnami/charts/issues/27341)
+
+## <small>7.5.6 (2024-06-17)</small>
+
+* [bitnami/external-dns] Release 7.5.6 (#27216) ([cfe95c9](https://github.com/bitnami/charts/commit/cfe95c9c1d2c0e6b8e3f1b574f992f47486bc91a)), closes [#27216](https://github.com/bitnami/charts/issues/27216)
+
+## <small>7.5.5 (2024-06-06)</small>
+
+* [bitnami/external-dns] Release 7.5.5 (#26948) ([d8def07](https://github.com/bitnami/charts/commit/d8def07c4bdaa2f6809d919bb9a4e5e6818317e3)), closes [#26948](https://github.com/bitnami/charts/issues/26948)
+
+## <small>7.5.4 (2024-06-05)</small>
+
+* [bitnami/external-dns] Release 7.5.4 (#26724) ([4b622b9](https://github.com/bitnami/charts/commit/4b622b935a9445598fd42adf885346549671032f)), closes [#26724](https://github.com/bitnami/charts/issues/26724)
+
+## <small>7.5.3 (2024-06-04)</small>
+
+* [bitnami/external-dns] Bump chart version (#26629) ([aba7563](https://github.com/bitnami/charts/commit/aba75631498b41c20034d7486431447527b75acd)), closes [#26629](https://github.com/bitnami/charts/issues/26629)
+
+## <small>7.5.2 (2024-05-24)</small>
+
+* [bitnami/external-dns] Use different liveness/readiness probes (#26317) ([465cecf](https://github.com/bitnami/charts/commit/465cecf3e3c6023ac32c7b552b86ba6cfd7a31ce)), closes [#26317](https://github.com/bitnami/charts/issues/26317)
 
 ## <small>7.5.1 (2024-05-22)</small>
 

@@ -1,8 +1,33 @@
 # Changelog
 
-## 11.2.1 (2024-05-22)
+## 11.3.6 (2024-06-26)
 
-* [bitnami/grafana] Use different liveness/readiness probes ([#26328](https://github.com/bitnami/charts/pulls/26328))
+* [bitnami/grafana] Release 11.3.6 ([#27544](https://github.com/bitnami/charts/pull/27544))
+
+## <small>11.3.5 (2024-06-18)</small>
+
+* [bitnami/grafana] Release 11.3.5 (#27354) ([3938c8b](https://github.com/bitnami/charts/commit/3938c8b33891c97a8a28357bf8c6498ddd20acb7)), closes [#27354](https://github.com/bitnami/charts/issues/27354)
+
+## <small>11.3.4 (2024-06-17)</small>
+
+* [bitnami/grafana] Release 11.3.4 (#27230) ([d288b6d](https://github.com/bitnami/charts/commit/d288b6dda4e9d3b63e20f28f3765d706cd2dc7d7)), closes [#27230](https://github.com/bitnami/charts/issues/27230)
+
+## <small>11.3.3 (2024-06-06)</small>
+
+* [bitnami/grafana] Release 11.3.2 (#26730) ([2608388](https://github.com/bitnami/charts/commit/26083883f08c9e459ccbea1cee1b01cc34f759d0)), closes [#26730](https://github.com/bitnami/charts/issues/26730)
+* [bitnami/grafana] Release 11.3.3 (#26961) ([d02e879](https://github.com/bitnami/charts/commit/d02e879d735a8327ffdc4d6fa079d4ed1233a7f6)), closes [#26961](https://github.com/bitnami/charts/issues/26961)
+
+## <small>11.3.1 (2024-06-04)</small>
+
+* [bitnami/grafana] Bump chart version (#26633) ([edb0698](https://github.com/bitnami/charts/commit/edb0698e60a7564cb57f1aa07ab456d0943a0427)), closes [#26633](https://github.com/bitnami/charts/issues/26633)
+
+## 11.3.0 (2024-05-29)
+
+* [bitnami/grafana] Enable PodDisruptionBudgets (#26473) ([75985a9](https://github.com/bitnami/charts/commit/75985a9499556bb742a232e49c1f1f861b09251e)), closes [#26473](https://github.com/bitnami/charts/issues/26473)
+
+## <small>11.2.1 (2024-05-23)</small>
+
+* [bitnami/grafana] Use different liveness/readiness probes (#26328) ([dce614b](https://github.com/bitnami/charts/commit/dce614b357cb3e7fa6387c4b31d5904952d60e76)), closes [#26328](https://github.com/bitnami/charts/issues/26328)
 
 ## 11.2.0 (2024-05-22)
 

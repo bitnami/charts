@@ -1,8 +1,57 @@
 # Changelog
 
-## 6.3.3 (2024-05-24)
+## 6.5.1 (2024-06-28)
 
-* [bitnami/argo-cd] Release 6.3.3 ([#26415](https://github.com/bitnami/charts/pull/26415))
+* [bitnami/argo-cd] Release 6.5.1 ([#27575](https://github.com/bitnami/charts/pull/27575))
+
+## 6.5.0 (2024-06-27)
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/argo-cd] Fix #27108, #27108 (#27450) ([f331dd2](https://github.com/bitnami/charts/commit/f331dd2ef0f901ad51c6af00866e82e401308cbb)), closes [#27108](https://github.com/bitnami/charts/issues/27108) [#27108](https://github.com/bitnami/charts/issues/27108) [#27450](https://github.com/bitnami/charts/issues/27450) [#27108](https://github.com/bitnami/charts/issues/27108)
+
+## <small>6.4.8 (2024-06-18)</small>
+
+* [bitnami/argo-cd] Release 6.4.8 (#27328) ([5764b48](https://github.com/bitnami/charts/commit/5764b4815b5ad230ea1aa617d939be96e04d1d81)), closes [#27328](https://github.com/bitnami/charts/issues/27328)
+
+## <small>6.4.7 (2024-06-17)</small>
+
+* [bitnami/argo-cd] Release 6.4.7 (#27202) ([0704678](https://github.com/bitnami/charts/commit/0704678902cff3c340e2e1998151acc9ba993256)), closes [#27202](https://github.com/bitnami/charts/issues/27202)
+
+## <small>6.4.6 (2024-06-11)</small>
+
+* [bitnami/argo-cd] Typo in notifications service (#27054) ([9012640](https://github.com/bitnami/charts/commit/901264004c90fda66a5ea024235b28ecc03b4a21)), closes [#27054](https://github.com/bitnami/charts/issues/27054)
+
+## <small>6.4.5 (2024-06-06)</small>
+
+* [bitnami/argo-cd] Release 6.4.5 (#26938) ([7233063](https://github.com/bitnami/charts/commit/72330635af507b167ed585844d2c3beb09191378)), closes [#26938](https://github.com/bitnami/charts/issues/26938)
+
+## <small>6.4.4 (2024-06-06)</small>
+
+* [bitnami/argo-cd] Release 6.4.4 (#26883) ([e8de061](https://github.com/bitnami/charts/commit/e8de0612539c6b0e4b1bad432378cd2a5a5767cb)), closes [#26883](https://github.com/bitnami/charts/issues/26883)
+
+## <small>6.4.3 (2024-06-05)</small>
+
+* [bitnami/argo-cd] Bump chart version (#26821) ([1c97a4c](https://github.com/bitnami/charts/commit/1c97a4c38cf2cc71c1c3525fc0feade3fae8dfa3)), closes [#26821](https://github.com/bitnami/charts/issues/26821)
+
+## <small>6.4.2 (2024-06-05)</small>
+
+* [bitnami/argo-cd] Bump chart version (#26763) ([179050f](https://github.com/bitnami/charts/commit/179050f2fa0e8c5e661213c6e9690d628cac4bd6)), closes [#26763](https://github.com/bitnami/charts/issues/26763)
+
+## <small>6.4.1 (2024-06-05)</small>
+
+* [bitnami/argo-cd] Release 6.4.1 (#26720) ([834b448](https://github.com/bitnami/charts/commit/834b4487c5e0d2356625ecc2923ee02865b41fb0)), closes [#26720](https://github.com/bitnami/charts/issues/26720)
+
+## 6.4.0 (2024-05-30)
+
+* [bitnami/argo-cd] Enable PodDisruptionBudgets (#26419) ([c2b50f2](https://github.com/bitnami/charts/commit/c2b50f25b5a553fe180784947091673093757a81)), closes [#26419](https://github.com/bitnami/charts/issues/26419)
+
+## <small>6.3.4 (2024-05-28)</small>
+
+* [bitnami/argo-cd] Define port for notifications probes (#26485) ([4500caf](https://github.com/bitnami/charts/commit/4500cafc0aab84295f85bd839978929e5dfc8773)), closes [#26485](https://github.com/bitnami/charts/issues/26485)
+
+## <small>6.3.3 (2024-05-24)</small>
+
+* [bitnami/argo-cd] Release 6.3.3 (#26415) ([e4f57d1](https://github.com/bitnami/charts/commit/e4f57d1a1a2c32bb471bb50d28f1241cbac421d3)), closes [#26415](https://github.com/bitnami/charts/issues/26415)
 
 ## <small>6.3.2 (2024-05-24)</small>
 

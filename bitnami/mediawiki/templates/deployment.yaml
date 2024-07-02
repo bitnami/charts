@@ -229,7 +229,7 @@ spec:
               subPath: apache-logs-dir
             - name: empty-dir
               mountPath: /opt/bitnami/apache/var/run
-              subPath: apcahe-tmp-dir
+              subPath: apache-tmp-dir
             - name: empty-dir
               mountPath: /opt/bitnami/php/etc
               subPath: php-conf-dir

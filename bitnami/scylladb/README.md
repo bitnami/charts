@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/scylladb
 ```
 
-Looking to use ScyllaDB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use ScyllaDB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -247,7 +247,7 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 | `initContainers`                                    | Add additional init containers to the scylladb pods                                                                                                                                                               | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the scylladb pods                                                                                                                                                            | `[]`             |
 | `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
-| `pdb.minAvailable`                                  | Mininimum number of pods that must still be available after the eviction                                                                                                                                          | `1`              |
+| `pdb.minAvailable`                                  | Mininimum number of pods that must still be available after the eviction                                                                                                                                          | `""`             |
 | `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                                                                                                                                                     | `""`             |
 | `hostNetwork`                                       | Enable HOST Network                                                                                                                                                                                               | `false`          |
 | `containerPorts.intra`                              | Intra Port on the Host and Container                                                                                                                                                                              | `7000`           |

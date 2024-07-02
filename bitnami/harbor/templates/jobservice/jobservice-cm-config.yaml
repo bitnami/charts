@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
   name: {{ include "harbor.jobservice" . }}-config
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -15,7 +15,7 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-stringData:
+data:
   config.yml: |+
     #Server listening port
     protocol: {{ ternary "https" "http" .Values.internalTLS.enabled | quote }}
@@ -29,7 +29,6 @@ stringData:
       workers: {{ .Values.jobservice.maxJobWorkers }}
       backend: "redis"
       redis_pool:
-        redis_url: {{ include "harbor.redisForJobservice" . | quote }}
         namespace: {{ .Values.jobservice.redisNamespace | quote }}
     job_loggers:
       {{- if eq .Values.jobservice.jobLogger "file" }}

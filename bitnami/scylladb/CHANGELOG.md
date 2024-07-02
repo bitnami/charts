@@ -1,8 +1,48 @@
 # Changelog
 
-## 0.1.4 (2024-05-24)
+## 1.0.4 (2024-06-23)
 
-* [bitnami/scylladb] chore: :wrench: Increase initialDelaySeconds in liveness probe ([#26416](https://github.com/bitnami/charts/pull/26416))
+* [bitnami/scylladb] Release 1.0.4 ([#27503](https://github.com/bitnami/charts/pull/27503))
+
+## <small>1.0.3 (2024-06-18)</small>
+
+* [bitnami/scylladb] Release 1.0.3 (#27413) ([63533e2](https://github.com/bitnami/charts/commit/63533e20c7d813dcc673c55b8a6ebc6ee34a6ef3)), closes [#27413](https://github.com/bitnami/charts/issues/27413)
+
+## <small>1.0.2 (2024-06-17)</small>
+
+* [bitnami/scylladb] Release 1.0.2 (#27279) ([1c5940a](https://github.com/bitnami/charts/commit/1c5940a8bc2b0abc89a565c1e8fdba4b7dfc77bf)), closes [#27279](https://github.com/bitnami/charts/issues/27279)
+
+## <small>1.0.1 (2024-06-14)</small>
+
+* [bitnami/scylladb] Release 1.0.1 (#27167) ([cd3773d](https://github.com/bitnami/charts/commit/cd3773d377c38090f5404866df1321517f1aaf55)), closes [#27167](https://github.com/bitnami/charts/issues/27167)
+
+## 1.0.0 (2024-06-13)
+
+* [bitnami/scylladb] Release 1.0.0 (#27090) ([e576962](https://github.com/bitnami/charts/commit/e5769627c16a06e3a87e4d4d68dee8519f1bdfcd)), closes [#27090](https://github.com/bitnami/charts/issues/27090)
+
+## <small>0.1.9 (2024-06-10)</small>
+
+* [bitnami/scylladb] Release 0.1.9 (#27069) ([fd078f0](https://github.com/bitnami/charts/commit/fd078f0de0947450f4402d7abfd1a0b615babc20)), closes [#27069](https://github.com/bitnami/charts/issues/27069)
+
+## <small>0.1.8 (2024-06-06)</small>
+
+* [bitnami/scylladb] Release 0.1.8 (#27017) ([31b62dd](https://github.com/bitnami/charts/commit/31b62dd5fb41072fe0ac163d9245a48fb6947a00)), closes [#27017](https://github.com/bitnami/charts/issues/27017)
+
+## <small>0.1.7 (2024-06-05)</small>
+
+* [bitnami/scylladb] Bump chart version (#26860) ([988e123](https://github.com/bitnami/charts/commit/988e123378b6e8a77daddbd3f763af20a859659c)), closes [#26860](https://github.com/bitnami/charts/issues/26860)
+
+## <small>0.1.6 (2024-06-05)</small>
+
+* [bitnami/scylladb] Bump chart version (#26802) ([c3ae1ae](https://github.com/bitnami/charts/commit/c3ae1ae9b97d8fc3beea4285a440fc53cd1f82af)), closes [#26802](https://github.com/bitnami/charts/issues/26802)
+
+## <small>0.1.5 (2024-05-29)</small>
+
+* [bitnami/scylladb] Enable PodDisruptionBudgets (#26533) ([6e834a0](https://github.com/bitnami/charts/commit/6e834a0a5c00f82cff1c5ffdff2fb717c887ba12)), closes [#26533](https://github.com/bitnami/charts/issues/26533)
+
+## <small>0.1.4 (2024-05-24)</small>
+
+* [bitnami/scylladb] chore: :wrench: Increase initialDelaySeconds in liveness probe (#26416) ([fe8a230](https://github.com/bitnami/charts/commit/fe8a230d41274f0222e85d9c5ca581a1d497aef9)), closes [#26416](https://github.com/bitnami/charts/issues/26416)
 
 ## <small>0.1.3 (2024-05-23)</small>
 

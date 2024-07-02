@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/schema-registry
 ```
 
-Looking to use Confluent Schema Registry in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Confluent Schema Registry in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -320,9 +320,9 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for schema-registry container(s)                                                                                                                         | `[]`             |
 | `initContainers`                                    | Add additional init containers to the Schema Registry pods.                                                                                                                                                       | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the Schema Registry pods.                                                                                                                                                    | `[]`             |
-| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `false`          |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that must still be available after the eviction                                                                                                                                 | `1`              |
-| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable after the eviction                                                                                                                                 | `""`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that must still be available after the eviction                                                                                                                                 | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable after the eviction. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                 | `""`             |
 | `autoscaling.enabled`                               | Enable autoscaling for replicas                                                                                                                                                                                   | `false`          |
 | `autoscaling.minReplicas`                           | Minimum number of replicas                                                                                                                                                                                        | `1`              |
 | `autoscaling.maxReplicas`                           | Maximum number of replicas                                                                                                                                                                                        | `11`             |
@@ -342,6 +342,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `service.loadBalancerIP`                | loadBalancerIP if service type is LoadBalancer                                                        | `""`                     |
 | `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                 | `[]`                     |
 | `service.annotations`                   | Annotations for Schema Registry service                                                               | `{}`                     |
+| `service.labels`                        | Labels for Schema Registry service                                                                    | `{}`                     |
 | `service.extraPorts`                    | Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)            | `[]`                     |
 | `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                           | `{}`                     |

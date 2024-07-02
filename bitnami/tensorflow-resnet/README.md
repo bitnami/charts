@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/tensorflow-resnet
 ```
 
-Looking to use TensorFlow ResNet in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use TensorFlow ResNet in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -140,6 +140,9 @@ As an alternative, you can use any of the preset configurations for pod affinity
 | `sidecars`                                          | Add additional sidecar containers to the pod                                                                                                                                                                      | `[]`                                 |
 | `enableDefaultInitContainers`                       | Add default init containers to the deployment                                                                                                                                                                     | `true`                               |
 | `initContainers`                                    | Add additional init containers to the pod                                                                                                                                                                         | `[]`                                 |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`                               |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                                 |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                                 |
 | `updateStrategy.type`                               | Deployment strategy type.                                                                                                                                                                                         | `RollingUpdate`                      |
 | `priorityClassName`                                 | Pod's priorityClassName                                                                                                                                                                                           | `""`                                 |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                                                                                                    | `""`                                 |

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kube-state-metrics
 ```
 
-Looking to use Kube State Metrics in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Kube State Metrics in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -153,6 +153,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the kube-state-metrics container(s)                                                                                                                  | `[]`                                 |
 | `sidecars`                                          | Add additional sidecar containers to the kube-state-metrics pod(s)                                                                                                                                                | `[]`                                 |
 | `initContainers`                                    | Add additional init containers to the kube-state-metrics pod(s)                                                                                                                                                   | `[]`                                 |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`                               |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                                 |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                                 |
 | `namespaces`                                        | Comma-separated list of namespaces to be enabled. Defaults to all namespaces. Evaluated as a template.                                                                                                            | `""`                                 |
 | `kubeResources.certificatesigningrequests`          | Enable the `certificatesigningrequests` resource                                                                                                                                                                  | `true`                               |
 | `kubeResources.configmaps`                          | Enable the `configmaps` resource                                                                                                                                                                                  | `true`                               |

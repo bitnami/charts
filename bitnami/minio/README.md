@@ -14,7 +14,7 @@ Disclaimer: All software products, projects and company names are trademark(TM) 
 helm install my-release oci://registry-1.docker.io/bitnamicharts/minio
 ```
 
-Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -476,7 +476,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | Name                 | Description                                                                       | Value  |
 | -------------------- | --------------------------------------------------------------------------------- | ------ |
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `true` |
-| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `1`    |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `""`   |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`   |
 
 ### Metrics parameters
