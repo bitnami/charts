@@ -39,7 +39,7 @@
             "tests_file": "neo4j/goss/goss.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-neo4j-web"
+                "workload": "sts-neo4j"
               }
             }
           }
@@ -53,7 +53,7 @@
             "endpoint": "lb-neo4j-http",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
+              "username": "neo4j",
               "password": "ComplicatedPassword123!4"
             }
           }

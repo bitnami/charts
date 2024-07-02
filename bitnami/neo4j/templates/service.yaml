@@ -35,7 +35,7 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: tcp-bolt
+    - name: bolt
       port: {{ .Values.service.ports.bolt }}
       {{- if not (eq .Values.service.ports.bolt .Values.containerPorts.bolt) }}
       targetPort: {{ .Values.containerPorts.bolt }}
@@ -46,7 +46,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: tcp-http
+    - name: http
       port: {{ .Values.service.ports.http }}
       {{- if not (eq .Values.service.ports.http .Values.containerPorts.http) }}
       targetPort: {{ .Values.containerPorts.http }}
@@ -57,7 +57,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: tcp-https
+    - name: https
       port: {{ .Values.service.ports.https }}
       {{- if not (eq .Values.service.ports.https .Values.containerPorts.https) }}
       targetPort: {{ .Values.containerPorts.https }}
