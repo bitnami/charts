@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.1.7 (2024-06-21)
+## 19.2.0 (2024-06-28)
 
-* [bitnami/schema-registry] Release 19.1.7 ([#27414](https://github.com/bitnami/charts/pull/27414))
+* [bitnami/schema-registry] Add labels to service ([#27528](https://github.com/bitnami/charts/pull/27528))
+
+## <small>19.1.7 (2024-06-21)</small>
+
+* [bitnami/schema-registry] Release 19.1.7 (#27414) ([bbeca45](https://github.com/bitnami/charts/commit/bbeca45e5660f575ee0ca3c57992d11dde7beca0)), closes [#27414](https://github.com/bitnami/charts/issues/27414)
 
 ## <small>19.1.6 (2024-06-17)</small>
 

@@ -20,7 +20,7 @@ spec:
   replicas: {{ .Values.operator.replicaCount }}
   {{- end }}
   {{- if .Values.operator.updateStrategy }}
-  updateStrategy: {{- toYaml .Values.operator.updateStrategy | nindent 4 }}
+  strategy: {{- toYaml .Values.operator.updateStrategy | nindent 4 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.operator.podLabels .Values.commonLabels) "context" .) }}
   selector:

@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.4 (2024-06-18)
+## 18.2.5 (2024-07-01)
 
-* [bitnami/mariadb] Release 18.2.4 ([#27375](https://github.com/bitnami/charts/pull/27375))
+* [bitnami/mariadb] Release 18.2.5 ([#27619](https://github.com/bitnami/charts/pull/27619))
+
+## <small>18.2.4 (2024-06-18)</small>
+
+* [bitnami/mariadb] Release 18.2.4 (#27375) ([fcac2b3](https://github.com/bitnami/charts/commit/fcac2b33f4bb90c19932b4eec6636fc4b3c10cdc)), closes [#27375](https://github.com/bitnami/charts/issues/27375)
 
 ## <small>18.2.3 (2024-06-17)</small>
 

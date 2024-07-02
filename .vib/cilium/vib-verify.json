@@ -59,9 +59,13 @@
           }
         },
         {
-          "action_id": "kubescape",
+          "action_id": "cypress",
           "params": {
-            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
+            "resources": {
+              "path": "/.vib/cilium/cypress"
+            },
+            "endpoint": "lb-cilium-hubble-ui-http",
+            "app_protocol": "HTTP"
           }
         }
       ]

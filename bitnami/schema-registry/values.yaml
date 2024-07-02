@@ -517,6 +517,9 @@ service:
   ## @param service.annotations Annotations for Schema Registry service
   ##
   annotations: {}
+  ## @param service.labels Labels for Schema Registry service
+  ##
+  labels: {}
   ## @param service.extraPorts Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)
   ##
   extraPorts: []

@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.6 (2024-06-18)
+## 18.2.7 (2024-06-27)
 
-* [bitnami/contour] Release 18.2.6 ([#27335](https://github.com/bitnami/charts/pull/27335))
+* [bitnami/contour] allow customizing lifecycle hooks for envoy containers ([#27506](https://github.com/bitnami/charts/pull/27506))
+
+## <small>18.2.6 (2024-06-18)</small>
+
+* [bitnami/contour] Release 18.2.6 (#27335) ([c28d442](https://github.com/bitnami/charts/commit/c28d442b0762f714a6279ff1bf204eac218105fc)), closes [#27335](https://github.com/bitnami/charts/issues/27335)
 
 ## <small>18.2.5 (2024-06-17)</small>
 
