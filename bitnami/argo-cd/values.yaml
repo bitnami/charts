@@ -88,6 +88,11 @@ image:
 ## Argo CD Controller
 ##
 controller:
+  ## @param controller.kind Kind to deploy ArgoCD application controller in.
+  ## Use either StatefulSet or Deployment (default). StatefulSet is required when running in HA mode.
+  ## ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/high_availability/
+  ##
+  kind: Deployment
   ## @param controller.replicaCount Number of Argo CD replicas to deploy
   ##
   replicaCount: 1
@@ -593,6 +598,10 @@ controller:
   ## @param controller.lifecycleHooks for the Argo CD container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param controller.podManagementPolicy podManagementPolicy to manage scaling operation of pods (only in StatefulSet mode)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
   ## @param controller.extraEnvVars Array with extra environment variables to add to Argo CD nodes
   ## e.g:
   ## extraEnvVars:

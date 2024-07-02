@@ -257,6 +257,15 @@ Return the Redis&reg; port
 {{- end -}}
 
 {{/*
+Validate Application Controller config
+*/}}
+{{- define "argocd.validateValues.controller.config" -}}
+{{- if and (gt .Values.controller.replicaCount 1) (not (eq .Values.controller.kind "StatefulSet")) }}
+Argo CD: When running in HA mode, the application controller must be installed as a StatefulSet.
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate Redis config
 */}}
 {{- define "argocd.validateValues.redis" -}}
@@ -316,6 +325,7 @@ Compile all warnings into a single message.
 */}}
 {{- define "argocd.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "argocd.validateValues.controller.config" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.dex.config" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.clusterCredentials" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.externalRedis" .) -}}
