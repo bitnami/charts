@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.5.12 (2024-07-02)
+## 15.5.13 (2024-07-03)
 
-* postgres exporter monitor all databases ([#27586](https://github.com/bitnami/charts/pull/27586))
+* [bitnami/postgresql] Release 15.5.13 ([#27733](https://github.com/bitnami/charts/pull/27733))
+
+## <small>15.5.12 (2024-07-02)</small>
+
+* postgres exporter monitor all databases (#27586) ([4feb56d](https://github.com/bitnami/charts/commit/4feb56d610de6e958fd0d7052958b88bcb21e1ab)), closes [#27586](https://github.com/bitnami/charts/issues/27586)
 
 ## <small>15.5.11 (2024-06-26)</small>
 
