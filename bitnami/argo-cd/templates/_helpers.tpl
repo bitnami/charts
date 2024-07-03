@@ -260,8 +260,12 @@ Return the Redis&reg; port
 Validate Application Controller config
 */}}
 {{- define "argocd.validateValues.controller.config" -}}
-{{- if and (gt .Values.controller.replicaCount 1) (not (eq .Values.controller.kind "StatefulSet")) }}
+{{- if gt .Values.controller.replicaCount 1 }}
+    {{- if and .Values.controller.dynamicClusterDistribution.enabled (not (eq .Values.controller.kind "Deployment")) }}
+Argo CD: When running in HA mode with dynamic cluster distribution enabled, the application controller must be installed as a Deployment.
+    {{- else if and (not .Values.controller.dynamicClusterDistribution.enabled) (not (eq .Values.controller.kind "StatefulSet")) }}
 Argo CD: When running in HA mode, the application controller must be installed as a StatefulSet.
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 

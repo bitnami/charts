@@ -147,6 +147,14 @@ containers:
     - name: ARGOCD_CONTROLLER_REPLICAS
       value: {{ .Values.controller.replicaCount | quote }}
     {{- end }}
+    {{- if .Values.controller.dynamicClusterDistribution.enabled }}
+    - name: ARGOCD_ENABLE_DYNAMIC_CLUSTER_DISTRIBUTION
+      value: "true"
+    {{- if .Values.controller.dynamicClusterDistribution.heartbeatDuration }}
+    - name: ARGOCD_CONTROLLER_HEARTBEAT_TIME
+      value: {{ .Values.controller.dynamicClusterDistribution.heartbeatDuration | quote }}
+    {{- end }}
+    {{- end }}
     {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
     - name: REDIS_PASSWORD
       valueFrom:
