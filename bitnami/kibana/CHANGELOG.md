@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.8 (2024-06-18)
+## 11.2.9 (2024-07-03)
 
-* [bitnami/kibana] Release 11.2.8 ([#27364](https://github.com/bitnami/charts/pull/27364))
+* [bitnami/kibana] Release 11.2.9 ([#27701](https://github.com/bitnami/charts/pull/27701))
+
+## <small>11.2.8 (2024-06-18)</small>
+
+* [bitnami/kibana] Release 11.2.8 (#27364) ([d8e27c5](https://github.com/bitnami/charts/commit/d8e27c5c151f1a219890211f7ba7a00e3bcee503)), closes [#27364](https://github.com/bitnami/charts/issues/27364)
 
 ## <small>11.2.7 (2024-06-17)</small>
 

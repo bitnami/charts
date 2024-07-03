@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.3.7 (2024-06-27)
+## 1.3.8 (2024-07-02)
 
-* [bitnami/cert-manager] Release 1.3.7 ([#27553](https://github.com/bitnami/charts/pull/27553))
+* [bitnami/cert-manager] Release 1.3.8 ([#27642](https://github.com/bitnami/charts/pull/27642))
+
+## <small>1.3.7 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/cert-manager] Release 1.3.7 (#27553) ([0f19124](https://github.com/bitnami/charts/commit/0f19124575596984c95e54530155f728ac025c76)), closes [#27553](https://github.com/bitnami/charts/issues/27553)
 
 ## <small>1.3.6 (2024-06-18)</small>
 

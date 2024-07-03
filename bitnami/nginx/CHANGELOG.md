@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.1.2 (2024-06-18)
+## 18.1.3 (2024-07-03)
 
-* [bitnami/nginx] Release 18.1.2 ([#27390](https://github.com/bitnami/charts/pull/27390))
+* [bitnami/nginx] Release 18.1.3 ([#27704](https://github.com/bitnami/charts/pull/27704))
+
+## <small>18.1.2 (2024-06-18)</small>
+
+* [bitnami/nginx] Release 18.1.2 (#27390) ([fc21995](https://github.com/bitnami/charts/commit/fc21995910ffd11ced39922667850a0864cabaeb)), closes [#27390](https://github.com/bitnami/charts/issues/27390)
 
 ## <small>18.1.1 (2024-06-17)</small>
 
