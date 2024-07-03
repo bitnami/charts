@@ -1,6 +1,6 @@
 module.exports = {
   pageLoadTimeout: 240000,
-  defaultCommandTimeout: 80000,
+  defaultCommandTimeout: 60000,
   env: {
     username: 'neo4j',
     password: 'ComplicatedPassword123!4',

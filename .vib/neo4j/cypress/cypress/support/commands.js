@@ -30,6 +30,7 @@ Cypress.Commands.add(
     cy.get('input[data-testid="username"]').type(username);
     cy.get('input[type="password"]').type(password);
     cy.contains('button', 'Connect').click();
-    cy.contains('You are connected as user');
+    // This may take a while
+    cy.contains('You are connected as user', {timeout: 240000});
   }
 );
