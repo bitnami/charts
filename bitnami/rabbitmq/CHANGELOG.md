@@ -1,8 +1,13 @@
 # Changelog
 
-## 14.4.5 (2024-07-03)
+## 14.4.6 (2024-07-03)
 
-* [bitnami/rabbitmq] Release 14.4.5 ([#27713](https://github.com/bitnami/charts/pull/27713))
+* [bitnami/rabbitmq] Release 14.4.6 ([#27739](https://github.com/bitnami/charts/pull/27739))
+
+## <small>14.4.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/rabbitmq] Release 14.4.5 (#27713) ([c54e941](https://github.com/bitnami/charts/commit/c54e941e790295203771c7574c907c72a00aef80)), closes [#27713](https://github.com/bitnami/charts/issues/27713)
 
 ## <small>14.4.4 (2024-06-18)</small>
 
