@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.8 (2024-07-02)
+## 2.3.8 (2024-07-03)
 
 * [bitnami/gitea] Release 2.3.8 ([#27647](https://github.com/bitnami/charts/pull/27647))
 
