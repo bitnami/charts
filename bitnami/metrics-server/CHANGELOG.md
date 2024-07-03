@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.6 (2024-06-18)
+## 7.2.7 (2024-07-03)
 
-* [bitnami/metrics-server] Release 7.2.6 ([#27379](https://github.com/bitnami/charts/pull/27379))
+* [bitnami/metrics-server] Release 7.2.7 ([#27663](https://github.com/bitnami/charts/pull/27663))
+
+## <small>7.2.6 (2024-06-18)</small>
+
+* [bitnami/metrics-server] Release 7.2.6 (#27379) ([bab2fc9](https://github.com/bitnami/charts/commit/bab2fc9db5d4b767c09fc62c53b2ec340afc34d6)), closes [#27379](https://github.com/bitnami/charts/issues/27379)
 
 ## <small>7.2.5 (2024-06-17)</small>
 
