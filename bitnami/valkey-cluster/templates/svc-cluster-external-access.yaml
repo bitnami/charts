@@ -55,7 +55,7 @@ spec:
       targetPort: tcp-redis
     - name: tcp-redis-bus
       targetPort: tcp-redis-bus
-      port: {{ $root.Values.redis.containerPorts.bus }}
+      port: {{ $root.Values.valkey.containerPorts.bus }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.valkey.podLabels $root.Values.commonLabels ) "context" $ ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}

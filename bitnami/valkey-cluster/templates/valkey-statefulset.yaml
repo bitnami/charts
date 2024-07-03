@@ -216,7 +216,7 @@ spec:
           {{- end }}
           ports:
             - name: tcp-redis
-              containerPort: {{ .Values.valkey.containerPorts.redis }}
+              containerPort: {{ .Values.valkey.containerPorts.valkey }}
             - name: tcp-redis-bus
               containerPort: {{ .Values.valkey.containerPorts.bus }}
           {{- if not .Values.diagnosticMode.enabled }}

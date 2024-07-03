@@ -45,7 +45,7 @@ The main features of each chart are the following:
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis-cluster
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/valkey-cluster
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
@@ -110,12 +110,12 @@ There is a job that will be executed using a `post-upgrade` hook that will allow
 The following will be an example to add one more node:
 
 ```console
-helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=7,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" oci://REGISTRY_NAME/REPOSITORY_NAME/redis-cluster
+helm upgrade --timeout 600s <release> --set "password=${VALKEY_PASSWORD},cluster.nodes=7,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" oci://REGISTRY_NAME/REPOSITORY_NAME/valkey-cluster
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-Where `REDIS_PASSWORD` is the password obtained with the command that appears after the first installation of the Helm Chart.
+Where `VALKEY_PASSWORD` is the password obtained with the command that appears after the first installation of the Helm Chart.
 The cluster will continue up while restarting pods one by one as the quorum is not lost.
 
 ##### External Access
@@ -123,19 +123,19 @@ The cluster will continue up while restarting pods one by one as the quorum is n
 If you are using external access, to add a new node you will need to perform two upgrades. First upgrade the release to add a new Valkey node and to get a LoadBalancerIP service. For example:
 
 ```console
-helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false oci://REGISTRY_NAME/REPOSITORY_NAME/redis-cluster
+helm upgrade <release> --set "password=${VALKEY_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false oci://REGISTRY_NAME/REPOSITORY_NAME/valkey-cluster
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Important here to provide the loadBalancerIP parameters for the new nodes empty to not get an index error.
 
 As we want to add a new node, we are setting `cluster.nodes=7` and we leave empty the LoadBalancerIP for the new node, so the cluster will provide the correct one.
-`REDIS_PASSWORD` is the password obtained with the command that appears after the first installation of the Helm Chart.
+`VALKEY_PASSWORD` is the password obtained with the command that appears after the first installation of the Helm Chart.
 At this point, you will have a new Valkey Pod that will remain in `crashLoopBackOff` state until we provide the LoadBalancerIP for the new service.
 Now, wait until the cluster provides the new LoadBalancerIP for the new service and perform the second upgrade:
 
 ```console
-helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadbalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalancerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=<loadbalancerip-6>,cluster.nodes=7,cluster.init=false,cluster.update.addNodes=true,cluster.update.newExternalIPs[0]=<load-balancerip-6>" oci://REGISTRY_NAME/REPOSITORY_NAME/redis-cluster
+helm upgrade <release> --set "password=${VALKEY_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadbalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalancerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=<loadbalancerip-6>,cluster.nodes=7,cluster.init=false,cluster.update.addNodes=true,cluster.update.newExternalIPs[0]=<load-balancerip-6>" oci://REGISTRY_NAME/REPOSITORY_NAME/valkey-cluster
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
@@ -151,7 +151,7 @@ To scale down the Valkey Cluster, follow these steps:
 First perform a normal upgrade setting the `cluster.nodes` value to the desired number of nodes. It should not be less than `6` and the difference between current number of nodes and the desired should be less or equal to `cluster.replicas` to avoid removing master node an its slaves at the same time. Also it is needed to provide the password using the `password`. For example, having more than 6 nodes, to scale down the cluster to 6 nodes:
 
 ```console
-helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=6" .
+helm upgrade --timeout 600s <release> --set "password=${VALKEY_PASSWORD},cluster.nodes=6" .
 ```
 
 The cluster will continue working during the update as long as the quorum is not lost.
@@ -161,7 +161,7 @@ The cluster will continue working during the update as long as the quorum is not
 Once all the nodes are ready, get the list of nodes in the cluster using the `CLUSTER NODES` command. You will see references to the ones that were removed. Write down the node IDs of the nodes that show `fail`. In the following example the cluster scaled down from 7 to 6 nodes.
 
 ```console
-valkey-cli -a $REDIS_PASSWORD CLUSTER NODES
+valkey-cli -a $VALKEY_PASSWORD CLUSTER NODES
 
 ...
 b23bcffa1fd64368d445c1d9bd9aeb92641105f7 10.0.0.70:6379@16379 slave,fail - 1645633139060 0 0 connected
@@ -171,27 +171,27 @@ b23bcffa1fd64368d445c1d9bd9aeb92641105f7 10.0.0.70:6379@16379 slave,fail - 16456
 In each cluster node, execute the following command. Replace the NODE_ID placeholder.
 
 ```console
-valkey-cli -a $REDIS_PASSWORD CLUSTER FORGET NODE_ID
+valkey-cli -a $VALKEY_PASSWORD CLUSTER FORGET NODE_ID
 ```
 
 In the previous example the commands would look like this in each cluster node:
 
 ```console
-valkey-cli -a $REDIS_PASSWORD CLUSTER FORGET b23bcffa1fd64368d445c1d9bd9aeb92641105f7
+valkey-cli -a $VALKEY_PASSWORD CLUSTER FORGET b23bcffa1fd64368d445c1d9bd9aeb92641105f7
 ```
 
 ### Using password file
 
 To use a password file for Valkey you need to create a secret containing the password.
 
-> *NOTE*: It is important that the file with the password must be called `redis-password`
+> *NOTE*: It is important that the file with the password must be called `valkey-password`
 
 And then deploy the Helm Chart using the secret name as parameter:
 
 ```text
 usePassword=true
 usePasswordFile=true
-existingSecret=redis-password-secret
+existingSecret=valkey-password-secret
 metrics.enabled=true
 ```
 
@@ -255,7 +255,7 @@ In case you want to add extra environment variables (useful for advanced operati
 
 ```yaml
 extraEnvVars:
-  - name: REDIS_WHATEVER
+  - name: VALKEY_WHATEVER
     value: value
 ```
 
@@ -308,8 +308,6 @@ These are the steps you will usually follow to back up and restore your Valkey C
 - Use Velero to restore the backed-up PVs on the destination cluster.
 - Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
 
-Refer to our detailed [tutorial on backing up and restoring Valkey Cluster deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-backup-restore-data-redis-cluster-kubernetes-index.html) for more information.
-
 ### NetworkPolicy
 
 To enable network policy for Valkey, install
@@ -327,13 +325,13 @@ With NetworkPolicy enabled, only pods with the generated client label will be
 able to connect to Valkey. This label will be displayed in the output
 after a successful install.
 
-With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to valkey. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `valkey-client=true` the fields should be set:
+With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to valkey. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `valkey=external` and pods in that namespace labeled `valkey-client=true` the fields should be set:
 
 ```yaml
 networkPolicy:
   enabled: true
   ingressNSMatchLabels:
-    redis: external
+    valkey: external
   ingressNSPodMatchLabels:
     valkey-client: true
 ```
@@ -355,8 +353,8 @@ To reconnect the failed node, run the following:
 See nodes.sh
 
 ```console
-$ cat /bitnami/redis/data/nodes.sh
-declare -A host_2_ip_array=([redis-node-0]="192.168.192.6" [redis-node-1]="192.168.192.2" [redis-node-2]="192.168.192.4" [redis-node-3]="192.168.192.5" [redis-node-4]="192.168.192.3" [redis-node-5]="192.168.192.7" )
+$ cat /bitnami/valkey/data/nodes.sh
+declare -A host_2_ip_array=([valkey-node-0]="192.168.192.6" [valkey-node-1]="192.168.192.2" [valkey-node-2]="192.168.192.4" [valkey-node-3]="192.168.192.5" [valkey-node-4]="192.168.192.3" [valkey-node-5]="192.168.192.7" )
 ```
 
 Run valkey-cli and run CLUSTER MEET to any other node in the cluster. Now the node has connected to the main cluster.
@@ -393,7 +391,7 @@ OK
 | `diagnosticMode.command`                                    | Command to override all containers in the deployment                                                                                                                                                                                                  | `["sleep"]`                     |
 | `diagnosticMode.args`                                       | Args to override all containers in the deployment                                                                                                                                                                                                     | `["infinity"]`                  |
 | `image.registry`                                            | Valkey cluster image registry                                                                                                                                                                                                                     | `REGISTRY_NAME`                 |
-| `image.repository`                                          | Valkey cluster image repository                                                                                                                                                                                                                   | `REPOSITORY_NAME/redis-cluster` |
+| `image.repository`                                          | Valkey cluster image repository                                                                                                                                                                                                                   | `REPOSITORY_NAME/valkey-cluster` |
 | `image.digest`                                              | Valkey cluster image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                    | `""`                            |
 | `image.pullPolicy`                                          | Valkey cluster image pull policy                                                                                                                                                                                                                  | `IfNotPresent`                  |
 | `image.pullSecrets`                                         | Specify docker-registry secret names as an array                                                                                                                                                                                                      | `[]`                            |
@@ -448,8 +446,8 @@ OK
 | `service.nodePorts.redis`                                   | Node port for Valkey                                                                                                                                                                                                                                   | `""`                            |
 | `service.extraPorts`                                        | Extra ports to expose in the service (normally used with the `sidecar` value)                                                                                                                                                                         | `[]`                            |
 | `service.annotations`                                       | Provide any additional annotations which may be required.                                                                                                                                                                                             | `{}`                            |
-| `service.labels`                                            | Additional labels for redis service                                                                                                                                                                                                                   | `{}`                            |
-| `service.type`                                              | Service type for default redis service                                                                                                                                                                                                                | `ClusterIP`                     |
+| `service.labels`                                            | Additional labels for valkey service                                                                                                                                                                                                                   | `{}`                            |
+| `service.type`                                              | Service type for default valkey service                                                                                                                                                                                                                | `ClusterIP`                     |
 | `service.clusterIP`                                         | Service Cluster IP                                                                                                                                                                                                                                    | `""`                            |
 | `service.loadBalancerIP`                                    | Load balancer IP if `service.type` is `LoadBalancer`                                                                                                                                                                                                  | `""`                            |
 | `service.loadBalancerSourceRanges`                          | Service Load Balancer sources                                                                                                                                                                                                                         | `[]`                            |
@@ -458,7 +456,7 @@ OK
 | `service.sessionAffinityConfig`                             | Additional settings for the sessionAffinity                                                                                                                                                                                                           | `{}`                            |
 | `service.headless.annotations`                              | Annotations for the headless service.                                                                                                                                                                                                                 | `{}`                            |
 | `persistence.enabled`                                       | Enable persistence on Valkey                                                                                                                                                                                                                      | `true`                          |
-| `persistence.path`                                          | Path to mount the volume at, to use other images Valkey images.                                                                                                                                                                                   | `/bitnami/redis/data`           |
+| `persistence.path`                                          | Path to mount the volume at, to use other images Valkey images.                                                                                                                                                                                   | `/bitnami/valkey/data`           |
 | `persistence.subPath`                                       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                                                                                                                               | `""`                            |
 | `persistence.storageClass`                                  | Storage class of backing PVC                                                                                                                                                                                                                          | `""`                            |
 | `persistence.annotations`                                   | Persistent Volume Claim annotations                                                                                                                                                                                                                   | `{}`                            |
@@ -488,7 +486,7 @@ OK
 
 | Name                                           | Description                                                                                                                                                                                                                   | Value           |
 | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `valkey.command`                                | Valkey entrypoint string. The command `redis-server` is executed if this is not provided                                                                                                                                  | `[]`            |
+| `valkey.command`                                | Valkey entrypoint string. The command `valkey-server` is executed if this is not provided                                                                                                                                  | `[]`            |
 | `valkey.args`                                   | Arguments for the provided command if needed                                                                                                                                                                                  | `[]`            |
 | `valkey.updateStrategy.type`                    | Argo Workflows statefulset strategy type                                                                                                                                                                                      | `RollingUpdate` |
 | `valkey.updateStrategy.rollingUpdate.partition` | Partition update strategy                                                                                                                                                                                                     | `0`             |
@@ -498,7 +496,7 @@ OK
 | `valkey.hostNetwork`                            | Host networking requested for this pod. Use the host's network namespace.                                                                                                                                                     | `false`         |
 | `valkey.useAOFPersistence`                      | Whether to use AOF Persistence mode or not                                                                                                                                                                                    | `yes`           |
 | `valkey.containerPorts.redis`                   | Valkey port                                                                                                                                                                                                               | `6379`          |
-| `valkey.containerPorts.bus`                     | The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379                                                                                                                                | `16379`         |
+| `valkey.containerPorts.bus`                     | The busPort should be obtained adding 10000 to the valkeyPort. By default: 10000 + 6379 = 16379                                                                                                                                | `16379`         |
 | `valkey.lifecycleHooks`                         | LifecycleHook to set additional configuration before or after startup. Evaluated as a template                                                                                                                                | `{}`            |
 | `valkey.extraVolumes`                           | Extra volumes to add to the deployment                                                                                                                                                                                        | `[]`            |
 | `valkey.extraVolumeMounts`                      | Extra volume mounts to add to the container                                                                                                                                                                                   | `[]`            |
@@ -642,7 +640,7 @@ OK
 | `metrics.prometheusRule.namespace`                          | namespace where prometheusRules resource should be created                                                                                                                                                                        | `""`                             |
 | `metrics.prometheusRule.rules`                              | Create specified [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/), check values for an example.                                                                                                | `[]`                             |
 | `metrics.priorityClassName`                                 | Metrics exporter pod priorityClassName                                                                                                                                                                                            | `""`                             |
-| `metrics.service.type`                                      | Kubernetes Service type (redis metrics)                                                                                                                                                                                           | `ClusterIP`                      |
+| `metrics.service.type`                                      | Kubernetes Service type (valkey metrics)                                                                                                                                                                                           | `ClusterIP`                      |
 | `metrics.service.loadBalancerIP`                            | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                                                                                                                  | `""`                             |
 | `metrics.service.annotations`                               | Annotations for the services to monitor.                                                                                                                                                                                          | `{}`                             |
 | `metrics.service.labels`                                    | Additional labels for the metrics service                                                                                                                                                                                         | `{}`                             |
@@ -673,7 +671,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set password=secretpassword \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/redis-cluster
+    oci://REGISTRY_NAME/REPOSITORY_NAME/valkey-cluster
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
@@ -685,20 +683,16 @@ The above command sets the Valkey server password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redis-cluster
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/valkey-cluster
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster/values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/valkey-cluster/values.yaml)
 > **Note for minikube users**: Current versions of minikube (v0.24.1 at the time of writing) provision `hostPath` persistent volumes that are only writable by root. Using chart defaults cause pod failure for the Valkey pod as it attempts to write to the `/bitnami` directory. See minikube issue [1990](https://github.com/kubernetes/minikube/issues/1990) for more information.
 
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
-
-### To 2.0.0
-
-The version `1.0.0` was using a label in the Statefulset's volumeClaimTemplate that didn't allow to upgrade the chart. The version `2.0.0` fixed that issue. Also it adds more docs in the README.md.
 
 ## License
 
