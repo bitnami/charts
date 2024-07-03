@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.3.7 (2024-07-02)
+## 2.3.8 (2024-07-03)
 
-* [bitnami/gitea] Release 2.3.7 ([#27630](https://github.com/bitnami/charts/pull/27630))
+* [bitnami/gitea] Release 2.3.8 ([#27647](https://github.com/bitnami/charts/pull/27647))
+
+## <small>2.3.7 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/gitea] Release 2.3.7 (#27630) ([e0208e5](https://github.com/bitnami/charts/commit/e0208e5b734d3c5c3e9475894222ce4b5bb653da)), closes [#27630](https://github.com/bitnami/charts/issues/27630)
 
 ## <small>2.3.6 (2024-06-18)</small>
 
