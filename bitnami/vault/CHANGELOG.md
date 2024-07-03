@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.4.9 (2024-06-27)
+## 1.4.10 (2024-07-03)
 
-* [bitnami/vault] Release 1.4.9 ([#27552](https://github.com/bitnami/charts/pull/27552))
+* [bitnami/vault] Release 1.4.10 ([#27680](https://github.com/bitnami/charts/pull/27680))
+
+## <small>1.4.9 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/vault] Release 1.4.9 (#27552) ([7268d20](https://github.com/bitnami/charts/commit/7268d20a34776d31702507494af4b9136a3c17af)), closes [#27552](https://github.com/bitnami/charts/issues/27552)
 
 ## <small>1.4.8 (2024-06-18)</small>
 
