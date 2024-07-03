@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.8 (2024-06-18)
+## 6.2.9 (2024-07-03)
 
-* [bitnami/logstash] Release 6.2.8 ([#27371](https://github.com/bitnami/charts/pull/27371))
+* [bitnami/logstash] Release 6.2.9 ([#27705](https://github.com/bitnami/charts/pull/27705))
+
+## <small>6.2.8 (2024-06-18)</small>
+
+* [bitnami/logstash] Release 6.2.8 (#27371) ([bbae2fc](https://github.com/bitnami/charts/commit/bbae2fca457a82cdcff10900dc9d5f6d7630f08e)), closes [#27371](https://github.com/bitnami/charts/issues/27371)
 
 ## <small>6.2.7 (2024-06-17)</small>
 
