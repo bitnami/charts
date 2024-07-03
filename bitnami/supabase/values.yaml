@@ -1255,8 +1255,7 @@ realtime:
     DB_NAME: {{ include "supabase.database.name" . | quote }}
     DB_SSL: {{ .Values.dbSSL | quote }}
     PORT: {{ .Values.realtime.containerPorts.http | quote }}
-    FLY_ALLOC_ID: "realtime"
-    FLY_APP_NAME: "realtime"
+    APP_NAME: "realtime"
     ERL_AFLAGS: "-proto_dist inet_tcp"
     REPLICATION_MODE: "RLS"
     REPLICATION_POLL_INTERVAL: "100"
