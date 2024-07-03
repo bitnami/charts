@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.7 (2024-06-18)
+## 5.2.8 (2024-07-03)
 
-* [bitnami/supabase] Release 5.2.7 ([#27421](https://github.com/bitnami/charts/pull/27421))
+* [bitnami/supabase] Release 5.2.8 ([#27728](https://github.com/bitnami/charts/pull/27728))
+
+## <small>5.2.7 (2024-06-18)</small>
+
+* [bitnami/supabase] Release 5.2.7 (#27421) ([dbc5d0a](https://github.com/bitnami/charts/commit/dbc5d0a2c4aa4f2773e12e3b58fd3079694350a4)), closes [#27421](https://github.com/bitnami/charts/issues/27421)
 
 ## <small>5.2.6 (2024-06-18)</small>
 
