@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.1 (2024-07-02)
+## 1.0.1 (2024-07-03)
 
 * [bitnami/cilium] Release 1.0.1 ([#27643](https://github.com/bitnami/charts/pull/27643))
 
