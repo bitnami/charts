@@ -83,8 +83,8 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  repository: miruiz145/neo4j
-  tag: latest
+  repository: bitnami/neo4j
+  tag: 5.20.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
