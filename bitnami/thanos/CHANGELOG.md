@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.7.10 (2024-06-24)
+## 15.7.11 (2024-07-03)
 
-* [bitnami/thanos] Add validation for Thanos receive configuration ([#27501](https://github.com/bitnami/charts/pull/27501))
+* [bitnami/thanos] Release 15.7.11 ([#27678](https://github.com/bitnami/charts/pull/27678))
+
+## <small>15.7.10 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/thanos] Add validation for Thanos receive configuration (#27501) ([fbf31b7](https://github.com/bitnami/charts/commit/fbf31b7dc547003ef016a3ac2ac46f9e89b15245)), closes [#27501](https://github.com/bitnami/charts/issues/27501)
 
 ## <small>15.7.9 (2024-06-18)</small>
 
