@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.5 (2024-06-18)
+## 1.1.6 (2024-07-03)
 
-* [bitnami/whereabouts] Release 1.1.5 ([#27427](https://github.com/bitnami/charts/pull/27427))
+* [bitnami/whereabouts] Release 1.1.6 ([#27681](https://github.com/bitnami/charts/pull/27681))
+
+## <small>1.1.5 (2024-06-18)</small>
+
+* [bitnami/whereabouts] Release 1.1.5 (#27427) ([9a35c1e](https://github.com/bitnami/charts/commit/9a35c1ecf572587042a06175ac790316ab47bba6)), closes [#27427](https://github.com/bitnami/charts/issues/27427)
 
 ## <small>1.1.4 (2024-06-17)</small>
 
