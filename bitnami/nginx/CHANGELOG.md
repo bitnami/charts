@@ -1,8 +1,13 @@
 # Changelog
 
-## 18.1.3 (2024-07-03)
+## 18.1.4 (2024-07-03)
 
-* [bitnami/nginx] Release 18.1.3 ([#27704](https://github.com/bitnami/charts/pull/27704))
+* [bitnami/nginx] Release 18.1.4 ([#27743](https://github.com/bitnami/charts/pull/27743))
+
+## <small>18.1.3 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/nginx] Release 18.1.3 (#27704) ([682210e](https://github.com/bitnami/charts/commit/682210e3c1b84e0aeeab9e9e14b6d50076aa8303)), closes [#27704](https://github.com/bitnami/charts/issues/27704)
 
 ## <small>18.1.2 (2024-06-18)</small>
 
