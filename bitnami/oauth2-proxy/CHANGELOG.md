@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.3.7 (2024-07-03)
+## 5.3.8 (2024-07-04)
 
-* [bitnami/oauth2-proxy] Release 5.3.7 ([#27671](https://github.com/bitnami/charts/pull/27671))
+* [bitnami/oauth2-proxy] Release 5.3.8 ([#27777](https://github.com/bitnami/charts/pull/27777))
+
+## <small>5.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/oauth2-proxy] Release 5.3.7 (#27671) ([e0dc793](https://github.com/bitnami/charts/commit/e0dc7936312a9c06b9a24eb71c93281611d34f54)), closes [#27671](https://github.com/bitnami/charts/issues/27671)
 
 ## <small>5.3.6 (2024-06-18)</small>
 
