@@ -69,9 +69,9 @@ INFO: The Job to create the cluster will be created.
 To connect to your Valkey cluster:
 
 1. Run a Valkey pod that you can use as a client:
-
+{{- $password_env := ternary (include "common.utils.fieldToEnvVar" (dict "field" $secretPasswordKey)) "VALKEYPASSWORD" (not (eq .Values.notEmptyString "")) -}}
 {{- if .Values.tls.enabled }}
-   kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --restart='Never' --env VALKEY_PASSWORD=$VALKEY_PASSWORD --image {{ template "valkey-cluster.image" . }} --command -- sleep infinity
+   kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --restart='Never' --env VALKEY_PASSWORD=${{ $password_env }} --image {{ template "valkey-cluster.image" . }} --command -- sleep infinity
 
    Copy your TLS certificates to the pod:
 
@@ -86,14 +86,14 @@ To connect to your Valkey cluster:
    --namespace {{ .Release.Namespace }} -- bash
 {{- else }}
 kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
-{{ if .Values.usePassword }} --env VALKEY_PASSWORD=$VALKEY_PASSWORD \{{ end }}
+{{ if .Values.usePassword }} --env VALKEY_PASSWORD=${{ $password_env }} \{{ end }}
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
 --image {{ template "valkey-cluster.image" . }} -- bash
 {{- end }}
 
 2. Connect using the Valkey CLI:
 
-valkey-cli -c -h {{ template "common.names.fullname" . }}{{ if .Values.usePassword }} -a $VALKEY_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+valkey-cli -c -h {{ template "common.names.fullname" . }}{{ if .Values.usePassword }} -a ${{ $password_env }}{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
 Note: Since NetworkPolicy is enabled, only pods with label
