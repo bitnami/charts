@@ -331,6 +331,12 @@ spec:
             - --transip-account={{ .Values.transip.account }}
             - --transip-keyfile=/transip/transip-api-key
             {{- end }}
+            {{- if .Values.global.compatibility.traefik.disableLegacy }}
+            - --traefik-disable-legacy
+            {{- end }}
+            {{- if .Values.global.compatibility.traefik.disableNew }}
+            - --traefik-disable-new
+            {{- end }}
             {{- if .Values.txtEncrypt.enabled }}
             # TXT registry encryption
             - --txt-encrypt-enabled
