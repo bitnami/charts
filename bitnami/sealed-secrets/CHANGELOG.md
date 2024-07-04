@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.3.7 (2024-07-03)
+## 2.3.8 (2024-07-04)
 
-* [bitnami/sealed-secrets] Release 2.3.7 ([#27677](https://github.com/bitnami/charts/pull/27677))
+* [bitnami/sealed-secrets] Release 2.3.8 ([#27789](https://github.com/bitnami/charts/pull/27789))
+
+## <small>2.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/sealed-secrets] Release 2.3.7 (#27677) ([19a26c9](https://github.com/bitnami/charts/commit/19a26c998d51186800af33972291b807d706e508)), closes [#27677](https://github.com/bitnami/charts/issues/27677)
 
 ## <small>2.3.6 (2024-06-20)</small>
 
