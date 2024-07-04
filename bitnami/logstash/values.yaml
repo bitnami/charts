@@ -224,9 +224,6 @@ containerPorts:
   - name: http
     containerPort: 8080
     protocol: TCP
-  - name: monitoring
-    containerPort: 9600
-    protocol: TCP
     ## - name: syslog-udp
     ##   containerPort: 1514
     ##   protocol: UDP

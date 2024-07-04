@@ -141,6 +141,11 @@ spec:
                 name: {{ .Values.extraEnvVarsSecret }}
             {{- end }}
           ports: {{- include "common.tplvalues.merge" (dict "values" (list .Values.containerPorts .Values.extraContainerPorts) "context" $) | nindent 12 }}
+            {{- if .Values.enableMonitoringAPI }}
+            - name: monitoring
+              containerPort: {{ .Values.monitoringAPIPort }}
+              protocol: TCP
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
