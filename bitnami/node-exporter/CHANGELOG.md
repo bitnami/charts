@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.4.6 (2024-07-03)
+## 4.4.7 (2024-07-04)
 
-* [bitnami/node-exporter] Release 4.4.6 ([#27668](https://github.com/bitnami/charts/pull/27668))
+* [bitnami/node-exporter] Release 4.4.7 ([#27772](https://github.com/bitnami/charts/pull/27772))
+
+## <small>4.4.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/node-exporter] Release 4.4.6 (#27668) ([b8aa99f](https://github.com/bitnami/charts/commit/b8aa99f7c6b67a23c9a0814ec5c589070e2b8b48)), closes [#27668](https://github.com/bitnami/charts/issues/27668)
 
 ## <small>4.4.5 (2024-06-18)</small>
 
