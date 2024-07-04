@@ -68,22 +68,22 @@ diagnosticMode:
   args:
     - infinity
 
-## @section neo4j Parameters
+## @section Neo4j Parameters
 ##
 
-## Bitnami neo4j image
-## ref: https://hub.docker.com/r/bitnami/neo4j/tags/
-## @param image.registry [default: REGISTRY_NAME] neo4j image registry
-## @param image.repository [default: REPOSITORY_NAME/neo4j] neo4j image repository
-## @skip image.tag neo4j image tag (immutable tags are recommended)
-## @param image.digest neo4j image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
-## @param image.pullPolicy neo4j image pull policy
-## @param image.pullSecrets neo4j image pull secrets
-## @param image.debug Enable neo4j image debug mode
+## Bitnami Neo4j image
+## ref: https://hub.docker.com/r/bitnami/Neo4j/tags/
+## @param image.registry [default: REGISTRY_NAME] Neo4j image registry
+## @param image.repository [default: REPOSITORY_NAME/Neo4j] Neo4j image repository
+## @skip image.tag Neo4j image tag (immutable tags are recommended)
+## @param image.digest Neo4j image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param image.pullPolicy Neo4j image pull policy
+## @param image.pullSecrets Neo4j image pull secrets
+## @param image.debug Enable Neo4j image debug mode
 ##
 image:
   registry: docker.io
-  repository: bitnami/neo4j
+  repository: bitnami/Neo4j
   tag: 5.20.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
@@ -101,24 +101,24 @@ image:
   pullSecrets: []
   debug: false
 
-## @param containerPorts.bolt neo4j Bolt container port
-## @param containerPorts.http neo4j HTTP container port
-## @param containerPorts.https neo4j HTTPS container port
+## @param containerPorts.bolt Neo4j Bolt container port
+## @param containerPorts.http Neo4j HTTP container port
+## @param containerPorts.https Neo4j HTTPS container port
 ##
 containerPorts:
   bolt: 7687
   http: 7474
   https: 7473
-## @param extraContainerPorts Optionally specify extra list of additional ports for neo4j containers
+## @param extraContainerPorts Optionally specify extra list of additional ports for Neo4j containers
 ## e.g:
 ## extraContainerPorts:
 ##   - name: myservice
 ##     containerPort: 9090
 ##
 extraContainerPorts: []
-## Configure extra options for neo4j containers' liveness and readiness probes
+## Configure extra options for Neo4j containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param livenessProbe.enabled Enable livenessProbe on neo4j containers
+## @param livenessProbe.enabled Enable livenessProbe on Neo4j containers
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -132,7 +132,7 @@ livenessProbe:
   timeoutSeconds: 10
   failureThreshold: 20
   successThreshold: 1
-## @param readinessProbe.enabled Enable readinessProbe on neo4j containers
+## @param readinessProbe.enabled Enable readinessProbe on Neo4j containers
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -146,7 +146,7 @@ readinessProbe:
   timeoutSeconds: 10
   failureThreshold: 20
   successThreshold: 1
-## @param startupProbe.enabled Enable startupProbe on neo4j containers
+## @param startupProbe.enabled Enable startupProbe on Neo4j containers
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -169,13 +169,13 @@ customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
 ##
 customStartupProbe: {}
-## neo4j resource requests and limits
+## Neo4j resource requests and limits
 ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resourcesPreset Set neo4j container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## @param resourcesPreset Set Neo4j container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
 resourcesPreset: "small"
-## @param resources Set neo4j container requests and limits for different resources like CPU or memory (essential for production workloads)
+## @param resources Set Neo4j container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
 ##   requests:
@@ -188,11 +188,11 @@ resourcesPreset: "small"
 resources: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enable neo4j pods' Security Context
-## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for neo4j pods
-## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface for neo4j pods
-## @param podSecurityContext.supplementalGroups Set filesystem extra groups for neo4j pods
-## @param podSecurityContext.fsGroup Set fsGroup in neo4j pods' Security Context
+## @param podSecurityContext.enabled Enable Neo4j pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Neo4j pods
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface for Neo4j pods
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups for Neo4j pods
+## @param podSecurityContext.fsGroup Set fsGroup in Neo4j pods' Security Context
 ##
 podSecurityContext:
   enabled: true
@@ -202,16 +202,16 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled neo4j container' Security Context
-## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in neo4j container
-## @param containerSecurityContext.runAsUser Set runAsUser in neo4j container' Security Context
-## @param containerSecurityContext.runAsGroup Set runAsGroup in neo4j container' Security Context
-## @param containerSecurityContext.runAsNonRoot Set runAsNonRoot in neo4j container' Security Context
-## @param containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in neo4j container' Security Context
-## @param containerSecurityContext.privileged Set privileged in neo4j container' Security Context
-## @param containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in neo4j container' Security Context
-## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped in neo4j container
-## @param containerSecurityContext.seccompProfile.type Set seccomp profile in neo4j container
+## @param containerSecurityContext.enabled Enabled Neo4j container' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Neo4j container
+## @param containerSecurityContext.runAsUser Set runAsUser in Neo4j container' Security Context
+## @param containerSecurityContext.runAsGroup Set runAsGroup in Neo4j container' Security Context
+## @param containerSecurityContext.runAsNonRoot Set runAsNonRoot in Neo4j container' Security Context
+## @param containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Neo4j container' Security Context
+## @param containerSecurityContext.privileged Set privileged in Neo4j container' Security Context
+## @param containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Neo4j container' Security Context
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped in Neo4j container
+## @param containerSecurityContext.seccompProfile.type Set seccomp profile in Neo4j container
 ##
 containerSecurityContext:
   enabled: true
@@ -226,8 +226,8 @@ containerSecurityContext:
     drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
-## @param auth.password Password for the 'neo4j' native user
-## @param auth.existingSecret Name of a secret containing the neo4j password. Password must be stored under the 'password' key.
+## @param auth.password Password for the 'Neo4j' native user
+## @param auth.existingSecret Name of a secret containing the Neo4j password. Password must be stored under the 'password' key.
 ##
 auth:
   password: ""
@@ -258,7 +258,7 @@ tls:
 ## @param advertisedHost Hostname used to configure Neo4j advertised address.
 ##
 advertisedHost: ""
-## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for neo4j
+## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Neo4j
 ##
 existingConfigmap: ""
 ## @param configuration Specify content for Neo4j config file (auto-generated based on other env. vars otherwise). Omitted if existingConfigmap is provided.
@@ -273,31 +273,31 @@ configuration: ""
 ##   ...
 ##
 apocConfiguration: ""
-## @param pluginsConfigMap The name of an existing ConfigMap with your custom plugins for neo4j
+## @param pluginsConfigMap The name of an existing ConfigMap with your custom plugins for Neo4j
 ##
 pluginsConfigMap: ""
-## @param command Override default neo4j container command (useful when using custom images)
+## @param command Override default Neo4j container command (useful when using custom images)
 ##
 command: []
-## @param args Override default neo4j container args (useful when using custom images)
+## @param args Override default Neo4j container args (useful when using custom images)
 ##
 args: []
-## @param automountServiceAccountToken Mount Service Account token in neo4j pods
+## @param automountServiceAccountToken Mount Service Account token in Neo4j pods
 ##
 automountServiceAccountToken: false
-## @param hostAliases neo4j pods host aliases
+## @param hostAliases Neo4j pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param statefulsetAnnotations Annotations for neo4j statefulset
+## @param statefulsetAnnotations Annotations for Neo4j statefulset
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 statefulsetAnnotations: {}
-## @param podLabels Extra labels for neo4j pods
+## @param podLabels Extra labels for Neo4j pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Annotations for neo4j pods
+## @param podAnnotations Annotations for Neo4j pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -326,72 +326,72 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-## @param affinity Affinity for neo4j pods assignment
+## @param affinity Affinity for Neo4j pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
 ##
 affinity: {}
-## @param nodeSelector Node labels for neo4j pods assignment
+## @param nodeSelector Node labels for Neo4j pods assignment
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
-## @param tolerations Tolerations for neo4j pods assignment
+## @param tolerations Tolerations for Neo4j pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
 ## ONLY FOR DEPLOYMENTS:
-## @param updateStrategy.type neo4j deployment strategy type
+## @param updateStrategy.type Neo4j deployment strategy type
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## ONLY FOR STATEFULSETS:
-## @param updateStrategy.type neo4j statefulset strategy type
+## @param updateStrategy.type Neo4j statefulset strategy type
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-## @param podManagementPolicy Pod management policy for neo4j statefulset
+## @param podManagementPolicy Pod management policy for Neo4j statefulset
 ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
 ##
 podManagementPolicy: Parallel
-## @param priorityClassName neo4j pods' priorityClassName
+## @param priorityClassName Neo4j pods' priorityClassName
 ##
 priorityClassName: ""
-## @param topologySpreadConstraints Topology Spread Constraints for neo4j pod assignment spread across your cluster among failure-domains
+## @param topologySpreadConstraints Topology Spread Constraints for Neo4j pod assignment spread across your cluster among failure-domains
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
 topologySpreadConstraints: []
-## @param schedulerName Name of the k8s scheduler (other than default) for neo4j pods
+## @param schedulerName Name of the k8s scheduler (other than default) for Neo4j pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
-## @param terminationGracePeriodSeconds Seconds neo4j pods need to terminate gracefully
+## @param terminationGracePeriodSeconds Seconds Neo4j pods need to terminate gracefully
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ##
 terminationGracePeriodSeconds: ""
-## @param lifecycleHooks for neo4j containers to automate configuration before or after startup
+## @param lifecycleHooks for Neo4j containers to automate configuration before or after startup
 ##
 lifecycleHooks: {}
-## @param extraEnvVars Array with extra environment variables to add to neo4j containers
+## @param extraEnvVars Array with extra environment variables to add to Neo4j containers
 ## e.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for neo4j containers
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Neo4j containers
 ##
 extraEnvVarsCM: ""
-## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for neo4j containers
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for Neo4j containers
 ##
 extraEnvVarsSecret: ""
-## @param extraVolumes Optionally specify extra list of additional volumes for the neo4j pods
+## @param extraVolumes Optionally specify extra list of additional volumes for the Neo4j pods
 ##
 extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the neo4j containers
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Neo4j containers
 ##
 extraVolumeMounts: []
-## @param sidecars Add additional sidecar containers to the neo4j pods
+## @param sidecars Add additional sidecar containers to the Neo4j pods
 ## e.g:
 ## sidecars:
 ##   - name: your-image-name
@@ -402,7 +402,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 sidecars: []
-## @param initContainers Add additional init containers to the neo4j pods
+## @param initContainers Add additional init containers to the Neo4j pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
 ## initContainers:
@@ -426,7 +426,7 @@ pdb:
 ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 ##
 autoscaling:
-  ## @param autoscaling.vpa.enabled Enable VPA for neo4j pods
+  ## @param autoscaling.vpa.enabled Enable VPA for Neo4j pods
   ## @param autoscaling.vpa.annotations Annotations for VPA resource
   ## @param autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
   ## @param autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
@@ -448,15 +448,15 @@ autoscaling:
 ## @section Traffic Exposure Parameters
 ##
 
-## neo4j service parameters
+## Neo4j service parameters
 ##
 service:
-  ## @param service.type neo4j service type
+  ## @param service.type Neo4j service type
   ##
   type: LoadBalancer
-  ## @param service.ports.bolt neo4j service bolt port
-  ## @param service.ports.http neo4j service HTTP port
-  ## @param service.ports.https neo4j service HTTPS port
+  ## @param service.ports.bolt Neo4j service bolt port
+  ## @param service.ports.http Neo4j service HTTP port
+  ## @param service.ports.https Neo4j service HTTPS port
   ##
   ports:
     bolt: 7687
@@ -472,30 +472,30 @@ service:
     bolt: ""
     http: ""
     https: ""
-  ## @param service.clusterIP neo4j service Cluster IP
+  ## @param service.clusterIP Neo4j service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.loadBalancerIP neo4j service Load Balancer IP
+  ## @param service.loadBalancerIP Neo4j service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.loadBalancerSourceRanges neo4j service Load Balancer sources
+  ## @param service.loadBalancerSourceRanges Neo4j service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy neo4j service external traffic policy
+  ## @param service.externalTrafficPolicy Neo4j service external traffic policy
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.annotations Additional custom annotations for neo4j service
+  ## @param service.annotations Additional custom annotations for Neo4j service
   ##
   annotations: {}
-  ## @param service.extraPorts Extra ports to expose in neo4j service (normally used with the `sidecars` value)
+  ## @param service.extraPorts Extra ports to expose in Neo4j service (normally used with the `sidecars` value)
   ##
   extraPorts: []
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
@@ -573,11 +573,11 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-## neo4j ingress parameters
+## Neo4j ingress parameters
 ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress record generation for neo4j
+  ## @param ingress.enabled Enable ingress record generation for Neo4j
   ##
   enabled: false
   ## @param ingress.pathType Ingress path type
@@ -588,7 +588,7 @@ ingress:
   apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
-  hostname: neo4j.local
+  hostname: Neo4j.local
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -621,7 +621,7 @@ ingress:
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
-  ##   - name: neo4j.local
+  ##   - name: Neo4j.local
   ##     path: /
   ##
   extraHosts: []
@@ -639,8 +639,8 @@ ingress:
   ## e.g:
   ## extraTls:
   ## - hosts:
-  ##     - neo4j.local
-  ##   secretName: neo4j.local-tls
+  ##     - Neo4j.local
+  ##   secretName: Neo4j.local-tls
   ##
   extraTls: []
   ## @param ingress.secrets Custom TLS certificates as secrets
@@ -652,7 +652,7 @@ ingress:
   ## Please see README.md for more information
   ## e.g:
   ## secrets:
-  ##   - name: neo4j.local-tls
+  ##   - name: Neo4j.local-tls
   ##     key: |-
   ##       -----BEGIN RSA PRIVATE KEY-----
   ##       ...
@@ -690,7 +690,7 @@ persistence:
   enabled: true
   ## @param persistence.mountPath Path to mount the volume at.
   ##
-  mountPath: /bitnami/neo4j
+  mountPath: /bitnami/Neo4j
   ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
   ##
   subPath: ""
@@ -745,7 +745,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r22
+    tag: 12-debian-12-r24
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
