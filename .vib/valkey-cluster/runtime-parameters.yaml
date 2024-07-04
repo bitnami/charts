@@ -11,10 +11,10 @@ service:
     valkey: 80
   type: LoadBalancer
 persistence:
-  path: /bitnami/valkey-cluster/data
+  path: /bitnami/valkey/data
 valkey:
   containerPorts:
-    redis: 6380
+    valkey: 6380
     bus: 16380
 cluster:
   init: true
