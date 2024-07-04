@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 {{- $auth := printf "REDISCLI_AUTH=%s" .Vars.password }}
-{{- $redis_port := .Vars.redis.containerPorts.redis }}
-{{- $lb_endpoint := printf "-h valkey-cluster -p %d" .Vars.service.ports.redis }}
+{{- $valkey_port := .Vars.valkey.containerPorts.valkey }}
+{{- $lb_endpoint := printf "-h valkey-cluster -p %d" .Vars.service.ports.valkey }}
 {{- $nodes := .Vars.cluster.nodes }}
 command:
   {{- $key := printf "key_%s" (randAlpha 5) }}
@@ -12,8 +12,8 @@ command:
     exec: |
       export {{ $auth }} && \
       valkey-cli {{ $lb_endpoint }} CLUSTER NODES | grep master -m 1 | cut -d' ' -f 2 | cut -d':' -f 1 | \
-      xargs -I '{}' valkey-cli -c -h '{}' -p {{ $redis_port }} SET {{ $key }} {{ $value }} && sleep 1 \
-      {{ range $e, $i := until $nodes }} && valkey-cli -c -h valkey-cluster-{{ $i }}.valkey-cluster-headless -p {{ $redis_port }} GET {{ $key }} | grep -q {{ $value }}{{ end }}
+      xargs -I '{}' valkey-cli -c -h '{}' -p {{ $valkey_port }} SET {{ $key }} {{ $value }} && sleep 1 \
+      {{ range $e, $i := until $nodes }} && valkey-cli -c -h valkey-cluster-{{ $i }}.valkey-cluster-headless -p {{ $valkey_port }} GET {{ $key }} | grep -q {{ $value }}{{ end }}
     exit-status: 0
   valkey-cluster-info:
     exec: {{ $auth }} valkey-cli {{ $lb_endpoint }} CLUSTER INFO
@@ -25,7 +25,7 @@ command:
     exec: |
       export {{ $auth }} && \
       valkey-cli {{ $lb_endpoint }} CLUSTER SLOTS | sed -n '3p' | \
-      xargs -I '{}' valkey-cli -h '{}' -p {{ $redis_port }} INFO
+      xargs -I '{}' valkey-cli -h '{}' -p {{ $valkey_port }} INFO
     exit-status: 0
     stdout:
       - "role:master"
