@@ -468,12 +468,6 @@ volumePermissions:
   ##     memory: 1024Mi
   ##
   resources: {}
-## PodSecurityPolicy configuration
-## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
-## @param podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
-##
-podSecurityPolicy:
-  create: false
 ## @section Valkey statefulset parameters
 ##
 valkey:

@@ -480,7 +480,6 @@ OK
 | `volumePermissions.containerSecurityContext.privileged`     | Run container as privileged                                                                                                                                                                                                                           | `false`                          |
 | `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                           |
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                             |
-| `podSecurityPolicy.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later                                                                                                           | `false`                          |
 
 ### Valkey statefulset parameters
 
