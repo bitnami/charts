@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.6.4 (2024-07-03)
+## 4.6.5 (2024-07-04)
 
-* [bitnami/grafana-loki] Release 4.6.4 ([#27650](https://github.com/bitnami/charts/pull/27650))
+* [bitnami/grafana-loki] Release 4.6.5 ([#27762](https://github.com/bitnami/charts/pull/27762))
+
+## <small>4.6.4 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana-loki] Release 4.6.4 (#27650) ([f8225e4](https://github.com/bitnami/charts/commit/f8225e4587c108c607ed19202a7e5fb7a843ba7b)), closes [#27650](https://github.com/bitnami/charts/issues/27650)
 
 ## <small>4.6.3 (2024-06-24)</small>
 
