@@ -1,4 +1,4 @@
-<!--- app-name: neo4j -->
+<!--- app-name: Neo4j -->
 
 # neo4j
 
