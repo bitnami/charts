@@ -14,12 +14,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
-  {{- if and (include "common.capabilities.psp.supported" .) .Values.podSecurityPolicy.create }}
-  - apiGroups: ['{{ template "podSecurityPolicy.apiGroup" . }}']
-    resources: ['podsecuritypolicies']
-    verbs: ['use']
-    resourceNames: [{{ template "common.names.fullname" . }}]
-{{- end -}}
 {{- if .Values.rbac.role.rules }}
 {{- toYaml .Values.rbac.role.rules | nindent 2 }}
 {{- end -}}
