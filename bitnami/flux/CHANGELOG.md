@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.3.7 (2024-07-02)
+## 2.3.8 (2024-07-04)
 
-* [bitnami/flux] Release 2.3.7 ([#27648](https://github.com/bitnami/charts/pull/27648))
+* [bitnami/flux] Release 2.3.8 ([#27782](https://github.com/bitnami/charts/pull/27782))
+
+## <small>2.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/flux] Release 2.3.7 (#27648) ([488d70c](https://github.com/bitnami/charts/commit/488d70c8412155c2a3288a30bf0ea3eb5aa368cb)), closes [#27648](https://github.com/bitnami/charts/issues/27648)
 
 ## <small>2.3.6 (2024-06-18)</small>
 
