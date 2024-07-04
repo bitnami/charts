@@ -1,8 +1,13 @@
 # Changelog
 
-## 10.2.5 (2024-07-03)
+## 10.2.6 (2024-07-04)
 
-* [bitnami/etcd] Release 10.2.5 ([#27646](https://github.com/bitnami/charts/pull/27646))
+* [bitnami/etcd] Release 10.2.6 ([#27765](https://github.com/bitnami/charts/pull/27765))
+
+## <small>10.2.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/etcd] Release 10.2.5 (#27646) ([41a7444](https://github.com/bitnami/charts/commit/41a74443e1abe22ae4e81aca14dbe52127c6aae1)), closes [#27646](https://github.com/bitnami/charts/issues/27646)
 
 ## <small>10.2.4 (2024-06-18)</small>
 
