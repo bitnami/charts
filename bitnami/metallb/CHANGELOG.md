@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.3.6 (2024-07-03)
+## 6.3.7 (2024-07-04)
 
-* [bitnami/metallb] Release 6.3.6 ([#27664](https://github.com/bitnami/charts/pull/27664))
+* [bitnami/metallb] Release 6.3.7 ([#27796](https://github.com/bitnami/charts/pull/27796))
+
+## <small>6.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/metallb] Release 6.3.6 (#27664) ([fe3e1bd](https://github.com/bitnami/charts/commit/fe3e1bda08186e65efe914093b4bbe2080df065a)), closes [#27664](https://github.com/bitnami/charts/issues/27664)
 
 ## <small>6.3.5 (2024-06-18)</small>
 
