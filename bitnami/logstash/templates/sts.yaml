@@ -140,9 +140,7 @@ spec:
             - secretRef:
                 name: {{ .Values.extraEnvVarsSecret }}
             {{- end }}
-          {{- if .Values.containerPorts }}
-          ports: {{ toYaml .Values.containerPorts | nindent 12 }}
-          {{- end }}
+          ports: {{- include "common.tplvalues.merge" (dict "values" (list .Values.containerPorts .Values.extraContainerPorts) "context" $) | nindent 12 }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
