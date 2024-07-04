@@ -1,8 +1,8 @@
 # Changelog
 
-## 11.2.8 (2024-07-03)
+## 11.2.8 (2024-07-04)
 
-* [bitnami/apache] Uses common.compatibility.renderSecurityContext template to render containerSecurityContext values in container specs ([#27748](https://github.com/bitnami/charts/pull/27748))
+* [bitnami/apache] Uses `common.compatibility.renderSecurityContext` template to render `containerSecurityContext` values in container specs ([#27748](https://github.com/bitnami/charts/pull/27748))
 
 ## <small>11.2.7 (2024-07-03)</small>
 
