@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.4.17 (2024-07-04)
+## 22.4.18 (2024-07-05)
 
-* [bitnami/wordpress] Release 22.4.17 ([#27799](https://github.com/bitnami/charts/pull/27799))
+* [bitnami/wordpress] Release 22.4.18 ([#27825](https://github.com/bitnami/charts/pull/27825))
+
+## <small>22.4.17 (2024-07-04)</small>
+
+* [bitnami/wordpress] Release 22.4.17 (#27799) ([6009d8a](https://github.com/bitnami/charts/commit/6009d8ac84e9ef76628216eef00cfac3f2def3dc)), closes [#27799](https://github.com/bitnami/charts/issues/27799)
 
 ## <small>22.4.16 (2024-06-27)</small>
 
