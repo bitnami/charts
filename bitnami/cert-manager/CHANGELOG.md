@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.8 (2024-07-02)
+## 1.3.9 (2024-07-04)
 
-* [bitnami/cert-manager] Release 1.3.8 ([#27642](https://github.com/bitnami/charts/pull/27642))
+* [bitnami/cert-manager] Release 1.3.9 ([#27758](https://github.com/bitnami/charts/pull/27758))
+
+## <small>1.3.8 (2024-07-02)</small>
+
+* [bitnami/cert-manager] Release 1.3.8 (#27642) ([280c6f3](https://github.com/bitnami/charts/commit/280c6f3f7ac6f010db2d5014077dc3c965f34352)), closes [#27642](https://github.com/bitnami/charts/issues/27642)
 
 ## <small>1.3.7 (2024-06-27)</small>
 

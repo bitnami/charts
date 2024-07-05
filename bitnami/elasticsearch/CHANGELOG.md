@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.2.7 (2024-07-03)
+## 21.2.8 (2024-07-04)
 
-* [bitnami/elasticsearch] Release 21.2.7 ([#27688](https://github.com/bitnami/charts/pull/27688))
+* [bitnami/elasticsearch] Release 21.2.8 ([#27801](https://github.com/bitnami/charts/pull/27801))
+
+## <small>21.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/elasticsearch] Release 21.2.7 (#27688) ([95ad961](https://github.com/bitnami/charts/commit/95ad9610c1e1e633336e021123e81b86e9180aa9)), closes [#27688](https://github.com/bitnami/charts/issues/27688)
 
 ## <small>21.2.6 (2024-06-24)</small>
 

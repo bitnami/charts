@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.2.8 (2024-07-03)
+## 5.2.9 (2024-07-04)
 
-* [bitnami/supabase] Release 5.2.8 ([#27728](https://github.com/bitnami/charts/pull/27728))
+* [bitnami/supabase] Do not render any resources for disabled components ([#27580](https://github.com/bitnami/charts/pull/27580))
+
+## <small>5.2.8 (2024-07-04)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/supabase] Release 5.2.8 (#27728) ([33e773b](https://github.com/bitnami/charts/commit/33e773b50bc227d85afee414fba8728833a8b529)), closes [#27728](https://github.com/bitnami/charts/issues/27728)
 
 ## <small>5.2.7 (2024-06-18)</small>
 

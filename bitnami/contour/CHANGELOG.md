@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.8 (2024-07-03)
+## 18.2.9 (2024-07-04)
 
-* [bitnami/contour] Release 18.2.8 ([#27649](https://github.com/bitnami/charts/pull/27649))
+* [bitnami/contour] Release 18.2.9 ([#27759](https://github.com/bitnami/charts/pull/27759))
+
+## <small>18.2.8 (2024-07-03)</small>
+
+* [bitnami/contour] Release 18.2.8 (#27649) ([b0114cf](https://github.com/bitnami/charts/commit/b0114cf34cb4669cb33c98a5cd36757c6e20c0e1)), closes [#27649](https://github.com/bitnami/charts/issues/27649)
 
 ## <small>18.2.7 (2024-07-02)</small>
 

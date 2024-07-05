@@ -2,7 +2,7 @@
 
 ## 6.5.4 (2024-07-04)
 
-* [bitnami/argo-cd] Use correct port in NetworkPolicy of Repo Server ([#27615](https://github.com/bitnami/charts/pull/27615))
+* [bitnami/argo-cd] Release 6.5.4 ([#27756](https://github.com/bitnami/charts/pull/27756))
 
 ## <small>6.5.3 (2024-07-03)</small>
 

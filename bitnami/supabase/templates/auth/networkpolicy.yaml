@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.auth.networkPolicy.enabled }}
+{{- if and .Values.auth.enabled .Values.auth.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
@@ -43,7 +43,7 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: postgresql
-              app.kubernetes.io/instance: {{ .Release.Name }}              
+              app.kubernetes.io/instance: {{ .Release.Name }}
       {{- end }}
     {{- if .Values.kong.enabled }}
     # Allow connection to public endpoint (Kong)
@@ -53,7 +53,7 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: kong
-              app.kubernetes.io/instance: {{ .Release.Name }}              
+              app.kubernetes.io/instance: {{ .Release.Name }}
     {{- end }}
     {{- if .Values.auth.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.auth.networkPolicy.extraEgress "context" $ ) | nindent 4 }}

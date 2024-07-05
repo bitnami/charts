@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.2.6 (2024-07-03)
+## 4.2.7 (2024-07-04)
 
-* [bitnami/kube-state-metrics] Release 4.2.6 ([#27658](https://github.com/bitnami/charts/pull/27658))
+* [bitnami/kube-state-metrics] Release 4.2.7 ([#27786](https://github.com/bitnami/charts/pull/27786))
+
+## <small>4.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kube-state-metrics] Release 4.2.6 (#27658) ([e347f7b](https://github.com/bitnami/charts/commit/e347f7b5bb286d2ace5412af9430754396d22e06)), closes [#27658](https://github.com/bitnami/charts/issues/27658)
 
 ## <small>4.2.5 (2024-06-18)</small>
 
