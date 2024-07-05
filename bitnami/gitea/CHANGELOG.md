@@ -4,9 +4,9 @@
 
 * [bitnami/gitea] Update externaldb-secret logic ([#27596](https://github.com/bitnami/charts/pull/27596))
 
-## 2.3.10 (2024-07-04)
+## <small>2.3.10 (2024-07-04)</small>
 
-* [bitnami/gitea] Release 2.3.10 ([#27803](https://github.com/bitnami/charts/pull/27803))
+* [bitnami/gitea] Release 2.3.10 (#27803) ([0dd2cf0](https://github.com/bitnami/charts/commit/0dd2cf0499d348260f7b967a9d739a8e57d451c4)), closes [#27803](https://github.com/bitnami/charts/issues/27803)
 
 ## <small>2.3.9 (2024-07-04)</small>
 
