@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.5.6 (2024-07-05)
+## 6.5.7 (2024-07-05)
 
-* [bitnami/argo-cd] Render PDBs and NetworkPolicies only if apps are enabled as well ([#27614](https://github.com/bitnami/charts/pull/27614))
+* [bitnami/argo-cd] Release 6.5.7 ([#27809](https://github.com/bitnami/charts/pull/27809))
+
+## <small>6.5.6 (2024-07-05)</small>
+
+* [bitnami/argo-cd] Render PDBs and NetworkPolicies only if apps are enabled as well (#27614) ([a8343fd](https://github.com/bitnami/charts/commit/a8343fd3563c76ba4d1eb7e8b37ed4f270b06c53)), closes [#27614](https://github.com/bitnami/charts/issues/27614)
 
 ## <small>6.5.5 (2024-07-05)</small>
 
