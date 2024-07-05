@@ -349,6 +349,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `spi.truststoreFilename`         | Truststore filename inside the existing secret                                                                               | `keycloak-spi.truststore.jks` |
 | `spi.passwordsSecret`            | Secret containing the SPI Truststore passwords.                                                                              | `""`                          |
 | `spi.hostnameVerificationPolicy` | Verify the hostname of the server's certificate. Allowed values: "ANY", "WILDCARD", "STRICT".                                | `""`                          |
+| `adminRealm`                     | Keycloak admin realm                                                                                                         | `master`                      |
 | `production`                     | Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.                                 | `false`                       |
 | `proxy`                          | reverse Proxy mode edge, reencrypt, passthrough or none                                                                      | `passthrough`                 |
 | `httpRelativePath`               | Set the path relative to '/' for serving resources. Useful if you are migrating from older version which were using '/auth/' | `/`                           |
