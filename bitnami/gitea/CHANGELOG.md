@@ -1,8 +1,25 @@
 # Changelog
 
-## 2.3.7 (2024-07-01)
+## 2.3.11 (2024-07-05)
 
 * [bitnami/gitea] Update externaldb-secret logic ([#27596](https://github.com/bitnami/charts/pull/27596))
+
+## 2.3.10 (2024-07-04)
+
+* [bitnami/gitea] Release 2.3.10 ([#27803](https://github.com/bitnami/charts/pull/27803))
+
+## <small>2.3.9 (2024-07-04)</small>
+
+* [bitnami/gitea] Release 2.3.9 (#27752) ([b37b9ef](https://github.com/bitnami/charts/commit/b37b9ef02ef34e15e576544ff94ce3c98c1ac159)), closes [#27752](https://github.com/bitnami/charts/issues/27752)
+
+## <small>2.3.8 (2024-07-03)</small>
+
+* [bitnami/gitea] Release 2.3.8 (#27647) ([53e54e7](https://github.com/bitnami/charts/commit/53e54e79995cd75fb1356302f22b8f16160928e8)), closes [#27647](https://github.com/bitnami/charts/issues/27647)
+
+## <small>2.3.7 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/gitea] Release 2.3.7 (#27630) ([e0208e5](https://github.com/bitnami/charts/commit/e0208e5b734d3c5c3e9475894222ce4b5bb653da)), closes [#27630](https://github.com/bitnami/charts/issues/27630)
 
 ## <small>2.3.6 (2024-06-18)</small>
 

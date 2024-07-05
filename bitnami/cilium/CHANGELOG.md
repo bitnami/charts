@@ -1,8 +1,16 @@
 # Changelog
 
+## 1.0.2 (2024-07-04)
+
+* [bitnami/cilium] Release 1.0.2 ([#27761](https://github.com/bitnami/charts/pull/27761))
+
+## <small>1.0.1 (2024-07-03)</small>
+
+* [bitnami/cilium] Release 1.0.1 (#27643) ([a124f1d](https://github.com/bitnami/charts/commit/a124f1d87169a313d525377991c9807b9f5f0aa1)), closes [#27643](https://github.com/bitnami/charts/issues/27643)
+
 ## 1.0.0 (2024-06-27)
 
-* [bitnami/cilium] Add support for Hubble ([#27526](https://github.com/bitnami/charts/pull/27526))
+* [bitnami/cilium] Add support for Hubble (#27526) ([38131c4](https://github.com/bitnami/charts/commit/38131c474861a747b239406aa30e7ef51a9ffc60)), closes [#27526](https://github.com/bitnami/charts/issues/27526)
 
 ## 0.2.0 (2024-06-25)
 

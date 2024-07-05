@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.4 (2024-06-18)
+## 9.2.5 (2024-07-03)
 
-* [bitnami/spark] Release 9.2.4 ([#27419](https://github.com/bitnami/charts/pull/27419))
+* [bitnami/spark] Release 9.2.5 ([#27719](https://github.com/bitnami/charts/pull/27719))
+
+## <small>9.2.4 (2024-06-18)</small>
+
+* [bitnami/spark] Release 9.2.4 (#27419) ([8d0a80f](https://github.com/bitnami/charts/commit/8d0a80fc4933932005d946b82c8fa4750d91ddcf)), closes [#27419](https://github.com/bitnami/charts/issues/27419)
 
 ## <small>9.2.3 (2024-06-17)</small>
 

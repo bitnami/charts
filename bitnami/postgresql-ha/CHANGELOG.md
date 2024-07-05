@@ -1,8 +1,17 @@
 # Changelog
 
-## 14.2.8 (2024-06-26)
+## 14.2.10 (2024-07-03)
 
-* [bitnami/postgresql-ha] Fix readiness probe when enabling TLS for PostgreSQL ([#27537](https://github.com/bitnami/charts/pull/27537))
+* [bitnami/postgresql-ha] Release 14.2.10 ([#27732](https://github.com/bitnami/charts/pull/27732))
+
+## <small>14.2.9 (2024-07-01)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.9 (#27547) ([2752ca5](https://github.com/bitnami/charts/commit/2752ca5c04ed441490c48083aa4a339de699b69c)), closes [#27547](https://github.com/bitnami/charts/issues/27547)
+
+## <small>14.2.8 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/postgresql-ha] Fix readiness probe when enabling TLS for PostgreSQL (#27537) ([da66fc5](https://github.com/bitnami/charts/commit/da66fc55cf0c39e90b72d81918d1907e4f25d8fb)), closes [#27537](https://github.com/bitnami/charts/issues/27537)
 
 ## <small>14.2.7 (2024-06-18)</small>
 

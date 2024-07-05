@@ -1,8 +1,13 @@
 # Changelog
 
-## 18.21.12 (2024-06-26)
+## 18.21.13 (2024-07-04)
 
-* [bitnami/drupal] Release 18.21.12 ([#27541](https://github.com/bitnami/charts/pull/27541))
+* [bitnami/drupal] Release 18.21.13 ([#27771](https://github.com/bitnami/charts/pull/27771))
+
+## <small>18.21.12 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/drupal] Release 18.21.12 (#27541) ([2dd97dc](https://github.com/bitnami/charts/commit/2dd97dc37f63302aec5f0149aea839d250579bb3)), closes [#27541](https://github.com/bitnami/charts/issues/27541)
 
 ## <small>18.21.11 (2024-06-21)</small>
 
