@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.4.5 (2024-07-03)
+## 21.4.6 (2024-07-05)
 
-* [bitnami/keycloak] Release 21.4.5 ([#27693](https://github.com/bitnami/charts/pull/27693))
+* bitnami/keycloak Diversity: Allow Keycloak admin realm to be changed/configurable ([#27821](https://github.com/bitnami/charts/pull/27821))
+
+## <small>21.4.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/keycloak] Release 21.4.5 (#27693) ([ed5f4a4](https://github.com/bitnami/charts/commit/ed5f4a4a46bb408fea752de831eebe8ca9c6e9af)), closes [#27693](https://github.com/bitnami/charts/issues/27693)
 
 ## <small>21.4.4 (2024-06-20)</small>
 
