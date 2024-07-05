@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.17 (2024-07-05)
+## 21.1.18 (2024-07-05)
 
-* [bitnami/ghost] Release 21.1.17 ([#27814](https://github.com/bitnami/charts/pull/27814))
+* [bitnami/ghost] Release 21.1.18 ([#27827](https://github.com/bitnami/charts/pull/27827))
+
+## <small>21.1.17 (2024-07-05)</small>
+
+* [bitnami/ghost] Release 21.1.17 (#27814) ([b878615](https://github.com/bitnami/charts/commit/b878615f9516e284131529772e720ef72dafd32b)), closes [#27814](https://github.com/bitnami/charts/issues/27814)
 
 ## <small>21.1.16 (2024-07-03)</small>
 
