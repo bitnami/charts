@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.18 (2024-07-04)
+## 14.6.19 (2024-07-05)
 
-* [bitnami/minio] Release 14.6.18 ([#27774](https://github.com/bitnami/charts/pull/27774))
+* [bitnami/minio]: Fix the condition end line to use containerPorts ([#27626](https://github.com/bitnami/charts/pull/27626))
+
+## <small>14.6.18 (2024-07-04)</small>
+
+* [bitnami/minio] Release 14.6.18 (#27774) ([6eea218](https://github.com/bitnami/charts/commit/6eea21800d5c8e38ac84f2232ab63034f0e18660)), closes [#27774](https://github.com/bitnami/charts/issues/27774)
 
 ## <small>14.6.17 (2024-07-03)</small>
 
