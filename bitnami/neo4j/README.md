@@ -1,10 +1,10 @@
 <!--- app-name: Neo4j -->
 
-# neo4j
+# Bitnami package for Neo4j
 
 Neo4j is a high performance graph store with all the features expected of a mature and robust database, like a friendly query language and ACID transactions.
 
-[Overview of Neo4j](https://www.neo4j.com/)
+[Overview of Neo4j](http://www.neo4j.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
