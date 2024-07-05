@@ -1,8 +1,17 @@
 # Changelog
 
-## 3.6.0 (2024-06-20)
+## 3.6.2 (2024-07-04)
 
-* [bitnami/grafana-tempo] Add option to disable tempo-query sidecar ([#27447](https://github.com/bitnami/charts/pull/27447))
+* [bitnami/grafana-tempo] Release 3.6.2 ([#27764](https://github.com/bitnami/charts/pull/27764))
+
+## <small>3.6.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana-tempo] Release 3.6.1 (#27657) ([544e8dd](https://github.com/bitnami/charts/commit/544e8ddfa5cd9379ed7177b511bdee0a653b3fea)), closes [#27657](https://github.com/bitnami/charts/issues/27657)
+
+## 3.6.0 (2024-06-24)
+
+* [bitnami/grafana-tempo] Add option to disable tempo-query sidecar (#27447) ([b251a0b](https://github.com/bitnami/charts/commit/b251a0beca7e98f2be4de453dad590fe8dfbac0d)), closes [#27447](https://github.com/bitnami/charts/issues/27447)
 
 ## <small>3.5.5 (2024-06-18)</small>
 

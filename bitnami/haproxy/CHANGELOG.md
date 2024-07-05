@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.0.6 (2024-06-18)
+## 2.0.8 (2024-07-04)
 
-* [bitnami/haproxy] Release 2.0.6 ([#27353](https://github.com/bitnami/charts/pull/27353))
+* [bitnami/haproxy] Release 2.0.8 ([#27794](https://github.com/bitnami/charts/pull/27794))
+
+## <small>2.0.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/haproxy] Release 2.0.7 (#27660) ([4f84329](https://github.com/bitnami/charts/commit/4f8432979a89c4ad56496b63bad6cbf768820df7)), closes [#27660](https://github.com/bitnami/charts/issues/27660)
+
+## <small>2.0.6 (2024-06-18)</small>
+
+* [bitnami/haproxy] Release 2.0.6 (#27353) ([368c8bf](https://github.com/bitnami/charts/commit/368c8bf6869e59fc11823d901c36838a01f6cfde)), closes [#27353](https://github.com/bitnami/charts/issues/27353)
 
 ## <small>2.0.5 (2024-06-17)</small>
 
