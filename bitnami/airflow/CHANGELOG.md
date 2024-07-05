@@ -1,8 +1,17 @@
 # Changelog
 
-## 18.3.6 (2024-07-03)
+## 18.3.8 (2024-07-05)
 
-* [bitnami/airflow] Release 18.3.6 ([#27682](https://github.com/bitnami/charts/pull/27682))
+* [bitnami/airflow] Release 18.3.8 ([#27818](https://github.com/bitnami/charts/pull/27818))
+
+## <small>18.3.7 (2024-07-03)</small>
+
+* [bitnami/airflow] Release 18.3.7 (#27742) ([fb7d639](https://github.com/bitnami/charts/commit/fb7d63923206bc2c7965ff0b80eeddec43c77d23)), closes [#27742](https://github.com/bitnami/charts/issues/27742)
+
+## <small>18.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/airflow] Release 18.3.6 (#27682) ([792722b](https://github.com/bitnami/charts/commit/792722b9717ae2e4f35b420207761b7aac67e2ac)), closes [#27682](https://github.com/bitnami/charts/issues/27682)
 
 ## <small>18.3.5 (2024-06-25)</small>
 

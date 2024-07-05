@@ -1,8 +1,24 @@
 # Changelog
 
-## 6.5.3 (2024-07-03)
+## 6.5.7 (2024-07-05)
 
-* [bitnami/argo-cd] Release 6.5.3 ([#27652](https://github.com/bitnami/charts/pull/27652))
+* [bitnami/argo-cd] Release 6.5.7 ([#27809](https://github.com/bitnami/charts/pull/27809))
+
+## <small>6.5.6 (2024-07-05)</small>
+
+* [bitnami/argo-cd] Render PDBs and NetworkPolicies only if apps are enabled as well (#27614) ([a8343fd](https://github.com/bitnami/charts/commit/a8343fd3563c76ba4d1eb7e8b37ed4f270b06c53)), closes [#27614](https://github.com/bitnami/charts/issues/27614)
+
+## <small>6.5.5 (2024-07-05)</small>
+
+* [bitnami/argo-cd] Use correct port in NetworkPolicy of Repo Server (#27615) ([afe2d37](https://github.com/bitnami/charts/commit/afe2d3707912e9717615a38e5a54741800b443a1)), closes [#27615](https://github.com/bitnami/charts/issues/27615)
+
+## <small>6.5.4 (2024-07-04)</small>
+
+* [bitnami/argo-cd] Release 6.5.4 (#27756) ([f5d8265](https://github.com/bitnami/charts/commit/f5d8265fa7f9f1ed69bcea1b64817d0f50274b3d)), closes [#27756](https://github.com/bitnami/charts/issues/27756)
+
+## <small>6.5.3 (2024-07-03)</small>
+
+* [bitnami/argo-cd] Release 6.5.3 (#27652) ([8540d55](https://github.com/bitnami/charts/commit/8540d55d2fb45254852efd8ed802b820787f35f0)), closes [#27652](https://github.com/bitnami/charts/issues/27652)
 
 ## <small>6.5.2 (2024-07-02)</small>
 

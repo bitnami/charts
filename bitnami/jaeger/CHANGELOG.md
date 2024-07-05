@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.5.1 (2024-07-03)
+## 2.5.2 (2024-07-04)
 
-* [bitnami/jaeger] Release 2.5.1 ([#27654](https://github.com/bitnami/charts/pull/27654))
+* [bitnami/jaeger] Release 2.5.2 ([#27791](https://github.com/bitnami/charts/pull/27791))
+
+## <small>2.5.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/jaeger] Release 2.5.1 (#27654) ([b66430f](https://github.com/bitnami/charts/commit/b66430fa4ecbfc084700db342034a88151ab1279)), closes [#27654](https://github.com/bitnami/charts/issues/27654)
 
 ## 2.5.0 (2024-06-25)
 

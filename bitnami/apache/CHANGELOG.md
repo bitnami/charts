@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.2.6 (2024-07-01)
+## 11.2.8 (2024-07-04)
 
-* [bitnami/apache] Release 11.2.6 ([#27618](https://github.com/bitnami/charts/pull/27618))
+* [bitnami/apache] Uses `common.compatibility.renderSecurityContext` template to render `containerSecurityContext` values in container specs ([#27748](https://github.com/bitnami/charts/pull/27748))
+
+## <small>11.2.7 (2024-07-03)</small>
+
+* [bitnami/apache] Release 11.2.7 (#27740) ([06bc29e](https://github.com/bitnami/charts/commit/06bc29e845408e9b9825660981af83bde4f488b6)), closes [#27740](https://github.com/bitnami/charts/issues/27740)
+
+## <small>11.2.6 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/apache] Release 11.2.6 (#27618) ([c9763df](https://github.com/bitnami/charts/commit/c9763df0112bdec4859a74280bde03160267a949)), closes [#27618](https://github.com/bitnami/charts/issues/27618)
 
 ## <small>11.2.5 (2024-06-18)</small>
 
