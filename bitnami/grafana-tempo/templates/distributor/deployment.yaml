@@ -137,7 +137,7 @@ spec:
               protocol: TCP
             {{- end }}
             {{- if .Values.tempo.traces.otlp.http }}
-            - containerPort: 55681
+            - containerPort: 4318
               name: otlp-http
               protocol: TCP
             {{- end }}
