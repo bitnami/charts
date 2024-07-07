@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/keycloak
 ```
 
-Looking to use Keycloak in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Keycloak in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -122,7 +122,7 @@ keycloak:
 Then open a terminal in the running keycloak container and run:
 
 ```bash
-kc.sh export --dir /export/ --users realm_file 
+kc.sh export --dir /export/ --users realm_file
 ````
 
 This will export the all the realms with users to the `/export` folder.
@@ -143,7 +143,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 ### Configure admin Ingress
 
-In addition to the Ingress resource described above, this chart also provides the ability to define an Ingress for the admin area of Keycloak, for example the `master` realm.  
+In addition to the Ingress resource described above, this chart also provides the ability to define an Ingress for the admin area of Keycloak, for example the `master` realm.
 
 For this scenario, you can use the Keycloak Config CLI integration with the following values, where `keycloak-admin.example.com` is to be replaced by the actual hostname:
 

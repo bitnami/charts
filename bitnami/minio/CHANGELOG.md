@@ -1,8 +1,38 @@
 # Changelog
 
-## 14.6.11 (2024-06-18)
+## 14.6.19 (2024-07-05)
 
-* [bitnami/minio] Release 14.6.11 ([#27380](https://github.com/bitnami/charts/pull/27380))
+* [bitnami/minio]: Fix the condition end line to use containerPorts ([#27626](https://github.com/bitnami/charts/pull/27626))
+
+## <small>14.6.18 (2024-07-04)</small>
+
+* [bitnami/minio] Release 14.6.18 (#27774) ([6eea218](https://github.com/bitnami/charts/commit/6eea21800d5c8e38ac84f2232ab63034f0e18660)), closes [#27774](https://github.com/bitnami/charts/issues/27774)
+
+## <small>14.6.17 (2024-07-03)</small>
+
+* [bitnami/minio] Release 14.6.17 (#27665) ([894b378](https://github.com/bitnami/charts/commit/894b378f618ee21255dab236fbc0770ceec95a57)), closes [#27665](https://github.com/bitnami/charts/issues/27665)
+
+## <small>14.6.16 (2024-06-29)</small>
+
+* [bitnami/minio] Release 14.6.15 (#27588) ([7e1d994](https://github.com/bitnami/charts/commit/7e1d9945dd0515dd317c6f6f12564757df66c8d7)), closes [#27588](https://github.com/bitnami/charts/issues/27588)
+* [bitnami/minio] Release 14.6.16 (#27598) ([055dab8](https://github.com/bitnami/charts/commit/055dab873a739e58cba8ffdc4a3d6ec5523e2df0)), closes [#27598](https://github.com/bitnami/charts/issues/27598)
+
+## <small>14.6.14 (2024-06-28)</small>
+
+* [bitnami/minio] fix: totalDrives calculation includes number of zones (#26602) ([00957aa](https://github.com/bitnami/charts/commit/00957aa79e594a89a8708c891abb43156bcda80f)), closes [#26602](https://github.com/bitnami/charts/issues/26602)
+
+## <small>14.6.13 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/minio] Release 14.6.13 (#27542) ([effbee4](https://github.com/bitnami/charts/commit/effbee4927decf0da325f06469b54325897016b3)), closes [#27542](https://github.com/bitnami/charts/issues/27542)
+
+## <small>14.6.12 (2024-06-22)</small>
+
+* [bitnami/minio] Release 14.6.12 (#27495) ([eda1a07](https://github.com/bitnami/charts/commit/eda1a07d7f532592d59997b744a7cd86e79fad20)), closes [#27495](https://github.com/bitnami/charts/issues/27495)
+
+## <small>14.6.11 (2024-06-18)</small>
+
+* [bitnami/minio] Release 14.6.11 (#27380) ([0e607db](https://github.com/bitnami/charts/commit/0e607db145bd34f416f4d846ea44a408c13ca1a8)), closes [#27380](https://github.com/bitnami/charts/issues/27380)
 
 ## <small>14.6.10 (2024-06-17)</small>
 

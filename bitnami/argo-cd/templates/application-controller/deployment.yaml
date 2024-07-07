@@ -164,6 +164,8 @@ spec:
               containerPort: {{ .Values.controller.containerPorts.metrics }}
               protocol: TCP
           env:
+            - name: ARGOCD_APPLICATION_CONTROLLER_NAME
+              value: {{ include "argocd.application-controller" . }}
             {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
               valueFrom:

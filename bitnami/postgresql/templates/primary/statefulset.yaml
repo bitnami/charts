@@ -466,6 +466,14 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/postgresql/tmp
               subPath: app-tmp-dir
+            {{- if or .Values.primary.preInitDb.scriptsConfigMap .Values.primary.preInitDb.scripts }}
+            - name: custom-preinit-scripts
+              mountPath: /docker-entrypoint-preinitdb.d/
+            {{- end }}
+            {{- if .Values.primary.preInitDb.scriptsSecret }}
+            - name: custom-preinit-scripts-secret
+              mountPath: /docker-entrypoint-preinitdb.d/secret
+            {{- end }}
             {{- if or .Values.primary.initdb.scriptsConfigMap .Values.primary.initdb.scripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
@@ -524,9 +532,8 @@ spec:
             {{- end }}
           {{- end }}
           env:
-            {{- $database := required "In order to enable metrics you need to specify a database (.Values.auth.database or .Values.global.postgresql.auth.database)" (include "postgresql.v1.database" .) }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (int (include "postgresql.v1.service.port" .)) $database }}
+              value: {{ printf "127.0.0.1:%d/?sslmode=disable" (int (include "postgresql.v1.service.port" .)) }}
             {{- $pwdKey := ternary (include "postgresql.v1.adminPasswordKey" .) (include "postgresql.v1.userPasswordKey" .) (or (eq $customUser "postgres") (empty $customUser)) }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
@@ -610,6 +617,16 @@ spec:
         - name: postgresql-password
           secret:
             secretName: {{ include "postgresql.v1.secretName" . }}
+        {{- end }}
+        {{- if or .Values.primary.preInitDb.scriptsConfigMap .Values.primary.preInitDb.scripts }}
+        - name: custom-preinit-scripts
+          configMap:
+            name: {{ include "postgresql.v1.preInitDb.scriptsCM" . }}
+        {{- end }}
+        {{- if .Values.primary.preInitDb.scriptsSecret }}
+        - name: custom-preinit-scripts-secret
+          secret:
+            secretName: {{ tpl .Values.primary.preInitDb.scriptsSecret $ }}
         {{- end }}
         {{- if or .Values.primary.initdb.scriptsConfigMap .Values.primary.initdb.scripts }}
         - name: custom-init-scripts
