@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.6.3 (2024-07-07)
+## 3.6.3 (2024-07-08)
 
 * [bitnami/grafana-tempo] Change OTLP HTTP port 55681 to 4318 ([#27830](https://github.com/bitnami/charts/pull/27830))
 
