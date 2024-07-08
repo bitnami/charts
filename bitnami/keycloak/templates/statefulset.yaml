@@ -220,6 +220,10 @@ spec:
             - name: KC_HOSTNAME_URL
               value: "http{{ if or .Values.adminIngress.tls (eq .Values.proxy "edge") }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
             {{- end }}
+            {{- if .Values.adminRealm }}
+            - name: KC_SPI_ADMIN_REALM
+              value: "{{ .Values.adminRealm }}"
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -275,7 +279,7 @@ spec:
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: {{ .Values.httpRelativePath }}realms/master
+              path: {{ .Values.httpRelativePath }}realms/{{ .Values.adminRealm | default "master" }}
               port: http
           {{- end }}
           {{- end }}

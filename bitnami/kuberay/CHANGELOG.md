@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.6 (2024-07-03)
+## 1.2.7 (2024-07-04)
 
-* [bitnami/kuberay] Release 1.2.6 ([#27673](https://github.com/bitnami/charts/pull/27673))
+* [bitnami/kuberay] Release 1.2.7 ([#27798](https://github.com/bitnami/charts/pull/27798))
+
+## <small>1.2.6 (2024-07-03)</small>
+
+* [bitnami/kuberay] Release 1.2.6 (#27673) ([d2be9ce](https://github.com/bitnami/charts/commit/d2be9ce1553907c01198a3ee94167044c7a54b2d)), closes [#27673](https://github.com/bitnami/charts/issues/27673)
 
 ## <small>1.2.5 (2024-06-28)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.1.5 (2024-07-02)
+## 9.1.6 (2024-07-04)
 
-* [bitnami/argo-workflows] Release 9.1.5 ([#27640](https://github.com/bitnami/charts/pull/27640))
+* [bitnami/argo-workflows] Release 9.1.6 ([#27755](https://github.com/bitnami/charts/pull/27755))
+
+## <small>9.1.5 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/argo-workflows] Release 9.1.5 (#27640) ([5d1255c](https://github.com/bitnami/charts/commit/5d1255c62120ad579a12957c1dd0c60d9fa6a53e)), closes [#27640](https://github.com/bitnami/charts/issues/27640)
 
 ## <small>9.1.4 (2024-06-18)</small>
 

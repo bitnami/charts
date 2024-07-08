@@ -1,8 +1,17 @@
 # Changelog
 
-## 3.6.1 (2024-07-03)
+## 3.6.3 (2024-07-08)
 
-* [bitnami/grafana-tempo] Release 3.6.1 ([#27657](https://github.com/bitnami/charts/pull/27657))
+* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) ([#27829](https://github.com/bitnami/charts/pull/27829))
+
+## <small>3.6.2 (2024-07-04)</small>
+
+* [bitnami/grafana-tempo] Release 3.6.2 (#27764) ([1194e92](https://github.com/bitnami/charts/commit/1194e9225dc4a85b74eb4cd60d9f32712501fbfe)), closes [#27764](https://github.com/bitnami/charts/issues/27764)
+
+## <small>3.6.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana-tempo] Release 3.6.1 (#27657) ([544e8dd](https://github.com/bitnami/charts/commit/544e8ddfa5cd9379ed7177b511bdee0a653b3fea)), closes [#27657](https://github.com/bitnami/charts/issues/27657)
 
 ## 3.6.0 (2024-06-24)
 

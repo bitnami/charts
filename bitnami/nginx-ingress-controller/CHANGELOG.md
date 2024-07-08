@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.3.9 (2024-07-03)
+## 11.3.10 (2024-07-04)
 
-* [bitnami/nginx-ingress-controller] Release 11.3.9 ([#27669](https://github.com/bitnami/charts/pull/27669))
+* [bitnami/nginx-ingress-controller] Release 11.3.10 ([#27778](https://github.com/bitnami/charts/pull/27778))
+
+## <small>11.3.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/nginx-ingress-controller] Release 11.3.9 (#27669) ([1faf3d7](https://github.com/bitnami/charts/commit/1faf3d75ee985a7e4ea655fa828cbcfb2d7d26d1)), closes [#27669](https://github.com/bitnami/charts/issues/27669)
 
 ## <small>11.3.8 (2024-06-18)</small>
 
