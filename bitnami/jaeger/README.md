@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/jaeger
 ```
 
-Looking to use Jaeger in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Jaeger in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -533,6 +533,8 @@ The [Bitnami jaeger](https://github.com/bitnami/containers/tree/main/bitnami/jae
 | `migration.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for jaeger container                                                                                                                                                         | `[]`             |
 | `migration.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if migration.resources is set (migration.resources is recommended for production). | `small`          |
 | `migration.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                     | `{}`             |
+| `migration.initContainer.resourcesPreset`                     | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if migration.resources is set (migration.resources is recommended for production). | `nano`           |
+| `migration.initContainer.resources`                           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                     | `{}`             |
 | `migration.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                   | `true`           |
 | `migration.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                            | `true`           |
 | `migration.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                       | `true`           |
@@ -544,22 +546,24 @@ The [Bitnami jaeger](https://github.com/bitnami/containers/tree/main/bitnami/jae
 
 ### Set the image to use for the migration job
 
-| Name                                         | Description                                                                                               | Value                       |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `cqlshImage.registry`                        | Cassandra image registry                                                                                  | `REGISTRY_NAME`             |
-| `cqlshImage.repository`                      | Cassandra image repository                                                                                | `REPOSITORY_NAME/cassandra` |
-| `cqlshImage.digest`                          | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
-| `cqlshImage.pullPolicy`                      | image pull policy                                                                                         | `IfNotPresent`              |
-| `cqlshImage.pullSecrets`                     | Cassandra image pull secrets                                                                              | `[]`                        |
-| `cqlshImage.debug`                           | Enable image debug mode                                                                                   | `false`                     |
-| `externalDatabase.host`                      | External database host                                                                                    | `""`                        |
-| `externalDatabase.port`                      | External database port                                                                                    | `9042`                      |
-| `externalDatabase.dbUser.user`               | Cassandra admin user                                                                                      | `bn_jaeger`                 |
-| `externalDatabase.dbUser.password`           | Password for `dbUser.user`. Randomly generated if empty                                                   | `""`                        |
-| `externalDatabase.existingSecret`            | Name of existing secret containing the database secret                                                    | `""`                        |
-| `externalDatabase.existingSecretPasswordKey` | Name of existing secret key containing the database password secret key                                   | `""`                        |
-| `externalDatabase.cluster.datacenter`        | Name for cassandra's jaeger datacenter                                                                    | `dc1`                       |
-| `externalDatabase.keyspace`                  | Name for cassandra's jaeger keyspace                                                                      | `bitnami_jaeger`            |
+| Name                                         | Description                                                                                                                                                                                                | Value                       |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `cqlshImage.registry`                        | Cassandra image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
+| `cqlshImage.repository`                      | Cassandra image repository                                                                                                                                                                                 | `REPOSITORY_NAME/cassandra` |
+| `cqlshImage.digest`                          | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                  | `""`                        |
+| `cqlshImage.pullPolicy`                      | image pull policy                                                                                                                                                                                          | `IfNotPresent`              |
+| `cqlshImage.pullSecrets`                     | Cassandra image pull secrets                                                                                                                                                                               | `[]`                        |
+| `cqlshImage.debug`                           | Enable image debug mode                                                                                                                                                                                    | `false`                     |
+| `cqlshImage.resourcesPreset`                 | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                      |
+| `cqlshImage.resources`                       | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
+| `externalDatabase.host`                      | External database host                                                                                                                                                                                     | `""`                        |
+| `externalDatabase.port`                      | External database port                                                                                                                                                                                     | `9042`                      |
+| `externalDatabase.dbUser.user`               | Cassandra admin user                                                                                                                                                                                       | `bn_jaeger`                 |
+| `externalDatabase.dbUser.password`           | Password for `dbUser.user`. Randomly generated if empty                                                                                                                                                    | `""`                        |
+| `externalDatabase.existingSecret`            | Name of existing secret containing the database secret                                                                                                                                                     | `""`                        |
+| `externalDatabase.existingSecretPasswordKey` | Name of existing secret key containing the database password secret key                                                                                                                                    | `""`                        |
+| `externalDatabase.cluster.datacenter`        | Name for cassandra's jaeger datacenter                                                                                                                                                                     | `dc1`                       |
+| `externalDatabase.keyspace`                  | Name for cassandra's jaeger keyspace                                                                                                                                                                       | `bitnami_jaeger`            |
 
 ### Cassandra storage sub-chart
 

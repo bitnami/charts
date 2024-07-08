@@ -1,8 +1,17 @@
 # Changelog
 
-## 8.2.8 (2024-06-18)
+## 8.3.1 (2024-06-29)
 
-* [bitnami/mongodb-sharded] Release 8.2.8 ([#27383](https://github.com/bitnami/charts/pull/27383))
+* [bitnami/mongodb-sharded] Release 8.3.1 ([#27591](https://github.com/bitnami/charts/pull/27591))
+
+## 8.3.0 (2024-06-28)
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mongodb-sharded] Support for persistent volume retention policies (#27512) ([df93121](https://github.com/bitnami/charts/commit/df93121fb40abcdaf4b3b12cd213c27d9f1b4e3f)), closes [#27512](https://github.com/bitnami/charts/issues/27512)
+
+## <small>8.2.8 (2024-06-18)</small>
+
+* [bitnami/mongodb-sharded] Release 8.2.8 (#27383) ([99030f3](https://github.com/bitnami/charts/commit/99030f353001393d321297c9295105b7c5c56ffb)), closes [#27383](https://github.com/bitnami/charts/issues/27383)
 
 ## <small>8.2.7 (2024-06-17)</small>
 

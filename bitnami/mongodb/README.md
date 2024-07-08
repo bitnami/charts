@@ -14,7 +14,7 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
-Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 

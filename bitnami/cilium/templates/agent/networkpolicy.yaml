@@ -65,6 +65,14 @@ spec:
         {{- range .Values.agent.extraContainerPorts }}
         - port: {{ .containerPort }}
         {{- end }}
+        {{- if not .Values.envoy.useDaemonSet }}
+        {{- if .Values.envoy.metrics.enabled }}
+        - port: {{ .Values.envoy.containerPorts.metrics }}
+        {{- end }}
+        {{- range .Values.envoy.extraContainerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
+        {{- end -}}
       {{- if not .Values.agent.networkPolicy.allowExternal }}
       from:
         - podSelector:

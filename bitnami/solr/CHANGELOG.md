@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.5 (2024-06-18)
+## 9.3.6 (2024-07-03)
 
-* [bitnami/solr] Release 9.3.5 ([#27417](https://github.com/bitnami/charts/pull/27417))
+* [bitnami/solr] Release 9.3.6 ([#27720](https://github.com/bitnami/charts/pull/27720))
+
+## <small>9.3.5 (2024-06-18)</small>
+
+* [bitnami/solr] Release 9.3.5 (#27417) ([5ea1326](https://github.com/bitnami/charts/commit/5ea13267930734b27e99bf62bc38c175b4daaa94)), closes [#27417](https://github.com/bitnami/charts/issues/27417)
 
 ## <small>9.3.4 (2024-06-17)</small>
 
