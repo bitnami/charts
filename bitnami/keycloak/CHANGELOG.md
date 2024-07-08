@@ -1,12 +1,12 @@
 # Changelog
 
-## 21.5.0 (2024-06-18)
+## 21.5.0 (2024-07-08)
 
 * [bitnami/keycloak] Add custom certs to system truststore ([#27197](https://github.com/bitnami/charts/pull/27197))
 
-## 21.4.6 (2024-07-08)
+## <small>21.4.6 (2024-07-08)</small>
 
-* bitnami/keycloak Diversity: Allow Keycloak admin realm to be changed/configurable ([#27821](https://github.com/bitnami/charts/pull/27821))
+* bitnami/keycloak Diversity: Allow Keycloak admin realm to be changed/configurable (#27821) ([85124dd](https://github.com/bitnami/charts/commit/85124dd6953ee9ba63af032856e7830de9db3a92)), closes [#27821](https://github.com/bitnami/charts/issues/27821)
 
 ## <small>21.4.5 (2024-07-03)</small>
 
