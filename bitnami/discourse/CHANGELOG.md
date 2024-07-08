@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.2.9 (2024-07-05)
+## 13.2.9 (2024-07-08)
 
 * [bitnami/discourse] Fix pgrep on livenessProbe typo ([#27824](https://github.com/bitnami/charts/pull/27824))
 
