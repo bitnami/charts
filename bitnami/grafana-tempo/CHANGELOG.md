@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.6.3 (2024-07-07)
+## 3.6.3 (2024-07-08)
 
 * [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) ([#27829](https://github.com/bitnami/charts/pull/27829))
 
