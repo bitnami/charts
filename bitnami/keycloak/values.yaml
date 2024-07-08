@@ -200,6 +200,9 @@ spi:
   ## @param spi.hostnameVerificationPolicy Verify the hostname of the server's certificate. Allowed values: "ANY", "WILDCARD", "STRICT".
   ##
   hostnameVerificationPolicy: ""
+## @param adminRealm Name of the admin realm
+##
+adminRealm: "master"
 ## @param production Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.
 ##
 production: false
@@ -998,7 +1001,7 @@ metrics:
     ##
     endpoints:
       - path: '{{ include "keycloak.httpPath" . }}metrics'
-      - path: '{{ include "keycloak.httpPath" . }}realms/master/metrics'
+      - path: '{{ include "keycloak.httpPath" . }}realms/{{ .Values.adminRealm }}/metrics'
     ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
     ##
     path: ""
