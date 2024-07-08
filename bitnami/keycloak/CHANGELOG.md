@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.4.6 (2024-07-05)
+## 21.4.6 (2024-07-08)
 
 * bitnami/keycloak Diversity: Allow Keycloak admin realm to be changed/configurable ([#27821](https://github.com/bitnami/charts/pull/27821))
 
