@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.5.15 (2024-07-05)
+## 15.5.15 (2024-07-08)
 
 * Postgres exporter URI fix ([#27734](https://github.com/bitnami/charts/pull/27734))
 
