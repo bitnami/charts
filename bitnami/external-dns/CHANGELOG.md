@@ -3,6 +3,14 @@
 ## 8.1.0 (2024-07-02)
 
 * [bitnami/external-dns] add default pihole.password value ([#27158](https://github.com/bitnami/charts/pull/27158))
+## 8.0.2 (2024-07-04)
+
+* [bitnami/external-dns] Release 8.0.2 ([#27760](https://github.com/bitnami/charts/pull/27760))
+
+## <small>8.0.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/external-dns] Release 8.0.1 (#27645) ([ca9be4a](https://github.com/bitnami/charts/commit/ca9be4a6bd1a9327401a1ab0f6694e8eb5a50279)), closes [#27645](https://github.com/bitnami/charts/issues/27645)
 
 ## 8.0.0 (2024-06-19)
 
