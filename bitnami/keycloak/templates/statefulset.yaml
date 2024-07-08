@@ -306,6 +306,11 @@ spec:
               mountPath: /opt/bitnami/keycloak/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.customCaExistingSecret }}
+            - name: custom-ca
+              mountPath: /opt/bitnami/keycloak/custom-ca
+              readOnly: true
+            {{- end }}
             {{- if .Values.spi.existingSecret }}
             - name: spi-certificates
               mountPath: /opt/bitnami/keycloak/spi-certs
@@ -333,6 +338,12 @@ spec:
         - name: certificates
           secret:
             secretName: {{ include "keycloak.tlsSecretName" . }}
+            defaultMode: 420
+        {{- end }}
+        {{- if .Values.customCaExistingSecret }}
+        - name: custom-ca
+          secret:
+            secretName: {{ .Values.customCaExistingSecret }}
             defaultMode: 420
         {{- end }}
         {{- if .Values.spi.existingSecret }}
