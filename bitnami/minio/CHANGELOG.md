@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.19 (2024-07-05)
+## 14.7.0 (2024-07-08)
 
-* [bitnami/minio]: Fix the condition end line to use containerPorts ([#27626](https://github.com/bitnami/charts/pull/27626))
+* [bitnami/minio]: Option to use a secret. ([#27837](https://github.com/bitnami/charts/pull/27837))
+
+## <small>14.6.19 (2024-07-05)</small>
+
+* [bitnami/minio]: Fix the condition end line to use containerPorts (#27626) ([9ccd164](https://github.com/bitnami/charts/commit/9ccd164313a80ad6911bb90b10413871bc523526)), closes [#27626](https://github.com/bitnami/charts/issues/27626)
 
 ## <small>14.6.18 (2024-07-04)</small>
 
