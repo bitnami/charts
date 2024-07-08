@@ -1,8 +1,21 @@
 # Changelog
 
-## 4.2.6 (2024-06-17)
+## 4.2.9 (2024-07-03)
 
-* [bitnami/pytorch] Release 4.2.6 ([#27273](https://github.com/bitnami/charts/pull/27273))
+* [bitnami/pytorch] Release 4.2.9 ([#27741](https://github.com/bitnami/charts/pull/27741))
+
+## <small>4.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/pytorch] Release 4.2.8 (#27708) ([f5fafe0](https://github.com/bitnami/charts/commit/f5fafe0482dc2dac6c5af083a159963cf2b937f7)), closes [#27708](https://github.com/bitnami/charts/issues/27708)
+
+## <small>4.2.7 (2024-06-18)</small>
+
+* [bitnami/pytorch] Release 4.2.7 (#27407) ([f3eb17e](https://github.com/bitnami/charts/commit/f3eb17ecdbfdfbd17723f80c3066f08bbba33bb7)), closes [#27407](https://github.com/bitnami/charts/issues/27407)
+
+## <small>4.2.6 (2024-06-17)</small>
+
+* [bitnami/pytorch] Release 4.2.6 (#27273) ([281f3dd](https://github.com/bitnami/charts/commit/281f3dd46bac4d089feab12fc6a47acdbd0d2616)), closes [#27273](https://github.com/bitnami/charts/issues/27273)
 
 ## <small>4.2.5 (2024-06-12)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 27.2.5 (2024-06-17)
+## 27.2.8 (2024-06-28)
 
-* [bitnami/magento] Release 27.2.5 ([#27241](https://github.com/bitnami/charts/pull/27241))
+* [bitnami/magento] Release 27.2.8 ([#27578](https://github.com/bitnami/charts/pull/27578))
+
+## <small>27.2.7 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/magento] Improve tests for Magento (#27545) ([6152191](https://github.com/bitnami/charts/commit/61521918e5371271456e6e741748cc78b9ed6155)), closes [#27545](https://github.com/bitnami/charts/issues/27545)
+
+## <small>27.2.6 (2024-06-18)</small>
+
+* [bitnami/magento] Release 27.2.6 (#27372) ([c33143b](https://github.com/bitnami/charts/commit/c33143b91b6810512bac31b6d2a40a07e7ee5484)), closes [#27372](https://github.com/bitnami/charts/issues/27372)
+
+## <small>27.2.5 (2024-06-17)</small>
+
+* [bitnami/magento] Release 27.2.5 (#27241) ([57d4947](https://github.com/bitnami/charts/commit/57d4947d77888d1df2194f12b5560fbc24688640)), closes [#27241](https://github.com/bitnami/charts/issues/27241)
 
 ## <small>27.2.4 (2024-06-07)</small>
 

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/contour
 ```
 
-Looking to use Contour in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Contour in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -353,6 +353,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `envoy.shutdownManager.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.shutdownManager.resources is set (envoy.shutdownManager.resources is recommended for production). | `nano`                  |
 | `envoy.shutdownManager.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                             | `{}`                    |
 | `envoy.shutdownManager.containerPorts.http`                               | Specify Port for shutdown container                                                                                                                                                                                                                           | `8090`                  |
+| `envoy.shutdownManager.lifecycleHooks`                                    | lifecycleHooks for the container to automate configuration before or after startup.                                                                                                                                                                           | `{}`                    |
 | `envoy.shutdownManager.containerSecurityContext.enabled`                  | Enabled envoy shutdownManager containers' Security Context                                                                                                                                                                                                    | `true`                  |
 | `envoy.shutdownManager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                              | `{}`                    |
 | `envoy.shutdownManager.containerSecurityContext.runAsUser`                | Set envoy shutdownManager containers' Security Context runAsUser                                                                                                                                                                                              | `1001`                  |

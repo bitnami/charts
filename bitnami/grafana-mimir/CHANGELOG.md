@@ -1,8 +1,25 @@
 # Changelog
 
-## 1.2.2 (2024-06-17)
+## 1.2.6 (2024-07-05)
 
-* [bitnami/grafana-mimir] Release 1.2.2 ([#27224](https://github.com/bitnami/charts/pull/27224))
+* [bitnami/grafana-mimir] Release 1.2.6 ([#27826](https://github.com/bitnami/charts/pull/27826))
+
+## <small>1.2.5 (2024-07-04)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.5 (#27767) ([4ecd808](https://github.com/bitnami/charts/commit/4ecd808615065f34f6ea97fcd68a393761d42dad)), closes [#27767](https://github.com/bitnami/charts/issues/27767)
+
+## <small>1.2.4 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana-mimir] Release 1.2.4 (#27651) ([c3ca8c3](https://github.com/bitnami/charts/commit/c3ca8c35942f39a665475451f7063995c354f89c)), closes [#27651](https://github.com/bitnami/charts/issues/27651)
+
+## <small>1.2.3 (2024-06-18)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.3 (#27351) ([bea97ef](https://github.com/bitnami/charts/commit/bea97ef105d07a94cd50fd9eb894195cbd21f1d9)), closes [#27351](https://github.com/bitnami/charts/issues/27351)
+
+## <small>1.2.2 (2024-06-17)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.2 (#27224) ([8657fec](https://github.com/bitnami/charts/commit/8657fecf03fc5d7f96671399038ec17bc7d7aad3)), closes [#27224](https://github.com/bitnami/charts/issues/27224)
 
 ## <small>1.2.1 (2024-06-06)</small>
 

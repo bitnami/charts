@@ -1,8 +1,25 @@
 # Changelog
 
-## 7.5.6 (2024-06-17)
+## 8.0.2 (2024-07-04)
 
-* [bitnami/external-dns] Release 7.5.6 ([#27216](https://github.com/bitnami/charts/pull/27216))
+* [bitnami/external-dns] Release 8.0.2 ([#27760](https://github.com/bitnami/charts/pull/27760))
+
+## <small>8.0.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/external-dns] Release 8.0.1 (#27645) ([ca9be4a](https://github.com/bitnami/charts/commit/ca9be4a6bd1a9327401a1ab0f6694e8eb5a50279)), closes [#27645](https://github.com/bitnami/charts/issues/27645)
+
+## 8.0.0 (2024-06-19)
+
+* [bitnami/external-dns] Major release: drop support for multiple replicas and DaemonSet (#26759) ([3186d84](https://github.com/bitnami/charts/commit/3186d8485b643a8a4141eafd67bcf259528aa548)), closes [#26759](https://github.com/bitnami/charts/issues/26759)
+
+## <small>7.5.7 (2024-06-18)</small>
+
+* [bitnami/external-dns] Release 7.5.7 (#27341) ([6668b3c](https://github.com/bitnami/charts/commit/6668b3c1ae632eb90b6e825fedddc39637aec137)), closes [#27341](https://github.com/bitnami/charts/issues/27341)
+
+## <small>7.5.6 (2024-06-17)</small>
+
+* [bitnami/external-dns] Release 7.5.6 (#27216) ([cfe95c9](https://github.com/bitnami/charts/commit/cfe95c9c1d2c0e6b8e3f1b574f992f47486bc91a)), closes [#27216](https://github.com/bitnami/charts/issues/27216)
 
 ## <small>7.5.5 (2024-06-06)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 2.2.4 (2024-06-17)
+## 2.2.7 (2024-07-04)
 
-* [bitnami/kiam] Release 2.2.4 ([#27265](https://github.com/bitnami/charts/pull/27265))
+* [bitnami/kiam] Release 2.2.7 ([#27787](https://github.com/bitnami/charts/pull/27787))
+
+## <small>2.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kiam] Release 2.2.6 (#27655) ([bde09c5](https://github.com/bitnami/charts/commit/bde09c56a79f1a9e95aec9fa46e9b5f40f27f940)), closes [#27655](https://github.com/bitnami/charts/issues/27655)
+
+## <small>2.2.5 (2024-06-18)</small>
+
+* [bitnami/kiam] Release 2.2.5 (#27365) ([7b0acfb](https://github.com/bitnami/charts/commit/7b0acfb2c828631af7b7c34964dbb60bf70a8927)), closes [#27365](https://github.com/bitnami/charts/issues/27365)
+
+## <small>2.2.4 (2024-06-17)</small>
+
+* [bitnami/kiam] Release 2.2.4 (#27265) ([aae30c3](https://github.com/bitnami/charts/commit/aae30c35857f82f20d9edf45e20316991f687ddf)), closes [#27265](https://github.com/bitnami/charts/issues/27265)
 
 ## <small>2.2.3 (2024-06-06)</small>
 

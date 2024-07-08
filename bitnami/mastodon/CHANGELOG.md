@@ -1,8 +1,21 @@
 # Changelog
 
-## 6.2.5 (2024-06-17)
+## 6.2.8 (2024-07-04)
 
-* [bitnami/mastodon] Release 6.2.5 ([#27244](https://github.com/bitnami/charts/pull/27244))
+* [bitnami/mastodon] Release 6.2.8 ([#27784](https://github.com/bitnami/charts/pull/27784))
+
+## <small>6.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mastodon] Release 6.2.7 (#27703) ([2853b4f](https://github.com/bitnami/charts/commit/2853b4f5aa2764d169bf172fa7995ce0b2151d5c)), closes [#27703](https://github.com/bitnami/charts/issues/27703)
+
+## <small>6.2.6 (2024-06-18)</small>
+
+* [bitnami/mastodon] Release 6.2.6 (#27374) ([cdaa431](https://github.com/bitnami/charts/commit/cdaa43156c0d28183ee734604fb081013b0bd6e9)), closes [#27374](https://github.com/bitnami/charts/issues/27374)
+
+## <small>6.2.5 (2024-06-17)</small>
+
+* [bitnami/mastodon] Release 6.2.5 (#27244) ([6b0c126](https://github.com/bitnami/charts/commit/6b0c126c64627fee7ffd27764b9523a56179960c)), closes [#27244](https://github.com/bitnami/charts/issues/27244)
 
 ## <small>6.2.4 (2024-06-06)</small>
 

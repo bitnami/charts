@@ -1,8 +1,21 @@
 # Changelog
 
-## 6.2.7 (2024-06-17)
+## 6.2.10 (2024-07-05)
 
-* [bitnami/clickhouse] Release 6.2.7 ([#27207](https://github.com/bitnami/charts/pull/27207))
+* [bitnami/clickhouse] Release 6.2.10 ([#27820](https://github.com/bitnami/charts/pull/27820))
+
+## <small>6.2.9 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/clickhouse] Release 6.2.9 (#27612) ([7ed47b9](https://github.com/bitnami/charts/commit/7ed47b9732f1992588202ad182f8261f972a80c4)), closes [#27612](https://github.com/bitnami/charts/issues/27612)
+
+## <small>6.2.8 (2024-06-18)</small>
+
+* [bitnami/clickhouse] Release 6.2.8 (#27331) ([7739cc3](https://github.com/bitnami/charts/commit/7739cc3bd84d860fe28ecc0980e76bb3bbb8416c)), closes [#27331](https://github.com/bitnami/charts/issues/27331)
+
+## <small>6.2.7 (2024-06-17)</small>
+
+* [bitnami/clickhouse] Release 6.2.7 (#27207) ([0d3ee20](https://github.com/bitnami/charts/commit/0d3ee2081bcf67ad253c6244da95b652fbde3818)), closes [#27207](https://github.com/bitnami/charts/issues/27207)
 
 ## <small>6.2.6 (2024-06-13)</small>
 

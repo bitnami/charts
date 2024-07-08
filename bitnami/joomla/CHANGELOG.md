@@ -1,8 +1,16 @@
 # Changelog
 
-## 19.2.4 (2024-06-17)
+## 19.2.6 (2024-07-03)
 
-* [bitnami/joomla] Release 19.2.4 ([#27232](https://github.com/bitnami/charts/pull/27232))
+* [bitnami/joomla] Release 19.2.6 ([#27695](https://github.com/bitnami/charts/pull/27695))
+
+## <small>19.2.5 (2024-06-18)</small>
+
+* [bitnami/joomla] Release 19.2.5 (#27359) ([48a410b](https://github.com/bitnami/charts/commit/48a410b4bea434b56b07a3e7a46e98e8444379a7)), closes [#27359](https://github.com/bitnami/charts/issues/27359)
+
+## <small>19.2.4 (2024-06-17)</small>
+
+* [bitnami/joomla] Release 19.2.4 (#27232) ([1c96944](https://github.com/bitnami/charts/commit/1c969440f00d3ac3253faf9e69a43bf40bc97ab0)), closes [#27232](https://github.com/bitnami/charts/issues/27232)
 
 ## <small>19.2.3 (2024-06-06)</small>
 

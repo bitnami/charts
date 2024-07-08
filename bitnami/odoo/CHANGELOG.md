@@ -1,8 +1,21 @@
 # Changelog
 
-## 26.2.7 (2024-06-17)
+## 26.2.10 (2024-07-05)
 
-* [bitnami/odoo] Release 26.2.7 ([#27257](https://github.com/bitnami/charts/pull/27257))
+* [bitnami/odoo] Release 26.2.10 ([#27808](https://github.com/bitnami/charts/pull/27808))
+
+## <small>26.2.9 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/odoo] Release 26.2.9 (#27631) ([ac3351a](https://github.com/bitnami/charts/commit/ac3351a082d328c2ea62db64e242840adfa8c61a)), closes [#27631](https://github.com/bitnami/charts/issues/27631)
+
+## <small>26.2.8 (2024-06-18)</small>
+
+* [bitnami/odoo] Release 26.2.8 (#27393) ([c674b17](https://github.com/bitnami/charts/commit/c674b17119a3474feff01f740d42fab9e8aa9566)), closes [#27393](https://github.com/bitnami/charts/issues/27393)
+
+## <small>26.2.7 (2024-06-17)</small>
+
+* [bitnami/odoo] Release 26.2.7 (#27257) ([066357d](https://github.com/bitnami/charts/commit/066357dfb61595d90fcba9b202375d15fa37d35b)), closes [#27257](https://github.com/bitnami/charts/issues/27257)
 
 ## <small>26.2.6 (2024-06-14)</small>
 

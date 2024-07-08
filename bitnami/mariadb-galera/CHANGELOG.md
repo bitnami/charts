@@ -1,8 +1,21 @@
 # Changelog
 
-## 13.2.4 (2024-06-17)
+## 13.2.7 (2024-07-03)
 
-* [bitnami/mariadb-galera] Release 13.2.4 ([#27242](https://github.com/bitnami/charts/pull/27242))
+* [bitnami/mariadb-galera] Release 13.2.7 ([#27746](https://github.com/bitnami/charts/pull/27746))
+
+## <small>13.2.6 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mariadb-galera] Release 13.2.6 (#27636) ([e0d84d3](https://github.com/bitnami/charts/commit/e0d84d3c17b2049e432899630c947015a62ffe70)), closes [#27636](https://github.com/bitnami/charts/issues/27636)
+
+## <small>13.2.5 (2024-06-18)</small>
+
+* [bitnami/mariadb-galera] Release 13.2.5 (#27373) ([a7bc574](https://github.com/bitnami/charts/commit/a7bc574e7f272949d809193d7d828ea295bf09b5)), closes [#27373](https://github.com/bitnami/charts/issues/27373)
+
+## <small>13.2.4 (2024-06-17)</small>
+
+* [bitnami/mariadb-galera] Release 13.2.4 (#27242) ([3b93909](https://github.com/bitnami/charts/commit/3b93909d2076f761ff648d51036aecdde89c844c)), closes [#27242](https://github.com/bitnami/charts/issues/27242)
 
 ## <small>13.2.3 (2024-06-06)</small>
 

@@ -1,8 +1,25 @@
 # Changelog
 
-## 8.2.7 (2024-06-17)
+## 8.2.11 (2024-07-04)
 
-* [bitnami/nats] Release 8.2.7 ([#27285](https://github.com/bitnami/charts/pull/27285))
+* [bitnami/nats] Release 8.2.11 ([#27788](https://github.com/bitnami/charts/pull/27788))
+
+## <small>8.2.10 (2024-07-03)</small>
+
+* [bitnami/nats] Release 8.2.10 (#27670) ([06da1d1](https://github.com/bitnami/charts/commit/06da1d122aaf5236aab95a04db60045448e30f7d)), closes [#27670](https://github.com/bitnami/charts/issues/27670)
+
+## <small>8.2.9 (2024-06-28)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/nats] Release 8.2.9 (#27572) ([21d53ff](https://github.com/bitnami/charts/commit/21d53ffe4b446dbcc3e4b86b12f3fc14f0dfbba0)), closes [#27572](https://github.com/bitnami/charts/issues/27572)
+
+## <small>8.2.8 (2024-06-18)</small>
+
+* [bitnami/nats] Release 8.2.8 (#27386) ([e2627bb](https://github.com/bitnami/charts/commit/e2627bb64fda56838614ae653822536c506cf50a)), closes [#27386](https://github.com/bitnami/charts/issues/27386)
+
+## <small>8.2.7 (2024-06-17)</small>
+
+* [bitnami/nats] Release 8.2.7 (#27285) ([289e29b](https://github.com/bitnami/charts/commit/289e29b8b7af49addc31773516336b0dd5dcd37f)), closes [#27285](https://github.com/bitnami/charts/issues/27285)
 
 ## <small>8.2.6 (2024-06-06)</small>
 

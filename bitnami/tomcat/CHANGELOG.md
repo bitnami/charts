@@ -1,8 +1,20 @@
 # Changelog
 
-## 11.2.6 (2024-06-17)
+## 11.2.9 (2024-07-03)
 
-* [bitnami/tomcat] Release 11.2.6 ([#27295](https://github.com/bitnami/charts/pull/27295))
+* [bitnami/tomcat] Release 11.2.9 ([#27715](https://github.com/bitnami/charts/pull/27715))
+
+## <small>11.2.8 (2024-06-20)</small>
+
+* [bitnami/tomcat] Release 11.2.8 (#27458) ([e557b3f](https://github.com/bitnami/charts/commit/e557b3f8d24b9c42618d6b269d7c44ed59496954)), closes [#27458](https://github.com/bitnami/charts/issues/27458)
+
+## <small>11.2.7 (2024-06-18)</small>
+
+* [bitnami/tomcat] Release 11.2.7 (#27428) ([8cd9663](https://github.com/bitnami/charts/commit/8cd96631d0d7744815d41dc19304ad88a6efa1ef)), closes [#27428](https://github.com/bitnami/charts/issues/27428)
+
+## <small>11.2.6 (2024-06-17)</small>
+
+* [bitnami/tomcat] Release 11.2.6 (#27295) ([8072e5d](https://github.com/bitnami/charts/commit/8072e5d79623145f6f5c71508b49b24f00e9b6f2)), closes [#27295](https://github.com/bitnami/charts/issues/27295)
 
 ## <small>11.2.5 (2024-06-14)</small>
 

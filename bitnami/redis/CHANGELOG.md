@@ -1,8 +1,21 @@
 # Changelog
 
-## 19.5.4 (2024-06-17)
+## 19.6.1 (2024-07-03)
 
-* [bitnami/redis] Release 19.5.4 ([#27277](https://github.com/bitnami/charts/pull/27277))
+* [bitnami/redis] Release 19.6.1 ([#27712](https://github.com/bitnami/charts/pull/27712))
+
+## 19.6.0 (2024-06-26)
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/redis] Allow setting revisionHistoryLimit (#27498) ([f8ea005](https://github.com/bitnami/charts/commit/f8ea005b071d8f2bbb6ccfe0a722ff8ca2882b3d)), closes [#27498](https://github.com/bitnami/charts/issues/27498)
+
+## <small>19.5.5 (2024-06-18)</small>
+
+* [bitnami/redis] Release 19.5.5 (#27411) ([ea96081](https://github.com/bitnami/charts/commit/ea96081967711fbb45815b51363a9c5818623a6f)), closes [#27411](https://github.com/bitnami/charts/issues/27411)
+
+## <small>19.5.4 (2024-06-17)</small>
+
+* [bitnami/redis] Release 19.5.4 (#27277) ([fe4c932](https://github.com/bitnami/charts/commit/fe4c932de4fec2aefd4d56dd9d0145c0bd76cc15)), closes [#27277](https://github.com/bitnami/charts/issues/27277)
 
 ## <small>19.5.3 (2024-06-13)</small>
 

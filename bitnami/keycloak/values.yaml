@@ -101,7 +101,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 24.0.5-debian-12-r0
+  tag: 24.0.5-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -205,6 +205,9 @@ spi:
   ## @param spi.hostnameVerificationPolicy Verify the hostname of the server's certificate. Allowed values: "ANY", "WILDCARD", "STRICT".
   ##
   hostnameVerificationPolicy: ""
+## @param adminRealm Name of the admin realm
+##
+adminRealm: "master"
 ## @param production Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.
 ##
 production: false
@@ -1003,7 +1006,7 @@ metrics:
     ##
     endpoints:
       - path: '{{ include "keycloak.httpPath" . }}metrics'
-      - path: '{{ include "keycloak.httpPath" . }}realms/master/metrics'
+      - path: '{{ include "keycloak.httpPath" . }}realms/{{ .Values.adminRealm }}/metrics'
     ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
     ##
     path: ""
@@ -1084,7 +1087,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.12.0-debian-12-r5
+    tag: 5.12.0-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

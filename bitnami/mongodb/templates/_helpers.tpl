@@ -269,6 +269,33 @@ Init container definition to change/establish volume permissions.
 {{- end -}}
 
 {{/*
+Init container definition to recover log dir.
+*/}}
+{{- define "mongodb.initContainer.prepareLogDir" }}
+- name: log-dir
+  image: {{ include "mongodb.image" . }}
+  imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      ln -sf /dev/stdout "/opt/bitnami/mongodb/logs/mongodb.log"
+  {{- if .Values.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+  {{- end }}
+  {{- if .Values.resources }}
+  resources: {{- toYaml .Values.resources | nindent 12 }}
+  {{- else if ne .Values.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+  {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /opt/bitnami/mongodb/logs
+      subPath: app-logs-dir
+{{- end -}}
+
+{{/*
 Init container definition to get external IP addresses.
 */}}
 {{- define "mongodb.initContainers.autoDiscovery" -}}

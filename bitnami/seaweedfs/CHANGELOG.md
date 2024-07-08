@@ -1,8 +1,25 @@
 # Changelog
 
-## 0.4.1 (2024-06-17)
+## 0.4.5 (2024-07-04)
 
-* [bitnami/seaweedfs] Release 0.4.1 ([#27281](https://github.com/bitnami/charts/pull/27281))
+* [bitnami/seaweedfs] Release 0.4.5 ([#27793](https://github.com/bitnami/charts/pull/27793))
+
+## <small>0.4.4 (2024-07-03)</small>
+
+* [bitnami/seaweedfs] Release 0.4.4 (#27679) ([8725e03](https://github.com/bitnami/charts/commit/8725e032abd5597575c61674a7566889dcd1848f)), closes [#27679](https://github.com/bitnami/charts/issues/27679)
+
+## <small>0.4.3 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/seaweedfs] Release 0.4.3 (#27611) ([7b9cebf](https://github.com/bitnami/charts/commit/7b9cebf6f0adac95e2ef99e589f8c492a5ebbf6b)), closes [#27611](https://github.com/bitnami/charts/issues/27611)
+
+## <small>0.4.2 (2024-06-18)</small>
+
+* [bitnami/seaweedfs] Release 0.4.2 (#27415) ([d78148f](https://github.com/bitnami/charts/commit/d78148f0fa81232fe7cb847b8bfe3d3a500a79e0)), closes [#27415](https://github.com/bitnami/charts/issues/27415)
+
+## <small>0.4.1 (2024-06-17)</small>
+
+* [bitnami/seaweedfs] Release 0.4.1 (#27281) ([a02d8b8](https://github.com/bitnami/charts/commit/a02d8b8682525e62d5173aa64e239c56268d12cd)), closes [#27281](https://github.com/bitnami/charts/issues/27281)
 
 ## 0.4.0 (2024-06-11)
 

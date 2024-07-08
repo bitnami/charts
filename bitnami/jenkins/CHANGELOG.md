@@ -1,8 +1,21 @@
 # Changelog
 
-## 13.4.5 (2024-06-17)
+## 13.4.8 (2024-07-05)
 
-* [bitnami/jenkins] Release 13.4.5 ([#27233](https://github.com/bitnami/charts/pull/27233))
+* [bitnami/jenkins] Release 13.4.8 ([#27813](https://github.com/bitnami/charts/pull/27813))
+
+## <small>13.4.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/jenkins] Release 13.4.7 (#27694) ([755b024](https://github.com/bitnami/charts/commit/755b02406451e2f693610043339103aeac2bd2f0)), closes [#27694](https://github.com/bitnami/charts/issues/27694)
+
+## <small>13.4.6 (2024-06-18)</small>
+
+* [bitnami/jenkins] Release 13.4.6 (#27360) ([a3d0355](https://github.com/bitnami/charts/commit/a3d0355642cc952c94dd3c28b4650d932cb465dc)), closes [#27360](https://github.com/bitnami/charts/issues/27360)
+
+## <small>13.4.5 (2024-06-17)</small>
+
+* [bitnami/jenkins] Release 13.4.5 (#27233) ([a06410d](https://github.com/bitnami/charts/commit/a06410de4b346c77e64bda289f685dea483edea3)), closes [#27233](https://github.com/bitnami/charts/issues/27233)
 
 ## <small>13.4.4 (2024-06-12)</small>
 

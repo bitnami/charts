@@ -1,8 +1,21 @@
 # Changelog
 
-## 3.2.4 (2024-06-17)
+## 3.2.7 (2024-07-04)
 
-* [bitnami/kubernetes-event-exporter] Release 3.2.4 ([#27239](https://github.com/bitnami/charts/pull/27239))
+* [bitnami/kubernetes-event-exporter] Release 3.2.7 ([#27802](https://github.com/bitnami/charts/pull/27802))
+
+## <small>3.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kubernetes-event-exporter] Release 3.2.6 (#27662) ([5fcf8d9](https://github.com/bitnami/charts/commit/5fcf8d970f55531ac579fd6848e50c9fa31f6023)), closes [#27662](https://github.com/bitnami/charts/issues/27662)
+
+## <small>3.2.5 (2024-06-18)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.5 (#27369) ([bf76bad](https://github.com/bitnami/charts/commit/bf76bad5fbbdfb7ecf8dd4b45d79741c7c56779a)), closes [#27369](https://github.com/bitnami/charts/issues/27369)
+
+## <small>3.2.4 (2024-06-17)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.4 (#27239) ([60fb9e5](https://github.com/bitnami/charts/commit/60fb9e5b00c0a2f808b598ae9f89e3789b773e52)), closes [#27239](https://github.com/bitnami/charts/issues/27239)
 
 ## <small>3.2.3 (2024-06-06)</small>
 

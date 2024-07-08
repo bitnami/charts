@@ -1,8 +1,16 @@
 # Changelog
 
-## 13.4.4 (2024-06-17)
+## 13.4.6 (2024-07-03)
 
-* [bitnami/zookeeper] Release 13.4.4 ([#27309](https://github.com/bitnami/charts/pull/27309))
+* [bitnami/zookeeper] Release 13.4.6 ([#27722](https://github.com/bitnami/charts/pull/27722))
+
+## <small>13.4.5 (2024-06-18)</small>
+
+* [bitnami/zookeeper] Release 13.4.5 (#27431) ([2168b4a](https://github.com/bitnami/charts/commit/2168b4af978a7657a8a1b0db8a0bd04e354cf0b9)), closes [#27431](https://github.com/bitnami/charts/issues/27431)
+
+## <small>13.4.4 (2024-06-17)</small>
+
+* [bitnami/zookeeper] Release 13.4.4 (#27309) ([eb6c0ff](https://github.com/bitnami/charts/commit/eb6c0ff2245c49d80712168f4a61b6928569fb06)), closes [#27309](https://github.com/bitnami/charts/issues/27309)
 
 ## <small>13.4.3 (2024-06-06)</small>
 

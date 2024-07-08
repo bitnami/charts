@@ -1,8 +1,21 @@
 # Changelog
 
-## 2.1.4 (2024-06-17)
+## 2.1.7 (2024-07-04)
 
-* [bitnami/multus-cni] Release 2.1.4 ([#27283](https://github.com/bitnami/charts/pull/27283))
+* [bitnami/multus-cni] Release 2.1.7 ([#27770](https://github.com/bitnami/charts/pull/27770))
+
+## <small>2.1.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/multus-cni] Release 2.1.6 (#27667) ([ff481b9](https://github.com/bitnami/charts/commit/ff481b98ef40e394a6bb695208e233733b7af6df)), closes [#27667](https://github.com/bitnami/charts/issues/27667)
+
+## <small>2.1.5 (2024-06-18)</small>
+
+* [bitnami/multus-cni] Release 2.1.5 (#27385) ([e3a6ba2](https://github.com/bitnami/charts/commit/e3a6ba2a593ca6b4d10195126723b30ab63dd8ea)), closes [#27385](https://github.com/bitnami/charts/issues/27385)
+
+## <small>2.1.4 (2024-06-17)</small>
+
+* [bitnami/multus-cni] Release 2.1.4 (#27283) ([386c85f](https://github.com/bitnami/charts/commit/386c85fe7a4a0325e645a1ea1dd102d343e87d64)), closes [#27283](https://github.com/bitnami/charts/issues/27283)
 
 ## <small>2.1.3 (2024-06-06)</small>
 

@@ -1,8 +1,25 @@
 # Changelog
 
-## 18.21.9 (2024-06-17)
+## 18.21.13 (2024-07-04)
 
-* [bitnami/drupal] Release 18.21.9 ([#27212](https://github.com/bitnami/charts/pull/27212))
+* [bitnami/drupal] Release 18.21.13 ([#27771](https://github.com/bitnami/charts/pull/27771))
+
+## <small>18.21.12 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/drupal] Release 18.21.12 (#27541) ([2dd97dc](https://github.com/bitnami/charts/commit/2dd97dc37f63302aec5f0149aea839d250579bb3)), closes [#27541](https://github.com/bitnami/charts/issues/27541)
+
+## <small>18.21.11 (2024-06-21)</small>
+
+* [bitnami/drupal] Release 18.21.11 (#27472) ([efb420b](https://github.com/bitnami/charts/commit/efb420b65a7b953689629f318c492ba3eb48750b)), closes [#27472](https://github.com/bitnami/charts/issues/27472)
+
+## <small>18.21.10 (2024-06-18)</small>
+
+* [bitnami/drupal] Release 18.21.10 (#27336) ([442561b](https://github.com/bitnami/charts/commit/442561b508578c24a6c60f4891bc852ab2a95aad)), closes [#27336](https://github.com/bitnami/charts/issues/27336)
+
+## <small>18.21.9 (2024-06-17)</small>
+
+* [bitnami/drupal] Release 18.21.9 (#27212) ([52e56bf](https://github.com/bitnami/charts/commit/52e56bf1a405dc11af61ab6f0371839c2921f31f)), closes [#27212](https://github.com/bitnami/charts/issues/27212)
 
 ## <small>18.21.8 (2024-06-13)</small>
 

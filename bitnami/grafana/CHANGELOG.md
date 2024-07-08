@@ -1,8 +1,25 @@
 # Changelog
 
-## 11.3.4 (2024-06-17)
+## 11.3.8 (2024-07-05)
 
-* [bitnami/grafana] Release 11.3.4 ([#27230](https://github.com/bitnami/charts/pull/27230))
+* [bitnami/grafana] Release 11.3.8 ([#27804](https://github.com/bitnami/charts/pull/27804))
+
+## <small>11.3.7 (2024-07-03)</small>
+
+* [bitnami/grafana] Release 11.3.7 (#27661) ([c6efb0b](https://github.com/bitnami/charts/commit/c6efb0b2fb01f331530f75c153360ee85692b928)), closes [#27661](https://github.com/bitnami/charts/issues/27661)
+
+## <small>11.3.6 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana] Release 11.3.6 (#27544) ([5036a64](https://github.com/bitnami/charts/commit/5036a64ed3d1f613e4a02af4634eb88b3248350c)), closes [#27544](https://github.com/bitnami/charts/issues/27544)
+
+## <small>11.3.5 (2024-06-18)</small>
+
+* [bitnami/grafana] Release 11.3.5 (#27354) ([3938c8b](https://github.com/bitnami/charts/commit/3938c8b33891c97a8a28357bf8c6498ddd20acb7)), closes [#27354](https://github.com/bitnami/charts/issues/27354)
+
+## <small>11.3.4 (2024-06-17)</small>
+
+* [bitnami/grafana] Release 11.3.4 (#27230) ([d288b6d](https://github.com/bitnami/charts/commit/d288b6dda4e9d3b63e20f28f3765d706cd2dc7d7)), closes [#27230](https://github.com/bitnami/charts/issues/27230)
 
 ## <small>11.3.3 (2024-06-06)</small>
 

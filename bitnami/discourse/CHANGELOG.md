@@ -1,8 +1,21 @@
 # Changelog
 
-## 13.2.5 (2024-06-17)
+## 13.2.8 (2024-07-03)
 
-* [bitnami/discourse] Release 13.2.5 ([#27209](https://github.com/bitnami/charts/pull/27209))
+* [bitnami/discourse] Release 13.2.8 ([#27749](https://github.com/bitnami/charts/pull/27749))
+
+## <small>13.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/discourse] Release 13.2.7 (#27684) ([8dc1d42](https://github.com/bitnami/charts/commit/8dc1d42ccec3fb8528a731b99bbf32b2ef3dfa36)), closes [#27684](https://github.com/bitnami/charts/issues/27684)
+
+## <small>13.2.6 (2024-06-18)</small>
+
+* [bitnami/discourse] Release 13.2.6 (#27337) ([11c378d](https://github.com/bitnami/charts/commit/11c378d1340c94175443c7a57d4413aae3fed97b)), closes [#27337](https://github.com/bitnami/charts/issues/27337)
+
+## <small>13.2.5 (2024-06-17)</small>
+
+* [bitnami/discourse] Release 13.2.5 (#27209) ([3d6a8e6](https://github.com/bitnami/charts/commit/3d6a8e6083dfc386e4707ad1c9876395c4dafe54)), closes [#27209](https://github.com/bitnami/charts/issues/27209)
 
 ## <small>13.2.4 (2024-06-06)</small>
 

@@ -1,8 +1,25 @@
 # Changelog
 
-## 2.2.5 (2024-06-17)
+## 2.2.9 (2024-07-04)
 
-* [bitnami/pinniped] Release 2.2.5 ([#27264](https://github.com/bitnami/charts/pull/27264))
+* [bitnami/pinniped] Release 2.2.9 ([#27775](https://github.com/bitnami/charts/pull/27775))
+
+## <small>2.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/pinniped] Release 2.2.8 (#27672) ([2139468](https://github.com/bitnami/charts/commit/2139468c7bee1525af628c721580499216eda5ef)), closes [#27672](https://github.com/bitnami/charts/issues/27672)
+
+## <small>2.2.7 (2024-06-19)</small>
+
+* [bitnami/pinniped] Release 2.2.7 (#27454) ([6b298c9](https://github.com/bitnami/charts/commit/6b298c9c0b5092bfa13713a7b473406157c268d1)), closes [#27454](https://github.com/bitnami/charts/issues/27454)
+
+## <small>2.2.6 (2024-06-18)</small>
+
+* [bitnami/pinniped] Release 2.2.6 (#27399) ([d84210f](https://github.com/bitnami/charts/commit/d84210ffb4a676768471575dd934240778ffe6ea)), closes [#27399](https://github.com/bitnami/charts/issues/27399)
+
+## <small>2.2.5 (2024-06-17)</small>
+
+* [bitnami/pinniped] Release 2.2.5 (#27264) ([c86f9ae](https://github.com/bitnami/charts/commit/c86f9ae85f53c079b5d267c1a0d57f9bb6d1e612)), closes [#27264](https://github.com/bitnami/charts/issues/27264)
 
 ## <small>2.2.4 (2024-06-14)</small>
 
