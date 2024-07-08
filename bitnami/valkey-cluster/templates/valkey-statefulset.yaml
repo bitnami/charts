@@ -43,9 +43,7 @@ spec:
         {{- end }}
     spec:
       hostNetwork: {{ .Values.valkey.hostNetwork }}
-      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
       enableServiceLinks: false
-      {{- end }}
       {{- include "valkey-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}

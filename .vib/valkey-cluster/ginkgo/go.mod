@@ -1,4 +1,4 @@
-module test-redis-chart
+module test-valkey-chart
 
 go 1.20
 
