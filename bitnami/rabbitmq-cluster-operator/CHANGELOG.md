@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.3.10 (2024-06-21)
+## 4.3.12 (2024-07-04)
 
-* [bitnami/rabbitmq-cluster-operator]: Fix operatorpolicies permissions… ([#27484](https://github.com/bitnami/charts/pull/27484))
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.12 ([#27779](https://github.com/bitnami/charts/pull/27779))
+
+## <small>4.3.11 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.11 (#27676) ([99338bd](https://github.com/bitnami/charts/commit/99338bd491afba4ae611ce4eaf99c20fc17ff918)), closes [#27676](https://github.com/bitnami/charts/issues/27676)
+
+## <small>4.3.10 (2024-06-24)</small>
+
+* [bitnami/rabbitmq-cluster-operator]: Fix operatorpolicies permissions… (#27484) ([e0b8aeb](https://github.com/bitnami/charts/commit/e0b8aeb3f5f386e1881b8e5b3930ffb81229697d)), closes [#27484](https://github.com/bitnami/charts/issues/27484)
 
 ## <small>4.3.9 (2024-06-19)</small>
 

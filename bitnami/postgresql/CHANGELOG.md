@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.5.12 (2024-07-08)
+## 15.5.15 (2024-07-08)
 
 * [bitnami/postgresql] Move comments inside conditionals ([#27627](https://github.com/bitnami/charts/pull/27627))
 

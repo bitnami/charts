@@ -1,8 +1,17 @@
 # Changelog
 
-## 22.4.16 (2024-06-27)
+## 22.4.18 (2024-07-05)
 
-* [bitnami/wordpress] Release 22.4.16 ([#27570](https://github.com/bitnami/charts/pull/27570))
+* [bitnami/wordpress] Release 22.4.18 ([#27825](https://github.com/bitnami/charts/pull/27825))
+
+## <small>22.4.17 (2024-07-04)</small>
+
+* [bitnami/wordpress] Release 22.4.17 (#27799) ([6009d8a](https://github.com/bitnami/charts/commit/6009d8ac84e9ef76628216eef00cfac3f2def3dc)), closes [#27799](https://github.com/bitnami/charts/issues/27799)
+
+## <small>22.4.16 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/wordpress] Release 22.4.16 (#27570) ([af4fcfa](https://github.com/bitnami/charts/commit/af4fcfa6a0c90f31c0fd916569fc865c919c9720)), closes [#27570](https://github.com/bitnami/charts/issues/27570)
 
 ## <small>22.4.15 (2024-06-24)</small>
 
