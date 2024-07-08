@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.2.10 (2024-06-24)
+## 22.2.11 (2024-07-03)
 
-* [bitnami/moodle] Release 22.2.10 ([#27516](https://github.com/bitnami/charts/pull/27516))
+* [bitnami/moodle] Release 22.2.11 ([#27702](https://github.com/bitnami/charts/pull/27702))
+
+## <small>22.2.10 (2024-06-24)</small>
+
+* [bitnami/moodle] Release 22.2.10 (#27516) ([9332734](https://github.com/bitnami/charts/commit/933273476efc9e5f5b66eb7a98f0da684173ec57)), closes [#27516](https://github.com/bitnami/charts/issues/27516)
 
 ## <small>22.2.9 (2024-06-18)</small>
 

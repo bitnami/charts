@@ -13,10 +13,9 @@ metadata:
     app.kubernetes.io/part-of: cilium
     app.kubernetes.io/component: operator
     prometheus.io/scrape: "true"
-  {{- if or .Values.operator.metrics.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.operator.metrics.service.annotations .Values.commonAnnotations) "context" .) }}
+  {{- $defaultAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" (.Values.operator.metrics.service.port | quote) }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list $defaultAnnotations .Values.operator.metrics.service.annotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
-  {{- end }}
 spec:
   type: ClusterIP
   ports:

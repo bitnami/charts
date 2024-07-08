@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.3.10 (2024-06-26)
+## 3.3.11 (2024-06-28)
 
-* [bitnami/appsmith] Increase test retries for Appsmith ([#27535](https://github.com/bitnami/charts/pull/27535))
+* [bitnami/appsmith] Release 3.3.11 ([#27576](https://github.com/bitnami/charts/pull/27576))
+
+## <small>3.3.10 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/appsmith] Increase test retries for Appsmith (#27535) ([aeecba3](https://github.com/bitnami/charts/commit/aeecba3c132c3bc89a9877300f235222985287e7)), closes [#27535](https://github.com/bitnami/charts/issues/27535)
 
 ## <small>3.3.9 (2024-06-18)</small>
 

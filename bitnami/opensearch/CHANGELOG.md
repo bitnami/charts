@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.2.5 (2024-06-26)
+## 1.2.6 (2024-06-28)
 
-* [bitnami/opensearch] Release 1.2.5 ([#27543](https://github.com/bitnami/charts/pull/27543))
+* [bitnami/opensearch] Fix opensearch annotation templating indentation ([#27571](https://github.com/bitnami/charts/pull/27571))
+
+## <small>1.2.5 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/opensearch] Release 1.2.5 (#27543) ([80fcadc](https://github.com/bitnami/charts/commit/80fcadce0160f2ee7df08d7523f7a886beeab64c)), closes [#27543](https://github.com/bitnami/charts/issues/27543)
 
 ## <small>1.2.4 (2024-06-18)</small>
 
