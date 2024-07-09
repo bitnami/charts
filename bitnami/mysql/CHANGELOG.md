@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.8 (2024-07-08)
+## 11.1.9 (2024-07-09)
 
-* [bitnami/mysql] Modify mysql liveness/startup probes to check output ([#27523](https://github.com/bitnami/charts/pull/27523))
+* [bitnami/mysql] Release 11.1.9 ([#27852](https://github.com/bitnami/charts/pull/27852))
+
+## <small>11.1.8 (2024-07-09)</small>
+
+* [bitnami/mysql] Modify mysql liveness/startup probes to check output (#27523) ([a26e779](https://github.com/bitnami/charts/commit/a26e7792554e763473efdb9da309c4eaa4f36edb)), closes [#27523](https://github.com/bitnami/charts/issues/27523)
 
 ## <small>11.1.7 (2024-07-02)</small>
 
