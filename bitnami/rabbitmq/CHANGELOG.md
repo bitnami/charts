@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.4.6 (2024-07-03)
+## 14.5.0 (2024-07-09)
 
-* [bitnami/rabbitmq] Release 14.4.6 ([#27739](https://github.com/bitnami/charts/pull/27739))
+* [bitnami/rabbitmq] Replace extraPorts with extraPortsHeadless in headless service ([#27853](https://github.com/bitnami/charts/pull/27853))
+
+## <small>14.4.6 (2024-07-03)</small>
+
+* [bitnami/rabbitmq] Release 14.4.6 (#27739) ([891935d](https://github.com/bitnami/charts/commit/891935dae482369fc75a9be9cdf13e9a148fdb3f)), closes [#27739](https://github.com/bitnami/charts/issues/27739)
 
 ## <small>14.4.5 (2024-07-03)</small>
 
