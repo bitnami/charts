@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.12 (2024-07-04)
+## 4.3.13 (2024-07-08)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.3.12 ([#27779](https://github.com/bitnami/charts/pull/27779))
+* [bitnami/rabbitmq-cluster-operator]: Adding permissions on controller… ([#27834](https://github.com/bitnami/charts/pull/27834))
+
+## <small>4.3.12 (2024-07-04)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.12 (#27779) ([2cd3bdf](https://github.com/bitnami/charts/commit/2cd3bdf391d4fed0be35e7593f11e8ce75b99ed1)), closes [#27779](https://github.com/bitnami/charts/issues/27779)
 
 ## <small>4.3.11 (2024-07-03)</small>
 

@@ -68,9 +68,7 @@ spec:
       {{- if .Values.registry.schedulerName }}
       schedulerName: {{ .Values.registry.schedulerName }}
       {{- end }}
-      {{- if .Values.registry.serviceAccountName }}
-      serviceAccountName: {{ .Values.registry.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "harbor.registry.serviceAccountName" . }}
       {{- if .Values.registry.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.registry.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}

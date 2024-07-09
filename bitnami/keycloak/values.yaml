@@ -490,6 +490,9 @@ terminationGracePeriodSeconds: ""
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
+## @param minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+##
+minReadySeconds: 0
 ## @param extraVolumes Optionally specify extra list of additional volumes for Keycloak pods
 ##
 extraVolumes: []
