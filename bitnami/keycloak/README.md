@@ -618,6 +618,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `postgresql.auth.database`                   | Name for a custom database to create                                                                              | `bitnami_keycloak` |
 | `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials                                                         | `""`               |
 | `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                                                           | `standalone`       |
+| `postgresql.primary.nodeSelector`            | Node selector for postgres pod assignment                                                                         | `{}`               |
+| `postgresql.primary.tolerations`             | Tolerations for postgres pod assignment                                                                           | `[]`               |
+| `postgresql.readReplicas.nodeSelector`       | Node selector for postgres read only pod assignment                                                               | `{}`               |
+| `postgresql.readReplicas.tolerations`        | Tolerations for postgres read only assignment                                                                     | `[]`               |
 | `externalDatabase.host`                      | Database host                                                                                                     | `""`               |
 | `externalDatabase.port`                      | Database port number                                                                                              | `5432`             |
 | `externalDatabase.user`                      | Non-root username for Keycloak                                                                                    | `bn_keycloak`      |
