@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.5 (2024-07-03)
+## 6.2.6 (2024-07-09)
 
-* [bitnami/aspnet-core] Release 6.2.5 ([#27744](https://github.com/bitnami/charts/pull/27744))
+* [bitnami/aspnet-core] Release 6.2.6 ([#27863](https://github.com/bitnami/charts/pull/27863))
+
+## <small>6.2.5 (2024-07-03)</small>
+
+* [bitnami/aspnet-core] Release 6.2.5 (#27744) ([f846654](https://github.com/bitnami/charts/commit/f846654f84e02a2ede18d41ed2e9856b893dd546)), closes [#27744](https://github.com/bitnami/charts/issues/27744)
 
 ## <small>6.2.4 (2024-07-03)</small>
 
