@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.6.0 (2024-07-08)
+
+* [bitnami/keycloak] Add support for minReadySeconds ([#27550](https://github.com/bitnami/charts/pull/27550))
+
 ## 21.5.0 (2024-07-08)
 
-* [bitnami/keycloak] Add custom certs to system truststore ([#27197](https://github.com/bitnami/charts/pull/27197))
+* [bitnami/keycloak] Add custom certs to system truststore (#27197) ([82b4d3e](https://github.com/bitnami/charts/commit/82b4d3e5b1b23500b1ed3758bca474894c6d752d)), closes [#27197](https://github.com/bitnami/charts/issues/27197)
 
 ## <small>21.4.6 (2024-07-08)</small>
 
