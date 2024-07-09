@@ -459,8 +459,7 @@ affinity: {}
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
-nodeSelector: 
-  type.starplatform.dk: "datalayer"
+nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
@@ -1285,7 +1284,7 @@ keycloakConfigCli:
 ## @param postgresql.primary.nodeSelector Node labels for postgres pod assignment
 ## @param postgresql.primary.tolerations Tolerations for postgres pod assignment
 ## @param postgresql.readReplicas.nodeSelector Node labels for postgres read only pod assignment
-## @param postgresql.readReplicas.tolerations Tolerations for postgres read only pod assignment
+## @param postgresql.readReplicas.tolerations Tolerations for postgres read only assignment
 ##
 postgresql:
   enabled: true
