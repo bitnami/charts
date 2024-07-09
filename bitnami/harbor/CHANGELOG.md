@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.5.0 (2024-07-07)
+## 22.0.0 (2024-07-09)
 
 * [bitnami/harbor] Add service account for Harbor resources ([#27067](https://github.com/bitnami/charts/pull/27067))
 
