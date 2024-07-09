@@ -1285,7 +1285,7 @@ keycloakConfigCli:
 ## @param postgresql.primary.nodeSelector Node labels for postgres pod assignment
 ## @param postgresql.primary.tolerations Tolerations for postgres pod assignment
 ## @param postgresql.readReplicas.nodeSelector Node labels for postgres read only pod assignment
-## @param postgresql.readReplicas.tolerations Tolerations for postgres read only assignment
+## @param postgresql.readReplicas.tolerations Tolerations for postgres read only pod assignment
 ##
 postgresql:
   enabled: true
