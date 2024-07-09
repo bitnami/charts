@@ -838,7 +838,7 @@ nginx:
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param nginx.automountServiceAccountToken Automount service account token
+  ## @param nginx.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## Harbor Nginx ServiceAccount configuration
@@ -851,7 +851,7 @@ nginx:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-    ## @param nginx.serviceAccount.automountServiceAccountToken Automount service account token
+    ## @param nginx.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ##
     automountServiceAccountToken: false
     ## @param nginx.serviceAccount.annotations Additional custom annotations for the ServiceAccount
@@ -1301,7 +1301,7 @@ portal:
   ## @param portal.extraVolumes Optionally specify extra list of additional volumes for the Harbor Portal pods
   ##
   extraVolumes: []
-  ## @param portal.automountServiceAccountToken Automount service account token
+  ## @param portal.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## Harbor Portal ServiceAccount configuration
@@ -1314,7 +1314,7 @@ portal:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-    ## @param portal.serviceAccount.automountServiceAccountToken Automount service account token
+    ## @param portal.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ##
     automountServiceAccountToken: false
     ## @param portal.serviceAccount.annotations Additional custom annotations for the ServiceAccount
@@ -1729,7 +1729,7 @@ core:
   ## @param core.extraVolumes Optionally specify extra list of additional volumes for the Harbor Core pods
   ##
   extraVolumes: []
-  ## @param core.automountServiceAccountToken Automount service account token
+  ## @param core.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## Harbor Core ServiceAccount configuration
@@ -1742,7 +1742,7 @@ core:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-    ## @param core.serviceAccount.automountServiceAccountToken Automount service account token
+    ## @param core.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ##
     automountServiceAccountToken: false
     ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
@@ -2129,7 +2129,7 @@ jobservice:
   ## @param jobservice.extraVolumes Optionally specify extra list of additional volumes for the Harbor Jobservice pods
   ##
   extraVolumes: []
-  ## @param jobservice.automountServiceAccountToken Automount service account token
+  ## @param jobservice.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## Harbor Jobservice ServiceAccount configuration
@@ -2142,7 +2142,7 @@ jobservice:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-    ## @param jobservice.serviceAccount.automountServiceAccountToken Automount service account token
+    ## @param jobservice.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ##
     automountServiceAccountToken: false
     ## @param jobservice.serviceAccount.annotations Additional custom annotations for the ServiceAccount
@@ -2400,7 +2400,7 @@ registry:
   ## @param registry.extraVolumes Optionally specify extra list of additional volumes for the Harbor Registry pods
   ##
   extraVolumes: []
-  ## @param registry.automountServiceAccountToken Automount service account token
+  ## @param registry.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## Harbor Registry ServiceAccount configuration
@@ -2413,7 +2413,7 @@ registry:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-    ## @param registry.serviceAccount.automountServiceAccountToken Automount service account token
+    ## @param registry.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ##
     automountServiceAccountToken: false
     ## @param registry.serviceAccount.annotations Additional custom annotations for the ServiceAccount
@@ -3151,7 +3151,7 @@ trivy:
   ## @param trivy.extraVolumes Optionally specify extra list of additional volumes for the Trivy pods
   ##
   extraVolumes: []
-  ## @param trivy.automountServiceAccountToken Automount service account token
+  ## @param trivy.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## Trivy ServiceAccount configuration
@@ -3164,7 +3164,7 @@ trivy:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-    ## @param trivy.serviceAccount.automountServiceAccountToken Automount service account token
+    ## @param trivy.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ##
     automountServiceAccountToken: false
     ## @param trivy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
@@ -3500,7 +3500,7 @@ exporter:
   ## @param exporter.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-  ## @param exporter.automountServiceAccountToken Automount service account token
+  ## @param exporter.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## Harbor Exporter ServiceAccount configuration
@@ -3513,7 +3513,7 @@ exporter:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-    ## @param exporter.serviceAccount.automountServiceAccountToken Automount service account token
+    ## @param exporter.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ##
     automountServiceAccountToken: false
     ## @param exporter.serviceAccount.annotations Additional custom annotations for the ServiceAccount
