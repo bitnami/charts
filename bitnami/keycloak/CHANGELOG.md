@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.6.0 (2024-07-08)
+## 21.6.1 (2024-07-09)
 
-* [bitnami/keycloak] Add support for minReadySeconds ([#27550](https://github.com/bitnami/charts/pull/27550))
+* [bitnami/keycloak] Added nodeSelector and toleration for postgres ([#27856](https://github.com/bitnami/charts/pull/27856))
+
+## 21.6.0 (2024-07-09)
+
+* [bitnami/keycloak] Add support for minReadySeconds (#27550) ([bf357f9](https://github.com/bitnami/charts/commit/bf357f93bb2ad28d3a27826f4bae8a65a0bc3af5)), closes [#27550](https://github.com/bitnami/charts/issues/27550)
 
 ## 21.5.0 (2024-07-08)
 
