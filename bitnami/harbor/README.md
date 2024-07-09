@@ -1217,6 +1217,20 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 22.0.0
+
+This major version renames the following values:
+
+- `nginx.serviceAccountName` was renamed as `nginx.serviceAccount.name`.
+- `portal.serviceAccountName` was renamed as `portal.serviceAccount.name`.
+- `core.serviceAccountName` was renamed as `core.serviceAccount.name`.
+- `jobservice.serviceAccountName` was renamed as `jobservice.serviceAccount.name`.
+- `registry.serviceAccountName` was renamed as `registry.serviceAccount.name`.
+- `trivy.serviceAccountName` was renamed as `trivy.serviceAccount.name`.
+- `exporter.serviceAccountName` was renamed as `exporter.serviceAccount.name`.
+
+Additionally, this major version adds support for serviceAccount creation in the Helm chart.
+
 ### To 21.0.0
 
 This major bump changes the following security defaults:
