@@ -1,8 +1,12 @@
 # Changelog
 
+## 8.2.0 (2024-07-10)
+
+* [bitnami/external-dns] Added extra arguments for Traefik new/legacy resource support ([#27766](https://github.com/bitnami/charts/pull/27766))
+
 ## 8.1.0 (2024-07-08)
 
-* [bitnami/external-dns] add default pihole.password value ([#27158](https://github.com/bitnami/charts/pull/27158))
+* [bitnami/external-dns] add default pihole.password value (#27158) ([531123b](https://github.com/bitnami/charts/commit/531123ba7d24cf35a1769047165a9073322a31e3)), closes [#27158](https://github.com/bitnami/charts/issues/27158)
 
 ## <small>8.0.2 (2024-07-04)</small>
 
