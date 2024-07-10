@@ -292,6 +292,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
 | `service.clusterIP`                | Sealed Secret service Cluster IP                                                                      | `""`                     |
 | `service.loadBalancerIP`           | Sealed Secret service Load Balancer IP                                                                | `""`                     |
+| `service.loadBalancerClass`        | Sealed Secret service Load Balancer Class                                                             | `""`                     |
 | `service.loadBalancerSourceRanges` | Sealed Secret service Load Balancer sources                                                           | `[]`                     |
 | `service.externalTrafficPolicy`    | Sealed Secret service external traffic policy                                                         | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Sealed Secret service                                               | `{}`                     |
