@@ -547,6 +547,9 @@ infoblox:
   ## @param infoblox.maxResults When using the Infoblox provider, specify the Infoblox Max Results (optional)
   ##
   maxResults: ""
+  ## @param infoblox.createPtr When using the Infoblox provider, specify the Infoblox create PTR flag (optional)
+  ##
+  createPtr: false
 ## Linode configuration to be set via arguments/env. variables
 ##
 linode:
