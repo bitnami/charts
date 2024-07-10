@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.3.5 (2024-07-02)
+## 11.3.6 (2024-07-04)
 
-* [bitnami/consul] Release 11.3.5 ([#27644](https://github.com/bitnami/charts/pull/27644))
+* [bitnami/consul] Release 11.3.6 ([#27776](https://github.com/bitnami/charts/pull/27776))
+
+## <small>11.3.5 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/consul] Release 11.3.5 (#27644) ([cd486ca](https://github.com/bitnami/charts/commit/cd486ca72b025e6afc74b384e2e1f3241e923146)), closes [#27644](https://github.com/bitnami/charts/issues/27644)
 
 ## <small>11.3.4 (2024-06-18)</small>
 

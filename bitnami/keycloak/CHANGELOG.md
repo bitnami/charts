@@ -1,8 +1,21 @@
 # Changelog
 
-## 21.4.5 (2024-07-03)
+## 21.6.0 (2024-07-08)
 
-* [bitnami/keycloak] Release 21.4.5 ([#27693](https://github.com/bitnami/charts/pull/27693))
+* [bitnami/keycloak] Add support for minReadySeconds ([#27550](https://github.com/bitnami/charts/pull/27550))
+
+## 21.5.0 (2024-07-08)
+
+* [bitnami/keycloak] Add custom certs to system truststore (#27197) ([82b4d3e](https://github.com/bitnami/charts/commit/82b4d3e5b1b23500b1ed3758bca474894c6d752d)), closes [#27197](https://github.com/bitnami/charts/issues/27197)
+
+## <small>21.4.6 (2024-07-08)</small>
+
+* bitnami/keycloak Diversity: Allow Keycloak admin realm to be changed/configurable (#27821) ([85124dd](https://github.com/bitnami/charts/commit/85124dd6953ee9ba63af032856e7830de9db3a92)), closes [#27821](https://github.com/bitnami/charts/issues/27821)
+
+## <small>21.4.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/keycloak] Release 21.4.5 (#27693) ([ed5f4a4](https://github.com/bitnami/charts/commit/ed5f4a4a46bb408fea752de831eebe8ca9c6e9af)), closes [#27693](https://github.com/bitnami/charts/issues/27693)
 
 ## <small>21.4.4 (2024-06-20)</small>
 

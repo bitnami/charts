@@ -22,7 +22,7 @@ annotations:
     - name: supabase-realtime
       image: docker.io/bitnami/supabase-realtime:2.29.15-debian-12-r0
     - name: supabase-storage
-      image: docker.io/bitnami/supabase-storage:1.6.4-debian-12-r1
+      image: docker.io/bitnami/supabase-storage:1.6.8-debian-12-r0
     - name: supabase-studio
       image: docker.io/bitnami/supabase-studio:1.24.5-debian-12-r1
 apiVersion: v2
@@ -53,4 +53,4 @@ maintainers:
 name: supabase
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 5.2.8
+version: 5.3.0

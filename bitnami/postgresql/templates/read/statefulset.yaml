@@ -433,7 +433,7 @@ spec:
           {{- end }}
           env:
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%d/?sslmode=disable" (int (include "postgresql.v1.service.port" .)) }}
+              value: {{ printf "127.0.0.1:%d/postgres?sslmode=disable" (int (include "postgresql.v1.service.port" .)) }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
               value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.v1.userPasswordKey" .) }}

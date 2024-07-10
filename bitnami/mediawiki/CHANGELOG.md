@@ -1,8 +1,13 @@
 # Changelog
 
-## 20.2.8 (2024-07-03)
+## 20.2.9 (2024-07-04)
 
-* [bitnami/mediawiki] Release 20.2.8 ([#27724](https://github.com/bitnami/charts/pull/27724))
+* [bitnami/mediawiki] Release 20.2.9 ([#27773](https://github.com/bitnami/charts/pull/27773))
+
+## <small>20.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mediawiki] Release 20.2.8 (#27724) ([a5e9c16](https://github.com/bitnami/charts/commit/a5e9c165c75efda3132f2276519f465ec469c4c8)), closes [#27724](https://github.com/bitnami/charts/issues/27724)
 
 ## <small>20.2.7 (2024-06-18)</small>
 
