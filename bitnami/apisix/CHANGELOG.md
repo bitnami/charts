@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.2 (2024-07-03)
+## 3.3.3 (2024-07-08)
 
-* [bitnami/apisix] Updated jsonschema to allow string values for fields passed to tpl ([#27441](https://github.com/bitnami/charts/pull/27441))
+* [bitnami/apisix] Correct service port name in control plane ingress ([#27839](https://github.com/bitnami/charts/pull/27839))
+
+## <small>3.3.2 (2024-07-08)</small>
+
+* [bitnami/apisix] Updated jsonschema to allow string values for fields passed to tpl (#27441) ([d3967c3](https://github.com/bitnami/charts/commit/d3967c3c5308e70f54028e67328552523d2358b4)), closes [#27441](https://github.com/bitnami/charts/issues/27441)
 
 ## <small>3.3.1 (2024-07-03)</small>
 
