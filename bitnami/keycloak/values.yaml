@@ -211,7 +211,11 @@ adminRealm: "master"
 ## @param production Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.
 ##
 production: false
+## @param proxyHeaders Set Keycloak proxy headers
+##
+proxyHeaders: ""
 ## @param proxy reverse Proxy mode edge, reencrypt, passthrough or none
+## DEPRECATED: use proxyHeaders instead
 ## ref: https://www.keycloak.org/server/reverseproxy
 ##
 proxy: passthrough

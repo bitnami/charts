@@ -16,7 +16,11 @@ metadata:
 data:
   KEYCLOAK_ADMIN: {{ .Values.auth.adminUser | quote }}
   KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
-  KEYCLOAK_PROXY: {{ .Values.proxy | quote }}
+  {{- if and .Values.proxy (empty .Values.proxyHeaders }}
+  KEYCLOAK_PROXY_HEADERS: {{ ternary "" "forwarded|xforwarded" (eq .Values.proxy "passthrough") }}
+  {{- else }}
+  KEYCLOAK_PROXY_HEADERS: {{ .Values.proxyHeaders | quote }}
+  {{- end }}
   KEYCLOAK_ENABLE_STATISTICS: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
   {{- if not .Values.externalDatabase.existingSecretHostKey }}
   KEYCLOAK_DATABASE_HOST: {{ include "keycloak.databaseHost" . | quote }}
