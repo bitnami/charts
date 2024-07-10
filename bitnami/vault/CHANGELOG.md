@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.11 (2024-07-04)
+## 1.4.12 (2024-07-10)
 
-* [bitnami/vault] Release 1.4.11 ([#27795](https://github.com/bitnami/charts/pull/27795))
+* [bitnami/vault] Release 1.4.12 ([#27885](https://github.com/bitnami/charts/pull/27885))
+
+## <small>1.4.11 (2024-07-04)</small>
+
+* [bitnami/vault] Release 1.4.11 (#27795) ([28e75bc](https://github.com/bitnami/charts/commit/28e75bc3ec2e8e575c1231f1e2b0ad9e22f23301)), closes [#27795](https://github.com/bitnami/charts/issues/27795)
 
 ## <small>1.4.10 (2024-07-03)</small>
 
