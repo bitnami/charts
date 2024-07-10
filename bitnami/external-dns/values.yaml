@@ -26,15 +26,6 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
-    ## Compatibility adaptations for Traefik
-    ##
-    traefik:
-      ## @param global.compatibility.traefik.disableNew Disable listeners on Resources under traefik.io
-      ##
-      disableNew: false
-      ## @param global.compatibility.traefik.disableLegacy Disable listeners on Resources under traefik.containo.us
-      ##
-      disableLegacy: false
 ## @section Common parameters
 ##
 
@@ -594,6 +585,15 @@ pihole:
   ## @param pihole.secretName Use an existing secret with key "pihole_password" defined.
   ##
   secretName: ""
+## Compatibility adaptations for Traefik
+##
+traefik:
+  ## @param traefik.disableNew Disable listeners on Resources under traefik.io
+  ##
+  disableNew: false
+  ## @param traefik.disableLegacy Disable listeners on Resources under traefik.containo.us
+  ##
+  disableLegacy: false
 ## oci configuration to be set via arguments/env. variables
 ##
 oci:

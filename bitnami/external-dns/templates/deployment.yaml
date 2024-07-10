@@ -331,10 +331,10 @@ spec:
             - --transip-account={{ .Values.transip.account }}
             - --transip-keyfile=/transip/transip-api-key
             {{- end }}
-            {{- if .Values.global.compatibility.traefik.disableLegacy }}
+            {{- if .Values.traefik.disableLegacy }}
             - --traefik-disable-legacy
             {{- end }}
-            {{- if .Values.global.compatibility.traefik.disableNew }}
+            {{- if .Values.traefik.disableNew }}
             - --traefik-disable-new
             {{- end }}
             {{- if .Values.txtEncrypt.enabled }}
