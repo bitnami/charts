@@ -1,8 +1,13 @@
 # Changelog
 
+## 19.2.1 (2024-07-03)
+
+* [bitnami/schema-registry] Release 19.2.1 ([#27716](https://github.com/bitnami/charts/pull/27716))
+
 ## 19.2.0 (2024-06-28)
 
-* [bitnami/schema-registry] Add labels to service ([#27528](https://github.com/bitnami/charts/pull/27528))
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/schema-registry] Add labels to service (#27528) ([638dc9e](https://github.com/bitnami/charts/commit/638dc9e45a55ada309f759368de3677b54da69ed)), closes [#27528](https://github.com/bitnami/charts/issues/27528)
 
 ## <small>19.1.7 (2024-06-21)</small>
 
