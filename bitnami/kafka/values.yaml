@@ -2131,7 +2131,7 @@ provisioning:
   ##   --command-config $CLIENT_CONF
   ##   --add
   ##   --allow-principal User:user
-  ##   --consumer --topic '*'
+  ##   --consumer --topic *
   ## - "/opt/bitnami/kafka/bin/kafka-acls.sh
   ##      --bootstrap-server $KAFKA_SERVICE
   ##      --command-config $CLIENT_CONF
