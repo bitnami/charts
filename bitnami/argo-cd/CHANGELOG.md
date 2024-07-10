@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.5.7 (2024-07-05)
+## 6.5.8 (2024-07-08)
 
-* [bitnami/argo-cd] Release 6.5.7 ([#27809](https://github.com/bitnami/charts/pull/27809))
+* [bitnami/argo-cd] fix: Use the right port name for livenessProbe. ([#27253](https://github.com/bitnami/charts/pull/27253))
+
+## <small>6.5.7 (2024-07-05)</small>
+
+* [bitnami/argo-cd] Release 6.5.7 (#27809) ([cb5ab65](https://github.com/bitnami/charts/commit/cb5ab651c4ac02d80d6ab30e3d5b2ccda4e261ac)), closes [#27809](https://github.com/bitnami/charts/issues/27809)
 
 ## <small>6.5.6 (2024-07-05)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 21.1.16 (2024-07-01)
+## 21.1.18 (2024-07-05)
 
-* [bitnami/ghost] Release 21.1.16 ([#27589](https://github.com/bitnami/charts/pull/27589))
+* [bitnami/ghost] Release 21.1.18 ([#27827](https://github.com/bitnami/charts/pull/27827))
+
+## <small>21.1.17 (2024-07-05)</small>
+
+* [bitnami/ghost] Release 21.1.17 (#27814) ([b878615](https://github.com/bitnami/charts/commit/b878615f9516e284131529772e720ef72dafd32b)), closes [#27814](https://github.com/bitnami/charts/issues/27814)
+
+## <small>21.1.16 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/ghost] Release 21.1.16 (#27589) ([0e677c4](https://github.com/bitnami/charts/commit/0e677c4218a009eb305b0126fad1eb8d0a75229c)), closes [#27589](https://github.com/bitnami/charts/issues/27589)
 
 ## <small>21.1.15 (2024-06-24)</small>
 

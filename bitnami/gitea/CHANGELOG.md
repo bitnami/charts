@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.11 (2024-07-05)
+## 2.3.11 (2024-07-08)
 
 * [bitnami/gitea] Update externaldb-secret logic ([#27596](https://github.com/bitnami/charts/pull/27596))
+
+## <small>2.3.11 (2024-07-05)</small>
+
+* [bitnami/gitea] Release 2.3.11 ([#27810](https://github.com/bitnami/charts/pull/27810))
 
 ## <small>2.3.10 (2024-07-04)</small>
 

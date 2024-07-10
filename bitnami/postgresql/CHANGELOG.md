@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.5.13 (2024-07-03)
+## 15.5.15 (2024-07-08)
 
-* [bitnami/postgresql] Release 15.5.13 ([#27733](https://github.com/bitnami/charts/pull/27733))
+* Postgres exporter URI fix ([#27734](https://github.com/bitnami/charts/pull/27734))
+
+## <small>15.5.14 (2024-07-05)</small>
+
+* [bitnami/postgresql] Release 15.5.14 (#27819) ([a4baae5](https://github.com/bitnami/charts/commit/a4baae5538d74b732fca029ad6ee5783279c4d54)), closes [#27819](https://github.com/bitnami/charts/issues/27819)
+
+## <small>15.5.13 (2024-07-03)</small>
+
+* [bitnami/postgresql] Release 15.5.13 (#27733) ([e51f4a8](https://github.com/bitnami/charts/commit/e51f4a8818f15e6c0b636294d50d223140cc43d5)), closes [#27733](https://github.com/bitnami/charts/issues/27733)
 
 ## <small>15.5.12 (2024-07-02)</small>
 
