@@ -1,8 +1,21 @@
 # Changelog
 
-## 6.2.3 (2024-06-18)
+## 6.2.6 (2024-07-09)
 
-* [bitnami/aspnet-core] Release 6.2.3 ([#27333](https://github.com/bitnami/charts/pull/27333))
+* [bitnami/aspnet-core] Release 6.2.6 ([#27863](https://github.com/bitnami/charts/pull/27863))
+
+## <small>6.2.5 (2024-07-03)</small>
+
+* [bitnami/aspnet-core] Release 6.2.5 (#27744) ([f846654](https://github.com/bitnami/charts/commit/f846654f84e02a2ede18d41ed2e9856b893dd546)), closes [#27744](https://github.com/bitnami/charts/issues/27744)
+
+## <small>6.2.4 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/aspnet-core] Release 6.2.4 (#27689) ([6b7a9d0](https://github.com/bitnami/charts/commit/6b7a9d04956cfff086cc62faafa195781a1779cf)), closes [#27689](https://github.com/bitnami/charts/issues/27689)
+
+## <small>6.2.3 (2024-06-18)</small>
+
+* [bitnami/aspnet-core] Release 6.2.3 (#27333) ([ae9dd67](https://github.com/bitnami/charts/commit/ae9dd675722da8a44669c44431bb75fce61ea0bf)), closes [#27333](https://github.com/bitnami/charts/issues/27333)
 
 ## <small>6.2.2 (2024-06-17)</small>
 

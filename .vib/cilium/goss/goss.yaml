@@ -22,20 +22,20 @@ http:
   {{ if .Vars.agent.metrics.enabled }}
   http://127.0.0.1:{{ .Vars.agent.containerPorts.metrics }}/metrics:
     status: 200
-  http://cilium-agent-metrics:{{ .Vars.agent.service.ports.metrics }}/metrics:
+  http://cilium-agent-metrics:{{ .Vars.agent.metrics.service.port }}/metrics:
     status: 200
   {{ end }}
-  {{ if .Vars.agent.hubbleMetrics.enabled }}
+  {{ if .Vars.hubble.peers.metrics.enabled }}
   http://127.0.0.1:{{ .Vars.agent.containerPorts.hubbleMetrics }}/metrics:
     status: 200
-  http://cilium-agent-hubble-metrics:{{ .Vars.agent.service.ports.hubbleMetrics }}/metrics:
+  http://cilium-hubble-peers-metrics:{{ .Vars.hubble.peers.metrics.service.port }}/metrics:
     status: 200
   {{ end }}
 addr:
   tcp://127.0.0.1:{{ .Vars.agent.containerPorts.hubblePeer }}:
     reachable: true
     timeout: 500
-  tcp://cilium-agent-hubble-peer:{{ .Vars.agent.service.ports.hubblePeer}}:
+  tcp://cilium-hubble-peers:{{ .Vars.hubble.peers.service.port }}:
     reachable: true
     timeout: 500
   {{ if .Vars.agent.enablePprof }}
@@ -53,6 +53,7 @@ file:
     exists: true
     filetype: socket
     mode: '0660'
+  {{ if .Vars.hubble.tls.enabled }}
   # Hubble certs are present
   /certs/hubble/ca.crt:
     exists: true
@@ -63,8 +64,9 @@ file:
   /certs/hubble/tls.key:
     exists: true
     filetype: symlink
+  {{ end }}
   # Cilium CNI configuration files should be present in the host
-  /host{{ .Vars.agent.cniPlugin.hostCNINetDir }}/05-cilium.conflist:
+  /host/etc/cni/net.d/05-cilium.conflist:
     exists: true
     filetype: file
     mode: '0644'

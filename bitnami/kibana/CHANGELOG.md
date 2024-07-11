@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.2.8 (2024-06-18)
+## 11.2.10 (2024-07-04)
 
-* [bitnami/kibana] Release 11.2.8 ([#27364](https://github.com/bitnami/charts/pull/27364))
+* [bitnami/kibana] Release 11.2.10 ([#27790](https://github.com/bitnami/charts/pull/27790))
+
+## <small>11.2.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kibana] Release 11.2.9 (#27701) ([7338901](https://github.com/bitnami/charts/commit/73389017b5993990144519d70130fd6e35ad55b9)), closes [#27701](https://github.com/bitnami/charts/issues/27701)
+
+## <small>11.2.8 (2024-06-18)</small>
+
+* [bitnami/kibana] Release 11.2.8 (#27364) ([d8e27c5](https://github.com/bitnami/charts/commit/d8e27c5c151f1a219890211f7ba7a00e3bcee503)), closes [#27364](https://github.com/bitnami/charts/issues/27364)
 
 ## <small>11.2.7 (2024-06-17)</small>
 

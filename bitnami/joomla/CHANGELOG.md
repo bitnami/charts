@@ -1,8 +1,17 @@
 # Changelog
 
-## 19.2.5 (2024-06-18)
+## 19.2.7 (2024-07-09)
 
-* [bitnami/joomla] Release 19.2.5 ([#27359](https://github.com/bitnami/charts/pull/27359))
+* [bitnami/joomla] Release 19.2.7 ([#27861](https://github.com/bitnami/charts/pull/27861))
+
+## <small>19.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/joomla] Release 19.2.6 (#27695) ([7d010ac](https://github.com/bitnami/charts/commit/7d010ac57b7f7020a0c0e4f878671311f76db7eb)), closes [#27695](https://github.com/bitnami/charts/issues/27695)
+
+## <small>19.2.5 (2024-06-18)</small>
+
+* [bitnami/joomla] Release 19.2.5 (#27359) ([48a410b](https://github.com/bitnami/charts/commit/48a410b4bea434b56b07a3e7a46e98e8444379a7)), closes [#27359](https://github.com/bitnami/charts/issues/27359)
 
 ## <small>19.2.4 (2024-06-17)</small>
 

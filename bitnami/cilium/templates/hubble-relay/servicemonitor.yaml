@@ -1,0 +1,50 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.hubble.relay.enabled .Values.hubble.relay.metrics.enabled .Values.hubble.relay.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "cilium.hubble.relay.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.hubble.relay.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.hubble.relay.metrics.serviceMonitor.labels .Values.commonLabels ) "context" .) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: hubble-relay
+  {{- if or .Values.hubble.relay.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.hubble.relay.metrics.serviceMonitor.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.hubble.relay.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: cilium
+      app.kubernetes.io/component: hubble-relay
+      {{- if .Values.hubble.relay.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.hubble.relay.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: tcp-metrics
+      path: "/metrics"
+      {{- if .Values.hubble.relay.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.hubble.relay.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.hubble.relay.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.hubble.relay.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.hubble.relay.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.hubble.relay.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.hubble.relay.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.hubble.relay.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hubble.relay.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.hubble.relay.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}
