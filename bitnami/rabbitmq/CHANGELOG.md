@@ -1,8 +1,12 @@
 # Changelog
 
+## 14.5.1 (2024-07-11)
+
+* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts ([#27900](https://github.com/bitnami/charts/pull/27900))
+
 ## 14.5.0 (2024-07-09)
 
-* [bitnami/rabbitmq] Replace extraPorts with extraPortsHeadless in headless service ([#27853](https://github.com/bitnami/charts/pull/27853))
+* [bitnami/rabbitmq] Replace extraPorts with extraPortsHeadless in headless service (#27853) ([b205f7a](https://github.com/bitnami/charts/commit/b205f7a39c528e0fe365568f955c25c460649c4f)), closes [#27853](https://github.com/bitnami/charts/issues/27853)
 
 ## <small>14.4.6 (2024-07-03)</small>
 
