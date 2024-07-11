@@ -310,6 +310,11 @@ spec:
             - name: kafka-config
               mountPath: /opt/bitnami/kafka/config/server.properties
               subPath: server.properties
+            {{- if .Values.sasl.zookeeper.user }}
+            - name: kafka-config
+              mountPath: /opt/bitnami/kafka/config/kafka_jaas.conf
+              subPath: kafka_jaas.conf
+            {{- end }}
             - name: tmp
               mountPath: /tmp
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}

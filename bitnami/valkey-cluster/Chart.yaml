@@ -1,0 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  licenses: Apache-2.0
+  images: |
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:12-debian-12-r25
+    - name: redis-exporter
+      image: docker.io/bitnami/redis-exporter:1.61.0-debian-12-r3
+    - name: valkey-cluster
+      image: docker.io/bitnami/valkey-cluster:7.2.5-debian-12-r1
+apiVersion: v2
+appVersion: 7.2.5
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Valkey is an open source (BSD) high-performance key/value datastore that supports a variety workloads such as caching, message queues, and can act as a primary database.
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/valkey/img/valkey-stack-220x234.png
+keywords:
+- valkey
+- keyvalue
+- database
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: valkey-cluster
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/valkey-cluster
+- https://github.com/bitnami/containers/tree/main/bitnami/vakey-cluster
+version: 0.1.1

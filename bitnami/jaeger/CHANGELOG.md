@@ -1,8 +1,29 @@
 # Changelog
 
-## 2.3.9 (2024-06-18)
+## 2.5.2 (2024-07-04)
 
-* [bitnami/jaeger] Release 2.3.9 ([#27357](https://github.com/bitnami/charts/pull/27357))
+* [bitnami/jaeger] Release 2.5.2 ([#27791](https://github.com/bitnami/charts/pull/27791))
+
+## <small>2.5.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/jaeger] Release 2.5.1 (#27654) ([b66430f](https://github.com/bitnami/charts/commit/b66430fa4ecbfc084700db342034a88151ab1279)), closes [#27654](https://github.com/bitnami/charts/issues/27654)
+
+## 2.5.0 (2024-06-25)
+
+* [bitnami/jaeger] Add init containers resources to Jaeger chart (#27462) ([58cb9da](https://github.com/bitnami/charts/commit/58cb9daf49adfee0794376d3616f290c8d56218b)), closes [#27462](https://github.com/bitnami/charts/issues/27462)
+
+## <small>2.4.1 (2024-06-22)</small>
+
+* [bitnami/jaeger] Release 2.4.1 (#27500) ([7dc1439](https://github.com/bitnami/charts/commit/7dc14399f43185a57254bfe91552eb28c3556527)), closes [#27500](https://github.com/bitnami/charts/issues/27500)
+
+## 2.4.0 (2024-06-21)
+
+* [bitnami/jaeger] Add support for cassandra existingSecret (#26563) ([175b933](https://github.com/bitnami/charts/commit/175b933346aaf2cdef7842394806cba75fa8f078)), closes [#26563](https://github.com/bitnami/charts/issues/26563)
+
+## <small>2.3.9 (2024-06-18)</small>
+
+* [bitnami/jaeger] Release 2.3.9 (#27357) ([a11df55](https://github.com/bitnami/charts/commit/a11df5597f3a252e7405f2f2beae81347c0d7d89)), closes [#27357](https://github.com/bitnami/charts/issues/27357)
 
 ## <small>2.3.8 (2024-06-17)</small>
 

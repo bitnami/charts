@@ -1,8 +1,21 @@
 # Changelog
 
-## 5.2.7 (2024-06-18)
+## 5.3.0 (2024-07-09)
 
-* [bitnami/supabase] Release 5.2.7 ([#27421](https://github.com/bitnami/charts/pull/27421))
+* [bitnami/supabase] chore: :arrow_up: Update supabase-storage to 1.6.8 ([#27857](https://github.com/bitnami/charts/pull/27857))
+
+## <small>5.2.9 (2024-07-04)</small>
+
+* [bitnami/supabase] Do not render any resources for disabled components (#27580) ([5d703ba](https://github.com/bitnami/charts/commit/5d703bad49025ab95654a09ecacef304de7492bd)), closes [#27580](https://github.com/bitnami/charts/issues/27580) [#27540](https://github.com/bitnami/charts/issues/27540)
+
+## <small>5.2.8 (2024-07-04)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/supabase] Release 5.2.8 (#27728) ([33e773b](https://github.com/bitnami/charts/commit/33e773b50bc227d85afee414fba8728833a8b529)), closes [#27728](https://github.com/bitnami/charts/issues/27728)
+
+## <small>5.2.7 (2024-06-18)</small>
+
+* [bitnami/supabase] Release 5.2.7 (#27421) ([dbc5d0a](https://github.com/bitnami/charts/commit/dbc5d0a2c4aa4f2773e12e3b58fd3079694350a4)), closes [#27421](https://github.com/bitnami/charts/issues/27421)
 
 ## <small>5.2.6 (2024-06-18)</small>
 
