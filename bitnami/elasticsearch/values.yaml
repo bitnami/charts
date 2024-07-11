@@ -836,7 +836,7 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
   persistentVolumeClaimRetentionPolicy:
-    ## @param master.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Primary StatefulSet
+    ## @param master.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Master StatefulSet
     ##
     enabled: false
     ## @param master.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
@@ -1242,7 +1242,7 @@ data:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
   persistentVolumeClaimRetentionPolicy:
-    ## @param data.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Primary StatefulSet
+    ## @param data.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Data StatefulSet
     ##
     enabled: false
     ## @param data.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
