@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.3.8 (2024-07-10)
+## 21.3.0 (2024-07-11)
 
 * [bitnami/elasticsearch] add persistentVolumeClaimRetentionPolicy to statefulset for master and data ([#27866](https://github.com/bitnami/charts/pull/27866))
 
