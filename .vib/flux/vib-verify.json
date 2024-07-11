@@ -47,6 +47,12 @@
               "file": "flux/goss/goss-wait.yaml"
             }
           }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
+          }
         }
       ]
     }
