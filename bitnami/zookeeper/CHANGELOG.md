@@ -1,8 +1,13 @@
 # Changelog
 
-## 13.4.6 (2024-07-03)
+## 13.4.7 (2024-07-11)
 
-* [bitnami/zookeeper] Release 13.4.6 ([#27722](https://github.com/bitnami/charts/pull/27722))
+* [bitnami/zookeeper] Bump patch version ([#27895](https://github.com/bitnami/charts/pull/27895))
+
+## <small>13.4.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/zookeeper] Release 13.4.6 (#27722) ([84b4b99](https://github.com/bitnami/charts/commit/84b4b99f4450009d8fcac4c43755cd8116db33ff)), closes [#27722](https://github.com/bitnami/charts/issues/27722)
 
 ## <small>13.4.5 (2024-06-18)</small>
 
