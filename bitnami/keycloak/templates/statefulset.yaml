@@ -215,7 +215,7 @@ spec:
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
-            {{- if .Values.adminIngress.enabled }}
+            {{- if and .Values.adminIngress.enabled .Values.adminIngress.hostname }}
             - name: KC_HOSTNAME_ADMIN_URL
               value: "http{{ if or .Values.adminIngress.tls (eq .Values.proxy "edge") }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
             {{- end }}
