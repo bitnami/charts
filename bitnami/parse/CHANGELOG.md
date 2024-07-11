@@ -1,8 +1,13 @@
 # Changelog
 
-## 23.2.8 (2024-07-03)
+## 23.2.9 (2024-07-10)
 
-* [bitnami/parse] Release 23.2.8 ([#27725](https://github.com/bitnami/charts/pull/27725))
+* [bitnami/parse] Release 23.2.9 ([#27874](https://github.com/bitnami/charts/pull/27874))
+
+## <small>23.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/parse] Release 23.2.8 (#27725) ([cc1d031](https://github.com/bitnami/charts/commit/cc1d03180b458ff3290192c1ee83cf54f0fccbd9)), closes [#27725](https://github.com/bitnami/charts/issues/27725)
 
 ## <small>23.2.7 (2024-06-18)</small>
 

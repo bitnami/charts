@@ -309,10 +309,7 @@ spec:
           {{- else if .Values.sidekiq.livenessProbe.enabled }}
           livenessProbe:
             exec:
-              command:
-                - pgreg
-                - -f
-                - sidekiq
+              command: ["/bin/sh", "-c", "pgrep -f ^sidekiq"]
             initialDelaySeconds: {{ .Values.sidekiq.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sidekiq.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.sidekiq.livenessProbe.timeoutSeconds }}

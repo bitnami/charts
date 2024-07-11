@@ -67,9 +67,7 @@ spec:
       {{- if .Values.exporter.schedulerName }}
       schedulerName: {{ .Values.exporter.schedulerName }}
       {{- end }}
-      {{- if .Values.exporter.serviceAccountName }}
-      serviceAccountName: {{ .Values.exporter.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "harbor.exporter.serviceAccountName" .}}
       {{- if .Values.exporter.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.exporter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
@@ -99,8 +97,8 @@ spec:
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.exporter.existingEnvVarsSecret }}
-                  name: {{ .Values.exporter.existingEnvVarsSecret }}
+                  {{- if .Values.core.existingEnvVarsSecret }}
+                  name: {{ .Values.core.existingEnvVarsSecret }}
                   {{- else }}
                   name: {{ printf "%s-envvars" (include "harbor.core" .) }}
                   {{- end }}
@@ -108,8 +106,8 @@ spec:
             - name: HARBOR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.exporter.existingEnvVarsSecret }}
-                  name: {{ .Values.exporter.existingEnvVarsSecret }}
+                  {{- if .Values.core.existingEnvVarsSecret }}
+                  name: {{ .Values.core.existingEnvVarsSecret }}
                   {{- else }}
                   name: {{ printf "%s-envvars" (include "harbor.core" .) }}
                   {{- end }}

@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.9 (2024-07-04)
+## 5.3.0 (2024-07-09)
 
-* [bitnami/supabase] Do not render any resources for disabled components ([#27580](https://github.com/bitnami/charts/pull/27580))
+* [bitnami/supabase] chore: :arrow_up: Update supabase-storage to 1.6.8 ([#27857](https://github.com/bitnami/charts/pull/27857))
+
+## <small>5.2.9 (2024-07-04)</small>
+
+* [bitnami/supabase] Do not render any resources for disabled components (#27580) ([5d703ba](https://github.com/bitnami/charts/commit/5d703bad49025ab95654a09ecacef304de7492bd)), closes [#27580](https://github.com/bitnami/charts/issues/27580) [#27540](https://github.com/bitnami/charts/issues/27540)
 
 ## <small>5.2.8 (2024-07-04)</small>
 

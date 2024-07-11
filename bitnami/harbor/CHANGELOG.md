@@ -1,8 +1,17 @@
 # Changelog
 
-## 21.4.7 (2024-07-03)
+## 22.0.1 (2024-07-09)
 
-* [bitnami/harbor] Release 21.4.7 ([#27691](https://github.com/bitnami/charts/pull/27691))
+* [bitnami/harbor] Fix typo in exporter secretKeyRef ([#27851](https://github.com/bitnami/charts/pull/27851))
+
+## 22.0.0 (2024-07-09)
+
+* [bitnami/harbor] Add service account for Harbor resources (#27067) ([0f01d69](https://github.com/bitnami/charts/commit/0f01d69a6bd94fc4b3a68012fea301490c3b5e07)), closes [#27067](https://github.com/bitnami/charts/issues/27067)
+
+## <small>21.4.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/harbor] Release 21.4.7 (#27691) ([6b5d149](https://github.com/bitnami/charts/commit/6b5d14984d42ec77ecb495e82be4fe40a6f16f91)), closes [#27691](https://github.com/bitnami/charts/issues/27691)
 
 ## <small>21.4.6 (2024-06-18)</small>
 

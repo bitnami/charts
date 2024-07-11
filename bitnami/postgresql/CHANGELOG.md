@@ -1,8 +1,7 @@
 # Changelog
 
 ## 15.5.15 (2024-07-08)
-
-* [bitnami/postgresql] Move comments inside conditionals ([#27627](https://github.com/bitnami/charts/pull/27627))
+* Postgres exporter URI fix ([#27734](https://github.com/bitnami/charts/pull/27734))
 
 ## <small>15.5.14 (2024-07-05)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.3.6 (2024-07-03)
+## 2.3.8 (2024-07-10)
 
-* [bitnami/fluent-bit] Release 2.3.6 ([#27692](https://github.com/bitnami/charts/pull/27692))
+* [bitnami/fluent-bit] Release 2.3.8 ([#27883](https://github.com/bitnami/charts/pull/27883))
+
+## <small>2.3.7 (2024-07-08)</small>
+
+* [bitnami/fluent-bit] Release 2.3.7 (#27848) ([5e56666](https://github.com/bitnami/charts/commit/5e566665993c48c79a8e284da8adb6e150bea0a1)), closes [#27848](https://github.com/bitnami/charts/issues/27848)
+
+## <small>2.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/fluent-bit] Release 2.3.6 (#27692) ([6543416](https://github.com/bitnami/charts/commit/6543416ae8d32281921cedfb73306e8122adc2a0)), closes [#27692](https://github.com/bitnami/charts/issues/27692)
 
 ## <small>2.3.5 (2024-06-18)</small>
 

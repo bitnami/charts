@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.8 (2024-07-04)
+## 2.4.0 (2024-07-10)
 
-* [bitnami/sealed-secrets] Release 2.3.8 ([#27789](https://github.com/bitnami/charts/pull/27789))
+* bitnami/sealed-secrets: add loadbalancerclass ([#27608](https://github.com/bitnami/charts/pull/27608))
+
+## <small>2.3.8 (2024-07-04)</small>
+
+* [bitnami/sealed-secrets] Release 2.3.8 (#27789) ([4338deb](https://github.com/bitnami/charts/commit/4338debda4d9f710bfc28399fc1fcf041d810325)), closes [#27789](https://github.com/bitnami/charts/issues/27789)
 
 ## <small>2.3.7 (2024-07-03)</small>
 

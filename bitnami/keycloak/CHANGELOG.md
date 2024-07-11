@@ -1,8 +1,20 @@
 # Changelog
 
-## 21.4.6 (2024-07-08)
+## 21.6.1 (2024-07-10)
 
-* bitnami/keycloak Diversity: Allow Keycloak admin realm to be changed/configurable ([#27821](https://github.com/bitnami/charts/pull/27821))
+* [bitnami/keycloak] fix conditions for KC_HOSTNAME_URL ([#27867](https://github.com/bitnami/charts/pull/27867))
+
+## 21.6.0 (2024-07-09)
+
+* [bitnami/keycloak] Add support for minReadySeconds (#27550) ([bf357f9](https://github.com/bitnami/charts/commit/bf357f93bb2ad28d3a27826f4bae8a65a0bc3af5)), closes [#27550](https://github.com/bitnami/charts/issues/27550)
+
+## 21.5.0 (2024-07-08)
+
+* [bitnami/keycloak] Add custom certs to system truststore (#27197) ([82b4d3e](https://github.com/bitnami/charts/commit/82b4d3e5b1b23500b1ed3758bca474894c6d752d)), closes [#27197](https://github.com/bitnami/charts/issues/27197)
+
+## <small>21.4.6 (2024-07-08)</small>
+
+* bitnami/keycloak Diversity: Allow Keycloak admin realm to be changed/configurable (#27821) ([85124dd](https://github.com/bitnami/charts/commit/85124dd6953ee9ba63af032856e7830de9db3a92)), closes [#27821](https://github.com/bitnami/charts/issues/27821)
 
 ## <small>21.4.5 (2024-07-03)</small>
 
