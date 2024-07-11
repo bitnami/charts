@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.10 (2024-07-04)
+## 11.2.11 (2024-07-11)
 
-* [bitnami/kibana] Release 11.2.10 ([#27790](https://github.com/bitnami/charts/pull/27790))
+* [bitnami/kibana] Release 11.2.11 ([#27909](https://github.com/bitnami/charts/pull/27909))
+
+## <small>11.2.10 (2024-07-04)</small>
+
+* [bitnami/kibana] Release 11.2.10 (#27790) ([175b63e](https://github.com/bitnami/charts/commit/175b63e6452d0358885e811c4a2542ffdc4ade52)), closes [#27790](https://github.com/bitnami/charts/issues/27790)
 
 ## <small>11.2.9 (2024-07-03)</small>
 
