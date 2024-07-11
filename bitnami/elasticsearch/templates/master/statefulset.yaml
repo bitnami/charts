@@ -392,9 +392,9 @@ spec:
             claimName: {{ .Values.master.persistence.existingClaim }}
   {{- else }}
   {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
-          persistentVolumeClaimRetentionPolicy:
-            whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
-            whenScaled: {{ .Values.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
   volumeClaimTemplates:
     - metadata:
