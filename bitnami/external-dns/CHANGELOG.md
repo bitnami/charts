@@ -6,7 +6,7 @@
 
 ## 8.2.0 (2024-07-10)
 
-* [bitnami/external-dns] Added extra arguments for Traefik new/legacy resource support ([#27766](https://github.com/bitnami/charts/pull/27766))
+* [bitnami/external-dns] Added extra arguments for Traefik new/legacy resource support (#27766) ([31ff6e7](https://github.com/bitnami/charts/commit/31ff6e73fb7d3e89c4c821c38a711afbf2eab830)), closes [#27766](https://github.com/bitnami/charts/issues/27766)
 
 ## 8.1.0 (2024-07-08)
 
