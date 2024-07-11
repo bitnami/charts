@@ -1,8 +1,25 @@
 # Changelog
 
-## 9.5.3 (2024-06-24)
+## 9.5.7 (2024-07-04)
 
-* [bitnami/kube-prometheus] :bug: Render imagePullSecrets ([#27511](https://github.com/bitnami/charts/pull/27511))
+* [bitnami/kube-prometheus] Release 9.5.7 ([#27781](https://github.com/bitnami/charts/pull/27781))
+
+## <small>9.5.6 (2024-07-03)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.6 (#27674) ([892e9aa](https://github.com/bitnami/charts/commit/892e9aa2bfdae50d4f1347ed6a03bab567401d9d)), closes [#27674](https://github.com/bitnami/charts/issues/27674)
+
+## <small>9.5.5 (2024-07-02)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.5 (#27632) ([ac35b81](https://github.com/bitnami/charts/commit/ac35b8180a70248bace0e69c05ba9a53b8d0b397)), closes [#27632](https://github.com/bitnami/charts/issues/27632)
+
+## <small>9.5.4 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kube-prometheus] Release 9.5.4 (#27551) ([73bdc54](https://github.com/bitnami/charts/commit/73bdc544c5046bc75dfb855a21939219ca929852)), closes [#27551](https://github.com/bitnami/charts/issues/27551)
+
+## <small>9.5.3 (2024-06-24)</small>
+
+* [bitnami/kube-prometheus] :bug: Render imagePullSecrets (#27511) ([b6fbb7e](https://github.com/bitnami/charts/commit/b6fbb7e5051029d8071d80ac618f9381cc1b06e0)), closes [#27511](https://github.com/bitnami/charts/issues/27511)
 
 ## <small>9.5.2 (2024-06-18)</small>
 

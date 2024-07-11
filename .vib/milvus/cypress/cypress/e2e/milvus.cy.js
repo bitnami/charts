@@ -28,7 +28,7 @@ it('allows to create a collection', () => {
     // Create collection index and load
     cy.get(`[href$="${c.collection.name}${random}/overview"]`).click({force: true});
     cy.get('span').contains('Create Index').click({force: true});
-    cy.get('[placeholder="Index name"]').type(`${c.collection.idName}{enter}`);
+    cy.get('[data-cy="index_name"]').type(`${c.collection.idName}{enter}`);
     // Reload and wait for DOM content load
     cy.visit('#/databases');
     cy.wait(2000);

@@ -1,0 +1,63 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.hubble.relay.enabled .Values.hubble.ui.enabled .Values.hubble.ui.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "cilium.hubble.ui.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.hubble.ui.frontend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: hubble-ui
+  {{- if or .Values.hubble.ui.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.hubble.ui.ingress.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.hubble.ui.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.hubble.ui.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.hubble.ui.ingress.hostname }}
+    - host: {{ .Values.hubble.ui.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.hubble.ui.ingress.extraPaths }}
+          {{- toYaml .Values.hubble.ui.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.hubble.ui.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.hubble.ui.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "cilium.hubble.ui.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.hubble.ui.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "cilium.hubble.ui.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.hubble.ui.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.hubble.ui.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.hubble.ui.ingress.annotations )) .Values.hubble.ui.ingress.selfSigned)) .Values.hubble.ui.ingress.extraTls }}
+  tls:
+    {{- if and .Values.hubble.ui.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.hubble.ui.ingress.annotations )) .Values.hubble.ui.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.hubble.ui.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.hubble.ui.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.hubble.ui.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
