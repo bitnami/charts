@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.0.1 (2024-07-09)
+
+* [bitnami/harbor] Fix typo in exporter secretKeyRef ([#27851](https://github.com/bitnami/charts/pull/27851))
+
 ## 22.0.0 (2024-07-09)
 
-* [bitnami/harbor] Add service account for Harbor resources ([#27067](https://github.com/bitnami/charts/pull/27067))
+* [bitnami/harbor] Add service account for Harbor resources (#27067) ([0f01d69](https://github.com/bitnami/charts/commit/0f01d69a6bd94fc4b3a68012fea301490c3b5e07)), closes [#27067](https://github.com/bitnami/charts/issues/27067)
 
 ## <small>21.4.7 (2024-07-03)</small>
 
