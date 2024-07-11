@@ -51,7 +51,7 @@
             "resources": {
               "path": "/.vib/dremio/cypress"
             },
-            "endpoint": "lb-dremio-http-web",
+            "endpoint": "lb-dremio-http",
             "app_protocol": "HTTP"
           }
         }

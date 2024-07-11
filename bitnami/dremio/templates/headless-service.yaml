@@ -19,7 +19,7 @@ spec:
   publishNotReadyAddresses: true
   clusterIP: None
   ports:
-    - name: http-web
+    - name: http
       port: {{ .Values.dremio.containerPorts.web }}
       targetPort: web
       protocol: TCP
