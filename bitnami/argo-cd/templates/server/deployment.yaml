@@ -169,7 +169,7 @@ spec:
               containerPort: {{ .Values.server.containerPorts.metrics }}
               protocol: TCP
           env:
-            {{- if gt .Values.server.replicaCount 1 }}
+            {{- if gt (int .Values.server.replicaCount) 1 }}
             - name: ARGOCD_API_SERVER_REPLICAS
               value: {{ .Values.server.replicaCount | quote }}
             {{- end }}
