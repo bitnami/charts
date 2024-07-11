@@ -8,6 +8,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+    api-approved.kubernetes.io: "https://github.com/kubernetes-sigs/external-dns/pull/2007"
   name: dnsendpoints.externaldns.k8s.io
 spec:
   group: externaldns.k8s.io
