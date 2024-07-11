@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.7.0 (2024-07-10)
+## 21.7.0 (2024-07-11)
 
 * [bitnami/keycloak] Add support for proxy-headers ([#27890](https://github.com/bitnami/charts/pull/27890))
 
