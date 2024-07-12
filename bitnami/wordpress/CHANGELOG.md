@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.4.20 (2024-07-11)
+## 23.0.0 (2024-07-12)
 
-* [bitnami/wordpress] Release 22.4.20 ([#27892](https://github.com/bitnami/charts/pull/27892))
+* [bitnami/wordpress] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27930](https://github.com/bitnami/charts/pull/27930))
+
+## <small>22.4.20 (2024-07-11)</small>
+
+* [bitnami/wordpress] Release 22.4.20 (#27892) ([985cf50](https://github.com/bitnami/charts/commit/985cf5095a6a3a4232f5ac752e7c391df7c61341)), closes [#27892](https://github.com/bitnami/charts/issues/27892)
 
 ## <small>22.4.19 (2024-07-08)</small>
 
