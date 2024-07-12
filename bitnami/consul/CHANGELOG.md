@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.3.7 (2024-07-11)
+## 11.3.7 (2024-07-12)
 
 * [bitnami/consul] Release 11.3.7 ([#27919](https://github.com/bitnami/charts/pull/27919))
 
