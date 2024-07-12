@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.12 (2024-07-08)
+## 3.3.13 (2024-07-12)
 
-* [bitnami/appsmith] Release 3.3.12 ([#27840](https://github.com/bitnami/charts/pull/27840))
+* [bitnami/appsmith] Release 3.3.13 ([#27950](https://github.com/bitnami/charts/pull/27950))
+
+## <small>3.3.12 (2024-07-08)</small>
+
+* [bitnami/appsmith] Release 3.3.12 (#27840) ([0ed2703](https://github.com/bitnami/charts/commit/0ed2703ba20ec6f9590ce8b6aa4df5df99cbfe96)), closes [#27840](https://github.com/bitnami/charts/issues/27840)
 
 ## <small>3.3.11 (2024-06-28)</small>
 
