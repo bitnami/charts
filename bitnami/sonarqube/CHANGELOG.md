@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.8 (2024-07-10)
+## 5.2.8 (2024-07-12)
 
 * [bitnami/sonarqube] Release 5.2.8 ([#27731](https://github.com/bitnami/charts/pull/27731))
 
