@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.2.8 (2024-07-12)
+## 5.2.9 (2024-07-12)
 
-* [bitnami/sonarqube] Release 5.2.8 ([#27731](https://github.com/bitnami/charts/pull/27731))
+* [bitnami/sonarqube] Release 5.2.9 ([#27946](https://github.com/bitnami/charts/pull/27946))
+
+## <small>5.2.8 (2024-07-12)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/sonarqube] Release 5.2.8 (#27731) ([ae56d1c](https://github.com/bitnami/charts/commit/ae56d1c5c5dcbd424faa1672adf34cf9fc7bce20)), closes [#27731](https://github.com/bitnami/charts/issues/27731)
 
 ## <small>5.2.7 (2024-06-18)</small>
 
