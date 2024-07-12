@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.3 (2024-07-08)
+## 3.3.4 (2024-07-12)
 
-* [bitnami/apisix] Correct service port name in control plane ingress ([#27839](https://github.com/bitnami/charts/pull/27839))
+* [bitnami/apisix] wait container: support self-generated certificates at etcd ([#27947](https://github.com/bitnami/charts/pull/27947))
+
+## <small>3.3.3 (2024-07-10)</small>
+
+* [bitnami/apisix] Correct service port name in control plane ingress (#27839) ([769db5e](https://github.com/bitnami/charts/commit/769db5e671e228bf2c74cc7c1b7d7b9079ff1e2a)), closes [#27839](https://github.com/bitnami/charts/issues/27839)
 
 ## <small>3.3.2 (2024-07-08)</small>
 
