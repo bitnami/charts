@@ -68,6 +68,7 @@ var _ = Describe("Contour:", func() {
 		It("contour and envoy container versions are in sync", func() {
 			var envoyVersion string
 			var contourVersion string
+			var envoyCompatibleVersion string
 
 			pods, err := coreclient.Pods(*namespace).List(ctx, metav1.ListOptions{})
 			if err != nil {
@@ -85,7 +86,14 @@ var _ = Describe("Contour:", func() {
 					}
 				}
 			}
-			Expect(contourVersion).To(Equal(envoyVersion))
+			// Compatibility Table https://projectcontour.io/resources/compatibility-matrix/
+			switch contourVersion {
+			case "1.29.1":
+				envoyCompatibleVersion = "1.30.2"
+			case "1.29.0":
+				envoyCompatibleVersion = "1.30.1"
+			}
+			Expect(envoyVersion).To(Equal(envoyCompatibleVersion))
 		})
 	})
 })
