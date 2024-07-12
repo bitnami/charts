@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.5 (2024-07-05)
+## 0.1.6 (2024-07-12)
 
-* [bitnami/dremio] Release 0.1.5 ([#27817](https://github.com/bitnami/charts/pull/27817))
+* [bitnami/dremio] Release 0.1.6 ([#27926](https://github.com/bitnami/charts/pull/27926))
+
+## <small>0.1.5 (2024-07-05)</small>
+
+* [bitnami/dremio] Release 0.1.5 (#27817) ([4358b4c](https://github.com/bitnami/charts/commit/4358b4ce5f426a7b8a27ef7abf511669e30822d7)), closes [#27817](https://github.com/bitnami/charts/issues/27817)
 
 ## <small>0.1.4 (2024-06-27)</small>
 
