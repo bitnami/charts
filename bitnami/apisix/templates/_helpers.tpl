@@ -446,7 +446,7 @@ Init container definition for waiting for the database to be ready
 
       check_etcd() {
           local -r etcd_host="${1:-?missing etcd}"
-          if curl --max-time 5 "${etcd_host}/version" | grep etcdcluster; then
+          if curl -k --max-time 5 "${etcd_host}/version" | grep etcdcluster; then
              return 0
           else
              return 1
