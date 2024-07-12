@@ -72,7 +72,7 @@ var _ = Describe("Contour:", func() {
 
 			pods, err := coreclient.Pods(*namespace).List(ctx, metav1.ListOptions{})
 			if err != nil {
-				panic(fmt.Sprintf("There was an getting the list of pods: %q", err))
+				panic(fmt.Sprintf("There was an error getting the list of pods: %q", err))
 			}
 			for _, pod := range pods.Items {
 				if strings.Contains(pod.Name, "contour-envoy") {
@@ -86,6 +86,14 @@ var _ = Describe("Contour:", func() {
 					}
 				}
 			}
+
+			if contourVersion == "" {
+				panic(fmt.Sprintf("There Contour image version could not be retrieved"))
+			}
+			if envoyVersion == "" {
+				panic(fmt.Sprintf("There Envoy image version could not be retrieved"))
+			}
+
 			// Compatibility Table https://projectcontour.io/resources/compatibility-matrix/
 			switch contourVersion {
 			case "1.29.1":
