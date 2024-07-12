@@ -19,7 +19,28 @@ import (
 
 	// For client auth plugins
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
+
+	// To parse matrix compatibility yaml
+	"gopkg.in/yaml.v3"
 )
+
+type compatibilityMatrix struct {
+	Metadata struct {
+		Name        string
+		Description string
+		Website     string
+		Repository  string
+	}
+	Versions []struct {
+		Version      string
+		Supported    string
+		Dependencies struct {
+			Envoy      string
+			Kubernetes []string
+			Gateway    []string
+		}
+	}
+}
 
 var _ = Describe("Contour:", func() {
 	var netclient netcv1.NetworkingV1Interface
@@ -66,9 +87,10 @@ var _ = Describe("Contour:", func() {
 			Expect(containsString(responseBody, "It works")).To(BeTrue())
 		})
 		It("contour and envoy container versions are in sync", func() {
-			var envoyVersion string
-			var contourVersion string
-			var envoyCompatibleVersion string
+			var envoyPodVersion string
+			var contourPodVersion string
+			var envoyCompatibleVersion bool = false
+			var contourVersionFound bool = false
 
 			pods, err := coreclient.Pods(*namespace).List(ctx, metav1.ListOptions{})
 			if err != nil {
@@ -79,29 +101,47 @@ var _ = Describe("Contour:", func() {
 					for _, container := range pod.Spec.Containers {
 						switch container.Name {
 						case "shutdown-manager":
-							contourVersion = getImageVersion(container.Image)
+							contourPodVersion = getImageVersion(container.Image)
 						case "envoy":
-							envoyVersion = getImageVersion(container.Image)
+							envoyPodVersion = getImageVersion(container.Image)
 						}
 					}
 				}
 			}
 
-			if contourVersion == "" {
+			if contourPodVersion == "" {
 				panic(fmt.Sprintf("There Contour image version could not be retrieved"))
 			}
-			if envoyVersion == "" {
+			if envoyPodVersion == "" {
 				panic(fmt.Sprintf("There Envoy image version could not be retrieved"))
 			}
 
 			// Compatibility Table https://projectcontour.io/resources/compatibility-matrix/
-			switch contourVersion {
-			case "1.29.1":
-				envoyCompatibleVersion = "1.30.2"
-			case "1.29.0":
-				envoyCompatibleVersion = "1.30.1"
+			body, err := getBodyOrDie("https://raw.githubusercontent.com/projectcontour/contour/main/versions.yaml")
+			if err != nil {
+				panic(fmt.Sprintf("Error when retriving compatibility matrix"))
 			}
-			Expect(envoyVersion).To(Equal(envoyCompatibleVersion))
+
+			compatibilityMatrixSRC := compatibilityMatrix{}
+
+			err = yaml.Unmarshal([]byte(body), &compatibilityMatrixSRC)
+			if err != nil {
+				panic(fmt.Sprintf("Error when parsing compatibility matrix yaml"))
+			}
+
+			// Look for the versions in the compatibility
+			for _, contourVersion := range compatibilityMatrixSRC.Versions {
+				if contourVersion.Version == ("v" + contourPodVersion) {
+					contourVersionFound = true
+					if contourVersion.Dependencies.Envoy == envoyPodVersion {
+						envoyCompatibleVersion = true
+					}
+				}
+			}
+			if !contourVersionFound {
+				panic(fmt.Sprintf("Error the contour version was not found in the compatibility matrix"))
+			}
+			Expect(envoyCompatibleVersion).To(BeTrue())
 		})
 	})
 })

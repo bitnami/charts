@@ -153,3 +153,26 @@ func TestIntegration(t *testing.T) {
 	CheckRequirements()
 	RunSpecs(t, fmt.Sprintf("%s Integration Tests", APP_NAME))
 }
+
+func getBodyOrDie(address string) (string, error) {
+	var output string
+	var client http.Client
+
+	resp, err := client.Get(address)
+	if err != nil {
+		panic(fmt.Sprintf("There was an error during the GET request: %q", err))
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		// Read the response body
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return "", err
+		}
+
+		// Convert the body to a string
+		output = string(body)
+	}
+	return output, nil
+}
