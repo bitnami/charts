@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.1 (2024-07-09)
+## 22.0.2 (2024-07-12)
 
-* [bitnami/harbor] Fix typo in exporter secretKeyRef ([#27851](https://github.com/bitnami/charts/pull/27851))
+* [bitnami/harbor] initContainer for certificate vol ([#27753](https://github.com/bitnami/charts/pull/27753))
+
+## <small>22.0.1 (2024-07-11)</small>
+
+* [bitnami/harbor] Fix typo in exporter secretKeyRef (#27851) ([56b64a0](https://github.com/bitnami/charts/commit/56b64a06a06b253bfc49746369eb62596614fd6a)), closes [#27851](https://github.com/bitnami/charts/issues/27851)
 
 ## 22.0.0 (2024-07-09)
 
