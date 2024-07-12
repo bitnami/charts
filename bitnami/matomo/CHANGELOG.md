@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.3.7 (2024-07-03)
+## 7.3.8 (2024-07-12)
 
-* [bitnami/matomo] Release 7.3.7 ([#27700](https://github.com/bitnami/charts/pull/27700))
+* [bitnami/matomo] Fix customCAs usage ([#27938](https://github.com/bitnami/charts/pull/27938))
+
+## <small>7.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/matomo] Release 7.3.7 (#27700) ([a6d7406](https://github.com/bitnami/charts/commit/a6d74060931be3c6f2944bfacc2f397a9220b75c)), closes [#27700](https://github.com/bitnami/charts/issues/27700)
 
 ## <small>7.3.6 (2024-06-19)</small>
 
