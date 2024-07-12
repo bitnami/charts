@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.2.2 (2024-07-11)
+## 8.2.2 (2024-07-12)
 
 * [bitnami/external-dns] add revisionHistoryLimit value ([#27913](https://github.com/bitnami/charts/pull/27913))
 
