@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.8 (2024-07-10)
+## 2.3.9 (2024-07-12)
 
-* [bitnami/fluent-bit] Release 2.3.8 ([#27883](https://github.com/bitnami/charts/pull/27883))
+* [bitnami/fluent-bit] Release 2.3.9 ([#27923](https://github.com/bitnami/charts/pull/27923))
+
+## <small>2.3.8 (2024-07-10)</small>
+
+* [bitnami/fluent-bit] Release 2.3.8 (#27883) ([bc8e1bd](https://github.com/bitnami/charts/commit/bc8e1bd604da1ca6466dc0e978e38afbd83c25f8)), closes [#27883](https://github.com/bitnami/charts/issues/27883)
 
 ## <small>2.3.7 (2024-07-08)</small>
 
