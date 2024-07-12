@@ -84,6 +84,11 @@ func getResponseBodyOrDie(ctx context.Context, address string) []string {
 	return output
 }
 
+func getImageVersion(imageName string) string {
+	version := strings.SplitN(strings.SplitN(imageName, ":", 2)[1], "-", 2)[0]
+	return version
+}
+
 type interruptableReader struct {
 	ctx context.Context
 	r   io.Reader

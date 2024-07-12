@@ -6,6 +6,7 @@ package integration
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -63,6 +64,28 @@ var _ = Describe("Contour:", func() {
 			responseBody := getResponseBodyOrDie(ctx, "http://"+ingressHost)
 
 			Expect(containsString(responseBody, "It works")).To(BeTrue())
+		})
+		It("contour and envoy container versions are in sync", func() {
+			var envoyVersion string
+			var contourVersion string
+
+			pods, err := coreclient.Pods(*namespace).List(ctx, metav1.ListOptions{})
+			if err != nil {
+				panic(fmt.Sprintf("There was an getting the list of pods: %q", err))
+			}
+			for _, pod := range pods.Items {
+				if strings.Contains(pod.Name, "contour-envoy") {
+					for _, container := range pod.Spec.Containers {
+						switch container.Name {
+						case "shutdown-manager":
+							contourVersion = getImageVersion(container.Image)
+						case "envoy":
+							envoyVersion = getImageVersion(container.Image)
+						}
+					}
+				}
+			}
+			Expect(contourVersion).To(Equal(envoyVersion))
 		})
 	})
 })
