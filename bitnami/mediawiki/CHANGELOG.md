@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.9 (2024-07-04)
+## 21.0.0 (2024-07-12)
 
-* [bitnami/mediawiki] Release 20.2.9 ([#27773](https://github.com/bitnami/charts/pull/27773))
+* [bitnami/mediawiki] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27941](https://github.com/bitnami/charts/pull/27941))
+
+## <small>20.2.9 (2024-07-04)</small>
+
+* [bitnami/mediawiki] Release 20.2.9 (#27773) ([47016a7](https://github.com/bitnami/charts/commit/47016a7ba791cafcec08e0c3806fefe227c872a9)), closes [#27773](https://github.com/bitnami/charts/issues/27773)
 
 ## <small>20.2.8 (2024-07-03)</small>
 
