@@ -1,8 +1,18 @@
 # Changelog
 
-## 21.2.9 (2024-07-11)
+
+## 21.3.2 (2024-07-12)
 
 * [bitnami/elasticsearch] fix: Unable to run the image using the root user ([#27491](https://github.com/bitnami/charts/pull/27491))
+=======
+## 21.3.1 (2024-07-11)
+
+* [bitnami/elasticsearch] Release 21.3.1 ([#27906](https://github.com/bitnami/charts/pull/27906))
+
+## 21.3.0 (2024-07-11)
+
+* [bitnami/elasticsearch] add persistentVolumeClaimRetentionPolicy to statefulset for master and data  ([2c4b4f2](https://github.com/bitnami/charts/commit/2c4b4f22acb66a3bd6712935d713a2f0d84eee27)), closes [#27866](https://github.com/bitnami/charts/issues/27866)
+
 
 ## <small>21.2.8 (2024-07-04)</small>
 
