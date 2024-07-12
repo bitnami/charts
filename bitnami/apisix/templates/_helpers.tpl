@@ -447,7 +447,7 @@ Init container definition for waiting for the database to be ready
       check_etcd() {
           local curl_options=()
           {{- if and .Values.etcd.auth.client.secureTransport .Values.etcd.auth.client.useAutoTLS }}
-          curl_options=("--insecure")
+          curl_options=("--insecure" ${curl_options[*]})
           {{- end }}
 
           local -r etcd_host="${1:-?missing etcd}"
