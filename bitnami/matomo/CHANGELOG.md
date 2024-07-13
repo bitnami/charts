@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.3.8 (2024-07-12)
+## 8.0.0 (2024-07-13)
 
-* [bitnami/matomo] Fix customCAs usage ([#27938](https://github.com/bitnami/charts/pull/27938))
+* [bitnami/matomo] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27943](https://github.com/bitnami/charts/pull/27943))
+
+## <small>7.3.8 (2024-07-12)</small>
+
+* [bitnami/matomo] Fix customCAs usage (#27938) ([91b7632](https://github.com/bitnami/charts/commit/91b763201c8bfff5722071c1d461e2c853407620)), closes [#27938](https://github.com/bitnami/charts/issues/27938)
 
 ## <small>7.3.7 (2024-07-03)</small>
 
