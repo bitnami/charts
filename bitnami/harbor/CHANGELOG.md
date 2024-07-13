@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.2 (2024-07-12)
+## 22.0.3 (2024-07-13)
 
-* [bitnami/harbor] initContainer for certificate vol ([#27753](https://github.com/bitnami/charts/pull/27753))
+* [bitnami/harbor] Remove duplicated security context ([#27955](https://github.com/bitnami/charts/pull/27955))
+
+## <small>22.0.2 (2024-07-12)</small>
+
+* [bitnami/harbor] initContainer for certificate vol (#27753) ([e924679](https://github.com/bitnami/charts/commit/e924679c363b1c2b2df6e602a691a6d9624c9391)), closes [#27753](https://github.com/bitnami/charts/issues/27753)
 
 ## <small>22.0.1 (2024-07-11)</small>
 
