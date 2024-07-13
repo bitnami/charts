@@ -17,7 +17,7 @@ dependencies:
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - mediawiki-database
-  version: 18.x.x
+  version: 19.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -39,4 +39,4 @@ maintainers:
 name: mediawiki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mediawiki
-version: 20.2.9
+version: 21.0.0
