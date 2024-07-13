@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.4.5 (2024-07-04)
+## 1.0.0 (2024-07-12)
 
-* [bitnami/seaweedfs] Release 0.4.5 ([#27793](https://github.com/bitnami/charts/pull/27793))
+* [bitnami/seaweedfs] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27937](https://github.com/bitnami/charts/pull/27937))
+
+## <small>0.4.5 (2024-07-04)</small>
+
+* [bitnami/seaweedfs] Release 0.4.5 (#27793) ([f38eab0](https://github.com/bitnami/charts/commit/f38eab0be837bead6abc9e75085241ac0eeb4b23)), closes [#27793](https://github.com/bitnami/charts/issues/27793)
 
 ## <small>0.4.4 (2024-07-03)</small>
 
