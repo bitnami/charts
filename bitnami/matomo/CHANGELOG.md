@@ -4,6 +4,10 @@
 
 * [bitnami/matomo] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27943](https://github.com/bitnami/charts/pull/27943))
 
+## <small>7.3.8 (2024-07-12)</small>
+
+* [bitnami/matomo] Fix customCAs usage ([#27938](https://github.com/bitnami/charts/pull/27938))
+
 ## <small>7.3.7 (2024-07-03)</small>
 
 * [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)

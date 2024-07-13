@@ -1,8 +1,13 @@
 # Changelog
 
-## 18.2.8 (2024-07-03)
+## 19.0.0 (2024-07-12)
 
-* [bitnami/phpbb] Release 18.2.8 ([#27710](https://github.com/bitnami/charts/pull/27710))
+* [bitnami/phpbb] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27929](https://github.com/bitnami/charts/pull/27929))
+
+## <small>18.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/phpbb] Release 18.2.8 (#27710) ([2a714b6](https://github.com/bitnami/charts/commit/2a714b6970842c734b2a469e5d265c02c03f8588)), closes [#27710](https://github.com/bitnami/charts/issues/27710)
 
 ## <small>18.2.7 (2024-06-18)</small>
 
