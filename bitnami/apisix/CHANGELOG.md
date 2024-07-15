@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.3.4 (2024-07-12)
+## 3.3.4 (2024-07-15)
 
 * [bitnami/apisix] wait container: support self-generated certificates at etcd ([#27947](https://github.com/bitnami/charts/pull/27947))
 
