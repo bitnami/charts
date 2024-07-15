@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.0 (2024-07-11)
+## 6.6.1 (2024-07-15)
 
-* [bitnami/argo-cd] Make it possible to run ArgoCD in HA mode ([#27585](https://github.com/bitnami/charts/pull/27585))
+* [bitnami/argo-cd] Release 6.6.1 ([#27987](https://github.com/bitnami/charts/pull/27987))
+
+## 6.6.0 (2024-07-12)
+
+* [bitnami/argo-cd] Make it possible to run ArgoCD in HA mode (#27585) ([8d231f8](https://github.com/bitnami/charts/commit/8d231f86e78a6ad07b5f588a0eedebf7c21d0f9b)), closes [#27585](https://github.com/bitnami/charts/issues/27585)
 
 ## <small>6.5.8 (2024-07-08)</small>
 
