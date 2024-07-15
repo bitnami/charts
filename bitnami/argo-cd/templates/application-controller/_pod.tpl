@@ -8,7 +8,7 @@ Pod Spec
 */}}
 {{- define "argocd.pod" -}}
 serviceAccountName: {{ include "argocd.application-controller.serviceAccountName" . }}
-{{- include "argocd.imagePullSecrets" . | nindent 6 }}
+{{ include "argocd.imagePullSecrets" . }}
 automountServiceAccountToken: {{ .Values.controller.automountServiceAccountToken }}
 {{- if .Values.controller.hostAliases }}
 hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controller.hostAliases "context" $) | nindent 2 }}
