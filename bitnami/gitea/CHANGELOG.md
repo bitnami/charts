@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.11 (2024-07-05)
+## 2.3.12 (2024-07-15)
 
-* [bitnami/gitea] Release 2.3.11 ([#27810](https://github.com/bitnami/charts/pull/27810))
+* [bitnami/gitea] Release 2.3.12 ([#27964](https://github.com/bitnami/charts/pull/27964))
+
+## <small>2.3.11 (2024-07-05)</small>
+
+* [bitnami/gitea] Release 2.3.11 (#27810) ([f792844](https://github.com/bitnami/charts/commit/f7928444d215f77f582b06dd8b0cce317d538992)), closes [#27810](https://github.com/bitnami/charts/issues/27810)
 
 ## <small>2.3.10 (2024-07-04)</small>
 
