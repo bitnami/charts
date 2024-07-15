@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.6.1 (2024-07-10)
+## 21.6.2 (2024-07-15)
 
-* [bitnami/keycloak] fix conditions for KC_HOSTNAME_URL ([#27867](https://github.com/bitnami/charts/pull/27867))
+* [bitnami/keycloak] Release 21.6.2 ([#27972](https://github.com/bitnami/charts/pull/27972))
+
+## <small>21.6.1 (2024-07-11)</small>
+
+* [bitnami/keycloak] fix conditions for KC_HOSTNAME_URL (#27867) ([687d228](https://github.com/bitnami/charts/commit/687d2283b5806ab91a85b085f2477c68fbe4f260)), closes [#27867](https://github.com/bitnami/charts/issues/27867)
 
 ## 21.6.0 (2024-07-09)
 
