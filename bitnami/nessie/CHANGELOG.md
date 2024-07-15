@@ -1,8 +1,21 @@
 # Changelog
 
-## 0.1.13 (2024-06-24)
+## 0.1.16 (2024-07-13)
 
-* [bitnami/nessie] Release 0.1.13 ([#27519](https://github.com/bitnami/charts/pull/27519))
+* [bitnami/nessie] Release 0.1.16 ([#27958](https://github.com/bitnami/charts/pull/27958))
+
+## <small>0.1.15 (2024-07-11)</small>
+
+* [bitnami/nessie] Release 0.1.15 (#27910) ([2a01142](https://github.com/bitnami/charts/commit/2a01142eca54e7974cc12aebb2272c8e3496922d)), closes [#27910](https://github.com/bitnami/charts/issues/27910)
+
+## <small>0.1.14 (2024-06-28)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/nessie] Release 0.1.14 (#27584) ([614604a](https://github.com/bitnami/charts/commit/614604a74713ce7c0a99b3aa0b31b6f0d9fcbcf9)), closes [#27584](https://github.com/bitnami/charts/issues/27584)
+
+## <small>0.1.13 (2024-06-24)</small>
+
+* [bitnami/nessie] Release 0.1.13 (#27519) ([7c9905d](https://github.com/bitnami/charts/commit/7c9905d3182cdb95ec6ca8fb538b96f00a57d86e)), closes [#27519](https://github.com/bitnami/charts/issues/27519)
 
 ## <small>0.1.12 (2024-06-22)</small>
 

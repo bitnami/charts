@@ -1,8 +1,17 @@
 # Changelog
 
-## 7.2.6 (2024-06-18)
+## 7.2.8 (2024-07-04)
 
-* [bitnami/metrics-server] Release 7.2.6 ([#27379](https://github.com/bitnami/charts/pull/27379))
+* [bitnami/metrics-server] Release 7.2.8 ([#27769](https://github.com/bitnami/charts/pull/27769))
+
+## <small>7.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/metrics-server] Release 7.2.7 (#27663) ([89ef5fb](https://github.com/bitnami/charts/commit/89ef5fb8e775de698a05904e079dce830e2b6e7b)), closes [#27663](https://github.com/bitnami/charts/issues/27663)
+
+## <small>7.2.6 (2024-06-18)</small>
+
+* [bitnami/metrics-server] Release 7.2.6 (#27379) ([bab2fc9](https://github.com/bitnami/charts/commit/bab2fc9db5d4b767c09fc62c53b2ec340afc34d6)), closes [#27379](https://github.com/bitnami/charts/issues/27379)
 
 ## <small>7.2.5 (2024-06-17)</small>
 

@@ -1,8 +1,25 @@
 # Changelog
 
-## 21.4.6 (2024-06-18)
+## 22.0.2 (2024-07-12)
 
-* [bitnami/harbor] Release 21.4.6 ([#27355](https://github.com/bitnami/charts/pull/27355))
+* [bitnami/harbor] initContainer for certificate vol ([#27753](https://github.com/bitnami/charts/pull/27753))
+
+## <small>22.0.1 (2024-07-11)</small>
+
+* [bitnami/harbor] Fix typo in exporter secretKeyRef (#27851) ([56b64a0](https://github.com/bitnami/charts/commit/56b64a06a06b253bfc49746369eb62596614fd6a)), closes [#27851](https://github.com/bitnami/charts/issues/27851)
+
+## 22.0.0 (2024-07-09)
+
+* [bitnami/harbor] Add service account for Harbor resources (#27067) ([0f01d69](https://github.com/bitnami/charts/commit/0f01d69a6bd94fc4b3a68012fea301490c3b5e07)), closes [#27067](https://github.com/bitnami/charts/issues/27067)
+
+## <small>21.4.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/harbor] Release 21.4.7 (#27691) ([6b5d149](https://github.com/bitnami/charts/commit/6b5d14984d42ec77ecb495e82be4fe40a6f16f91)), closes [#27691](https://github.com/bitnami/charts/issues/27691)
+
+## <small>21.4.6 (2024-06-18)</small>
+
+* [bitnami/harbor] Release 21.4.6 (#27355) ([9867f13](https://github.com/bitnami/charts/commit/9867f138b7a9597f772510d0996818776fb5c079)), closes [#27355](https://github.com/bitnami/charts/issues/27355)
 
 ## <small>21.4.5 (2024-06-17)</small>
 

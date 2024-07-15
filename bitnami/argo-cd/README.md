@@ -174,6 +174,65 @@ extraDeploy:
         (...)
 ```
 
+### Allowing multi namespace tendancy
+
+In case you would like to allow applications / application sets in multiple namespaces, you can use the following to configure Argo-CD.
+
+Upstream docs:
+
+- [Reconfigure Argo CD to allow certain namespaces for apps](https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#reconfigure-argo-cd-to-allow-certain-namespaces)
+- [Reconfigure Argo CD to allow certain namespaces for appset](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#change-workload-startup-parameters)
+
+```yaml
+controller:
+  # Default is true
+  clusterAdminAccess: true
+  extraArgs:
+  # Refer to documentation to allow specific namespaces:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#change-workload-startup-parameters
+  - --application-namespaces=*
+  # Refer to documentation if you are enabling notifications
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/#namespace-based-configuration
+  - --self-service-notification-enabled
+
+server:
+  # Default is true
+  clusterAdminAccess: true
+  # Refer to recommended documentation for config:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/#switch-resource-tracking-method
+  config:
+    application.resourceTrackingMethod: annotation
+
+repoServer:
+  # Default is false
+  clusterAdminAccess: true
+
+notifications:
+  # Enable if you would like notifications to be used, default false
+  enabled: true
+  # Default is false
+  clusterAdminAccess: true
+
+applicationSet:
+  # Enable if you would like applicationSets to be used, default false
+  enabled: true
+  # Default is false
+  clusterAdminAccess: true
+
+  # Refer to documentation for SCM providers:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#scm-providers-secrets-consideration
+  extraEnv:
+  - name: ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_SCM_PROVIDERS
+    value: true
+  - name: ARGOCD_APPLICATIONSET_CONTROLLER_ALLOWED_SCM_PROVIDERS
+    value: https://git.mydomain.com/,https://gitlab.mydomain.com/
+
+  # Refer to documentation to allow specific namespaces:
+  # https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/#change-workload-startup-parameters
+  extraArgs:
+  - --applicationset-namespaces=*
+```
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
@@ -271,6 +330,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 | Name                                                           | Description                                                                                                                                                                                                                             | Value            |
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `controller.kind`                                              | Kind to deploy ArgoCD application controller in.                                                                                                                                                                                        | `Deployment`     |
 | `controller.replicaCount`                                      | Number of Argo CD replicas to deploy                                                                                                                                                                                                    | `1`              |
 | `controller.startupProbe.enabled`                              | Enable startupProbe on Argo CD nodes                                                                                                                                                                                                    | `false`          |
 | `controller.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                                                  | `10`             |
@@ -370,6 +430,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `controller.defaultArgs.selfHealTimeout`                       | Default self heal timeout for Argo CD controller                                                                                                                                                                                        | `5`              |
 | `controller.args`                                              | Override default container args (useful when using custom images). Overrides the defaultArgs.                                                                                                                                           | `[]`             |
 | `controller.extraArgs`                                         | Add extra arguments to the default arguments for the Argo CD controller                                                                                                                                                                 | `[]`             |
+| `controller.dynamicClusterDistribution.enabled`                | Whether dynamic cluster distribution is enabled.                                                                                                                                                                                        | `false`          |
+| `controller.dynamicClusterDistribution.heartbeatDuration`      | Time to update the cluster sharding (defaults to 10 seconds).                                                                                                                                                                           | `""`             |
 | `controller.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                      | `true`           |
 | `controller.hostAliases`                                       | Argo CD pods host aliases                                                                                                                                                                                                               | `[]`             |
 | `controller.podLabels`                                         | Extra labels for Argo CD pods                                                                                                                                                                                                           | `{}`             |
@@ -389,6 +451,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `controller.priorityClassName`                                 | Argo CD pods' priorityClassName                                                                                                                                                                                                         | `""`             |
 | `controller.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                                                                                                                                                          | `""`             |
 | `controller.lifecycleHooks`                                    | for the Argo CD container(s) to automate configuration before or after startup                                                                                                                                                          | `{}`             |
+| `controller.podManagementPolicy`                               | podManagementPolicy to manage scaling operation of pods (only in StatefulSet mode)                                                                                                                                                      | `""`             |
 | `controller.extraEnvVars`                                      | Array with extra environment variables to add to Argo CD nodes                                                                                                                                                                          | `[]`             |
 | `controller.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Argo CD nodes                                                                                                                                                                  | `""`             |
 | `controller.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Argo CD nodes                                                                                                                                                                     | `""`             |
@@ -460,6 +523,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `applicationSet.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                                                          | `""`             |
 | `applicationSet.serviceAccount.automountServiceAccountToken`       | Automount service account token for the applicationSet controller service account                                                                                                                                                               | `false`          |
 | `applicationSet.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                                      | `{}`             |
+| `applicationSet.clusterAdminAccess`                                | Enable K8s cluster admin access for the application controller                                                                                                                                                                                  | `false`          |
+| `applicationSet.clusterRoleRules`                                  | Use custom rules for Argo CD applicationSet controller's cluster role                                                                                                                                                                           | `[]`             |
 | `applicationSet.podAffinityPreset`                                 | Pod affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                              | `""`             |
 | `applicationSet.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                         | `soft`           |
 | `applicationSet.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                        | `""`             |
@@ -567,6 +632,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `notifications.serviceAccount.name`                                          | The name of the ServiceAccount to use.                                                                                                                                                                                                                              | `""`             |
 | `notifications.serviceAccount.automountServiceAccountToken`                  | Automount service account token for the notifications controller service account                                                                                                                                                                                    | `false`          |
 | `notifications.serviceAccount.annotations`                                   | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                                                          | `{}`             |
+| `notifications.clusterAdminAccess`                                           | Enable K8s cluster admin access for the notifications controller                                                                                                                                                                                                    | `false`          |
+| `notifications.clusterRoleRules`                                             | Use custom rules for notifications controller's cluster role                                                                                                                                                                                                        | `[]`             |
 | `notifications.podAffinityPreset`                                            | Pod affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                   | `""`             |
 | `notifications.podAntiAffinityPreset`                                        | Pod anti-affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                              | `soft`           |
 | `notifications.nodeAffinityPreset.type`                                      | Node affinity preset type. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                             | `""`             |
@@ -877,6 +944,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `server.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                                          | `""`                     |
 | `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                  | `false`                  |
 | `server.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                      | `{}`                     |
+| `server.clusterAdminAccess`                                | Enable K8s cluster admin access for the server                                                                                                                                                                                  | `true`                   |
+| `server.clusterRoleRules`                                  | Use custom rules for server's cluster role                                                                                                                                                                                      | `[]`                     |
 | `server.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                 | `true`                   |
 | `server.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `""`                     |
 | `server.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.                                                                    | `""`                     |
@@ -976,6 +1045,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `repoServer.serviceAccount.name`                               | The name of the ServiceAccount for repo server to use.                                                                                                                                                                                  | `""`             |
 | `repoServer.serviceAccount.automountServiceAccountToken`       | Automount service account token for the repo server service account                                                                                                                                                                     | `false`          |
 | `repoServer.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                              | `{}`             |
+| `repoServer.clusterAdminAccess`                                | Enable K8s cluster admin access for the repo server                                                                                                                                                                                     | `false`          |
+| `repoServer.clusterRoleRules`                                  | Use custom rules for repo server's cluster role                                                                                                                                                                                         | `[]`             |
 | `repoServer.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                    | `[]`             |
 | `repoServer.args`                                              | Override default container args (useful when using custom images)                                                                                                                                                                       | `[]`             |
 | `repoServer.extraArgs`                                         | Add extra args to the default repo server args                                                                                                                                                                                          | `[]`             |
