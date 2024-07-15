@@ -1,8 +1,21 @@
 # Changelog
 
-## 18.2.4 (2024-06-18)
+## 19.0.0 (2024-07-11)
 
-* [bitnami/mariadb] Release 18.2.4 ([#27375](https://github.com/bitnami/charts/pull/27375))
+* [bitnami/mariadb] Release 19.0.0 ([#27901](https://github.com/bitnami/charts/pull/27901))
+
+## <small>18.2.6 (2024-07-02)</small>
+
+* [bitnami/mariadb] Release 18.2.6 (#27638) ([9822f43](https://github.com/bitnami/charts/commit/9822f43757bbf85d48db29c9e0c39ae4825e436b)), closes [#27638](https://github.com/bitnami/charts/issues/27638)
+
+## <small>18.2.5 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mariadb] Release 18.2.5 (#27619) ([41836cc](https://github.com/bitnami/charts/commit/41836ccc60bd99a45185b0e33e2ca5970867e886)), closes [#27619](https://github.com/bitnami/charts/issues/27619)
+
+## <small>18.2.4 (2024-06-18)</small>
+
+* [bitnami/mariadb] Release 18.2.4 (#27375) ([fcac2b3](https://github.com/bitnami/charts/commit/fcac2b33f4bb90c19932b4eec6636fc4b3c10cdc)), closes [#27375](https://github.com/bitnami/charts/issues/27375)
 
 ## <small>18.2.3 (2024-06-17)</small>
 

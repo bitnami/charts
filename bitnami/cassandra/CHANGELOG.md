@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.3.3 (2024-06-18)
+## 11.3.5 (2024-07-12)
 
-* [bitnami/cassandra] Release 11.3.3 ([#27327](https://github.com/bitnami/charts/pull/27327))
+* [bitnami/cassandra] Release 11.3.5 ([#27932](https://github.com/bitnami/charts/pull/27932))
+
+## <small>11.3.4 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/cassandra] Release 11.3.4 (#27687) ([7d04f02](https://github.com/bitnami/charts/commit/7d04f020dd9e7c697dcc3433234ebf98be704377)), closes [#27687](https://github.com/bitnami/charts/issues/27687)
+
+## <small>11.3.3 (2024-06-18)</small>
+
+* [bitnami/cassandra] Release 11.3.3 (#27327) ([0500e6c](https://github.com/bitnami/charts/commit/0500e6ce6acbefcb6093f7cf04de1821a3b42971)), closes [#27327](https://github.com/bitnami/charts/issues/27327)
 
 ## <small>11.3.2 (2024-06-17)</small>
 

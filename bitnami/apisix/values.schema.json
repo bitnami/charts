@@ -49,7 +49,7 @@
             "default": {}
         },
         "commonAnnotations": {
-            "type": "object",
+            "type": ["object", "string"],
             "description": "Annotations to add to all deployed objects",
             "default": {}
         },
@@ -73,7 +73,7 @@
                     "default": false
                 },
                 "command": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Command to override all containers in the deployment",
                     "default": [
                         "sleep"
@@ -83,7 +83,7 @@
                     }
                 },
                 "args": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Args to override all containers in the deployment",
                     "default": [
                         "infinity"
@@ -289,17 +289,17 @@
                     }
                 },
                 "customLivenessProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom livenessProbe that overrides the default one",
                     "default": {}
                 },
                 "customReadinessProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom readinessProbe that overrides the default one",
                     "default": {}
                 },
                 "customStartupProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
@@ -389,19 +389,19 @@
                     }
                 },
                 "command": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Override default container command (useful when using custom images)",
                     "default": [],
                     "items": {}
                 },
                 "args": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Override default container args (useful when using custom images)",
                     "default": [],
                     "items": {}
                 },
                 "hostAliases": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "APISIX pods host aliases",
                     "default": [],
                     "items": {}
@@ -477,7 +477,7 @@
                     "default": {}
                 },
                 "podAnnotations": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Annotations for APISIX pods",
                     "default": {}
                 },
@@ -500,12 +500,12 @@
                             "default": false
                         },
                         "minAvailable": {
-                            "type": [ "number", "string" ],
+                            "type": ["number", "string"],
                             "description": "Minimum number/percentage of pods that should remain scheduled",
                             "default": 1
                         },
                         "maxUnavailable": {
-                            "type": [ "number", "string" ],
+                            "type": ["number", "string"],
                             "description": "Maximum number/percentage of pods that may be made unavailable",
                             "default": ""
                         }
@@ -533,17 +533,17 @@
                     }
                 },
                 "affinity": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Affinity for APISIX pods assignment",
                     "default": {}
                 },
                 "nodeSelector": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Node labels for APISIX pods assignment",
                     "default": {}
                 },
                 "tolerations": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Tolerations for APISIX pods assignment",
                     "default": [],
                     "items": {}
@@ -564,7 +564,7 @@
                     "default": ""
                 },
                 "topologySpreadConstraints": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
                     "default": [],
                     "items": {}
@@ -580,12 +580,12 @@
                     "default": ""
                 },
                 "lifecycleHooks": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "for the APISIX container(s) to automate configuration before or after startup",
                     "default": {}
                 },
                 "extraEnvVars": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Array with extra environment variables to add to APISIX nodes",
                     "default": [],
                     "items": {}
@@ -601,25 +601,25 @@
                     "default": ""
                 },
                 "extraVolumes": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Optionally specify extra list of additional volumes for the APISIX pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "extraVolumeMounts": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Optionally specify extra list of additional volumeMounts for the APISIX container(s)",
                     "default": [],
                     "items": {}
                 },
                 "sidecars": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Add additional sidecar containers to the APISIX pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "initContainers": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Add additional init containers to the APISIX pod(s)",
                     "default": [],
                     "items": {}
@@ -699,7 +699,7 @@
                             "default": {}
                         },
                         "extraPorts": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Extra ports to expose in APISIX service (normally used with the `sidecars` value)",
                             "default": [],
                             "items": {}
@@ -710,7 +710,7 @@
                             "default": "None"
                         },
                         "sessionAffinityConfig": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "description": "Additional settings for the sessionAffinity",
                             "default": {}
                         }
@@ -777,7 +777,7 @@
                             "items": {}
                         },
                         "extraTls": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
                             "default": [],
                             "items": {}
@@ -789,7 +789,7 @@
                             "items": {}
                         },
                         "extraRules": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Additional rules to be covered with this ingress record",
                             "default": [],
                             "items": {}
@@ -881,7 +881,7 @@
                             "default": true
                         },
                         "rules": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Custom RBAC rules to set",
                             "default": [],
                             "items": {}
@@ -922,7 +922,7 @@
                             "default": false
                         },
                         "annotations": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "properties": {
                                 "prometheus": {
                                     "type": "object",
@@ -990,19 +990,19 @@
                                     "default": ""
                                 },
                                 "metricRelabelings": {
-                                    "type": "array",
+                                    "type": ["array", "string"],
                                     "description": "Specify additional relabeling of metrics",
                                     "default": [],
                                     "items": {}
                                 },
                                 "relabelings": {
-                                    "type": "array",
+                                    "type": ["array", "string"],
                                     "description": "Specify general relabeling",
                                     "default": [],
                                     "items": {}
                                 },
                                 "selector": {
-                                    "type": "object",
+                                    "type": ["object", "string"],
                                     "description": "Prometheus instance selector labels",
                                     "default": {}
                                 }
@@ -1166,17 +1166,17 @@
                     }
                 },
                 "customLivenessProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom livenessProbe that overrides the default one",
                     "default": {}
                 },
                 "customReadinessProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom readinessProbe that overrides the default one",
                     "default": {}
                 },
                 "customStartupProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
@@ -1266,19 +1266,19 @@
                     }
                 },
                 "command": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Override default container command (useful when using custom images)",
                     "default": [],
                     "items": {}
                 },
                 "args": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Override default container args (useful when using custom images)",
                     "default": [],
                     "items": {}
                 },
                 "hostAliases": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "APISIX pods host aliases",
                     "default": [],
                     "items": {}
@@ -1379,7 +1379,7 @@
                     "default": {}
                 },
                 "podAnnotations": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Annotations for APISIX pods",
                     "default": {}
                 },
@@ -1402,12 +1402,12 @@
                             "default": false
                         },
                         "minAvailable": {
-                            "type": [ "number", "string" ],
+                            "type": ["number", "string"],
                             "description": "Minimum number/percentage of pods that should remain scheduled",
                             "default": 1
                         },
                         "maxUnavailable": {
-                            "type": [ "number", "string" ],
+                            "type": ["number", "string"],
                             "description": "Maximum number/percentage of pods that may be made unavailable",
                             "default": ""
                         }
@@ -1435,17 +1435,17 @@
                     }
                 },
                 "affinity": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Affinity for APISIX pods assignment",
                     "default": {}
                 },
                 "nodeSelector": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Node labels for APISIX pods assignment",
                     "default": {}
                 },
                 "tolerations": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Tolerations for APISIX pods assignment",
                     "default": [],
                     "items": {}
@@ -1466,7 +1466,7 @@
                     "default": ""
                 },
                 "topologySpreadConstraints": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
                     "default": [],
                     "items": {}
@@ -1482,12 +1482,12 @@
                     "default": ""
                 },
                 "lifecycleHooks": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "for the APISIX container(s) to automate configuration before or after startup",
                     "default": {}
                 },
                 "extraEnvVars": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Array with extra environment variables to add to APISIX nodes",
                     "default": [],
                     "items": {}
@@ -1503,25 +1503,25 @@
                     "default": ""
                 },
                 "extraVolumes": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Optionally specify extra list of additional volumes for the APISIX pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "extraVolumeMounts": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Optionally specify extra list of additional volumeMounts for the APISIX container(s)",
                     "default": [],
                     "items": {}
                 },
                 "sidecars": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Add additional sidecar containers to the APISIX pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "initContainers": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Add additional init containers to the APISIX pod(s)",
                     "default": [],
                     "items": {}
@@ -1601,7 +1601,7 @@
                             "default": {}
                         },
                         "extraPorts": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Extra ports to expose in APISIX service (normally used with the `sidecars` value)",
                             "default": [],
                             "items": {}
@@ -1612,7 +1612,7 @@
                             "default": "None"
                         },
                         "sessionAffinityConfig": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "description": "Additional settings for the sessionAffinity",
                             "default": {}
                         }
@@ -1679,7 +1679,7 @@
                             "items": {}
                         },
                         "extraTls": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
                             "default": [],
                             "items": {}
@@ -1691,7 +1691,7 @@
                             "items": {}
                         },
                         "extraRules": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Additional rules to be covered with this ingress record",
                             "default": [],
                             "items": {}
@@ -1783,7 +1783,7 @@
                             "default": true
                         },
                         "rules": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Custom RBAC rules to set",
                             "default": [],
                             "items": {}
@@ -1824,7 +1824,7 @@
                             "default": false
                         },
                         "annotations": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "properties": {
                                 "prometheus": {
                                     "type": "object",
@@ -1892,19 +1892,19 @@
                                     "default": ""
                                 },
                                 "metricRelabelings": {
-                                    "type": "array",
+                                    "type": ["array", "string"],
                                     "description": "Specify additional relabeling of metrics",
                                     "default": [],
                                     "items": {}
                                 },
                                 "relabelings": {
-                                    "type": "array",
+                                    "type": ["array", "string"],
                                     "description": "Specify general relabeling",
                                     "default": [],
                                     "items": {}
                                 },
                                 "selector": {
-                                    "type": "object",
+                                    "type": ["object", "string"],
                                     "description": "Prometheus instance selector labels",
                                     "default": {}
                                 }
@@ -1994,7 +1994,7 @@
                     "default": "conf:\n  listen:\n    host: 0.0.0.0\n    port: {{ .Values.dashboard.containerPorts.http }}\n  {{- if .Values.dashboard.tls.enabled }}\n  ssl:\n    host: 0.0.0.0\n    port: {{ .Values.dashboard.containerPorts.https }}\n    cert: /bitnami/certs/{{ .Values.dashboard.tls.certFilename }}\n    key: /bitnami/certs/{{ .Values.dashboard.tls.certKeyFilename }}\n  {{- end }}\n  etcd:\n    prefix: \"/apisix\"\n    endpoints:\n      {{- if .Values.etcd.enabled  }}\n        {{- $replicas := $.Values.etcd.replicaCount | int }}\n        {{- range $i, $_e := until $replicas }}\n      - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"apisix.etcd.fullname\" $ ) $i (include \"apisix.etcd.headlessServiceName\" $) ( include \"apisix.etcd.port\" $ ) }}          {{- end }}\n      {{- else }}\n      {{- range $node :=.Values.externalEtcd.servers }}\n      - {{ printf \"%s:%v\" $node (include \"apisix.etcd.port\" $) }}\n      {{- end }}\n      {{- end }}\n    {{- if (include \"apisix.etcd.authEnabled\" .) }}\n    username: \"{{ print \"{{ APISIX_ETCD_USER }}\" }}\"\n    password: \"{{ print \"{{ APISIX_ETCD_PASSWORD }}\" }}\"\n    {{- end }}\n  log:\n    error_log:\n      level: warn\n      file_path: /dev/stderr\n    access_log:\n      file_path: /dev/stdout\nauthentication:\n  secret: secret\n  expire_time: 3600\n  users:\n    - username: \"{{ print \"{{ APISIX_DASHBOARD_USER }}\" }}\"\n      password: \"{{ print \"{{ APISIX_DASHBOARD_PASSWORD }}\" }}\"\n"
                 },
                 "extraConfig": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "extra configuration settings for APISIX Dashboard",
                     "default": {}
                 },
@@ -2059,7 +2059,7 @@
                     }
                 },
                 "hostAliases": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "APISIX Dashboard pods host aliases",
                     "default": [],
                     "items": {}
@@ -2070,7 +2070,7 @@
                     "default": {}
                 },
                 "podAnnotations": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Annotations for APISIX Dashboard pods",
                     "default": {}
                 },
@@ -2106,17 +2106,17 @@
                     }
                 },
                 "affinity": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Affinity for APISIX Dashboard pods assignment",
                     "default": {}
                 },
                 "nodeSelector": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Node labels for APISIX Dashboard pods assignment",
                     "default": {}
                 },
                 "tolerations": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Tolerations for APISIX Dashboard pods assignment",
                     "default": [],
                     "items": {}
@@ -2137,7 +2137,7 @@
                     "default": ""
                 },
                 "topologySpreadConstraints": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
                     "default": [],
                     "items": {}
@@ -2153,19 +2153,19 @@
                     "default": ""
                 },
                 "extraVolumes": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Optionally specify extra list of additional volumes for the APISIX Dashboard pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "sidecars": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Add additional sidecar containers to the APISIX Dashboard pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "initContainers": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Add additional init containers to the APISIX Dashboard pod(s)",
                     "default": [],
                     "items": {}
@@ -2316,17 +2316,17 @@
                     }
                 },
                 "customLivenessProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom livenessProbe that overrides the default one",
                     "default": {}
                 },
                 "customReadinessProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom readinessProbe that overrides the default one",
                     "default": {}
                 },
                 "customStartupProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
@@ -2391,24 +2391,24 @@
                     }
                 },
                 "command": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Override default container command (useful when using custom images)",
                     "default": [],
                     "items": {}
                 },
                 "args": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Override default container args (useful when using custom images)",
                     "default": [],
                     "items": {}
                 },
                 "lifecycleHooks": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "for the Dashboard container(s) to automate configuration before or after startup",
                     "default": {}
                 },
                 "extraEnvVars": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Array with extra environment variables to add to Dashboard nodes",
                     "default": [],
                     "items": {}
@@ -2424,7 +2424,7 @@
                     "default": ""
                 },
                 "extraVolumeMounts": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Optionally specify extra list of additional volumeMounts for the APISIX Dashboard container",
                     "default": [],
                     "items": {}
@@ -2494,7 +2494,7 @@
                             "default": {}
                         },
                         "extraPorts": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Extra ports to expose in APISIX Dashboard service (normally used with the `sidecars` value)",
                             "default": [],
                             "items": {}
@@ -2505,7 +2505,7 @@
                             "default": "None"
                         },
                         "sessionAffinityConfig": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "description": "Additional settings for the sessionAffinity",
                             "default": {}
                         }
@@ -2572,7 +2572,7 @@
                             "items": {}
                         },
                         "extraTls": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
                             "default": [],
                             "items": {}
@@ -2584,7 +2584,7 @@
                             "items": {}
                         },
                         "extraRules": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Additional rules to be covered with this ingress record",
                             "default": [],
                             "items": {}
@@ -2869,17 +2869,17 @@
                     }
                 },
                 "customLivenessProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom livenessProbe that overrides the default one",
                     "default": {}
                 },
                 "customReadinessProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom readinessProbe that overrides the default one",
                     "default": {}
                 },
                 "customStartupProbe": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Custom startupProbe that overrides the default one",
                     "default": {}
                 },
@@ -2969,19 +2969,19 @@
                     }
                 },
                 "command": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Override default container command (useful when using custom images)",
                     "default": [],
                     "items": {}
                 },
                 "args": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Override default container args (useful when using custom images)",
                     "default": [],
                     "items": {}
                 },
                 "hostAliases": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "APISIX Ingress Controller pods host aliases",
                     "default": [],
                     "items": {}
@@ -2992,7 +2992,7 @@
                     "default": {}
                 },
                 "podAnnotations": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Annotations for APISIX Ingress Controller pods",
                     "default": {}
                 },
@@ -3015,12 +3015,12 @@
                             "default": false
                         },
                         "minAvailable": {
-                            "type": [ "number", "string" ],
+                            "type": ["number", "string"],
                             "description": "Minimum number/percentage of pods that should remain scheduled",
                             "default": 1
                         },
                         "maxUnavailable": {
-                            "type": [ "number", "string" ],
+                            "type": ["number", "string"],
                             "description": "Maximum number/percentage of pods that may be made unavailable",
                             "default": ""
                         }
@@ -3048,17 +3048,17 @@
                     }
                 },
                 "affinity": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Affinity for APISIX Ingress Controller pods assignment",
                     "default": {}
                 },
                 "nodeSelector": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Node labels for APISIX Ingress Controller pods assignment",
                     "default": {}
                 },
                 "tolerations": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Tolerations for APISIX Ingress Controller pods assignment",
                     "default": [],
                     "items": {}
@@ -3079,7 +3079,7 @@
                     "default": ""
                 },
                 "topologySpreadConstraints": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
                     "default": [],
                     "items": {}
@@ -3095,12 +3095,12 @@
                     "default": ""
                 },
                 "lifecycleHooks": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "for the APISIX Ingress Controller container(s) to automate configuration before or after startup",
                     "default": {}
                 },
                 "extraEnvVars": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Array with extra environment variables to add to APISIX Ingress Controller nodes",
                     "default": [],
                     "items": {}
@@ -3116,25 +3116,25 @@
                     "default": ""
                 },
                 "extraVolumes": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Optionally specify extra list of additional volumes for the APISIX Ingress Controller pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "extraVolumeMounts": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Optionally specify extra list of additional volumeMounts for the APISIX Ingress Controller container(s)",
                     "default": [],
                     "items": {}
                 },
                 "sidecars": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Add additional sidecar containers to the APISIX Ingress Controller pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "initContainers": {
-                    "type": "array",
+                    "type": ["array", "string"],
                     "description": "Add additional init containers to the APISIX Ingress Controller pod(s)",
                     "default": [],
                     "items": {}
@@ -3145,7 +3145,7 @@
                     "default": "# log options\nlog_level: \"info\"\nlog_output: \"stderr\"\n{{- if .Values.ingressController.tls.enabled }}\nhttps_listen: \":{{ .Values.ingressController.containerPorts.https }}\"\ncert_file: \"/bitnami/certs/{{ .Values.ingressController.tls.certFilename }}\"\nkey_file: \"/bitnami/certs/{{ .Values.ingressController.tls.certKeyFilename }}\"\n{{- end }}\nhttp_listen: \":{{ .Values.ingressController.containerPorts.http }}\"\ningress_publish_service: \"{{ include \"common.names.namespace\" . }}/{{ ternary (include \"apisix.data-plane.fullname\" .) (include \"apisix.control-plane.fullname\" .) .Values.dataPlane.enabled }}\"\nenable_profiling: true\napisix-resource-sync-interval: 1h\nkubernetes:\n  kubeconfig: \"\"\n  resync_interval: \"6h\"\n  election_id: \"{{ include \"apisix.ingress-controller.fullname\" . }}-leader\"\n  ingress_class: \"apisix\"\n  ingress_version: \"networking/v1\"\n  watch_endpointslices: false\n  apisix_route_version: \"apisix.apache.org/v2\"\n  enable_gateway_api: false\n  apisix_version: \"apisix.apache.org/v2\"\n  plugin_metadata_cm: \"\"\napisix:\n  admin_api_version: \"v3\"\n  default_cluster_base_url: {{ ternary \"https\" \"http\" .Values.controlPlane.tls.enabled }}://{{ include \"apisix.control-plane.fullname\" . }}:{{ .Values.controlPlane.service.ports.adminAPI }}/apisix/admin\n  default_cluster_admin_key: \"{{ print \"{{APISIX_ADMIN_API_TOKEN}}\" }}\"\n  default_cluster_name: \"default\"\n"
                 },
                 "extraConfig": {
-                    "type": "object",
+                    "type": ["object", "string"],
                     "description": "Extra configuration parameters for APISIX Ingress Controller",
                     "default": {}
                 },
@@ -3274,7 +3274,7 @@
                             "default": {}
                         },
                         "extraPorts": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Extra ports to expose in APISIX Ingress Controller service (normally used with the `sidecars` value)",
                             "default": [],
                             "items": {}
@@ -3285,7 +3285,7 @@
                             "default": "None"
                         },
                         "sessionAffinityConfig": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "description": "Additional settings for the sessionAffinity",
                             "default": {}
                         }
@@ -3352,7 +3352,7 @@
                             "items": {}
                         },
                         "extraTls": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
                             "default": [],
                             "items": {}
@@ -3364,7 +3364,7 @@
                             "items": {}
                         },
                         "extraRules": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Additional rules to be covered with this ingress record",
                             "default": [],
                             "items": {}
@@ -3456,7 +3456,7 @@
                             "default": true
                         },
                         "rules": {
-                            "type": "array",
+                            "type": ["array", "string"],
                             "description": "Custom RBAC rules to set",
                             "default": [],
                             "items": {}
@@ -3492,7 +3492,7 @@
                     "type": "object",
                     "properties": {
                         "annotations": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "properties": {
                                 "prometheus": {
                                     "type": "object",
@@ -3560,19 +3560,19 @@
                                     "default": ""
                                 },
                                 "metricRelabelings": {
-                                    "type": "array",
+                                    "type": ["array", "string"],
                                     "description": "Specify additional relabeling of metrics",
                                     "default": [],
                                     "items": {}
                                 },
                                 "relabelings": {
-                                    "type": "array",
+                                    "type": ["array", "string"],
                                     "description": "Specify general relabeling",
                                     "default": [],
                                     "items": {}
                                 },
                                 "selector": {
-                                    "type": "object",
+                                    "type": ["object", "string"],
                                     "description": "Prometheus instance selector labels",
                                     "default": {}
                                 }

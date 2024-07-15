@@ -1,8 +1,29 @@
 # Changelog
 
-## 22.4.16 (2024-06-27)
+## 23.0.0 (2024-07-12)
 
-* [bitnami/wordpress] Release 22.4.16 ([#27570](https://github.com/bitnami/charts/pull/27570))
+* [bitnami/wordpress] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27930](https://github.com/bitnami/charts/pull/27930))
+
+## <small>22.4.20 (2024-07-11)</small>
+
+* [bitnami/wordpress] Release 22.4.20 (#27892) ([985cf50](https://github.com/bitnami/charts/commit/985cf5095a6a3a4232f5ac752e7c391df7c61341)), closes [#27892](https://github.com/bitnami/charts/issues/27892)
+
+## <small>22.4.19 (2024-07-08)</small>
+
+* [bitnami/wordpress] Release 22.4.19 (#27842) ([8d4001e](https://github.com/bitnami/charts/commit/8d4001e747f01ce0720eda6b09a8ec08a32324c0)), closes [#27842](https://github.com/bitnami/charts/issues/27842)
+
+## <small>22.4.18 (2024-07-05)</small>
+
+* [bitnami/wordpress] Release 22.4.18 (#27825) ([0dc0f73](https://github.com/bitnami/charts/commit/0dc0f73239ee8173ff078a40a3bfd7e11863d976)), closes [#27825](https://github.com/bitnami/charts/issues/27825)
+
+## <small>22.4.17 (2024-07-04)</small>
+
+* [bitnami/wordpress] Release 22.4.17 (#27799) ([6009d8a](https://github.com/bitnami/charts/commit/6009d8ac84e9ef76628216eef00cfac3f2def3dc)), closes [#27799](https://github.com/bitnami/charts/issues/27799)
+
+## <small>22.4.16 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/wordpress] Release 22.4.16 (#27570) ([af4fcfa](https://github.com/bitnami/charts/commit/af4fcfa6a0c90f31c0fd916569fc865c919c9720)), closes [#27570](https://github.com/bitnami/charts/issues/27570)
 
 ## <small>22.4.15 (2024-06-24)</small>
 

@@ -19,7 +19,7 @@ To access Keycloak from outside the cluster execute the following commands:
    echo "$CLUSTER_IP  {{ (tpl .Values.ingress.hostname .) }}" | sudo tee -a /etc/hosts
 
 {{- if .Values.adminIngress.enabled }}
-The admin area of Keycloak has been configured to point to a different domain ({{ .Values.adminIngress.hostname }}). Please remember to update the `frontendUrl` property of the `master` (or any other) realm for it to work properly (see README for an example) :
+The admin area of Keycloak has been configured to point to a different domain ({{ .Values.adminIngress.hostname }}). Please remember to update the `frontendUrl` property of the `{{ .Values.adminRealm | default "master" }}` (or any other) realm for it to work properly (see README for an example) :
 
    echo "Keycloak admin URL: http{{ if .Values.adminIngress.tls }}s{{ end }}://{{ (tpl .Values.adminIngress.hostname .) }}/"
    echo "$CLUSTER_IP  {{ (tpl .Values.adminIngress.hostname .) }}" | sudo tee -a /etc/hosts
