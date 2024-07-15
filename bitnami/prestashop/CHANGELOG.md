@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.2.8 (2024-07-03)
+## 22.0.0 (2024-07-12)
 
-* [bitnami/prestashop] Release 21.2.8 ([#27707](https://github.com/bitnami/charts/pull/27707))
+* [bitnami/prestashop] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27933](https://github.com/bitnami/charts/pull/27933))
+
+## <small>21.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/prestashop] Release 21.2.8 (#27707) ([30b4dd4](https://github.com/bitnami/charts/commit/30b4dd42339f39e96eb282e593cb1857679807f1)), closes [#27707](https://github.com/bitnami/charts/issues/27707)
 
 ## <small>21.2.7 (2024-06-24)</small>
 

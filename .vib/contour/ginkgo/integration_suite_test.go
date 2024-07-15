@@ -84,6 +84,11 @@ func getResponseBodyOrDie(ctx context.Context, address string) []string {
 	return output
 }
 
+func getImageVersion(imageName string) string {
+	version := strings.SplitN(strings.SplitN(imageName, ":", 2)[1], "-", 2)[0]
+	return version
+}
+
 type interruptableReader struct {
 	ctx context.Context
 	r   io.Reader
@@ -147,4 +152,27 @@ func TestIntegration(t *testing.T) {
 	RegisterFailHandler(Fail)
 	CheckRequirements()
 	RunSpecs(t, fmt.Sprintf("%s Integration Tests", APP_NAME))
+}
+
+func getBody(address string) (string, error) {
+	var output string
+	var client http.Client
+
+	resp, err := client.Get(address)
+	if err != nil {
+		panic(fmt.Sprintf("There was an error during the GET request: %q", err))
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		// Read the response body
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return "", err
+		}
+
+		// Convert the body to a string
+		output = string(body)
+	}
+	return output, nil
 }

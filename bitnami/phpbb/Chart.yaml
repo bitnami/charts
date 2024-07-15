@@ -17,7 +17,7 @@ dependencies:
 - condition: mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.x.x
+  version: 19.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -37,4 +37,4 @@ maintainers:
 name: phpbb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/phpbb
-version: 18.2.8
+version: 19.0.0

@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.2.7 (2024-07-09)
+## 20.0.0 (2024-07-12)
 
-* [bitnami/joomla] Release 19.2.7 ([#27861](https://github.com/bitnami/charts/pull/27861))
+* [bitnami/joomla] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27940](https://github.com/bitnami/charts/pull/27940))
+
+## <small>19.2.7 (2024-07-09)</small>
+
+* [bitnami/joomla] Release 19.2.7 (#27861) ([95ffaaf](https://github.com/bitnami/charts/commit/95ffaaf81dc3d0e7b07d3c1fd3ba6e69a1fb3ce1)), closes [#27861](https://github.com/bitnami/charts/issues/27861)
 
 ## <small>19.2.6 (2024-07-03)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.5.8 (2024-07-08)
+## 6.6.0 (2024-07-11)
 
-* [bitnami/argo-cd] fix: Use the right port name for livenessProbe. ([#27253](https://github.com/bitnami/charts/pull/27253))
+* [bitnami/argo-cd] Make it possible to run ArgoCD in HA mode ([#27585](https://github.com/bitnami/charts/pull/27585))
+
+## <small>6.5.8 (2024-07-08)</small>
+
+* [bitnami/argo-cd] fix: Use the right port name for livenessProbe. (#27253) ([516d67a](https://github.com/bitnami/charts/commit/516d67a0e6c7f6a24fab5d6c000c0c0de27bdd58)), closes [#27253](https://github.com/bitnami/charts/issues/27253)
 
 ## <small>6.5.7 (2024-07-05)</small>
 

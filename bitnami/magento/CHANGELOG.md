@@ -1,8 +1,12 @@
 # Changelog
 
-## 27.2.8 (2024-06-28)
+## 28.0.0 (2024-07-12)
 
-* [bitnami/magento] Release 27.2.8 ([#27578](https://github.com/bitnami/charts/pull/27578))
+* [bitnami/magento] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27928](https://github.com/bitnami/charts/pull/27928))
+
+## <small>27.2.8 (2024-06-28)</small>
+
+* [bitnami/magento] Release 27.2.8 (#27578) ([5374031](https://github.com/bitnami/charts/commit/5374031fd785932843e2b16313b76468c0bb8457)), closes [#27578](https://github.com/bitnami/charts/issues/27578)
 
 ## <small>27.2.7 (2024-06-27)</small>
 

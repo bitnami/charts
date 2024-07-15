@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.2.9 (2024-07-03)
+## 11.2.10 (2024-07-15)
 
-* [bitnami/tomcat] Release 11.2.9 ([#27715](https://github.com/bitnami/charts/pull/27715))
+* [bitnami/tomcat] Release 11.2.10 ([#27969](https://github.com/bitnami/charts/pull/27969))
+
+## <small>11.2.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/tomcat] Release 11.2.9 (#27715) ([9f5296f](https://github.com/bitnami/charts/commit/9f5296f7c87e3cf3e3a9c6c5531f97fe24b60f25)), closes [#27715](https://github.com/bitnami/charts/issues/27715)
 
 ## <small>11.2.8 (2024-06-20)</small>
 

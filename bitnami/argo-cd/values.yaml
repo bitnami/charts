@@ -88,6 +88,11 @@ image:
 ## Argo CD Controller
 ##
 controller:
+  ## @param controller.kind Kind to deploy ArgoCD application controller in.
+  ## Use either StatefulSet or Deployment (default). StatefulSet is required when running in HA mode.
+  ## ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/high_availability/
+  ##
+  kind: Deployment
   ## @param controller.replicaCount Number of Argo CD replicas to deploy
   ##
   replicaCount: 1
@@ -505,6 +510,16 @@ controller:
   ## @param controller.extraArgs Add extra arguments to the default arguments for the Argo CD controller
   ##
   extraArgs: []
+  ## ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution/
+  ##
+  dynamicClusterDistribution:
+    ## @param controller.dynamicClusterDistribution.enabled Whether dynamic cluster distribution is enabled.
+    ##
+    enabled: false
+    ## @param controller.dynamicClusterDistribution.heartbeatDuration Time to update the cluster sharding (defaults to 10 seconds).
+    ## ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution/#working-of-dynamic-distribution
+    ##
+    heartbeatDuration: ""
   ## @param controller.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true
@@ -593,6 +608,10 @@ controller:
   ## @param controller.lifecycleHooks for the Argo CD container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param controller.podManagementPolicy podManagementPolicy to manage scaling operation of pods (only in StatefulSet mode)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
   ## @param controller.extraEnvVars Array with extra environment variables to add to Argo CD nodes
   ## e.g:
   ## extraEnvVars:
