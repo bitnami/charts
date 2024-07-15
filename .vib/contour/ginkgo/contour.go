@@ -110,14 +110,14 @@ var _ = Describe("Contour:", func() {
 			}
 
 			if contourPodVersion == "" {
-				panic(fmt.Sprintf("There Contour image version could not be retrieved"))
+				panic(fmt.Sprintf("Contour image version could not be retrieved"))
 			}
 			if envoyPodVersion == "" {
-				panic(fmt.Sprintf("There Envoy image version could not be retrieved"))
+				panic(fmt.Sprintf("Envoy image version could not be retrieved"))
 			}
 
 			// Compatibility Table https://projectcontour.io/resources/compatibility-matrix/
-			body, err := getBodyOrDie("https://raw.githubusercontent.com/projectcontour/contour/main/versions.yaml")
+			body, err := getBody("https://raw.githubusercontent.com/projectcontour/contour/main/versions.yaml")
 			if err != nil {
 				panic(fmt.Sprintf("Error when retriving compatibility matrix"))
 			}
@@ -139,7 +139,7 @@ var _ = Describe("Contour:", func() {
 				}
 			}
 			if !contourVersionFound {
-				panic(fmt.Sprintf("Error the contour version was not found in the compatibility matrix"))
+				panic(fmt.Sprintf("Error: The contour version was not found in the compatibility matrix"))
 			}
 			Expect(envoyCompatibleVersion).To(BeTrue())
 		})

@@ -154,7 +154,7 @@ func TestIntegration(t *testing.T) {
 	RunSpecs(t, fmt.Sprintf("%s Integration Tests", APP_NAME))
 }
 
-func getBodyOrDie(address string) (string, error) {
+func getBody(address string) (string, error) {
 	var output string
 	var client http.Client
 
