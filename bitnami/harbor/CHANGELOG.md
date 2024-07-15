@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.0.3 (2024-07-13)
+## 22.0.3 (2024-07-15)
 
 * [bitnami/harbor] Remove duplicated security context ([#27955](https://github.com/bitnami/charts/pull/27955))
 
