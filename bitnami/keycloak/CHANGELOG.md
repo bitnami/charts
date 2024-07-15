@@ -4,9 +4,9 @@
 
 * bitnami/keycloak Safer variable set of KC_HOSTNAME_URL ([#27912](https://github.com/bitnami/charts/pull/27912))
 
-## 21.6.2 (2024-07-15)
+## <small>21.6.2 (2024-07-15)</small>
 
-* [bitnami/keycloak] Release 21.6.2 ([#27972](https://github.com/bitnami/charts/pull/27972))
+* [bitnami/keycloak] Release 21.6.2 (#27972) ([6b9fa9d](https://github.com/bitnami/charts/commit/6b9fa9d298f8651b50a73edbb87198ebc6d21f2b)), closes [#27972](https://github.com/bitnami/charts/issues/27972)
 
 ## <small>21.6.1 (2024-07-11)</small>
 
