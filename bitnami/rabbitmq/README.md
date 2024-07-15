@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/rabbitmq
 ```
 
-Looking to use RabbitMQ in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use RabbitMQ in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -580,6 +580,7 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `service.nodePorts.epmd`                | Node port for EPMD Discovery                                                                                                     | `""`                     |
 | `service.nodePorts.metrics`             | Node port for RabbitMQ Prometheues metrics                                                                                       | `""`                     |
 | `service.extraPorts`                    | Extra ports to expose in the service                                                                                             | `[]`                     |
+| `service.extraPortsHeadless`            | Extra ports to expose in the headless service                                                                                    | `[]`                     |
 | `service.loadBalancerSourceRanges`      | Address(es) that are allowed when service is `LoadBalancer`                                                                      | `[]`                     |
 | `service.allocateLoadBalancerNodePorts` | Whether to allocate node ports when service type is LoadBalancer                                                                 | `true`                   |
 | `service.externalIPs`                   | Set the ExternalIPs                                                                                                              | `[]`                     |

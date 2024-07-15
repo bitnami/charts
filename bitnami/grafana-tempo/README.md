@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-tempo
 ```
 
-Looking to use Grafana Tempo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Grafana Tempo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -812,6 +812,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `queryFrontend.pdb.minAvailable`                                        | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                            | `""`                                  |
 | `queryFrontend.pdb.maxUnavailable`                                      | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryFrontend.pdb.minAvailable` and `queryFrontend.pdb.maxUnavailable` are empty.                                                                                | `""`                                  |
 | `queryFrontend.enableServiceLinks`                                      | Whether information about services should be injected into pod's environment variable                                                                                                                                                                     | `true`                                |
+| `queryFrontend.query.enabled`                                           | Whether to enable the query container for legacy Grafana compatibility with jaeger-ui.  Only required for grafana version <7.5                                                                                                                            | `false`                               |
 | `queryFrontend.query.image.registry`                                    | Grafana Tempo Query image registry                                                                                                                                                                                                                        | `REGISTRY_NAME`                       |
 | `queryFrontend.query.image.repository`                                  | Grafana Tempo Query image repository                                                                                                                                                                                                                      | `REPOSITORY_NAME/grafana-tempo-query` |
 | `queryFrontend.query.image.digest`                                      | Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                       | `""`                                  |

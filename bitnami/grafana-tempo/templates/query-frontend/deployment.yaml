@@ -159,6 +159,7 @@ spec:
           {{- if .Values.queryFrontend.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        {{- if .Values.queryFrontend.query.enabled }}
         - name: grafana-tempo-query
           image: {{ template "grafana-tempo.queryImage" . }}
           imagePullPolicy: {{ .Values.queryFrontend.query.image.pullPolicy }}
@@ -240,6 +241,7 @@ spec:
           {{- if .Values.queryFrontend.query.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        {{- end }}
         {{- if .Values.queryFrontend.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.sidecars "context" $) | nindent 8 }}
         {{- end }}

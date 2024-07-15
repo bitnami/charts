@@ -133,7 +133,7 @@ spec:
               #!/bin/bash
 
               cd /opt/bitnami/supabase-storage
-              node dist/server.js
+              node dist/start/server.js
           {{- end }}
           env:
             - name: DB_USER

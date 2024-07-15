@@ -392,6 +392,11 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.data.persistence.existingClaim }}
   {{- else }}
+  {{- if .Values.data.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.data.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.data.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: "data"

@@ -1,8 +1,33 @@
 # Changelog
 
-## 21.4.4 (2024-06-18)
+## 21.6.2 (2024-07-15)
 
-* [bitnami/keycloak] fix Keycloak HTTP schema for edge proxy mode ([#27436](https://github.com/bitnami/charts/pull/27436))
+* [bitnami/keycloak] Release 21.6.2 ([#27972](https://github.com/bitnami/charts/pull/27972))
+
+## <small>21.6.1 (2024-07-11)</small>
+
+* [bitnami/keycloak] fix conditions for KC_HOSTNAME_URL (#27867) ([687d228](https://github.com/bitnami/charts/commit/687d2283b5806ab91a85b085f2477c68fbe4f260)), closes [#27867](https://github.com/bitnami/charts/issues/27867)
+
+## 21.6.0 (2024-07-09)
+
+* [bitnami/keycloak] Add support for minReadySeconds (#27550) ([bf357f9](https://github.com/bitnami/charts/commit/bf357f93bb2ad28d3a27826f4bae8a65a0bc3af5)), closes [#27550](https://github.com/bitnami/charts/issues/27550)
+
+## 21.5.0 (2024-07-08)
+
+* [bitnami/keycloak] Add custom certs to system truststore (#27197) ([82b4d3e](https://github.com/bitnami/charts/commit/82b4d3e5b1b23500b1ed3758bca474894c6d752d)), closes [#27197](https://github.com/bitnami/charts/issues/27197)
+
+## <small>21.4.6 (2024-07-08)</small>
+
+* bitnami/keycloak Diversity: Allow Keycloak admin realm to be changed/configurable (#27821) ([85124dd](https://github.com/bitnami/charts/commit/85124dd6953ee9ba63af032856e7830de9db3a92)), closes [#27821](https://github.com/bitnami/charts/issues/27821)
+
+## <small>21.4.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/keycloak] Release 21.4.5 (#27693) ([ed5f4a4](https://github.com/bitnami/charts/commit/ed5f4a4a46bb408fea752de831eebe8ca9c6e9af)), closes [#27693](https://github.com/bitnami/charts/issues/27693)
+
+## <small>21.4.4 (2024-06-20)</small>
+
+* [bitnami/keycloak] fix Keycloak HTTP schema for edge proxy mode (#27436) ([f04548a](https://github.com/bitnami/charts/commit/f04548a1dbae55d5dbad34cea87e6972f97c9bb7)), closes [#27436](https://github.com/bitnami/charts/issues/27436)
 
 ## <small>21.4.3 (2024-06-18)</small>
 

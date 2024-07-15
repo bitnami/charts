@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/apisix
 ```
 
-Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -892,6 +892,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ingressController.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the APISIX Ingress Controller container(s)                                                                                                                                               | `[]`                                        |
 | `ingressController.sidecars`                                          | Add additional sidecar containers to the APISIX Ingress Controller pod(s)                                                                                                                                                                             | `[]`                                        |
 | `ingressController.initContainers`                                    | Add additional init containers to the APISIX Ingress Controller pod(s)                                                                                                                                                                                | `[]`                                        |
+| `ingressController.ingressClass.name`                                 | IngressClass that will be be used to implement the APISIX Ingress                                                                                                                                                                                     | `apisix`                                    |
+| `ingressController.ingressClass.annotations`                          | Additional annotations for the APISIX IngressClass                                                                                                                                                                                                    | `{}`                                        |
 | `ingressController.defaultConfig`                                     | APISIX Dashboard configuration (evaluated as a template)                                                                                                                                                                                              | `""`                                        |
 | `ingressController.extraConfig`                                       | Extra configuration parameters for APISIX Ingress Controller                                                                                                                                                                                          | `{}`                                        |
 | `ingressController.existingConfigMap`                                 | name of a ConfigMap with existing configuration for the Dashboard                                                                                                                                                                                     | `""`                                        |
