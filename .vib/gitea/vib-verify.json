@@ -37,7 +37,7 @@
               "path": "/.vib"
             },
             "wait": {
-              "file": "fluentd/goss/goss-wait.yaml"
+              "file": "gitea/goss/goss-wait.yaml"
             },
             "tests_file": "gitea/goss/goss.yaml",
             "vars_file": "gitea/runtime-parameters.yaml",
