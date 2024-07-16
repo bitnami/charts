@@ -142,7 +142,7 @@ jobs:
             git reset --hard $(git commit-tree origin/index^{tree} -m "Update index.yaml")
 
             # Rebuild index
-            helm repo index --url oci://registry-1.docker.io/bitnamicharts/ --merge bitnami/index.yaml ../download
+            helm repo index --url oci://registry-1.docker.io/bitnamicharts --merge bitnami/index.yaml ../download
             # Replace .tgz in URL with OCI tag
             sed -i "s|oci://registry-1.docker.io/bitnamicharts/$app-$chart_version.tgz|oci://registry-1.docker.io/bitnamicharts/$app:$chart_version|" index.yaml
 
