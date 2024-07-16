@@ -329,6 +329,13 @@ jobs:
         run: |
           if [ -d "charts-main/bitnami/${CHART}" ]; then
             helm dep build charts-main/bitnami/${CHART}
+            if [ -d "charts-main/bitnami/${CHART}/charts" ]; then
+              cd charts-main/bitnami/${CHART}/charts
+              for filename in *.tgz; do
+                tar -xf "$filename"
+                rm -f "$filename"
+              done
+            fi
           fi
       - id: get-chart-score
         uses: addnab/docker-run-action@4f65fabd2431ebc8d299f8e5a018d79a769ae185

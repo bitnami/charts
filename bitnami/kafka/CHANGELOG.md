@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.3.7 (2024-07-02)
+## 29.3.8 (2024-07-16)
 
-* [bitnami/kafka] Fix jmx-exporter scrape path ([#27562](https://github.com/bitnami/charts/pull/27562))
+* [bitnami/kafka] fix jmx-servicemonitor by using JMX Exporter's default metrics path ([#27455](https://github.com/bitnami/charts/pull/27455))
+
+## <small>29.3.7 (2024-07-08)</small>
+
+* [bitnami/kafka] Fix jmx-exporter scrape path (#27562) ([1dd9439](https://github.com/bitnami/charts/commit/1dd943997da79e6095bee6d05410178a0344d4c9)), closes [#27562](https://github.com/bitnami/charts/issues/27562)
 
 ## <small>29.3.6 (2024-07-02)</small>
 
