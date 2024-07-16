@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.5 (2024-07-16)
+## 3.3.6 (2024-07-16)
 
-* [bitnami/apisix] Correct type at loadBalancerSourceRanges ([#27985](https://github.com/bitnami/charts/pull/27985))
+* [bitnami/apisix] Global StorageClass as default value ([#27997](https://github.com/bitnami/charts/pull/27997))
+
+## <small>3.3.5 (2024-07-16)</small>
+
+* [bitnami/apisix] Correct type at loadBalancerSourceRanges (#27985) ([fa74d4b](https://github.com/bitnami/charts/commit/fa74d4b7af146ec18c7f17776432016428422b68)), closes [#27985](https://github.com/bitnami/charts/issues/27985)
 
 ## <small>3.3.4 (2024-07-16)</small>
 
