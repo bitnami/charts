@@ -14,7 +14,7 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb-sharded
 ```
 
-Looking to use MongoDBreg; Sharded in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MongoDBreg; Sharded in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -287,7 +287,9 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 | `configsvr.persistence.accessModes`                           | Use volume as ReadOnly or ReadWrite                                                                                                                                                                                                   | `["ReadWriteOnce"]`                                    |
 | `configsvr.persistence.size`                                  | PersistentVolumeClaim size                                                                                                                                                                                                            | `8Gi`                                                  |
 | `configsvr.persistence.annotations`                           | Persistent Volume annotations                                                                                                                                                                                                         | `{}`                                                   |
-| `configsvr.persistence.resourcePolicy`                        | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted                                                                                                 | `""`                                                   |
+| `configsvr.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for Config Server StatefulSet                                                                                                                                                               | `false`                                                |
+| `configsvr.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                                                                                                                                        | `Retain`                                               |
+| `configsvr.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                                                                                                                                                | `Retain`                                               |
 | `configsvr.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created for Config Server                                                                                                                                                                | `true`                                                 |
 | `configsvr.serviceAccount.name`                               | Name of a Service Account to be used by Config Server                                                                                                                                                                                 | `""`                                                   |
 | `configsvr.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                                                                                                      | `{}`                                                   |
@@ -517,16 +519,18 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 
 ### Shard configuration: Persistence parameters
 
-| Name                                  | Description                                                                                                                           | Value               |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `shardsvr.persistence.enabled`        | Use a PVC to persist data                                                                                                             | `true`              |
-| `shardsvr.persistence.mountPath`      | The path the volume will be mounted at, useful when using different MongoDB&reg; images.                                              | `/bitnami/mongodb`  |
-| `shardsvr.persistence.subPath`        | Subdirectory of the volume to mount at (evaluated as a template)                                                                      | `""`                |
-| `shardsvr.persistence.storageClass`   | Storage class of backing PVC                                                                                                          | `""`                |
-| `shardsvr.persistence.accessModes`    | Use volume as ReadOnly or ReadWrite                                                                                                   | `["ReadWriteOnce"]` |
-| `shardsvr.persistence.size`           | PersistentVolumeClaim size                                                                                                            | `8Gi`               |
-| `shardsvr.persistence.annotations`    | Additional volume annotations                                                                                                         | `{}`                |
-| `shardsvr.persistence.resourcePolicy` | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
+| Name                                                        | Description                                                                              | Value               |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| `shardsvr.persistence.enabled`                              | Use a PVC to persist data                                                                | `true`              |
+| `shardsvr.persistence.mountPath`                            | The path the volume will be mounted at, useful when using different MongoDB&reg; images. | `/bitnami/mongodb`  |
+| `shardsvr.persistence.subPath`                              | Subdirectory of the volume to mount at (evaluated as a template)                         | `""`                |
+| `shardsvr.persistence.storageClass`                         | Storage class of backing PVC                                                             | `""`                |
+| `shardsvr.persistence.accessModes`                          | Use volume as ReadOnly or ReadWrite                                                      | `["ReadWriteOnce"]` |
+| `shardsvr.persistence.size`                                 | PersistentVolumeClaim size                                                               | `8Gi`               |
+| `shardsvr.persistence.annotations`                          | Additional volume annotations                                                            | `{}`                |
+| `shardsvr.persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for Shard replicas StatefulSet                 | `false`             |
+| `shardsvr.persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced           | `Retain`            |
+| `shardsvr.persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                   | `Retain`            |
 
 ### Shard configuration: Arbiter parameters
 

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql
 ```
 
-Looking to use PostgreSQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use PostgreSQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -384,6 +384,9 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `primary.initdb.scriptsSecret`                              | Secret with scripts to be run at first boot (in case it contains sensitive information)                                                                                                                                           | `""`                  |
 | `primary.initdb.user`                                       | Specify the PostgreSQL username to execute the initdb scripts                                                                                                                                                                     | `""`                  |
 | `primary.initdb.password`                                   | Specify the PostgreSQL password to execute the initdb scripts                                                                                                                                                                     | `""`                  |
+| `primary.preInitDb.scripts`                                 | Dictionary of pre-init scripts                                                                                                                                                                                                    | `{}`                  |
+| `primary.preInitDb.scriptsConfigMap`                        | ConfigMap with pre-init scripts to be run                                                                                                                                                                                         | `""`                  |
+| `primary.preInitDb.scriptsSecret`                           | Secret with pre-init scripts to be run                                                                                                                                                                                            | `""`                  |
 | `primary.standby.enabled`                                   | Whether to enable current cluster's primary as standby server of another cluster or not                                                                                                                                           | `false`               |
 | `primary.standby.primaryHost`                               | The Host of replication primary in the other cluster                                                                                                                                                                              | `""`                  |
 | `primary.standby.primaryPort`                               | The Port of replication primary in the other cluster                                                                                                                                                                              | `""`                  |

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/external-dns
 ```
 
-Looking to use ExternalDNS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use ExternalDNS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -253,7 +253,10 @@ helm install my-release \
 | `ns1.secretName`                                    | Use an existing secret with key "ns1-api-key" defined.                                                                                                                                                            | `""`                           |
 | `pihole.server`                                     | When using the Pi-hole provider, specify The address of the Pi-hole web server                                                                                                                                    | `""`                           |
 | `pihole.tlsSkipVerify`                              | When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server                                                                                     | `""`                           |
+| `pihole.password`                                   | When using the Pi-hole provider, specify a password to use                                                                                                                                                        | `""`                           |
 | `pihole.secretName`                                 | Use an existing secret with key "pihole_password" defined.                                                                                                                                                        | `""`                           |
+| `traefik.disableNew`                                | Disable listeners on Resources under traefik.io                                                                                                                                                                   | `false`                        |
+| `traefik.disableLegacy`                             | Disable listeners on Resources under traefik.containo.us                                                                                                                                                          | `false`                        |
 | `oci.region`                                        | When using the OCI provider, specify the region, where your zone is located in.                                                                                                                                   | `""`                           |
 | `oci.tenancyOCID`                                   | When using the OCI provider, specify your Tenancy OCID                                                                                                                                                            | `""`                           |
 | `oci.userOCID`                                      | When using the OCI provider, specify your User OCID                                                                                                                                                               | `""`                           |

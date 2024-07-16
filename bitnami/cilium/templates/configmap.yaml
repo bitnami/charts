@@ -1,0 +1,156 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
+Return the Cilium common configuration.
+ref: https://docs.cilium.io/en/stable/network/kubernetes/configuration/
+*/}}
+{{- define "cilium.configuration" -}}
+{{- if .Values.configuration }}
+{{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) }}
+{{- else }}
+debug: {{ ternary "true" "false" (or .Values.agent.image.debug .Values.operator.image.debug .Values.diagnosticMode.enabled) | quote }}
+certificates-directory: /certs
+lib-dir: /opt/bitnami/cilium/var/lib
+state-dir: /opt/bitnami/cilium/var/run
+socket-path: /opt/bitnami/cilium/var/run/cilium.sock
+procfs: /host/proc
+# Name & ID of the cluster
+cluster-name: {{ .Values.clusterName | quote }}
+cluster-id: "0"
+{{- if or .Values.etcd.enabled .Values.externalKvstore.enabled }}
+# KeyValue Store configuration
+kvstore-opt: '{"etcd.config": "/opt/bitnami/cilium/var/lib/etcd/etcd.config"}'
+etcd-config: |-
+  ---
+  endpoints: {{- include "cilium.kvstore.endpoints" . | nindent 4 }}
+{{- end }}
+# Remove state from the filesystem on startup
+clean-cilium-state: "false"
+clean-cilium-bpf-state: "false"
+# IP addressing
+enable-ipv4: "true"
+enable-ipv6: "false"
+# IP Address Management (IPAM)
+# https://docs.cilium.io/en/stable/network/concepts/ipam
+{{- if or .Values.aws.enabled (and .Values.azure.enabled (not .Values.agent.byoCNI)) }}
+routing-mode: "native"
+enable-endpoint-routes: "true"
+ipv4-native-routing-cidr: "10.0.0.0/8"
+auto-create-cilium-node-resource: "true"
+{{- else }}
+routing-mode: "tunnel"
+tunnel-protocol: "vxlan"
+tunnel-port: "8472"
+{{- end }}
+# Health checking and Pprof
+enable-endpoint-health-checking: "true"
+enable-health-check-loadbalancer-ip: "false"
+enable-health-check-nodeport: "false"
+enable-health-checking: "true"
+agent-health-port: {{ printf "%d" (int .Values.agent.containerPorts.health) | quote }}
+pprof: {{ ternary "true" "false" .Values.agent.enablePprof | quote }}
+{{- if .Values.agent.enablePprof }}
+pprof-address: "localhost"
+pprof-port: {{ printf "%d" (int .Values.agent.containerPorts.pprof) | quote }}
+{{- end }}
+operator-pprof: {{ ternary "true" "false" .Values.operator.enablePprof | quote }}
+{{- if .Values.operator.enablePprof }}
+operator-pprof-address: "localhost"
+operator-pprof-port: {{ printf "%d" (int .Values.operator.containerPorts.pprof) | quote }}
+{{- end }}
+# Monitor aggregation
+monitor-aggregation: medium
+monitor-aggregation-interval: "5s"
+monitor-aggregation-flags: all
+# BPF configuration
+bpf-root: /sys/fs/bpf
+preallocate-bpf-maps: "false"
+# CNI configuration
+cni-exclusive: "true"
+custom-cni-conf: "false"
+cni-log-file: "/opt/bitnami/cilium/var/run/cni.log"
+write-cni-conf-when-ready: {{ printf "/host%s/05-cilium.conflist" (include "cilium.agent.hostCNINetDir" .) }}
+cni-uninstall: {{ ternary "true" "false" .Values.agent.cniPlugin.uninstall | quote }}
+cgroup-root: {{ .Values.agent.cgroup2.hostRoot | quote }}
+# Operator configuration
+operator-api-serve-addr: {{ printf ":%d" (int .Values.operator.containerPorts.api) | quote }}
+disable-endpoint-crd: "false"
+skip-crd-creation: "false"
+identity-allocation-mode: crd
+{{- if .Values.agent.enableENI }}
+ipam: "eni"
+{{- else if and .Values.azure.enabled (not .Values.agent.byoCNI) }}
+ipam: "azure"
+{{- else }}
+ipam: "cluster-pool"
+cluster-pool-ipv4-cidr: "10.0.0.0/8"
+cluster-pool-ipv4-mask-size: "24"
+{{- end }}
+# Hubble configuration
+enable-hubble: "true"
+hubble-socket-path: "/opt/bitnami/cilium/var/run/hubble.sock"
+hubble-export-file-max-size-mb: "10"
+hubble-export-file-max-backups: "5"
+hubble-listen-address: {{ printf ":%d" (int .Values.agent.containerPorts.hubblePeer) | quote }}
+hubble-disable-tls: {{ ternary "false" "true" .Values.hubble.tls.enabled | quote }}
+{{- if .Values.hubble.tls.enabled }}
+hubble-tls-cert-file: /certs/hubble/tls.crt
+hubble-tls-key-file: /certs/hubble/tls.key
+hubble-tls-client-ca-files: /certs/hubble/ca.crt
+{{- end }}
+{{- if or .Values.agent.metrics.enabled .Values.hubble.peers.metrics.enabled .Values.operator.metrics.enabled }}
+# Prometheus metrics
+enable-metrics: "true"
+{{- if .Values.agent.metrics.enabled }}
+prometheus-serve-addr: {{ printf ":%d" (int .Values.agent.containerPorts.metrics) | quote }}
+controller-group-metrics: all
+metrics: ~
+{{- end }}
+{{- if .Values.hubble.peers.metrics.enabled }}
+hubble-metrics-server: {{ printf ":%d" (int .Values.agent.containerPorts.hubbleMetrics) | quote }}
+hubble-metrics: ~
+{{- end }}
+{{- if .Values.operator.metrics.enabled }}
+operator-prometheus-serve-addr: {{ printf ":%d" (int .Values.operator.containerPorts.metrics) | quote }}
+{{- end }}
+{{- end }}
+# Envoy configuration
+external-envoy-proxy: "true"
+disable-envoy-version-check: "true"
+# Other configuration
+{{- if or .Values.azure.enabled .Values.aws.enabled .Values.gcp.enabled }}
+install-no-conntrack-iptables-rules: "false"
+{{- end }}
+enable-policy: default
+enable-k8s-networkpolicy: "true"
+enable-well-known-identities: "false"
+enable-l7-proxy: "true"
+synchronize-k8s-nodes: "true"
+remove-cilium-node-taints: "true"
+set-cilium-node-taints: "true"
+set-cilium-is-up-condition: "true"
+agent-not-ready-taint-key: "node.cilium.io/agent-not-ready"
+{{- end }}
+{{- end }}
+
+{{- if not .Values.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+{{- $configuration := include "cilium.configuration" . | fromYaml -}}
+{{- if .Values.overrideConfiguration }}
+{{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.overrideConfiguration "context" .) | fromYaml }}
+{{- $configuration = mustMergeOverwrite $configuration $overrideConfiguration }}
+{{- end }}
+data: {{- $configuration | toYaml | nindent 2 }}
+{{- end }}

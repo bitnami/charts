@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.20.3 (2024-06-17)
+## 2.20.4 (2024-07-11)
 
-* [bitnami/common] chore: :wrench: Relax large and xlarge presets resource requests ([#27312](https://github.com/bitnami/charts/pull/27312))
+* [bitnami/common] Increase ephemeral-storage default limits ([#27902](https://github.com/bitnami/charts/pull/27902))
+
+## <small>2.20.3 (2024-06-17)</small>
+
+* [bitnami/common] chore: :wrench: Relax large and xlarge presets resource requests (#27312) ([6ca69f6](https://github.com/bitnami/charts/commit/6ca69f6769d0f65acc850fa0bcc08506de50cc41)), closes [#27312](https://github.com/bitnami/charts/issues/27312)
 
 ## <small>2.20.2 (2024-06-10)</small>
 

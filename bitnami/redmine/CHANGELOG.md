@@ -1,8 +1,17 @@
 # Changelog
 
-## 28.2.6 (2024-06-18)
+## 29.0.0 (2024-07-12)
 
-* [bitnami/redmine] Release 28.2.6 ([#27412](https://github.com/bitnami/charts/pull/27412))
+* [bitnami/redmine] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27936](https://github.com/bitnami/charts/pull/27936))
+
+## <small>28.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/redmine] Release 28.2.7 (#27717) ([34ba5f5](https://github.com/bitnami/charts/commit/34ba5f51aa4e678fc5511103d67987fd691dbf7b)), closes [#27717](https://github.com/bitnami/charts/issues/27717)
+
+## <small>28.2.6 (2024-06-18)</small>
+
+* [bitnami/redmine] Release 28.2.6 (#27412) ([9d24214](https://github.com/bitnami/charts/commit/9d242140b7a4bd51f3bd3a136b52cf9209351e5e)), closes [#27412](https://github.com/bitnami/charts/issues/27412)
 
 ## <small>28.2.5 (2024-06-17)</small>
 

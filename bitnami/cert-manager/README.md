@@ -1,6 +1,6 @@
 <!--- app-name: cert-manager -->
 
-# cert-manager packaged by Bitnami
+# Bitnami package for cert-manager
 
 cert-manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
 
@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/cert-manager
 ```
 
-Looking to use cert-manager in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use cert-manager in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 

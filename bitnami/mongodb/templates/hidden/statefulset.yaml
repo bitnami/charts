@@ -83,7 +83,6 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.hidden.terminationGracePeriodSeconds }}
       {{- end }}
       enableServiceLinks: {{ .Values.enableServiceLinks }}
-      {{- if or .Values.hidden.initContainers (and .Values.volumePermissions.enabled .Values.hidden.persistence.enabled) (and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled) .Values.tls.enabled }}
       initContainers:
         {{- if .Values.hidden.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.hidden.initContainers "context" $) | nindent 8 }}
@@ -97,6 +96,7 @@ spec:
         {{- if and .Values.externalAccess.enabled ( or .Values.externalAccess.service.publicNames  .Values.externalAccess.service.domain ) }}
         {{- include "mongodb.initContainers.dnsCheck" . | indent 8 }}
         {{- end }}
+        {{- include "mongodb.initContainer.prepareLogDir" . | nindent 8 }}
         {{- if .Values.tls.enabled }}
         - name: generate-tls-certs
           image: {{ include "mongodb.tls.image" . }}
@@ -147,7 +147,6 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- end }}
       containers:
         - name: mongodb
           image: {{ include "mongodb.image" . }}

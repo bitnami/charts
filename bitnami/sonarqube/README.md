@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/sonarqube
 ```
 
-Looking to use SonarQube&trade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use SonarQube&trade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -275,7 +275,7 @@ As an alternative, this chart supports using an initContainer to change the owne
 | `maxHeapSize`                 | Maximum heap size for SonarQube&trade;                                                                                                                                      | `2048m`                                                  |
 | `jvmOpts`                     | Values to add to SONARQUBE_WEB_JAVA_ADD_OPTS                                                                                                                                | `""`                                                     |
 | `jvmCeOpts`                   | Values to add to SONAR_CE_JAVAADDITIONALOPTS                                                                                                                                | `""`                                                     |
-| `startTimeout`                | Timeout for the application to start in seconds                                                                                                                             | `150`                                                    |
+| `startTimeout`                | Timeout for the application to start in seconds                                                                                                                             | `300`                                                    |
 | `extraProperties`             | List of extra properties to be set in the sonar.properties file (key=value format)                                                                                          | `[]`                                                     |
 | `sonarqubeSkipInstall`        | Skip wizard installation                                                                                                                                                    | `false`                                                  |
 | `sonarSecurityRealm`          | Set this to LDAP authenticate first against the external sytem. If the external system is not                                                                               | `""`                                                     |

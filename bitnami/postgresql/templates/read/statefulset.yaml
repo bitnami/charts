@@ -432,9 +432,8 @@ spec:
           args: [ "--extend.query-path", "/conf/custom-metrics.yaml" ]
           {{- end }}
           env:
-          {{- $database := required "In order to enable metrics you need to specify a database (.Values.auth.database or .Values.global.postgresql.auth.database)" (include "postgresql.v1.database" .) }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (int (include "postgresql.v1.service.port" .)) $database }}
+              value: {{ printf "127.0.0.1:%d/postgres?sslmode=disable" (int (include "postgresql.v1.service.port" .)) }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
               value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.v1.userPasswordKey" .) }}
