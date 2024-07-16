@@ -142,10 +142,7 @@ jobs:
             git reset --hard $(git commit-tree origin/index^{tree} -m "Update index.yaml")
 
             # Rebuild index
-            helm repo index --url oci://registry-1.docker.io/bitnamicharts --merge bitnami/index.yaml ../download
-            # Replace .tgz in URL with OCI tag
-            sed -i "s|oci://registry-1.docker.io/bitnamicharts/$chart_name-$chart_version.tgz|oci://registry-1.docker.io/bitnamicharts/$chart_name:$chart_version|" ../download/index.yaml
-
+            helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
             # Compare size of files
             if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
               echo "New index.yaml file is shorter than the current one"
@@ -252,7 +249,7 @@ jobs:
             "version": $app_version,
             "bundled_os_version": $bundled_os_version,
             "properties": {
-                "chart_url": "oci://registry-1.docker.io/bitnamicharts/\($app):\($chart_version)",
+                "chart_url": "https://charts.bitnami.com/bitnami/\($app)-\($chart_version).tgz",
                 "containers": $image_list,
                 "github_repository": "bitnami/charts/tree/main/bitnami/\($app)",
             }
