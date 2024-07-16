@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.6.3 (2024-07-15)
+## 21.6.4 (2024-07-16)
 
-* bitnami/keycloak Safer variable set of KC_HOSTNAME_URL ([#27912](https://github.com/bitnami/charts/pull/27912))
+* [bitnami/keycloak] Global StorageClass as default value ([#28039](https://github.com/bitnami/charts/pull/28039))
+
+## <small>21.6.3 (2024-07-16)</small>
+
+* bitnami/keycloak Safer variable set of KC_HOSTNAME_URL (#27912) ([b713d56](https://github.com/bitnami/charts/commit/b713d56c29f99fa111d079c300fb1e1880be8553)), closes [#27912](https://github.com/bitnami/charts/issues/27912)
 
 ## <small>21.6.2 (2024-07-15)</small>
 
