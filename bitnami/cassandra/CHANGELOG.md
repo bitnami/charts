@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.5 (2024-07-12)
+## 11.3.6 (2024-07-16)
 
-* [bitnami/cassandra] Release 11.3.5 ([#27932](https://github.com/bitnami/charts/pull/27932))
+* [bitnami/cassandra] Global StorageClass as default value ([#28002](https://github.com/bitnami/charts/pull/28002))
+
+## <small>11.3.5 (2024-07-12)</small>
+
+* [bitnami/cassandra] Release 11.3.5 (#27932) ([c70f93d](https://github.com/bitnami/charts/commit/c70f93dfc0bbfa494c94b248ea9219c2c1a3918b)), closes [#27932](https://github.com/bitnami/charts/issues/27932)
 
 ## <small>11.3.4 (2024-07-03)</small>
 
