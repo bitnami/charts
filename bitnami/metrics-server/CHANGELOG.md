@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.8 (2024-07-04)
+## 7.2.9 (2024-07-16)
 
-* [bitnami/metrics-server] Release 7.2.8 ([#27769](https://github.com/bitnami/charts/pull/27769))
+* [bitnami/metrics-server] Global StorageClass as default value ([#28057](https://github.com/bitnami/charts/pull/28057))
+
+## <small>7.2.8 (2024-07-04)</small>
+
+* [bitnami/metrics-server] Release 7.2.8 (#27769) ([3b84a42](https://github.com/bitnami/charts/commit/3b84a4289928f5e9c94c51254f4de93c74e4d9b7)), closes [#27769](https://github.com/bitnami/charts/issues/27769)
 
 ## <small>7.2.7 (2024-07-03)</small>
 
