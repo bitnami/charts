@@ -1,8 +1,13 @@
 # Changelog
 
-## 29.0.9 (2024-07-03)
+## 29.0.10 (2024-07-16)
 
-* [bitnami/spring-cloud-dataflow] Release 29.0.9 ([#27721](https://github.com/bitnami/charts/pull/27721))
+* [bitnami/spring-cloud-dataflow] Global StorageClass as default value ([#28099](https://github.com/bitnami/charts/pull/28099))
+
+## <small>29.0.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/spring-cloud-dataflow] Release 29.0.9 (#27721) ([118d637](https://github.com/bitnami/charts/commit/118d63706b4d9709d1f806dc9ade176de7028124)), closes [#27721](https://github.com/bitnami/charts/issues/27721)
 
 ## <small>29.0.8 (2024-06-18)</small>
 
