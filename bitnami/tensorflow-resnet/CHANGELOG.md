@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.2.6 (2024-07-03)
+## 4.2.7 (2024-07-16)
 
-* [bitnami/tensorflow-resnet] Release 4.2.6 ([#27714](https://github.com/bitnami/charts/pull/27714))
+* [bitnami/tensorflow-resnet] Global StorageClass as default value ([#28102](https://github.com/bitnami/charts/pull/28102))
+
+## <small>4.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/tensorflow-resnet] Release 4.2.6 (#27714) ([1d97768](https://github.com/bitnami/charts/commit/1d97768803359a386f0d0e1f1a3edf6702ae1645)), closes [#27714](https://github.com/bitnami/charts/issues/27714)
 
 ## <small>4.2.5 (2024-06-18)</small>
 
