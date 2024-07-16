@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.0.0 (2024-07-12)
+## 29.0.1 (2024-07-16)
 
-* [bitnami/redmine] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27936](https://github.com/bitnami/charts/pull/27936))
+* [bitnami/redmine] Global StorageClass as default value ([#28091](https://github.com/bitnami/charts/pull/28091))
+
+## 29.0.0 (2024-07-13)
+
+* [bitnami/redmine] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27936) ([82701c8](https://github.com/bitnami/charts/commit/82701c851f09497545d061ec73d5f07ac332e719)), closes [#27936](https://github.com/bitnami/charts/issues/27936)
 
 ## <small>28.2.7 (2024-07-03)</small>
 
