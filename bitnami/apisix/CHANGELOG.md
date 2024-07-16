@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.3.4 (2024-07-15)
+## 3.3.4 (2024-07-16)
 
 * [bitnami/apisix] Correct type at loadBalancerSourceRanges ([#27985](https://github.com/bitnami/charts/pull/27985))
 
