@@ -1,8 +1,12 @@
 # Changelog
 
+## 19.0.1 (2024-07-16)
+
+* [bitnami/phpbb] Global StorageClass as default value ([#28079](https://github.com/bitnami/charts/pull/28079))
+
 ## 19.0.0 (2024-07-12)
 
-* [bitnami/phpbb] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27929](https://github.com/bitnami/charts/pull/27929))
+* [bitnami/phpbb] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27929) ([72a6347](https://github.com/bitnami/charts/commit/72a63477d7342a93ff073e9d32efffa49a3269a9)), closes [#27929](https://github.com/bitnami/charts/issues/27929)
 
 ## <small>18.2.8 (2024-07-03)</small>
 
