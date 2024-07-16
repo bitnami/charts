@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.2.8 (2024-07-03)
+## 7.2.9 (2024-07-16)
 
-* [bitnami/jupyterhub] Release 7.2.8 ([#27699](https://github.com/bitnami/charts/pull/27699))
+* [bitnami/jupyterhub] Global StorageClass as default value ([#28037](https://github.com/bitnami/charts/pull/28037))
+
+## <small>7.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/jupyterhub] Release 7.2.8 (#27699) ([9263ae2](https://github.com/bitnami/charts/commit/9263ae265214c69b4581035cd70890b9d07153fc)), closes [#27699](https://github.com/bitnami/charts/issues/27699)
 
 ## <small>7.2.7 (2024-06-18)</small>
 

@@ -10,22 +10,22 @@ annotations:
 apiVersion: v2
 appVersion: 1.8.2
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/node-exporter/img/node-exporter-stack-220x234.png
 keywords:
-- prometheus
-- node-exporter
-- monitoring
+  - prometheus
+  - node-exporter
+  - monitoring
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: node-exporter
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
-version: 4.4.8
+  - https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
+version: 4.4.9
