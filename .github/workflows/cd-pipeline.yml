@@ -144,7 +144,7 @@ jobs:
             # Rebuild index
             helm repo index --url oci://registry-1.docker.io/bitnamicharts --merge bitnami/index.yaml ../download
             # Replace .tgz in URL with OCI tag
-            sed -i "s|oci://registry-1.docker.io/bitnamicharts/$app-$chart_version.tgz|oci://registry-1.docker.io/bitnamicharts/$app:$chart_version|" index.yaml
+            sed -i "s|oci://registry-1.docker.io/bitnamicharts/$app-$chart_version.tgz|oci://registry-1.docker.io/bitnamicharts/$app:$chart_version|" ../download/index.yaml
 
             # Compare size of files
             if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
