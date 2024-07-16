@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.0.4 (2024-07-15)
+## 22.0.4 (2024-07-16)
 
 * [bitnami/harbor] Dont set redis DB if Sentinel is enabled ([#27977](https://github.com/bitnami/charts/pull/27977))
 
