@@ -4,6 +4,10 @@
 
 * [bitnami/spring-cloud-dataflow] Global StorageClass as default value ([#28099](https://github.com/bitnami/charts/pull/28099))
 
+## 30.0.0 (2024-07-16)
+
+* [bitnami/spring-cloud-dataflow] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27931) ([e319e16](https://github.com/bitnami/charts/commit/e319e16c3ca9b4390de72f20550a09e037cc023f)), closes [#27931](https://github.com/bitnami/charts/issues/27931)
+
 ## <small>29.0.9 (2024-07-03)</small>
 
 * [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
