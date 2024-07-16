@@ -893,7 +893,7 @@ persistence:
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner
   ##
-  storageClass: ""
+  defaultStorageClass: ""
   ## @param persistence.accessModes PVC Access modes
   ##
   accessModes:
