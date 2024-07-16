@@ -8,7 +8,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ## @param global.postgresql.username PostgreSQL username (overrides `postgresql.username`)
 ## @param global.postgresql.password PostgreSQL password (overrides `postgresql.password`)
 ## @param global.postgresql.database PostgreSQL database (overrides `postgresql.database`)
@@ -29,7 +29,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
   postgresql:
     username: ""
     password: ""
