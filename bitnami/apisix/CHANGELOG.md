@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.4 (2024-07-16)
+## 3.3.5 (2024-07-16)
 
 * [bitnami/apisix] Correct type at loadBalancerSourceRanges ([#27985](https://github.com/bitnami/charts/pull/27985))
+
+## <small>3.3.4 (2024-07-16)</small>
+
+* [bitnami/apisix] wait container: support self-generated certificates at etcd (#27947) ([e816b4a](https://github.com/bitnami/charts/commit/e816b4a249e0212ea6378bd31657661c5ac234a3)), closes [#27947](https://github.com/bitnami/charts/issues/27947)
 
 ## <small>3.3.3 (2024-07-10)</small>
 
