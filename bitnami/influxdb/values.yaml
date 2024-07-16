@@ -17,7 +17,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
