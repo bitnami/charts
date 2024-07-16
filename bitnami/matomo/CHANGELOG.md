@@ -1,8 +1,12 @@
 # Changelog
 
+## 8.0.1 (2024-07-16)
+
+* [bitnami/matomo] Global StorageClass as default value ([#28053](https://github.com/bitnami/charts/pull/28053))
+
 ## 8.0.0 (2024-07-13)
 
-* [bitnami/matomo] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27943](https://github.com/bitnami/charts/pull/27943))
+* [bitnami/matomo] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27943) ([ee74a7f](https://github.com/bitnami/charts/commit/ee74a7fc02d22cbbdcd1eaec39960ea7215e50c0)), closes [#27943](https://github.com/bitnami/charts/issues/27943)
 
 ## <small>7.3.8 (2024-07-12)</small>
 
