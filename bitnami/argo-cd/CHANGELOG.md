@@ -4,7 +4,7 @@
 
 * [bitnami/argo-cd] Fix issue when using imagePullSecrets ([#27983](https://github.com/bitnami/charts/pull/27983))
 
-## <small>6.6.1 (2024-07-15)</small>
+## 6.6.1 (2024-07-15)
 
 * [bitnami/argo-cd] Release 6.6.1 (#27987) ([1e0fade](https://github.com/bitnami/charts/commit/1e0fadee59b7e7f30c68ce39c33acaab78341045)), closes [#27987](https://github.com/bitnami/charts/issues/27987)
 
