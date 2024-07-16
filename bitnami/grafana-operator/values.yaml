@@ -752,7 +752,7 @@ grafana:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: ""
+    defaultStorageClass: ""
     ## @param grafana.persistence.existingVolume Define the existingVolume for the persistent storage provisioned outside this chart
     ## https://github.com/grafana-operator/grafana-operator/blob/master/deploy/examppersistentvolume/Grafana-existingVolume.yaml
     existingVolume: ""
