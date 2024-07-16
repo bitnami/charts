@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.9 (2024-07-12)
+## 2.3.10 (2024-07-16)
 
-* [bitnami/fluent-bit] Release 2.3.9 ([#27923](https://github.com/bitnami/charts/pull/27923))
+* [bitnami/fluent-bit] Global StorageClass as default value ([#28019](https://github.com/bitnami/charts/pull/28019))
+
+## <small>2.3.9 (2024-07-12)</small>
+
+* [bitnami/fluent-bit] Release 2.3.9 (#27923) ([a435aaa](https://github.com/bitnami/charts/commit/a435aaa3769fb1c91d1a7317c531c3056bc9539c)), closes [#27923](https://github.com/bitnami/charts/issues/27923)
 
 ## <small>2.3.8 (2024-07-10)</small>
 
