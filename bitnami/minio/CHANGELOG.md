@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.22 (2024-07-15)
+## 14.6.23 (2024-07-16)
 
-* [bitnami/minio] Release 14.6.22 ([#27991](https://github.com/bitnami/charts/pull/27991))
+* [bitnami/minio] Fix provisioning in non-tty environment ([#28118](https://github.com/bitnami/charts/pull/28118))
+
+## <small>14.6.22 (2024-07-15)</small>
+
+* [bitnami/minio] Release 14.6.22 (#27991) ([0771882](https://github.com/bitnami/charts/commit/07718826311f3a9ee5a10b8b507ee3a16bb21990)), closes [#27991](https://github.com/bitnami/charts/issues/27991)
 
 ## <small>14.6.21 (2024-07-13)</small>
 
