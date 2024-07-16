@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.6.3 (2024-07-08)
+## 3.6.4 (2024-07-16)
 
-* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) ([#27829](https://github.com/bitnami/charts/pull/27829))
+* [bitnami/grafana-tempo] Global StorageClass as default value ([#28028](https://github.com/bitnami/charts/pull/28028))
+
+## <small>3.6.3 (2024-07-08)</small>
+
+* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) (#27829) ([8eb5299](https://github.com/bitnami/charts/commit/8eb529978d6b43100dd43a7dc2d4a2bfaf0f4ed7)), closes [#27829](https://github.com/bitnami/charts/issues/27829)
 
 ## <small>3.6.2 (2024-07-04)</small>
 
