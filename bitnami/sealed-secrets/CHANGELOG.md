@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.4.1 (2024-07-16)
+
+* [bitnami/sealed-secrets] Global StorageClass as default value ([#28094](https://github.com/bitnami/charts/pull/28094))
+
 ## 2.4.0 (2024-07-10)
 
-* bitnami/sealed-secrets: add loadbalancerclass ([#27608](https://github.com/bitnami/charts/pull/27608))
+* bitnami/sealed-secrets: add loadbalancerclass (#27608) ([cfe40ce](https://github.com/bitnami/charts/commit/cfe40ce6ce725757329db1566fea83ec78cbd078)), closes [#27608](https://github.com/bitnami/charts/issues/27608)
 
 ## <small>2.3.8 (2024-07-04)</small>
 
