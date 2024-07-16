@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.9 (2024-07-16)
+## 7.2.10 (2024-07-16)
 
-* [bitnami/jupyterhub] Global StorageClass as default value ([#28037](https://github.com/bitnami/charts/pull/28037))
+* [bitnami/jupyterhub] Fix for jupyterhub.storage.class helper ([#28120](https://github.com/bitnami/charts/pull/28120))
+
+## <small>7.2.9 (2024-07-16)</small>
+
+* [bitnami/jupyterhub] Global StorageClass as default value (#28037) ([ca95359](https://github.com/bitnami/charts/commit/ca95359cf47bd71df8e091049bce8d5c55ab990d)), closes [#28037](https://github.com/bitnami/charts/issues/28037)
 
 ## <small>7.2.8 (2024-07-03)</small>
 
