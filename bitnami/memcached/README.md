@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/memcached
 ```
 
-Looking to use Memcached in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Memcached in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -234,7 +234,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `autoscaling.targetMemory`                          | memcached statefulset autoscaling target CPU memory                                                                                                                                                               | `50`             |
 | `pdb.create`                                        | Deploy a pdb object for the Memcached pod                                                                                                                                                                         | `true`           |
 | `pdb.minAvailable`                                  | Minimum available Memcached replicas                                                                                                                                                                              | `""`             |
-| `pdb.maxUnavailable`                                | Maximum unavailable Memcached replicas                                                                                                                                                                            | `1`              |
+| `pdb.maxUnavailable`                                | Maximum unavailable Memcached replicas                                                                                                                                                                            | `""`             |
 
 ### Traffic Exposure parameters
 

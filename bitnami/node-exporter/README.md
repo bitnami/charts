@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/node-exporter
 ```
 
-Looking to use Node Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Node Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -115,6 +115,9 @@ Installing the Node Exporter chart in `Deployment` mode will overwrite `hostNetw
 | `containerPorts.metrics`                            | Node Exporter container port                                                                                                                                                                                      | `9100`                          |
 | `sidecars`                                          | Add additional sidecar containers to the Node exporter pod(s)                                                                                                                                                     | `[]`                            |
 | `initContainers`                                    | Add additional init containers to the Node exporter pod(s)                                                                                                                                                        | `[]`                            |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`                          |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                            |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                            |
 | `extraArgs`                                         | Additional command line arguments to pass to node-exporter                                                                                                                                                        | `{}`                            |
 | `command`                                           | Override default container command (useful when using custom images)                                                                                                                                              | `[]`                            |
 | `args`                                              | Override default container args (useful when using custom images)                                                                                                                                                 | `[]`                            |

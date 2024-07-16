@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/magento
 ```
 
-Looking to use Magento in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Magento in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -325,6 +325,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `extraVolumeMounts`                                 | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`                                                                                              | `[]`                      |
 | `extraContainerPorts`                               | Array of additional container ports for the Magento container                                                                                                                                                     | `[]`                      |
 | `initContainers`                                    | Add additional init containers to the pod (evaluated as a template)                                                                                                                                               | `[]`                      |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`                    |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                      |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                      |
 | `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                 | `[]`                      |
 | `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                    | `[]`                      |
 | `priorityClassName`                                 | %%MAIN_CONTAINER_NAME%% pods' priorityClassName                                                                                                                                                                   | `""`                      |
@@ -679,6 +682,10 @@ Currently, Elasticsearch requires some changes in the kernel of the host machine
 You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=false` parameter.
 
 ## Upgrading
+
+### To 28.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
 
 ### To 24.0.0
 

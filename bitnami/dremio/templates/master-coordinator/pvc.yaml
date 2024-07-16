@@ -1,0 +1,39 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.masterCoordinator.persistence.enabled (not .Values.masterCoordinator.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "dremio.master-coordinator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: master-coordinator
+    app: dremio-coordinator
+  annotations:
+    {{- if .Values.masterCoordinator.persistence.resourcePolicy }}
+    helm.sh/resource-policy: {{ .Values.masterCoordinator.persistence.resourcePolicy | quote }}
+    {{- end }}
+    {{- if or .Values.masterCoordinator.persistence.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.masterCoordinator.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.masterCoordinator.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.masterCoordinator.persistence.size | quote }}
+  {{- if .Values.masterCoordinator.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.persistence.selector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.masterCoordinator.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.masterCoordinator.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.masterCoordinator.persistence "global" .Values.global) | nindent 2 }}
+{{- end -}}

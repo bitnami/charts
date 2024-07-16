@@ -1,8 +1,53 @@
 # Changelog
 
-## 8.1.1 (2024-05-22)
+## 9.1.6 (2024-07-04)
 
-* [bitnami/argo-workflows] Use different liveness/readiness probes ([#26338](https://github.com/bitnami/charts/pull/26338))
+* [bitnami/argo-workflows] Release 9.1.6 ([#27755](https://github.com/bitnami/charts/pull/27755))
+
+## <small>9.1.5 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/argo-workflows] Release 9.1.5 (#27640) ([5d1255c](https://github.com/bitnami/charts/commit/5d1255c62120ad579a12957c1dd0c60d9fa6a53e)), closes [#27640](https://github.com/bitnami/charts/issues/27640)
+
+## <small>9.1.4 (2024-06-18)</small>
+
+* [bitnami/argo-workflows] Release 9.1.4 (#27402) ([0c29858](https://github.com/bitnami/charts/commit/0c29858bdd7127b83fc98718d8b3105e32300289)), closes [#27402](https://github.com/bitnami/charts/issues/27402)
+
+## <small>9.1.3 (2024-06-17)</small>
+
+* [bitnami/argo-workflows] Release 9.1.3 (#27203) ([e06390e](https://github.com/bitnami/charts/commit/e06390ec12ae42973c812ee6654a21d6cfb9940c)), closes [#27203](https://github.com/bitnami/charts/issues/27203)
+
+## <small>9.1.2 (2024-06-06)</small>
+
+* [bitnami/argo-workflows] Release 9.1.2 (#26939) ([3ce67e5](https://github.com/bitnami/charts/commit/3ce67e58391b9cc30f25d871d9a8403d62153de4)), closes [#26939](https://github.com/bitnami/charts/issues/26939)
+
+## <small>9.1.1 (2024-06-05)</small>
+
+* [bitnami/argo-workflows] Bump chart version (#26822) ([6bfdc26](https://github.com/bitnami/charts/commit/6bfdc260bbf7b6a6442d567f909e6d1238012832)), closes [#26822](https://github.com/bitnami/charts/issues/26822)
+
+## 9.1.0 (2024-06-05)
+
+* [bitnami/argo-workflows] Enable PodDisruptionBudgets (#26595) ([4a87ecd](https://github.com/bitnami/charts/commit/4a87ecd4fc9fd817655426839843a65f8eda47e5)), closes [#26595](https://github.com/bitnami/charts/issues/26595)
+
+## <small>9.0.3 (2024-06-05)</small>
+
+* [bitnami/argo-workflows] Bump chart version (#26764) ([3ad8f3b](https://github.com/bitnami/charts/commit/3ad8f3bd66903b2f844698f8bdfd21d58c8a2385)), closes [#26764](https://github.com/bitnami/charts/issues/26764)
+
+## <small>9.0.2 (2024-06-05)</small>
+
+* [bitnami/argo-workflows] Release 9.0.2 (#26719) ([8935f8c](https://github.com/bitnami/charts/commit/8935f8c7f1736c2ec9134be621e5cfcaf10fe539)), closes [#26719](https://github.com/bitnami/charts/issues/26719)
+
+## <small>9.0.1 (2024-05-27)</small>
+
+* [bitnami/argo-workflows] Release 9.0.1 (#26456) ([8f899a8](https://github.com/bitnami/charts/commit/8f899a80be1f6462a77f27e01ee93e7f0cef529e)), closes [#26456](https://github.com/bitnami/charts/issues/26456)
+
+## 9.0.0 (2024-05-27)
+
+* [bitnami/argo-workflows] Update dependencies (#26449) ([0491305](https://github.com/bitnami/charts/commit/0491305081197889ebb5388901a154b03dcc5893)), closes [#26449](https://github.com/bitnami/charts/issues/26449)
+
+## <small>8.1.1 (2024-05-23)</small>
+
+* [bitnami/argo-workflows] Use different liveness/readiness probes (#26338) ([74c9d18](https://github.com/bitnami/charts/commit/74c9d1860077443f82d7140c2cdaf95a63fa1615)), closes [#26338](https://github.com/bitnami/charts/issues/26338)
 
 ## 8.1.0 (2024-05-21)
 

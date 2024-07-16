@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/sonarqube
 ```
 
-Looking to use SonarQube&trade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use SonarQube&trade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -275,7 +275,7 @@ As an alternative, this chart supports using an initContainer to change the owne
 | `maxHeapSize`                 | Maximum heap size for SonarQube&trade;                                                                                                                                      | `2048m`                                                  |
 | `jvmOpts`                     | Values to add to SONARQUBE_WEB_JAVA_ADD_OPTS                                                                                                                                | `""`                                                     |
 | `jvmCeOpts`                   | Values to add to SONAR_CE_JAVAADDITIONALOPTS                                                                                                                                | `""`                                                     |
-| `startTimeout`                | Timeout for the application to start in seconds                                                                                                                             | `150`                                                    |
+| `startTimeout`                | Timeout for the application to start in seconds                                                                                                                             | `300`                                                    |
 | `extraProperties`             | List of extra properties to be set in the sonar.properties file (key=value format)                                                                                          | `[]`                                                     |
 | `sonarqubeSkipInstall`        | Skip wizard installation                                                                                                                                                    | `false`                                                  |
 | `sonarSecurityRealm`          | Set this to LDAP authenticate first against the external sytem. If the external system is not                                                                               | `""`                                                     |
@@ -372,6 +372,9 @@ As an alternative, this chart supports using an initContainer to change the owne
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the SonarQube&trade; container(s)                                                                                                                    | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the SonarQube&trade; pod(s)                                                                                                                                                  | `[]`             |
 | `initContainers`                                    | Add additional init containers to the SonarQube&trade; pod(s)                                                                                                                                                     | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Traffic Exposure Parameters
 
@@ -481,6 +484,7 @@ As an alternative, this chart supports using an initContainer to change the owne
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                                                                                                                                                                 | `[]`                       |
 | `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                       |
+| `volumePermissions.containerSecurityContext.enabled`        | Enable init container's Security Context                                                                                                                                                                                                              | `true`                     |
 | `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `{}`                       |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                                                                                                                                                       | `0`                        |
 

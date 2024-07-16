@@ -1,8 +1,49 @@
 # Changelog
 
-## 10.1.1 (2024-05-24)
+## 10.2.6 (2024-07-04)
 
-* [bitnami/etcd] Fix livenessProbe for ETCD with TLS ([#26407](https://github.com/bitnami/charts/pull/26407))
+* [bitnami/etcd] Release 10.2.6 ([#27765](https://github.com/bitnami/charts/pull/27765))
+
+## <small>10.2.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/etcd] Release 10.2.5 (#27646) ([41a7444](https://github.com/bitnami/charts/commit/41a74443e1abe22ae4e81aca14dbe52127c6aae1)), closes [#27646](https://github.com/bitnami/charts/issues/27646)
+
+## <small>10.2.4 (2024-06-18)</small>
+
+* [bitnami/etcd] Release 10.2.4 (#27342) ([ddd960c](https://github.com/bitnami/charts/commit/ddd960cd73fedd20e4f5411c9a30d7d3be56e6ab)), closes [#27342](https://github.com/bitnami/charts/issues/27342)
+
+## <small>10.2.3 (2024-06-17)</small>
+
+* [bitnami/etcd] Release 10.2.3 (#27215) ([a37f7f3](https://github.com/bitnami/charts/commit/a37f7f3f028c05b7da745f8720e9daa69d691e01)), closes [#27215](https://github.com/bitnami/charts/issues/27215)
+
+## <small>10.2.2 (2024-06-06)</small>
+
+* [bitnami/etcd] Release 10.2.2 (#26951) ([8c377b6](https://github.com/bitnami/charts/commit/8c377b62e3cb7346cd639c7455e2b86e0336a931)), closes [#26951](https://github.com/bitnami/charts/issues/26951)
+
+## <small>10.2.1 (2024-06-06)</small>
+
+* [bitnami/etcd] Align PodDisruptionBudgets with templates (#26692) ([5a15485](https://github.com/bitnami/charts/commit/5a154857226db6b76f915dbf837c1cc79cc013a1)), closes [#26692](https://github.com/bitnami/charts/issues/26692)
+
+## 10.2.0 (2024-06-06)
+
+* [bitnami/etcd] Non-manual chart upgrades (#25655) ([74000ba](https://github.com/bitnami/charts/commit/74000ba366b23ca6ca4d6f2730bf6d22d9404689)), closes [#25655](https://github.com/bitnami/charts/issues/25655)
+
+## <small>10.1.4 (2024-06-05)</small>
+
+* [bitnami/etcd] Release 10.1.4 (#26723) ([21a4c55](https://github.com/bitnami/charts/commit/21a4c55475238e7e2cccc922b0b5463aba26fefd)), closes [#26723](https://github.com/bitnami/charts/issues/26723)
+
+## <small>10.1.3 (2024-06-04)</small>
+
+* [bitnami/etcd] Bump chart version (#26628) ([86ade26](https://github.com/bitnami/charts/commit/86ade2624082951d3e618a389293618a10e433d4)), closes [#26628](https://github.com/bitnami/charts/issues/26628)
+
+## <small>10.1.2 (2024-05-29)</small>
+
+* [bitnami/etcd] Release 10.1.2 (#26555) ([f646374](https://github.com/bitnami/charts/commit/f6463741bd6d21d0b0330483f4961f0112680b97)), closes [#26555](https://github.com/bitnami/charts/issues/26555)
+
+## <small>10.1.1 (2024-05-24)</small>
+
+* [bitnami/etcd] Fix livenessProbe for ETCD with TLS (#26407) ([4dbf742](https://github.com/bitnami/charts/commit/4dbf74264d1e718328757a07dc4dd4b86ab5f6da)), closes [#26407](https://github.com/bitnami/charts/issues/26407)
 
 ## 10.1.0 (2024-05-21)
 

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mastodon
 ```
 
-Looking to use Mastodon in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Mastodon in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -368,6 +368,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `web.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon web container(s)                                                                                                                                | `[]`             |
 | `web.sidecars`                                          | Add additional sidecar containers to the Mastodon web pod(s)                                                                                                                                                              | `[]`             |
 | `web.initContainers`                                    | Add additional init containers to the Mastodon web pod(s)                                                                                                                                                                 | `[]`             |
+| `web.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                           | `true`           |
+| `web.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                            | `""`             |
+| `web.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `web.pdb.minAvailable` and `web.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Mastodon Web Traffic Exposure Parameters
 
@@ -462,6 +465,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `sidekiq.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon sidekiq container(s)                                                                                                                                    | `[]`             |
 | `sidekiq.sidecars`                                          | Add additional sidecar containers to the Mastodon sidekiq pod(s)                                                                                                                                                                  | `[]`             |
 | `sidekiq.initContainers`                                    | Add additional init containers to the Mastodon sidekiq pod(s)                                                                                                                                                                     | `[]`             |
+| `sidekiq.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`           |
+| `sidekiq.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`             |
+| `sidekiq.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `sidekiq.pdb.minAvailable` and `sidekiq.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 | `sidekiq.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                                                                                                                                        | `true`           |
 | `sidekiq.networkPolicy.allowExternal`                       | The Policy model to apply                                                                                                                                                                                                         | `true`           |
 | `sidekiq.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                   | `true`           |
@@ -541,6 +547,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `streaming.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon streaming container(s)                                                                                                                                      | `[]`             |
 | `streaming.sidecars`                                          | Add additional sidecar containers to the Mastodon streaming pod(s)                                                                                                                                                                    | `[]`             |
 | `streaming.initContainers`                                    | Add additional init containers to the Mastodon streaming pod(s)                                                                                                                                                                       | `[]`             |
+| `streaming.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `streaming.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`             |
+| `streaming.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `streaming.pdb.minAvailable` and `streaming.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Mastodon Streaming Traffic Exposure Parameters
 

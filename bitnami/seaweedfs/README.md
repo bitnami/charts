@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/seaweedfs
 ```
 
-Looking to use SeaweedFS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use SeaweedFS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -1042,6 +1042,7 @@ enabled = false
 | `mariadb.primary.persistence.size`         | Persistent Volume size                                                                                                                                                                                                     | `8Gi`               |
 | `mariadb.primary.resourcesPreset`          | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`             |
 | `mariadb.primary.resources`                | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                |
+| `externalDatabase.enabled`                 | Enable secret with external mariadb database credentials                                                                                                                                                                   | `false`             |
 | `externalDatabase.host`                    | External Database server host                                                                                                                                                                                              | `localhost`         |
 | `externalDatabase.port`                    | External Database server port                                                                                                                                                                                              | `3306`              |
 | `externalDatabase.user`                    | External Database username                                                                                                                                                                                                 | `bn_seaweedfs`      |
@@ -1072,6 +1073,12 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/seawe
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/template/seaweedfs/values.yaml)
+
+## Upgrading
+
+### To 1.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
 
 ## Troubleshooting
 

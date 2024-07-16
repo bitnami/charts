@@ -1,8 +1,58 @@
 # Changelog
 
+## 15.6.13 (2024-07-13)
+
+* [bitnami/mongodb] Fix autoDiscovery initContainer template ([#27953](https://github.com/bitnami/charts/pull/27953))
+
+## <small>15.6.12 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mongodb] Release 15.6.12 (#27590) ([97d0ec8](https://github.com/bitnami/charts/commit/97d0ec8a20365d93a4121dd7df98352eac8e69a7)), closes [#27590](https://github.com/bitnami/charts/issues/27590)
+
+## <small>15.6.11 (2024-06-25)</small>
+
+* [bitnami/mongodb] add space back so script works again (#27183) ([e880657](https://github.com/bitnami/charts/commit/e880657e7744f7871d04c55283f34fad9d04598a)), closes [#27183](https://github.com/bitnami/charts/issues/27183)
+* [bitnami/mongodb] Recover logging to stdout (#27510) ([33bbddd](https://github.com/bitnami/charts/commit/33bbddd532d0debbe775a13a1b0c31e59ccd3c35)), closes [#27510](https://github.com/bitnami/charts/issues/27510)
+
+## <small>15.6.9 (2024-06-18)</small>
+
+* [bitnami/mongodb] Release 15.6.9 (#27382) ([d59a4b1](https://github.com/bitnami/charts/commit/d59a4b1346d607d82a68d59c6c162197b2305858)), closes [#27382](https://github.com/bitnami/charts/issues/27382)
+
+## <small>15.6.8 (2024-06-17)</small>
+
+* [bitnami/mongodb] Release 15.6.8 (#27317) ([71d3b7e](https://github.com/bitnami/charts/commit/71d3b7efac8585b90018d0cda9099104bb6a8ae4)), closes [#27317](https://github.com/bitnami/charts/issues/27317)
+
+## <small>15.6.7 (2024-06-17)</small>
+
+* [bitnami/mongodb] Release 15.6.7 (#27254) ([33a8fd2](https://github.com/bitnami/charts/commit/33a8fd21116b9ee49238ab13553010b859149bc1)), closes [#27254](https://github.com/bitnami/charts/issues/27254)
+
+## <small>15.6.6 (2024-06-10)</small>
+
+* [bitnami/mongodb] Add securityContext to generate-tls in replicaset (#26606) ([34ff09b](https://github.com/bitnami/charts/commit/34ff09b6e8f797163172059c194250961869e034)), closes [#26606](https://github.com/bitnami/charts/issues/26606)
+
+## <small>15.6.5 (2024-06-06)</small>
+
+* [bitnami/mongodb] Release 15.6.5 (#26988) ([1b8c210](https://github.com/bitnami/charts/commit/1b8c210aa7585a5a3731c3d8c033625c170fa1dc)), closes [#26988](https://github.com/bitnami/charts/issues/26988)
+
+## <small>15.6.4 (2024-06-06)</small>
+
+* [bitnami/mongodb] Release 15.6.4 (#26907) ([0fbcf92](https://github.com/bitnami/charts/commit/0fbcf926bb04ce00021013314b511324cd96056e)), closes [#26907](https://github.com/bitnami/charts/issues/26907)
+
+## <small>15.6.3 (2024-06-04)</small>
+
+* [bitnami/mongodb] Bump chart version (#26650) ([8a4412d](https://github.com/bitnami/charts/commit/8a4412df8904d90daefe8ac8a5345270867d329f)), closes [#26650](https://github.com/bitnami/charts/issues/26650)
+
+## <small>15.6.2 (2024-06-04)</small>
+
+* [bitnami/mongodb] Remove UTF-8 chars (#26607) ([9ab3365](https://github.com/bitnami/charts/commit/9ab33654ca45ee82d27088578308068e493c43cd)), closes [#26607](https://github.com/bitnami/charts/issues/26607)
+
+## <small>15.6.1 (2024-05-28)</small>
+
+* [bitnami/mongodb] Release 15.6.1 (#26481) ([f4dbc07](https://github.com/bitnami/charts/commit/f4dbc07bf19489d2ce4156675c1cf7e291ad0385)), closes [#26481](https://github.com/bitnami/charts/issues/26481)
+
 ## 15.6.0 (2024-05-24)
 
-* [bitnami/mongodb] PDB review ([#26154](https://github.com/bitnami/charts/pull/26154))
+* [bitnami/mongodb] PDB review (#26154) ([a4ecaf9](https://github.com/bitnami/charts/commit/a4ecaf9ed62fe573de17ce95d9ec090d3b1bde88)), closes [#26154](https://github.com/bitnami/charts/issues/26154)
 
 ## <small>15.5.3 (2024-05-24)</small>
 

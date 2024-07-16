@@ -1,8 +1,41 @@
 # Changelog
 
-## 28.2.0 (2024-05-23)
+## 29.0.0 (2024-07-12)
 
-* [bitnami/redmine] Enable PodDisruptionBudgets ([#26376](https://github.com/bitnami/charts/pull/26376))
+* [bitnami/redmine] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27936](https://github.com/bitnami/charts/pull/27936))
+
+## <small>28.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/redmine] Release 28.2.7 (#27717) ([34ba5f5](https://github.com/bitnami/charts/commit/34ba5f51aa4e678fc5511103d67987fd691dbf7b)), closes [#27717](https://github.com/bitnami/charts/issues/27717)
+
+## <small>28.2.6 (2024-06-18)</small>
+
+* [bitnami/redmine] Release 28.2.6 (#27412) ([9d24214](https://github.com/bitnami/charts/commit/9d242140b7a4bd51f3bd3a136b52cf9209351e5e)), closes [#27412](https://github.com/bitnami/charts/issues/27412)
+
+## <small>28.2.5 (2024-06-17)</small>
+
+* [bitnami/redmine] Release 28.2.5 (#27278) ([ee9bd13](https://github.com/bitnami/charts/commit/ee9bd132bd5b3ecd2929ce1721d5eb6ffe20ef43)), closes [#27278](https://github.com/bitnami/charts/issues/27278)
+
+## <small>28.2.4 (2024-06-12)</small>
+
+* [bitnami/redmine] Release 28.2.4 (#27107) ([ea7b2f5](https://github.com/bitnami/charts/commit/ea7b2f5847c1cc7b2693e471e2b13712c1979752)), closes [#27107](https://github.com/bitnami/charts/issues/27107)
+
+## <small>28.2.3 (2024-06-06)</small>
+
+* [bitnami/redmine] Release 28.2.3 (#27011) ([978624c](https://github.com/bitnami/charts/commit/978624c2895fb24bdbbbde8d386d2f84a4056064)), closes [#27011](https://github.com/bitnami/charts/issues/27011)
+
+## <small>28.2.2 (2024-06-05)</small>
+
+* [bitnami/redmine] Bump chart version (#26858) ([28a494a](https://github.com/bitnami/charts/commit/28a494a3e666d1ff9bd6fe3ecca921ea041dc1e8)), closes [#26858](https://github.com/bitnami/charts/issues/26858)
+
+## <small>28.2.1 (2024-06-05)</small>
+
+* [bitnami/redmine] Bump chart version (#26800) ([11bf83c](https://github.com/bitnami/charts/commit/11bf83caa900b9861b310ff80644b80b7eef04e6)), closes [#26800](https://github.com/bitnami/charts/issues/26800)
+
+## 28.2.0 (2024-05-24)
+
+* [bitnami/redmine] Enable PodDisruptionBudgets (#26376) ([4ffd3fd](https://github.com/bitnami/charts/commit/4ffd3fd91c2e9db900400b9c9e1ff45957922211)), closes [#26376](https://github.com/bitnami/charts/issues/26376)
 
 ## 28.1.0 (2024-05-21)
 

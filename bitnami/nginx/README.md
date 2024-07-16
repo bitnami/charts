@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx
 ```
 
-Looking to use NGINX Open Source in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use NGINX Open Source in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -195,6 +195,8 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                       | `{}`             |
 | `hostNetwork`                                       | Specify if host network should be enabled for NGINX pod                                                                                                                                                           | `false`          |
 | `hostIPC`                                           | Specify if host IPC should be enabled for NGINX pod                                                                                                                                                               | `false`          |
+| `dnsPolicy`                                         | Specifies the DNS policy for the NGINX pod                                                                                                                                                                        | `""`             |
+| `dnsConfig`                                         | Allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                                                                                                 | `{}`             |
 | `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                                                                                                                          | `{}`             |
 | `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                                                                                                                          | `[]`             |
 | `priorityClassName`                                 | NGINX pods' priorityClassName                                                                                                                                                                                     | `""`             |

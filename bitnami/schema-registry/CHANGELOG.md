@@ -1,8 +1,53 @@
 # Changelog
 
-## 18.1.3 (2024-05-26)
+## 19.2.1 (2024-07-03)
 
-* [bitnami/schema-registry] Release 18.1.3 ([#26441](https://github.com/bitnami/charts/pull/26441))
+* [bitnami/schema-registry] Release 19.2.1 ([#27716](https://github.com/bitnami/charts/pull/27716))
+
+## 19.2.0 (2024-06-28)
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/schema-registry] Add labels to service (#27528) ([638dc9e](https://github.com/bitnami/charts/commit/638dc9e45a55ada309f759368de3677b54da69ed)), closes [#27528](https://github.com/bitnami/charts/issues/27528)
+
+## <small>19.1.7 (2024-06-21)</small>
+
+* [bitnami/schema-registry] Release 19.1.7 (#27414) ([bbeca45](https://github.com/bitnami/charts/commit/bbeca45e5660f575ee0ca3c57992d11dde7beca0)), closes [#27414](https://github.com/bitnami/charts/issues/27414)
+
+## <small>19.1.6 (2024-06-17)</small>
+
+* [bitnami/schema-registry] Release 19.1.6 (#27302) ([d681090](https://github.com/bitnami/charts/commit/d681090fe4e5c8197ac700aa3847b74e18c94064)), closes [#27302](https://github.com/bitnami/charts/issues/27302)
+
+## <small>19.1.5 (2024-06-14)</small>
+
+* [bitnami/schema-registry] Release 19.1.5 (#27169) ([d1fc70f](https://github.com/bitnami/charts/commit/d1fc70f5a2b6b02de8e161e5642f63df5d525f24)), closes [#27169](https://github.com/bitnami/charts/issues/27169)
+
+## <small>19.1.4 (2024-06-13)</small>
+
+* [bitnami/schema-registry] Render imagePullSecrets (#27129) ([155d842](https://github.com/bitnami/charts/commit/155d842a9517619077f82e2589d0104027a4a004)), closes [#27129](https://github.com/bitnami/charts/issues/27129)
+
+## <small>19.1.3 (2024-06-06)</small>
+
+* [bitnami/schema-registry] Release 19.1.3 (#27015) ([9624f24](https://github.com/bitnami/charts/commit/9624f24d3cc8eaf0704ac828729ec486ab0779ac)), closes [#27015](https://github.com/bitnami/charts/issues/27015)
+
+## <small>19.1.2 (2024-06-05)</small>
+
+* [bitnami/schema-registry] Bump chart version (#26859) ([cc07701](https://github.com/bitnami/charts/commit/cc07701f428b486e8c4f35fae719e1a513ee56ef)), closes [#26859](https://github.com/bitnami/charts/issues/26859)
+
+## <small>19.1.1 (2024-06-05)</small>
+
+* [bitnami/schema-registry] Bump chart version (#26801) ([90a1ef0](https://github.com/bitnami/charts/commit/90a1ef0fbe9545af302d682ac2b51adc3e6a9be9)), closes [#26801](https://github.com/bitnami/charts/issues/26801)
+
+## 19.1.0 (2024-05-29)
+
+* [bitnami/schema-registry] Enable PodDisruptionBudgets (#26377) ([5337d8a](https://github.com/bitnami/charts/commit/5337d8ab354416b64a55994f5a2f838cea83f083)), closes [#26377](https://github.com/bitnami/charts/issues/26377)
+
+## 19.0.0 (2024-05-27)
+
+* [bitnami/schema-registry] Update dependencies (#26446) ([6db614b](https://github.com/bitnami/charts/commit/6db614bb44e95947764e4de7c2e0803a0123cc84)), closes [#26446](https://github.com/bitnami/charts/issues/26446)
+
+## <small>18.1.3 (2024-05-26)</small>
+
+* [bitnami/schema-registry] Release 18.1.3 (#26441) ([82f2f80](https://github.com/bitnami/charts/commit/82f2f80cf10a38b25c4937ed8a8b048afce47a48)), closes [#26441](https://github.com/bitnami/charts/issues/26441)
 
 ## <small>18.1.2 (2024-05-24)</small>
 

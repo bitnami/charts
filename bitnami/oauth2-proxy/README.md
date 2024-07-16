@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/oauth2-proxy
 ```
 
-Looking to use OAuth2 Proxy in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use OAuth2 Proxy in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -320,6 +320,7 @@ The [Bitnami OAuth2 Proxy](https://github.com/bitnami/containers/tree/main/bitna
 | `externalRedis.host`                      | External Redis&reg; server host                            | `""`   |
 | `externalRedis.password`                  | External Redis&reg; user password                          | `""`   |
 | `externalRedis.port`                      | External Redis&reg; server port                            | `6379` |
+| `externalRedis.databaseIndex`             | External Redis&reg; database index                         | `0`    |
 | `externalRedis.existingSecret`            | The name of an existing secret with Redis&reg; credentials | `""`   |
 | `externalRedis.existingSecretPasswordKey` | Key inside the existing secret with Redis&reg; credentials | `""`   |
 

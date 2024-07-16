@@ -85,6 +85,9 @@ data:
                     {{- if .Values.deployer.entryPointStyle }}
                     entryPointStyle: {{ .Values.deployer.entryPointStyle }}
                     {{- end }}
+                    {{- if .Values.deployer.taskServiceAccountName }}
+                    taskServiceAccountName: {{ .Values.deployer.taskServiceAccountName }}
+                    {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:

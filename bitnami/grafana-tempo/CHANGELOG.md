@@ -1,8 +1,49 @@
 # Changelog
 
-## 3.4.1 (2024-05-22)
+## 3.6.3 (2024-07-08)
 
-* [bitnami/grafana-tempo] Use different liveness/readiness probes ([#26349](https://github.com/bitnami/charts/pull/26349))
+* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) ([#27829](https://github.com/bitnami/charts/pull/27829))
+
+## <small>3.6.2 (2024-07-04)</small>
+
+* [bitnami/grafana-tempo] Release 3.6.2 (#27764) ([1194e92](https://github.com/bitnami/charts/commit/1194e9225dc4a85b74eb4cd60d9f32712501fbfe)), closes [#27764](https://github.com/bitnami/charts/issues/27764)
+
+## <small>3.6.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana-tempo] Release 3.6.1 (#27657) ([544e8dd](https://github.com/bitnami/charts/commit/544e8ddfa5cd9379ed7177b511bdee0a653b3fea)), closes [#27657](https://github.com/bitnami/charts/issues/27657)
+
+## 3.6.0 (2024-06-24)
+
+* [bitnami/grafana-tempo] Add option to disable tempo-query sidecar (#27447) ([b251a0b](https://github.com/bitnami/charts/commit/b251a0beca7e98f2be4de453dad590fe8dfbac0d)), closes [#27447](https://github.com/bitnami/charts/issues/27447)
+
+## <small>3.5.5 (2024-06-18)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.5 (#27352) ([bda5da9](https://github.com/bitnami/charts/commit/bda5da981a74094a9802d419ec77e87995177250)), closes [#27352](https://github.com/bitnami/charts/issues/27352)
+
+## <small>3.5.4 (2024-06-17)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.4 (#27227) ([2846858](https://github.com/bitnami/charts/commit/28468587f7c7760cf24be63e6b47c1c45b613ed1)), closes [#27227](https://github.com/bitnami/charts/issues/27227)
+
+## <small>3.5.3 (2024-06-14)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.3 (#26958) ([793e0ac](https://github.com/bitnami/charts/commit/793e0acb0bd52f2d19449c7bbc8f9649f7b84ccb)), closes [#26958](https://github.com/bitnami/charts/issues/26958)
+
+## <small>3.5.2 (2024-06-05)</small>
+
+* [bitnami/grafana-tempo] Bump chart version (#26833) ([37e9569](https://github.com/bitnami/charts/commit/37e956938ddd3a8eb999a519146e7ac6220125ee)), closes [#26833](https://github.com/bitnami/charts/issues/26833)
+
+## <small>3.5.1 (2024-06-05)</small>
+
+* [bitnami/grafana-tempo] Bump chart version (#26775) ([39ce37d](https://github.com/bitnami/charts/commit/39ce37d01180666c368ebb05c5c90b7327376af8)), closes [#26775](https://github.com/bitnami/charts/issues/26775)
+
+## 3.5.0 (2024-05-29)
+
+* [bitnami/grafana-tempo] Enable PodDisruptionBudgets (#26484) ([d637d7c](https://github.com/bitnami/charts/commit/d637d7c723a58b7426721a549b8a81625e7b110a)), closes [#26484](https://github.com/bitnami/charts/issues/26484)
+
+## <small>3.4.1 (2024-05-23)</small>
+
+* [bitnami/grafana-tempo] Use different liveness/readiness probes (#26349) ([91203f6](https://github.com/bitnami/charts/commit/91203f64a401ca01afcd58bc7761380a931d7f25)), closes [#26349](https://github.com/bitnami/charts/issues/26349)
 
 ## 3.4.0 (2024-05-21)
 

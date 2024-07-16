@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/nats
 ```
 
-Looking to use NATS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use NATS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -342,7 +342,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | Name                 | Description                                                    | Value  |
 | -------------------- | -------------------------------------------------------------- | ------ |
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `true` |
-| `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `1`    |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `""`   |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

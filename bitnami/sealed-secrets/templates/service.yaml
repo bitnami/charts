@@ -28,6 +28,9 @@ spec:
   {{ if eq .Values.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
   {{- end }}
+  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerClass))) }}
+  loadBalancerClass: {{ .Values.service.loadBalancerClass }}
+  {{- end }}
   {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}

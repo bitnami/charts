@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kibana --set elasticsearch.hosts[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
 ```
 
-Looking to use Kibana in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Kibana in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -382,6 +382,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `podLabels`                                         | Extra labels to add to Pod                                                                                                                                                                                                                            | `{}`                       |
 | `sidecars`                                          | Attach additional containers to the pod                                                                                                                                                                                                               | `[]`                       |
 | `initContainers`                                    | Add additional init containers to the pod                                                                                                                                                                                                             | `[]`                       |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`                     |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`                       |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                                                        | `""`                       |
 | `configuration`                                     | Kibana configuration                                                                                                                                                                                                                                  | `{}`                       |
 | `metrics.enabled`                                   | Start a side-car prometheus exporter                                                                                                                                                                                                                  | `false`                    |
 | `metrics.service.annotations`                       | Prometheus annotations for the Kibana service                                                                                                                                                                                                         | `{}`                       |

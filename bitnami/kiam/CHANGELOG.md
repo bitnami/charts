@@ -1,8 +1,41 @@
 # Changelog
 
-## 2.1.1 (2024-05-23)
+## 2.2.7 (2024-07-04)
 
-* [bitnami/kiam] Use different liveness/readiness probes ([#26370](https://github.com/bitnami/charts/pull/26370))
+* [bitnami/kiam] Release 2.2.7 ([#27787](https://github.com/bitnami/charts/pull/27787))
+
+## <small>2.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kiam] Release 2.2.6 (#27655) ([bde09c5](https://github.com/bitnami/charts/commit/bde09c56a79f1a9e95aec9fa46e9b5f40f27f940)), closes [#27655](https://github.com/bitnami/charts/issues/27655)
+
+## <small>2.2.5 (2024-06-18)</small>
+
+* [bitnami/kiam] Release 2.2.5 (#27365) ([7b0acfb](https://github.com/bitnami/charts/commit/7b0acfb2c828631af7b7c34964dbb60bf70a8927)), closes [#27365](https://github.com/bitnami/charts/issues/27365)
+
+## <small>2.2.4 (2024-06-17)</small>
+
+* [bitnami/kiam] Release 2.2.4 (#27265) ([aae30c3](https://github.com/bitnami/charts/commit/aae30c35857f82f20d9edf45e20316991f687ddf)), closes [#27265](https://github.com/bitnami/charts/issues/27265)
+
+## <small>2.2.3 (2024-06-06)</small>
+
+* [bitnami/kiam] Release 2.2.3 (#26971) ([3c1fc88](https://github.com/bitnami/charts/commit/3c1fc88212d5817b751f144af1b51ad4a053f7da)), closes [#26971](https://github.com/bitnami/charts/issues/26971)
+
+## <small>2.2.2 (2024-06-05)</small>
+
+* [bitnami/kiam] Release 2.2.2 (#26734) ([16d7be0](https://github.com/bitnami/charts/commit/16d7be0d2c9eac7692e29360fade811bce8de1f0)), closes [#26734](https://github.com/bitnami/charts/issues/26734)
+
+## <small>2.2.1 (2024-06-04)</small>
+
+* [bitnami/kiam] Bump chart version (#26638) ([3c501b6](https://github.com/bitnami/charts/commit/3c501b6f194ea225c9c43fee7ccde4d0fb392bfb)), closes [#26638](https://github.com/bitnami/charts/issues/26638)
+
+## 2.2.0 (2024-05-29)
+
+* [bitnami/kiam] Enable PodDisruptionBudgets (#26500) ([00f157a](https://github.com/bitnami/charts/commit/00f157a60b3c18df462a2d0bd16762614edb7400)), closes [#26500](https://github.com/bitnami/charts/issues/26500)
+
+## <small>2.1.1 (2024-05-23)</small>
+
+* [bitnami/kiam] Use different liveness/readiness probes (#26370) ([ef14a50](https://github.com/bitnami/charts/commit/ef14a506d8116ece0a140790725dcaa5abc4696b)), closes [#26370](https://github.com/bitnami/charts/issues/26370)
 
 ## 2.1.0 (2024-05-21)
 

@@ -41,6 +41,8 @@ var _ = Describe("SeaweedFS", Ordered, func() {
 			masterStsName := fmt.Sprintf("%s-master", releaseName)
 			masterSts, err := c.AppsV1().StatefulSets(namespace).Get(ctx, masterStsName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
+			fsGroup := masterSts.Spec.Template.Spec.SecurityContext.FSGroup
+			runAsUser := masterSts.Spec.Template.Spec.Containers[0].SecurityContext.RunAsUser
 			volumeStsName := fmt.Sprintf("%s-volume", releaseName)
 			volumeSts, err := c.AppsV1().StatefulSets(namespace).Get(ctx, volumeStsName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
@@ -74,7 +76,7 @@ var _ = Describe("SeaweedFS", Ordered, func() {
 
 			By("creating a job to upload a file")
 			uploadJobName := fmt.Sprintf("weed-upload-%s", jobSuffix)
-			err = createJob(ctx, c, uploadJobName, port, image, pvcName, kindUpload)
+			err = createJob(ctx, c, uploadJobName, port, image, pvcName, kindUpload, fsGroup, runAsUser)
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
@@ -109,7 +111,7 @@ var _ = Describe("SeaweedFS", Ordered, func() {
 
 			By("creating a job to download the file")
 			downloadJobName := fmt.Sprintf("weed-download-%s", jobSuffix)
-			err = createJob(ctx, c, downloadJobName, port, image, pvcName, kindDownload)
+			err = createJob(ctx, c, downloadJobName, port, image, pvcName, kindDownload, fsGroup, runAsUser)
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {

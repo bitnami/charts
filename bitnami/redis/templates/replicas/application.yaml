@@ -18,6 +18,7 @@ spec:
   {{- if and (not (eq .Values.replica.kind "DaemonSet")) (not .Values.replica.autoscaling.enabled) }}
   replicas: {{ .Values.replica.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.replica.revisionHistoryLimit }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}

@@ -12,7 +12,7 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 helm install my-release oci://registry-1.docker.io/bitnamicharts/sealed-secrets
 ```
 
-Looking to use Sealed Secrets in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Sealed Secrets in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -292,6 +292,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
 | `service.clusterIP`                | Sealed Secret service Cluster IP                                                                      | `""`                     |
 | `service.loadBalancerIP`           | Sealed Secret service Load Balancer IP                                                                | `""`                     |
+| `service.loadBalancerClass`        | Sealed Secret service Load Balancer Class                                                             | `""`                     |
 | `service.loadBalancerSourceRanges` | Sealed Secret service Load Balancer sources                                                           | `[]`                     |
 | `service.externalTrafficPolicy`    | Sealed Secret service external traffic policy                                                         | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Sealed Secret service                                               | `{}`                     |
@@ -333,9 +334,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                                                                        | `false` |
 | `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                                                                                                   | `false` |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                                                                            | `true`  |
-| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                                                                               | `false` |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                                                                               | `true`  |
 | `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                                                                        | `""`    |
-| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                                                                        | `""`    |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                        | `""`    |
 
 ### Metrics parameters
 

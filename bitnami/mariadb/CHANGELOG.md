@@ -1,8 +1,37 @@
 # Changelog
 
-## 18.2.0 (2024-05-22)
+## 19.0.0 (2024-07-11)
 
-* [bitnami/mariadb] PDB review ([#25978](https://github.com/bitnami/charts/pull/25978))
+* [bitnami/mariadb] Release 19.0.0 ([#27901](https://github.com/bitnami/charts/pull/27901))
+
+## <small>18.2.6 (2024-07-02)</small>
+
+* [bitnami/mariadb] Release 18.2.6 (#27638) ([9822f43](https://github.com/bitnami/charts/commit/9822f43757bbf85d48db29c9e0c39ae4825e436b)), closes [#27638](https://github.com/bitnami/charts/issues/27638)
+
+## <small>18.2.5 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mariadb] Release 18.2.5 (#27619) ([41836cc](https://github.com/bitnami/charts/commit/41836ccc60bd99a45185b0e33e2ca5970867e886)), closes [#27619](https://github.com/bitnami/charts/issues/27619)
+
+## <small>18.2.4 (2024-06-18)</small>
+
+* [bitnami/mariadb] Release 18.2.4 (#27375) ([fcac2b3](https://github.com/bitnami/charts/commit/fcac2b33f4bb90c19932b4eec6636fc4b3c10cdc)), closes [#27375](https://github.com/bitnami/charts/issues/27375)
+
+## <small>18.2.3 (2024-06-17)</small>
+
+* [bitnami/mariadb] Release 18.2.3 (#27243) ([605363c](https://github.com/bitnami/charts/commit/605363caa20e787ea3782928ae95faea07b9b08a)), closes [#27243](https://github.com/bitnami/charts/issues/27243)
+
+## <small>18.2.2 (2024-06-06)</small>
+
+* [bitnami/mariadb] Release 18.2.2 (#26977) ([e79cf8c](https://github.com/bitnami/charts/commit/e79cf8c2aa2aba398f4464d119605afe11534b08)), closes [#26977](https://github.com/bitnami/charts/issues/26977)
+
+## <small>18.2.1 (2024-06-04)</small>
+
+* [bitnami/mariadb] Bump chart version (#26644) ([1cf51a6](https://github.com/bitnami/charts/commit/1cf51a65b4c7753ade78015e301b378cf490979e)), closes [#26644](https://github.com/bitnami/charts/issues/26644)
+
+## 18.2.0 (2024-05-24)
+
+* [bitnami/mariadb] PDB review (#25978) ([d8286f1](https://github.com/bitnami/charts/commit/d8286f18bbeb0909f95be790b92e29489adc6f5d)), closes [#25978](https://github.com/bitnami/charts/issues/25978)
 
 ## 18.1.0 (2024-05-21)
 

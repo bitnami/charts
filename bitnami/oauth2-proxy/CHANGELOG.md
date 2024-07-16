@@ -1,8 +1,45 @@
 # Changelog
 
-## 5.2.0 (2024-05-23)
+## 5.3.8 (2024-07-04)
 
-* [bitnami/oauth2-proxy] Enable PodDisruptionBudgets ([#26161](https://github.com/bitnami/charts/pull/26161))
+* [bitnami/oauth2-proxy] Release 5.3.8 ([#27777](https://github.com/bitnami/charts/pull/27777))
+
+## <small>5.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/oauth2-proxy] Release 5.3.7 (#27671) ([e0dc793](https://github.com/bitnami/charts/commit/e0dc7936312a9c06b9a24eb71c93281611d34f54)), closes [#27671](https://github.com/bitnami/charts/issues/27671)
+
+## <small>5.3.6 (2024-06-18)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.6 (#27392) ([018294a](https://github.com/bitnami/charts/commit/018294a69e74f4f7b090a534b2b610e106b91836)), closes [#27392](https://github.com/bitnami/charts/issues/27392)
+
+## <small>5.3.5 (2024-06-17)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.5 (#27256) ([3c3e7cc](https://github.com/bitnami/charts/commit/3c3e7ccce936048bceda6556fe804760aa033cb9)), closes [#27256](https://github.com/bitnami/charts/issues/27256)
+
+## <small>5.3.4 (2024-06-06)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.4 (#26998) ([3e218c3](https://github.com/bitnami/charts/commit/3e218c3e9e7be00fade1bd7c74586bf8b64830f1)), closes [#26998](https://github.com/bitnami/charts/issues/26998)
+
+## <small>5.3.3 (2024-06-05)</small>
+
+* [bitnami/oauth2-proxy] Bump chart version (#26850) ([83ca47c](https://github.com/bitnami/charts/commit/83ca47c7c6a4b6e3aee8fc99a86d9e8392853dc7)), closes [#26850](https://github.com/bitnami/charts/issues/26850)
+
+## <small>5.3.2 (2024-06-05)</small>
+
+* [bitnami/oauth2-proxy] Bump chart version (#26792) ([3199b02](https://github.com/bitnami/charts/commit/3199b025f38b3b7e2e0e4c9995bbf6f114519ea5)), closes [#26792](https://github.com/bitnami/charts/issues/26792)
+
+## <small>5.3.1 (2024-06-05)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.1 (#26746) ([e5bea6c](https://github.com/bitnami/charts/commit/e5bea6c07275e46d4aa6ca2c191c0a352d94e929)), closes [#26746](https://github.com/bitnami/charts/issues/26746)
+
+## 5.3.0 (2024-05-27)
+
+* [bitnami/oauth2-proxy] Add field externalRedis.databaseIndex (#26439) ([43a38d4](https://github.com/bitnami/charts/commit/43a38d47397e7af81002f0adda65ea266c7369a9)), closes [#26439](https://github.com/bitnami/charts/issues/26439)
+
+## 5.2.0 (2024-05-24)
+
+* [bitnami/oauth2-proxy] Enable PodDisruptionBudgets (#26161) ([cec7b38](https://github.com/bitnami/charts/commit/cec7b38a2124bf708cf55852cd705fdc800091dc)), closes [#26161](https://github.com/bitnami/charts/issues/26161)
 
 ## <small>5.1.1 (2024-05-21)</small>
 

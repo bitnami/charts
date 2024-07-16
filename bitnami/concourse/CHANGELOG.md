@@ -1,8 +1,36 @@
 # Changelog
 
-## 4.2.1 (2024-05-22)
+## 4.2.8 (2024-07-03)
 
-* [bitnami/concourse] Use different liveness/readiness probes ([#26340](https://github.com/bitnami/charts/pull/26340))
+* [bitnami/concourse] Release 4.2.8 ([#27727](https://github.com/bitnami/charts/pull/27727))
+
+## <small>4.2.7 (2024-06-18)</small>
+
+* [bitnami/concourse] Release 4.2.7 (#27432) ([0214bf9](https://github.com/bitnami/charts/commit/0214bf977798a91fe3110960463ababebdaf99d2)), closes [#27432](https://github.com/bitnami/charts/issues/27432)
+
+## <small>4.2.6 (2024-06-17)</small>
+
+* [bitnami/concourse] Release 4.2.6 (#27301) ([7309c98](https://github.com/bitnami/charts/commit/7309c98e8bcb7d6a87c4fc1d79144ded24ae39a7)), closes [#27301](https://github.com/bitnami/charts/issues/27301)
+
+## <small>4.2.5 (2024-06-06)</small>
+
+* [bitnami/concourse] Release 4.2.5 (#26931) ([9c29ca0](https://github.com/bitnami/charts/commit/9c29ca041a09726337cd6e75e191ca6ba5290e52)), closes [#26931](https://github.com/bitnami/charts/issues/26931)
+
+## <small>4.2.4 (2024-06-06)</small>
+
+* [bitnami/concourse] Align PodDisruptionBudgets with templates (#26688) ([5fb555f](https://github.com/bitnami/charts/commit/5fb555f85c804d48e3cbf0ccf5f0d8dd278dbdcc)), closes [#26688](https://github.com/bitnami/charts/issues/26688)
+
+## <small>4.2.3 (2024-06-05)</small>
+
+* [bitnami/concourse] Bump chart version (#26824) ([2ab9b50](https://github.com/bitnami/charts/commit/2ab9b509e77e27dc5af7537da764f7c1612e8015)), closes [#26824](https://github.com/bitnami/charts/issues/26824)
+
+## <small>4.2.2 (2024-06-05)</small>
+
+* [bitnami/concourse] Bump chart version (#26766) ([5413c17](https://github.com/bitnami/charts/commit/5413c1784a303f46c590b14cb9ad3663e1618747)), closes [#26766](https://github.com/bitnami/charts/issues/26766)
+
+## <small>4.2.1 (2024-05-23)</small>
+
+* [bitnami/concourse] Use different liveness/readiness probes (#26340) ([04467b6](https://github.com/bitnami/charts/commit/04467b6969709579e43317c63ade2d3a96f79bfc)), closes [#26340](https://github.com/bitnami/charts/issues/26340)
 
 ## 4.2.0 (2024-05-21)
 

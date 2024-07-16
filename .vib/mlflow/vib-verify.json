@@ -36,6 +36,9 @@
             "resources": {
               "path": "/.vib"
             },
+            "wait": {
+              "file": "mlflow/goss/goss-wait.yaml"
+            },
             "tests_file": "mlflow/goss/goss.yaml",
             "vars_file": "mlflow/runtime-parameters.yaml",
             "remote": {
@@ -57,6 +60,12 @@
               "username": "vib-user",
               "password": "ComplicatedPassword123!4"
             }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

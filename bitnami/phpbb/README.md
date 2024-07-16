@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/phpbb
 ```
 
-Looking to use phpBB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use phpBB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -166,6 +166,9 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 | `extraVolumes`                                      | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                                                                                                                                                                          | `[]`                       |
 | `extraVolumeMounts`                                 | Extra volume mounts to add to the container. Normally used with `extraVolumes`                                                                                                                                                                        | `[]`                       |
 | `initContainers`                                    | Extra init containers to add to the deployment                                                                                                                                                                                                        | `[]`                       |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`                     |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`                       |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                                                        | `""`                       |
 | `sidecars`                                          | Extra sidecar containers to add to the deployment                                                                                                                                                                                                     | `[]`                       |
 | `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                                                        | `[]`                       |
 | `existingSecret`                                    | Use existing secret for the application password                                                                                                                                                                                                      | `""`                       |
@@ -359,6 +362,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/phpbb
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
 
 ### To 18.0.0
 

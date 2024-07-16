@@ -1,8 +1,62 @@
 # Changelog
 
-## 6.1.1 (2024-05-22)
+## 6.3.10 (2024-07-11)
 
-* [bitnami/influxdb] Use different liveness/readiness probes ([#26303](https://github.com/bitnami/charts/pull/26303))
+* [bitnami/influxdb] Release 6.3.10 ([#27917](https://github.com/bitnami/charts/pull/27917))
+
+## <small>6.3.9 (2024-07-04)</small>
+
+* [bitnami/influxdb] Release 6.3.9 (#27797) ([e1c3c74](https://github.com/bitnami/charts/commit/e1c3c745af42267a85a55ab18b1f762de98a9587)), closes [#27797](https://github.com/bitnami/charts/issues/27797)
+
+## <small>6.3.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/influxdb] Release 6.3.8 (#27656) ([700ca36](https://github.com/bitnami/charts/commit/700ca3603d8536e3b79861fbf097046fcfe89d63)), closes [#27656](https://github.com/bitnami/charts/issues/27656)
+
+## <small>6.3.7 (2024-06-18)</small>
+
+* [bitnami/influxdb] Release 6.3.7 (#27356) ([0c346d2](https://github.com/bitnami/charts/commit/0c346d2c794fb011afe553fb6ea25767cafb511f)), closes [#27356](https://github.com/bitnami/charts/issues/27356)
+
+## <small>6.3.6 (2024-06-17)</small>
+
+* [bitnami/influxdb] Release 6.3.6 (#27228) ([32e0a59](https://github.com/bitnami/charts/commit/32e0a59db7dbf1ac34ea417678512aa1d9ba9d39)), closes [#27228](https://github.com/bitnami/charts/issues/27228)
+
+## <small>6.3.5 (2024-06-06)</small>
+
+* [bitnami/influxdb] Release 6.3.5 (#26962) ([9e3988a](https://github.com/bitnami/charts/commit/9e3988a81464f8a4250f5a33fae5c7b094f8af2a)), closes [#26962](https://github.com/bitnami/charts/issues/26962)
+
+## <small>6.3.4 (2024-06-05)</small>
+
+* [bitnami/influxdb] Release 6.3.4 (#26733) ([23fcbaa](https://github.com/bitnami/charts/commit/23fcbaaaa75e6d6eb237cea30071663ebcf08869)), closes [#26733](https://github.com/bitnami/charts/issues/26733)
+
+## <small>6.3.3 (2024-06-04)</small>
+
+* [bitnami/influxdb] Bump chart version (#26636) ([e3280d3](https://github.com/bitnami/charts/commit/e3280d3efcd3822a9d575e8e4f27ef8015ef97d7)), closes [#26636](https://github.com/bitnami/charts/issues/26636)
+
+## <small>6.3.2 (2024-05-30)</small>
+
+* [bitnami/influxdb] Release 6.3.2 (#26564) ([ffe032e](https://github.com/bitnami/charts/commit/ffe032eaeb07cd1d6194ce384e57d4ea321dfe91)), closes [#26564](https://github.com/bitnami/charts/issues/26564)
+* [bitnami/influxdb] Update docs (#26560) ([f51e2c4](https://github.com/bitnami/charts/commit/f51e2c4cbe452716ceb8059eb1fd4baf4b7632da)), closes [#26560](https://github.com/bitnami/charts/issues/26560)
+
+## <small>6.3.1 (2024-05-29)</small>
+
+* [bitnami/influxdb] Release 6.3.1 (#26549) ([cb8be5b](https://github.com/bitnami/charts/commit/cb8be5b6770c4bfb0feb5f0b5cfb14b2e7de8cbe)), closes [#26549](https://github.com/bitnami/charts/issues/26549)
+
+## 6.3.0 (2024-05-29)
+
+* [bitnami/influxdb] Enable PodDisruptionBudgets (#26491) ([1b1fbd9](https://github.com/bitnami/charts/commit/1b1fbd9e66a7c10cb6baef80a1a7ef0520edc9a3)), closes [#26491](https://github.com/bitnami/charts/issues/26491)
+
+## <small>6.2.1 (2024-05-28)</small>
+
+* [bitnami/influxdb] Release 6.2.1 (#26511) ([b5b3bfc](https://github.com/bitnami/charts/commit/b5b3bfc36967ed57c72266dc7fda45e863035eeb)), closes [#26511](https://github.com/bitnami/charts/issues/26511)
+
+## 6.2.0 (2024-05-27)
+
+* [bitnami/influxdb] Allow separate persistence cfg for backups (#26453) ([57ba39e](https://github.com/bitnami/charts/commit/57ba39ec1f4376b41b28fd4e91b326ff42378f25)), closes [#26453](https://github.com/bitnami/charts/issues/26453)
+
+## <small>6.1.1 (2024-05-23)</small>
+
+* [bitnami/influxdb] Use different liveness/readiness probes (#26303) ([1bbf1a0](https://github.com/bitnami/charts/commit/1bbf1a005e9f34891d10990d053f4a6af5e71bb6)), closes [#26303](https://github.com/bitnami/charts/issues/26303)
 
 ## 6.1.0 (2024-05-21)
 

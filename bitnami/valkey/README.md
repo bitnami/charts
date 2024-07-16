@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/valkey
 ```
 
-Looking to use Valkey in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Valkey in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -572,6 +572,9 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `master.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                                          | `""`                     |
 | `master.serviceAccount.automountServiceAccountToken`       | Whether to auto mount the service account token                                                                                                                                                                                 | `false`                  |
 | `master.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                            | `{}`                     |
+| `master.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                 | `true`                   |
+| `master.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `{}`                     |
+| `master.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.                                                                    | `{}`                     |
 
 ### Valkey replicas configuration parameters
 
@@ -712,6 +715,9 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `replica.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                                                 | `""`    |
 | `replica.serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                                                                        | `false` |
 | `replica.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                                                   | `{}`    |
+| `replica.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                                        | `true`  |
+| `replica.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                                         | `{}`    |
+| `replica.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `replica.pdb.minAvailable` and `replica.pdb.maxUnavailable` are empty.         | `{}`    |
 
 ### Valkey Sentinel configuration parameters
 
@@ -834,9 +840,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `serviceAccount.name`                           | The name of the ServiceAccount to use.                                                                                                      | `""`    |
 | `serviceAccount.automountServiceAccountToken`   | Whether to auto mount the service account token                                                                                             | `false` |
 | `serviceAccount.annotations`                    | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
-| `pdb.create`                                    | Specifies whether a PodDisruptionBudget should be created                                                                                   | `false` |
-| `pdb.minAvailable`                              | Min number of pods that must still be available after the eviction                                                                          | `1`     |
-| `pdb.maxUnavailable`                            | Max number of pods that can be unavailable after the eviction                                                                               | `""`    |
+| `pdb`                                           | DEPRECATED Please use `master.pdb` and `replica.pdb` values instead                                                                         | `{}`    |
 | `tls.enabled`                                   | Enable TLS traffic                                                                                                                          | `false` |
 | `tls.authClients`                               | Require clients to authenticate                                                                                                             | `true`  |
 | `tls.autoGenerated`                             | Enable autogenerated certificates                                                                                                           | `false` |

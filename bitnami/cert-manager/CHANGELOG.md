@@ -1,8 +1,53 @@
 # Changelog
 
-## 1.2.1 (2024-05-23)
+## 1.3.10 (2024-07-12)
 
-* [bitnami/cert-manager] Use different liveness/readiness probes ([#26310](https://github.com/bitnami/charts/pull/26310))
+* [bitnami/cert-manager] Release 1.3.10 ([#27945](https://github.com/bitnami/charts/pull/27945))
+
+## <small>1.3.9 (2024-07-04)</small>
+
+* [bitnami/cert-manager] Release 1.3.9 (#27758) ([4f9dea1](https://github.com/bitnami/charts/commit/4f9dea13515ded8b785628ec1bf331b3212cff4e)), closes [#27758](https://github.com/bitnami/charts/issues/27758)
+
+## <small>1.3.8 (2024-07-02)</small>
+
+* [bitnami/cert-manager] Release 1.3.8 (#27642) ([280c6f3](https://github.com/bitnami/charts/commit/280c6f3f7ac6f010db2d5014077dc3c965f34352)), closes [#27642](https://github.com/bitnami/charts/issues/27642)
+
+## <small>1.3.7 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/cert-manager] Release 1.3.7 (#27553) ([0f19124](https://github.com/bitnami/charts/commit/0f19124575596984c95e54530155f728ac025c76)), closes [#27553](https://github.com/bitnami/charts/issues/27553)
+
+## <small>1.3.6 (2024-06-18)</small>
+
+* [bitnami/cert-manager] Release 1.3.6 (#27334) ([ba8ec01](https://github.com/bitnami/charts/commit/ba8ec01ca413d28001a5a4a956f5f9e95beff25c)), closes [#27334](https://github.com/bitnami/charts/issues/27334)
+
+## <small>1.3.5 (2024-06-17)</small>
+
+* [bitnami/cert-manager] Release 1.3.5 (#27206) ([b35df20](https://github.com/bitnami/charts/commit/b35df2025836e40e5ce2b9f45beb754e1be9ac92)), closes [#27206](https://github.com/bitnami/charts/issues/27206)
+
+## <small>1.3.4 (2024-06-12)</small>
+
+* [bitnami/cert-manager] Release 1.3.4 (#27117) ([be84a62](https://github.com/bitnami/charts/commit/be84a62af073c6ffcf23397e65111f47aa0c1b89)), closes [#27117](https://github.com/bitnami/charts/issues/27117)
+
+## <small>1.3.3 (2024-06-07)</small>
+
+* [bitnami/cert-manager] Release 1.3.3 (#27047) ([9ba40ab](https://github.com/bitnami/charts/commit/9ba40abd572004e250e24d15c03b4b21a246bc17)), closes [#27047](https://github.com/bitnami/charts/issues/27047)
+
+## <small>1.3.2 (2024-06-05)</small>
+
+* [bitnami/cert-manager] Release 1.3.2 (#26721) ([44ceecf](https://github.com/bitnami/charts/commit/44ceecfe0bb948433f3b1149e2721d7dec05e4f4)), closes [#26721](https://github.com/bitnami/charts/issues/26721)
+
+## <small>1.3.1 (2024-06-04)</small>
+
+* [bitnami/cert-manager] Bump chart version (#26623) ([b16ae3f](https://github.com/bitnami/charts/commit/b16ae3f7e195e1b5f53fdc2bf75fecac26181819)), closes [#26623](https://github.com/bitnami/charts/issues/26623)
+
+## 1.3.0 (2024-05-27)
+
+* [bitnami/cert-manager] Enable PodDisruptionBudgets (#26421) ([0b20366](https://github.com/bitnami/charts/commit/0b20366ba83014a429ca7e8313da38335f89c845)), closes [#26421](https://github.com/bitnami/charts/issues/26421)
+
+## <small>1.2.1 (2024-05-23)</small>
+
+* [bitnami/cert-manager] Use different liveness/readiness probes (#26310) ([5225821](https://github.com/bitnami/charts/commit/522582196e58b35eebc21306f5843680f805e9b9)), closes [#26310](https://github.com/bitnami/charts/issues/26310)
 
 ## 1.2.0 (2024-05-21)
 

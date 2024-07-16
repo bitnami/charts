@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/apisix
 ```
 
-Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -91,6 +91,8 @@ ingressController:
   enabled: false
 etcd:
   enabled: false
+dashboard:
+  enabled: false
 dataPlane:
   extraConfig:
     deployment:
@@ -102,7 +104,7 @@ dataPlane:
         name: apisix-routes
   extraVolumeMounts:
     - name: routes
-      mountPath: /opt/bitnami/apisix/conf/apisix.yaml
+      mountPath: /usr/local/apisix/conf/apisix.yaml
       subPath: apisix.yaml
 extraDeploy:
   - apiVersion: v1
@@ -118,6 +120,7 @@ extraDeploy:
                 nodes:
                     "127.0.0.1:1980": 1
                 type: roundrobin
+        #END
 ```
 
 ### Ingress
@@ -174,7 +177,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### External etcd support
 
-You may want to have Mastodon connect to an external etcd rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalEtcd` parameter](#parameters). You should also disable the etcd installation with the `etcd.enabled` option. Here is an example:
+You may want to have APISIX connect to an external etcd rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalEtcd` parameter](#parameters). You should also disable the etcd installation with the `etcd.enabled` option. Here is an example:
 
 ```yaml
 etcd:
@@ -347,8 +350,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `dataPlane.podAnnotations`                                    | Annotations for APISIX pods                                                                                                                                                                                                           | `{}`             |
 | `dataPlane.podAffinityPreset`                                 | Pod affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                            | `""`             |
 | `dataPlane.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                       | `soft`           |
-| `dataPlane.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `false`          |
-| `dataPlane.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `1`              |
+| `dataPlane.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `dataPlane.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`             |
 | `dataPlane.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                        | `""`             |
 | `dataPlane.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                      | `""`             |
 | `dataPlane.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `apisix.affinity` is set                                                                                                                                                                          | `""`             |
@@ -533,8 +536,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `controlPlane.podAnnotations`                                    | Annotations for APISIX pods                                                                                                                                                                                                                 | `{}`             |
 | `controlPlane.podAffinityPreset`                                 | Pod affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                  | `""`             |
 | `controlPlane.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                             | `soft`           |
-| `controlPlane.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                             | `false`          |
-| `controlPlane.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                              | `1`              |
+| `controlPlane.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                             | `true`           |
+| `controlPlane.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                              | `""`             |
 | `controlPlane.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                              | `""`             |
 | `controlPlane.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                            | `""`             |
 | `controlPlane.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `apisix.affinity` is set                                                                                                                                                                                | `""`             |
@@ -685,8 +688,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `dashboard.nodeSelector`                                      | Node labels for APISIX Dashboard pods assignment                                                                                                                                                                                      | `{}`                               |
 | `dashboard.tolerations`                                       | Tolerations for APISIX Dashboard pods assignment                                                                                                                                                                                      | `[]`                               |
 | `dashboard.updateStrategy.type`                               | APISIX Dashboard statefulset strategy type                                                                                                                                                                                            | `RollingUpdate`                    |
-| `dashboard.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `false`                            |
-| `dashboard.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `1`                                |
+| `dashboard.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`                             |
+| `dashboard.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`                               |
 | `dashboard.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                        | `""`                               |
 | `dashboard.priorityClassName`                                 | APISIX Dashboard pods' priorityClassName                                                                                                                                                                                              | `""`                               |
 | `dashboard.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                                              | `[]`                               |
@@ -867,8 +870,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ingressController.podAnnotations`                                    | Annotations for APISIX Ingress Controller pods                                                                                                                                                                                                        | `{}`                                        |
 | `ingressController.podAffinityPreset`                                 | Pod affinity preset. Ignored if `injector.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                          | `""`                                        |
 | `ingressController.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `injector.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                     | `soft`                                      |
-| `ingressController.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `false`                                     |
-| `ingressController.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `1`                                         |
+| `ingressController.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                       | `true`                                      |
+| `ingressController.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                        | `""`                                        |
 | `ingressController.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                                                        | `""`                                        |
 | `ingressController.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `injector.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                    | `""`                                        |
 | `ingressController.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `injector.affinity` is set                                                                                                                                                                                        | `""`                                        |
@@ -889,6 +892,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ingressController.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the APISIX Ingress Controller container(s)                                                                                                                                               | `[]`                                        |
 | `ingressController.sidecars`                                          | Add additional sidecar containers to the APISIX Ingress Controller pod(s)                                                                                                                                                                             | `[]`                                        |
 | `ingressController.initContainers`                                    | Add additional init containers to the APISIX Ingress Controller pod(s)                                                                                                                                                                                | `[]`                                        |
+| `ingressController.ingressClass.name`                                 | IngressClass that will be be used to implement the APISIX Ingress                                                                                                                                                                                     | `apisix`                                    |
+| `ingressController.ingressClass.annotations`                          | Additional annotations for the APISIX IngressClass                                                                                                                                                                                                    | `{}`                                        |
 | `ingressController.defaultConfig`                                     | APISIX Dashboard configuration (evaluated as a template)                                                                                                                                                                                              | `""`                                        |
 | `ingressController.extraConfig`                                       | Extra configuration parameters for APISIX Ingress Controller                                                                                                                                                                                          | `{}`                                        |
 | `ingressController.existingConfigMap`                                 | name of a ConfigMap with existing configuration for the Dashboard                                                                                                                                                                                     | `""`                                        |

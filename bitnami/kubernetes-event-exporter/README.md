@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kubernetes-event-exporter
 ```
 
-Looking to use Kubernetes Event Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Kubernetes Event Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -121,6 +121,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                    | `[]`                                        |
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                       | `[]`                                        |
 | `podSecurityContext.fsGroup`                        | Group ID for the container                                                                                                                                                                                        | `1001`                                      |
+| `pdb.create`                                        | Create a pdb                                                                                                                                                                                                      | `true`                                      |
+| `pdb.minAvailable`                                  | Minimum number / percentage of pods that should remain scheduled                                                                                                                                                  | `""`                                        |
+| `pdb.maxUnavailable`                                | Maximum number / percentage of pods that may be made unavailable                                                                                                                                                  | `""`                                        |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                              | `true`                                      |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`                                        |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                        | `1001`                                      |

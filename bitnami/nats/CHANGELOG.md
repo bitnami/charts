@@ -1,8 +1,45 @@
 # Changelog
 
-## 8.2.2 (2024-05-23)
+## 8.2.11 (2024-07-04)
 
-* [bitnami/nats] Use different liveness/readiness probes ([#26320](https://github.com/bitnami/charts/pull/26320))
+* [bitnami/nats] Release 8.2.11 ([#27788](https://github.com/bitnami/charts/pull/27788))
+
+## <small>8.2.10 (2024-07-03)</small>
+
+* [bitnami/nats] Release 8.2.10 (#27670) ([06da1d1](https://github.com/bitnami/charts/commit/06da1d122aaf5236aab95a04db60045448e30f7d)), closes [#27670](https://github.com/bitnami/charts/issues/27670)
+
+## <small>8.2.9 (2024-06-28)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/nats] Release 8.2.9 (#27572) ([21d53ff](https://github.com/bitnami/charts/commit/21d53ffe4b446dbcc3e4b86b12f3fc14f0dfbba0)), closes [#27572](https://github.com/bitnami/charts/issues/27572)
+
+## <small>8.2.8 (2024-06-18)</small>
+
+* [bitnami/nats] Release 8.2.8 (#27386) ([e2627bb](https://github.com/bitnami/charts/commit/e2627bb64fda56838614ae653822536c506cf50a)), closes [#27386](https://github.com/bitnami/charts/issues/27386)
+
+## <small>8.2.7 (2024-06-17)</small>
+
+* [bitnami/nats] Release 8.2.7 (#27285) ([289e29b](https://github.com/bitnami/charts/commit/289e29b8b7af49addc31773516336b0dd5dcd37f)), closes [#27285](https://github.com/bitnami/charts/issues/27285)
+
+## <small>8.2.6 (2024-06-06)</small>
+
+* [bitnami/nats] Release 8.2.6 (#26990) ([ceb395f](https://github.com/bitnami/charts/commit/ceb395f4284e4425233a3f0916e1680cd48b3cc5)), closes [#26990](https://github.com/bitnami/charts/issues/26990)
+
+## <small>8.2.5 (2024-06-06)</small>
+
+* [bitnami/nats] Align PodDisruptionBudgets with templates (#26707) ([db78a05](https://github.com/bitnami/charts/commit/db78a056f96576ac2ec4b85ac78fbf85a40630d4)), closes [#26707](https://github.com/bitnami/charts/issues/26707)
+
+## <small>8.2.4 (2024-06-05)</small>
+
+* [bitnami/nats] Release 8.2.4 (#26745) ([bb70a5f](https://github.com/bitnami/charts/commit/bb70a5f5f49cccdc0ee7972dd3701f50343fc6bd)), closes [#26745](https://github.com/bitnami/charts/issues/26745)
+
+## <small>8.2.3 (2024-06-04)</small>
+
+* [bitnami/nats] Bump chart version (#26654) ([68a9a8d](https://github.com/bitnami/charts/commit/68a9a8d748c0235451b71b9f610440838bbf8de2)), closes [#26654](https://github.com/bitnami/charts/issues/26654)
+
+## <small>8.2.2 (2024-05-23)</small>
+
+* [bitnami/nats] Use different liveness/readiness probes (#26320) ([fc72025](https://github.com/bitnami/charts/commit/fc7202546f5fc871165c218126f6fc568361f7fe)), closes [#26320](https://github.com/bitnami/charts/issues/26320)
 
 ## <small>8.2.1 (2024-05-22)</small>
 

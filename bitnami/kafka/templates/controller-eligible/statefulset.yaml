@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- $replicaCount := int .Values.controller.replicaCount }}
-{{- if and .Values.kraft.enabled (gt $replicaCount 0) }}
+{{- if and .Values.kraft.enabled (or (gt $replicaCount 0) .Values.controller.autoscaling.enabled) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -18,7 +18,9 @@ metadata:
   {{- end }}
 spec:
   podManagementPolicy: {{ .Values.controller.podManagementPolicy }}
+  {{- if not .Values.controller.autoscaling.enabled }}
   replicas: {{ .Values.controller.replicaCount }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -308,6 +310,11 @@ spec:
             - name: kafka-config
               mountPath: /opt/bitnami/kafka/config/server.properties
               subPath: server.properties
+            {{- if .Values.sasl.zookeeper.user }}
+            - name: kafka-config
+              mountPath: /opt/bitnami/kafka/config/kafka_jaas.conf
+              subPath: kafka_jaas.conf
+            {{- end }}
             - name: tmp
               mountPath: /tmp
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}

@@ -1,8 +1,37 @@
 # Changelog
 
-## 13.4.0 (2024-05-23)
+## 13.4.7 (2024-07-11)
 
-* [bitnami/zookeeper] Enable PodDisruptionBudgets ([#26382](https://github.com/bitnami/charts/pull/26382))
+* [bitnami/zookeeper] Bump patch version ([#27895](https://github.com/bitnami/charts/pull/27895))
+
+## <small>13.4.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/zookeeper] Release 13.4.6 (#27722) ([84b4b99](https://github.com/bitnami/charts/commit/84b4b99f4450009d8fcac4c43755cd8116db33ff)), closes [#27722](https://github.com/bitnami/charts/issues/27722)
+
+## <small>13.4.5 (2024-06-18)</small>
+
+* [bitnami/zookeeper] Release 13.4.5 (#27431) ([2168b4a](https://github.com/bitnami/charts/commit/2168b4af978a7657a8a1b0db8a0bd04e354cf0b9)), closes [#27431](https://github.com/bitnami/charts/issues/27431)
+
+## <small>13.4.4 (2024-06-17)</small>
+
+* [bitnami/zookeeper] Release 13.4.4 (#27309) ([eb6c0ff](https://github.com/bitnami/charts/commit/eb6c0ff2245c49d80712168f4a61b6928569fb06)), closes [#27309](https://github.com/bitnami/charts/issues/27309)
+
+## <small>13.4.3 (2024-06-06)</small>
+
+* [bitnami/zookeeper] Release 13.4.3 (#27029) ([a3977c8](https://github.com/bitnami/charts/commit/a3977c84f92e93ec4f9eea1710646afd987d3d08)), closes [#27029](https://github.com/bitnami/charts/issues/27029)
+
+## <small>13.4.2 (2024-06-05)</small>
+
+* [bitnami/zookeeper] Release 13.4.2 (#26874) ([25338c3](https://github.com/bitnami/charts/commit/25338c3a70634f51d331459793a1161244576f54)), closes [#26874](https://github.com/bitnami/charts/issues/26874)
+
+## <small>13.4.1 (2024-06-04)</small>
+
+* [bitnami/zookeeper] Bump chart version (#26675) ([a04a619](https://github.com/bitnami/charts/commit/a04a619420db3ac872e225b0709889b588ecf886)), closes [#26675](https://github.com/bitnami/charts/issues/26675)
+
+## 13.4.0 (2024-05-24)
+
+* [bitnami/zookeeper] Enable PodDisruptionBudgets (#26382) ([8809f55](https://github.com/bitnami/charts/commit/8809f554cf1a91afbc002b453bc17c6dd705e9ab)), closes [#26382](https://github.com/bitnami/charts/issues/26382)
 
 ## 13.3.0 (2024-05-21)
 

@@ -1,8 +1,40 @@
 # Changelog
 
-## 1.2.1 (2024-05-23)
+## 1.3.7 (2024-07-03)
 
-* [bitnami/flink] Use different liveness/readiness probes ([#26316](https://github.com/bitnami/charts/pull/26316))
+* [bitnami/flink] Release 1.3.7 ([#27683](https://github.com/bitnami/charts/pull/27683))
+
+## <small>1.3.6 (2024-06-18)</small>
+
+* [bitnami/flink] Release 1.3.6 (#27343) ([b6743d3](https://github.com/bitnami/charts/commit/b6743d3b1e17cdeb12e3a4f6ee25ef8c564318fa)), closes [#27343](https://github.com/bitnami/charts/issues/27343)
+
+## <small>1.3.5 (2024-06-17)</small>
+
+* [bitnami/flink] Release 1.3.5 (#27217) ([72a8672](https://github.com/bitnami/charts/commit/72a867263269a9cec5d61411b1c294d3a75a1c10)), closes [#27217](https://github.com/bitnami/charts/issues/27217)
+
+## <small>1.3.4 (2024-06-14)</small>
+
+* [bitnami/flink] Release 1.3.4 (#27182) ([19a8dae](https://github.com/bitnami/charts/commit/19a8daeacb51e6d60051d55e81ab20afc19b11e3)), closes [#27182](https://github.com/bitnami/charts/issues/27182)
+
+## <small>1.3.3 (2024-06-06)</small>
+
+* [bitnami/flink] Release 1.3.3 (#26950) ([af5fc61](https://github.com/bitnami/charts/commit/af5fc61847eac8aef7c9a59ea99de77614daf3b9)), closes [#26950](https://github.com/bitnami/charts/issues/26950)
+
+## <small>1.3.2 (2024-06-06)</small>
+
+* [bitnami/flink] Release 1.3.2 (#26898) ([63273f2](https://github.com/bitnami/charts/commit/63273f25a3329be9f570ba31327dc7d6f3bc29b6)), closes [#26898](https://github.com/bitnami/charts/issues/26898)
+
+## <small>1.3.1 (2024-06-04)</small>
+
+* [bitnami/flink] Bump chart version (#26630) ([ae25bb7](https://github.com/bitnami/charts/commit/ae25bb7fad5896ff76afbf00f94c89a1fdcbefed)), closes [#26630](https://github.com/bitnami/charts/issues/26630)
+
+## 1.3.0 (2024-06-03)
+
+* [bitnami/flink] Enable PodDisruptionBudgets (#26429) ([a0514ba](https://github.com/bitnami/charts/commit/a0514ba575c8fbe7cd0f730deb976c1788464e40)), closes [#26429](https://github.com/bitnami/charts/issues/26429)
+
+## <small>1.2.1 (2024-05-23)</small>
+
+* [bitnami/flink] Use different liveness/readiness probes (#26316) ([bb44040](https://github.com/bitnami/charts/commit/bb44040e2fb9a1da7317bf4af97e2bb6c5e0162e)), closes [#26316](https://github.com/bitnami/charts/issues/26316)
 
 ## 1.2.0 (2024-05-21)
 

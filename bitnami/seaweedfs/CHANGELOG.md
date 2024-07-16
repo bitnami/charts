@@ -1,8 +1,61 @@
 # Changelog
 
-## 0.3.0 (2024-05-23)
+## 1.0.0 (2024-07-12)
 
-* [bitnami/seaweedfs] Enable PodDisruptionBudgets ([#26379](https://github.com/bitnami/charts/pull/26379))
+* [bitnami/seaweedfs] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27937](https://github.com/bitnami/charts/pull/27937))
+
+## <small>0.4.5 (2024-07-04)</small>
+
+* [bitnami/seaweedfs] Release 0.4.5 (#27793) ([f38eab0](https://github.com/bitnami/charts/commit/f38eab0be837bead6abc9e75085241ac0eeb4b23)), closes [#27793](https://github.com/bitnami/charts/issues/27793)
+
+## <small>0.4.4 (2024-07-03)</small>
+
+* [bitnami/seaweedfs] Release 0.4.4 (#27679) ([8725e03](https://github.com/bitnami/charts/commit/8725e032abd5597575c61674a7566889dcd1848f)), closes [#27679](https://github.com/bitnami/charts/issues/27679)
+
+## <small>0.4.3 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/seaweedfs] Release 0.4.3 (#27611) ([7b9cebf](https://github.com/bitnami/charts/commit/7b9cebf6f0adac95e2ef99e589f8c492a5ebbf6b)), closes [#27611](https://github.com/bitnami/charts/issues/27611)
+
+## <small>0.4.2 (2024-06-18)</small>
+
+* [bitnami/seaweedfs] Release 0.4.2 (#27415) ([d78148f](https://github.com/bitnami/charts/commit/d78148f0fa81232fe7cb847b8bfe3d3a500a79e0)), closes [#27415](https://github.com/bitnami/charts/issues/27415)
+
+## <small>0.4.1 (2024-06-17)</small>
+
+* [bitnami/seaweedfs] Release 0.4.1 (#27281) ([a02d8b8](https://github.com/bitnami/charts/commit/a02d8b8682525e62d5173aa64e239c56268d12cd)), closes [#27281](https://github.com/bitnami/charts/issues/27281)
+
+## 0.4.0 (2024-06-11)
+
+* [bitnami/seaweedfs] Make Mariadb optional (#26366) ([36ec406](https://github.com/bitnami/charts/commit/36ec406782e32e6eeea34f13ec61f2734e430f6d)), closes [#26366](https://github.com/bitnami/charts/issues/26366)
+
+## <small>0.3.6 (2024-06-10)</small>
+
+* [bitnami/seaweedfs] Release 0.3.6 (#27066) ([5ee73cf](https://github.com/bitnami/charts/commit/5ee73cfca0e75cabcf4ee7a758b229f3e44d71eb)), closes [#27066](https://github.com/bitnami/charts/issues/27066)
+
+## <small>0.3.5 (2024-06-06)</small>
+
+* [bitnami/seaweedfs] Release 0.3.5 (#27016) ([c0375ab](https://github.com/bitnami/charts/commit/c0375ab68bdc85f1870212507287bcd8c0a98592)), closes [#27016](https://github.com/bitnami/charts/issues/27016)
+
+## <small>0.3.4 (2024-06-05)</small>
+
+* [bitnami/seaweedfs] Bump chart version (#26861) ([335d6c9](https://github.com/bitnami/charts/commit/335d6c921ab539585d8908c56498591f6f7ace0f)), closes [#26861](https://github.com/bitnami/charts/issues/26861)
+
+## <small>0.3.3 (2024-06-05)</small>
+
+* [bitnami/seaweedfs] Bump chart version (#26803) ([f815b87](https://github.com/bitnami/charts/commit/f815b872c71cb720cd4cd753cb0301280eac8c0b)), closes [#26803](https://github.com/bitnami/charts/issues/26803)
+
+## <small>0.3.2 (2024-06-05)</small>
+
+* [bitnami/seaweedfs] Release 0.3.2 (#26753) ([4ff09d3](https://github.com/bitnami/charts/commit/4ff09d3d6178612acf578cc1a7648a0831654868)), closes [#26753](https://github.com/bitnami/charts/issues/26753)
+
+## <small>0.3.1 (2024-05-29)</small>
+
+* [bitnami/seaweedfs] Add chart source URL to sources list (#26538) ([0a1b8c1](https://github.com/bitnami/charts/commit/0a1b8c1843634aafc89db4a0b5b78a2756661c37)), closes [#26538](https://github.com/bitnami/charts/issues/26538)
+
+## 0.3.0 (2024-05-24)
+
+* [bitnami/seaweedfs] Enable PodDisruptionBudgets (#26379) ([3c7ae2c](https://github.com/bitnami/charts/commit/3c7ae2c0d8cd7943a1c3962bc649821b8d6f3239)), closes [#26379](https://github.com/bitnami/charts/issues/26379)
 
 ## <small>0.2.2 (2024-05-22)</small>
 

@@ -1,6 +1,6 @@
 <!--- app-name: cert-manager -->
 
-# cert-manager packaged by Bitnami
+# Bitnami package for cert-manager
 
 cert-manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
 
@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/cert-manager
 ```
 
-Looking to use cert-manager in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use cert-manager in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -387,6 +387,9 @@ As an alternative, you can make use of the preset configurations for pod affinit
 | `controller.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                            | `[]`                           |
 | `controller.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                                  | `{}`                           |
 | `controller.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                              | `{}`                           |
+| `controller.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`                         |
+| `controller.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`                           |
+| `controller.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.                                                                    | `""`                           |
 
 ### Webhook deployment parameters
 
@@ -478,6 +481,9 @@ As an alternative, you can make use of the preset configurations for pod affinit
 | `webhook.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                            | `[]`                                   |
 | `webhook.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                                  | `{}`                                   |
 | `webhook.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                              | `{}`                                   |
+| `webhook.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`                                 |
+| `webhook.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`                                   |
+| `webhook.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `webhook.pdb.minAvailable` and `webhook.pdb.maxUnavailable` are empty.                                                                          | `""`                                   |
 
 ### CAInjector deployment parameters
 
@@ -565,6 +571,9 @@ As an alternative, you can make use of the preset configurations for pod affinit
 | `cainjector.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                         | `true`                       |
 | `cainjector.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                            | `[]`                         |
 | `cainjector.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                            | `[]`                         |
+| `cainjector.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                         | `true`                       |
+| `cainjector.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                          | `""`                         |
+| `cainjector.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `cainjector.pdb.minAvailable` and `cainjector.pdb.maxUnavailable` are empty.                                                                                    | `""`                         |
 
 ### Metrics Parameters
 

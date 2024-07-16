@@ -17,7 +17,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/kiam
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > NOTE: KIAM has been designed to work on a Kubernetes cluster deployed on top of AWS, although it is possible to deploy it in other environments.
 
-Looking to use Kiam in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Kiam in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -279,6 +279,9 @@ If managing TLS secrets outside of Helm, it is possible to create a TLS secret (
 | `server.extraVolumes`                                      | Optionally specify extra list of additional volumes for kiam pods                                                                                                                                                               | `[]`             |
 | `server.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for kiam container(s)                                                                                                                                                  | `[]`             |
 | `server.initContainers`                                    | Add additional init containers to the kiam pods                                                                                                                                                                                 | `[]`             |
+| `server.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                 | `true`           |
+| `server.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `""`             |
+| `server.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 | `server.sidecars`                                          | Add additional sidecar containers to the kiam pods                                                                                                                                                                              | `[]`             |
 
 ### kiam server exposure parameters

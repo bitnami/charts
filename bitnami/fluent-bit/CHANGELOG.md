@@ -1,8 +1,50 @@
 # Changelog
 
-## 2.2.2 (2024-05-26)
+## 2.3.9 (2024-07-12)
 
-* [bitnami/fluent-bit] Release 2.2.2 ([#26442](https://github.com/bitnami/charts/pull/26442))
+* [bitnami/fluent-bit] Release 2.3.9 ([#27923](https://github.com/bitnami/charts/pull/27923))
+
+## <small>2.3.8 (2024-07-10)</small>
+
+* [bitnami/fluent-bit] Release 2.3.8 (#27883) ([bc8e1bd](https://github.com/bitnami/charts/commit/bc8e1bd604da1ca6466dc0e978e38afbd83c25f8)), closes [#27883](https://github.com/bitnami/charts/issues/27883)
+
+## <small>2.3.7 (2024-07-08)</small>
+
+* [bitnami/fluent-bit] Release 2.3.7 (#27848) ([5e56666](https://github.com/bitnami/charts/commit/5e566665993c48c79a8e284da8adb6e150bea0a1)), closes [#27848](https://github.com/bitnami/charts/issues/27848)
+
+## <small>2.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/fluent-bit] Release 2.3.6 (#27692) ([6543416](https://github.com/bitnami/charts/commit/6543416ae8d32281921cedfb73306e8122adc2a0)), closes [#27692](https://github.com/bitnami/charts/issues/27692)
+
+## <small>2.3.5 (2024-06-18)</small>
+
+* [bitnami/fluent-bit] Release 2.3.4 (#27218) ([2189ddb](https://github.com/bitnami/charts/commit/2189ddbbd6d5808ae1b8bd82ff58075418340f5f)), closes [#27218](https://github.com/bitnami/charts/issues/27218)
+* [bitnami/fluent-bit] Release 2.3.5 (#27344) ([1032ea6](https://github.com/bitnami/charts/commit/1032ea62180360dc0a289e2c606473f8a0abad4c)), closes [#27344](https://github.com/bitnami/charts/issues/27344)
+
+## <small>2.3.3 (2024-06-12)</small>
+
+* [bitnami/fluent-bit] Release 2.3.3 (#27125) ([6544466](https://github.com/bitnami/charts/commit/6544466a73d9ce96986a2829a6c245e1363d0e79)), closes [#27125](https://github.com/bitnami/charts/issues/27125)
+
+## <small>2.3.2 (2024-06-08)</small>
+
+* [bitnami/fluent-bit] Release 2.3.2 (#27061) ([1a5338d](https://github.com/bitnami/charts/commit/1a5338daf534b712823a407b409f7b71b9ddb294)), closes [#27061](https://github.com/bitnami/charts/issues/27061)
+
+## <small>2.3.1 (2024-06-07)</small>
+
+* [bitnami/fluent-bit] Release 2.3.1 (#26949) ([62fdaac](https://github.com/bitnami/charts/commit/62fdaacb7d41f4ce8ec98688374eb8eeef31f099)), closes [#26949](https://github.com/bitnami/charts/issues/26949)
+
+## 2.3.0 (2024-06-06)
+
+* [bitnami/fluent-bit] Enable PodDisruptionBudgets (#26693) ([a746ed1](https://github.com/bitnami/charts/commit/a746ed1b65609c31ca517a6851c4b13668df016d)), closes [#26693](https://github.com/bitnami/charts/issues/26693)
+
+## <small>2.2.3 (2024-06-04)</small>
+
+* [bitnami/fluent-bit] Bump chart version (#26631) ([3119749](https://github.com/bitnami/charts/commit/311974914d758451d8ed6a7754b3bff61e1633f0)), closes [#26631](https://github.com/bitnami/charts/issues/26631)
+
+## <small>2.2.2 (2024-05-27)</small>
+
+* [bitnami/fluent-bit] Release 2.2.2 (#26442) ([d966419](https://github.com/bitnami/charts/commit/d9664199abc3f0b025546b05686b1e1daff07341)), closes [#26442](https://github.com/bitnami/charts/issues/26442)
 
 ## <small>2.2.1 (2024-05-24)</small>
 

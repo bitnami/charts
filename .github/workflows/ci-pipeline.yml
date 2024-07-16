@@ -100,14 +100,14 @@ jobs:
     if: needs.get-chart.outputs.result == 'ok'
     steps:
       - name: Checkout bitnami/charts
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           path: charts
       - name: Clone upstream bitnami/charts repository
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         with:
           path: upstream-charts
       - name: Setup git configuration
@@ -128,9 +128,14 @@ jobs:
       - id: generate-changelog
         name: Generate changelog
         env:
+          PULL_REQUEST_NUMBER: "${{ github.event.pull_request.number }}"
+          PULL_REQUEST_URL: "${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}"
+          GITHUB_TOKEN: "${{ github.token }}"
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           cd $GITHUB_WORKSPACE/upstream-charts
+          # Get PR title using the API to avoid malicious string substitutions
+          pr_title="$(gh api /repos/${GITHUB_REPOSITORY}/pulls/${PULL_REQUEST_NUMBER} | jq -r '.title')"
           # The generator needs the file to exist
           chart_version="$(yq e '.version' $GITHUB_WORKSPACE/charts/bitnami/${CHART}/Chart.yaml)"
           changelog_file="$GITHUB_WORKSPACE/charts/bitnami/${CHART}/CHANGELOG.md"
@@ -152,7 +157,7 @@ jobs:
           # Include h1 heading and add entry for the current version. There is no tag for the current version (this will be created once merged), so we need to manually add it.
           # We know the final squashed commit title, which will be the PR title. We cannot add a link to the commit in the main branch because it has not been
           # merged yet (this will be corrected once a new version regenerates the changelog). Instead, we add the PR url which contains the exact same information.
-          echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${{ github.event.pull_request.title }} ([#${{ github.event.number }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}))\n" > ${changelog_file}
+          echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${pr_title} ([#${PULL_REQUEST_NUMBER}](${PULL_REQUEST_URL}))\n" > ${changelog_file}
           cat ${changelog_tmp} >> ${changelog_file}
           rm ${changelog_tmp}
           if git status -s | grep "bitnami/${CHART}/CHANGELOG.md"; then
@@ -193,12 +198,6 @@ jobs:
             ! grep --quiet "@param\s\+[A-Za-z\.]\+\.tag\s\+" "bitnami/${CHART}/values.yaml" || exit_code=$?
             if [[ $exit_code -ne 0 ]]; then
               echo "error=Please ensure all *.tag params are skipped (@skip) in the bitnami/${CHART}/values.yaml file"
-              exit "$exit_code"
-            fi
-            # Ensuring no unprintable characters are present in values.yaml
-            ! grep --quiet "[^[:print:]]" "bitnami/${CHART}/values.yaml" || exit_code=$?
-            if [[ $exit_code -ne 0 ]]; then
-              echo "error=Please ensure there are no unprintable characters in the bitnami/${CHART}/values.yaml file"
               exit "$exit_code"
             fi
             echo "Updating README.md for bitnami/${CHART}"
@@ -304,9 +303,75 @@ jobs:
           else
             echo "result=skip" >> $GITHUB_OUTPUT
           fi
+  chart-score:
+    runs-on: ubuntu-latest
+    needs: [get-chart]
+    name: Get chart latest Kubescape score
+    permissions:
+      contents: read
+    outputs:
+      threshold: ${{ steps.set-output.outputs.threshold }}
+    if: needs.get-chart.outputs.result == 'ok'
+    steps:
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        name: Checkout 'main' branch
+        with:
+          path: charts-main
+          repository: bitnami/charts
+          fetch-depth: 1
+      - name: Install helm
+        run: |
+          HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
+          curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
+      - name: Run helm-dep-build
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          if [ -d "charts-main/bitnami/${CHART}" ]; then
+            helm dep build charts-main/bitnami/${CHART}
+            cd charts-main/bitnami/${CHART}/charts
+            for filename in *.tgz; do
+              tar -xf "$filename"
+              rm -f "$filename"
+            done
+          fi
+      - id: get-chart-score
+        uses: addnab/docker-run-action@4f65fabd2431ebc8d299f8e5a018d79a769ae185
+        name: Get main branch kubescape score
+        # Skip step when user is bitnami-bot or 'skip-score' label is used
+        if: |
+          !(
+            github.event.pull_request.user.login == 'bitnami-bot' ||
+            contains(github.event.pull_request.labels.*.name, 'skip-score') ||
+            (github.event.action == 'labeled' && github.event.label.name == 'skip-score')
+          )
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        with:
+          image: bitnami/kubescape:3.0.3
+          options: -v  /home/runner/work/charts/charts/charts-main:/charts -v /tmp:/out -e CHART
+          run: |
+            if [ -d "/charts/bitnami/${CHART}" ]; then
+              kubescape scan framework MITRE,NSA,SOC2,cis-v1.23-t1.0.1 /charts/bitnami/${CHART} --format json -o /out/report.json
+              # Truncate score to 2 decimals
+              printf "%s.%.2s" $(echo "$(jq .summaryDetails.complianceScore /out/report.json)" | tr '.' ' ') | sed 's/\.$//' > /out/score
+            else
+              echo "Chart not found at /charts/bitnami/${CHART}. It will be assumed that the upstream chart does not exist."
+            fi
+      - id: set-output
+        name: Set threshold score
+        run: |
+          if [[ -f "/tmp/score" ]]; then
+            score="$(cat /tmp/score)"
+          else
+            echo "Skipping Kubescape score check."
+            score="0"
+          fi
+          echo "Using threshold score: ${score}"
+          echo "threshold=${score}" >> $GITHUB_OUTPUT
   vib-verify:
     runs-on: ubuntu-latest
-    needs: [get-chart, update-pr]
+    needs: [get-chart, update-pr, chart-score]
     permissions:
       contents: read
     # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
@@ -322,7 +387,7 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -368,6 +433,8 @@ jobs:
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           # Alternative Target-Platform to be used in case of incompatibilities
           VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
+          # Set kubescape score threshold
+          VIB_ENV_KUBESCAPE_SCORE_THRESHOLD: ${{ needs.chart-score.outputs.threshold }}
   auto-pr-review:
     runs-on: ubuntu-latest
     needs: vib-verify
