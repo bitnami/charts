@@ -894,6 +894,7 @@ persistence:
   ##   set, choosing the default provisioner
   ##
   defaultStorageClass: ""
+  storageClass: ""
   ## @param persistence.accessModes PVC Access modes
   ##
   accessModes:
