@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.4 (2024-07-15)
+## 1.0.5 (2024-07-16)
 
-* [bitnami/cilium] Fix Cilium Envoy configuration ([#27587](https://github.com/bitnami/charts/pull/27587))
+* [bitnami/cilium] Global StorageClass as default value ([#28004](https://github.com/bitnami/charts/pull/28004))
+
+## <small>1.0.4 (2024-07-15)</small>
+
+* [bitnami/cilium] Fix Cilium Envoy configuration (#27587) ([bc4297c](https://github.com/bitnami/charts/commit/bc4297c826dcf1a0020f1373bdfe9d801b40bd0b)), closes [#27587](https://github.com/bitnami/charts/issues/27587)
 
 ## <small>1.0.3 (2024-07-11)</small>
 
