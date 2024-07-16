@@ -10,6 +10,7 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ## @param global.redis.password Redis&reg; password (overrides `password`)
 ##
 global:
@@ -20,6 +21,7 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
+  storageClass: ""
   redis:
     password: ""
   ## Compatibility adaptations for Kubernetes platforms
