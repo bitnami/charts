@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.2 (2024-07-12)
+## 8.2.3 (2024-07-16)
 
-* [bitnami/external-dns] add revisionHistoryLimit value ([#27913](https://github.com/bitnami/charts/pull/27913))
+* [bitnami/external-dns] Global StorageClass as default value ([#28017](https://github.com/bitnami/charts/pull/28017))
+
+## <small>8.2.2 (2024-07-16)</small>
+
+* [bitnami/external-dns] add revisionHistoryLimit value (#27913) ([8cd1824](https://github.com/bitnami/charts/commit/8cd182450c2cc0e2f7136ee9a455a3aa3486d7dc)), closes [#27913](https://github.com/bitnami/charts/issues/27913)
 
 ## <small>8.2.1 (2024-07-11)</small>
 
