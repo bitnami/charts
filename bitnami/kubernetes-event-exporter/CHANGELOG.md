@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.7 (2024-07-04)
+## 3.2.8 (2024-07-16)
 
-* [bitnami/kubernetes-event-exporter] Release 3.2.7 ([#27802](https://github.com/bitnami/charts/pull/27802))
+* [bitnami/kubernetes-event-exporter] Global StorageClass as default value ([#28047](https://github.com/bitnami/charts/pull/28047))
+
+## <small>3.2.7 (2024-07-04)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.7 (#27802) ([c7dd23a](https://github.com/bitnami/charts/commit/c7dd23a40f206ff3d6de389164b6b9341138cf78)), closes [#27802](https://github.com/bitnami/charts/issues/27802)
 
 ## <small>3.2.6 (2024-07-03)</small>
 
