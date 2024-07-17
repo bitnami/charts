@@ -248,6 +248,11 @@ memoryHighWatermark:
 ## @param plugins List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)
 ##
 plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
+
+## @param queue_master_locator Changes the queue_master_locator setting in the rabbitmq config file
+## 
+queue_master_locator: min-masters  
+  
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
 ##
@@ -415,7 +420,7 @@ configuration: |-
   load_definitions = {{ .Values.loadDefinition.file }}
   {{- end }}
   # queue master locator
-  queue_master_locator = min-masters
+  queue_master_locator = {{ .Values.queue_master_locator }}
   # enable loopback user
   {{- if not (empty .Values.auth.username) }}
   loopback_users.{{ .Values.auth.username }} = {{ .Values.auth.enableLoopbackUser }}
