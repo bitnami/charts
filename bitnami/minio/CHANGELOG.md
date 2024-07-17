@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.23 (2024-07-16)
+## 14.6.24 (2024-07-17)
 
-* [bitnami/minio] Fix provisioning in non-tty environment ([#28118](https://github.com/bitnami/charts/pull/28118))
+* [bitnami/minio] Global StorageClass as default value ([#28059](https://github.com/bitnami/charts/pull/28059))
+
+## <small>14.6.23 (2024-07-17)</small>
+
+* [bitnami/minio] Fix provisioning in non-tty environment (#28118) ([020db20](https://github.com/bitnami/charts/commit/020db20e248a464e366de9cdff83cd8b335b69e9)), closes [#28118](https://github.com/bitnami/charts/issues/28118)
 
 ## <small>14.6.22 (2024-07-15)</small>
 
