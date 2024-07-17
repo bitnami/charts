@@ -2,7 +2,7 @@
 
 ## 14.6.23 (2024-07-16)
 
-* [bitnami/minio] Global StorageClass as default value ([#28059](https://github.com/bitnami/charts/pull/28059))
+* [bitnami/minio] Fix provisioning in non-tty environment ([#28118](https://github.com/bitnami/charts/pull/28118))
 
 ## <small>14.6.22 (2024-07-15)</small>
 

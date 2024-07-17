@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.1.4 (2024-07-03)
+## 18.1.5 (2024-07-16)
 
-* [bitnami/nginx] Release 18.1.4 ([#27743](https://github.com/bitnami/charts/pull/27743))
+* [bitnami/nginx] Global StorageClass as default value ([#28070](https://github.com/bitnami/charts/pull/28070))
+
+## <small>18.1.4 (2024-07-03)</small>
+
+* [bitnami/nginx] Release 18.1.4 (#27743) ([a9c9841](https://github.com/bitnami/charts/commit/a9c9841d4f409ebcefb740fb323dd2268bc4930b)), closes [#27743](https://github.com/bitnami/charts/issues/27743)
 
 ## <small>18.1.3 (2024-07-03)</small>
 
