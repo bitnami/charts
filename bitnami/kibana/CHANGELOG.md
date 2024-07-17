@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.11 (2024-07-11)
+## 11.2.12 (2024-07-16)
 
-* [bitnami/kibana] Release 11.2.11 ([#27909](https://github.com/bitnami/charts/pull/27909))
+* [bitnami/kibana] Global StorageClass as default value ([#28041](https://github.com/bitnami/charts/pull/28041))
+
+## <small>11.2.11 (2024-07-11)</small>
+
+* [bitnami/kibana] Release 11.2.11 (#27909) ([bbbe46f](https://github.com/bitnami/charts/commit/bbbe46f4fd1877ab80c092544f02b8ebddd1224d)), closes [#27909](https://github.com/bitnami/charts/issues/27909)
 
 ## <small>11.2.10 (2024-07-04)</small>
 

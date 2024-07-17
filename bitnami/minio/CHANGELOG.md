@@ -1,8 +1,16 @@
 # Changelog
 
-## 14.6.20 (2024-07-10)
+## 14.6.22 (2024-07-15)
 
-* [bitnami/minio] Release 14.6.20 ([#27891](https://github.com/bitnami/charts/pull/27891))
+* [bitnami/minio] Release 14.6.22 ([#27991](https://github.com/bitnami/charts/pull/27991))
+
+## <small>14.6.21 (2024-07-13)</small>
+
+* [bitnami/minio] Release 14.6.21 (#27957) ([275b8af](https://github.com/bitnami/charts/commit/275b8af69ff830bd5cb6e02ad4d3839dfaa6c234)), closes [#27957](https://github.com/bitnami/charts/issues/27957)
+
+## <small>14.6.20 (2024-07-10)</small>
+
+* [bitnami/minio] Release 14.6.20 (#27891) ([65a0403](https://github.com/bitnami/charts/commit/65a040321f33ffe03e18be24ce1441a6f03a4fde)), closes [#27891](https://github.com/bitnami/charts/issues/27891)
 
 ## <small>14.6.19 (2024-07-05)</small>
 

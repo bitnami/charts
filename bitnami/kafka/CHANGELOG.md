@@ -1,8 +1,14 @@
 # Changelog
 
-## 29.4.0 (2024-07-13)
+
+## 29.4.0 (2024-07-17)
 
 * [bitnami/kafka] Add support IMDSv2 for getting brokerRackAwareness data ([#27921](https://github.com/bitnami/charts/pull/27921))
+
+## <small>29.3.8 (2024-07-16)</small>
+
+* [bitnami/kafka] fix jmx-servicemonitor by using JMX Exporter's default metrics path ([#27455](https://github.com/bitnami/charts/pull/27455))
+
 
 ## <small>29.3.7 (2024-07-08)</small>
 
