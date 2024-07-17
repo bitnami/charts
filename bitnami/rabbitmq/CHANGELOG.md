@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.6.0 (2024-07-16)
+## 14.6.0 (2024-07-17)
 
 * [bitnami/rabbitmq] make queue_master_locator configurable ([#27990](https://github.com/bitnami/charts/pull/27990))
 
