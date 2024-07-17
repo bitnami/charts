@@ -36,6 +36,9 @@
             "resources": {
               "path": "/.vib"
             },
+            "wait": {
+              "file": "gitea/goss/goss-wait.yaml"
+            },
             "tests_file": "gitea/goss/goss.yaml",
             "vars_file": "gitea/runtime-parameters.yaml",
             "remote": {
