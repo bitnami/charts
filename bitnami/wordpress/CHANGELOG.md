@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.5 (2024-07-17)
+## 23.0.6 (2024-07-17)
 
-* [bitnami/wordpress] Release 23.0.5 ([#28140](https://github.com/bitnami/charts/pull/28140))
+* [bitnami/wordpress] Release 23.0.6 ([#28142](https://github.com/bitnami/charts/pull/28142))
+
+## <small>23.0.5 (2024-07-17)</small>
+
+* [bitnami/wordpress] Release 23.0.5 (#28140) ([f2e730d](https://github.com/bitnami/charts/commit/f2e730dcf202bd23bc55d06494212f2e7299c273)), closes [#28140](https://github.com/bitnami/charts/issues/28140)
 
 ## <small>23.0.4 (2024-07-17)</small>
 
