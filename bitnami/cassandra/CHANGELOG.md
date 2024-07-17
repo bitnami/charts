@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.6 (2024-07-16)
+## 11.3.7 (2024-07-16)
 
-* [bitnami/cassandra] Global StorageClass as default value ([#28002](https://github.com/bitnami/charts/pull/28002))
+* [bitnami/cassandra] Fix for cassandra.commitstorage.class helper ([#28119](https://github.com/bitnami/charts/pull/28119))
+
+## <small>11.3.6 (2024-07-16)</small>
+
+* [bitnami/cassandra] Global StorageClass as default value (#28002) ([691d719](https://github.com/bitnami/charts/commit/691d71984aa90d993cc8d869950bb2ef8ea46374)), closes [#28002](https://github.com/bitnami/charts/issues/28002)
 
 ## <small>11.3.5 (2024-07-12)</small>
 
