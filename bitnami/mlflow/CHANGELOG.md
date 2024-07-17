@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.4.15 (2024-07-16)
+## 1.4.15 (2024-07-17)
 
-* [bitnami/mlflow] Global StorageClass as default value ([#28060](https://github.com/bitnami/charts/pull/28060))
+* [bitnami/mlflow] Update deps ([#28131](https://github.com/bitnami/charts/pull/28131))
 
 ## <small>1.4.14 (2024-07-13)</small>
 

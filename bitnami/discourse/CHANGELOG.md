@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.2.10 (2024-07-15)
+## 13.2.11 (2024-07-16)
 
-* [bitnami/discourse] Release 13.2.10 ([#27984](https://github.com/bitnami/charts/pull/27984))
+* [bitnami/discourse] Global StorageClass as default value ([#28010](https://github.com/bitnami/charts/pull/28010))
+
+## <small>13.2.10 (2024-07-15)</small>
+
+* [bitnami/discourse] Release 13.2.10 (#27984) ([d5f6db6](https://github.com/bitnami/charts/commit/d5f6db6dd719f2e2333a26d7651a18bda6e412aa)), closes [#27984](https://github.com/bitnami/charts/issues/27984)
 
 ## <small>13.2.9 (2024-07-08)</small>
 
