@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.3.9 (2024-07-16)
+## 18.3.10 (2024-07-17)
 
-* [bitnami/airflow] Global StorageClass as default value ([#27995](https://github.com/bitnami/charts/pull/27995))
+* [bitnami/airflow] Release 18.3.10 ([#28128](https://github.com/bitnami/charts/pull/28128))
+
+## <small>18.3.9 (2024-07-16)</small>
+
+* [bitnami/airflow] Global StorageClass as default value (#27995) ([dee5654](https://github.com/bitnami/charts/commit/dee56546656435608b99cefe030c4e3e957aeff3)), closes [#27995](https://github.com/bitnami/charts/issues/27995)
 
 ## <small>18.3.8 (2024-07-05)</small>
 
