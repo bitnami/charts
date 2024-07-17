@@ -2046,6 +2046,9 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.path Path where JMX exporter serves metrics
+    ##
+    path: /metrics
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##

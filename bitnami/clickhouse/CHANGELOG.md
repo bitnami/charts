@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.10 (2024-07-05)
+## 6.2.11 (2024-07-16)
 
-* [bitnami/clickhouse] Release 6.2.10 ([#27820](https://github.com/bitnami/charts/pull/27820))
+* [bitnami/clickhouse] Global StorageClass as default value ([#28005](https://github.com/bitnami/charts/pull/28005))
+
+## <small>6.2.10 (2024-07-05)</small>
+
+* [bitnami/clickhouse] Release 6.2.10 (#27820) ([8f5d69f](https://github.com/bitnami/charts/commit/8f5d69f2d1a832de64742cc49ee8f59a7fe85301)), closes [#27820](https://github.com/bitnami/charts/issues/27820)
 
 ## <small>6.2.9 (2024-07-01)</small>
 

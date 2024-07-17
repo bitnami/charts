@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.12 (2024-07-15)
+## 2.3.13 (2024-07-15)
 
-* [bitnami/gitea] Release 2.3.12 ([#27964](https://github.com/bitnami/charts/pull/27964))
+* [bitnami/gitea] Include goss-wait test to improve test results ([#27980](https://github.com/bitnami/charts/pull/27980))
+
+## <small>2.3.12 (2024-07-15)</small>
+
+* [bitnami/gitea] Release 2.3.12 (#27964) ([48112ab](https://github.com/bitnami/charts/commit/48112ab4823167fd68daa82cda933f4f896acf7e)), closes [#27964](https://github.com/bitnami/charts/issues/27964)
 
 ## <small>2.3.11 (2024-07-05)</small>
 

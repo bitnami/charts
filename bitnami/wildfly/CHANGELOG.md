@@ -1,8 +1,13 @@
 # Changelog
 
-## 20.2.8 (2024-07-03)
+## 20.2.9 (2024-07-16)
 
-* [bitnami/wildfly] Release 20.2.8 ([#27726](https://github.com/bitnami/charts/pull/27726))
+* [bitnami/wildfly] Global StorageClass as default value ([#28109](https://github.com/bitnami/charts/pull/28109))
+
+## <small>20.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/wildfly] Release 20.2.8 (#27726) ([17a30c5](https://github.com/bitnami/charts/commit/17a30c59552838abdb0b2d9862cb4b582f164d7b)), closes [#27726](https://github.com/bitnami/charts/issues/27726)
 
 ## <small>20.2.7 (2024-06-18)</small>
 

@@ -1,8 +1,8 @@
 # Changelog
 
-## 21.7.0 (2024-07-15)
+## 21.6.3 (2024-07-15)
 
-* [bitnami/keycloak] Add support for proxy-headers ([#27890](https://github.com/bitnami/charts/pull/27890))
+* bitnami/keycloak Safer variable set of KC_HOSTNAME_URL ([#27912](https://github.com/bitnami/charts/pull/27912))
 
 ## <small>21.6.2 (2024-07-15)</small>
 

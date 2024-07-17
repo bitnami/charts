@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.7 (2024-07-11)
+## 13.4.8 (2024-07-16)
 
-* [bitnami/zookeeper] Bump patch version ([#27895](https://github.com/bitnami/charts/pull/27895))
+* [bitnami/zookeeper] Global StorageClass as default value ([#28111](https://github.com/bitnami/charts/pull/28111))
+
+## <small>13.4.7 (2024-07-11)</small>
+
+* [bitnami/zookeeper] Bump patch version (#27895) ([8cf2526](https://github.com/bitnami/charts/commit/8cf2526d81c0010e69e9c19b7739ec86531f8d2e)), closes [#27895](https://github.com/bitnami/charts/issues/27895)
 
 ## <small>13.4.6 (2024-07-03)</small>
 
