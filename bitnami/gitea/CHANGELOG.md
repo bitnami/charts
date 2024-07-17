@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.3.9 (2024-07-04)
+## 2.3.13 (2024-07-15)
 
-* [bitnami/gitea] Release 2.3.9 ([#27752](https://github.com/bitnami/charts/pull/27752))
+* [bitnami/gitea] Include goss-wait test to improve test results ([#27980](https://github.com/bitnami/charts/pull/27980))
+
+## <small>2.3.12 (2024-07-15)</small>
+
+* [bitnami/gitea] Release 2.3.12 (#27964) ([48112ab](https://github.com/bitnami/charts/commit/48112ab4823167fd68daa82cda933f4f896acf7e)), closes [#27964](https://github.com/bitnami/charts/issues/27964)
+
+## <small>2.3.11 (2024-07-05)</small>
+
+* [bitnami/gitea] Release 2.3.11 (#27810) ([f792844](https://github.com/bitnami/charts/commit/f7928444d215f77f582b06dd8b0cce317d538992)), closes [#27810](https://github.com/bitnami/charts/issues/27810)
+
+## <small>2.3.10 (2024-07-04)</small>
+
+* [bitnami/gitea] Release 2.3.10 (#27803) ([0dd2cf0](https://github.com/bitnami/charts/commit/0dd2cf0499d348260f7b967a9d739a8e57d451c4)), closes [#27803](https://github.com/bitnami/charts/issues/27803)
+
+## <small>2.3.9 (2024-07-04)</small>
+
+* [bitnami/gitea] Release 2.3.9 (#27752) ([b37b9ef](https://github.com/bitnami/charts/commit/b37b9ef02ef34e15e576544ff94ce3c98c1ac159)), closes [#27752](https://github.com/bitnami/charts/issues/27752)
 
 ## <small>2.3.8 (2024-07-03)</small>
 

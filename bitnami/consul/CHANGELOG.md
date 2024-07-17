@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.3.5 (2024-07-02)
+## 11.3.8 (2024-07-16)
 
-* [bitnami/consul] Release 11.3.5 ([#27644](https://github.com/bitnami/charts/pull/27644))
+* [bitnami/consul] Global StorageClass as default value ([#28007](https://github.com/bitnami/charts/pull/28007))
+
+## <small>11.3.7 (2024-07-13)</small>
+
+* [bitnami/consul] Release 11.3.7 (#27919) ([84b416f](https://github.com/bitnami/charts/commit/84b416fa1044c6cdee410d2e4db2fb379bd30fa0)), closes [#27919](https://github.com/bitnami/charts/issues/27919)
+
+## <small>11.3.6 (2024-07-04)</small>
+
+* [bitnami/consul] Release 11.3.6 (#27776) ([a490d98](https://github.com/bitnami/charts/commit/a490d980bcd640b15b5eb6819859a6259befda5d)), closes [#27776](https://github.com/bitnami/charts/issues/27776)
+
+## <small>11.3.5 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/consul] Release 11.3.5 (#27644) ([cd486ca](https://github.com/bitnami/charts/commit/cd486ca72b025e6afc74b384e2e1f3241e923146)), closes [#27644](https://github.com/bitnami/charts/issues/27644)
 
 ## <small>11.3.4 (2024-06-18)</small>
 

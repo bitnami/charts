@@ -1,8 +1,17 @@
 # Changelog
 
-## 6.2.9 (2024-07-01)
+## 6.2.11 (2024-07-16)
 
-* [bitnami/clickhouse] Release 6.2.9 ([#27612](https://github.com/bitnami/charts/pull/27612))
+* [bitnami/clickhouse] Global StorageClass as default value ([#28005](https://github.com/bitnami/charts/pull/28005))
+
+## <small>6.2.10 (2024-07-05)</small>
+
+* [bitnami/clickhouse] Release 6.2.10 (#27820) ([8f5d69f](https://github.com/bitnami/charts/commit/8f5d69f2d1a832de64742cc49ee8f59a7fe85301)), closes [#27820](https://github.com/bitnami/charts/issues/27820)
+
+## <small>6.2.9 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/clickhouse] Release 6.2.9 (#27612) ([7ed47b9](https://github.com/bitnami/charts/commit/7ed47b9732f1992588202ad182f8261f972a80c4)), closes [#27612](https://github.com/bitnami/charts/issues/27612)
 
 ## <small>6.2.8 (2024-06-18)</small>
 

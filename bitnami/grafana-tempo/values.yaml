@@ -214,13 +214,15 @@ tempo:
         path: {{ .Values.tempo.dataDir }}/wal
         remote_write: {{ include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.remoteWrite "context" $) | nindent 6 }}
     memberlist:
+      bind_port: {{ .Values.tempo.containerPorts.gossipRing }}
       abort_if_cluster_join_fails: false
       join_members:
-        - {{ include "grafana-tempo.gossip-ring.fullname" . }}
+        - {{ include "grafana-tempo.gossip-ring.fullname" . }}:{{ .Values.tempo.gossipRing.service.ports.http }}
     overrides:
       per_tenant_override_config: /bitnami/grafana-tempo/conf/overrides.yaml
     server:
       http_listen_port: {{ .Values.tempo.containerPorts.web }}
+      grpc_listen_port: {{ .Values.tempo.containerPorts.grpc }}
     storage:
       trace:
         backend: local

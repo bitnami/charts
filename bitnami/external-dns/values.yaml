@@ -84,6 +84,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+## @param revisionHistoryLimit sets number of replicaset to keep in k8s
+##
+revisionHistoryLimit: 10
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
@@ -579,9 +582,21 @@ pihole:
   ## @param pihole.tlsSkipVerify When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server
   ##
   tlsSkipVerify: ""
+  ## @param pihole.password When using the Pi-hole provider, specify a password to use
+  ##
+  password: ""
   ## @param pihole.secretName Use an existing secret with key "pihole_password" defined.
   ##
   secretName: ""
+## Compatibility adaptations for Traefik
+##
+traefik:
+  ## @param traefik.disableNew Disable listeners on Resources under traefik.io
+  ##
+  disableNew: false
+  ## @param traefik.disableLegacy Disable listeners on Resources under traefik.containo.us
+  ##
+  disableLegacy: false
 ## oci configuration to be set via arguments/env. variables
 ##
 oci:
@@ -779,7 +794,7 @@ logFormat: text
 ##
 policy: upsert-only
 ## @param registry Registry method to use (options: txt, aws-sd, dynamodb, noop)
-## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/proposal/registry.md
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/registry.md
 ##
 registry: "txt"
 ## @param txtPrefix When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)<CNAME record> (Mutual exclusive with txt-suffix)

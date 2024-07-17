@@ -1,8 +1,17 @@
 # Changelog
 
-## 6.3.8 (2024-07-03)
+## 6.3.10 (2024-07-11)
 
-* [bitnami/influxdb] Release 6.3.8 ([#27656](https://github.com/bitnami/charts/pull/27656))
+* [bitnami/influxdb] Release 6.3.10 ([#27917](https://github.com/bitnami/charts/pull/27917))
+
+## <small>6.3.9 (2024-07-04)</small>
+
+* [bitnami/influxdb] Release 6.3.9 (#27797) ([e1c3c74](https://github.com/bitnami/charts/commit/e1c3c745af42267a85a55ab18b1f762de98a9587)), closes [#27797](https://github.com/bitnami/charts/issues/27797)
+
+## <small>6.3.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/influxdb] Release 6.3.8 (#27656) ([700ca36](https://github.com/bitnami/charts/commit/700ca3603d8536e3b79861fbf097046fcfe89d63)), closes [#27656](https://github.com/bitnami/charts/issues/27656)
 
 ## <small>6.3.7 (2024-06-18)</small>
 

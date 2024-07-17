@@ -257,8 +257,8 @@ spec:
             - name: POSTGRES_DATABASE
               value: {{ (include "postgresql.v1.database" .) | quote }}
             {{- end }}
-            # Replication
             {{- if or (eq .Values.architecture "replication") .Values.primary.standby.enabled }}
+            # Replication
             - name: POSTGRES_REPLICATION_MODE
               value: {{ ternary "slave" "master" .Values.primary.standby.enabled | quote }}
             - name: POSTGRES_REPLICATION_USER
@@ -282,8 +282,8 @@ spec:
             - name: POSTGRES_CLUSTER_APP_NAME
               value: {{ .Values.replication.applicationName }}
             {{- end }}
-            # Initdb
             {{- if .Values.primary.initdb.args }}
+            # Initdb
             - name: POSTGRES_INITDB_ARGS
               value: {{ .Values.primary.initdb.args | quote }}
             {{- end }}
@@ -299,8 +299,8 @@ spec:
             - name: POSTGRES_INITSCRIPTS_PASSWORD
               value: {{ .Values.primary.initdb.password | quote }}
             {{- end }}
-            # Standby
             {{- if .Values.primary.standby.enabled }}
+            # Standby
             - name: POSTGRES_MASTER_HOST
               value: {{ .Values.primary.standby.primaryHost }}
             - name: POSTGRES_MASTER_PORT_NUMBER
@@ -533,7 +533,7 @@ spec:
           {{- end }}
           env:
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%d/?sslmode=disable" (int (include "postgresql.v1.service.port" .)) }}
+              value: {{ printf "127.0.0.1:%d/postgres?sslmode=disable" (int (include "postgresql.v1.service.port" .)) }}
             {{- $pwdKey := ternary (include "postgresql.v1.adminPasswordKey" .) (include "postgresql.v1.userPasswordKey" .) (or (eq $customUser "postgres") (empty $customUser)) }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE

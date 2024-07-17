@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.4.12 (2024-06-20)
+## 1.4.14 (2024-07-12)
 
-* [bitnami/mlflow] Release 1.4.12 ([#27468](https://github.com/bitnami/charts/pull/27468))
+* [bitnami/mlflow] Release 1.4.14 ([#27949](https://github.com/bitnami/charts/pull/27949))
+
+## <small>1.4.13 (2024-07-08)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mlflow] Release 1.4.13 (#27841) ([8384d96](https://github.com/bitnami/charts/commit/8384d96ba8b92128a2d262499f8b54f4541db2a4)), closes [#27841](https://github.com/bitnami/charts/issues/27841)
+
+## <small>1.4.12 (2024-06-20)</small>
+
+* [bitnami/mlflow] Release 1.4.12 (#27468) ([00fe505](https://github.com/bitnami/charts/commit/00fe505345fccf57ff1353749841ae3ec5b9d2a5)), closes [#27468](https://github.com/bitnami/charts/issues/27468)
 
 ## <small>1.4.11 (2024-06-18)</small>
 

@@ -1,8 +1,24 @@
 # Changelog
 
-## 8.0.2 (2024-07-04)
+## 8.2.2 (2024-07-12)
 
-* [bitnami/external-dns] Release 8.0.2 ([#27760](https://github.com/bitnami/charts/pull/27760))
+* [bitnami/external-dns] add revisionHistoryLimit value ([#27913](https://github.com/bitnami/charts/pull/27913))
+
+## <small>8.2.1 (2024-07-11)</small>
+
+* [bitnami/external-dns] docs: update registry doc url (#27505) ([cf18b0b](https://github.com/bitnami/charts/commit/cf18b0b65db5371bab05415066e31d5c80378922)), closes [#27505](https://github.com/bitnami/charts/issues/27505)
+
+## 8.2.0 (2024-07-10)
+
+* [bitnami/external-dns] Added extra arguments for Traefik new/legacy resource support (#27766) ([31ff6e7](https://github.com/bitnami/charts/commit/31ff6e73fb7d3e89c4c821c38a711afbf2eab830)), closes [#27766](https://github.com/bitnami/charts/issues/27766)
+
+## 8.1.0 (2024-07-08)
+
+* [bitnami/external-dns] add default pihole.password value (#27158) ([531123b](https://github.com/bitnami/charts/commit/531123ba7d24cf35a1769047165a9073322a31e3)), closes [#27158](https://github.com/bitnami/charts/issues/27158)
+
+## <small>8.0.2 (2024-07-04)</small>
+
+* [bitnami/external-dns] Release 8.0.2 (#27760) ([565db6a](https://github.com/bitnami/charts/commit/565db6a6cebfcc534e9fa0a88cd6a097bd461601)), closes [#27760](https://github.com/bitnami/charts/issues/27760)
 
 ## <small>8.0.1 (2024-07-03)</small>
 

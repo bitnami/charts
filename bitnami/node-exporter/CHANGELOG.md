@@ -1,8 +1,21 @@
 # Changelog
 
-## 4.4.6 (2024-07-03)
+## 4.4.9 (2024-07-16)
 
-* [bitnami/node-exporter] Release 4.4.6 ([#27668](https://github.com/bitnami/charts/pull/27668))
+* [bitnami/node-exporter] Global StorageClass as default value ([#28072](https://github.com/bitnami/charts/pull/28072))
+
+## <small>4.4.8 (2024-07-14)</small>
+
+* [bitnami/node-exporter] Release 4.4.8 (#27959) ([f83c58e](https://github.com/bitnami/charts/commit/f83c58e64c7c33a4594d2cd7a7f7ea5e02aeb59e)), closes [#27959](https://github.com/bitnami/charts/issues/27959)
+
+## <small>4.4.7 (2024-07-04)</small>
+
+* [bitnami/node-exporter] Release 4.4.7 (#27772) ([1205c88](https://github.com/bitnami/charts/commit/1205c887c4f450c380857f2f4bcab0e4a80a8a7e)), closes [#27772](https://github.com/bitnami/charts/issues/27772)
+
+## <small>4.4.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/node-exporter] Release 4.4.6 (#27668) ([b8aa99f](https://github.com/bitnami/charts/commit/b8aa99f7c6b67a23c9a0814ec5c589070e2b8b48)), closes [#27668](https://github.com/bitnami/charts/issues/27668)
 
 ## <small>4.4.5 (2024-06-18)</small>
 

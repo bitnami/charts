@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.3.9 (2024-07-03)
+## 1.3.11 (2024-07-10)
 
-* [bitnami/prometheus] Release 1.3.9 ([#27675](https://github.com/bitnami/charts/pull/27675))
+* [bitnami/prometheus] Release 1.3.11 ([#27880](https://github.com/bitnami/charts/pull/27880))
+
+## <small>1.3.10 (2024-07-04)</small>
+
+* [bitnami/prometheus] Release 1.3.10 (#27780) ([efffcf0](https://github.com/bitnami/charts/commit/efffcf0dd6596305ee8fd22b7bda470a6d50c7b9)), closes [#27780](https://github.com/bitnami/charts/issues/27780)
+
+## <small>1.3.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/prometheus] Release 1.3.9 (#27675) ([c8053a0](https://github.com/bitnami/charts/commit/c8053a0af773e1ce64c875500cd4d2269b5f6eee)), closes [#27675](https://github.com/bitnami/charts/issues/27675)
 
 ## <small>1.3.8 (2024-06-19)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.5.6 (2024-07-03)
+## 9.5.8 (2024-07-16)
 
-* [bitnami/kube-prometheus] Release 9.5.6 ([#27674](https://github.com/bitnami/charts/pull/27674))
+* [bitnami/kube-prometheus] Global StorageClass as default value ([#28043](https://github.com/bitnami/charts/pull/28043))
+
+## <small>9.5.7 (2024-07-04)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.7 (#27781) ([b507458](https://github.com/bitnami/charts/commit/b5074584ed43b0ac54ec9883a12da274ee64b6e0)), closes [#27781](https://github.com/bitnami/charts/issues/27781)
+
+## <small>9.5.6 (2024-07-03)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.6 (#27674) ([892e9aa](https://github.com/bitnami/charts/commit/892e9aa2bfdae50d4f1347ed6a03bab567401d9d)), closes [#27674](https://github.com/bitnami/charts/issues/27674)
 
 ## <small>9.5.5 (2024-07-02)</small>
 

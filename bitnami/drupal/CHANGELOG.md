@@ -1,8 +1,21 @@
 # Changelog
 
-## 18.21.12 (2024-06-26)
+## 19.0.1 (2024-07-16)
 
-* [bitnami/drupal] Release 18.21.12 ([#27541](https://github.com/bitnami/charts/pull/27541))
+* [bitnami/drupal] Global StorageClass as default value ([#28013](https://github.com/bitnami/charts/pull/28013))
+
+## 19.0.0 (2024-07-12)
+
+* [bitnami/drupal] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27927) ([b68f40d](https://github.com/bitnami/charts/commit/b68f40dad01802822b4973bc263e95926af941cc)), closes [#27927](https://github.com/bitnami/charts/issues/27927)
+
+## <small>18.21.13 (2024-07-04)</small>
+
+* [bitnami/drupal] Release 18.21.13 (#27771) ([9026350](https://github.com/bitnami/charts/commit/902635019f3f306d634ba7e90db39eff0bda28e2)), closes [#27771](https://github.com/bitnami/charts/issues/27771)
+
+## <small>18.21.12 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/drupal] Release 18.21.12 (#27541) ([2dd97dc](https://github.com/bitnami/charts/commit/2dd97dc37f63302aec5f0149aea839d250579bb3)), closes [#27541](https://github.com/bitnami/charts/issues/27541)
 
 ## <small>18.21.11 (2024-06-21)</small>
 

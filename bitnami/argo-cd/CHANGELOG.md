@@ -1,8 +1,36 @@
 # Changelog
 
-## 6.5.4 (2024-07-04)
+## 6.6.2 (2024-07-16)
 
-* [bitnami/argo-cd] Release 6.5.4 ([#27756](https://github.com/bitnami/charts/pull/27756))
+* [bitnami/argo-cd] Fix issue when using imagePullSecrets ([#27983](https://github.com/bitnami/charts/pull/27983))
+
+## <small>6.6.1 (2024-07-15)</small>
+
+* [bitnami/argo-cd] Release 6.6.1 (#27987) ([1e0fade](https://github.com/bitnami/charts/commit/1e0fadee59b7e7f30c68ce39c33acaab78341045)), closes [#27987](https://github.com/bitnami/charts/issues/27987)
+
+## 6.6.0 (2024-07-12)
+
+* [bitnami/argo-cd] Make it possible to run ArgoCD in HA mode (#27585) ([8d231f8](https://github.com/bitnami/charts/commit/8d231f86e78a6ad07b5f588a0eedebf7c21d0f9b)), closes [#27585](https://github.com/bitnami/charts/issues/27585)
+
+## <small>6.5.8 (2024-07-08)</small>
+
+* [bitnami/argo-cd] fix: Use the right port name for livenessProbe. (#27253) ([516d67a](https://github.com/bitnami/charts/commit/516d67a0e6c7f6a24fab5d6c000c0c0de27bdd58)), closes [#27253](https://github.com/bitnami/charts/issues/27253)
+
+## <small>6.5.7 (2024-07-05)</small>
+
+* [bitnami/argo-cd] Release 6.5.7 (#27809) ([cb5ab65](https://github.com/bitnami/charts/commit/cb5ab651c4ac02d80d6ab30e3d5b2ccda4e261ac)), closes [#27809](https://github.com/bitnami/charts/issues/27809)
+
+## <small>6.5.6 (2024-07-05)</small>
+
+* [bitnami/argo-cd] Render PDBs and NetworkPolicies only if apps are enabled as well (#27614) ([a8343fd](https://github.com/bitnami/charts/commit/a8343fd3563c76ba4d1eb7e8b37ed4f270b06c53)), closes [#27614](https://github.com/bitnami/charts/issues/27614)
+
+## <small>6.5.5 (2024-07-05)</small>
+
+* [bitnami/argo-cd] Use correct port in NetworkPolicy of Repo Server (#27615) ([afe2d37](https://github.com/bitnami/charts/commit/afe2d3707912e9717615a38e5a54741800b443a1)), closes [#27615](https://github.com/bitnami/charts/issues/27615)
+
+## <small>6.5.4 (2024-07-04)</small>
+
+* [bitnami/argo-cd] Release 6.5.4 (#27756) ([f5d8265](https://github.com/bitnami/charts/commit/f5d8265fa7f9f1ed69bcea1b64817d0f50274b3d)), closes [#27756](https://github.com/bitnami/charts/issues/27756)
 
 ## <small>6.5.3 (2024-07-03)</small>
 

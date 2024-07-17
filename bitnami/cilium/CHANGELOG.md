@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.0.1 (2024-07-03)
+## 1.0.4 (2024-07-15)
 
-* [bitnami/cilium] Release 1.0.1 ([#27643](https://github.com/bitnami/charts/pull/27643))
+* [bitnami/cilium] Fix Cilium Envoy configuration ([#27587](https://github.com/bitnami/charts/pull/27587))
+
+## <small>1.0.3 (2024-07-11)</small>
+
+* [bitnami/cilium] Release 1.0.3 (#27916) ([9cf292f](https://github.com/bitnami/charts/commit/9cf292f86b99cf3e7a7f01508c07750e5e879429)), closes [#27916](https://github.com/bitnami/charts/issues/27916)
+
+## <small>1.0.2 (2024-07-04)</small>
+
+* [bitnami/cilium] Release 1.0.2 (#27761) ([437021d](https://github.com/bitnami/charts/commit/437021de1f52602bdf4e3df7d2355f502094c102)), closes [#27761](https://github.com/bitnami/charts/issues/27761)
+
+## <small>1.0.1 (2024-07-03)</small>
+
+* [bitnami/cilium] Release 1.0.1 (#27643) ([a124f1d](https://github.com/bitnami/charts/commit/a124f1d87169a313d525377991c9807b9f5f0aa1)), closes [#27643](https://github.com/bitnami/charts/issues/27643)
 
 ## 1.0.0 (2024-06-27)
 

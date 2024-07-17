@@ -4,9 +4,9 @@
 
 * [bitnami/grafana-tempo] Change OTLP HTTP port 55681 to 4318 ([#27830](https://github.com/bitnami/charts/pull/27830))
 
-## <small>3.6.3 (2024-07-08)</small>
+## 3.6.3 (2024-07-08)
 
-* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) (#27829) ([8eb5299](https://github.com/bitnami/charts/commit/8eb529978d6b43100dd43a7dc2d4a2bfaf0f4ed7)), closes [#27829](https://github.com/bitnami/charts/issues/27829)
+* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) ([#27829](https://github.com/bitnami/charts/pull/27829))
 
 ## <small>3.6.2 (2024-07-04)</small>
 

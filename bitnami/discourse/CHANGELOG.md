@@ -1,8 +1,20 @@
 # Changelog
 
-## 13.2.8 (2024-07-03)
+## 13.2.11 (2024-07-16)
 
-* [bitnami/discourse] Release 13.2.8 ([#27749](https://github.com/bitnami/charts/pull/27749))
+* [bitnami/discourse] Global StorageClass as default value ([#28010](https://github.com/bitnami/charts/pull/28010))
+
+## <small>13.2.10 (2024-07-15)</small>
+
+* [bitnami/discourse] Release 13.2.10 (#27984) ([d5f6db6](https://github.com/bitnami/charts/commit/d5f6db6dd719f2e2333a26d7651a18bda6e412aa)), closes [#27984](https://github.com/bitnami/charts/issues/27984)
+
+## <small>13.2.9 (2024-07-08)</small>
+
+* [bitnami/discourse] Fix pgrep on livenessProbe typo (#27824) ([5c4b604](https://github.com/bitnami/charts/commit/5c4b6040abe28a689f210bcd18572ad0e4a690ba)), closes [#27824](https://github.com/bitnami/charts/issues/27824)
+
+## <small>13.2.8 (2024-07-03)</small>
+
+* [bitnami/discourse] Release 13.2.8 (#27749) ([bc83af9](https://github.com/bitnami/charts/commit/bc83af9654e2901e463ff39f7baff6e231cb6853)), closes [#27749](https://github.com/bitnami/charts/issues/27749)
 
 ## <small>13.2.7 (2024-07-03)</small>
 
