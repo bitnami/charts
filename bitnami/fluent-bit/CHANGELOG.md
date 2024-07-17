@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.3.8 (2024-07-10)
+## 2.3.11 (2024-07-17)
 
-* [bitnami/fluent-bit] Release 2.3.8 ([#27883](https://github.com/bitnami/charts/pull/27883))
+* [bitnami/fluent-bit] Release 2.3.11 ([#28130](https://github.com/bitnami/charts/pull/28130))
+
+## <small>2.3.10 (2024-07-16)</small>
+
+* [bitnami/fluent-bit] Global StorageClass as default value (#28019) ([f4718c2](https://github.com/bitnami/charts/commit/f4718c2bbc9babe8051c912ea8bd0feaaf868a5e)), closes [#28019](https://github.com/bitnami/charts/issues/28019)
+
+## <small>2.3.9 (2024-07-12)</small>
+
+* [bitnami/fluent-bit] Release 2.3.9 (#27923) ([a435aaa](https://github.com/bitnami/charts/commit/a435aaa3769fb1c91d1a7317c531c3056bc9539c)), closes [#27923](https://github.com/bitnami/charts/issues/27923)
+
+## <small>2.3.8 (2024-07-10)</small>
+
+* [bitnami/fluent-bit] Release 2.3.8 (#27883) ([bc8e1bd](https://github.com/bitnami/charts/commit/bc8e1bd604da1ca6466dc0e978e38afbd83c25f8)), closes [#27883](https://github.com/bitnami/charts/issues/27883)
 
 ## <small>2.3.7 (2024-07-08)</small>
 

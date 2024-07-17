@@ -1,8 +1,8 @@
 # Changelog
 
-## 14.5.1 (2024-07-12)
+## 14.6.0 (2024-07-17)
 
-* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts ([#27900](https://github.com/bitnami/charts/pull/27900))
+* [bitnami/rabbitmq] make queue_master_locator configurable ([#27990](https://github.com/bitnami/charts/pull/27990))
 
 ## 14.5.0 (2024-07-09)
 

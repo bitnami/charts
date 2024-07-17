@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.7 (2024-07-04)
+## 6.3.8 (2024-07-16)
 
-* [bitnami/metallb] Release 6.3.7 ([#27796](https://github.com/bitnami/charts/pull/27796))
+* [bitnami/metallb] Global StorageClass as default value ([#28056](https://github.com/bitnami/charts/pull/28056))
+
+## <small>6.3.7 (2024-07-04)</small>
+
+* [bitnami/metallb] Release 6.3.7 (#27796) ([bfd90e5](https://github.com/bitnami/charts/commit/bfd90e589210411ecf58128c2c92dc178ff3299b)), closes [#27796](https://github.com/bitnami/charts/issues/27796)
 
 ## <small>6.3.6 (2024-07-03)</small>
 
