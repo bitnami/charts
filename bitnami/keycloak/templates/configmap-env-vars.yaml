@@ -16,7 +16,7 @@ metadata:
 data:
   KEYCLOAK_ADMIN: {{ .Values.auth.adminUser | quote }}
   KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
-  {{- if and .Values.proxy (empty .Values.proxyHeaders }}
+  {{- if and .Values.proxy (empty .Values.proxyHeaders) }}
   KEYCLOAK_PROXY_HEADERS: {{ ternary "" "forwarded|xforwarded" (eq .Values.proxy "passthrough") }}
   {{- else }}
   KEYCLOAK_PROXY_HEADERS: {{ .Values.proxyHeaders | quote }}
