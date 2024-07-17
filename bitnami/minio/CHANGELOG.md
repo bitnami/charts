@@ -2,7 +2,7 @@
 
 ## 14.6.24 (2024-07-17)
 
-* [bitnami/minio] Global StorageClass as default value ([#28059](https://github.com/bitnami/charts/pull/28059))
+* [bitnami/minio] Release 14.6.24 ([#28143](https://github.com/bitnami/charts/pull/28143))
 
 ## <small>14.6.23 (2024-07-17)</small>
 
