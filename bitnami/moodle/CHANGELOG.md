@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.0 (2024-07-12)
+## 23.0.1 (2024-07-16)
 
-* [bitnami/moodle] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27925](https://github.com/bitnami/charts/pull/27925))
+* [bitnami/moodle] Global StorageClass as default value ([#28063](https://github.com/bitnami/charts/pull/28063))
+
+## 23.0.0 (2024-07-13)
+
+* [bitnami/moodle] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27925) ([fb35951](https://github.com/bitnami/charts/commit/fb35951a5dee0e14def01cb9d7113fc5f8764728)), closes [#27925](https://github.com/bitnami/charts/issues/27925)
 
 ## <small>22.2.11 (2024-07-03)</small>
 
