@@ -1,8 +1,21 @@
 # Changelog
 
-## 15.7.10 (2024-06-24)
+## 15.7.13 (2024-07-16)
 
-* [bitnami/thanos] Add validation for Thanos receive configuration ([#27501](https://github.com/bitnami/charts/pull/27501))
+* [bitnami/thanos] Global StorageClass as default value ([#28103](https://github.com/bitnami/charts/pull/28103))
+
+## <small>15.7.12 (2024-07-04)</small>
+
+* [bitnami/thanos] Release 15.7.12 (#27792) ([f4bd712](https://github.com/bitnami/charts/commit/f4bd7126c3617faa30c875b68a1f974d72c53ca6)), closes [#27792](https://github.com/bitnami/charts/issues/27792)
+
+## <small>15.7.11 (2024-07-03)</small>
+
+* [bitnami/thanos] Release 15.7.11 (#27678) ([a0a34ce](https://github.com/bitnami/charts/commit/a0a34cef1d7537e9f5a1cb457e7bfcf932932b10)), closes [#27678](https://github.com/bitnami/charts/issues/27678)
+
+## <small>15.7.10 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/thanos] Add validation for Thanos receive configuration (#27501) ([fbf31b7](https://github.com/bitnami/charts/commit/fbf31b7dc547003ef016a3ac2ac46f9e89b15245)), closes [#27501](https://github.com/bitnami/charts/issues/27501)
 
 ## <small>15.7.9 (2024-06-18)</small>
 

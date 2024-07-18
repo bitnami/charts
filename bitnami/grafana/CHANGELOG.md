@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.3.6 (2024-06-26)
+## 11.3.9 (2024-07-16)
 
-* [bitnami/grafana] Release 11.3.6 ([#27544](https://github.com/bitnami/charts/pull/27544))
+* [bitnami/grafana] Global StorageClass as default value ([#28024](https://github.com/bitnami/charts/pull/28024))
+
+## <small>11.3.8 (2024-07-05)</small>
+
+* [bitnami/grafana] Release 11.3.8 (#27804) ([0623ed3](https://github.com/bitnami/charts/commit/0623ed35aae650b653e1c71a836f734ce8333c99)), closes [#27804](https://github.com/bitnami/charts/issues/27804)
+
+## <small>11.3.7 (2024-07-03)</small>
+
+* [bitnami/grafana] Release 11.3.7 (#27661) ([c6efb0b](https://github.com/bitnami/charts/commit/c6efb0b2fb01f331530f75c153360ee85692b928)), closes [#27661](https://github.com/bitnami/charts/issues/27661)
+
+## <small>11.3.6 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana] Release 11.3.6 (#27544) ([5036a64](https://github.com/bitnami/charts/commit/5036a64ed3d1f613e4a02af4634eb88b3248350c)), closes [#27544](https://github.com/bitnami/charts/issues/27544)
 
 ## <small>11.3.5 (2024-06-18)</small>
 

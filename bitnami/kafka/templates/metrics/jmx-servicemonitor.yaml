@@ -27,7 +27,7 @@ spec:
       app.kubernetes.io/component: metrics
   endpoints:
     - port: http-metrics
-      path: "/"
+      path: {{ .Values.metrics.serviceMonitor.path }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}

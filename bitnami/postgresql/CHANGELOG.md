@@ -1,8 +1,28 @@
 # Changelog
 
-## 15.5.12 (2024-07-02)
+## 15.5.17 (2024-07-16)
 
-* postgres exporter monitor all databases ([#27586](https://github.com/bitnami/charts/pull/27586))
+* [bitnami/postgresql] Global StorageClass as default value ([#28082](https://github.com/bitnami/charts/pull/28082))
+
+## <small>15.5.16 (2024-07-11)</small>
+
+* [bitnami/postgresql] Move comments inside conditionals (#27627) ([7d3b0f0](https://github.com/bitnami/charts/commit/7d3b0f0f13b79e75ee38ce1f5b59911c0cedb187)), closes [#27627](https://github.com/bitnami/charts/issues/27627)
+
+## <small>15.5.15 (2024-07-09)</small>
+
+* Postgres exporter URI fix (#27734) ([d8d0dfe](https://github.com/bitnami/charts/commit/d8d0dfe79932c19f1b9b66bc5ac1addf0643da21)), closes [#27734](https://github.com/bitnami/charts/issues/27734)
+
+## <small>15.5.14 (2024-07-05)</small>
+
+* [bitnami/postgresql] Release 15.5.14 (#27819) ([a4baae5](https://github.com/bitnami/charts/commit/a4baae5538d74b732fca029ad6ee5783279c4d54)), closes [#27819](https://github.com/bitnami/charts/issues/27819)
+
+## <small>15.5.13 (2024-07-03)</small>
+
+* [bitnami/postgresql] Release 15.5.13 (#27733) ([e51f4a8](https://github.com/bitnami/charts/commit/e51f4a8818f15e6c0b636294d50d223140cc43d5)), closes [#27733](https://github.com/bitnami/charts/issues/27733)
+
+## <small>15.5.12 (2024-07-02)</small>
+
+* postgres exporter monitor all databases (#27586) ([4feb56d](https://github.com/bitnami/charts/commit/4feb56d610de6e958fd0d7052958b88bcb21e1ab)), closes [#27586](https://github.com/bitnami/charts/issues/27586)
 
 ## <small>15.5.11 (2024-06-26)</small>
 

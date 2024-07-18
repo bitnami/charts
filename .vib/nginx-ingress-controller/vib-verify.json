@@ -58,6 +58,12 @@
               "service-port": "80"
             }
           }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
+          }
         }
       ]
     }

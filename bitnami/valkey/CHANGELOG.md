@@ -1,8 +1,21 @@
 # Changelog
 
-## 0.3.7 (2024-06-18)
+## 0.3.10 (2024-07-16)
 
-* [bitnami/valkey] Release 0.3.7 ([#27425](https://github.com/bitnami/charts/pull/27425))
+* [bitnami/valkey] Global StorageClass as default value ([#28105](https://github.com/bitnami/charts/pull/28105))
+
+## <small>0.3.9 (2024-07-11)</small>
+
+* [bitnami/valkey] Release 0.3.9 (#27903) ([d0d6cbc](https://github.com/bitnami/charts/commit/d0d6cbc8ca22f8f27ea0147875ba5506c8f7a80b)), closes [#27903](https://github.com/bitnami/charts/issues/27903)
+
+## <small>0.3.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/valkey] Release 0.3.8 (#27723) ([2c282cd](https://github.com/bitnami/charts/commit/2c282cd32ef866e7babd70599919edf130495565)), closes [#27723](https://github.com/bitnami/charts/issues/27723)
+
+## <small>0.3.7 (2024-06-18)</small>
+
+* [bitnami/valkey] Release 0.3.7 (#27425) ([9fe347f](https://github.com/bitnami/charts/commit/9fe347feff551a2e92440cf7a649f994964ab468)), closes [#27425](https://github.com/bitnami/charts/issues/27425)
 
 ## <small>0.3.6 (2024-06-17)</small>
 

@@ -1,8 +1,25 @@
 # Changelog
 
-## 20.2.7 (2024-06-18)
+## 21.0.1 (2024-07-16)
 
-* [bitnami/mediawiki] Release 20.2.7 ([#27376](https://github.com/bitnami/charts/pull/27376))
+* [bitnami/mediawiki] Global StorageClass as default value ([#28054](https://github.com/bitnami/charts/pull/28054))
+
+## 21.0.0 (2024-07-13)
+
+* [bitnami/mediawiki] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27941) ([d1afa01](https://github.com/bitnami/charts/commit/d1afa01d6c93621dbdec032226999808ce6d69e5)), closes [#27941](https://github.com/bitnami/charts/issues/27941)
+
+## <small>20.2.9 (2024-07-04)</small>
+
+* [bitnami/mediawiki] Release 20.2.9 (#27773) ([47016a7](https://github.com/bitnami/charts/commit/47016a7ba791cafcec08e0c3806fefe227c872a9)), closes [#27773](https://github.com/bitnami/charts/issues/27773)
+
+## <small>20.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mediawiki] Release 20.2.8 (#27724) ([a5e9c16](https://github.com/bitnami/charts/commit/a5e9c165c75efda3132f2276519f465ec469c4c8)), closes [#27724](https://github.com/bitnami/charts/issues/27724)
+
+## <small>20.2.7 (2024-06-18)</small>
+
+* [bitnami/mediawiki] Release 20.2.7 (#27376) ([3e80a6c](https://github.com/bitnami/charts/commit/3e80a6c901c8ea955fbe6b0282d8dc063a7049b0)), closes [#27376](https://github.com/bitnami/charts/issues/27376)
 
 ## <small>20.2.6 (2024-06-17)</small>
 

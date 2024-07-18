@@ -313,7 +313,7 @@ jobs:
       threshold: ${{ steps.set-output.outputs.threshold }}
     if: needs.get-chart.outputs.result == 'ok'
     steps:
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         name: Checkout 'main' branch
         with:
           path: charts-main
@@ -329,10 +329,24 @@ jobs:
         run: |
           if [ -d "charts-main/bitnami/${CHART}" ]; then
             helm dep build charts-main/bitnami/${CHART}
+            if [ -d "charts-main/bitnami/${CHART}/charts" ]; then
+              cd charts-main/bitnami/${CHART}/charts
+              for filename in *.tgz; do
+                tar -xf "$filename"
+                rm -f "$filename"
+              done
+            fi
           fi
       - id: get-chart-score
         uses: addnab/docker-run-action@4f65fabd2431ebc8d299f8e5a018d79a769ae185
         name: Get main branch kubescape score
+        # Skip step when user is bitnami-bot or 'skip-score' label is used
+        if: |
+          !(
+            github.event.pull_request.user.login == 'bitnami-bot' ||
+            contains(github.event.pull_request.labels.*.name, 'skip-score') ||
+            (github.event.action == 'labeled' && github.event.label.name == 'skip-score')
+          )
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         with:
@@ -341,17 +355,20 @@ jobs:
           run: |
             if [ -d "/charts/bitnami/${CHART}" ]; then
               kubescape scan framework MITRE,NSA,SOC2,cis-v1.23-t1.0.1 /charts/bitnami/${CHART} --format json -o /out/report.json
-              score=$(jq .summaryDetails.complianceScore /out/report.json)
               # Truncate score to 2 decimals
-              printf "%s.%.2s" $(echo "$(jq .summaryDetails.complianceScore /out/report.json)" | tr '.' ' ') > /out/score
+              printf "%s.%.2s" $(echo "$(jq .summaryDetails.complianceScore /out/report.json)" | tr '.' ' ') | sed 's/\.$//' > /out/score
             else
               echo "Chart not found at /charts/bitnami/${CHART}. It will be assumed that the upstream chart does not exist."
-              echo "0.00" > /out/score
             fi
       - id: set-output
         name: Set threshold score
         run: |
-          score="$(cat /tmp/score)"
+          if [[ -f "/tmp/score" ]]; then
+            score="$(cat /tmp/score)"
+          else
+            echo "Skipping Kubescape score check."
+            score="0"
+          fi
           echo "Using threshold score: ${score}"
           echo "threshold=${score}" >> $GITHUB_OUTPUT
   vib-verify:

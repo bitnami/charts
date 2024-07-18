@@ -1,8 +1,29 @@
 # Changelog
 
-## 18.3.5 (2024-06-24)
+## 18.3.10 (2024-07-17)
 
-* [bitnami/airflow] liveness probe fail on worker pod ([#27514](https://github.com/bitnami/charts/pull/27514))
+* [bitnami/airflow] Release 18.3.10 ([#28128](https://github.com/bitnami/charts/pull/28128))
+
+## <small>18.3.9 (2024-07-16)</small>
+
+* [bitnami/airflow] Global StorageClass as default value (#27995) ([dee5654](https://github.com/bitnami/charts/commit/dee56546656435608b99cefe030c4e3e957aeff3)), closes [#27995](https://github.com/bitnami/charts/issues/27995)
+
+## <small>18.3.8 (2024-07-05)</small>
+
+* [bitnami/airflow] Release 18.3.8 (#27818) ([ff4acba](https://github.com/bitnami/charts/commit/ff4acba91570d0607f8ec5590826d122fed24eb7)), closes [#27818](https://github.com/bitnami/charts/issues/27818)
+
+## <small>18.3.7 (2024-07-03)</small>
+
+* [bitnami/airflow] Release 18.3.7 (#27742) ([fb7d639](https://github.com/bitnami/charts/commit/fb7d63923206bc2c7965ff0b80eeddec43c77d23)), closes [#27742](https://github.com/bitnami/charts/issues/27742)
+
+## <small>18.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/airflow] Release 18.3.6 (#27682) ([792722b](https://github.com/bitnami/charts/commit/792722b9717ae2e4f35b420207761b7aac67e2ac)), closes [#27682](https://github.com/bitnami/charts/issues/27682)
+
+## <small>18.3.5 (2024-06-25)</small>
+
+* [bitnami/airflow] liveness probe fail on worker pod (#27514) ([4e89d48](https://github.com/bitnami/charts/commit/4e89d48d2d281c6e07b94a4cd724fed0ee221947)), closes [#27514](https://github.com/bitnami/charts/issues/27514)
 
 ## <small>18.3.4 (2024-06-18)</small>
 
