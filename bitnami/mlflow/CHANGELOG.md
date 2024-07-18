@@ -2,7 +2,7 @@
 
 ## 1.4.16 (2024-07-17)
 
-* [bitnami/mlflow] Global StorageClass as default value ([#28060](https://github.com/bitnami/charts/pull/28060))
+* [bitnami/mlflow] fix issue 26397 - allow MLFLOW_S3_ENDPOINT without minio ([#26462](https://github.com/bitnami/charts/pull/26462))
 
 ## <small>1.4.15 (2024-07-17)</small>
 
