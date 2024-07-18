@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.20.4 (2024-07-11)
+## 2.20.5 (2024-07-16)
 
-* [bitnami/common] Increase ephemeral-storage default limits ([#27902](https://github.com/bitnami/charts/pull/27902))
+* [bitnami/common] [bitnami/wordpress] Use global.storageClass for fallback, not override ([#24863](https://github.com/bitnami/charts/pull/24863))
+
+## <small>2.20.4 (2024-07-11)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/common] Increase ephemeral-storage default limits (#27902) ([dc0000d](https://github.com/bitnami/charts/commit/dc0000d7b56f68991bb8d8fff473103ed9026f5f)), closes [#27902](https://github.com/bitnami/charts/issues/27902)
 
 ## <small>2.20.3 (2024-06-17)</small>
 

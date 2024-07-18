@@ -1,8 +1,16 @@
 # Changelog
 
-## 19.2.1 (2024-07-03)
+## 19.2.3 (2024-07-17)
 
-* [bitnami/schema-registry] Release 19.2.1 ([#27716](https://github.com/bitnami/charts/pull/27716))
+* [bitnami/schema-registry] Release 19.2.3 ([#28148](https://github.com/bitnami/charts/pull/28148))
+
+## <small>19.2.2 (2024-07-16)</small>
+
+* [bitnami/schema-registry] Global StorageClass as default value (#28092) ([1b0c2c6](https://github.com/bitnami/charts/commit/1b0c2c6cbdbf602d74965110225359f5cf2eb446)), closes [#28092](https://github.com/bitnami/charts/issues/28092)
+
+## <small>19.2.1 (2024-07-03)</small>
+
+* [bitnami/schema-registry] Release 19.2.1 (#27716) ([793f73b](https://github.com/bitnami/charts/commit/793f73b2410013bacc67069306a5d792b6360b8c)), closes [#27716](https://github.com/bitnami/charts/issues/27716)
 
 ## 19.2.0 (2024-06-28)
 

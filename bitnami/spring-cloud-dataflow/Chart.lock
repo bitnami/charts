@@ -4,7 +4,7 @@ dependencies:
   version: 14.5.0
 - name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.2.6
+  version: 19.0.0
 - name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 29.3.8

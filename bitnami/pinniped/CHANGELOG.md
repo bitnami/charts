@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.9 (2024-07-04)
+## 2.2.10 (2024-07-16)
 
-* [bitnami/pinniped] Release 2.2.9 ([#27775](https://github.com/bitnami/charts/pull/27775))
+* [bitnami/pinniped] Global StorageClass as default value ([#28081](https://github.com/bitnami/charts/pull/28081))
+
+## <small>2.2.9 (2024-07-04)</small>
+
+* [bitnami/pinniped] Release 2.2.9 (#27775) ([657bff4](https://github.com/bitnami/charts/commit/657bff4c8d68c2b2e512b7527ed50d190ce73a6a)), closes [#27775](https://github.com/bitnami/charts/issues/27775)
 
 ## <small>2.2.8 (2024-07-03)</small>
 
