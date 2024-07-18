@@ -38,5 +38,5 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: matomo
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/matomo
-version: 8.0.1
+- https://github.com/bitnami/charts/tree/main/bitnami/matomo
+version: 8.0.2

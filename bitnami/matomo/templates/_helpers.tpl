@@ -172,10 +172,6 @@ Return the matomo pods needed initContainers
 - name: certificates
   image: {{ template "certificates.image" . }}
   imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
-  imagePullSecrets:
-  {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
-    - name: {{ . }}
-  {{- end }}
   securityContext:
     runAsUser: 0
   {{- if .Values.certificates.command }}

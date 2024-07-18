@@ -447,7 +447,7 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 
 | Name                                      | Description                                                        | Value           |
 | ----------------------------------------- | ------------------------------------------------------------------ | --------------- |
-| `externalS3.host`                         | External S3 host                                                   | `""`            |
+| `externalS3.host`                         | External S3 host, e.g. "s3.amazonaws.com"                          | `""`            |
 | `externalS3.port`                         | External S3 port number                                            | `443`           |
 | `externalS3.useCredentialsInSecret`       | Whether to use a secret to store the S3 credentials                | `true`          |
 | `externalS3.accessKeyID`                  | External S3 access key ID                                          | `""`            |

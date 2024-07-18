@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.0.1 (2024-07-16)
+## 8.0.2 (2024-07-18)
 
 * [bitnami/matomo] Global StorageClass as default value ([#28053](https://github.com/bitnami/charts/pull/28053))
+
+## <small>8.0.1 (2024-07-16)</small>
+
+* [bitnami/matomo] Fix wrong initContainers[0].imagePullSecrets value ([#28115](https://github.com/bitnami/charts/pull/28115))
 
 ## 8.0.0 (2024-07-13)
 

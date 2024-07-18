@@ -1,8 +1,16 @@
 # Changelog
 
-## 13.2.10 (2024-07-15)
+## 13.2.12 (2024-07-17)
 
-* [bitnami/discourse] Release 13.2.10 ([#27984](https://github.com/bitnami/charts/pull/27984))
+* [bitnami/discourse] fix: :bug: Remove incorrect CHMOD capability ([#27982](https://github.com/bitnami/charts/pull/27982))
+
+## <small>13.2.11 (2024-07-16)</small>
+
+* [bitnami/discourse] Global StorageClass as default value (#28010) ([84bce06](https://github.com/bitnami/charts/commit/84bce06012772a0a5c93072e4dd5a64878e54eec)), closes [#28010](https://github.com/bitnami/charts/issues/28010)
+
+## <small>13.2.10 (2024-07-15)</small>
+
+* [bitnami/discourse] Release 13.2.10 (#27984) ([d5f6db6](https://github.com/bitnami/charts/commit/d5f6db6dd719f2e2333a26d7651a18bda6e412aa)), closes [#27984](https://github.com/bitnami/charts/issues/27984)
 
 ## <small>13.2.9 (2024-07-08)</small>
 
