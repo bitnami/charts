@@ -1,12 +1,12 @@
 # Changelog
 
-## 9.4.0 (2024-07-17)
+## 9.4.0 (2024-07-18)
 
 * [bitnami/solr] Add revisionHistoryLimit variable for metrics-deployment ([#28137](https://github.com/bitnami/charts/pull/28137))
 
-## 9.3.7 (2024-07-16)
+## <small>9.3.7 (2024-07-18)</small>
 
-* [bitnami/solr] Global StorageClass as default value ([#28096](https://github.com/bitnami/charts/pull/28096))
+* [bitnami/solr] Global StorageClass as default value (#28096) ([6897cfa](https://github.com/bitnami/charts/commit/6897cfa75b4e26fc94e211c4984f6d9e713212ec)), closes [#28096](https://github.com/bitnami/charts/issues/28096)
 
 ## <small>9.3.6 (2024-07-03)</small>
 
