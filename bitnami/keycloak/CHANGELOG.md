@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.7.1 (2024-07-17)
+
+* [bitnami/keycloak] Global StorageClass as default value ([#28039](https://github.com/bitnami/charts/pull/28039))
+
 ## 21.7.0 (2024-07-17)
 
-* [bitnami/keycloak] Add support for proxy-headers ([#27890](https://github.com/bitnami/charts/pull/27890))
+* [bitnami/keycloak] Add support for proxy-headers (#27890) ([eb2b3bd](https://github.com/bitnami/charts/commit/eb2b3bdd8612a754c1b7e28237e9a32f6661eaab)), closes [#27890](https://github.com/bitnami/charts/issues/27890)
 
 ## <small>21.6.3 (2024-07-16)</small>
 

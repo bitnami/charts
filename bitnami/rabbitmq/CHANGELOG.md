@@ -1,8 +1,12 @@
 # Changelog
 
+## 14.6.1 (2024-07-18)
+
+* [bitnami/rabbitmq] Global StorageClass as default value ([#28087](https://github.com/bitnami/charts/pull/28087))
+
 ## 14.6.0 (2024-07-17)
 
-* [bitnami/rabbitmq] make queue_master_locator configurable ([#27990](https://github.com/bitnami/charts/pull/27990))
+* [bitnami/rabbitmq] make queue_master_locator configurable (#27990) ([7266748](https://github.com/bitnami/charts/commit/726674875655c7f90ccd17370950c858f951a96a)), closes [#27990](https://github.com/bitnami/charts/issues/27990)
 
 ## 14.5.0 (2024-07-09)
 

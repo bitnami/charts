@@ -4,6 +4,10 @@
 
 * [bitnami/solr] Add revisionHistoryLimit variable for metrics-deployment ([#28137](https://github.com/bitnami/charts/pull/28137))
 
+## 9.3.7 (2024-07-16)
+
+* [bitnami/solr] Global StorageClass as default value ([#28096](https://github.com/bitnami/charts/pull/28096))
+
 ## <small>9.3.6 (2024-07-03)</small>
 
 * [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
