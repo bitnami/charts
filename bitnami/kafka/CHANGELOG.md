@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.3.9 (2024-07-16)
+## 29.3.10 (2024-07-18)
 
-* [bitnami/kafka] Global StorageClass as default value ([#28038](https://github.com/bitnami/charts/pull/28038))
+* [bitnami/kafka] Release 29.3.10 ([#28157](https://github.com/bitnami/charts/pull/28157))
+
+## <small>29.3.9 (2024-07-18)</small>
+
+* [bitnami/kafka] Global StorageClass as default value (#28038) ([0e596df](https://github.com/bitnami/charts/commit/0e596df1d5e6c9e9d3d1854788d5485408cd49f5)), closes [#28038](https://github.com/bitnami/charts/issues/28038)
 
 ## <small>29.3.8 (2024-07-16)</small>
 
