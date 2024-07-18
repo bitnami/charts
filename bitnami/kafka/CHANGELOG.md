@@ -4,9 +4,9 @@
 
 * [bitnami/kafka] Fix issue on how to provision access to all topics / groups ([#27877](https://github.com/bitnami/charts/pull/27877))
 
-## 29.3.9 (2024-07-16)
+## <small>29.3.9 (2024-07-18)</small>
 
-* [bitnami/kafka] Global StorageClass as default value ([#28038](https://github.com/bitnami/charts/pull/28038))
+* [bitnami/kafka] Global StorageClass as default value (#28038) ([0e596df](https://github.com/bitnami/charts/commit/0e596df1d5e6c9e9d3d1854788d5485408cd49f5)), closes [#28038](https://github.com/bitnami/charts/issues/28038)
 
 ## <small>29.3.8 (2024-07-16)</small>
 
