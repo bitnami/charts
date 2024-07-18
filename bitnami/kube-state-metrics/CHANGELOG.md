@@ -1,8 +1,8 @@
 # Changelog
 
-## 4.2.8 (2024-07-16)
+## 4.2.8 (2024-07-18)
 
-* [bitnami/kube-state-metrics] Global StorageClass as default value ([#28044](https://github.com/bitnami/charts/pull/28044))
+* [bitnami/kube-state-metrics] Remove global.storageClass ([#28044](https://github.com/bitnami/charts/pull/28044))
 
 ## <small>4.2.7 (2024-07-04)</small>
 
