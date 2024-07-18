@@ -1,8 +1,16 @@
 # Changelog
 
-## 29.3.7 (2024-07-02)
+## 29.3.9 (2024-07-16)
 
-* [bitnami/kafka] Fix jmx-exporter scrape path ([#27562](https://github.com/bitnami/charts/pull/27562))
+* [bitnami/kafka] Global StorageClass as default value ([#28038](https://github.com/bitnami/charts/pull/28038))
+
+## <small>29.3.8 (2024-07-16)</small>
+
+* [bitnami/kafka] fix jmx-servicemonitor by using JMX Exporter's default metrics path (#27455) ([e04d611](https://github.com/bitnami/charts/commit/e04d6117bc4c0e1dac47e9303bf5ad92188bce29)), closes [#27455](https://github.com/bitnami/charts/issues/27455)
+
+## <small>29.3.7 (2024-07-08)</small>
+
+* [bitnami/kafka] Fix jmx-exporter scrape path (#27562) ([1dd9439](https://github.com/bitnami/charts/commit/1dd943997da79e6095bee6d05410178a0344d4c9)), closes [#27562](https://github.com/bitnami/charts/issues/27562)
 
 ## <small>29.3.6 (2024-07-02)</small>
 

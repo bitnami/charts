@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.3.2 (2024-07-12)
+## 21.3.3 (2024-07-18)
 
 * [bitnami/elasticsearch] fix: Unable to run the image using the root user ([#27491](https://github.com/bitnami/charts/pull/27491))
+
+## 21.3.2 (2024-07-16)
+
+* [bitnami/elasticsearch] Global StorageClass as default value ([#28015](https://github.com/bitnami/charts/pull/28015))
 
 ## <small>21.3.1 (2024-07-11)</small>
 

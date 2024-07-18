@@ -84,6 +84,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+## @param revisionHistoryLimit sets number of replicaset to keep in k8s
+##
+revisionHistoryLimit: 10
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
@@ -547,6 +550,9 @@ infoblox:
   ## @param infoblox.maxResults When using the Infoblox provider, specify the Infoblox Max Results (optional)
   ##
   maxResults: ""
+  ## @param infoblox.createPtr When using the Infoblox provider, specify the Infoblox create PTR flag (optional)
+  ##
+  createPtr: false
 ## Linode configuration to be set via arguments/env. variables
 ##
 linode:
