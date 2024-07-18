@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.2 (2024-07-16)
+## 6.6.3 (2024-07-16)
 
-* [bitnami/argo-cd] Fix issue when using imagePullSecrets ([#27983](https://github.com/bitnami/charts/pull/27983))
+* [bitnami/argo-cd] Global StorageClass as default value ([#27999](https://github.com/bitnami/charts/pull/27999))
+
+## <small>6.6.2 (2024-07-16)</small>
+
+* [bitnami/argo-cd] Fix issue when using imagePullSecrets (#27983) ([f716e12](https://github.com/bitnami/charts/commit/f716e12ccc46a838fee203a137e15ab5a1791b32)), closes [#27983](https://github.com/bitnami/charts/issues/27983)
 
 ## <small>6.6.1 (2024-07-15)</small>
 

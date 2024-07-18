@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.11 (2024-07-16)
+## 11.2.12 (2024-07-17)
 
-* [bitnami/tomcat] Global StorageClass as default value ([#28104](https://github.com/bitnami/charts/pull/28104))
+* [bitnami/tomcat] Release 11.2.12 ([#28145](https://github.com/bitnami/charts/pull/28145))
+
+## <small>11.2.11 (2024-07-16)</small>
+
+* [bitnami/tomcat] Global StorageClass as default value (#28104) ([ba7fb29](https://github.com/bitnami/charts/commit/ba7fb298a519dc7077022cbc1559282ab4f000d3)), closes [#28104](https://github.com/bitnami/charts/issues/28104)
 
 ## <small>11.2.10 (2024-07-15)</small>
 

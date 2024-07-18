@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.13 (2024-07-13)
+## 15.6.14 (2024-07-16)
 
-* [bitnami/mongodb] Fix autoDiscovery initContainer template ([#27953](https://github.com/bitnami/charts/pull/27953))
+* [bitnami/mongodb] Global StorageClass as default value ([#28061](https://github.com/bitnami/charts/pull/28061))
+
+## <small>15.6.13 (2024-07-16)</small>
+
+* [bitnami/mongodb] Fix autoDiscovery initContainer template (#27953) ([c3955b0](https://github.com/bitnami/charts/commit/c3955b0e2c0cd7fc287f3acc36990b8c0a8c09ac)), closes [#27953](https://github.com/bitnami/charts/issues/27953)
 
 ## <small>15.6.12 (2024-07-01)</small>
 

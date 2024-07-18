@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.1 (2024-07-17)
+## 14.6.2 (2024-07-18)
 
 * [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts ([#27900](https://github.com/bitnami/charts/pull/27900))
+
+## <small>14.6.1 (2024-07-18)</small>
+
+* [bitnami/rabbitmq] Global StorageClass as default value ([#28087](https://github.com/bitnami/charts/pull/28087))
 
 ## 14.6.0 (2024-07-17)
 
