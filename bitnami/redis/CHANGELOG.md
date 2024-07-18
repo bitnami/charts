@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.6.1 (2024-07-03)
+## 19.6.2 (2024-07-16)
 
-* [bitnami/redis] Release 19.6.1 ([#27712](https://github.com/bitnami/charts/pull/27712))
+* [bitnami/redis] Global StorageClass as default value ([#28089](https://github.com/bitnami/charts/pull/28089))
+
+## <small>19.6.1 (2024-07-03)</small>
+
+* [bitnami/redis] Release 19.6.1 (#27712) ([a8f05c6](https://github.com/bitnami/charts/commit/a8f05c665a810762b420864a29460d8c84421f73)), closes [#27712](https://github.com/bitnami/charts/issues/27712)
 
 ## 19.6.0 (2024-06-26)
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.4.5 (2024-07-04)
+## 1.0.1 (2024-07-16)
 
-* [bitnami/seaweedfs] Release 0.4.5 ([#27793](https://github.com/bitnami/charts/pull/27793))
+* [bitnami/seaweedfs] Global StorageClass as default value ([#28095](https://github.com/bitnami/charts/pull/28095))
+
+## 1.0.0 (2024-07-13)
+
+* [bitnami/seaweedfs] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27937) ([4fcc6c6](https://github.com/bitnami/charts/commit/4fcc6c6b05c0f02242ae0a6109077f2048633a4e)), closes [#27937](https://github.com/bitnami/charts/issues/27937)
+
+## <small>0.4.5 (2024-07-04)</small>
+
+* [bitnami/seaweedfs] Release 0.4.5 (#27793) ([f38eab0](https://github.com/bitnami/charts/commit/f38eab0be837bead6abc9e75085241ac0eeb4b23)), closes [#27793](https://github.com/bitnami/charts/issues/27793)
 
 ## <small>0.4.4 (2024-07-03)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 16.2.8 (2024-07-08)
+## 17.0.1 (2024-07-16)
 
-* [bitnami/phpmyadmin] Release 16.2.8 ([#27730](https://github.com/bitnami/charts/pull/27730))
+* [bitnami/phpmyadmin] Global StorageClass as default value ([#28080](https://github.com/bitnami/charts/pull/28080))
+
+## 17.0.0 (2024-07-12)
+
+* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27934) ([09715e6](https://github.com/bitnami/charts/commit/09715e61c495b3b2cb07f33aa2940b2c1ce17284)), closes [#27934](https://github.com/bitnami/charts/issues/27934)
+
+## <small>16.2.8 (2024-07-08)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/phpmyadmin] Release 16.2.8 (#27730) ([680549f](https://github.com/bitnami/charts/commit/680549f455dc5b6e55bd5202603b1a79d96f73d6)), closes [#27730](https://github.com/bitnami/charts/issues/27730)
 
 ## <small>16.2.7 (2024-06-18)</small>
 

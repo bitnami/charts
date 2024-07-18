@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.12 (2024-07-08)
+## 11.3.13 (2024-07-15)
 
-* [bitnami/nginx-ingress-controller] Release 11.3.12 ([#27849](https://github.com/bitnami/charts/pull/27849))
+* [bitnami/nginx-ingress-controller] Release 11.3.13 ([#27971](https://github.com/bitnami/charts/pull/27971))
+
+## <small>11.3.12 (2024-07-08)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.3.12 (#27849) ([53c7686](https://github.com/bitnami/charts/commit/53c76867f15601cdb1d83587613f730807fb2a95)), closes [#27849](https://github.com/bitnami/charts/issues/27849)
 
 ## <small>11.3.11 (2024-07-08)</small>
 

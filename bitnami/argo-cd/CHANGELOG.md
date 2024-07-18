@@ -1,8 +1,24 @@
 # Changelog
 
-## 6.5.8 (2024-07-08)
+## 6.6.3 (2024-07-16)
 
-* [bitnami/argo-cd] fix: Use the right port name for livenessProbe. ([#27253](https://github.com/bitnami/charts/pull/27253))
+* [bitnami/argo-cd] Global StorageClass as default value ([#27999](https://github.com/bitnami/charts/pull/27999))
+
+## <small>6.6.2 (2024-07-16)</small>
+
+* [bitnami/argo-cd] Fix issue when using imagePullSecrets (#27983) ([f716e12](https://github.com/bitnami/charts/commit/f716e12ccc46a838fee203a137e15ab5a1791b32)), closes [#27983](https://github.com/bitnami/charts/issues/27983)
+
+## <small>6.6.1 (2024-07-15)</small>
+
+* [bitnami/argo-cd] Release 6.6.1 (#27987) ([1e0fade](https://github.com/bitnami/charts/commit/1e0fadee59b7e7f30c68ce39c33acaab78341045)), closes [#27987](https://github.com/bitnami/charts/issues/27987)
+
+## 6.6.0 (2024-07-12)
+
+* [bitnami/argo-cd] Make it possible to run ArgoCD in HA mode (#27585) ([8d231f8](https://github.com/bitnami/charts/commit/8d231f86e78a6ad07b5f588a0eedebf7c21d0f9b)), closes [#27585](https://github.com/bitnami/charts/issues/27585)
+
+## <small>6.5.8 (2024-07-08)</small>
+
+* [bitnami/argo-cd] fix: Use the right port name for livenessProbe. (#27253) ([516d67a](https://github.com/bitnami/charts/commit/516d67a0e6c7f6a24fab5d6c000c0c0de27bdd58)), closes [#27253](https://github.com/bitnami/charts/issues/27253)
 
 ## <small>6.5.7 (2024-07-05)</small>
 

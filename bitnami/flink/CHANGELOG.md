@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.3.7 (2024-07-03)
+## 1.3.8 (2024-07-16)
 
-* [bitnami/flink] Release 1.3.7 ([#27683](https://github.com/bitnami/charts/pull/27683))
+* [bitnami/flink] Global StorageClass as default value ([#28018](https://github.com/bitnami/charts/pull/28018))
+
+## <small>1.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/flink] Release 1.3.7 (#27683) ([48d2c43](https://github.com/bitnami/charts/commit/48d2c436a7367ac68abac6fd09114b49541371b3)), closes [#27683](https://github.com/bitnami/charts/issues/27683)
 
 ## <small>1.3.6 (2024-06-18)</small>
 

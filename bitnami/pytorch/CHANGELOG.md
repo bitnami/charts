@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.9 (2024-07-03)
+## 4.2.10 (2024-07-16)
 
-* [bitnami/pytorch] Release 4.2.9 ([#27741](https://github.com/bitnami/charts/pull/27741))
+* [bitnami/pytorch] Global StorageClass as default value ([#28086](https://github.com/bitnami/charts/pull/28086))
+
+## <small>4.2.9 (2024-07-03)</small>
+
+* [bitnami/pytorch] Release 4.2.9 (#27741) ([0ed50b3](https://github.com/bitnami/charts/commit/0ed50b36fb22d77f8f6c1ce7715d479ff3d1191e)), closes [#27741](https://github.com/bitnami/charts/issues/27741)
 
 ## <small>4.2.8 (2024-07-03)</small>
 
