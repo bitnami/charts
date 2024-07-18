@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.8 (2024-07-16)
+## 2.2.8 (2024-07-18)
 
 * [bitnami/kiam] Global StorageClass as default value ([#28040](https://github.com/bitnami/charts/pull/28040))
 
