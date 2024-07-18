@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.4.14 (2024-07-12)
+## 1.4.16 (2024-07-17)
 
-* [bitnami/mlflow] Release 1.4.14 ([#27949](https://github.com/bitnami/charts/pull/27949))
+* [bitnami/mlflow] fix issue 26397 - allow MLFLOW_S3_ENDPOINT without minio ([#26462](https://github.com/bitnami/charts/pull/26462))
+
+## <small>1.4.15 (2024-07-17)</small>
+
+* [bitnami/mlflow] Update deps (#28131) ([35854a2](https://github.com/bitnami/charts/commit/35854a2de3b24a3d307c8a6d2210ce849a13c81c)), closes [#28131](https://github.com/bitnami/charts/issues/28131)
+
+## <small>1.4.14 (2024-07-13)</small>
+
+* [bitnami/mlflow] Release 1.4.14 (#27949) ([88f5ff0](https://github.com/bitnami/charts/commit/88f5ff0e1ca35361e0cc4f2cf0c6d8b84c8ad2f7)), closes [#27949](https://github.com/bitnami/charts/issues/27949)
 
 ## <small>1.4.13 (2024-07-08)</small>
 

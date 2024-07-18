@@ -1,8 +1,12 @@
 # Changelog
 
+## 5.3.1 (2024-07-16)
+
+* [bitnami/supabase] Global StorageClass as default value ([#28101](https://github.com/bitnami/charts/pull/28101))
+
 ## 5.3.0 (2024-07-09)
 
-* [bitnami/supabase] chore: :arrow_up: Update supabase-storage to 1.6.8 ([#27857](https://github.com/bitnami/charts/pull/27857))
+* [bitnami/supabase] chore: :arrow_up: Update supabase-storage to 1.6.8 (#27857) ([d2b1182](https://github.com/bitnami/charts/commit/d2b11820e25a73ee35b7bbbe7dcb47cf12c2de9f)), closes [#27857](https://github.com/bitnami/charts/issues/27857)
 
 ## <small>5.2.9 (2024-07-04)</small>
 

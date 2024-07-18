@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.16 (2024-07-13)
+## 0.1.17 (2024-07-16)
 
-* [bitnami/nessie] Release 0.1.16 ([#27958](https://github.com/bitnami/charts/pull/27958))
+* [bitnami/nessie] Global StorageClass as default value ([#28069](https://github.com/bitnami/charts/pull/28069))
+
+## <small>0.1.16 (2024-07-13)</small>
+
+* [bitnami/nessie] Release 0.1.16 (#27958) ([35186e2](https://github.com/bitnami/charts/commit/35186e2891615a906aa0bed557861f9d7e092ac7)), closes [#27958](https://github.com/bitnami/charts/issues/27958)
 
 ## <small>0.1.15 (2024-07-11)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.4 (2024-07-15)
+## 2.5.5 (2024-07-16)
 
-* [bitnami/jaeger] Release 2.5.4 ([#27973](https://github.com/bitnami/charts/pull/27973))
+* [bitnami/jaeger] Global StorageClass as default value ([#28032](https://github.com/bitnami/charts/pull/28032))
+
+## <small>2.5.4 (2024-07-15)</small>
+
+* [bitnami/jaeger] Release 2.5.4 (#27973) ([2c4f9ae](https://github.com/bitnami/charts/commit/2c4f9ae71a62018b6d691ab0014318cc4bf85d2b)), closes [#27973](https://github.com/bitnami/charts/issues/27973)
 
 ## <small>2.5.3 (2024-07-15)</small>
 
