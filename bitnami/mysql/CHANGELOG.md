@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.10 (2024-07-16)
+## 11.1.11 (2024-07-18)
 
-* [bitnami/mysql] Global StorageClass as default value ([#28066](https://github.com/bitnami/charts/pull/28066))
+* [bitnami/mysql]: Remove duplicated ports in the network policies ([#28136](https://github.com/bitnami/charts/pull/28136))
+
+## <small>11.1.10 (2024-07-18)</small>
+
+* [bitnami/mysql] Global StorageClass as default value (#28066) ([e92ae97](https://github.com/bitnami/charts/commit/e92ae976e916f66ce59736df3468f2e97d56b036)), closes [#28066](https://github.com/bitnami/charts/issues/28066)
 
 ## <small>11.1.9 (2024-07-09)</small>
 
