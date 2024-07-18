@@ -6,7 +6,7 @@
 
 ## <small>8.2.3 (2024-07-18)</small>
 
-* [bitnami/external-dns] Add value.yaml support for "--infoblox-create-ptr" argument flag ([#27882](https://github.com/bitnami/charts/pull/27882))
+* [bitnami/external-dns] Add value.yaml support for "--infoblox-create-ptr" argument flag (#27882) ([d50881f](https://github.com/bitnami/charts/commit/d50881f2b88c8c16711e98962121e75162c8e539)), closes [#27882](https://github.com/bitnami/charts/issues/27882)
 
 ## <small>8.2.2 (2024-07-16)</small>
 
