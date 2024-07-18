@@ -1,8 +1,8 @@
 # Changelog
 
-## 3.6.4 (2024-07-16)
+## 3.7.0 (2024-07-17)
 
-* [bitnami/grafana-tempo] Global StorageClass as default value ([#28028](https://github.com/bitnami/charts/pull/28028))
+* [bitnami/grafana-tempo] Change OTLP HTTP port 55681 to 4318 ([#27830](https://github.com/bitnami/charts/pull/27830))
 
 ## <small>3.6.3 (2024-07-08)</small>
 

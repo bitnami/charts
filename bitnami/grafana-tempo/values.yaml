@@ -187,7 +187,7 @@ tempo:
           protocols:
             {{- if .Values.tempo.traces.otlp.http }}
             http:
-              endpoint: 0.0.0.0:55681
+              endpoint: 0.0.0.0:4318
             {{- end }}
             {{- if .Values.tempo.traces.otlp.grpc }}
             grpc:

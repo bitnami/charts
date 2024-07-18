@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.5.7 (2024-07-03)
+## 6.5.8 (2024-07-16)
 
-* [bitnami/fluentd] Release 6.5.7 ([#27696](https://github.com/bitnami/charts/pull/27696))
+* [bitnami/fluentd] Global StorageClass as default value ([#28020](https://github.com/bitnami/charts/pull/28020))
+
+## <small>6.5.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/fluentd] Release 6.5.7 (#27696) ([407cf4b](https://github.com/bitnami/charts/commit/407cf4b36770b3c4609043bca844c99af0292ed0)), closes [#27696](https://github.com/bitnami/charts/issues/27696)
 
 ## <small>6.5.6 (2024-06-18)</small>
 
