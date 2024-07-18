@@ -1,8 +1,28 @@
 # Changelog
 
-## 14.6.19 (2024-07-05)
+## 14.6.24 (2024-07-17)
 
-* [bitnami/minio]: Fix the condition end line to use containerPorts ([#27626](https://github.com/bitnami/charts/pull/27626))
+* [bitnami/minio] Release 14.6.24 ([#28143](https://github.com/bitnami/charts/pull/28143))
+
+## <small>14.6.23 (2024-07-17)</small>
+
+* [bitnami/minio] Fix provisioning in non-tty environment (#28118) ([020db20](https://github.com/bitnami/charts/commit/020db20e248a464e366de9cdff83cd8b335b69e9)), closes [#28118](https://github.com/bitnami/charts/issues/28118)
+
+## <small>14.6.22 (2024-07-15)</small>
+
+* [bitnami/minio] Release 14.6.22 (#27991) ([0771882](https://github.com/bitnami/charts/commit/07718826311f3a9ee5a10b8b507ee3a16bb21990)), closes [#27991](https://github.com/bitnami/charts/issues/27991)
+
+## <small>14.6.21 (2024-07-13)</small>
+
+* [bitnami/minio] Release 14.6.21 (#27957) ([275b8af](https://github.com/bitnami/charts/commit/275b8af69ff830bd5cb6e02ad4d3839dfaa6c234)), closes [#27957](https://github.com/bitnami/charts/issues/27957)
+
+## <small>14.6.20 (2024-07-10)</small>
+
+* [bitnami/minio] Release 14.6.20 (#27891) ([65a0403](https://github.com/bitnami/charts/commit/65a040321f33ffe03e18be24ce1441a6f03a4fde)), closes [#27891](https://github.com/bitnami/charts/issues/27891)
+
+## <small>14.6.19 (2024-07-05)</small>
+
+* [bitnami/minio]: Fix the condition end line to use containerPorts (#27626) ([9ccd164](https://github.com/bitnami/charts/commit/9ccd164313a80ad6911bb90b10413871bc523526)), closes [#27626](https://github.com/bitnami/charts/issues/27626)
 
 ## <small>14.6.18 (2024-07-04)</small>
 

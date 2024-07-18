@@ -59,6 +59,12 @@
               "password": "R0ot)Password"
             }
           }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
+          }
         }
       ]
     }

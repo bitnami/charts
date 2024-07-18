@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.6 (2024-06-28)
+## 1.2.7 (2024-07-16)
 
-* [bitnami/opensearch] Fix opensearch annotation templating indentation ([#27571](https://github.com/bitnami/charts/pull/27571))
+* [bitnami/opensearch] Global StorageClass as default value ([#28076](https://github.com/bitnami/charts/pull/28076))
+
+## <small>1.2.6 (2024-06-28)</small>
+
+* [bitnami/opensearch] Fix opensearch annotation templating indentation (#27571) ([dcb262a](https://github.com/bitnami/charts/commit/dcb262a491a5eb97e99560ff24a13ce999e6dbb3)), closes [#27571](https://github.com/bitnami/charts/issues/27571)
 
 ## <small>1.2.5 (2024-06-26)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.0.11 (2024-07-10)
+## 2.0.13 (2024-07-16)
 
-* [bitnami/haproxy] Release 2.0.11 ([#27878](https://github.com/bitnami/charts/pull/27878))
+* [bitnami/haproxy] Global StorageClass as default value ([#28029](https://github.com/bitnami/charts/pull/28029))
+
+## <small>2.0.12 (2024-07-11)</small>
+
+* [bitnami/haproxy] Release 2.0.12 (#27905) ([ddf0687](https://github.com/bitnami/charts/commit/ddf0687a7c3a5d81430bca80c2590a7b1620309e)), closes [#27905](https://github.com/bitnami/charts/issues/27905)
+
+## <small>2.0.11 (2024-07-10)</small>
+
+* [bitnami/haproxy] Release 2.0.11 (#27878) ([35b81c3](https://github.com/bitnami/charts/commit/35b81c39b75e8856fd95ce148b7368b48efca7bc)), closes [#27878](https://github.com/bitnami/charts/issues/27878)
 
 ## <small>2.0.10 (2024-07-10)</small>
 

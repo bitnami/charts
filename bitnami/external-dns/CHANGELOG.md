@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.1 (2024-07-10)
+## 8.2.2 (2024-07-12)
 
-* [bitnami/external-dns] Add value.yaml support for "--infoblox-create-ptr" argument flag ([#27882](https://github.com/bitnami/charts/pull/27882))
+* [bitnami/external-dns] add revisionHistoryLimit value ([#27913](https://github.com/bitnami/charts/pull/27913))
+
+## <small>8.2.1 (2024-07-11)</small>
+
+* [bitnami/external-dns] docs: update registry doc url (#27505) ([cf18b0b](https://github.com/bitnami/charts/commit/cf18b0b65db5371bab05415066e31d5c80378922)), closes [#27505](https://github.com/bitnami/charts/issues/27505)
 
 ## 8.2.0 (2024-07-10)
 
