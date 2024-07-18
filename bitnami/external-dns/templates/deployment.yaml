@@ -13,6 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   replicas: 1
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -276,6 +277,9 @@ spec:
             - --no-infoblox-ssl-verify
               {{- else }}
             - --infoblox-ssl-verify
+              {{- end }}
+              {{- if .Values.infoblox.createPtr }}
+            - --infoblox-create-ptr
               {{- end }}
               {{- if .Values.infoblox.maxResults }}
             - --infoblox-max-results={{ .Values.infoblox.maxResults }}

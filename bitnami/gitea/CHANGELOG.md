@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.3.11 (2024-07-05)
+## 2.3.14 (2024-07-16)
 
-* [bitnami/gitea] Release 2.3.11 ([#27810](https://github.com/bitnami/charts/pull/27810))
+* [bitnami/gitea] Global StorageClass as default value ([#28023](https://github.com/bitnami/charts/pull/28023))
+
+## <small>2.3.13 (2024-07-15)</small>
+
+* [bitnami/gitea] Include goss-wait test to improve test results (#27980) ([c690b0d](https://github.com/bitnami/charts/commit/c690b0d818d06feb79ad473ae1447d5b3b345518)), closes [#27980](https://github.com/bitnami/charts/issues/27980)
+
+## <small>2.3.12 (2024-07-15)</small>
+
+* [bitnami/gitea] Release 2.3.12 (#27964) ([48112ab](https://github.com/bitnami/charts/commit/48112ab4823167fd68daa82cda933f4f896acf7e)), closes [#27964](https://github.com/bitnami/charts/issues/27964)
+
+## <small>2.3.11 (2024-07-05)</small>
+
+* [bitnami/gitea] Release 2.3.11 (#27810) ([f792844](https://github.com/bitnami/charts/commit/f7928444d215f77f582b06dd8b0cce317d538992)), closes [#27810](https://github.com/bitnami/charts/issues/27810)
 
 ## <small>2.3.10 (2024-07-04)</small>
 

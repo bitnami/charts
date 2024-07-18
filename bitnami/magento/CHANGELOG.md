@@ -1,8 +1,12 @@
 # Changelog
 
-## 28.0.0 (2024-07-12)
+## 28.0.1 (2024-07-16)
 
-* [bitnami/magento] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27928](https://github.com/bitnami/charts/pull/27928))
+* [bitnami/magento] Global StorageClass as default value ([#28049](https://github.com/bitnami/charts/pull/28049))
+
+## 28.0.0 (2024-07-13)
+
+* [bitnami/magento] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27928) ([0ee23ef](https://github.com/bitnami/charts/commit/0ee23ef40024a769da066da282c8b54e6df3f732)), closes [#27928](https://github.com/bitnami/charts/issues/27928)
 
 ## <small>27.2.8 (2024-06-28)</small>
 

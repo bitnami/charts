@@ -75,9 +75,6 @@ spec:
         - name: certificate-volume
           image: {{ include "harbor.portal.image" . }}
           imagePullPolicy: {{ .Values.portal.image.pullPolicy | quote }}
-          {{- if .Values.portal.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.portal.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
           command:
             - /bin/bash
           args:
