@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.3.1 (2024-07-11)
+## 21.3.2 (2024-07-16)
 
-* [bitnami/elasticsearch] Release 21.3.1 ([#27906](https://github.com/bitnami/charts/pull/27906))
+* [bitnami/elasticsearch] Global StorageClass as default value ([#28015](https://github.com/bitnami/charts/pull/28015))
+
+## <small>21.3.1 (2024-07-11)</small>
+
+* [bitnami/elasticsearch] Release 21.3.1 (#27906) ([7a5c222](https://github.com/bitnami/charts/commit/7a5c222482334e274e8e21995a0e292407ba996e)), closes [#27906](https://github.com/bitnami/charts/issues/27906)
 
 ## 21.3.0 (2024-07-11)
 

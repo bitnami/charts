@@ -1,8 +1,12 @@
 # Changelog
 
+## 14.6.0 (2024-07-17)
+
+* [bitnami/rabbitmq] make queue_master_locator configurable ([#27990](https://github.com/bitnami/charts/pull/27990))
+
 ## 14.5.0 (2024-07-09)
 
-* [bitnami/rabbitmq] Replace extraPorts with extraPortsHeadless in headless service ([#27853](https://github.com/bitnami/charts/pull/27853))
+* [bitnami/rabbitmq] Replace extraPorts with extraPortsHeadless in headless service (#27853) ([b205f7a](https://github.com/bitnami/charts/commit/b205f7a39c528e0fe365568f955c25c460649c4f)), closes [#27853](https://github.com/bitnami/charts/issues/27853)
 
 ## <small>14.4.6 (2024-07-03)</small>
 
