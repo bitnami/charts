@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/nessie
 ```
 
-Looking to use Nessie in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Nessie in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -70,7 +70,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 The chart supports setting Nessie [application properties](https://github.com/projectnessie/nessie/blob/main/servers/quarkus-server/src/main/resources/application.properties) via two parameters:
 
 - `configOverrides`: Overrides non-sensitive application properties, such as `quarkus.micrometer.enabled`. Nested and plain YAML are supported.
-- `secretConfigOverrides`: Overrides sensitive applicatino properties, such as `quarkus.datasource.postgresql.password`. Nested and plain YAML are supported.
+- `secretConfigOverrides`: Overrides sensitive application properties, such as `quarkus.datasource.postgresql.password`. Nested and plain YAML are supported.
 
 In the following example, we use `configOverrides` to disable the HTTP access log and the HTTP decompression:
 
@@ -86,6 +86,23 @@ configOverrides:
 Alternatively, it is possible to use an external configmap and an external secret for this configuration: `existingConfigmap` and `existingSecret`.
 
 > NOTE: Configuration overrides take precedence over the chart values. For example, setting `quarkus.http.port` via `configOverrides` leaves the `containerPorts.http` without effect.
+
+### Enabling tracing
+
+In the example below, we enable telemetry following the [upstream Nessie documentation](https://projectnessie.org/nessie-latest/configuration/#traces) (replace the TRACE_ENDPOINT placeholder):
+
+```yaml
+configOverrides:
+  quarkus.otel.exporter.otlp.traces.endpoint: TRACE_ENDPOINT
+```
+
+Find the full list of available properties in the [upstream Quarkus documentation](https://quarkus.io/guides/opentelemetry#configuration-reference). In the example below we also define the delay between two consecutive exports:
+
+```yaml
+configOverrides:
+  quarkus.otel.exporter.otlp.traces.endpoint: TRACE_ENDPOINT
+  quarkus.otel.bsp.schedule.delay: 10S
+```
 
 ### Supported version store types
 
@@ -283,7 +300,8 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters

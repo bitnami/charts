@@ -1,8 +1,29 @@
 # Changelog
 
-## 1.3.7 (2024-06-18)
+## 1.3.12 (2024-07-16)
 
-* [bitnami/prometheus] Release 1.3.7 ([#27406](https://github.com/bitnami/charts/pull/27406))
+* [bitnami/prometheus] Global StorageClass as default value ([#28085](https://github.com/bitnami/charts/pull/28085))
+
+## <small>1.3.11 (2024-07-10)</small>
+
+* [bitnami/prometheus] Release 1.3.11 (#27880) ([2472a61](https://github.com/bitnami/charts/commit/2472a61fe95344bf2c7545d4d28c629c5bb468e2)), closes [#27880](https://github.com/bitnami/charts/issues/27880)
+
+## <small>1.3.10 (2024-07-04)</small>
+
+* [bitnami/prometheus] Release 1.3.10 (#27780) ([efffcf0](https://github.com/bitnami/charts/commit/efffcf0dd6596305ee8fd22b7bda470a6d50c7b9)), closes [#27780](https://github.com/bitnami/charts/issues/27780)
+
+## <small>1.3.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/prometheus] Release 1.3.9 (#27675) ([c8053a0](https://github.com/bitnami/charts/commit/c8053a0af773e1ce64c875500cd4d2269b5f6eee)), closes [#27675](https://github.com/bitnami/charts/issues/27675)
+
+## <small>1.3.8 (2024-06-19)</small>
+
+* [bitnami/prometheus] Release 1.3.8 (#27445) ([71dae51](https://github.com/bitnami/charts/commit/71dae51ed04ea9ae723929f886ace043c7d54a66)), closes [#27445](https://github.com/bitnami/charts/issues/27445)
+
+## <small>1.3.7 (2024-06-18)</small>
+
+* [bitnami/prometheus] Release 1.3.7 (#27406) ([483a9f9](https://github.com/bitnami/charts/commit/483a9f96f311b9984b5d2aee5d341b7922c2d1d2)), closes [#27406](https://github.com/bitnami/charts/issues/27406)
 
 ## <small>1.3.6 (2024-06-17)</small>
 

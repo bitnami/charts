@@ -1,8 +1,29 @@
 # Changelog
 
-## 3.5.5 (2024-06-18)
+## 3.7.0 (2024-07-17)
 
-* [bitnami/grafana-tempo] Release 3.5.5 ([#27352](https://github.com/bitnami/charts/pull/27352))
+* [bitnami/grafana-tempo] Change OTLP HTTP port 55681 to 4318 ([#27830](https://github.com/bitnami/charts/pull/27830))
+
+## <small>3.6.3 (2024-07-08)</small>
+
+* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) (#27829) ([8eb5299](https://github.com/bitnami/charts/commit/8eb529978d6b43100dd43a7dc2d4a2bfaf0f4ed7)), closes [#27829](https://github.com/bitnami/charts/issues/27829)
+
+## <small>3.6.2 (2024-07-04)</small>
+
+* [bitnami/grafana-tempo] Release 3.6.2 (#27764) ([1194e92](https://github.com/bitnami/charts/commit/1194e9225dc4a85b74eb4cd60d9f32712501fbfe)), closes [#27764](https://github.com/bitnami/charts/issues/27764)
+
+## <small>3.6.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/grafana-tempo] Release 3.6.1 (#27657) ([544e8dd](https://github.com/bitnami/charts/commit/544e8ddfa5cd9379ed7177b511bdee0a653b3fea)), closes [#27657](https://github.com/bitnami/charts/issues/27657)
+
+## 3.6.0 (2024-06-24)
+
+* [bitnami/grafana-tempo] Add option to disable tempo-query sidecar (#27447) ([b251a0b](https://github.com/bitnami/charts/commit/b251a0beca7e98f2be4de453dad590fe8dfbac0d)), closes [#27447](https://github.com/bitnami/charts/issues/27447)
+
+## <small>3.5.5 (2024-06-18)</small>
+
+* [bitnami/grafana-tempo] Release 3.5.5 (#27352) ([bda5da9](https://github.com/bitnami/charts/commit/bda5da981a74094a9802d419ec77e87995177250)), closes [#27352](https://github.com/bitnami/charts/issues/27352)
 
 ## <small>3.5.4 (2024-06-17)</small>
 

@@ -1,8 +1,45 @@
 # Changelog
 
-## 2.3.5 (2024-06-17)
+## 2.3.14 (2024-07-16)
 
-* [bitnami/gitea] Release 2.3.5 ([#27223](https://github.com/bitnami/charts/pull/27223))
+* [bitnami/gitea] Global StorageClass as default value ([#28023](https://github.com/bitnami/charts/pull/28023))
+
+## <small>2.3.13 (2024-07-15)</small>
+
+* [bitnami/gitea] Include goss-wait test to improve test results (#27980) ([c690b0d](https://github.com/bitnami/charts/commit/c690b0d818d06feb79ad473ae1447d5b3b345518)), closes [#27980](https://github.com/bitnami/charts/issues/27980)
+
+## <small>2.3.12 (2024-07-15)</small>
+
+* [bitnami/gitea] Release 2.3.12 (#27964) ([48112ab](https://github.com/bitnami/charts/commit/48112ab4823167fd68daa82cda933f4f896acf7e)), closes [#27964](https://github.com/bitnami/charts/issues/27964)
+
+## <small>2.3.11 (2024-07-05)</small>
+
+* [bitnami/gitea] Release 2.3.11 (#27810) ([f792844](https://github.com/bitnami/charts/commit/f7928444d215f77f582b06dd8b0cce317d538992)), closes [#27810](https://github.com/bitnami/charts/issues/27810)
+
+## <small>2.3.10 (2024-07-04)</small>
+
+* [bitnami/gitea] Release 2.3.10 (#27803) ([0dd2cf0](https://github.com/bitnami/charts/commit/0dd2cf0499d348260f7b967a9d739a8e57d451c4)), closes [#27803](https://github.com/bitnami/charts/issues/27803)
+
+## <small>2.3.9 (2024-07-04)</small>
+
+* [bitnami/gitea] Release 2.3.9 (#27752) ([b37b9ef](https://github.com/bitnami/charts/commit/b37b9ef02ef34e15e576544ff94ce3c98c1ac159)), closes [#27752](https://github.com/bitnami/charts/issues/27752)
+
+## <small>2.3.8 (2024-07-03)</small>
+
+* [bitnami/gitea] Release 2.3.8 (#27647) ([53e54e7](https://github.com/bitnami/charts/commit/53e54e79995cd75fb1356302f22b8f16160928e8)), closes [#27647](https://github.com/bitnami/charts/issues/27647)
+
+## <small>2.3.7 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/gitea] Release 2.3.7 (#27630) ([e0208e5](https://github.com/bitnami/charts/commit/e0208e5b734d3c5c3e9475894222ce4b5bb653da)), closes [#27630](https://github.com/bitnami/charts/issues/27630)
+
+## <small>2.3.6 (2024-06-18)</small>
+
+* [bitnami/gitea] Release 2.3.6 (#27348) ([b74347f](https://github.com/bitnami/charts/commit/b74347fad60d2643e60d6a6a572ec7d436b0d447)), closes [#27348](https://github.com/bitnami/charts/issues/27348)
+
+## <small>2.3.5 (2024-06-17)</small>
+
+* [bitnami/gitea] Release 2.3.5 (#27223) ([8933668](https://github.com/bitnami/charts/commit/893366838219b710030bd39c047cf64bdd7cdf6b)), closes [#27223](https://github.com/bitnami/charts/issues/27223)
 
 ## <small>2.3.4 (2024-06-06)</small>
 

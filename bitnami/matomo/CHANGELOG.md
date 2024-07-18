@@ -1,8 +1,29 @@
 # Changelog
 
-## 7.3.5 (2024-06-12)
+## 8.0.1 (2024-07-16)
 
-* [bitnami/matomo] Release 7.3.5 ([#27122](https://github.com/bitnami/charts/pull/27122))
+* [bitnami/matomo] Fix wrong initContainers[0].imagePullSecrets value ([#28115](https://github.com/bitnami/charts/pull/28115))
+
+## 8.0.0 (2024-07-13)
+
+* [bitnami/matomo] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27943) ([ee74a7f](https://github.com/bitnami/charts/commit/ee74a7fc02d22cbbdcd1eaec39960ea7215e50c0)), closes [#27943](https://github.com/bitnami/charts/issues/27943)
+
+## <small>7.3.8 (2024-07-12)</small>
+
+* [bitnami/matomo] Fix customCAs usage (#27938) ([91b7632](https://github.com/bitnami/charts/commit/91b763201c8bfff5722071c1d461e2c853407620)), closes [#27938](https://github.com/bitnami/charts/issues/27938)
+
+## <small>7.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/matomo] Release 7.3.7 (#27700) ([a6d7406](https://github.com/bitnami/charts/commit/a6d74060931be3c6f2944bfacc2f397a9220b75c)), closes [#27700](https://github.com/bitnami/charts/issues/27700)
+
+## <small>7.3.6 (2024-06-19)</small>
+
+* [bitnami/matomo] Release 7.3.6 (#27437) ([1aaac3c](https://github.com/bitnami/charts/commit/1aaac3c652d15fb1709d68eeb7d2bbbe606d80ad)), closes [#27437](https://github.com/bitnami/charts/issues/27437)
+
+## <small>7.3.5 (2024-06-12)</small>
+
+* [bitnami/matomo] Release 7.3.5 (#27122) ([912f116](https://github.com/bitnami/charts/commit/912f116808785950399e785226fa55bd0b8eb654)), closes [#27122](https://github.com/bitnami/charts/issues/27122)
 
 ## <small>7.3.4 (2024-06-06)</small>
 

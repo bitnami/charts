@@ -1,8 +1,25 @@
 # Changelog
 
-## 8.2.7 (2024-06-18)
+## 8.3.3 (2024-07-08)
 
-* [bitnami/milvus] Release 8.2.7 ([#27403](https://github.com/bitnami/charts/pull/27403))
+* [bitnami/milvus] Release 8.3.3 ([#27807](https://github.com/bitnami/charts/pull/27807))
+
+## <small>8.3.2 (2024-06-28)</small>
+
+* [bitnami/milvus] Release 8.3.2 (#27573) ([05453cb](https://github.com/bitnami/charts/commit/05453cbeae31cd9cffcd9fcf98cffc16233e5a47)), closes [#27573](https://github.com/bitnami/charts/issues/27573)
+
+## <small>8.3.1 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/milvus] Release 8.3.1 (#27558) ([45be6d3](https://github.com/bitnami/charts/commit/45be6d3c5169f035356910e2a75d211922b9249a)), closes [#27558](https://github.com/bitnami/charts/issues/27558)
+
+## 8.3.0 (2024-06-19)
+
+* [bitnami/milvus] feat: config external S3 tls client certs settings (… (#27068) ([f8249bf](https://github.com/bitnami/charts/commit/f8249bf1cca9198fd42c23d02409b774b18d3e60)), closes [#27068](https://github.com/bitnami/charts/issues/27068) [bitnami#26111](https://github.com/bitnami/issues/26111)
+
+## <small>8.2.7 (2024-06-18)</small>
+
+* [bitnami/milvus] Release 8.2.7 (#27403) ([72a2ad7](https://github.com/bitnami/charts/commit/72a2ad7c8a3f2eac2cfeede24bbf96d28c13fa18)), closes [#27403](https://github.com/bitnami/charts/issues/27403)
 
 ## <small>8.2.6 (2024-06-17)</small>
 

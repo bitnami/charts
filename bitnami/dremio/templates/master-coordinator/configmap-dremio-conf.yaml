@@ -1,0 +1,50 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/* Adding the helper in here for better readability */}}
+{{- define "dremio.dremio-conf.master-coordinator.default" -}}
+{{/* Common configuration */}}
+{{- include "dremio.dremio-conf.common.default" . }}
+{{/* Master coordinator settings */}}
+services.coordinator.enabled: true
+services.coordinator.master.enabled: true
+services.coordinator.master.embedded-zookeeper.enabled: false
+services.executor.enabled: false
+{{- end }}
+
+{{- if not .Values.masterCoordinator.dremioConf.existingConfigmap -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-dremio-conf" (include "dremio.master-coordinator.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: dremio
+    app.kubernetes.io/component: master-coordinator
+    {{- /* We need an extra label that applies to both master and non-master coordinators. Taken from upstream dremio chart */}}
+    app: dremio-coordinator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- $extraFiles := mustMergeOverwrite .Values.dremio.dremioConf.extraFiles .Values.masterCoordinator.dremioConf.extraFiles }}
+  {{- if not (hasKey $extraFiles "dremio.conf") }}
+  {{- /* dremio.conf uses HOCON, in which flattened YAML is a subset. So converting all values to flattened YAML generates a valid HOCON configuration */}}
+  {{- $defaultConfiguration := include "dremio.dremio-conf.master-coordinator.default" . | fromYaml -}}
+  {{- /* Obtain first the flattened version of all YAML content so the merge works as expected */}}
+  {{- $defaultConfigurationFlat := include "dremio.dremio-conf.flattenYAML" (dict "config" $defaultConfiguration "prefix" "" "context" $) | fromYaml -}}
+  {{- $commonConfigOverridesFlat := include "dremio.dremio-conf.flattenYAML" (dict "config" .Values.dremio.dremioConf.configOverrides "prefix" "" "context" $) | fromYaml -}}
+  {{- $configOverridesFlat := include "dremio.dremio-conf.flattenYAML" (dict "config" .Values.masterCoordinator.dremioConf.configOverrides "prefix" "" "context" $) | fromYaml -}}
+  {{- /* Override order: default configuration <- common overrides <- specific overrides */}}
+  {{- $mergedConfiguration := mustMergeOverwrite $defaultConfigurationFlat $commonConfigOverridesFlat }}
+  {{- $mergedConfiguration = mustMergeOverwrite $mergedConfiguration $configOverridesFlat }}
+  dremio.conf: |
+    {{- /* Apply the helper again to avoid arrays having a HOCON incompatible format */}}
+    {{- include "dremio.dremio-conf.flattenYAML" (dict "config" $mergedConfiguration "prefix" "" "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if $extraFiles }}
+  {{- include "common.tplvalues.render" (dict "value" $extraFiles "context" $) | nindent 2 }}
+  {{- end }}
+{{- end }}

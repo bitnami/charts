@@ -1,8 +1,25 @@
 # Changelog
 
-## 21.2.6 (2024-06-18)
+## 22.0.1 (2024-07-16)
 
-* [bitnami/prestashop] Release 21.2.6 ([#27404](https://github.com/bitnami/charts/pull/27404))
+* [bitnami/prestashop] Global StorageClass as default value ([#28084](https://github.com/bitnami/charts/pull/28084))
+
+## 22.0.0 (2024-07-13)
+
+* [bitnami/prestashop] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27933) ([2a29c42](https://github.com/bitnami/charts/commit/2a29c42dc6bac2452735873e881bdd6d785c4e2b)), closes [#27933](https://github.com/bitnami/charts/issues/27933)
+
+## <small>21.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/prestashop] Release 21.2.8 (#27707) ([30b4dd4](https://github.com/bitnami/charts/commit/30b4dd42339f39e96eb282e593cb1857679807f1)), closes [#27707](https://github.com/bitnami/charts/issues/27707)
+
+## <small>21.2.7 (2024-06-24)</small>
+
+* [bitnami/prestashop] Release 21.2.7 (#27515) ([5a9b88c](https://github.com/bitnami/charts/commit/5a9b88cc97439cf49929d46e97507eb6194c45ae)), closes [#27515](https://github.com/bitnami/charts/issues/27515)
+
+## <small>21.2.6 (2024-06-18)</small>
+
+* [bitnami/prestashop] Release 21.2.6 (#27404) ([f1d8fd7](https://github.com/bitnami/charts/commit/f1d8fd7645eb108e34078f16caaac5f8a128d410)), closes [#27404](https://github.com/bitnami/charts/issues/27404)
 
 ## <small>21.2.5 (2024-06-17)</small>
 

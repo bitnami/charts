@@ -1,8 +1,25 @@
 # Changelog
 
-## 13.4.4 (2024-06-17)
+## 13.4.8 (2024-07-16)
 
-* [bitnami/zookeeper] Release 13.4.4 ([#27309](https://github.com/bitnami/charts/pull/27309))
+* [bitnami/zookeeper] Global StorageClass as default value ([#28111](https://github.com/bitnami/charts/pull/28111))
+
+## <small>13.4.7 (2024-07-11)</small>
+
+* [bitnami/zookeeper] Bump patch version (#27895) ([8cf2526](https://github.com/bitnami/charts/commit/8cf2526d81c0010e69e9c19b7739ec86531f8d2e)), closes [#27895](https://github.com/bitnami/charts/issues/27895)
+
+## <small>13.4.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/zookeeper] Release 13.4.6 (#27722) ([84b4b99](https://github.com/bitnami/charts/commit/84b4b99f4450009d8fcac4c43755cd8116db33ff)), closes [#27722](https://github.com/bitnami/charts/issues/27722)
+
+## <small>13.4.5 (2024-06-18)</small>
+
+* [bitnami/zookeeper] Release 13.4.5 (#27431) ([2168b4a](https://github.com/bitnami/charts/commit/2168b4af978a7657a8a1b0db8a0bd04e354cf0b9)), closes [#27431](https://github.com/bitnami/charts/issues/27431)
+
+## <small>13.4.4 (2024-06-17)</small>
+
+* [bitnami/zookeeper] Release 13.4.4 (#27309) ([eb6c0ff](https://github.com/bitnami/charts/commit/eb6c0ff2245c49d80712168f4a61b6928569fb06)), closes [#27309](https://github.com/bitnami/charts/issues/27309)
 
 ## <small>13.4.3 (2024-06-06)</small>
 

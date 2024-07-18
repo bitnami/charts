@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/milvus
 ```
 
-Looking to use Milvus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Milvus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -1725,20 +1725,22 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### External S3 parameters
 
-| Name                                      | Description                                                        | Value           |
-| ----------------------------------------- | ------------------------------------------------------------------ | --------------- |
-| `externalS3.host`                         | External S3 host                                                   | `""`            |
-| `externalS3.port`                         | External S3 port number                                            | `443`           |
-| `externalS3.accessKeyID`                  | External S3 access key ID                                          | `""`            |
-| `externalS3.accessKeySecret`              | External S3 access key secret                                      | `""`            |
-| `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials  | `""`            |
-| `externalS3.existingSecretAccessKeyIDKey` | Name of an existing secret key containing the S3 access key ID     | `root-user`     |
-| `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret | `root-password` |
-| `externalS3.protocol`                     | External S3 protocol                                               | `https`         |
-| `externalS3.bucket`                       | External S3 bucket                                                 | `milvus`        |
-| `externalS3.rootPath`                     | External S3 root path                                              | `file`          |
-| `externalS3.iamEndpoint`                  | External S3 IAM endpoint                                           | `""`            |
-| `externalS3.cloudProvider`                | External S3 cloud provider                                         | `""`            |
+| Name                                      | Description                                                                                       | Value           |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------- |
+| `externalS3.host`                         | External S3 host                                                                                  | `""`            |
+| `externalS3.port`                         | External S3 port number                                                                           | `443`           |
+| `externalS3.accessKeyID`                  | External S3 access key ID                                                                         | `""`            |
+| `externalS3.accessKeySecret`              | External S3 access key secret                                                                     | `""`            |
+| `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials                                 | `""`            |
+| `externalS3.existingSecretAccessKeyIDKey` | Name of an existing secret key containing the S3 access key ID                                    | `root-user`     |
+| `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret                                | `root-password` |
+| `externalS3.bucket`                       | External S3 bucket                                                                                | `milvus`        |
+| `externalS3.rootPath`                     | External S3 root path                                                                             | `file`          |
+| `externalS3.iamEndpoint`                  | External S3 IAM endpoint                                                                          | `""`            |
+| `externalS3.cloudProvider`                | External S3 cloud provider                                                                        | `""`            |
+| `externalS3.tls.enabled`                  | Enable TLS for externalS3 client connections.                                                     | `false`         |
+| `externalS3.tls.existingSecret`           | Name of the existing secret containing the TLS certificates for externalS3 client communications. | `""`            |
+| `externalS3.tls.caCert`                   | The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)        | `ca.crt`        |
 
 ### External Kafka parameters
 

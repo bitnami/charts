@@ -260,7 +260,7 @@ spec:
     name: {{ .Values.prometheus.additionalAlertManagerExternal.name }}
     key: {{ .Values.prometheus.additionalAlertManagerExternal.key }}
   {{- end -}}
-{{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
+{{- include "kube-prometheus.imagePullSecrets" . | nindent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   {{- if .Values.prometheus.initContainers }}
   initContainers:

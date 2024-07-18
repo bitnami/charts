@@ -1,8 +1,26 @@
 # Changelog
 
-## 15.6.9 (2024-06-18)
+## 15.6.14 (2024-07-16)
 
-* [bitnami/mongodb] Release 15.6.9 ([#27382](https://github.com/bitnami/charts/pull/27382))
+* [bitnami/mongodb] Global StorageClass as default value ([#28061](https://github.com/bitnami/charts/pull/28061))
+
+## <small>15.6.13 (2024-07-16)</small>
+
+* [bitnami/mongodb] Fix autoDiscovery initContainer template (#27953) ([c3955b0](https://github.com/bitnami/charts/commit/c3955b0e2c0cd7fc287f3acc36990b8c0a8c09ac)), closes [#27953](https://github.com/bitnami/charts/issues/27953)
+
+## <small>15.6.12 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mongodb] Release 15.6.12 (#27590) ([97d0ec8](https://github.com/bitnami/charts/commit/97d0ec8a20365d93a4121dd7df98352eac8e69a7)), closes [#27590](https://github.com/bitnami/charts/issues/27590)
+
+## <small>15.6.11 (2024-06-25)</small>
+
+* [bitnami/mongodb] add space back so script works again (#27183) ([e880657](https://github.com/bitnami/charts/commit/e880657e7744f7871d04c55283f34fad9d04598a)), closes [#27183](https://github.com/bitnami/charts/issues/27183)
+* [bitnami/mongodb] Recover logging to stdout (#27510) ([33bbddd](https://github.com/bitnami/charts/commit/33bbddd532d0debbe775a13a1b0c31e59ccd3c35)), closes [#27510](https://github.com/bitnami/charts/issues/27510)
+
+## <small>15.6.9 (2024-06-18)</small>
+
+* [bitnami/mongodb] Release 15.6.9 (#27382) ([d59a4b1](https://github.com/bitnami/charts/commit/d59a4b1346d607d82a68d59c6c162197b2305858)), closes [#27382](https://github.com/bitnami/charts/issues/27382)
 
 ## <small>15.6.8 (2024-06-17)</small>
 

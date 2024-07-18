@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mlflow
 ```
 
-Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -447,7 +447,7 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 
 | Name                                      | Description                                                        | Value           |
 | ----------------------------------------- | ------------------------------------------------------------------ | --------------- |
-| `externalS3.host`                         | External S3 host                                                   | `""`            |
+| `externalS3.host`                         | External S3 host, e.g. "s3.amazonaws.com"                          | `""`            |
 | `externalS3.port`                         | External S3 port number                                            | `443`           |
 | `externalS3.useCredentialsInSecret`       | Whether to use a secret to store the S3 credentials                | `true`          |
 | `externalS3.accessKeyID`                  | External S3 access key ID                                          | `""`            |

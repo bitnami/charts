@@ -1,8 +1,25 @@
 # Changelog
 
-## 0.3.11 (2024-06-18)
+## 0.3.15 (2024-07-16)
 
-* [bitnami/janusgraph] Release 0.3.11 ([#27358](https://github.com/bitnami/charts/pull/27358))
+* [bitnami/janusgraph] Global StorageClass as default value ([#28033](https://github.com/bitnami/charts/pull/28033))
+
+## <small>0.3.14 (2024-07-05)</small>
+
+* [bitnami/janusgraph] Release 0.3.14 (#27812) ([aa66dd1](https://github.com/bitnami/charts/commit/aa66dd1abf1e766bb54cac5d151e816accedc197)), closes [#27812](https://github.com/bitnami/charts/issues/27812)
+
+## <small>0.3.13 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/janusgraph] Release 0.3.13 (#27697) ([b06ce3d](https://github.com/bitnami/charts/commit/b06ce3d9cba0f89a4eeae4852cb4e710349fc72a)), closes [#27697](https://github.com/bitnami/charts/issues/27697)
+
+## <small>0.3.12 (2024-06-21)</small>
+
+* [bitnami/janusgraph] Fix fullname resolution for cassandra subchart (#27151) ([6773447](https://github.com/bitnami/charts/commit/677344797f3ff1a1342c8237182db17f6c09b675)), closes [#27151](https://github.com/bitnami/charts/issues/27151)
+
+## <small>0.3.11 (2024-06-18)</small>
+
+* [bitnami/janusgraph] Release 0.3.11 (#27358) ([da2f1b0](https://github.com/bitnami/charts/commit/da2f1b06d8cb23a1668f1a1a6b848eddfa502fcb)), closes [#27358](https://github.com/bitnami/charts/issues/27358)
 
 ## <small>0.3.10 (2024-06-17)</small>
 

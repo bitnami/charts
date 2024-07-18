@@ -1,8 +1,21 @@
 # Changelog
 
-## 1.0.3 (2024-06-18)
+## 1.0.6 (2024-07-16)
 
-* [bitnami/scylladb] Release 1.0.3 ([#27413](https://github.com/bitnami/charts/pull/27413))
+* [bitnami/scylladb] Global StorageClass as default value ([#28093](https://github.com/bitnami/charts/pull/28093))
+
+## <small>1.0.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/scylladb] Release 1.0.5 (#27718) ([c6adbd0](https://github.com/bitnami/charts/commit/c6adbd0855240c1b43c0bf1c658efe330f1d8ad4)), closes [#27718](https://github.com/bitnami/charts/issues/27718)
+
+## <small>1.0.4 (2024-06-23)</small>
+
+* [bitnami/scylladb] Release 1.0.4 (#27503) ([0bfadf3](https://github.com/bitnami/charts/commit/0bfadf34a8d10aaca7ba27c1560b4e4c85b1272b)), closes [#27503](https://github.com/bitnami/charts/issues/27503)
+
+## <small>1.0.3 (2024-06-18)</small>
+
+* [bitnami/scylladb] Release 1.0.3 (#27413) ([63533e2](https://github.com/bitnami/charts/commit/63533e20c7d813dcc673c55b8a6ebc6ee34a6ef3)), closes [#27413](https://github.com/bitnami/charts/issues/27413)
 
 ## <small>1.0.2 (2024-06-17)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 9.1.4 (2024-06-18)
+## 9.1.7 (2024-07-16)
 
-* [bitnami/argo-workflows] Release 9.1.4 ([#27402](https://github.com/bitnami/charts/pull/27402))
+* [bitnami/argo-workflows] Global StorageClass as default value ([#28000](https://github.com/bitnami/charts/pull/28000))
+
+## <small>9.1.6 (2024-07-04)</small>
+
+* [bitnami/argo-workflows] Release 9.1.6 (#27755) ([b30c5f5](https://github.com/bitnami/charts/commit/b30c5f5f8affa1f3924e6248c7597ca365ca1c4c)), closes [#27755](https://github.com/bitnami/charts/issues/27755)
+
+## <small>9.1.5 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/argo-workflows] Release 9.1.5 (#27640) ([5d1255c](https://github.com/bitnami/charts/commit/5d1255c62120ad579a12957c1dd0c60d9fa6a53e)), closes [#27640](https://github.com/bitnami/charts/issues/27640)
+
+## <small>9.1.4 (2024-06-18)</small>
+
+* [bitnami/argo-workflows] Release 9.1.4 (#27402) ([0c29858](https://github.com/bitnami/charts/commit/0c29858bdd7127b83fc98718d8b3105e32300289)), closes [#27402](https://github.com/bitnami/charts/issues/27402)
 
 ## <small>9.1.3 (2024-06-17)</small>
 

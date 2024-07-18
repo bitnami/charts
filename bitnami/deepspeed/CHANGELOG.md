@@ -1,8 +1,33 @@
 # Changelog
 
-## 2.2.4 (2024-06-07)
+## 2.2.10 (2024-07-16)
 
-* [bitnami/deepspeed] Release 2.2.4 ([#26889](https://github.com/bitnami/charts/pull/26889))
+* [bitnami/deepspeed] Global StorageClass as default value ([#28009](https://github.com/bitnami/charts/pull/28009))
+
+## <small>2.2.9 (2024-07-05)</small>
+
+* [bitnami/deepspeed] Release 2.2.9 (#27815) ([762e81e](https://github.com/bitnami/charts/commit/762e81ee2743605c16a44174d6b2b0a7ff4c73c1)), closes [#27815](https://github.com/bitnami/charts/issues/27815)
+
+## <small>2.2.8 (2024-07-03)</small>
+
+* [bitnami/deepspeed] Release 2.2.8 (#27745) ([d4e368d](https://github.com/bitnami/charts/commit/d4e368dd209fc959a1977ccfb53f8423937a2d20)), closes [#27745](https://github.com/bitnami/charts/issues/27745)
+
+## <small>2.2.7 (2024-06-28)</small>
+
+* [bitnami/deepspeed] Release 2.2.7 (#27577) ([d403bd4](https://github.com/bitnami/charts/commit/d403bd4c5e7c2c762eead48d052a2f39fa42fe6c)), closes [#27577](https://github.com/bitnami/charts/issues/27577)
+
+## <small>2.2.6 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/deepspeed] Release 2.2.6 (#27560) ([7d6ffd7](https://github.com/bitnami/charts/commit/7d6ffd74d6721451e7d38ab860919965446c5b2b)), closes [#27560](https://github.com/bitnami/charts/issues/27560)
+
+## <small>2.2.5 (2024-06-21)</small>
+
+* [bitnami/deepspeed] Release 2.2.5 (#27438) ([fcf2330](https://github.com/bitnami/charts/commit/fcf2330d032796fc8d623ca22fb9fb25d379547d)), closes [#27438](https://github.com/bitnami/charts/issues/27438)
+
+## <small>2.2.4 (2024-06-07)</small>
+
+* [bitnami/deepspeed] Release 2.2.4 (#26889) ([f2ed42d](https://github.com/bitnami/charts/commit/f2ed42df98d83133969f27ba98c42c65b8db3b08)), closes [#26889](https://github.com/bitnami/charts/issues/26889)
 
 ## <small>2.2.3 (2024-06-06)</small>
 

@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/apisix
 ```
 
-Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -91,6 +91,8 @@ ingressController:
   enabled: false
 etcd:
   enabled: false
+dashboard:
+  enabled: false
 dataPlane:
   extraConfig:
     deployment:
@@ -102,7 +104,7 @@ dataPlane:
         name: apisix-routes
   extraVolumeMounts:
     - name: routes
-      mountPath: /opt/bitnami/apisix/conf/apisix.yaml
+      mountPath: /usr/local/apisix/conf/apisix.yaml
       subPath: apisix.yaml
 extraDeploy:
   - apiVersion: v1
@@ -118,6 +120,7 @@ extraDeploy:
                 nodes:
                     "127.0.0.1:1980": 1
                 type: roundrobin
+        #END
 ```
 
 ### Ingress
@@ -174,7 +177,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### External etcd support
 
-You may want to have Mastodon connect to an external etcd rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalEtcd` parameter](#parameters). You should also disable the etcd installation with the `etcd.enabled` option. Here is an example:
+You may want to have APISIX connect to an external etcd rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalEtcd` parameter](#parameters). You should also disable the etcd installation with the `etcd.enabled` option. Here is an example:
 
 ```yaml
 etcd:
@@ -251,7 +254,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -889,6 +893,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ingressController.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the APISIX Ingress Controller container(s)                                                                                                                                               | `[]`                                        |
 | `ingressController.sidecars`                                          | Add additional sidecar containers to the APISIX Ingress Controller pod(s)                                                                                                                                                                             | `[]`                                        |
 | `ingressController.initContainers`                                    | Add additional init containers to the APISIX Ingress Controller pod(s)                                                                                                                                                                                | `[]`                                        |
+| `ingressController.ingressClass.name`                                 | IngressClass that will be be used to implement the APISIX Ingress                                                                                                                                                                                     | `apisix`                                    |
+| `ingressController.ingressClass.annotations`                          | Additional annotations for the APISIX IngressClass                                                                                                                                                                                                    | `{}`                                        |
 | `ingressController.defaultConfig`                                     | APISIX Dashboard configuration (evaluated as a template)                                                                                                                                                                                              | `""`                                        |
 | `ingressController.extraConfig`                                       | Extra configuration parameters for APISIX Ingress Controller                                                                                                                                                                                          | `{}`                                        |
 | `ingressController.existingConfigMap`                                 | name of a ConfigMap with existing configuration for the Dashboard                                                                                                                                                                                     | `""`                                        |

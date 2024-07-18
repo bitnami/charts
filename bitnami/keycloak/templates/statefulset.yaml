@@ -22,6 +22,9 @@ spec:
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy:
     {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  {{- if .Values.minReadySeconds }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -212,13 +215,17 @@ spec:
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
-            {{- if .Values.adminIngress.enabled }}
+            {{- if and .Values.adminIngress.enabled .Values.adminIngress.hostname }}
             - name: KC_HOSTNAME_ADMIN_URL
-              value: "http{{ if .Values.adminIngress.tls }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
+              value: "http{{ if or .Values.adminIngress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
             {{- end }}
-            {{- if and .Values.adminIngress.enabled (not .Values.ingress.enabled) }}
+            {{- if and .Values.ingress.enabled .Values.ingress.hostname }}
             - name: KC_HOSTNAME_URL
-              value: "http{{ if .Values.adminIngress.tls }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
+              value: "http{{ if or .Values.ingress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.ingress.hostname "context" $) }}"
+            {{- end }}
+            {{- if .Values.adminRealm }}
+            - name: KC_SPI_ADMIN_REALM
+              value: "{{ .Values.adminRealm }}"
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -275,7 +282,7 @@ spec:
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: {{ .Values.httpRelativePath }}realms/master
+              path: {{ .Values.httpRelativePath }}realms/{{ .Values.adminRealm | default "master" }}
               port: http
           {{- end }}
           {{- end }}
@@ -300,6 +307,11 @@ spec:
             {{- if .Values.tls.enabled }}
             - name: certificates
               mountPath: /opt/bitnami/keycloak/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.customCaExistingSecret }}
+            - name: custom-ca
+              mountPath: /opt/bitnami/keycloak/custom-ca
               readOnly: true
             {{- end }}
             {{- if .Values.spi.existingSecret }}
@@ -329,6 +341,12 @@ spec:
         - name: certificates
           secret:
             secretName: {{ include "keycloak.tlsSecretName" . }}
+            defaultMode: 420
+        {{- end }}
+        {{- if .Values.customCaExistingSecret }}
+        - name: custom-ca
+          secret:
+            secretName: {{ .Values.customCaExistingSecret }}
             defaultMode: 420
         {{- end }}
         {{- if .Values.spi.existingSecret }}

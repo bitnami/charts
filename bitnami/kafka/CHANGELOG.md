@@ -1,8 +1,29 @@
 # Changelog
 
-## 29.3.4 (2024-06-18)
+## 29.3.9 (2024-07-16)
 
-* [bitnami/kafka] Release 29.3.4 ([#27362](https://github.com/bitnami/charts/pull/27362))
+* [bitnami/kafka] Global StorageClass as default value ([#28038](https://github.com/bitnami/charts/pull/28038))
+
+## <small>29.3.8 (2024-07-16)</small>
+
+* [bitnami/kafka] fix jmx-servicemonitor by using JMX Exporter's default metrics path (#27455) ([e04d611](https://github.com/bitnami/charts/commit/e04d6117bc4c0e1dac47e9303bf5ad92188bce29)), closes [#27455](https://github.com/bitnami/charts/issues/27455)
+
+## <small>29.3.7 (2024-07-08)</small>
+
+* [bitnami/kafka] Fix jmx-exporter scrape path (#27562) ([1dd9439](https://github.com/bitnami/charts/commit/1dd943997da79e6095bee6d05410178a0344d4c9)), closes [#27562](https://github.com/bitnami/charts/issues/27562)
+
+## <small>29.3.6 (2024-07-02)</small>
+
+* [bitnami/kafka] fix: Mount kafka_jaas.conf in controller statefulset for kraft migration (#27610) ([fcf03f8](https://github.com/bitnami/charts/commit/fcf03f8314fc30401fa3712c90b0261f8f3b09db)), closes [#27610](https://github.com/bitnami/charts/issues/27610)
+
+## <small>29.3.5 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kafka] Release 29.3.5 (#27613) ([1ef0ca8](https://github.com/bitnami/charts/commit/1ef0ca867542f99b4e37ac3182727357a0fd17cf)), closes [#27613](https://github.com/bitnami/charts/issues/27613)
+
+## <small>29.3.4 (2024-06-18)</small>
+
+* [bitnami/kafka] Release 29.3.4 (#27362) ([39074dc](https://github.com/bitnami/charts/commit/39074dcf4c92f7b875f1ddb2bc87443b05e7592d)), closes [#27362](https://github.com/bitnami/charts/issues/27362)
 
 ## <small>29.3.3 (2024-06-17)</small>
 
