@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.13 (2024-07-08)
+## 4.3.14 (2024-07-16)
 
-* [bitnami/rabbitmq-cluster-operator]: Adding permissions on controller… ([#27834](https://github.com/bitnami/charts/pull/27834))
+* [bitnami/rabbitmq-cluster-operator] Global StorageClass as default value ([#28088](https://github.com/bitnami/charts/pull/28088))
+
+## <small>4.3.13 (2024-07-08)</small>
+
+* [bitnami/rabbitmq-cluster-operator]: Adding permissions on controller… (#27834) ([262c057](https://github.com/bitnami/charts/commit/262c057a9a6a019c948573f0e3e859dd865c262c)), closes [#27834](https://github.com/bitnami/charts/issues/27834)
 
 ## <small>4.3.12 (2024-07-04)</small>
 

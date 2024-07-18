@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.7 (2024-07-12)
+## 11.3.8 (2024-07-16)
 
-* [bitnami/consul] Release 11.3.7 ([#27919](https://github.com/bitnami/charts/pull/27919))
+* [bitnami/consul] Global StorageClass as default value ([#28007](https://github.com/bitnami/charts/pull/28007))
+
+## <small>11.3.7 (2024-07-13)</small>
+
+* [bitnami/consul] Release 11.3.7 (#27919) ([84b416f](https://github.com/bitnami/charts/commit/84b416fa1044c6cdee410d2e4db2fb379bd30fa0)), closes [#27919](https://github.com/bitnami/charts/issues/27919)
 
 ## <small>11.3.6 (2024-07-04)</small>
 
