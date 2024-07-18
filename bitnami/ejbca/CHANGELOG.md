@@ -1,8 +1,12 @@
 # Changelog
 
+## 15.0.1 (2024-07-16)
+
+* [bitnami/ejbca] Global StorageClass as default value ([#28014](https://github.com/bitnami/charts/pull/28014))
+
 ## 15.0.0 (2024-07-12)
 
-* [bitnami/ejbca] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27935](https://github.com/bitnami/charts/pull/27935))
+* [bitnami/ejbca] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27935) ([2babab0](https://github.com/bitnami/charts/commit/2babab043054b955b319b017a3fe5860c582650b)), closes [#27935](https://github.com/bitnami/charts/issues/27935)
 
 ## <small>14.2.7 (2024-07-03)</small>
 

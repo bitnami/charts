@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2024-07-11)
+## 0.1.3 (2024-07-16)
 
-* [bitnami/valkey-cluster] Release 0.1.2 ([#27904](https://github.com/bitnami/charts/pull/27904))
+* [bitnami/valkey-cluster] Global StorageClass as default value ([#28106](https://github.com/bitnami/charts/pull/28106))
+
+## <small>0.1.2 (2024-07-11)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.2 (#27904) ([4f7d453](https://github.com/bitnami/charts/commit/4f7d453085b9a481f65227b6f9edc7ae068b45b5)), closes [#27904](https://github.com/bitnami/charts/issues/27904)
 
 ## <small>0.1.1 (2024-07-08)</small>
 
