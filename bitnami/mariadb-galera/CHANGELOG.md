@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.0.1 (2024-07-12)
+## 14.0.2 (2024-07-18)
 
-* [bitnami/mariadb-galera] allow template in existingSecret and extraVolumes ([#27915](https://github.com/bitnami/charts/pull/27915))
+* [bitnami/mariadb-galera] Global StorageClass as default value ([#28051](https://github.com/bitnami/charts/pull/28051))
+
+## <small>14.0.1 (2024-07-18)</small>
+
+* [bitnami/mariadb-galera] allow template in existingSecret and extraVolumes (#27915) ([6d7ad68](https://github.com/bitnami/charts/commit/6d7ad68f94c618e817778308f926fefd32a6f3eb)), closes [#27915](https://github.com/bitnami/charts/issues/27915)
 
 ## 14.0.0 (2024-07-11)
 
