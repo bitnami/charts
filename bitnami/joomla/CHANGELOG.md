@@ -1,8 +1,12 @@
 # Changelog
 
+## 20.0.1 (2024-07-16)
+
+* [bitnami/joomla] Global StorageClass as default value ([#28036](https://github.com/bitnami/charts/pull/28036))
+
 ## 20.0.0 (2024-07-12)
 
-* [bitnami/joomla] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27940](https://github.com/bitnami/charts/pull/27940))
+* [bitnami/joomla] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27940) ([c85169d](https://github.com/bitnami/charts/commit/c85169dad6bf34916d2c1c0953ff1fc1c1cb6c3c)), closes [#27940](https://github.com/bitnami/charts/issues/27940)
 
 ## <small>19.2.7 (2024-07-09)</small>
 
