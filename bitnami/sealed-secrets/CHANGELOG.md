@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.1 (2024-07-18)
+## 2.4.2 (2024-07-18)
 
-* [bitnami/sealed-secrets] Remove global.storageClass ([#28094](https://github.com/bitnami/charts/pull/28094))
+* [bitnami/sealed-secrets] Release 2.4.2 ([#28156](https://github.com/bitnami/charts/pull/28156))
+
+## <small>2.4.1 (2024-07-18)</small>
+
+* [bitnami/sealed-secrets] Remove global.storageClass (#28094) ([bed4701](https://github.com/bitnami/charts/commit/bed47017dd178fa7db81ec9042d5ee2a1ee4dc47)), closes [#28094](https://github.com/bitnami/charts/issues/28094)
 
 ## 2.4.0 (2024-07-10)
 
