@@ -172,10 +172,6 @@ Return the matomo pods needed initContainers
 - name: certificates
   image: {{ template "certificates.image" . }}
   imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
-  imagePullSecrets:
-  {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
-    - name: {{ . }}
-  {{- end }}
   securityContext:
     runAsUser: 0
   {{- if .Values.certificates.command }}
@@ -190,7 +186,7 @@ Return the matomo pods needed initContainers
     - sh
     - -c
     - install_packages ca-certificates openssl
-    && openssl req -new -x509 -days 3650 -nodes -sha256
+      && openssl req -new -x509 -days 3650 -nodes -sha256
       -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
       -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
       -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req

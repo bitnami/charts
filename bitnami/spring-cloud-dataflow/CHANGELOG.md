@@ -1,8 +1,17 @@
 # Changelog
 
-## 29.0.8 (2024-06-18)
+## 30.0.0 (2024-07-12)
 
-* [bitnami/spring-cloud-dataflow] Release 29.0.8 ([#27420](https://github.com/bitnami/charts/pull/27420))
+* [bitnami/spring-cloud-dataflow] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27931](https://github.com/bitnami/charts/pull/27931))
+
+## <small>29.0.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/spring-cloud-dataflow] Release 29.0.9 (#27721) ([118d637](https://github.com/bitnami/charts/commit/118d63706b4d9709d1f806dc9ade176de7028124)), closes [#27721](https://github.com/bitnami/charts/issues/27721)
+
+## <small>29.0.8 (2024-06-18)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 29.0.8 (#27420) ([113e822](https://github.com/bitnami/charts/commit/113e8220987b0eb36bf4866def844994f864e405)), closes [#27420](https://github.com/bitnami/charts/issues/27420)
 
 ## <small>29.0.7 (2024-06-17)</small>
 

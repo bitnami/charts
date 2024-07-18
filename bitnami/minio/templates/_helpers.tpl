@@ -184,7 +184,8 @@ Validate values of MinIO&reg; - total number of drives should be greater than 4
 {{- define "minio.validateValues.totalDrives" -}}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
 {{- $drivesPerNode := int .Values.statefulset.drivesPerNode }}
-{{- $totalDrives := mul $replicaCount $drivesPerNode }}
+{{- $zones := int .Values.statefulset.zones }}
+{{- $totalDrives := mul $replicaCount $zones $drivesPerNode }}
 {{- if and (eq .Values.mode "distributed") (lt $totalDrives 4) -}}
 minio: total drives
     The total number of drives should be greater than 4 to guarantee erasure coding!

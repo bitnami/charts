@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/rabbitmq
 ```
 
-Looking to use RabbitMQ in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use RabbitMQ in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -393,6 +393,7 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `memoryHighWatermark.type`                   | Memory high watermark type. Either `absolute` or `relative`                                                                                                             | `relative`                                        |
 | `memoryHighWatermark.value`                  | Memory high watermark value                                                                                                                                             | `0.4`                                             |
 | `plugins`                                    | List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)                                                | `rabbitmq_management rabbitmq_peer_discovery_k8s` |
+| `queue_master_locator`                       | Changes the queue_master_locator setting in the rabbitmq config file                                                                                                    | `min-masters`                                     |
 | `communityPlugins`                           | List of Community plugins (URLs) to be downloaded during container initialization                                                                                       | `""`                                              |
 | `extraPlugins`                               | Extra plugins to enable (single string containing a space-separated list)                                                                                               | `rabbitmq_auth_backend_ldap`                      |
 | `clustering.enabled`                         | Enable RabbitMQ clustering                                                                                                                                              | `true`                                            |
@@ -580,6 +581,7 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `service.nodePorts.epmd`                | Node port for EPMD Discovery                                                                                                     | `""`                     |
 | `service.nodePorts.metrics`             | Node port for RabbitMQ Prometheues metrics                                                                                       | `""`                     |
 | `service.extraPorts`                    | Extra ports to expose in the service                                                                                             | `[]`                     |
+| `service.extraPortsHeadless`            | Extra ports to expose in the headless service                                                                                    | `[]`                     |
 | `service.loadBalancerSourceRanges`      | Address(es) that are allowed when service is `LoadBalancer`                                                                      | `[]`                     |
 | `service.allocateLoadBalancerNodePorts` | Whether to allocate node ports when service type is LoadBalancer                                                                 | `true`                   |
 | `service.externalIPs`                   | Set the ExternalIPs                                                                                                              | `[]`                     |

@@ -42,7 +42,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.13.3-debian-12-r0
+  tag: 3.13.4-debian-12-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -248,6 +248,11 @@ memoryHighWatermark:
 ## @param plugins List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)
 ##
 plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
+
+## @param queue_master_locator Changes the queue_master_locator setting in the rabbitmq config file
+## 
+queue_master_locator: min-masters  
+  
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
 ##
@@ -415,7 +420,7 @@ configuration: |-
   load_definitions = {{ .Values.loadDefinition.file }}
   {{- end }}
   # queue master locator
-  queue_master_locator = min-masters
+  queue_master_locator = {{ .Values.queue_master_locator }}
   # enable loopback user
   {{- if not (empty .Values.auth.username) }}
   loopback_users.{{ .Values.auth.username }} = {{ .Values.auth.enableLoopbackUser }}
@@ -1065,6 +1070,14 @@ service:
   ##   targetPort: 1234
   ##
   extraPorts: []
+  ## @param service.extraPortsHeadless Extra ports to expose in the headless service
+  ## E.g.:
+  ## extraPortsHeadless:
+  ## - name: new_svc_name
+  ##   port: 1234
+  ##   targetPort: 1234
+  ##
+  extraPortsHeadless: []
   ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is `LoadBalancer`
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -1466,7 +1479,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r22
+    tag: 12-debian-12-r24
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

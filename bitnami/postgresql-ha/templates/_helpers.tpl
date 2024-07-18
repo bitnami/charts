@@ -726,7 +726,7 @@ Get the readiness probe command
 {{- $block := index .context.Values .component }}
 {{- if eq .component "postgresql" -}}
 - |
-  exec pg_isready -U "postgres" {{- if $block.tls.enabled }} -d "sslcert={{ include "postgresql-ha.postgresql.tlsCert" . }} sslkey={{ include "postgresql-ha.postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ $block.containerPorts.postgresql }}
+  exec pg_isready -U "postgres" {{- if $block.tls.enabled }} -d "sslcert={{ include "postgresql-ha.postgresql.tlsCert" .context }} sslkey={{ include "postgresql-ha.postgresql.tlsCertKey" .context }}"{{- end }} -h 127.0.0.1 -p {{ $block.containerPorts.postgresql }}
 {{- if contains "bitnami/" $block.image.repository }}
   [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
 {{- end }}

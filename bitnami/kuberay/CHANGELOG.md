@@ -1,8 +1,29 @@
 # Changelog
 
-## 1.2.3 (2024-06-18)
+## 1.2.8 (2024-07-16)
 
-* [bitnami/kuberay] Release 1.2.3 ([#27368](https://github.com/bitnami/charts/pull/27368))
+* [bitnami/kuberay] Global StorageClass as default value ([#28046](https://github.com/bitnami/charts/pull/28046))
+
+## <small>1.2.7 (2024-07-04)</small>
+
+* [bitnami/kuberay] Release 1.2.7 (#27798) ([5619a25](https://github.com/bitnami/charts/commit/5619a25ba4aa1ee7d62cbcc66044be7fb95db6e3)), closes [#27798](https://github.com/bitnami/charts/issues/27798)
+
+## <small>1.2.6 (2024-07-03)</small>
+
+* [bitnami/kuberay] Release 1.2.6 (#27673) ([d2be9ce](https://github.com/bitnami/charts/commit/d2be9ce1553907c01198a3ee94167044c7a54b2d)), closes [#27673](https://github.com/bitnami/charts/issues/27673)
+
+## <small>1.2.5 (2024-06-28)</small>
+
+* [bitnami/kuberay] Release 1.2.5 (#27574) ([f76470a](https://github.com/bitnami/charts/commit/f76470ab1411a5de878d4eab292af56f507e059f)), closes [#27574](https://github.com/bitnami/charts/issues/27574)
+
+## <small>1.2.4 (2024-06-27)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kuberay] Release 1.2.4 (#27559) ([284f9aa](https://github.com/bitnami/charts/commit/284f9aa9ce8bf55d7872d77b20e1ebc70a7a2715)), closes [#27559](https://github.com/bitnami/charts/issues/27559)
+
+## <small>1.2.3 (2024-06-18)</small>
+
+* [bitnami/kuberay] Release 1.2.3 (#27368) ([40f17d6](https://github.com/bitnami/charts/commit/40f17d61d826ef9250289db5098262eb282ebf6e)), closes [#27368](https://github.com/bitnami/charts/issues/27368)
 
 ## <small>1.2.2 (2024-06-17)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 19.5.5 (2024-06-18)
+## 19.6.2 (2024-07-16)
 
-* [bitnami/redis] Release 19.5.5 ([#27411](https://github.com/bitnami/charts/pull/27411))
+* [bitnami/redis] Global StorageClass as default value ([#28089](https://github.com/bitnami/charts/pull/28089))
+
+## <small>19.6.1 (2024-07-03)</small>
+
+* [bitnami/redis] Release 19.6.1 (#27712) ([a8f05c6](https://github.com/bitnami/charts/commit/a8f05c665a810762b420864a29460d8c84421f73)), closes [#27712](https://github.com/bitnami/charts/issues/27712)
+
+## 19.6.0 (2024-06-26)
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/redis] Allow setting revisionHistoryLimit (#27498) ([f8ea005](https://github.com/bitnami/charts/commit/f8ea005b071d8f2bbb6ccfe0a722ff8ca2882b3d)), closes [#27498](https://github.com/bitnami/charts/issues/27498)
+
+## <small>19.5.5 (2024-06-18)</small>
+
+* [bitnami/redis] Release 19.5.5 (#27411) ([ea96081](https://github.com/bitnami/charts/commit/ea96081967711fbb45815b51363a9c5818623a6f)), closes [#27411](https://github.com/bitnami/charts/issues/27411)
 
 ## <small>19.5.4 (2024-06-17)</small>
 

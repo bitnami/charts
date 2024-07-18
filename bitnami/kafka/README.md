@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kafka
 ```
 
-Looking to use Apache Kafka in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Kafka in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -935,6 +935,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `metrics.jmx.extraRules`                                        | Add extra rules to JMX exporter configuration                                                                                                                                                                                             | `""`                                                                                    |
 | `metrics.serviceMonitor.enabled`                                | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.jmx.enabled` to be `true`)                                                                                                                                     | `false`                                                                                 |
 | `metrics.serviceMonitor.namespace`                              | Namespace in which Prometheus is running                                                                                                                                                                                                  | `""`                                                                                    |
+| `metrics.serviceMonitor.path`                                   | Path where JMX exporter serves metrics                                                                                                                                                                                                    | `/metrics`                                                                              |
 | `metrics.serviceMonitor.interval`                               | Interval at which metrics should be scraped                                                                                                                                                                                               | `""`                                                                                    |
 | `metrics.serviceMonitor.scrapeTimeout`                          | Timeout after which the scrape is ended                                                                                                                                                                                                   | `""`                                                                                    |
 | `metrics.serviceMonitor.labels`                                 | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                                                                                                                     | `{}`                                                                                    |

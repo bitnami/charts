@@ -303,9 +303,77 @@ jobs:
           else
             echo "result=skip" >> $GITHUB_OUTPUT
           fi
+  chart-score:
+    runs-on: ubuntu-latest
+    needs: [get-chart]
+    name: Get chart latest Kubescape score
+    permissions:
+      contents: read
+    outputs:
+      threshold: ${{ steps.set-output.outputs.threshold }}
+    if: needs.get-chart.outputs.result == 'ok'
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        name: Checkout 'main' branch
+        with:
+          path: charts-main
+          repository: bitnami/charts
+          fetch-depth: 1
+      - name: Install helm
+        run: |
+          HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
+          curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
+      - name: Run helm-dep-build
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          if [ -d "charts-main/bitnami/${CHART}" ]; then
+            helm dep build charts-main/bitnami/${CHART}
+            if [ -d "charts-main/bitnami/${CHART}/charts" ]; then
+              cd charts-main/bitnami/${CHART}/charts
+              for filename in *.tgz; do
+                tar -xf "$filename"
+                rm -f "$filename"
+              done
+            fi
+          fi
+      - id: get-chart-score
+        uses: addnab/docker-run-action@4f65fabd2431ebc8d299f8e5a018d79a769ae185
+        name: Get main branch kubescape score
+        # Skip step when user is bitnami-bot or 'skip-score' label is used
+        if: |
+          !(
+            github.event.pull_request.user.login == 'bitnami-bot' ||
+            contains(github.event.pull_request.labels.*.name, 'skip-score') ||
+            (github.event.action == 'labeled' && github.event.label.name == 'skip-score')
+          )
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        with:
+          image: bitnami/kubescape:3.0.3
+          options: -v  /home/runner/work/charts/charts/charts-main:/charts -v /tmp:/out -e CHART
+          run: |
+            if [ -d "/charts/bitnami/${CHART}" ]; then
+              kubescape scan framework MITRE,NSA,SOC2,cis-v1.23-t1.0.1 /charts/bitnami/${CHART} --format json -o /out/report.json
+              # Truncate score to 2 decimals
+              printf "%s.%.2s" $(echo "$(jq .summaryDetails.complianceScore /out/report.json)" | tr '.' ' ') | sed 's/\.$//' > /out/score
+            else
+              echo "Chart not found at /charts/bitnami/${CHART}. It will be assumed that the upstream chart does not exist."
+            fi
+      - id: set-output
+        name: Set threshold score
+        run: |
+          if [[ -f "/tmp/score" ]]; then
+            score="$(cat /tmp/score)"
+          else
+            echo "Skipping Kubescape score check."
+            score="0"
+          fi
+          echo "Using threshold score: ${score}"
+          echo "threshold=${score}" >> $GITHUB_OUTPUT
   vib-verify:
     runs-on: ubuntu-latest
-    needs: [get-chart, update-pr]
+    needs: [get-chart, update-pr, chart-score]
     permissions:
       contents: read
     # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
@@ -367,6 +435,8 @@ jobs:
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           # Alternative Target-Platform to be used in case of incompatibilities
           VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
+          # Set kubescape score threshold
+          VIB_ENV_KUBESCAPE_SCORE_THRESHOLD: ${{ needs.chart-score.outputs.threshold }}
   auto-pr-review:
     runs-on: ubuntu-latest
     needs: vib-verify

@@ -1,8 +1,33 @@
 # Changelog
 
-## 3.3.9 (2024-06-18)
+## 3.3.15 (2024-07-16)
 
-* [bitnami/appsmith] Release 3.3.9 ([#27332](https://github.com/bitnami/charts/pull/27332))
+* [bitnami/appsmith] Global StorageClass as default value ([#27998](https://github.com/bitnami/charts/pull/27998))
+
+## <small>3.3.14 (2024-07-15)</small>
+
+* [bitnami/appsmith] Release 3.3.14 (#27966) ([1e06d46](https://github.com/bitnami/charts/commit/1e06d46f9c046e26f1473e55a1b32d15587c2330)), closes [#27966](https://github.com/bitnami/charts/issues/27966)
+
+## <small>3.3.13 (2024-07-12)</small>
+
+* [bitnami/appsmith] Release 3.3.13 (#27950) ([ff6c2b4](https://github.com/bitnami/charts/commit/ff6c2b49bb6d78974657fb4e8d6424f2947b763d)), closes [#27950](https://github.com/bitnami/charts/issues/27950)
+
+## <small>3.3.12 (2024-07-08)</small>
+
+* [bitnami/appsmith] Release 3.3.12 (#27840) ([0ed2703](https://github.com/bitnami/charts/commit/0ed2703ba20ec6f9590ce8b6aa4df5df99cbfe96)), closes [#27840](https://github.com/bitnami/charts/issues/27840)
+
+## <small>3.3.11 (2024-06-28)</small>
+
+* [bitnami/appsmith] Release 3.3.11 (#27576) ([81f9c09](https://github.com/bitnami/charts/commit/81f9c091bf1ac3f8482414fbe08e4cda98a65d00)), closes [#27576](https://github.com/bitnami/charts/issues/27576)
+
+## <small>3.3.10 (2024-06-26)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/appsmith] Increase test retries for Appsmith (#27535) ([aeecba3](https://github.com/bitnami/charts/commit/aeecba3c132c3bc89a9877300f235222985287e7)), closes [#27535](https://github.com/bitnami/charts/issues/27535)
+
+## <small>3.3.9 (2024-06-18)</small>
+
+* [bitnami/appsmith] Release 3.3.9 (#27332) ([93debb6](https://github.com/bitnami/charts/commit/93debb6e5062b8303660d62f63f4b3472ffff890)), closes [#27332](https://github.com/bitnami/charts/issues/27332)
 
 ## <small>3.3.8 (2024-06-17)</small>
 
