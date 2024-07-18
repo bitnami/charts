@@ -1,8 +1,16 @@
 # Changelog
 
-## 20.2.9 (2024-07-16)
+## 20.2.11 (2024-07-17)
 
-* [bitnami/wildfly] Global StorageClass as default value ([#28109](https://github.com/bitnami/charts/pull/28109))
+* [bitnami/wildfly] Release 20.2.11 ([#28147](https://github.com/bitnami/charts/pull/28147))
+
+## <small>20.2.10 (2024-07-17)</small>
+
+* [bitnami/wildfly] Release 20.2.10 (#28144) ([4351edb](https://github.com/bitnami/charts/commit/4351edb6e7fc8e55eb8ae4c2aa19d69b2189d38c)), closes [#28144](https://github.com/bitnami/charts/issues/28144)
+
+## <small>20.2.9 (2024-07-16)</small>
+
+* [bitnami/wildfly] Global StorageClass as default value (#28109) ([e16eb2e](https://github.com/bitnami/charts/commit/e16eb2e59072f78e10c18284fc2c87f02714ce3d)), closes [#28109](https://github.com/bitnami/charts/issues/28109)
 
 ## <small>20.2.8 (2024-07-03)</small>
 
