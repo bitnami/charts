@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.12 (2024-07-10)
+## 1.4.13 (2024-07-16)
 
-* [bitnami/vault] Release 1.4.12 ([#27885](https://github.com/bitnami/charts/pull/27885))
+* [bitnami/vault] Global StorageClass as default value ([#28107](https://github.com/bitnami/charts/pull/28107))
+
+## <small>1.4.12 (2024-07-10)</small>
+
+* [bitnami/vault] Release 1.4.12 (#27885) ([bba178f](https://github.com/bitnami/charts/commit/bba178ff953d1344f69b43879e5b295103f11e34)), closes [#27885](https://github.com/bitnami/charts/issues/27885)
 
 ## <small>1.4.11 (2024-07-04)</small>
 

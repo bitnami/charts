@@ -10,24 +10,24 @@ annotations:
 apiVersion: v2
 appVersion: 1.17.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/fluentd/img/fluentd-stack-220x234.png
 keywords:
-- fluentd
-- logging
-- logs
-- data
-- collector
+  - fluentd
+  - logging
+  - logs
+  - data
+  - collector
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: fluentd
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/fluentd
-version: 6.5.7
+  - https://github.com/bitnami/charts/tree/main/bitnami/fluentd
+version: 6.5.8

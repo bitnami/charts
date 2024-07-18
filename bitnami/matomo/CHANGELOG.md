@@ -1,8 +1,16 @@
 # Changelog
 
+## 8.0.2 (2024-07-18)
+
+* [bitnami/matomo] Global StorageClass as default value ([#28053](https://github.com/bitnami/charts/pull/28053))
+
+## <small>8.0.1 (2024-07-16)</small>
+
+* [bitnami/matomo] Fix wrong initContainers[0].imagePullSecrets value (#28115) ([424d58b](https://github.com/bitnami/charts/commit/424d58bc5bdde3c83a423a939b0493b72a5d0d26)), closes [#28115](https://github.com/bitnami/charts/issues/28115)
+
 ## 8.0.0 (2024-07-13)
 
-* [bitnami/matomo] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27943](https://github.com/bitnami/charts/pull/27943))
+* [bitnami/matomo] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27943) ([ee74a7f](https://github.com/bitnami/charts/commit/ee74a7fc02d22cbbdcd1eaec39960ea7215e50c0)), closes [#27943](https://github.com/bitnami/charts/issues/27943)
 
 ## <small>7.3.8 (2024-07-12)</small>
 

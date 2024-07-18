@@ -1,8 +1,12 @@
 # Changelog
 
+## 19.0.1 (2024-07-16)
+
+* [bitnami/drupal] Global StorageClass as default value ([#28013](https://github.com/bitnami/charts/pull/28013))
+
 ## 19.0.0 (2024-07-12)
 
-* [bitnami/drupal] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27927](https://github.com/bitnami/charts/pull/27927))
+* [bitnami/drupal] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27927) ([b68f40d](https://github.com/bitnami/charts/commit/b68f40dad01802822b4973bc263e95926af941cc)), closes [#27927](https://github.com/bitnami/charts/issues/27927)
 
 ## <small>18.21.13 (2024-07-04)</small>
 

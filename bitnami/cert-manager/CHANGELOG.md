@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.10 (2024-07-12)
+## 1.3.11 (2024-07-16)
 
-* [bitnami/cert-manager] Release 1.3.10 ([#27945](https://github.com/bitnami/charts/pull/27945))
+* [bitnami/cert-manager] Global StorageClass as default value ([#28003](https://github.com/bitnami/charts/pull/28003))
+
+## <small>1.3.10 (2024-07-12)</small>
+
+* [bitnami/cert-manager] Release 1.3.10 (#27945) ([5526472](https://github.com/bitnami/charts/commit/5526472dc15989e17f547ecaebd249816396242c)), closes [#27945](https://github.com/bitnami/charts/issues/27945)
 
 ## <small>1.3.9 (2024-07-04)</small>
 

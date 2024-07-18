@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.2.8 (2024-07-04)
+## 11.2.10 (2024-07-18)
 
-* [bitnami/apache] Uses `common.compatibility.renderSecurityContext` template to render `containerSecurityContext` values in container specs ([#27748](https://github.com/bitnami/charts/pull/27748))
+* [bitnami/apache] Global StorageClass as default value ([#27996](https://github.com/bitnami/charts/pull/27996))
+
+## <small>11.2.9 (2024-07-17)</small>
+
+* [bitnami/apache] Release 11.2.9 (#28146) ([3c9fb46](https://github.com/bitnami/charts/commit/3c9fb4673ab387b1fa1636259d557da19c82e26c)), closes [#28146](https://github.com/bitnami/charts/issues/28146)
+
+## <small>11.2.8 (2024-07-05)</small>
+
+* [bitnami/apache] Uses `common.compatibility.renderSecurityContext` template to render `containerSecu ([28b8f9f](https://github.com/bitnami/charts/commit/28b8f9f5053ba1ac43c63d0a796dd1acb6e8b34c)), closes [#27748](https://github.com/bitnami/charts/issues/27748) [#27633](https://github.com/bitnami/charts/issues/27633)
 
 ## <small>11.2.7 (2024-07-03)</small>
 
