@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.0.6 (2024-07-18)
+## 1.0.7 (2024-07-18)
 
-* [bitnami/cilium] Global StorageClass as default value ([#28004](https://github.com/bitnami/charts/pull/28004))
+* [bitnami/cilium] Release 1.0.7 ([#28165](https://github.com/bitnami/charts/pull/28165))
+
+## <small>1.0.6 (2024-07-18)</small>
+
+* [bitnami/cilium] Fix TLS cert for Hubble Relay (#28139) ([6097179](https://github.com/bitnami/charts/commit/6097179f26172d29ac952499d6f8be52c9c594e8)), closes [#28139](https://github.com/bitnami/charts/issues/28139)
+* [bitnami/cilium] Global StorageClass as default value (#28004) ([41001c7](https://github.com/bitnami/charts/commit/41001c723b542c6df126ae925a188848c53c16c2)), closes [#28004](https://github.com/bitnami/charts/issues/28004)
 
 ## <small>1.0.4 (2024-07-15)</small>
 
