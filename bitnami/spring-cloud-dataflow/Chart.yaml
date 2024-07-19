@@ -43,14 +43,14 @@ description: Spring Cloud Data Flow is a microservices-based toolkit for buildin
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
 keywords:
-- spring-cloud
-- dataflow
-- skipper
-- spring
+  - spring-cloud
+  - dataflow
+  - skipper
+  - spring
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 30.0.1
+version: 30.0.2
