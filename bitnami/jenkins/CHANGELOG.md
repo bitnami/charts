@@ -1,12 +1,12 @@
 # Changelog
 
-## 13.5.0 (2024-07-03)
+## 13.5.0 (2024-07-19)
 
 * [bitnami/jenkins] Add Jenkins Password Secret and Secret Key Values ([#27603](https://github.com/bitnami/charts/pull/27603))
 
-## 13.4.10 (2024-07-16)
+## <small>13.4.10 (2024-07-18)</small>
 
-* [bitnami/jenkins] Global StorageClass as default value ([#28035](https://github.com/bitnami/charts/pull/28035))
+* [bitnami/jenkins] Global StorageClass as default value (#28035) ([43d852e](https://github.com/bitnami/charts/commit/43d852e10614d61558aeee9ca80d55e52c7495cb)), closes [#28035](https://github.com/bitnami/charts/issues/28035)
 
 ## <small>13.4.9 (2024-07-10)</small>
 
