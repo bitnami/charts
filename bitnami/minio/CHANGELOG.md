@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.25 (2024-07-18)
+## 14.6.26 (2024-07-19)
 
 * [bitnami/minio] getValueFromSecret missing key bug fix ([#27517](https://github.com/bitnami/charts/pull/27517))
+
+## 14.6.25 (2024-07-18)
+
+* [bitnami/minio] Global StorageClass as default value ([#28151](https://github.com/bitnami/charts/pull/28151))
 
 ## <small>14.6.24 (2024-07-17)</small>
 
