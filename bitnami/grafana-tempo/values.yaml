@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,6 +19,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -81,7 +83,7 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 2.5.0-debian-12-r2
+    tag: 2.5.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -185,7 +187,7 @@ tempo:
           protocols:
             {{- if .Values.tempo.traces.otlp.http }}
             http:
-              endpoint: 0.0.0.0:55681
+              endpoint: 0.0.0.0:4318
             {{- end }}
             {{- if .Values.tempo.traces.otlp.grpc }}
             grpc:
@@ -214,13 +216,15 @@ tempo:
         path: {{ .Values.tempo.dataDir }}/wal
         remote_write: {{ include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.remoteWrite "context" $) | nindent 6 }}
     memberlist:
+      bind_port: {{ .Values.tempo.containerPorts.gossipRing }}
       abort_if_cluster_join_fails: false
       join_members:
-        - {{ include "grafana-tempo.gossip-ring.fullname" . }}
+        - {{ include "grafana-tempo.gossip-ring.fullname" . }}:{{ .Values.tempo.gossipRing.service.ports.http }}
     overrides:
       per_tenant_override_config: /bitnami/grafana-tempo/conf/overrides.yaml
     server:
       http_listen_port: {{ .Values.tempo.containerPorts.web }}
+      grpc_listen_port: {{ .Values.tempo.containerPorts.grpc }}
     storage:
       trace:
         backend: local
@@ -2438,7 +2442,7 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 2.5.0-debian-12-r1
+      tag: 2.5.0-debian-12-r3
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2739,7 +2743,7 @@ vulture:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 2.5.0-debian-12-r1
+    tag: 2.5.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3148,7 +3152,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r22
+    tag: 12-debian-12-r24
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -303,7 +303,6 @@ Init container definition to get external IP addresses.
   image: {{ include "mongodb.externalAccess.autoDiscovery.image" . }}
   imagePullPolicy: {{ .Values.externalAccess.autoDiscovery.image.pullPolicy | quote }}
   # We need the service account token for contacting the k8s API
-  automountServiceAccountToken: true
   command:
     - /scripts/auto-discovery.sh
   env:

@@ -1,8 +1,21 @@
 # Changelog
 
-## 7.2.7 (2024-06-18)
+## 7.2.10 (2024-07-16)
 
-* [bitnami/jupyterhub] Release 7.2.7 ([#27363](https://github.com/bitnami/charts/pull/27363))
+* [bitnami/jupyterhub] Fix for jupyterhub.storage.class helper ([#28120](https://github.com/bitnami/charts/pull/28120))
+
+## <small>7.2.9 (2024-07-16)</small>
+
+* [bitnami/jupyterhub] Global StorageClass as default value (#28037) ([ca95359](https://github.com/bitnami/charts/commit/ca95359cf47bd71df8e091049bce8d5c55ab990d)), closes [#28037](https://github.com/bitnami/charts/issues/28037)
+
+## <small>7.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/jupyterhub] Release 7.2.8 (#27699) ([9263ae2](https://github.com/bitnami/charts/commit/9263ae265214c69b4581035cd70890b9d07153fc)), closes [#27699](https://github.com/bitnami/charts/issues/27699)
+
+## <small>7.2.7 (2024-06-18)</small>
+
+* [bitnami/jupyterhub] Release 7.2.7 (#27363) ([bca9d98](https://github.com/bitnami/charts/commit/bca9d9877d0d09eeffada7d07e922c2bf7408f24)), closes [#27363](https://github.com/bitnami/charts/issues/27363)
 
 ## <small>7.2.6 (2024-06-17)</small>
 

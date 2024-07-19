@@ -1,8 +1,21 @@
 # Changelog
 
-## 2.1.5 (2024-06-18)
+## 2.1.8 (2024-07-16)
 
-* [bitnami/multus-cni] Release 2.1.5 ([#27385](https://github.com/bitnami/charts/pull/27385))
+* [bitnami/multus-cni] Global StorageClass as default value ([#28064](https://github.com/bitnami/charts/pull/28064))
+
+## <small>2.1.7 (2024-07-04)</small>
+
+* [bitnami/multus-cni] Release 2.1.7 (#27770) ([0d4001e](https://github.com/bitnami/charts/commit/0d4001ef1bd840b0bc01e6dedf895ae18f17cc46)), closes [#27770](https://github.com/bitnami/charts/issues/27770)
+
+## <small>2.1.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/multus-cni] Release 2.1.6 (#27667) ([ff481b9](https://github.com/bitnami/charts/commit/ff481b98ef40e394a6bb695208e233733b7af6df)), closes [#27667](https://github.com/bitnami/charts/issues/27667)
+
+## <small>2.1.5 (2024-06-18)</small>
+
+* [bitnami/multus-cni] Release 2.1.5 (#27385) ([e3a6ba2](https://github.com/bitnami/charts/commit/e3a6ba2a593ca6b4d10195126723b30ab63dd8ea)), closes [#27385](https://github.com/bitnami/charts/issues/27385)
 
 ## <small>2.1.4 (2024-06-17)</small>
 

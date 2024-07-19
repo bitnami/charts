@@ -1,8 +1,21 @@
 # Changelog
 
-## 18.1.2 (2024-06-18)
+## 18.1.5 (2024-07-16)
 
-* [bitnami/nginx] Release 18.1.2 ([#27390](https://github.com/bitnami/charts/pull/27390))
+* [bitnami/nginx] Global StorageClass as default value ([#28070](https://github.com/bitnami/charts/pull/28070))
+
+## <small>18.1.4 (2024-07-03)</small>
+
+* [bitnami/nginx] Release 18.1.4 (#27743) ([a9c9841](https://github.com/bitnami/charts/commit/a9c9841d4f409ebcefb740fb323dd2268bc4930b)), closes [#27743](https://github.com/bitnami/charts/issues/27743)
+
+## <small>18.1.3 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/nginx] Release 18.1.3 (#27704) ([682210e](https://github.com/bitnami/charts/commit/682210e3c1b84e0aeeab9e9e14b6d50076aa8303)), closes [#27704](https://github.com/bitnami/charts/issues/27704)
+
+## <small>18.1.2 (2024-06-18)</small>
+
+* [bitnami/nginx] Release 18.1.2 (#27390) ([fc21995](https://github.com/bitnami/charts/commit/fc21995910ffd11ced39922667850a0864cabaeb)), closes [#27390](https://github.com/bitnami/charts/issues/27390)
 
 ## <small>18.1.1 (2024-06-17)</small>
 

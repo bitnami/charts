@@ -1,8 +1,17 @@
 # Changelog
 
-## 10.2.5 (2024-06-18)
+## 10.2.7 (2024-07-16)
 
-* [bitnami/redis-cluster] Release 10.2.5 ([#27410](https://github.com/bitnami/charts/pull/27410))
+* [bitnami/redis-cluster] Global StorageClass as default value ([#28090](https://github.com/bitnami/charts/pull/28090))
+
+## <small>10.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/redis-cluster] Release 10.2.6 (#27711) ([4070805](https://github.com/bitnami/charts/commit/4070805cbedcbaa8a04282e5ab6a9dadc79f4e23)), closes [#27711](https://github.com/bitnami/charts/issues/27711)
+
+## <small>10.2.5 (2024-06-18)</small>
+
+* [bitnami/redis-cluster] Release 10.2.5 (#27410) ([1fe6395](https://github.com/bitnami/charts/commit/1fe6395d057044dbe1869af7c747fb9ebce48149)), closes [#27410](https://github.com/bitnami/charts/issues/27410)
 
 ## <small>10.2.4 (2024-06-17)</small>
 

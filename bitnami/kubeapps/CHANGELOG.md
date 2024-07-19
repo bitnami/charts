@@ -1,8 +1,17 @@
 # Changelog
 
-## 15.3.5 (2024-06-19)
+## 15.3.7 (2024-07-16)
 
-* [bitnami/kubeapps] Render imagePullSecrets ([#27127](https://github.com/bitnami/charts/pull/27127))
+* [bitnami/kubeapps] Global StorageClass as default value ([#28045](https://github.com/bitnami/charts/pull/28045))
+
+## <small>15.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kubeapps] Release 15.3.6 (#27706) ([ea5443f](https://github.com/bitnami/charts/commit/ea5443fd9bdb8a27e10bf03824d8d37f4189a834)), closes [#27706](https://github.com/bitnami/charts/issues/27706)
+
+## <small>15.3.5 (2024-06-19)</small>
+
+* [bitnami/kubeapps] Render imagePullSecrets (#27127) ([af2aef8](https://github.com/bitnami/charts/commit/af2aef81f2dc4d521935a931d8a133fecb25b536)), closes [#27127](https://github.com/bitnami/charts/issues/27127)
 
 ## <small>15.3.4 (2024-06-18)</small>
 

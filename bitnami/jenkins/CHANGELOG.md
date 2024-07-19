@@ -4,6 +4,18 @@
 
 * [bitnami/jenkins] Add Jenkins Password Secret and Secret Key Values ([#27603](https://github.com/bitnami/charts/pull/27603))
 
+## 13.4.10 (2024-07-16)
+
+* [bitnami/jenkins] Global StorageClass as default value ([#28035](https://github.com/bitnami/charts/pull/28035))
+
+## <small>13.4.9 (2024-07-10)</small>
+
+* [bitnami/jenkins] Release 13.4.9 (#27888) ([484ab86](https://github.com/bitnami/charts/commit/484ab8654f528decedde68c13942ce196d6cccf0)), closes [#27888](https://github.com/bitnami/charts/issues/27888)
+
+## <small>13.4.8 (2024-07-05)</small>
+
+* [bitnami/jenkins] Release 13.4.8 (#27813) ([ddb47f6](https://github.com/bitnami/charts/commit/ddb47f6f77ffeeb65698b38b7ab8fad6a0dfb06d)), closes [#27813](https://github.com/bitnami/charts/issues/27813)
+
 ## <small>13.4.7 (2024-07-03)</small>
 
 * [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)

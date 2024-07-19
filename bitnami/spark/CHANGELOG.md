@@ -1,8 +1,17 @@
 # Changelog
 
-## 9.2.4 (2024-06-18)
+## 9.2.6 (2024-07-16)
 
-* [bitnami/spark] Release 9.2.4 ([#27419](https://github.com/bitnami/charts/pull/27419))
+* [bitnami/spark] Global StorageClass as default value ([#28098](https://github.com/bitnami/charts/pull/28098))
+
+## <small>9.2.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/spark] Release 9.2.5 (#27719) ([5dfefe1](https://github.com/bitnami/charts/commit/5dfefe1a0d1f2da7655fb26b3a36d1a7aba337b4)), closes [#27719](https://github.com/bitnami/charts/issues/27719)
+
+## <small>9.2.4 (2024-06-18)</small>
+
+* [bitnami/spark] Release 9.2.4 (#27419) ([8d0a80f](https://github.com/bitnami/charts/commit/8d0a80fc4933932005d946b82c8fa4750d91ddcf)), closes [#27419](https://github.com/bitnami/charts/issues/27419)
 
 ## <small>9.2.3 (2024-06-17)</small>
 

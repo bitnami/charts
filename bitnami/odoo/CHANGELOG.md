@@ -1,8 +1,21 @@
 # Changelog
 
-## 26.2.8 (2024-06-18)
+## 26.2.11 (2024-07-16)
 
-* [bitnami/odoo] Release 26.2.8 ([#27393](https://github.com/bitnami/charts/pull/27393))
+* [bitnami/odoo] Global StorageClass as default value ([#28074](https://github.com/bitnami/charts/pull/28074))
+
+## <small>26.2.10 (2024-07-05)</small>
+
+* [bitnami/odoo] Release 26.2.10 (#27808) ([af8d109](https://github.com/bitnami/charts/commit/af8d10963794ed10c9237f678f5bd915b0eaaa8d)), closes [#27808](https://github.com/bitnami/charts/issues/27808)
+
+## <small>26.2.9 (2024-07-02)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/odoo] Release 26.2.9 (#27631) ([ac3351a](https://github.com/bitnami/charts/commit/ac3351a082d328c2ea62db64e242840adfa8c61a)), closes [#27631](https://github.com/bitnami/charts/issues/27631)
+
+## <small>26.2.8 (2024-06-18)</small>
+
+* [bitnami/odoo] Release 26.2.8 (#27393) ([c674b17](https://github.com/bitnami/charts/commit/c674b17119a3474feff01f740d42fab9e8aa9566)), closes [#27393](https://github.com/bitnami/charts/issues/27393)
 
 ## <small>26.2.7 (2024-06-17)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 4.2.5 (2024-06-18)
+## 4.2.8 (2024-07-18)
 
-* [bitnami/kube-state-metrics] Release 4.2.5 ([#27367](https://github.com/bitnami/charts/pull/27367))
+* [bitnami/kube-state-metrics] Remove global.storageClass ([#28044](https://github.com/bitnami/charts/pull/28044))
+
+## <small>4.2.7 (2024-07-04)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.7 (#27786) ([096c1cd](https://github.com/bitnami/charts/commit/096c1cd92bdbf4d5870f5dc9852fd4686f3d062d)), closes [#27786](https://github.com/bitnami/charts/issues/27786)
+
+## <small>4.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kube-state-metrics] Release 4.2.6 (#27658) ([e347f7b](https://github.com/bitnami/charts/commit/e347f7b5bb286d2ace5412af9430754396d22e06)), closes [#27658](https://github.com/bitnami/charts/issues/27658)
+
+## <small>4.2.5 (2024-06-18)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.5 (#27367) ([25c4280](https://github.com/bitnami/charts/commit/25c428035346747c59874d57de01ee45bc5a9742)), closes [#27367](https://github.com/bitnami/charts/issues/27367)
 
 ## <small>4.2.4 (2024-06-17)</small>
 

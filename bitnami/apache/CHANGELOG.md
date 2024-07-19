@@ -1,8 +1,29 @@
 # Changelog
 
-## 11.2.5 (2024-06-18)
+## 11.2.10 (2024-07-18)
 
-* [bitnami/apache] Release 11.2.5 ([#27325](https://github.com/bitnami/charts/pull/27325))
+* [bitnami/apache] Global StorageClass as default value ([#27996](https://github.com/bitnami/charts/pull/27996))
+
+## <small>11.2.9 (2024-07-17)</small>
+
+* [bitnami/apache] Release 11.2.9 (#28146) ([3c9fb46](https://github.com/bitnami/charts/commit/3c9fb4673ab387b1fa1636259d557da19c82e26c)), closes [#28146](https://github.com/bitnami/charts/issues/28146)
+
+## <small>11.2.8 (2024-07-05)</small>
+
+* [bitnami/apache] Uses `common.compatibility.renderSecurityContext` template to render `containerSecu ([28b8f9f](https://github.com/bitnami/charts/commit/28b8f9f5053ba1ac43c63d0a796dd1acb6e8b34c)), closes [#27748](https://github.com/bitnami/charts/issues/27748) [#27633](https://github.com/bitnami/charts/issues/27633)
+
+## <small>11.2.7 (2024-07-03)</small>
+
+* [bitnami/apache] Release 11.2.7 (#27740) ([06bc29e](https://github.com/bitnami/charts/commit/06bc29e845408e9b9825660981af83bde4f488b6)), closes [#27740](https://github.com/bitnami/charts/issues/27740)
+
+## <small>11.2.6 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/apache] Release 11.2.6 (#27618) ([c9763df](https://github.com/bitnami/charts/commit/c9763df0112bdec4859a74280bde03160267a949)), closes [#27618](https://github.com/bitnami/charts/issues/27618)
+
+## <small>11.2.5 (2024-06-18)</small>
+
+* [bitnami/apache] Release 11.2.5 (#27325) ([112164d](https://github.com/bitnami/charts/commit/112164d62fb8696d3849422caaeca2f07e210cdc)), closes [#27325](https://github.com/bitnami/charts/issues/27325)
 
 ## <small>11.2.4 (2024-06-17)</small>
 

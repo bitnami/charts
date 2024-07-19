@@ -1,8 +1,17 @@
 # Changelog
 
-## 12.2.5 (2024-06-21)
+## 12.2.7 (2024-07-16)
 
-* [bitnami/kong] Release 12.2.5 ([#27481](https://github.com/bitnami/charts/pull/27481))
+* [bitnami/kong] Global StorageClass as default value ([#28042](https://github.com/bitnami/charts/pull/28042))
+
+## <small>12.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kong] Release 12.2.6 (#27698) ([277f389](https://github.com/bitnami/charts/commit/277f389d58297bc7ac9dae529e2ee37a8d5c88ad)), closes [#27698](https://github.com/bitnami/charts/issues/27698)
+
+## <small>12.2.5 (2024-06-21)</small>
+
+* [bitnami/kong] Release 12.2.5 (#27481) ([0a244ff](https://github.com/bitnami/charts/commit/0a244ffab824b403db7d1bc265351e33ed6bf0de)), closes [#27481](https://github.com/bitnami/charts/issues/27481)
 
 ## <small>12.2.4 (2024-06-19)</small>
 

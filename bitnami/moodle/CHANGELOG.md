@@ -1,8 +1,21 @@
 # Changelog
 
-## 22.2.10 (2024-06-24)
+## 23.0.1 (2024-07-16)
 
-* [bitnami/moodle] Release 22.2.10 ([#27516](https://github.com/bitnami/charts/pull/27516))
+* [bitnami/moodle] Global StorageClass as default value ([#28063](https://github.com/bitnami/charts/pull/28063))
+
+## 23.0.0 (2024-07-13)
+
+* [bitnami/moodle] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27925) ([fb35951](https://github.com/bitnami/charts/commit/fb35951a5dee0e14def01cb9d7113fc5f8764728)), closes [#27925](https://github.com/bitnami/charts/issues/27925)
+
+## <small>22.2.11 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/moodle] Release 22.2.11 (#27702) ([85b4c78](https://github.com/bitnami/charts/commit/85b4c78eb0321af711b6a5f463af34fe1f47fc16)), closes [#27702](https://github.com/bitnami/charts/issues/27702)
+
+## <small>22.2.10 (2024-06-24)</small>
+
+* [bitnami/moodle] Release 22.2.10 (#27516) ([9332734](https://github.com/bitnami/charts/commit/933273476efc9e5f5b66eb7a98f0da684173ec57)), closes [#27516](https://github.com/bitnami/charts/issues/27516)
 
 ## <small>22.2.9 (2024-06-18)</small>
 

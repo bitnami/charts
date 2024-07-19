@@ -1,8 +1,37 @@
 # Changelog
 
+## 8.2.3 (2024-07-18)
+
+* [bitnami/external-dns] Add value.yaml support for "--infoblox-create-ptr" argument flag ([#27882](https://github.com/bitnami/charts/pull/27882))
+
+## <small>8.2.2 (2024-07-16)</small>
+
+* [bitnami/external-dns] add revisionHistoryLimit value (#27913) ([8cd1824](https://github.com/bitnami/charts/commit/8cd182450c2cc0e2f7136ee9a455a3aa3486d7dc)), closes [#27913](https://github.com/bitnami/charts/issues/27913)
+
+## <small>8.2.1 (2024-07-11)</small>
+
+* [bitnami/external-dns] docs: update registry doc url (#27505) ([cf18b0b](https://github.com/bitnami/charts/commit/cf18b0b65db5371bab05415066e31d5c80378922)), closes [#27505](https://github.com/bitnami/charts/issues/27505)
+
+## 8.2.0 (2024-07-10)
+
+* [bitnami/external-dns] Added extra arguments for Traefik new/legacy resource support (#27766) ([31ff6e7](https://github.com/bitnami/charts/commit/31ff6e73fb7d3e89c4c821c38a711afbf2eab830)), closes [#27766](https://github.com/bitnami/charts/issues/27766)
+
+## 8.1.0 (2024-07-08)
+
+* [bitnami/external-dns] add default pihole.password value (#27158) ([531123b](https://github.com/bitnami/charts/commit/531123ba7d24cf35a1769047165a9073322a31e3)), closes [#27158](https://github.com/bitnami/charts/issues/27158)
+
+## <small>8.0.2 (2024-07-04)</small>
+
+* [bitnami/external-dns] Release 8.0.2 (#27760) ([565db6a](https://github.com/bitnami/charts/commit/565db6a6cebfcc534e9fa0a88cd6a097bd461601)), closes [#27760](https://github.com/bitnami/charts/issues/27760)
+
+## <small>8.0.1 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/external-dns] Release 8.0.1 (#27645) ([ca9be4a](https://github.com/bitnami/charts/commit/ca9be4a6bd1a9327401a1ab0f6694e8eb5a50279)), closes [#27645](https://github.com/bitnami/charts/issues/27645)
+
 ## 8.0.0 (2024-06-19)
 
-* [bitnami/external-dns] Major release: drop support for multiple replicas and DaemonSet ([#26759](https://github.com/bitnami/charts/pull/26759))
+* [bitnami/external-dns] Major release: drop support for multiple replicas and DaemonSet (#26759) ([3186d84](https://github.com/bitnami/charts/commit/3186d8485b643a8a4141eafd67bcf259528aa548)), closes [#26759](https://github.com/bitnami/charts/issues/26759)
 
 ## <small>7.5.7 (2024-06-18)</small>
 
