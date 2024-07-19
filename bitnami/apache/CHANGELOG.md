@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.9 (2024-07-17)
+## 11.2.10 (2024-07-18)
 
-* [bitnami/apache] Release 11.2.9 ([#28146](https://github.com/bitnami/charts/pull/28146))
+* [bitnami/apache] Global StorageClass as default value ([#27996](https://github.com/bitnami/charts/pull/27996))
+
+## <small>11.2.9 (2024-07-17)</small>
+
+* [bitnami/apache] Release 11.2.9 (#28146) ([3c9fb46](https://github.com/bitnami/charts/commit/3c9fb4673ab387b1fa1636259d557da19c82e26c)), closes [#28146](https://github.com/bitnami/charts/issues/28146)
 
 ## <small>11.2.8 (2024-07-05)</small>
 
