@@ -1,4 +1,4 @@
-name: '[Index] Sync bitnami/charts index.yaml to Cloudflare'
+name: '[Index] Push bitnami/charts index.yaml to Cloudflare'
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions: {}
 
 jobs:
   deploy:
-    name: Sync bitnami/charts index.yaml to Cloudflare
+    name: Push bitnami/charts index.yaml to Cloudflare
     runs-on: ubuntu-latest
     permissions:
       contents: read
