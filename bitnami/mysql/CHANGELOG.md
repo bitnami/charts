@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.9 (2024-07-09)
+## 11.1.10 (2024-07-16)
 
-* [bitnami/mysql] Release 11.1.9 ([#27852](https://github.com/bitnami/charts/pull/27852))
+* [bitnami/mysql] Global StorageClass as default value ([#28066](https://github.com/bitnami/charts/pull/28066))
+
+## <small>11.1.9 (2024-07-09)</small>
+
+* [bitnami/mysql] Release 11.1.9 (#27852) ([82141eb](https://github.com/bitnami/charts/commit/82141eb337f58773f0bcce2c33e33d0ac267996a)), closes [#27852](https://github.com/bitnami/charts/issues/27852)
 
 ## <small>11.1.8 (2024-07-09)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.7 (2024-07-04)
+## 4.2.8 (2024-07-18)
 
-* [bitnami/kube-state-metrics] Release 4.2.7 ([#27786](https://github.com/bitnami/charts/pull/27786))
+* [bitnami/kube-state-metrics] Remove global.storageClass ([#28044](https://github.com/bitnami/charts/pull/28044))
+
+## <small>4.2.7 (2024-07-04)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.7 (#27786) ([096c1cd](https://github.com/bitnami/charts/commit/096c1cd92bdbf4d5870f5dc9852fd4686f3d062d)), closes [#27786](https://github.com/bitnami/charts/issues/27786)
 
 ## <small>4.2.6 (2024-07-03)</small>
 
