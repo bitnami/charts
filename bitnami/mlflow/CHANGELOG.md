@@ -4,6 +4,10 @@
 
 * [bitnami/mlflow] added support for google storage ([#26461](https://github.com/bitnami/charts/pull/26461))
 
+## 1.4.17 (2024-07-18)
+
+* [bitnami/mlflow] Global StorageClass as default value ([#28060](https://github.com/bitnami/charts/pull/28060))
+
 ## <small>1.4.16 (2024-07-17)</small>
 
 * [bitnami/mlflow] fix issue 26397 - allow MLFLOW_S3_ENDPOINT without minio (#26462) ([bfef7cf](https://github.com/bitnami/charts/commit/bfef7cf6e49f2f941d0ceea68e369d2c39a1f4ac)), closes [#26462](https://github.com/bitnami/charts/issues/26462)
