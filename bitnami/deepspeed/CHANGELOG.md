@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.9 (2024-07-05)
+## 2.2.10 (2024-07-16)
 
-* [bitnami/deepspeed] Release 2.2.9 ([#27815](https://github.com/bitnami/charts/pull/27815))
+* [bitnami/deepspeed] Global StorageClass as default value ([#28009](https://github.com/bitnami/charts/pull/28009))
+
+## <small>2.2.9 (2024-07-05)</small>
+
+* [bitnami/deepspeed] Release 2.2.9 (#27815) ([762e81e](https://github.com/bitnami/charts/commit/762e81ee2743605c16a44174d6b2b0a7ff4c73c1)), closes [#27815](https://github.com/bitnami/charts/issues/27815)
 
 ## <small>2.2.8 (2024-07-03)</small>
 

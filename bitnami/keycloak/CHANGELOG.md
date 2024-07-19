@@ -1,8 +1,28 @@
 # Changelog
 
-## 21.6.0 (2024-07-08)
+## 21.7.1 (2024-07-17)
 
-* [bitnami/keycloak] Add support for minReadySeconds ([#27550](https://github.com/bitnami/charts/pull/27550))
+* [bitnami/keycloak] Global StorageClass as default value ([#28039](https://github.com/bitnami/charts/pull/28039))
+
+## 21.7.0 (2024-07-17)
+
+* [bitnami/keycloak] Add support for proxy-headers (#27890) ([eb2b3bd](https://github.com/bitnami/charts/commit/eb2b3bdd8612a754c1b7e28237e9a32f6661eaab)), closes [#27890](https://github.com/bitnami/charts/issues/27890)
+
+## <small>21.6.3 (2024-07-16)</small>
+
+* bitnami/keycloak Safer variable set of KC_HOSTNAME_URL (#27912) ([b713d56](https://github.com/bitnami/charts/commit/b713d56c29f99fa111d079c300fb1e1880be8553)), closes [#27912](https://github.com/bitnami/charts/issues/27912)
+
+## <small>21.6.2 (2024-07-15)</small>
+
+* [bitnami/keycloak] Release 21.6.2 (#27972) ([6b9fa9d](https://github.com/bitnami/charts/commit/6b9fa9d298f8651b50a73edbb87198ebc6d21f2b)), closes [#27972](https://github.com/bitnami/charts/issues/27972)
+
+## <small>21.6.1 (2024-07-11)</small>
+
+* [bitnami/keycloak] fix conditions for KC_HOSTNAME_URL (#27867) ([687d228](https://github.com/bitnami/charts/commit/687d2283b5806ab91a85b085f2477c68fbe4f260)), closes [#27867](https://github.com/bitnami/charts/issues/27867)
+
+## 21.6.0 (2024-07-09)
+
+* [bitnami/keycloak] Add support for minReadySeconds (#27550) ([bf357f9](https://github.com/bitnami/charts/commit/bf357f93bb2ad28d3a27826f4bae8a65a0bc3af5)), closes [#27550](https://github.com/bitnami/charts/issues/27550)
 
 ## 21.5.0 (2024-07-08)
 
