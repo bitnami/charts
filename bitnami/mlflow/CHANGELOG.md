@@ -1,12 +1,12 @@
 # Changelog
 
-## 1.5.0 (2024-07-18)
+## 1.5.0 (2024-07-19)
 
 * [bitnami/mlflow] added support for google storage ([#26461](https://github.com/bitnami/charts/pull/26461))
 
-## 1.4.17 (2024-07-18)
+## <small>1.4.17 (2024-07-19)</small>
 
-* [bitnami/mlflow] Global StorageClass as default value ([#28060](https://github.com/bitnami/charts/pull/28060))
+* [bitnami/mlflow] Global StorageClass as default value (#28060) ([ad82fbf](https://github.com/bitnami/charts/commit/ad82fbf05614fe2bbd5155164cee374aceb00bf5)), closes [#28060](https://github.com/bitnami/charts/issues/28060)
 
 ## <small>1.4.16 (2024-07-17)</small>
 
