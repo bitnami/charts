@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.4 (2024-07-18)
+## 0.1.4 (2024-07-19)
 
 * [bitanami/valkey-cluster] fix name generation loop in the external access template ([#28163](https://github.com/bitnami/charts/pull/28163))
 
