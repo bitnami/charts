@@ -4,6 +4,10 @@
 
 * [bitnami/kafka] Add support IMDSv2 for getting brokerRackAwareness data ([#27921](https://github.com/bitnami/charts/pull/27921))
 
+## 29.3.10 (2024-07-18)
+
+* [bitnami/kafka] Release 29.3.10 ([#28157](https://github.com/bitnami/charts/pull/28157))
+
 ## <small>29.3.9 (2024-07-18)</small>
 
 * [bitnami/kafka] Global StorageClass as default value (#28038) ([0e596df](https://github.com/bitnami/charts/commit/0e596df1d5e6c9e9d3d1854788d5485408cd49f5)), closes [#28038](https://github.com/bitnami/charts/issues/28038)

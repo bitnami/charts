@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.7 (2024-07-18)
+## 23.0.8 (2024-07-18)
 
-* [bitnami/wordpress] Global StorageClass as default value ([#28110](https://github.com/bitnami/charts/pull/28110))
+* [bitnami/wordpress] Release 23.0.8 ([#28159](https://github.com/bitnami/charts/pull/28159))
+
+## <small>23.0.7 (2024-07-18)</small>
+
+* [bitnami/wordpress] Global StorageClass as default value (#28110) ([6f6094f](https://github.com/bitnami/charts/commit/6f6094f72801a5abd10c81fa86c02a903cc27ecf)), closes [#28110](https://github.com/bitnami/charts/issues/28110)
 
 ## <small>23.0.6 (2024-07-17)</small>
 
