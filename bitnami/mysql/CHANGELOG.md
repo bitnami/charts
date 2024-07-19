@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.1.11 (2024-07-18)
+## 11.1.11 (2024-07-19)
 
 * [bitnami/mysql]: Remove duplicated ports in the network policies ([#28136](https://github.com/bitnami/charts/pull/28136))
 
