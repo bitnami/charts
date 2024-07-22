@@ -1474,6 +1474,8 @@ core:
   ## `CSRF_KEY` (required),
   ## `HARBOR_ADMIN_PASSWORD` (required),
   ## `POSTGRESQL_PASSWORD` (required),
+  ## `HARBOR_DATABASE_PASSWORD` (required, must be the same as POSTGRESQL_PASSWORD)
+  ## `postgres-password` (required when using postgresql.enabled=true and not relying on external DB, must be the same as POSTGRESQL_PASSWORD)
   ## `REGISTRY_CREDENTIAL_USERNAME` (required),
   ## `REGISTRY_CREDENTIAL_PASSWORD` (required),
   ## `_REDIS_URL_CORE` (optional),
