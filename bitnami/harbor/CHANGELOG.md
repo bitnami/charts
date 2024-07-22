@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.5 (2024-07-16)
+## 22.0.6 (2024-07-22)
 
-* [bitnami/harbor] Global StorageClass as default value ([#28030](https://github.com/bitnami/charts/pull/28030))
+* [bitnami/harbor] doc: Req. HARBOR_DATABASE_PASSWORD & postgres-password ([#28191](https://github.com/bitnami/charts/pull/28191))
+
+## <small>22.0.5 (2024-07-19)</small>
+
+* [bitnami/harbor] Global StorageClass as default value (#28030) ([fb9252b](https://github.com/bitnami/charts/commit/fb9252ba06e4da0c967503e1fcca4e4edd496fdd)), closes [#28030](https://github.com/bitnami/charts/issues/28030)
 
 ## <small>22.0.4 (2024-07-16)</small>
 
