@@ -1,6 +1,6 @@
 # Changelog
 
-## 18.2.10 (2024-07-16)
+## 18.2.10 (2024-07-22)
 
 * [bitnami/contour] Global StorageClass as default value ([#28008](https://github.com/bitnami/charts/pull/28008))
 
