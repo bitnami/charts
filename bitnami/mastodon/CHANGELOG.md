@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.2.9 (2024-07-16)
+## 6.2.9 (2024-07-22)
 
 * [bitnami/mastodon] Global StorageClass as default value ([#28052](https://github.com/bitnami/charts/pull/28052))
 
