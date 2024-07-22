@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.14 (2024-07-19)
+## 1.4.14 (2024-07-22)
 
 * [bitnami/vault] Only mount data volume if persistence is enabled ([#27986](https://github.com/bitnami/charts/pull/27986))
 
