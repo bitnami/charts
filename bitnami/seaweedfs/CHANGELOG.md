@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.1 (2024-07-16)
+## 1.0.2 (2024-07-22)
 
-* [bitnami/seaweedfs] Global StorageClass as default value ([#28095](https://github.com/bitnami/charts/pull/28095))
+* [bitnami/seaweedfs] Release 1.0.2 ([#28194](https://github.com/bitnami/charts/pull/28194))
+
+## <small>1.0.1 (2024-07-18)</small>
+
+* [bitnami/seaweedfs] Global StorageClass as default value (#28095) ([638cb6e](https://github.com/bitnami/charts/commit/638cb6e030714132cd0e68976a0684b886a96eb1)), closes [#28095](https://github.com/bitnami/charts/issues/28095)
 
 ## 1.0.0 (2024-07-13)
 
