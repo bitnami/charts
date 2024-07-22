@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.3.4 (2024-07-16)
+## 8.3.4 (2024-07-22)
 
 * [bitnami/milvus] Global StorageClass as default value ([#28058](https://github.com/bitnami/charts/pull/28058))
 
