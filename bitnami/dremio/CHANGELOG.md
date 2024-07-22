@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.6 (2024-07-16)
+## 0.1.6 (2024-07-22)
 
 * [bitnami/dremio] Global StorageClass as default value ([#28012](https://github.com/bitnami/charts/pull/28012))
 
