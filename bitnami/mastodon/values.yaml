@@ -1764,7 +1764,7 @@ postgresql:
       ports:
         postgresql: 5432
 ## @section MinIO&reg; chart parameters
-## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
+## @extra minio For full list of MinIO&reg; values configurations please refer [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
 ##
 minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation
