@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.1 (2024-07-18)
+## 14.6.2 (2024-07-22)
 
-* [bitnami/rabbitmq] Global StorageClass as default value ([#28087](https://github.com/bitnami/charts/pull/28087))
+* [bitnami/rabbitmq] Release 14.6.2 ([#28192](https://github.com/bitnami/charts/pull/28192))
+
+## <small>14.6.1 (2024-07-18)</small>
+
+* [bitnami/rabbitmq] Global StorageClass as default value (#28087) ([a4143c5](https://github.com/bitnami/charts/commit/a4143c5e397df6a5124381f7531d2d508f526221)), closes [#28087](https://github.com/bitnami/charts/issues/28087)
 
 ## 14.6.0 (2024-07-17)
 
