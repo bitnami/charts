@@ -33,5 +33,5 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: elasticsearch
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
-version: 21.3.2
+- https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
+version: 21.3.3
