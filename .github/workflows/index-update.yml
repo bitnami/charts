@@ -37,7 +37,7 @@ jobs:
           yq eval '.entries[][] | .name + ":" + .version' merged_index.yaml | sort| uniq > merged_index_releases
           new_releases="$(comm -13 charts_index_releases merged_index_releases | tr "\n" " " | sed 's/ $//')"
           if [ -n "${new_releases}" ]; then
-              echo "Found new releases:\n${new_releases// /\n}"
+              echo "Found new releases: ${new_releases}"
           else
               echo "No new releases detected"
           fi
