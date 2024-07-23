@@ -1,8 +1,36 @@
 # Changelog
 
-## 14.7.0 (2024-07-08)
+## 14.7.0 (2024-07-23)
 
 * [bitnami/minio]: Option to use a secret. ([#27837](https://github.com/bitnami/charts/pull/27837))
+
+## <small>14.6.26 (2024-07-23)</small>
+
+* [bitnami/minio] getValueFromSecret missing key bug fix (#27517) ([95aed4d](https://github.com/bitnami/charts/commit/95aed4d1d55a0b54a8497ad2b975e416adc57c10)), closes [#27517](https://github.com/bitnami/charts/issues/27517)
+
+## <small>14.6.25 (2024-07-18)</small>
+
+* [bitnami/minio] Global StorageClass as default value (#28151) ([28211ff](https://github.com/bitnami/charts/commit/28211ff2987c23993e5787e5b776215bb3eac6f4)), closes [#28151](https://github.com/bitnami/charts/issues/28151)
+
+## <small>14.6.24 (2024-07-17)</small>
+
+* [bitnami/minio] Release 14.6.24 (#28143) ([e364bc2](https://github.com/bitnami/charts/commit/e364bc2f5534b619f30962fd94c05fcb0f2308c0)), closes [#28143](https://github.com/bitnami/charts/issues/28143)
+
+## <small>14.6.23 (2024-07-17)</small>
+
+* [bitnami/minio] Fix provisioning in non-tty environment (#28118) ([020db20](https://github.com/bitnami/charts/commit/020db20e248a464e366de9cdff83cd8b335b69e9)), closes [#28118](https://github.com/bitnami/charts/issues/28118)
+
+## <small>14.6.22 (2024-07-15)</small>
+
+* [bitnami/minio] Release 14.6.22 (#27991) ([0771882](https://github.com/bitnami/charts/commit/07718826311f3a9ee5a10b8b507ee3a16bb21990)), closes [#27991](https://github.com/bitnami/charts/issues/27991)
+
+## <small>14.6.21 (2024-07-13)</small>
+
+* [bitnami/minio] Release 14.6.21 (#27957) ([275b8af](https://github.com/bitnami/charts/commit/275b8af69ff830bd5cb6e02ad4d3839dfaa6c234)), closes [#27957](https://github.com/bitnami/charts/issues/27957)
+
+## <small>14.6.20 (2024-07-10)</small>
+
+* [bitnami/minio] Release 14.6.20 (#27891) ([65a0403](https://github.com/bitnami/charts/commit/65a040321f33ffe03e18be24ce1441a6f03a4fde)), closes [#27891](https://github.com/bitnami/charts/issues/27891)
 
 ## <small>14.6.19 (2024-07-05)</small>
 
