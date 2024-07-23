@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.3.7 (2024-07-16)
+## 15.3.8 (2024-07-23)
 
-* [bitnami/kubeapps] Global StorageClass as default value ([#28045](https://github.com/bitnami/charts/pull/28045))
+* [bitnami/kubeapps] Release 15.3.8 ([#28214](https://github.com/bitnami/charts/pull/28214))
+
+## <small>15.3.7 (2024-07-18)</small>
+
+* [bitnami/kubeapps] Global StorageClass as default value (#28045) ([44a64a8](https://github.com/bitnami/charts/commit/44a64a8adb3b1e66aa43a41f85cb3d51f14b322a)), closes [#28045](https://github.com/bitnami/charts/issues/28045)
 
 ## <small>15.3.6 (2024-07-03)</small>
 
