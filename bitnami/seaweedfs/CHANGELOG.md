@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.2 (2024-07-22)
+## 1.0.3 (2024-07-23)
 
-* [bitnami/seaweedfs] Release 1.0.2 ([#28194](https://github.com/bitnami/charts/pull/28194))
+* [bitnami/seaweedfs] Release 1.0.3 ([#28217](https://github.com/bitnami/charts/pull/28217))
+
+## <small>1.0.2 (2024-07-22)</small>
+
+* [bitnami/seaweedfs] Release 1.0.2 (#28194) ([f1e0b37](https://github.com/bitnami/charts/commit/f1e0b37ed9860efa6ecc05dcda4ab501b0d7e505)), closes [#28194](https://github.com/bitnami/charts/issues/28194)
 
 ## <small>1.0.1 (2024-07-18)</small>
 
