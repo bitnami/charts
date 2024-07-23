@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.3.10 (2024-07-18)
+## 29.3.11 (2024-07-19)
 
-* [bitnami/kafka] Release 29.3.10 ([#28157](https://github.com/bitnami/charts/pull/28157))
+* [bitnami/kafka] Fix issue on how to provision access to all topics / groups ([#27877](https://github.com/bitnami/charts/pull/27877))
+
+## <small>29.3.10 (2024-07-18)</small>
+
+* [bitnami/kafka] Release 29.3.10 (#28157) ([4fc0181](https://github.com/bitnami/charts/commit/4fc0181dd3f334c71cb5adad90c8e2a67ff482fa)), closes [#28157](https://github.com/bitnami/charts/issues/28157)
 
 ## <small>29.3.9 (2024-07-18)</small>
 
