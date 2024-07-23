@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.8 (2024-07-23)
+## 11.3.9 (2024-07-23)
 
-* [bitnami/cassandra] Release 11.3.8 ([#28209](https://github.com/bitnami/charts/pull/28209))
+* [bitnami/cassandra] Release 11.3.9 ([#28236](https://github.com/bitnami/charts/pull/28236))
+
+## <small>11.3.8 (2024-07-23)</small>
+
+* [bitnami/cassandra] Release 11.3.8 (#28209) ([97f5aaa](https://github.com/bitnami/charts/commit/97f5aaaa2a19c9ed3a8581db26e7c74de423c456)), closes [#28209](https://github.com/bitnami/charts/issues/28209)
 
 ## <small>11.3.7 (2024-07-17)</small>
 
