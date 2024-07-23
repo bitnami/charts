@@ -232,6 +232,7 @@ spec:
               mountPath: /.mc
               subPath: app-mc-dir
             {{- if and .Values.auth.useSecret .Values.auth.useCredentialsFiles }}
+            - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
             - name: data
