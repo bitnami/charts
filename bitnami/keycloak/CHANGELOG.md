@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.7.1 (2024-07-17)
+## 21.7.2 (2024-07-23)
 
-* [bitnami/keycloak] Global StorageClass as default value ([#28039](https://github.com/bitnami/charts/pull/28039))
+* Fix broken theme assets by append the httpRelativeURL to the KC-HOSTNAME ([#28176](https://github.com/bitnami/charts/pull/28176))
+
+## <small>21.7.1 (2024-07-18)</small>
+
+* [bitnami/keycloak] Global StorageClass as default value (#28039) ([b81cbe1](https://github.com/bitnami/charts/commit/b81cbe126960f5dd0d8cab5c40c00a2ab31fb68f)), closes [#28039](https://github.com/bitnami/charts/issues/28039)
 
 ## 21.7.0 (2024-07-17)
 
