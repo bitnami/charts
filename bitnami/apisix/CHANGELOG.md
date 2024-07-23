@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.6 (2024-07-16)
+## 3.3.7 (2024-07-23)
 
-* [bitnami/apisix] Global StorageClass as default value ([#27997](https://github.com/bitnami/charts/pull/27997))
+* [bitnami/apisix] Release 3.3.7 ([#28227](https://github.com/bitnami/charts/pull/28227))
+
+## <small>3.3.6 (2024-07-16)</small>
+
+* [bitnami/apisix] Global StorageClass as default value (#27997) ([d280b1e](https://github.com/bitnami/charts/commit/d280b1e357dfb1db422ebd955260ada65071f3cb)), closes [#27997](https://github.com/bitnami/charts/issues/27997)
 
 ## <small>3.3.5 (2024-07-16)</small>
 
