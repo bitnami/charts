@@ -2,7 +2,7 @@
 
 ## 22.0.6 (2024-07-23)
 
-* [bitnami/harbor] doc: Req. HARBOR_DATABASE_PASSWORD & postgres-password ([#28191](https://github.com/bitnami/charts/pull/28191))
+* [bitnami/harbor] fix: core-secret-envvars.yaml now handles variables individually ([#28191](https://github.com/bitnami/charts/pull/28191))
 
 ## <small>22.0.5 (2024-07-19)</small>
 
