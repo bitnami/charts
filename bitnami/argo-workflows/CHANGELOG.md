@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.1.7 (2024-07-16)
+## 9.1.8 (2024-07-23)
 
-* [bitnami/argo-workflows] Global StorageClass as default value ([#28000](https://github.com/bitnami/charts/pull/28000))
+* [bitnami/argo-workflows] Release 9.1.8 ([#28210](https://github.com/bitnami/charts/pull/28210))
+
+## <small>9.1.7 (2024-07-18)</small>
+
+* [bitnami/argo-workflows] Global StorageClass as default value (#28000) ([19060c8](https://github.com/bitnami/charts/commit/19060c83fe5a16f1b3b7e9f705b178f25d4a2984)), closes [#28000](https://github.com/bitnami/charts/issues/28000)
 
 ## <small>9.1.6 (2024-07-04)</small>
 
