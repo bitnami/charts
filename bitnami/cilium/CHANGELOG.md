@@ -2,7 +2,7 @@
 
 ## 1.0.8 (2024-07-23)
 
-* null ([#28201](https://github.com/bitnami/charts/pull/28201))
+* [bitnami/cilium] Release 1.0.8 ([#28201](https://github.com/bitnami/charts/pull/28201))
 
 ## <small>1.0.7 (2024-07-18)</small>
 
