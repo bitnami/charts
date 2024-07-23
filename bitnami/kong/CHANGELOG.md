@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.2.7 (2024-07-16)
+## 12.2.8 (2024-07-23)
 
-* [bitnami/kong] Global StorageClass as default value ([#28042](https://github.com/bitnami/charts/pull/28042))
+* [bitnami/kong] Release 12.2.8 ([#28212](https://github.com/bitnami/charts/pull/28212))
+
+## <small>12.2.7 (2024-07-18)</small>
+
+* [bitnami/kong] Global StorageClass as default value (#28042) ([0d5fd72](https://github.com/bitnami/charts/commit/0d5fd72f4d1307f8437b149589b4e9e8df0f7c34)), closes [#28042](https://github.com/bitnami/charts/issues/28042)
 
 ## <small>12.2.6 (2024-07-03)</small>
 
