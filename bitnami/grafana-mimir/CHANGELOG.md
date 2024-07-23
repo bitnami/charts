@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.7 (2024-07-22)
+## 1.2.8 (2024-07-23)
 
-* [bitnami/grafana-mimir] Global StorageClass as default value ([#28026](https://github.com/bitnami/charts/pull/28026))
+* [bitnami/grafana-mimir] Release 1.2.8 ([#28247](https://github.com/bitnami/charts/pull/28247))
+
+## <small>1.2.7 (2024-07-22)</small>
+
+* [bitnami/grafana-mimir] Global StorageClass as default value (#28026) ([ca1fab7](https://github.com/bitnami/charts/commit/ca1fab7ceca035dc4f1a34bf14afc758cbf0cee8)), closes [#28026](https://github.com/bitnami/charts/issues/28026)
 
 ## <small>1.2.6 (2024-07-05)</small>
 
