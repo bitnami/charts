@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.56.1 (2024-06-14)
+## 1.81.0 (2024-07-24)
 
 * New chart: Chainloop ([#27100](https://github.com/bitnami/charts/pull/27100))

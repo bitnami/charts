@@ -114,8 +114,8 @@ controlplane:
   ## @param controlplane.replicaCount Number of replicas
   replicaCount: 2
 
-  ## @param controlplane.image.registry Image registry
-  ## @param controlplane.image.repository Image repository
+  ## @param controlplane.image.registry [default: REGISTRY_NAME] Image registry
+  ## @param controlplane.image.repository [default: REPOSITORY_NAME] Image repository
   ## @skip controlplane.image.tag
   image:
     registry: ghcr.io
@@ -149,8 +149,8 @@ controlplane:
   #    - org_name: "read-only-demo"
 
   # Database migration
-  ## @param controlplane.migration.image.registry Image registry
-  ## @param controlplane.migration.image.repository Image repository
+  ## @param controlplane.migration.image.registry [default: REGISTRY_NAME] Image registry
+  ## @param controlplane.migration.image.repository [default: REPOSITORY_NAME] Image repository
   ## @param controlplane.migration.ssl Connect to the database using SSL (required fro AWS RDS, etc)
   ## @skip controlplane.migration.image.tag
   migration:
@@ -541,8 +541,8 @@ cas:
   ## @param cas.replicaCount Number of replicas
   replicaCount: 2
 
-  ## @param cas.image.registry Image registry
-  ## @param cas.image.repository Image repository
+  ## @param cas.image.registry [default: REGISTRY_NAME] Image registry
+  ## @param cas.image.repository [default: REPOSITORY_NAME] Image repository
   ## @skip cas.image.tag
   image:
     registry: ghcr.io

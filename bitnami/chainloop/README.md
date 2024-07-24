@@ -520,22 +520,22 @@ chainloop config save \
 
 ### Control Plane
 
-| Name                                           | Description                                                                                     | Value                                              |
-| ---------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| `controlplane.replicaCount`                    | Number of replicas                                                                              | `2`                                                |
-| `controlplane.image.registry`                  | Image registry                                                                                  | `ghcr.io`                                          |
-| `controlplane.image.repository`                | Image repository                                                                                | `chainloop-dev/chainloop/control-plane`            |
-| `controlplane.tlsConfig.secret.name`           | name of a secret containing TLS certificate to be used by the controlplane grpc server.         | `""`                                               |
-| `controlplane.pluginsDir`                      | Directory where to look for plugins                                                             | `/plugins`                                         |
-| `controlplane.referrerSharedIndex`             | Configure the shared, public index API endpoint that can be used to discover metadata referrers |                                                    |
-| `controlplane.referrerSharedIndex.enabled`     | Enable index API endpoint                                                                       | `false`                                            |
-| `controlplane.referrerSharedIndex.allowedOrgs` | List of UUIDs of organizations that are allowed to publish to the shared index                  | `[]`                                               |
-| `controlplane.onboarding.name`                 | Name of the organization to onboard                                                             |                                                    |
-| `controlplane.onboarding.role`                 | Role of the organization to onboard                                                             |                                                    |
-| `controlplane.prometheus_org_metrics`          | List of organizations to expose metrics for using Prometheus                                    |                                                    |
-| `controlplane.migration.image.registry`        | Image registry                                                                                  | `ghcr.io`                                          |
-| `controlplane.migration.image.repository`      | Image repository                                                                                | `chainloop-dev/chainloop/control-plane-migrations` |
-| `controlplane.migration.ssl`                   | Connect to the database using SSL (required fro AWS RDS, etc)                                   | `false`                                            |
+| Name                                           | Description                                                                                     | Value             |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------- |
+| `controlplane.replicaCount`                    | Number of replicas                                                                              | `2`               |
+| `controlplane.image.registry`                  | Image registry                                                                                  | `REGISTRY_NAME`   |
+| `controlplane.image.repository`                | Image repository                                                                                | `REPOSITORY_NAME` |
+| `controlplane.tlsConfig.secret.name`           | name of a secret containing TLS certificate to be used by the controlplane grpc server.         | `""`              |
+| `controlplane.pluginsDir`                      | Directory where to look for plugins                                                             | `/plugins`        |
+| `controlplane.referrerSharedIndex`             | Configure the shared, public index API endpoint that can be used to discover metadata referrers |                   |
+| `controlplane.referrerSharedIndex.enabled`     | Enable index API endpoint                                                                       | `false`           |
+| `controlplane.referrerSharedIndex.allowedOrgs` | List of UUIDs of organizations that are allowed to publish to the shared index                  | `[]`              |
+| `controlplane.onboarding.name`                 | Name of the organization to onboard                                                             |                   |
+| `controlplane.onboarding.role`                 | Role of the organization to onboard                                                             |                   |
+| `controlplane.prometheus_org_metrics`          | List of organizations to expose metrics for using Prometheus                                    |                   |
+| `controlplane.migration.image.registry`        | Image registry                                                                                  | `REGISTRY_NAME`   |
+| `controlplane.migration.image.repository`      | Image repository                                                                                | `REPOSITORY_NAME` |
+| `controlplane.migration.ssl`                   | Connect to the database using SSL (required fro AWS RDS, etc)                                   | `false`           |
 
 ### Control Plane Database
 
@@ -641,12 +641,12 @@ chainloop config save \
 
 ### Artifact Content Addressable (CAS) API
 
-| Name                        | Description                                                                             | Value                                  |
-| --------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------- |
-| `cas.replicaCount`          | Number of replicas                                                                      | `2`                                    |
-| `cas.image.registry`        | Image registry                                                                          | `ghcr.io`                              |
-| `cas.image.repository`      | Image repository                                                                        | `chainloop-dev/chainloop/artifact-cas` |
-| `cas.tlsConfig.secret.name` | name of a secret containing TLS certificate to be used by the controlplane grpc server. | `""`                                   |
+| Name                        | Description                                                                             | Value             |
+| --------------------------- | --------------------------------------------------------------------------------------- | ----------------- |
+| `cas.replicaCount`          | Number of replicas                                                                      | `2`               |
+| `cas.image.registry`        | Image registry                                                                          | `REGISTRY_NAME`   |
+| `cas.image.repository`      | Image repository                                                                        | `REPOSITORY_NAME` |
+| `cas.tlsConfig.secret.name` | name of a secret containing TLS certificate to be used by the controlplane grpc server. | `""`              |
 
 ### CAS Networking
 
