@@ -1,8 +1,16 @@
 # Changelog
 
+## 19.0.2 (2024-07-24)
+
+* [bitnami/opencart] Release 19.0.2 ([#28341](https://github.com/bitnami/charts/pull/28341))
+
+## <small>19.0.1 (2024-07-17)</small>
+
+* [bitnami/opencart] Global StorageClass as default value (#28075) ([f5f46bf](https://github.com/bitnami/charts/commit/f5f46bfb9aeec144bf3986797e901ad5f87aae99)), closes [#28075](https://github.com/bitnami/charts/issues/28075)
+
 ## 19.0.0 (2024-07-12)
 
-* [bitnami/opencart] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27939](https://github.com/bitnami/charts/pull/27939))
+* [bitnami/opencart] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27939) ([b2f89a0](https://github.com/bitnami/charts/commit/b2f89a06db1af17352f085be208bee1825d2e938)), closes [#27939](https://github.com/bitnami/charts/issues/27939)
 
 ## <small>18.2.8 (2024-07-03)</small>
 

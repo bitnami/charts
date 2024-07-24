@@ -1,8 +1,24 @@
 # Changelog
 
-## 11.1.9 (2024-07-09)
+## 11.1.13 (2024-07-24)
 
-* [bitnami/mysql] Release 11.1.9 ([#27852](https://github.com/bitnami/charts/pull/27852))
+* [bitnami/mysql] Release 11.1.13 ([#28338](https://github.com/bitnami/charts/pull/28338))
+
+## <small>11.1.12 (2024-07-23)</small>
+
+* [bitnami/mysql] Release 11.1.12 (#28206) ([910b102](https://github.com/bitnami/charts/commit/910b1028b01ed667761888fd39a76209cb873fd9)), closes [#28206](https://github.com/bitnami/charts/issues/28206)
+
+## <small>11.1.11 (2024-07-22)</small>
+
+* [bitnami/mysql]: Remove duplicated ports in the network policies (#28136) ([99db50f](https://github.com/bitnami/charts/commit/99db50f52930a43525344f9739cba5a31f566147)), closes [#28136](https://github.com/bitnami/charts/issues/28136)
+
+## <small>11.1.10 (2024-07-18)</small>
+
+* [bitnami/mysql] Global StorageClass as default value (#28066) ([e92ae97](https://github.com/bitnami/charts/commit/e92ae976e916f66ce59736df3468f2e97d56b036)), closes [#28066](https://github.com/bitnami/charts/issues/28066)
+
+## <small>11.1.9 (2024-07-09)</small>
+
+* [bitnami/mysql] Release 11.1.9 (#27852) ([82141eb](https://github.com/bitnami/charts/commit/82141eb337f58773f0bcce2c33e33d0ac267996a)), closes [#27852](https://github.com/bitnami/charts/issues/27852)
 
 ## <small>11.1.8 (2024-07-09)</small>
 

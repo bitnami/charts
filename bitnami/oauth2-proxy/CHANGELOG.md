@@ -1,8 +1,16 @@
 # Changelog
 
-## 5.3.8 (2024-07-04)
+## 5.3.10 (2024-07-24)
 
-* [bitnami/oauth2-proxy] Release 5.3.8 ([#27777](https://github.com/bitnami/charts/pull/27777))
+* [bitnami/oauth2-proxy] Release 5.3.10 ([#28345](https://github.com/bitnami/charts/pull/28345))
+
+## <small>5.3.9 (2024-07-18)</small>
+
+* [bitnami/oauth2-proxy] Global StorageClass as default value (#28073) ([04ad6b8](https://github.com/bitnami/charts/commit/04ad6b89687a8fd1da21d1477a86f14f7c3b29af)), closes [#28073](https://github.com/bitnami/charts/issues/28073)
+
+## <small>5.3.8 (2024-07-04)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.8 (#27777) ([a10d8a5](https://github.com/bitnami/charts/commit/a10d8a558ba6ad53c1a3df426cd0a8d09989d23b)), closes [#27777](https://github.com/bitnami/charts/issues/27777)
 
 ## <small>5.3.7 (2024-07-03)</small>
 

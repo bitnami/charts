@@ -1,8 +1,28 @@
 # Changelog
 
-## 1.4.14 (2024-07-12)
+## 1.4.19 (2024-07-24)
 
-* [bitnami/mlflow] Release 1.4.14 ([#27949](https://github.com/bitnami/charts/pull/27949))
+* [bitnami/mlflow] Release 1.4.19 ([#28322](https://github.com/bitnami/charts/pull/28322))
+
+## <small>1.4.18 (2024-07-24)</small>
+
+* [bitnami/mlflow] feat: Fixup to allow database dialects to be configured (#25965) (#28316) ([5b69392](https://github.com/bitnami/charts/commit/5b693921f0ef549e63bd2496b7f636110a5ed5f2)), closes [#25965](https://github.com/bitnami/charts/issues/25965) [#28316](https://github.com/bitnami/charts/issues/28316)
+
+## <small>1.4.17 (2024-07-19)</small>
+
+* [bitnami/mlflow] Global StorageClass as default value (#28060) ([ad82fbf](https://github.com/bitnami/charts/commit/ad82fbf05614fe2bbd5155164cee374aceb00bf5)), closes [#28060](https://github.com/bitnami/charts/issues/28060)
+
+## <small>1.4.16 (2024-07-17)</small>
+
+* [bitnami/mlflow] fix issue 26397 - allow MLFLOW_S3_ENDPOINT without minio (#26462) ([bfef7cf](https://github.com/bitnami/charts/commit/bfef7cf6e49f2f941d0ceea68e369d2c39a1f4ac)), closes [#26462](https://github.com/bitnami/charts/issues/26462)
+
+## <small>1.4.15 (2024-07-17)</small>
+
+* [bitnami/mlflow] Update deps (#28131) ([35854a2](https://github.com/bitnami/charts/commit/35854a2de3b24a3d307c8a6d2210ce849a13c81c)), closes [#28131](https://github.com/bitnami/charts/issues/28131)
+
+## <small>1.4.14 (2024-07-13)</small>
+
+* [bitnami/mlflow] Release 1.4.14 (#27949) ([88f5ff0](https://github.com/bitnami/charts/commit/88f5ff0e1ca35361e0cc4f2cf0c6d8b84c8ad2f7)), closes [#27949](https://github.com/bitnami/charts/issues/27949)
 
 ## <small>1.4.13 (2024-07-08)</small>
 

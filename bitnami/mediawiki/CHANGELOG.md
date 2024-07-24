@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.0.0 (2024-07-12)
+## 21.0.2 (2024-07-24)
 
-* [bitnami/mediawiki] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27941](https://github.com/bitnami/charts/pull/27941))
+* [bitnami/mediawiki] Release 21.0.2 ([#28337](https://github.com/bitnami/charts/pull/28337))
+
+## <small>21.0.1 (2024-07-16)</small>
+
+* [bitnami/mediawiki] Global StorageClass as default value (#28054) ([a142306](https://github.com/bitnami/charts/commit/a142306961690b5699c406a287ac061940732c03)), closes [#28054](https://github.com/bitnami/charts/issues/28054)
+
+## 21.0.0 (2024-07-13)
+
+* [bitnami/mediawiki] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27941) ([d1afa01](https://github.com/bitnami/charts/commit/d1afa01d6c93621dbdec032226999808ce6d69e5)), closes [#27941](https://github.com/bitnami/charts/issues/27941)
 
 ## <small>20.2.9 (2024-07-04)</small>
 

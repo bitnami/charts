@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.3.11 (2024-07-10)
+## 1.3.13 (2024-07-24)
 
-* [bitnami/prometheus] Release 1.3.11 ([#27880](https://github.com/bitnami/charts/pull/27880))
+* [bitnami/prometheus] Release 1.3.13 ([#28353](https://github.com/bitnami/charts/pull/28353))
+
+## <small>1.3.12 (2024-07-18)</small>
+
+* [bitnami/prometheus] Global StorageClass as default value (#28085) ([39e4b8a](https://github.com/bitnami/charts/commit/39e4b8a0c2dc8c44db7b2330c825dfea7b595bce)), closes [#28085](https://github.com/bitnami/charts/issues/28085)
+
+## <small>1.3.11 (2024-07-10)</small>
+
+* [bitnami/prometheus] Release 1.3.11 (#27880) ([2472a61](https://github.com/bitnami/charts/commit/2472a61fe95344bf2c7545d4d28c629c5bb468e2)), closes [#27880](https://github.com/bitnami/charts/issues/27880)
 
 ## <small>1.3.10 (2024-07-04)</small>
 

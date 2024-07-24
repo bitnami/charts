@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.0 (2024-07-12)
+## 22.0.1 (2024-07-16)
 
-* [bitnami/prestashop] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27933](https://github.com/bitnami/charts/pull/27933))
+* [bitnami/prestashop] Global StorageClass as default value ([#28084](https://github.com/bitnami/charts/pull/28084))
+
+## 22.0.0 (2024-07-13)
+
+* [bitnami/prestashop] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27933) ([2a29c42](https://github.com/bitnami/charts/commit/2a29c42dc6bac2452735873e881bdd6d785c4e2b)), closes [#27933](https://github.com/bitnami/charts/issues/27933)
 
 ## <small>21.2.8 (2024-07-03)</small>
 

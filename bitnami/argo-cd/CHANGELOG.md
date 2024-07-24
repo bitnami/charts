@@ -1,8 +1,36 @@
 # Changelog
 
-## 6.6.0 (2024-07-11)
+## 6.6.7 (2024-07-24)
 
-* [bitnami/argo-cd] Make it possible to run ArgoCD in HA mode ([#27585](https://github.com/bitnami/charts/pull/27585))
+* [bitnami/argo-cd] Release 6.6.7 ([#28363](https://github.com/bitnami/charts/pull/28363))
+
+## <small>6.6.6 (2024-07-24)</small>
+
+* [bitnami/argo-cd] Release 6.6.6 (#28344) ([95e78c0](https://github.com/bitnami/charts/commit/95e78c03303a22ff50bc639d06548bc1eaa0095f)), closes [#28344](https://github.com/bitnami/charts/issues/28344)
+
+## <small>6.6.5 (2024-07-24)</small>
+
+* [bitnami/argo-cd] Release 6.6.5 (#28232) ([5e5bd07](https://github.com/bitnami/charts/commit/5e5bd0720ad4d4c40287ef412c019186a073ffe3)), closes [#28232](https://github.com/bitnami/charts/issues/28232)
+
+## <small>6.6.4 (2024-07-23)</small>
+
+* [bitnami/argo-cd] Release 6.6.4 (#28208) ([374fda5](https://github.com/bitnami/charts/commit/374fda56e3d11e5fa75710b58f92b85e6fc14aff)), closes [#28208](https://github.com/bitnami/charts/issues/28208)
+
+## <small>6.6.3 (2024-07-18)</small>
+
+* [bitnami/argo-cd] Global StorageClass as default value (#27999) ([61c4086](https://github.com/bitnami/charts/commit/61c408671f7e016213ca8ac1e129c44b8ae96bc9)), closes [#27999](https://github.com/bitnami/charts/issues/27999)
+
+## <small>6.6.2 (2024-07-16)</small>
+
+* [bitnami/argo-cd] Fix issue when using imagePullSecrets (#27983) ([f716e12](https://github.com/bitnami/charts/commit/f716e12ccc46a838fee203a137e15ab5a1791b32)), closes [#27983](https://github.com/bitnami/charts/issues/27983)
+
+## <small>6.6.1 (2024-07-15)</small>
+
+* [bitnami/argo-cd] Release 6.6.1 (#27987) ([1e0fade](https://github.com/bitnami/charts/commit/1e0fadee59b7e7f30c68ce39c33acaab78341045)), closes [#27987](https://github.com/bitnami/charts/issues/27987)
+
+## 6.6.0 (2024-07-12)
+
+* [bitnami/argo-cd] Make it possible to run ArgoCD in HA mode (#27585) ([8d231f8](https://github.com/bitnami/charts/commit/8d231f86e78a6ad07b5f588a0eedebf7c21d0f9b)), closes [#27585](https://github.com/bitnami/charts/issues/27585)
 
 ## <small>6.5.8 (2024-07-08)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 16.2.6 (2024-07-03)
+## 16.2.9 (2024-07-24)
 
-* [bitnami/dokuwiki] Release 16.2.6 ([#27685](https://github.com/bitnami/charts/pull/27685))
+* [bitnami/dokuwiki] Release 16.2.9 ([#28311](https://github.com/bitnami/charts/pull/28311))
+
+## <small>16.2.8 (2024-07-24)</small>
+
+* [bitnami/dokuwiki] Release 16.2.8 (#28243) ([b165bea](https://github.com/bitnami/charts/commit/b165beaed503666c1f541dedf54b250ed8365b0b)), closes [#28243](https://github.com/bitnami/charts/issues/28243)
+
+## <small>16.2.7 (2024-07-16)</small>
+
+* [bitnami/dokuwiki] Global StorageClass as default value (#28011) ([2ad2f57](https://github.com/bitnami/charts/commit/2ad2f572554d1d7d2bea24321fbce9d960f5b25d)), closes [#28011](https://github.com/bitnami/charts/issues/28011)
+
+## <small>16.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/dokuwiki] Release 16.2.6 (#27685) ([cf5f6ba](https://github.com/bitnami/charts/commit/cf5f6ba7e669b02630d5b800bb3525012f0f5691)), closes [#27685](https://github.com/bitnami/charts/issues/27685)
 
 ## <small>16.2.5 (2024-06-18)</small>
 
