@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.16 (2024-07-24)
+## 0.3.17 (2024-07-24)
 
-* [bitnami/janusgraph] Release 0.3.16 ([#28256](https://github.com/bitnami/charts/pull/28256))
+* [bitnami/janusgraph] Release 0.3.17 ([#28297](https://github.com/bitnami/charts/pull/28297))
+
+## <small>0.3.16 (2024-07-24)</small>
+
+* [bitnami/janusgraph] Release 0.3.16 (#28256) ([911c81e](https://github.com/bitnami/charts/commit/911c81e8749f3c24078fb849cf8ce670464f150f)), closes [#28256](https://github.com/bitnami/charts/issues/28256)
 
 ## <small>0.3.15 (2024-07-18)</small>
 
