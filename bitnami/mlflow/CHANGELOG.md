@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.18 (2024-07-24)
+## 1.4.19 (2024-07-24)
 
-* [bitnami/mlflow] feat: Fixup to allow database dialects to be configured (#25965) ([#28316](https://github.com/bitnami/charts/pull/28316))
+* [bitnami/mlflow] Release 1.4.19 ([#28322](https://github.com/bitnami/charts/pull/28322))
+
+## <small>1.4.18 (2024-07-24)</small>
+
+* [bitnami/mlflow] feat: Fixup to allow database dialects to be configured (#25965) (#28316) ([5b69392](https://github.com/bitnami/charts/commit/5b693921f0ef549e63bd2496b7f636110a5ed5f2)), closes [#25965](https://github.com/bitnami/charts/issues/25965) [#28316](https://github.com/bitnami/charts/issues/28316)
 
 ## <small>1.4.17 (2024-07-19)</small>
 
