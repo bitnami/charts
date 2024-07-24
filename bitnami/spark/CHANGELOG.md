@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.6 (2024-07-16)
+## 9.2.7 (2024-07-24)
 
-* [bitnami/spark] Global StorageClass as default value ([#28098](https://github.com/bitnami/charts/pull/28098))
+* [bitnami/spark] Release 9.2.7 ([#28393](https://github.com/bitnami/charts/pull/28393))
+
+## <small>9.2.6 (2024-07-18)</small>
+
+* [bitnami/spark] Global StorageClass as default value (#28098) ([a71c989](https://github.com/bitnami/charts/commit/a71c989e8810622b5c0eeddef8fae16d17831f64)), closes [#28098](https://github.com/bitnami/charts/issues/28098)
 
 ## <small>9.2.5 (2024-07-03)</small>
 
