@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.1 (2024-07-16)
+## 19.0.2 (2024-07-24)
 
-* [bitnami/mariadb] Global StorageClass as default value ([#28050](https://github.com/bitnami/charts/pull/28050))
+* [bitnami/mariadb] Release 19.0.2 ([#28317](https://github.com/bitnami/charts/pull/28317))
+
+## <small>19.0.1 (2024-07-18)</small>
+
+* [bitnami/mariadb] Global StorageClass as default value (#28050) ([7319c20](https://github.com/bitnami/charts/commit/7319c20e742e282f4517823f6cca054fa7322f0e)), closes [#28050](https://github.com/bitnami/charts/issues/28050)
 
 ## 19.0.0 (2024-07-11)
 

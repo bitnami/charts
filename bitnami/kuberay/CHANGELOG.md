@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.8 (2024-07-16)
+## 1.2.9 (2024-07-24)
 
-* [bitnami/kuberay] Global StorageClass as default value ([#28046](https://github.com/bitnami/charts/pull/28046))
+* [bitnami/kuberay] Release 1.2.9 ([#28306](https://github.com/bitnami/charts/pull/28306))
+
+## <small>1.2.8 (2024-07-16)</small>
+
+* [bitnami/kuberay] Global StorageClass as default value (#28046) ([ce63e89](https://github.com/bitnami/charts/commit/ce63e897be221fde5f370807188e894f2ad5f616)), closes [#28046](https://github.com/bitnami/charts/issues/28046)
 
 ## <small>1.2.7 (2024-07-04)</small>
 
