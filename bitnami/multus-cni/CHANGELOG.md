@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.8 (2024-07-16)
+## 2.1.9 (2024-07-24)
 
-* [bitnami/multus-cni] Global StorageClass as default value ([#28064](https://github.com/bitnami/charts/pull/28064))
+* [bitnami/multus-cni] Release 2.1.9 ([#28335](https://github.com/bitnami/charts/pull/28335))
+
+## <small>2.1.8 (2024-07-18)</small>
+
+* [bitnami/multus-cni] Global StorageClass as default value (#28064) ([fcfb5d0](https://github.com/bitnami/charts/commit/fcfb5d0a33eb0d56c3bb4841de1b12957fada4a1)), closes [#28064](https://github.com/bitnami/charts/issues/28064)
 
 ## <small>2.1.7 (2024-07-04)</small>
 
