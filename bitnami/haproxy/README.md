@@ -187,18 +187,19 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+| Name                         | Description                                                                             | Value           |
+| ---------------------------- | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`                | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`               | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`           | String to fully override common.names.fullname                                          | `""`            |
+| `commonLabels`               | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`          | Annotations to add to all deployed objects                                              | `{}`            |
+| `clusterDomain`              | Kubernetes cluster domain name                                                          | `cluster.local` |
+| `deploymentAnnotations`      | Annotations to add to the deployment                                                    | `{}`            |
+| `extraDeploy`                | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled`     | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command`     | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`        | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 ### Traffic Exposure Parameters
 

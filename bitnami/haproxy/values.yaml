@@ -54,6 +54,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param deploymentAnnotations Annotations to add to the deployment
+##
+deploymentAnnotations: {}
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
