@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.7.3 (2024-07-24)
+## 21.7.4 (2024-07-24)
 
-* [bitnami/keycloak] Release 21.7.3 ([#28299](https://github.com/bitnami/charts/pull/28299))
+* Fix broken theme assets by append the httpRelativeURL to the KC-HOSTNAME ([#28176](https://github.com/bitnami/charts/pull/28176))
+
+## <small>21.7.3 (2024-07-24)</small>
+
+* [bitnami/keycloak] Release 21.7.3 (#28299) ([06e9a9d](https://github.com/bitnami/charts/commit/06e9a9dfb2dc0bd10089947810fdf8867b2ffa37)), closes [#28299](https://github.com/bitnami/charts/issues/28299)
 
 ## <small>21.7.2 (2024-07-24)</small>
 
