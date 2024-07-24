@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.14 (2024-07-16)
+## 2.3.15 (2024-07-24)
 
-* [bitnami/gitea] Global StorageClass as default value ([#28023](https://github.com/bitnami/charts/pull/28023))
+* [bitnami/gitea] Release 2.3.15 ([#28250](https://github.com/bitnami/charts/pull/28250))
+
+## <small>2.3.14 (2024-07-18)</small>
+
+* [bitnami/gitea] Global StorageClass as default value (#28023) ([36100a3](https://github.com/bitnami/charts/commit/36100a3f4471aabfeb2d4179fea56d153157e525)), closes [#28023](https://github.com/bitnami/charts/issues/28023)
 
 ## <small>2.3.13 (2024-07-15)</small>
 
