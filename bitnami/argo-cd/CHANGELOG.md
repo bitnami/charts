@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.3 (2024-07-16)
+## 6.6.4 (2024-07-23)
 
-* [bitnami/argo-cd] Global StorageClass as default value ([#27999](https://github.com/bitnami/charts/pull/27999))
+* [bitnami/argo-cd] Release 6.6.4 ([#28208](https://github.com/bitnami/charts/pull/28208))
+
+## <small>6.6.3 (2024-07-18)</small>
+
+* [bitnami/argo-cd] Global StorageClass as default value (#27999) ([61c4086](https://github.com/bitnami/charts/commit/61c408671f7e016213ca8ac1e129c44b8ae96bc9)), closes [#27999](https://github.com/bitnami/charts/issues/27999)
 
 ## <small>6.6.2 (2024-07-16)</small>
 

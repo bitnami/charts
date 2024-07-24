@@ -1,8 +1,20 @@
 # Changelog
 
-## 18.3.10 (2024-07-17)
+## 18.3.13 (2024-07-24)
 
-* [bitnami/airflow] Release 18.3.10 ([#28128](https://github.com/bitnami/charts/pull/28128))
+* [bitnami/airflow] Release 18.3.13 ([#28282](https://github.com/bitnami/charts/pull/28282))
+
+## <small>18.3.12 (2024-07-24)</small>
+
+* [bitnami/airflow] Release 18.3.12 (#28258) ([df45ab4](https://github.com/bitnami/charts/commit/df45ab4562f52b3baecd354a2b41b9d21f122585)), closes [#28258](https://github.com/bitnami/charts/issues/28258)
+
+## <small>18.3.11 (2024-07-23)</small>
+
+* [bitnami/airflow] Release 18.3.11 (#28213) ([4b9adf7](https://github.com/bitnami/charts/commit/4b9adf7e240a7d760acb12abd0d50f276bf19bfd)), closes [#28213](https://github.com/bitnami/charts/issues/28213)
+
+## <small>18.3.10 (2024-07-17)</small>
+
+* [bitnami/airflow] Release 18.3.10 (#28128) ([eaaa2b8](https://github.com/bitnami/charts/commit/eaaa2b8fcd75829ff395d91326b4855daef13115)), closes [#28128](https://github.com/bitnami/charts/issues/28128)
 
 ## <small>18.3.9 (2024-07-16)</small>
 
