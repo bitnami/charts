@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.9 (2024-07-16)
+## 2.3.10 (2024-07-24)
 
-* [bitnami/flux] Global StorageClass as default value ([#28021](https://github.com/bitnami/charts/pull/28021))
+* [bitnami/flux] Release 2.3.10 ([#28266](https://github.com/bitnami/charts/pull/28266))
+
+## <small>2.3.9 (2024-07-18)</small>
+
+* [bitnami/flux] Global StorageClass as default value (#28021) ([d16095e](https://github.com/bitnami/charts/commit/d16095eb4fba118281fe9248d4cc22db31985043)), closes [#28021](https://github.com/bitnami/charts/issues/28021)
 
 ## <small>2.3.8 (2024-07-04)</small>
 
