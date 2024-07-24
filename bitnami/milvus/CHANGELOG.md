@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.3 (2024-07-08)
+## 8.3.4 (2024-07-22)
 
-* [bitnami/milvus] Release 8.3.3 ([#27807](https://github.com/bitnami/charts/pull/27807))
+* [bitnami/milvus] Global StorageClass as default value ([#28058](https://github.com/bitnami/charts/pull/28058))
+
+## <small>8.3.3 (2024-07-08)</small>
+
+* [bitnami/milvus] Release 8.3.3 (#27807) ([9cfaffe](https://github.com/bitnami/charts/commit/9cfaffeeb9f4145f26bb2f03a868d4fe2bd295a2)), closes [#27807](https://github.com/bitnami/charts/issues/27807)
 
 ## <small>8.3.2 (2024-06-28)</small>
 

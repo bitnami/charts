@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.1.20 (2024-07-16)
+## 21.1.22 (2024-07-24)
 
-* [bitnami/ghost] Global StorageClass as default value ([#28022](https://github.com/bitnami/charts/pull/28022))
+* [bitnami/ghost] Release 21.1.22 ([#28246](https://github.com/bitnami/charts/pull/28246))
+
+## <small>21.1.21 (2024-07-23)</small>
+
+* [bitnami/ghost] Release 21.1.21 (#28211) ([3fbae08](https://github.com/bitnami/charts/commit/3fbae08962c5bacd88db8e0a8e6f70fa3988995b)), closes [#28211](https://github.com/bitnami/charts/issues/28211)
+
+## <small>21.1.20 (2024-07-18)</small>
+
+* [bitnami/ghost] Global StorageClass as default value (#28022) ([a11ac35](https://github.com/bitnami/charts/commit/a11ac35203c61e4b0ace12e34e95f77065b6eb98)), closes [#28022](https://github.com/bitnami/charts/issues/28022)
 
 ## <small>21.1.19 (2024-07-12)</small>
 
