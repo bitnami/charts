@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.14 (2024-07-16)
+## 15.6.15 (2024-07-24)
 
-* [bitnami/mongodb] Global StorageClass as default value ([#28061](https://github.com/bitnami/charts/pull/28061))
+* [bitnami/mongodb] Release 15.6.15 ([#28332](https://github.com/bitnami/charts/pull/28332))
+
+## <small>15.6.14 (2024-07-18)</small>
+
+* [bitnami/mongodb] Global StorageClass as default value (#28061) ([0661fba](https://github.com/bitnami/charts/commit/0661fbaf3436de16452d82cbf244a616c5892e64)), closes [#28061](https://github.com/bitnami/charts/issues/28061)
 
 ## <small>15.6.13 (2024-07-16)</small>
 

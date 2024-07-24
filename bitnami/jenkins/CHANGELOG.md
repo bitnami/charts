@@ -1,8 +1,16 @@
 # Changelog
 
-## 13.4.10 (2024-07-16)
+## 13.4.12 (2024-07-24)
 
-* [bitnami/jenkins] Global StorageClass as default value ([#28035](https://github.com/bitnami/charts/pull/28035))
+* [bitnami/jenkins] Release 13.4.12 ([#28298](https://github.com/bitnami/charts/pull/28298))
+
+## <small>13.4.11 (2024-07-24)</small>
+
+* [bitnami/jenkins] Release 13.4.11 (#28261) ([0940cd0](https://github.com/bitnami/charts/commit/0940cd04b08754574e4d46d6da4709272c7fec02)), closes [#28261](https://github.com/bitnami/charts/issues/28261)
+
+## <small>13.4.10 (2024-07-18)</small>
+
+* [bitnami/jenkins] Global StorageClass as default value (#28035) ([43d852e](https://github.com/bitnami/charts/commit/43d852e10614d61558aeee9ca80d55e52c7495cb)), closes [#28035](https://github.com/bitnami/charts/issues/28035)
 
 ## <small>13.4.9 (2024-07-10)</small>
 

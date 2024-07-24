@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.6 (2024-07-16)
+## 1.0.7 (2024-07-24)
 
-* [bitnami/scylladb] Global StorageClass as default value ([#28093](https://github.com/bitnami/charts/pull/28093))
+* [bitnami/scylladb] Release 1.0.7 ([#28370](https://github.com/bitnami/charts/pull/28370))
+
+## <small>1.0.6 (2024-07-16)</small>
+
+* [bitnami/scylladb] Global StorageClass as default value (#28093) ([dcbaf82](https://github.com/bitnami/charts/commit/dcbaf828c1c50e417260442ce95532fb2c340517)), closes [#28093](https://github.com/bitnami/charts/issues/28093)
 
 ## <small>1.0.5 (2024-07-03)</small>
 

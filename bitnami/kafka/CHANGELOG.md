@@ -1,8 +1,20 @@
 # Changelog
 
-## 29.3.9 (2024-07-16)
+## 29.3.12 (2024-07-24)
 
-* [bitnami/kafka] Global StorageClass as default value ([#28038](https://github.com/bitnami/charts/pull/28038))
+* [bitnami/kafka] Release 29.3.12 ([#28336](https://github.com/bitnami/charts/pull/28336))
+
+## <small>29.3.11 (2024-07-23)</small>
+
+* [bitnami/kafka] Fix issue on how to provision access to all topics / groups (#27877) ([6535067](https://github.com/bitnami/charts/commit/65350670e7249108972fa137b0aaf0423f65f74f)), closes [#27877](https://github.com/bitnami/charts/issues/27877)
+
+## <small>29.3.10 (2024-07-18)</small>
+
+* [bitnami/kafka] Release 29.3.10 (#28157) ([4fc0181](https://github.com/bitnami/charts/commit/4fc0181dd3f334c71cb5adad90c8e2a67ff482fa)), closes [#28157](https://github.com/bitnami/charts/issues/28157)
+
+## <small>29.3.9 (2024-07-18)</small>
+
+* [bitnami/kafka] Global StorageClass as default value (#28038) ([0e596df](https://github.com/bitnami/charts/commit/0e596df1d5e6c9e9d3d1854788d5485408cd49f5)), closes [#28038](https://github.com/bitnami/charts/issues/28038)
 
 ## <small>29.3.8 (2024-07-16)</small>
 

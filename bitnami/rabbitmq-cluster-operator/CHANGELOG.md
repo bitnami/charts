@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.14 (2024-07-16)
+## 4.3.15 (2024-07-24)
 
-* [bitnami/rabbitmq-cluster-operator] Global StorageClass as default value ([#28088](https://github.com/bitnami/charts/pull/28088))
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.15 ([#28358](https://github.com/bitnami/charts/pull/28358))
+
+## <small>4.3.14 (2024-07-16)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Global StorageClass as default value (#28088) ([ee4fdcd](https://github.com/bitnami/charts/commit/ee4fdcd6d6faed9ebd489cd8f9814640aa6ba270)), closes [#28088](https://github.com/bitnami/charts/issues/28088)
 
 ## <small>4.3.13 (2024-07-08)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
+
 ## 9.4.0 (2024-07-18)
 
 * [bitnami/solr] Add revisionHistoryLimit variable for metrics-deployment ([#28137](https://github.com/bitnami/charts/pull/28137))
+
+## 9.3.8 (2024-07-22)
+
+* [bitnami/solr] Change permissions of the Solr data directory ([#28189](https://github.com/bitnami/charts/pull/28189))
 
 ## <small>9.3.7 (2024-07-18)</small>
 

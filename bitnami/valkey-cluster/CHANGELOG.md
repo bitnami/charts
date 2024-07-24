@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.1.3 (2024-07-16)
+## 0.1.5 (2024-07-24)
 
-* [bitnami/valkey-cluster] Global StorageClass as default value ([#28106](https://github.com/bitnami/charts/pull/28106))
+* [bitnami/valkey-cluster] Release 0.1.5 ([#28377](https://github.com/bitnami/charts/pull/28377))
+
+## <small>0.1.4 (2024-07-22)</small>
+
+* [bitanami/valkey-cluster] fix name generation loop in the external access template (#28163) ([0acace4](https://github.com/bitnami/charts/commit/0acace4851bcfee9ff90935194a9d3acf371f9dc)), closes [#28163](https://github.com/bitnami/charts/issues/28163)
+
+## <small>0.1.3 (2024-07-18)</small>
+
+* [bitnami/valkey-cluster] Global StorageClass as default value (#28106) ([47318eb](https://github.com/bitnami/charts/commit/47318eb3fad504d94ad0e4450dcb7cb36380e0c1)), closes [#28106](https://github.com/bitnami/charts/issues/28106)
 
 ## <small>0.1.2 (2024-07-11)</small>
 
