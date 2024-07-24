@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.6 (2024-07-24)
+## 22.0.7 (2024-07-24)
 
-* [bitnami/harbor] Release 22.0.6 ([#28255](https://github.com/bitnami/charts/pull/28255))
+* [bitnami/harbor] Release 22.0.7 ([#28301](https://github.com/bitnami/charts/pull/28301))
+
+## <small>22.0.6 (2024-07-24)</small>
+
+* [bitnami/harbor] Release 22.0.6 (#28255) ([1aedb99](https://github.com/bitnami/charts/commit/1aedb9946c5129e77f0841425ba3ddfb647fdca7)), closes [#28255](https://github.com/bitnami/charts/issues/28255)
 
 ## <small>22.0.5 (2024-07-19)</small>
 
