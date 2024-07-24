@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.0.1 (2024-07-16)
+## 29.0.2 (2024-07-24)
 
-* [bitnami/redmine] Global StorageClass as default value ([#28091](https://github.com/bitnami/charts/pull/28091))
+* [bitnami/redmine] Release 29.0.2 ([#28366](https://github.com/bitnami/charts/pull/28366))
+
+## <small>29.0.1 (2024-07-18)</small>
+
+* [bitnami/redmine] Global StorageClass as default value (#28091) ([2771982](https://github.com/bitnami/charts/commit/2771982ba09c709df3fe0029b33d4823b3f2048d)), closes [#28091](https://github.com/bitnami/charts/issues/28091)
 
 ## 29.0.0 (2024-07-13)
 
