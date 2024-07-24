@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.3.1 (2024-07-23)
+## 8.3.1 (2024-07-24)
 
 * [bitnami/external-dns] Release 8.3.1 ([#28245](https://github.com/bitnami/charts/pull/28245))
 
