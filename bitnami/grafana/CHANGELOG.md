@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.9 (2024-07-16)
+## 11.3.10 (2024-07-24)
 
-* [bitnami/grafana] Global StorageClass as default value ([#28024](https://github.com/bitnami/charts/pull/28024))
+* [bitnami/grafana] Release 11.3.10 ([#28285](https://github.com/bitnami/charts/pull/28285))
+
+## <small>11.3.9 (2024-07-16)</small>
+
+* [bitnami/grafana] Global StorageClass as default value (#28024) ([5dcef0c](https://github.com/bitnami/charts/commit/5dcef0cd7fdccd518c1d9baa24ab501d04b62942)), closes [#28024](https://github.com/bitnami/charts/issues/28024)
 
 ## <small>11.3.8 (2024-07-05)</small>
 
