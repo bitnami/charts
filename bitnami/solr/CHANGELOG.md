@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.7 (2024-07-16)
+## 9.3.8 (2024-07-22)
 
-* [bitnami/solr] Global StorageClass as default value ([#28096](https://github.com/bitnami/charts/pull/28096))
+* [bitnami/solr] Change permissions of the Solr data directory ([#28189](https://github.com/bitnami/charts/pull/28189))
+
+## <small>9.3.7 (2024-07-18)</small>
+
+* [bitnami/solr] Global StorageClass as default value (#28096) ([6897cfa](https://github.com/bitnami/charts/commit/6897cfa75b4e26fc94e211c4984f6d9e713212ec)), closes [#28096](https://github.com/bitnami/charts/issues/28096)
 
 ## <small>9.3.6 (2024-07-03)</small>
 

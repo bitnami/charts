@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.3.7 (2024-07-16)
+## 11.3.9 (2024-07-23)
 
-* [bitnami/cassandra] Fix for cassandra.commitstorage.class helper ([#28119](https://github.com/bitnami/charts/pull/28119))
+* [bitnami/cassandra] Release 11.3.9 ([#28236](https://github.com/bitnami/charts/pull/28236))
+
+## <small>11.3.8 (2024-07-23)</small>
+
+* [bitnami/cassandra] Release 11.3.8 (#28209) ([97f5aaa](https://github.com/bitnami/charts/commit/97f5aaaa2a19c9ed3a8581db26e7c74de423c456)), closes [#28209](https://github.com/bitnami/charts/issues/28209)
+
+## <small>11.3.7 (2024-07-17)</small>
+
+* [bitnami/cassandra] Fix for cassandra.commitstorage.class helper (#28119) ([18acada](https://github.com/bitnami/charts/commit/18acada4400bdf5bde6d8c5b36d93ee57bb54b22)), closes [#28119](https://github.com/bitnami/charts/issues/28119)
 
 ## <small>11.3.6 (2024-07-16)</small>
 

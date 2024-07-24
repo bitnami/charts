@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.7 (2024-07-16)
+## 10.2.8 (2024-07-23)
 
-* [bitnami/etcd] Global StorageClass as default value ([#28016](https://github.com/bitnami/charts/pull/28016))
+* [bitnami/etcd] Release 10.2.8 ([#28218](https://github.com/bitnami/charts/pull/28218))
+
+## <small>10.2.7 (2024-07-16)</small>
+
+* [bitnami/etcd] Global StorageClass as default value (#28016) ([983fdc1](https://github.com/bitnami/charts/commit/983fdc186ab87520e8d06ff02a8bbbcb817edb82)), closes [#28016](https://github.com/bitnami/charts/issues/28016)
 
 ## <small>10.2.6 (2024-07-04)</small>
 

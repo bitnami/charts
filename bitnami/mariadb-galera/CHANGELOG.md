@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.0.2 (2024-07-18)
+## 14.0.3 (2024-07-23)
 
-* [bitnami/mariadb-galera] Global StorageClass as default value ([#28051](https://github.com/bitnami/charts/pull/28051))
+* [bitnami/mariadb-galera] Release 14.0.3 ([#28219](https://github.com/bitnami/charts/pull/28219))
+
+## <small>14.0.2 (2024-07-19)</small>
+
+* [bitnami/mariadb-galera] Global StorageClass as default value (#28051) ([75bf8d7](https://github.com/bitnami/charts/commit/75bf8d738a728b480d73521f19e0824f89cc4693)), closes [#28051](https://github.com/bitnami/charts/issues/28051)
 
 ## <small>14.0.1 (2024-07-18)</small>
 
