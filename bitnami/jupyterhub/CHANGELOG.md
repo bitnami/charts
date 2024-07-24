@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.10 (2024-07-16)
+## 7.2.11 (2024-07-24)
 
-* [bitnami/jupyterhub] Fix for jupyterhub.storage.class helper ([#28120](https://github.com/bitnami/charts/pull/28120))
+* [bitnami/jupyterhub] Release 7.2.11 ([#28265](https://github.com/bitnami/charts/pull/28265))
+
+## <small>7.2.10 (2024-07-16)</small>
+
+* [bitnami/jupyterhub] Fix for jupyterhub.storage.class helper (#28120) ([16e6f01](https://github.com/bitnami/charts/commit/16e6f01507f1aef5f5a575e4b550e0734a238045)), closes [#28120](https://github.com/bitnami/charts/issues/28120)
 
 ## <small>7.2.9 (2024-07-16)</small>
 
