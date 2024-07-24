@@ -1,8 +1,12 @@
 # Changelog
 
+## 8.3.1 (2024-07-24)
+
+* [bitnami/external-dns] Release 8.3.1 ([#28245](https://github.com/bitnami/charts/pull/28245))
+
 ## 8.3.0 (2024-07-23)
 
-* [bitnami/external-dns] feat: Add support for provider scaleway secretName ([#24630](https://github.com/bitnami/charts/pull/24630))
+* [bitnami/external-dns] feat: Add support for provider scaleway secretName (#24630) ([fdb8c86](https://github.com/bitnami/charts/commit/fdb8c86dfa81697619b5d5e798f41860c793ad3c)), closes [#24630](https://github.com/bitnami/charts/issues/24630)
 
 ## <small>8.2.3 (2024-07-18)</small>
 
