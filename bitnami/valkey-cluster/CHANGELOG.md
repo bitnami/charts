@@ -4,9 +4,9 @@
 
 * [bitnami/valkey-cluster] update metrics-svc template name format ([#27993](https://github.com/bitnami/charts/pull/27993))
 
-## 0.1.4 (2024-07-19)
+## <small>0.1.4 (2024-07-22)</small>
 
-* [bitanami/valkey-cluster] fix name generation loop in the external access template ([#28163](https://github.com/bitnami/charts/pull/28163))
+* [bitanami/valkey-cluster] fix name generation loop in the external access template (#28163) ([0acace4](https://github.com/bitnami/charts/commit/0acace4851bcfee9ff90935194a9d3acf371f9dc)), closes [#28163](https://github.com/bitnami/charts/issues/28163)
 
 ## <small>0.1.3 (2024-07-18)</small>
 
