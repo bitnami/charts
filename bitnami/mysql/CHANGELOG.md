@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.12 (2024-07-23)
+## 11.1.13 (2024-07-24)
 
-* [bitnami/mysql] Release 11.1.12 ([#28206](https://github.com/bitnami/charts/pull/28206))
+* [bnitnami/mysql] Update documentation to use bash instead of sh ([#28252](https://github.com/bitnami/charts/pull/28252))
+
+## <small>11.1.12 (2024-07-23)</small>
+
+* [bitnami/mysql] Release 11.1.12 (#28206) ([910b102](https://github.com/bitnami/charts/commit/910b1028b01ed667761888fd39a76209cb873fd9)), closes [#28206](https://github.com/bitnami/charts/issues/28206)
 
 ## <small>11.1.11 (2024-07-22)</small>
 
