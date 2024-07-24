@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.2.9 (2024-07-23)
+## 10.2.9 (2024-07-24)
 
 * [bitnami/etcd] Release 10.2.9 ([#28240](https://github.com/bitnami/charts/pull/28240))
 
