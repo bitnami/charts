@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.1.22 (2024-07-23)
+## 21.1.22 (2024-07-24)
 
 * [bitnami/ghost] Release 21.1.22 ([#28246](https://github.com/bitnami/charts/pull/28246))
 
