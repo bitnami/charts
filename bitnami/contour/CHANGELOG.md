@@ -1,6 +1,6 @@
 # Changelog
 
-## 18.2.11 (2024-07-23)
+## 18.2.11 (2024-07-24)
 
 * [bitnami/contour] Release 18.2.11 ([#28233](https://github.com/bitnami/charts/pull/28233))
 
