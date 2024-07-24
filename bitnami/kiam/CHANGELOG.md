@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.8 (2024-07-18)
+## 2.2.9 (2024-07-24)
 
-* [bitnami/kiam] Global StorageClass as default value ([#28040](https://github.com/bitnami/charts/pull/28040))
+* [bitnami/kiam] Release 2.2.9 ([#28263](https://github.com/bitnami/charts/pull/28263))
+
+## <small>2.2.8 (2024-07-19)</small>
+
+* [bitnami/kiam] Global StorageClass as default value (#28040) ([bcebfb0](https://github.com/bitnami/charts/commit/bcebfb0311c21bb5909f310ab1b7011a326b3cab)), closes [#28040](https://github.com/bitnami/charts/issues/28040)
 
 ## <small>2.2.7 (2024-07-04)</small>
 
