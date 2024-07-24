@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.6 (2024-07-24)
+## 2.5.7 (2024-07-24)
 
-* [bitnami/jaeger] Release 2.5.6 ([#28253](https://github.com/bitnami/charts/pull/28253))
+* [bitnami/jaeger] Release 2.5.7 ([#28290](https://github.com/bitnami/charts/pull/28290))
+
+## <small>2.5.6 (2024-07-24)</small>
+
+* [bitnami/jaeger] Release 2.5.6 (#28253) ([b955a63](https://github.com/bitnami/charts/commit/b955a63b31a4548d3466451ed79aae61ff761d93)), closes [#28253](https://github.com/bitnami/charts/issues/28253)
 
 ## <small>2.5.5 (2024-07-18)</small>
 
