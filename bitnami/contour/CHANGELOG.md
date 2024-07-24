@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.9 (2024-07-04)
+## 18.2.10 (2024-07-22)
 
-* [bitnami/contour] Release 18.2.9 ([#27759](https://github.com/bitnami/charts/pull/27759))
+* [bitnami/contour] Global StorageClass as default value ([#28008](https://github.com/bitnami/charts/pull/28008))
+
+## <small>18.2.9 (2024-07-04)</small>
+
+* [bitnami/contour] Release 18.2.9 (#27759) ([3fc8c8d](https://github.com/bitnami/charts/commit/3fc8c8dd7a257e47498e531a734faad5ebb9c52d)), closes [#27759](https://github.com/bitnami/charts/issues/27759)
 
 ## <small>18.2.8 (2024-07-03)</small>
 
