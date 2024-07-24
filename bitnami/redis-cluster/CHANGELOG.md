@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.7 (2024-07-16)
+## 10.2.8 (2024-07-24)
 
-* [bitnami/redis-cluster] Global StorageClass as default value ([#28090](https://github.com/bitnami/charts/pull/28090))
+* [bitnami/redis-cluster] Release 10.2.8 ([#28367](https://github.com/bitnami/charts/pull/28367))
+
+## <small>10.2.7 (2024-07-16)</small>
+
+* [bitnami/redis-cluster] Global StorageClass as default value (#28090) ([d80ea5c](https://github.com/bitnami/charts/commit/d80ea5c578a13a27eafd5733aabab31bccc86fe8)), closes [#28090](https://github.com/bitnami/charts/issues/28090)
 
 ## <small>10.2.6 (2024-07-03)</small>
 
