@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.1 (2024-07-16)
+## 17.0.2 (2024-07-24)
 
-* [bitnami/phpmyadmin] Global StorageClass as default value ([#28080](https://github.com/bitnami/charts/pull/28080))
+* [bitnami/phpmyadmin] Release 17.0.2 ([#28381](https://github.com/bitnami/charts/pull/28381))
+
+## <small>17.0.1 (2024-07-16)</small>
+
+* [bitnami/phpmyadmin] Global StorageClass as default value (#28080) ([a050713](https://github.com/bitnami/charts/commit/a0507136851f7881ee451f999a9687c398d0c1ba)), closes [#28080](https://github.com/bitnami/charts/issues/28080)
 
 ## 17.0.0 (2024-07-12)
 
