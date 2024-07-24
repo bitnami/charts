@@ -631,7 +631,7 @@ chainloop config save \
 | `controlplane.keylessSigning.fileCA.cert`                  | The PEM-encoded certificate of the file based CA                        | `""`     |
 | `controlplane.keylessSigning.fileCA.key`                   | The PEM-encoded private key of the file based CA                        | `""`     |
 | `controlplane.keylessSigning.fileCA.keyPass`               | The secret key pass                                                     | `""`     |
-| `controlplane.keylessSigning.ejbcaCA.serverURL`            | The url of the EJBCA service (https://host/ejbca)                       | `""`     |
+| `controlplane.keylessSigning.ejbcaCA.serverURL`            | The url of the EJBCA service ("https://host/ejbca")                     | `""`     |
 | `controlplane.keylessSigning.ejbcaCA.clientKey`            | PEM-encoded the private key for EJBCA cert authentication               | `""`     |
 | `controlplane.keylessSigning.ejbcaCA.clientCert`           | PEM-encoded certificate for EJBCA cert authentication                   | `""`     |
 | `controlplane.keylessSigning.ejbcaCA.certProfileName`      | Name of the certificate profile to use in EJBCA                         | `""`     |

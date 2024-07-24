@@ -508,7 +508,7 @@ controlplane:
   ##       ...
   ##       -----END RSA PRIVATE KEY-----
   ## @param controlplane.keylessSigning.fileCA.keyPass The secret key pass
-  ## @param controlplane.keylessSigning.ejbcaCA.serverURL The url of the EJBCA service (https://host/ejbca)
+  ## @param controlplane.keylessSigning.ejbcaCA.serverURL The url of the EJBCA service ("https://host/ejbca")
   ## @param controlplane.keylessSigning.ejbcaCA.clientKey PEM-encoded the private key for EJBCA cert authentication
   ## @param controlplane.keylessSigning.ejbcaCA.clientCert PEM-encoded certificate for EJBCA cert authentication
   ## @param controlplane.keylessSigning.ejbcaCA.certProfileName Name of the certificate profile to use in EJBCA
