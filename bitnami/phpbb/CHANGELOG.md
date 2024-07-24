@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.1 (2024-07-16)
+## 19.0.2 (2024-07-24)
 
-* [bitnami/phpbb] Global StorageClass as default value ([#28079](https://github.com/bitnami/charts/pull/28079))
+* [bitnami/phpbb] Release 19.0.2 ([#28354](https://github.com/bitnami/charts/pull/28354))
+
+## <small>19.0.1 (2024-07-16)</small>
+
+* [bitnami/phpbb] Global StorageClass as default value (#28079) ([cab3bb8](https://github.com/bitnami/charts/commit/cab3bb8b41f8f09dde60b2c5d64f6c14c8d6a8e4)), closes [#28079](https://github.com/bitnami/charts/issues/28079)
 
 ## 19.0.0 (2024-07-12)
 
