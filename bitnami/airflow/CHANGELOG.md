@@ -1,8 +1,28 @@
 # Changelog
 
-## 18.3.8 (2024-07-05)
+## 18.3.13 (2024-07-24)
 
-* [bitnami/airflow] Release 18.3.8 ([#27818](https://github.com/bitnami/charts/pull/27818))
+* [bitnami/airflow] Release 18.3.13 ([#28282](https://github.com/bitnami/charts/pull/28282))
+
+## <small>18.3.12 (2024-07-24)</small>
+
+* [bitnami/airflow] Release 18.3.12 (#28258) ([df45ab4](https://github.com/bitnami/charts/commit/df45ab4562f52b3baecd354a2b41b9d21f122585)), closes [#28258](https://github.com/bitnami/charts/issues/28258)
+
+## <small>18.3.11 (2024-07-23)</small>
+
+* [bitnami/airflow] Release 18.3.11 (#28213) ([4b9adf7](https://github.com/bitnami/charts/commit/4b9adf7e240a7d760acb12abd0d50f276bf19bfd)), closes [#28213](https://github.com/bitnami/charts/issues/28213)
+
+## <small>18.3.10 (2024-07-17)</small>
+
+* [bitnami/airflow] Release 18.3.10 (#28128) ([eaaa2b8](https://github.com/bitnami/charts/commit/eaaa2b8fcd75829ff395d91326b4855daef13115)), closes [#28128](https://github.com/bitnami/charts/issues/28128)
+
+## <small>18.3.9 (2024-07-16)</small>
+
+* [bitnami/airflow] Global StorageClass as default value (#27995) ([dee5654](https://github.com/bitnami/charts/commit/dee56546656435608b99cefe030c4e3e957aeff3)), closes [#27995](https://github.com/bitnami/charts/issues/27995)
+
+## <small>18.3.8 (2024-07-05)</small>
+
+* [bitnami/airflow] Release 18.3.8 (#27818) ([ff4acba](https://github.com/bitnami/charts/commit/ff4acba91570d0607f8ec5590826d122fed24eb7)), closes [#27818](https://github.com/bitnami/charts/issues/27818)
 
 ## <small>18.3.7 (2024-07-03)</small>
 

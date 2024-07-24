@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.12 (2024-07-04)
+## 15.7.13 (2024-07-16)
 
-* [bitnami/thanos] Release 15.7.12 ([#27792](https://github.com/bitnami/charts/pull/27792))
+* [bitnami/thanos] Global StorageClass as default value ([#28103](https://github.com/bitnami/charts/pull/28103))
+
+## <small>15.7.12 (2024-07-04)</small>
+
+* [bitnami/thanos] Release 15.7.12 (#27792) ([f4bd712](https://github.com/bitnami/charts/commit/f4bd7126c3617faa30c875b68a1f974d72c53ca6)), closes [#27792](https://github.com/bitnami/charts/issues/27792)
 
 ## <small>15.7.11 (2024-07-03)</small>
 

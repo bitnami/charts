@@ -1,8 +1,24 @@
 # Changelog
 
-## 22.0.3 (2024-07-15)
+## 22.0.7 (2024-07-24)
 
-* [bitnami/harbor] Remove duplicated security context ([#27955](https://github.com/bitnami/charts/pull/27955))
+* [bitnami/harbor] Release 22.0.7 ([#28301](https://github.com/bitnami/charts/pull/28301))
+
+## <small>22.0.6 (2024-07-24)</small>
+
+* [bitnami/harbor] Release 22.0.6 (#28255) ([1aedb99](https://github.com/bitnami/charts/commit/1aedb9946c5129e77f0841425ba3ddfb647fdca7)), closes [#28255](https://github.com/bitnami/charts/issues/28255)
+
+## <small>22.0.5 (2024-07-19)</small>
+
+* [bitnami/harbor] Global StorageClass as default value (#28030) ([fb9252b](https://github.com/bitnami/charts/commit/fb9252ba06e4da0c967503e1fcca4e4edd496fdd)), closes [#28030](https://github.com/bitnami/charts/issues/28030)
+
+## <small>22.0.4 (2024-07-16)</small>
+
+* [bitnami/harbor] Dont set redis DB if Sentinel is enabled (#27977) ([e1d2920](https://github.com/bitnami/charts/commit/e1d2920e6db5696ed0b96c578c6806f7d097056a)), closes [#27977](https://github.com/bitnami/charts/issues/27977)
+
+## <small>22.0.3 (2024-07-15)</small>
+
+* [bitnami/harbor] Remove duplicated security context (#27955) ([ddef5d9](https://github.com/bitnami/charts/commit/ddef5d9ebe14c95ba2c4637dac462f4db8603915)), closes [#27955](https://github.com/bitnami/charts/issues/27955)
 
 ## <small>22.0.2 (2024-07-12)</small>
 

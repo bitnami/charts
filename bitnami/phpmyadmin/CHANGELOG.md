@@ -1,8 +1,12 @@
 # Changelog
 
+## 17.0.1 (2024-07-16)
+
+* [bitnami/phpmyadmin] Global StorageClass as default value ([#28080](https://github.com/bitnami/charts/pull/28080))
+
 ## 17.0.0 (2024-07-12)
 
-* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Update mariadb to 11.4 ([#27934](https://github.com/bitnami/charts/pull/27934))
+* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27934) ([09715e6](https://github.com/bitnami/charts/commit/09715e61c495b3b2cb07f33aa2940b2c1ce17284)), closes [#27934](https://github.com/bitnami/charts/issues/27934)
 
 ## <small>16.2.8 (2024-07-08)</small>
 

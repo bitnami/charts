@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.6.5 (2024-07-04)
+## 4.6.8 (2024-07-24)
 
-* [bitnami/grafana-loki] Release 4.6.5 ([#27762](https://github.com/bitnami/charts/pull/27762))
+* [bitnami/grafana-loki] Release 4.6.8 ([#28281](https://github.com/bitnami/charts/pull/28281))
+
+## <small>4.6.7 (2024-07-24)</small>
+
+* [bitnami/grafana-loki] Release 4.6.7 (#28251) ([9e1b52b](https://github.com/bitnami/charts/commit/9e1b52b4d128a94179435664617b7cbe581937dc)), closes [#28251](https://github.com/bitnami/charts/issues/28251)
+
+## <small>4.6.6 (2024-07-18)</small>
+
+* [bitnami/grafana-loki] Global StorageClass as default value (#28025) ([c2143a4](https://github.com/bitnami/charts/commit/c2143a49ff62dbe2c69411128f5391856894f803)), closes [#28025](https://github.com/bitnami/charts/issues/28025)
+
+## <small>4.6.5 (2024-07-04)</small>
+
+* [bitnami/grafana-loki] Release 4.6.5 (#27762) ([9feb5b9](https://github.com/bitnami/charts/commit/9feb5b9f173cb473571c2257a7841d10da201406)), closes [#27762](https://github.com/bitnami/charts/issues/27762)
 
 ## <small>4.6.4 (2024-07-03)</small>
 
