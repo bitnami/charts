@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.2.3 (2024-07-17)
+## 19.2.4 (2024-07-24)
 
-* [bitnami/schema-registry] Release 19.2.3 ([#28148](https://github.com/bitnami/charts/pull/28148))
+* [bitnami/schema-registry] Release 19.2.4 ([#28371](https://github.com/bitnami/charts/pull/28371))
+
+## <small>19.2.3 (2024-07-17)</small>
+
+* [bitnami/schema-registry] Release 19.2.3 (#28148) ([ef37a2d](https://github.com/bitnami/charts/commit/ef37a2d3e7bc6d5ed84d9d49a1ef231b728c6c13)), closes [#28148](https://github.com/bitnami/charts/issues/28148)
 
 ## <small>19.2.2 (2024-07-16)</small>
 
