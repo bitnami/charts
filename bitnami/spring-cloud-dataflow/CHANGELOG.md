@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.0.2 (2024-07-19)
+## 30.0.3 (2024-07-24)
 
-* [bitnami/spring-cloud-dataflow] Global StorageClass as default value ([#28099](https://github.com/bitnami/charts/pull/28099))
+* [bitnami/spring-cloud-dataflow] Release 30.0.3 ([#28378](https://github.com/bitnami/charts/pull/28378))
+
+## <small>30.0.2 (2024-07-19)</small>
+
+* [bitnami/spring-cloud-dataflow] Global StorageClass as default value (#28099) ([8adda63](https://github.com/bitnami/charts/commit/8adda63eaf319c373fb0e822aa3bf7da263dafea)), closes [#28099](https://github.com/bitnami/charts/issues/28099)
 
 ## <small>30.0.1 (2024-07-19)</small>
 
