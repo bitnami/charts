@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.7 (2024-07-04)
+## 1.1.8 (2024-07-16)
 
-* [bitnami/whereabouts] Release 1.1.7 ([#27800](https://github.com/bitnami/charts/pull/27800))
+* [bitnami/whereabouts] Global StorageClass as default value ([#28108](https://github.com/bitnami/charts/pull/28108))
+
+## <small>1.1.7 (2024-07-04)</small>
+
+* [bitnami/whereabouts] Release 1.1.7 (#27800) ([d628953](https://github.com/bitnami/charts/commit/d628953296525abcb1d3a6ae17069790e245b179)), closes [#27800](https://github.com/bitnami/charts/issues/27800)
 
 ## <small>1.1.6 (2024-07-03)</small>
 

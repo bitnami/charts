@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.5.16 (2024-07-11)
+## 15.5.18 (2024-07-23)
 
-* [bitnami/postgresql] Move comments inside conditionals ([#27627](https://github.com/bitnami/charts/pull/27627))
+* [bitnami/postgresql] Release 15.5.18 ([#28221](https://github.com/bitnami/charts/pull/28221))
+
+## <small>15.5.17 (2024-07-16)</small>
+
+* [bitnami/postgresql] Global StorageClass as default value (#28082) ([6267bb7](https://github.com/bitnami/charts/commit/6267bb792f70eb0b67800132f5fbd488087e347b)), closes [#28082](https://github.com/bitnami/charts/issues/28082)
+
+## <small>15.5.16 (2024-07-11)</small>
+
+* [bitnami/postgresql] Move comments inside conditionals (#27627) ([7d3b0f0](https://github.com/bitnami/charts/commit/7d3b0f0f13b79e75ee38ce1f5b59911c0cedb187)), closes [#27627](https://github.com/bitnami/charts/issues/27627)
 
 ## <small>15.5.15 (2024-07-09)</small>
 

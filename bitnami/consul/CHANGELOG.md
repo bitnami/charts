@@ -1,8 +1,24 @@
 # Changelog
 
-## 11.3.6 (2024-07-04)
+## 11.3.10 (2024-07-24)
 
-* [bitnami/consul] Release 11.3.6 ([#27776](https://github.com/bitnami/charts/pull/27776))
+* [bitnami/consul] Release 11.3.10 ([#28272](https://github.com/bitnami/charts/pull/28272))
+
+## <small>11.3.9 (2024-07-23)</small>
+
+* [bitnami/consul] Release 11.3.9 (#28231) ([ccc6335](https://github.com/bitnami/charts/commit/ccc633529597ce610d64728a6d410762aac4bb94)), closes [#28231](https://github.com/bitnami/charts/issues/28231)
+
+## <small>11.3.8 (2024-07-16)</small>
+
+* [bitnami/consul] Global StorageClass as default value (#28007) ([70f6b86](https://github.com/bitnami/charts/commit/70f6b861f201ce413929259e4a39225533a55d2c)), closes [#28007](https://github.com/bitnami/charts/issues/28007)
+
+## <small>11.3.7 (2024-07-13)</small>
+
+* [bitnami/consul] Release 11.3.7 (#27919) ([84b416f](https://github.com/bitnami/charts/commit/84b416fa1044c6cdee410d2e4db2fb379bd30fa0)), closes [#27919](https://github.com/bitnami/charts/issues/27919)
+
+## <small>11.3.6 (2024-07-04)</small>
+
+* [bitnami/consul] Release 11.3.6 (#27776) ([a490d98](https://github.com/bitnami/charts/commit/a490d980bcd640b15b5eb6819859a6259befda5d)), closes [#27776](https://github.com/bitnami/charts/issues/27776)
 
 ## <small>11.3.5 (2024-07-02)</small>
 

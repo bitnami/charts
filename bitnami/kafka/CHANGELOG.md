@@ -1,8 +1,24 @@
 # Changelog
 
-## 29.3.7 (2024-07-02)
+## 29.3.11 (2024-07-19)
 
-* [bitnami/kafka] Fix jmx-exporter scrape path ([#27562](https://github.com/bitnami/charts/pull/27562))
+* [bitnami/kafka] Fix issue on how to provision access to all topics / groups ([#27877](https://github.com/bitnami/charts/pull/27877))
+
+## <small>29.3.10 (2024-07-18)</small>
+
+* [bitnami/kafka] Release 29.3.10 (#28157) ([4fc0181](https://github.com/bitnami/charts/commit/4fc0181dd3f334c71cb5adad90c8e2a67ff482fa)), closes [#28157](https://github.com/bitnami/charts/issues/28157)
+
+## <small>29.3.9 (2024-07-18)</small>
+
+* [bitnami/kafka] Global StorageClass as default value (#28038) ([0e596df](https://github.com/bitnami/charts/commit/0e596df1d5e6c9e9d3d1854788d5485408cd49f5)), closes [#28038](https://github.com/bitnami/charts/issues/28038)
+
+## <small>29.3.8 (2024-07-16)</small>
+
+* [bitnami/kafka] fix jmx-servicemonitor by using JMX Exporter's default metrics path (#27455) ([e04d611](https://github.com/bitnami/charts/commit/e04d6117bc4c0e1dac47e9303bf5ad92188bce29)), closes [#27455](https://github.com/bitnami/charts/issues/27455)
+
+## <small>29.3.7 (2024-07-08)</small>
+
+* [bitnami/kafka] Fix jmx-exporter scrape path (#27562) ([1dd9439](https://github.com/bitnami/charts/commit/1dd943997da79e6095bee6d05410178a0344d4c9)), closes [#27562](https://github.com/bitnami/charts/issues/27562)
 
 ## <small>29.3.6 (2024-07-02)</small>
 
