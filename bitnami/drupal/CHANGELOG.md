@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.1 (2024-07-16)
+## 19.0.2 (2024-07-24)
 
-* [bitnami/drupal] Global StorageClass as default value ([#28013](https://github.com/bitnami/charts/pull/28013))
+* [bitnami/drupal] Release 19.0.2 ([#28244](https://github.com/bitnami/charts/pull/28244))
+
+## <small>19.0.1 (2024-07-16)</small>
+
+* [bitnami/drupal] Global StorageClass as default value (#28013) ([2a9b593](https://github.com/bitnami/charts/commit/2a9b593ea30172512e51f2fe2969178a02e8382c)), closes [#28013](https://github.com/bitnami/charts/issues/28013)
 
 ## 19.0.0 (2024-07-12)
 
