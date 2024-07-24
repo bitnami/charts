@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.12 (2024-07-17)
+## 11.2.13 (2024-07-24)
 
-* [bitnami/tomcat] Release 11.2.12 ([#28145](https://github.com/bitnami/charts/pull/28145))
+* [bitnami/tomcat] Release 11.2.13 ([#28389](https://github.com/bitnami/charts/pull/28389))
+
+## <small>11.2.12 (2024-07-17)</small>
+
+* [bitnami/tomcat] Release 11.2.12 (#28145) ([d6071a1](https://github.com/bitnami/charts/commit/d6071a135a4fe52c3b62fdde46bea74d7cfda795)), closes [#28145](https://github.com/bitnami/charts/issues/28145)
 
 ## <small>11.2.11 (2024-07-16)</small>
 
