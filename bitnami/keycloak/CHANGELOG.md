@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.7.2 (2024-07-24)
+## 21.7.3 (2024-07-24)
 
-* [bitnami/keycloak] Release 21.7.2 ([#28262](https://github.com/bitnami/charts/pull/28262))
+* [bitnami/keycloak] Release 21.7.3 ([#28299](https://github.com/bitnami/charts/pull/28299))
+
+## <small>21.7.2 (2024-07-24)</small>
+
+* [bitnami/keycloak] Release 21.7.2 (#28262) ([ec3f085](https://github.com/bitnami/charts/commit/ec3f085e78cd45e66fb2d782dec3c07654cbde56)), closes [#28262](https://github.com/bitnami/charts/issues/28262)
 
 ## <small>21.7.1 (2024-07-18)</small>
 
