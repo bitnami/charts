@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.12 (2024-07-16)
+## 14.2.13 (2024-07-24)
 
-* [bitnami/postgresql-ha] Global StorageClass as default value ([#28083](https://github.com/bitnami/charts/pull/28083))
+* [bitnami/postgresql-ha] Release 14.2.13 ([#28355](https://github.com/bitnami/charts/pull/28355))
+
+## <small>14.2.12 (2024-07-16)</small>
+
+* [bitnami/postgresql-ha] Global StorageClass as default value (#28083) ([4b58cab](https://github.com/bitnami/charts/commit/4b58cab33ff3785af8826e921e6693ad3b785d8c)), closes [#28083](https://github.com/bitnami/charts/issues/28083)
 
 ## <small>14.2.11 (2024-07-05)</small>
 
