@@ -3,8 +3,21 @@
 
 ## Default values for Chainloop Helm Chart
 
-## @skip global
-global: {}
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
 
 ## @section Common parameters
 ##
@@ -69,13 +82,13 @@ secretsBackend:
 ## @section Authentication
 ##
 
-## ECDSA (ES512) key-pair used for Controlplane <-> CAS Authentication
+## ECDSA (ES512) key-pair used for Controlplane to; CAS Authentication
 ## The controlplane will use the private key to generate a JWT at user request
 ## The CAS will use the public key to verify the authenticity of that token
 ## If development=true is set, a development key will be configured automatically
 ## otherwise you'll need to provide new keys via .Values.casJWTPrivateKey and .Values.cas.casJWTPublicKey
 
-## @param casJWTPrivateKey ECDSA (ES512) private key used for Controlplane <-> CAS Authentication
+## @param casJWTPrivateKey ECDSA (ES512) private key used for Controlplane to CAS Authentication
 ##
 ## To generate one
 ## openssl ecparam -name secp521r1 -genkey -noout -out private.ec.key
@@ -101,12 +114,13 @@ controlplane:
   ## @param controlplane.replicaCount Number of replicas
   replicaCount: 2
 
-  ## @param controlplane.image.repository FQDN uri for the image
-  ## @extra controlplane.image.tag Image tag (immutable tags are recommended). If no set chart.appVersion will be used
+  ## @param controlplane.image.registry Image registry
+  ## @param controlplane.image.repository Image repository
+  ## @skip controlplane.image.tag
   image:
-    repository: ghcr.io/chainloop-dev/chainloop/control-plane
-    # Overrides the image tag whose default is the chart appVersion.
-    # tag: latest
+    registry: ghcr.io
+    repository: chainloop-dev/chainloop/control-plane
+    tag: "v0.94.2"
 
   ## @param controlplane.tlsConfig.secret.name name of a secret containing TLS certificate to be used by the controlplane grpc server.
   tlsConfig:
@@ -124,13 +138,26 @@ controlplane:
     enabled: false
     allowedOrgs: []
 
+  ## @extra controlplane.onboarding.name Name of the organization to onboard
+  ## @extra controlplane.onboarding.role Role of the organization to onboard
+  #  onboarding:
+  #    - name: "read-only-demo"
+  #      role: "MEMBERSHIP_ROLE_ORG_VIEWER"
+
+  ## @extra controlplane.prometheus_org_metrics List of organizations to expose metrics for using Prometheus
+  #  prometheus_org_metrics:
+  #    - org_name: "read-only-demo"
+
   # Database migration
-  ## @skip controlplane.migration
+  ## @param controlplane.migration.image.registry Image registry
+  ## @param controlplane.migration.image.repository Image repository
+  ## @param controlplane.migration.ssl Connect to the database using SSL (required fro AWS RDS, etc)
+  ## @skip controlplane.migration.image.tag
   migration:
     image:
-      repository: ghcr.io/chainloop-dev/chainloop/control-plane-migrations
-      # Overrides the image tag whose default is the chart appVersion.
-    # tag: latest
+      registry: ghcr.io
+      repository: chainloop-dev/chainloop/control-plane-migrations
+      tag: "v0.94.2"
     # Run the migration job forcing SSL, required in AWS RDS for PostgreSQL 15
     ssl: false
 
@@ -175,12 +202,24 @@ controlplane:
     passphrase: ""
 
     ## @param controlplane.auth.oidc.url Full authentication path, it should match the issuer URL of the Identity provider (IDp)
-    ## @param controlplane.auth.oidc.clientID  OIDC IDp clientID
-    ## @param controlplane.auth.oidc.clientSecret  OIDC IDp clientSecret
+    ## @param controlplane.auth.oidc.clientID OIDC IDp clientID
+    ## @param controlplane.auth.oidc.clientSecret OIDC IDp clientSecret
+    ## @extra controlplane.auth.oidc.loginURLOverride Optional OIDC login URL override, useful to point to custom login pages
+    ## @extra controlplane.auth.oidc.externalURL Optional External URL for the controlplane to the outside world
     oidc:
       url: ""
       clientID: ""
       clientSecret: ""
+      # loginURLOverride: ""
+      # externalURL: ""
+
+    ## @extra controlplane.auth.allowList.rules List of domains or emails to allow
+    ## @extra controlplane.auth.allowList.selectedRoutes List of selected routes to allow. If not set it applies to all routes
+    ## @extra controlplane.auth.allowList.customMessage Custom message to display when a user is not allowed
+    #    allowList:
+    #      rules: []
+    #      selectedRoutes: []
+    #      customMessage: ""
 
   ## @section Control Plane Networking
   service:
@@ -190,7 +229,7 @@ controlplane:
     port: 80
     ## @param controlplane.service.targetPort Service target Port
     targetPort: http
-    ## @extra controlplane.service.nodePorts.http Node port for HTTP. NOTE: choose port between <30000-32767>
+    ## @extra controlplane.service.nodePorts.http Node port for HTTP. NOTE: choose port between [30000-32767]
     # nodePorts:
     #   http: "30800"
     annotations:
@@ -209,7 +248,7 @@ controlplane:
       ## @skip controlplane.serviceAPI.annotations.traefik.ingress.kubernetes.io/service.serversscheme
       traefik.ingress.kubernetes.io/service.serversscheme: h2c
 
-    ## @extra controlplane.serviceAPI.nodePorts.http Node port for HTTP. NOTE: choose port between <30000-32767>
+    ## @extra controlplane.serviceAPI.nodePorts.http Node port for HTTP. NOTE: choose port between [30000-32767]
     # nodePorts:
     #   http: "30900"
 
@@ -455,9 +494,11 @@ controlplane:
     dsn: ""
     environment: production
 
+  ## @section Keyless signing configuration
+
   ## Configuration for keyless signing using one of the supported providers
-  ## @param controlplane.keylessSigning.enabled Activates or deactivates de feature
-  ## @param controlplane.keylessSigning.backend The backend to use. Currently only "fileCA" is supported
+  ## @param controlplane.keylessSigning.enabled Activates or deactivates the feature
+  ## @param controlplane.keylessSigning.backend The backend to use. Currently only "fileCA" and "ejbcaCA" are supported
   ## @param controlplane.keylessSigning.fileCA.cert The PEM-encoded certificate of the file based CA
   ##       -----BEGIN CERTIFICATE-----
   ##       ...
@@ -467,6 +508,12 @@ controlplane:
   ##       ...
   ##       -----END RSA PRIVATE KEY-----
   ## @param controlplane.keylessSigning.fileCA.keyPass The secret key pass
+  ## @param controlplane.keylessSigning.ejbcaCA.serverURL The url of the EJBCA service (https://host/ejbca)
+  ## @param controlplane.keylessSigning.ejbcaCA.clientKey PEM-encoded the private key for EJBCA cert authentication
+  ## @param controlplane.keylessSigning.ejbcaCA.clientCert PEM-encoded certificate for EJBCA cert authentication
+  ## @param controlplane.keylessSigning.ejbcaCA.certProfileName Name of the certificate profile to use in EJBCA
+  ## @param controlplane.keylessSigning.ejbcaCA.endEntityProfileName Name of the Entity Profile to use in EJBCA
+  ## @param controlplane.keylessSigning.ejbcaCA.caName Name of the CA issuer to use in EJBCA
   keylessSigning:
     enabled: false
     backend: fileCA
@@ -474,6 +521,17 @@ controlplane:
       cert: ""
       key: ""
       keyPass: ""
+    ejbcaCA:
+      serverURL: ""
+      clientKey: ""
+      clientCert: ""
+      certProfileName: ""
+      endEntityProfileName: ""
+      caName: ""
+
+  ## Inject custom CA certificates to the controlplane container
+  ## @param controlplane.customCAs List of custom CA certificates content
+  customCAs: []
 
 ## @section Artifact Content Addressable (CAS) API
 ##################################
@@ -483,12 +541,13 @@ cas:
   ## @param cas.replicaCount Number of replicas
   replicaCount: 2
 
-  ## @param cas.image.repository FQDN uri for the image
-  ## @extra cas.image.tag Image tag (immutable tags are recommended). If no set chart.appVersion will be used
+  ## @param cas.image.registry Image registry
+  ## @param cas.image.repository Image repository
+  ## @skip cas.image.tag
   image:
-    repository: ghcr.io/chainloop-dev/chainloop/artifact-cas
-    # Overrides the image tag whose default is the chart appVersion.
-    # tag: latest
+    registry: ghcr.io
+    repository: chainloop-dev/chainloop/artifact-cas
+    tag: "v0.94.2"
 
   ## @param cas.tlsConfig.secret.name name of a secret containing TLS certificate to be used by the controlplane grpc server.
   tlsConfig:
@@ -514,7 +573,7 @@ cas:
     port: 80
     ## @param cas.service.targetPort Service target Port
     targetPort: http
-    ## @extra cas.service.nodePorts.http Node port for HTTP. NOTE: choose port between <30000-32767>
+    ## @extra cas.service.nodePorts.http Node port for HTTP. NOTE: choose port between [30000-32767]
     # nodePorts:
     #   http: "30800"
     annotations:
@@ -533,7 +592,7 @@ cas:
       ## @skip cas.serviceAPI.annotations.traefik.ingress.kubernetes.io/service.serversscheme
       traefik.ingress.kubernetes.io/service.serversscheme: h2c
 
-    ## @extra cas.serviceAPI.nodePorts.http Node port for HTTP. NOTE: choose port between <30000-32767>
+    ## @extra cas.serviceAPI.nodePorts.http Node port for HTTP. NOTE: choose port between [30000-32767]
     # nodePorts:
     #   http: "30901"
 
@@ -786,6 +845,10 @@ cas:
     enabled: false
     dsn: ""
     environment: production
+
+  ## Inject custom CA certificates to the CAS container
+  ## @param cas.customCAs List of custom CA certificates content
+  customCAs: []
 
 ## @section Dependencies
 # ##################################

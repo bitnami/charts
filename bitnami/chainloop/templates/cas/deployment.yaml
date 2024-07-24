@@ -25,10 +25,7 @@ spec:
       labels:
         {{- include "chainloop.cas.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.cas.image.pullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.cas.image) "context" $) | nindent 6 }}
       serviceAccountName: {{ include "chainloop.cas.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.cas.podSecurityContext | nindent 8 }}
@@ -36,7 +33,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.cas.securityContext | nindent 12 }}
-          image: "{{ .Values.cas.image.repository }}:{{ .Values.cas.image.tag | default .Chart.AppVersion }}"
+          image: {{ include "chainloop.cas.image" . }}
           imagePullPolicy: {{ .Values.cas.image.pullPolicy }}
           ports:
             - name: http
@@ -71,6 +68,13 @@ spec:
             - name: server-certs
               mountPath: /data/server-certs
             {{- end }}
+            {{- if (not (empty .Values.cas.customCAs)) }}
+            - name: custom-cas
+              # NOTE: /etc/ssl/certs already contains the system CA certs
+              # Let's use another known path https://go.dev/src/crypto/x509/root_linux.go
+              mountPath: /etc/pki/tls/certs
+              readOnly: true
+            {{- end }}
       volumes:
         - name: config
           projected:
@@ -91,4 +95,11 @@ spec:
         - name: gcp-secretmanager-serviceaccountkey
           secret:
             secretName: {{ include "chainloop.controlplane.fullname" . }}-gcp-secretmanager-serviceaccountkey
+        {{- end }}
+        {{- if (not (empty .Values.cas.customCAs)) }}
+        - name: custom-cas
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "chainloop.cas.fullname" . }}-custom-cas
         {{- end }}

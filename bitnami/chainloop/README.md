@@ -51,7 +51,7 @@ During installation, you'll need to provide
 
 - Open ID Connect Identity Provider (IDp) settings i.e [Auth0 settings](https://auth0.com/docs/get-started/applications/application-settings#basic-information)
 - Connection settings for a secrets storage backend, either [Hashicorp Vault](https://www.vaultproject.io/) or [AWS Secrets Manager](https://aws.amazon.com/secrets-manager)
-- ECDSA (ES512) key-pair used for Controlplane <-> CAS Authentication
+- ECDSA (ES512) key-pair used for Controlplane to CAS Authentication
 
 Instructions on how to create the ECDSA keypair can be found [here](#generate-a-ecdsa-key-pair).
 
@@ -159,7 +159,7 @@ During installation, you'll need to provide
 
 - Open ID Connect Identity Provider (IDp) settings i.e [Auth0 settings](https://auth0.com/docs/get-started/applications/application-settings#basic-information)
 - ~~Connection settings for a secrets storage backend, either [Hashicorp Vault](https://www.vaultproject.io/) or [AWS Secrets Manager](https://aws.amazon.com/secrets-manager)~~
-- ~~ECDSA (ES512) key-pair used for Controlplane <-> CAS Authentication~~
+- ~~ECDSA (ES512) key-pair used for Controlplane to CAS Authentication~~
 
 #### Installation examples for development mode
 
@@ -171,6 +171,30 @@ helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
     --set controlplane.auth.oidc.url=[OIDC URL] \
     --set controlplane.auth.oidc.clientID=[clientID] \
     --set controlplane.auth.oidc.clientSecret=[clientSecret]
+```
+
+## AirGap and Relocation Support
+
+This chart is compatible with relocation processes performed by the [Helm Relocation Plugin](https://github.com/vmware-labs/distribution-tooling-for-helm)
+
+This is a two-step process (wrap -> unwrap)
+
+- Pull all the container images and Helm chart and wrap them in an intermediate tarball.
+- Unwrap the tarball and push container images, update the Helm Chart with new image references and push it to the target registry.
+
+For example: to relocate to an Azure Container Registry
+
+```sh
+helm dt wrap oci://ghcr.io/chainloop-dev/charts/chainloop
+# 🎉  Helm chart wrapped into "chainloop-1.77.0.wrap.tgz"
+
+# Now you can take the tarball to an air-gapped environment and unwrap it like this
+helm dt unwrap chainloop-1.77.0.wrap.tgz oci://chainloop.azurecr.io --yes
+#  Unwrapping Helm chart "chainloop-1.77.0.wrap.tgz"
+#    ✔  All images pushed successfully
+#    ✔  Helm chart successfully pushed
+#
+# 🎉  Helm chart unwrapped successfully: You can use it now by running "helm install oci://chainloop.azurecr.io/chart/chainloop --generate-name"
 ```
 
 ## How to guides
@@ -371,12 +395,12 @@ secretsBackend:
 *This feature is experimental, as it doesn't yet support verification.*
 
 You can enable keyless signing mode by providing a custom Certificate Authority.
-For example, these commands generate a self-signed certificate with an RSA private key of length 4096 and AES256 encryption:
+For example, these commands generate a self-signed certificate with an RSA private key of length 4096 and AES256 encryption with a validity of 365 days:
 
 ```bash
 > openssl genrsa -aes256 -out ca.key 4096
 ...
-> openssl req -new -x509 -sha256 -key ca.key -out ca.crt
+> openssl req -new -x509 -sha256 -key ca.key -out ca.crt -days 365
 ...
 ```
 
@@ -397,6 +421,22 @@ controlplane:
         ...
         -----END ENCRYPTED PRIVATE KEY-----
       keyPass: "REDACTED"  
+```
+
+### Insert custom Certificate Authorities (CAs)
+
+In some scenarios, you might want to add custom Certificate Authorities to the Chainloop deployment. Like in the instance where your OIDC provider uses a self-signed certificate. To do so, add the PEM-encoded CA certificate to the `customCAs` list in either `controlplane` or `cas` sections, in your `values.yaml` file like in the example below.
+
+```yaml
+  customCAs:
+    - |-
+      -----BEGIN CERTIFICATE-----
+      MIIFmDCCA4CgAwIBAgIQU9C87nMpOIFKYpfvOHFHFDANBgkqhkiG9w0BAQsFADBm
+      BhMCVVMxMzAxBgNVBAoTKihTVEFHSU5HKSBJbnRlcm5ldCBTZWN1cml0eSBSZXNl
+      REDACTED
+      5CunuvCXmEQJHo7kGcViT7sETn6Jz9KOhvYcXkJ7po6d93A/jy4GKPIPnsKKNEmR
+      7DiA+/9Qdp9RBWJpTS9i/mDnJg1xvo8Xz49mrrgfmcAXTCJqXi24NatI3Oc=
+      -----END CERTIFICATE-----
 ```
 
 ### Send exceptions to Sentry
@@ -438,6 +478,13 @@ chainloop config save \
 
 ## Parameters
 
+### Global parameters
+
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+
 ### Common parameters
 
 | Name                    | Description                                                                                                                                                            | Value   |
@@ -466,23 +513,29 @@ chainloop config save \
 
 ### Authentication
 
-| Name               | Description                                                            | Value |
-| ------------------ | ---------------------------------------------------------------------- | ----- |
-| `casJWTPrivateKey` | ECDSA (ES512) private key used for Controlplane <-> CAS Authentication | `""`  |
-| `casJWTPublicKey`  | ECDSA (ES512) public key                                               | `""`  |
+| Name               | Description                                                           | Value |
+| ------------------ | --------------------------------------------------------------------- | ----- |
+| `casJWTPrivateKey` | ECDSA (ES512) private key used for Controlplane to CAS Authentication | `""`  |
+| `casJWTPublicKey`  | ECDSA (ES512) public key                                              | `""`  |
 
 ### Control Plane
 
-| Name                                           | Description                                                                                     | Value                                           |
-| ---------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `controlplane.replicaCount`                    | Number of replicas                                                                              | `2`                                             |
-| `controlplane.image.repository`                | FQDN uri for the image                                                                          | `ghcr.io/chainloop-dev/chainloop/control-plane` |
-| `controlplane.image.tag`                       | Image tag (immutable tags are recommended). If no set chart.appVersion will be used             |                                                 |
-| `controlplane.tlsConfig.secret.name`           | name of a secret containing TLS certificate to be used by the controlplane grpc server.         | `""`                                            |
-| `controlplane.pluginsDir`                      | Directory where to look for plugins                                                             | `/plugins`                                      |
-| `controlplane.referrerSharedIndex`             | Configure the shared, public index API endpoint that can be used to discover metadata referrers |                                                 |
-| `controlplane.referrerSharedIndex.enabled`     | Enable index API endpoint                                                                       | `false`                                         |
-| `controlplane.referrerSharedIndex.allowedOrgs` | List of UUIDs of organizations that are allowed to publish to the shared index                  | `[]`                                            |
+| Name                                           | Description                                                                                     | Value                                              |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `controlplane.replicaCount`                    | Number of replicas                                                                              | `2`                                                |
+| `controlplane.image.registry`                  | Image registry                                                                                  | `ghcr.io`                                          |
+| `controlplane.image.repository`                | Image repository                                                                                | `chainloop-dev/chainloop/control-plane`            |
+| `controlplane.tlsConfig.secret.name`           | name of a secret containing TLS certificate to be used by the controlplane grpc server.         | `""`                                               |
+| `controlplane.pluginsDir`                      | Directory where to look for plugins                                                             | `/plugins`                                         |
+| `controlplane.referrerSharedIndex`             | Configure the shared, public index API endpoint that can be used to discover metadata referrers |                                                    |
+| `controlplane.referrerSharedIndex.enabled`     | Enable index API endpoint                                                                       | `false`                                            |
+| `controlplane.referrerSharedIndex.allowedOrgs` | List of UUIDs of organizations that are allowed to publish to the shared index                  | `[]`                                               |
+| `controlplane.onboarding.name`                 | Name of the organization to onboard                                                             |                                                    |
+| `controlplane.onboarding.role`                 | Role of the organization to onboard                                                             |                                                    |
+| `controlplane.prometheus_org_metrics`          | List of organizations to expose metrics for using Prometheus                                    |                                                    |
+| `controlplane.migration.image.registry`        | Image registry                                                                                  | `ghcr.io`                                          |
+| `controlplane.migration.image.repository`      | Image repository                                                                                | `chainloop-dev/chainloop/control-plane-migrations` |
+| `controlplane.migration.ssl`                   | Connect to the database using SSL (required fro AWS RDS, etc)                                   | `false`                                            |
 
 ### Control Plane Database
 
@@ -500,12 +553,17 @@ chainloop config save \
 
 ### Control Plane Authentication
 
-| Name                                  | Description                                                                                            | Value |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----- |
-| `controlplane.auth.passphrase`        | Passphrase used to sign the Auth Tokens generated by the controlplane. Leave empty for auto-generation | `""`  |
-| `controlplane.auth.oidc.url`          | Full authentication path, it should match the issuer URL of the Identity provider (IDp)                | `""`  |
-| `controlplane.auth.oidc.clientID`     | OIDC IDp clientID                                                                                      | `""`  |
-| `controlplane.auth.oidc.clientSecret` | OIDC IDp clientSecret                                                                                  | `""`  |
+| Name                                         | Description                                                                                            | Value |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----- |
+| `controlplane.auth.passphrase`               | Passphrase used to sign the Auth Tokens generated by the controlplane. Leave empty for auto-generation | `""`  |
+| `controlplane.auth.oidc.url`                 | Full authentication path, it should match the issuer URL of the Identity provider (IDp)                | `""`  |
+| `controlplane.auth.oidc.clientID`            | OIDC IDp clientID                                                                                      | `""`  |
+| `controlplane.auth.oidc.clientSecret`        | OIDC IDp clientSecret                                                                                  | `""`  |
+| `controlplane.auth.oidc.loginURLOverride`    | Optional OIDC login URL override, useful to point to custom login pages                                |       |
+| `controlplane.auth.oidc.externalURL`         | Optional External URL for the controlplane to the outside world                                        |       |
+| `controlplane.auth.allowList.rules`          | List of domains or emails to allow                                                                     |       |
+| `controlplane.auth.allowList.selectedRoutes` | List of selected routes to allow. If not set it applies to all routes                                  |       |
+| `controlplane.auth.allowList.customMessage`  | Custom message to display when a user is not allowed                                                   |       |
 
 ### Control Plane Networking
 
@@ -514,12 +572,12 @@ chainloop config save \
 | `controlplane.service.type`                | Service type                                                                                                                     | `ClusterIP`              |
 | `controlplane.service.port`                | Service port                                                                                                                     | `80`                     |
 | `controlplane.service.targetPort`          | Service target Port                                                                                                              | `http`                   |
-| `controlplane.service.nodePorts.http`      | Node port for HTTP. NOTE: choose port between <30000-32767>                                                                      |                          |
+| `controlplane.service.nodePorts.http`      | Node port for HTTP. NOTE: choose port between [30000-32767]                                                                      |                          |
 | `controlplane.serviceAPI.type`             | Service type                                                                                                                     | `ClusterIP`              |
 | `controlplane.serviceAPI.port`             | Service port                                                                                                                     | `80`                     |
 | `controlplane.serviceAPI.targetPort`       | Service target Port                                                                                                              | `grpc`                   |
 | `controlplane.serviceAPI.annotations`      | Service annotations                                                                                                              |                          |
-| `controlplane.serviceAPI.nodePorts.http`   | Node port for HTTP. NOTE: choose port between <30000-32767>                                                                      |                          |
+| `controlplane.serviceAPI.nodePorts.http`   | Node port for HTTP. NOTE: choose port between [30000-32767]                                                                      |                          |
 | `controlplane.ingress.enabled`             | Enable ingress record generation for %%MAIN_CONTAINER_NAME%%                                                                     | `false`                  |
 | `controlplane.ingress.pathType`            | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `controlplane.ingress.hostname`            | Default host for the ingress record                                                                                              | `cp.dev.local`           |
@@ -549,34 +607,46 @@ chainloop config save \
 
 ### Controlplane Misc
 
-| Name                                                         | Description                                              | Value        |
-| ------------------------------------------------------------ | -------------------------------------------------------- | ------------ |
-| `controlplane.resources.limits.cpu`                          | Container resource limits CPU                            | `250m`       |
-| `controlplane.resources.limits.memory`                       | Container resource limits memory                         | `512Mi`      |
-| `controlplane.resources.requests.cpu`                        | Container resource requests CPU                          | `250m`       |
-| `controlplane.resources.requests.memory`                     | Container resource requests memory                       | `512Mi`      |
-| `controlplane.autoscaling.enabled`                           | Enable deployment autoscaling                            | `false`      |
-| `controlplane.autoscaling.minReplicas`                       | Minimum number of replicas                               | `1`          |
-| `controlplane.autoscaling.maxReplicas`                       | Maximum number of replicas                               | `100`        |
-| `controlplane.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage                                    | `80`         |
-| `controlplane.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                                        | `80`         |
-| `controlplane.sentry.enabled`                                | Enable sentry.io alerting                                | `false`      |
-| `controlplane.sentry.dsn`                                    | DSN endpoint                                             | `""`         |
-| `controlplane.sentry.environment`                            | Environment tag                                          | `production` |
-| `controlplane.keylessSigning.enabled`                        | Activates or deactivates de feature                      | `false`      |
-| `controlplane.keylessSigning.backend`                        | The backend to use. Currently only "fileCA" is supported | `fileCA`     |
-| `controlplane.keylessSigning.fileCA.cert`                    | The PEM-encoded certificate of the file based CA         | `""`         |
-| `controlplane.keylessSigning.fileCA.key`                     | The PEM-encoded private key of the file based CA         | `""`         |
-| `controlplane.keylessSigning.fileCA.keyPass`                 | The secret key pass                                      | `""`         |
+| Name                                                         | Description                        | Value        |
+| ------------------------------------------------------------ | ---------------------------------- | ------------ |
+| `controlplane.resources.limits.cpu`                          | Container resource limits CPU      | `250m`       |
+| `controlplane.resources.limits.memory`                       | Container resource limits memory   | `512Mi`      |
+| `controlplane.resources.requests.cpu`                        | Container resource requests CPU    | `250m`       |
+| `controlplane.resources.requests.memory`                     | Container resource requests memory | `512Mi`      |
+| `controlplane.autoscaling.enabled`                           | Enable deployment autoscaling      | `false`      |
+| `controlplane.autoscaling.minReplicas`                       | Minimum number of replicas         | `1`          |
+| `controlplane.autoscaling.maxReplicas`                       | Maximum number of replicas         | `100`        |
+| `controlplane.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage              | `80`         |
+| `controlplane.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                  | `80`         |
+| `controlplane.sentry.enabled`                                | Enable sentry.io alerting          | `false`      |
+| `controlplane.sentry.dsn`                                    | DSN endpoint                       | `""`         |
+| `controlplane.sentry.environment`                            | Environment tag                    | `production` |
+
+### Keyless signing configuration
+
+| Name                                                       | Description                                                             | Value    |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------- | -------- |
+| `controlplane.keylessSigning.enabled`                      | Activates or deactivates the feature                                    | `false`  |
+| `controlplane.keylessSigning.backend`                      | The backend to use. Currently only "fileCA" and "ejbcaCA" are supported | `fileCA` |
+| `controlplane.keylessSigning.fileCA.cert`                  | The PEM-encoded certificate of the file based CA                        | `""`     |
+| `controlplane.keylessSigning.fileCA.key`                   | The PEM-encoded private key of the file based CA                        | `""`     |
+| `controlplane.keylessSigning.fileCA.keyPass`               | The secret key pass                                                     | `""`     |
+| `controlplane.keylessSigning.ejbcaCA.serverURL`            | The url of the EJBCA service (https://host/ejbca)                       | `""`     |
+| `controlplane.keylessSigning.ejbcaCA.clientKey`            | PEM-encoded the private key for EJBCA cert authentication               | `""`     |
+| `controlplane.keylessSigning.ejbcaCA.clientCert`           | PEM-encoded certificate for EJBCA cert authentication                   | `""`     |
+| `controlplane.keylessSigning.ejbcaCA.certProfileName`      | Name of the certificate profile to use in EJBCA                         | `""`     |
+| `controlplane.keylessSigning.ejbcaCA.endEntityProfileName` | Name of the Entity Profile to use in EJBCA                              | `""`     |
+| `controlplane.keylessSigning.ejbcaCA.caName`               | Name of the CA issuer to use in EJBCA                                   | `""`     |
+| `controlplane.customCAs`                                   | List of custom CA certificates content                                  | `[]`     |
 
 ### Artifact Content Addressable (CAS) API
 
-| Name                        | Description                                                                             | Value                                          |
-| --------------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| `cas.replicaCount`          | Number of replicas                                                                      | `2`                                            |
-| `cas.image.repository`      | FQDN uri for the image                                                                  | `ghcr.io/chainloop-dev/chainloop/artifact-cas` |
-| `cas.image.tag`             | Image tag (immutable tags are recommended). If no set chart.appVersion will be used     |                                                |
-| `cas.tlsConfig.secret.name` | name of a secret containing TLS certificate to be used by the controlplane grpc server. | `""`                                           |
+| Name                        | Description                                                                             | Value                                  |
+| --------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------- |
+| `cas.replicaCount`          | Number of replicas                                                                      | `2`                                    |
+| `cas.image.registry`        | Image registry                                                                          | `ghcr.io`                              |
+| `cas.image.repository`      | Image repository                                                                        | `chainloop-dev/chainloop/artifact-cas` |
+| `cas.tlsConfig.secret.name` | name of a secret containing TLS certificate to be used by the controlplane grpc server. | `""`                                   |
 
 ### CAS Networking
 
@@ -585,12 +655,12 @@ chainloop config save \
 | `cas.service.type`                | Service type                                                                                                                     | `ClusterIP`              |
 | `cas.service.port`                | Service port                                                                                                                     | `80`                     |
 | `cas.service.targetPort`          | Service target Port                                                                                                              | `http`                   |
-| `cas.service.nodePorts.http`      | Node port for HTTP. NOTE: choose port between <30000-32767>                                                                      |                          |
+| `cas.service.nodePorts.http`      | Node port for HTTP. NOTE: choose port between [30000-32767]                                                                      |                          |
 | `cas.serviceAPI.type`             | Service type                                                                                                                     | `ClusterIP`              |
 | `cas.serviceAPI.port`             | Service port                                                                                                                     | `80`                     |
 | `cas.serviceAPI.targetPort`       | Service target Port                                                                                                              | `grpc`                   |
 | `cas.serviceAPI.annotations`      | Service annotations                                                                                                              |                          |
-| `cas.serviceAPI.nodePorts.http`   | Node port for HTTP. NOTE: choose port between <30000-32767>                                                                      |                          |
+| `cas.serviceAPI.nodePorts.http`   | Node port for HTTP. NOTE: choose port between [30000-32767]                                                                      |                          |
 | `cas.ingress.enabled`             | Enable ingress record generation for %%MAIN_CONTAINER_NAME%%                                                                     | `false`                  |
 | `cas.ingress.pathType`            | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `cas.ingress.hostname`            | Default host for the ingress record                                                                                              | `cas.dev.local`          |
@@ -620,20 +690,21 @@ chainloop config save \
 
 ### CAS Misc
 
-| Name                                                | Description                        | Value        |
-| --------------------------------------------------- | ---------------------------------- | ------------ |
-| `cas.resources.limits.cpu`                          | Container resource limits CPU      | `250m`       |
-| `cas.resources.limits.memory`                       | Container resource limits memory   | `512Mi`      |
-| `cas.resources.requests.cpu`                        | Container resource requests CPU    | `250m`       |
-| `cas.resources.requests.memory`                     | Container resource requests memory | `512Mi`      |
-| `cas.autoscaling.enabled`                           | Enable deployment autoscaling      | `false`      |
-| `cas.autoscaling.minReplicas`                       | Minimum number of replicas         | `1`          |
-| `cas.autoscaling.maxReplicas`                       | Maximum number of replicas         | `100`        |
-| `cas.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage              | `80`         |
-| `cas.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                  | `80`         |
-| `cas.sentry.enabled`                                | Enable sentry.io alerting          | `false`      |
-| `cas.sentry.dsn`                                    | DSN endpoint                       | `""`         |
-| `cas.sentry.environment`                            | Environment tag                    | `production` |
+| Name                                                | Description                            | Value        |
+| --------------------------------------------------- | -------------------------------------- | ------------ |
+| `cas.resources.limits.cpu`                          | Container resource limits CPU          | `250m`       |
+| `cas.resources.limits.memory`                       | Container resource limits memory       | `512Mi`      |
+| `cas.resources.requests.cpu`                        | Container resource requests CPU        | `250m`       |
+| `cas.resources.requests.memory`                     | Container resource requests memory     | `512Mi`      |
+| `cas.autoscaling.enabled`                           | Enable deployment autoscaling          | `false`      |
+| `cas.autoscaling.minReplicas`                       | Minimum number of replicas             | `1`          |
+| `cas.autoscaling.maxReplicas`                       | Maximum number of replicas             | `100`        |
+| `cas.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage                  | `80`         |
+| `cas.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                      | `80`         |
+| `cas.sentry.enabled`                                | Enable sentry.io alerting              | `false`      |
+| `cas.sentry.dsn`                                    | DSN endpoint                           | `""`         |
+| `cas.sentry.environment`                            | Environment tag                        | `production` |
+| `cas.customCAs`                                     | List of custom CA certificates content | `[]`         |
 
 ### Dependencies
 
@@ -675,7 +746,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-<https://www.apache.org/licenses/LICENSE-2.0>
+[https://www.apache.org/licenses/LICENSE-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

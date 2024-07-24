@@ -26,29 +26,32 @@ spec:
       labels:
         {{- include "chainloop.controlplane.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.controlplane.image.pullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.controlplane.image .Values.controlplane.migration.image) "context" $) | nindent 6 }}
       serviceAccountName: {{ include "controlplane.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.controlplane.podSecurityContext | nindent 8 }}
       initContainers:
         - name: migrate
-          image: "{{ .Values.controlplane.migration.image.repository }}:{{ .Values.controlplane.migration.image.tag | default .Chart.AppVersion }}"
+          image: {{ include "chainloop.controlplane.migration.image" . }}
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           args:
             - migrate
             - apply
             - --url
-            - "{{include "controlplane.database.atlas_connection_string" . }}"
+            - $(CONNECTION_STRING)
             - --dir
             - file:///migrations
+          env:
+            - name: CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "chainloop.controlplane.fullname" . }}
+                  key: db_migrate_source
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.controlplane.securityContext | nindent 12 }}
-          image: "{{ .Values.controlplane.image.repository }}:{{ .Values.controlplane.image.tag | default .Chart.AppVersion }}"
+          image: {{ include "chainloop.controlplane.image" . }}
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           ports:
             - name: http
@@ -79,8 +82,12 @@ spec:
               mountPath: /tmp
             - name: jwt-cas-private-key
               mountPath: /secrets
-            {{- if .Values.controlplane.keylessSigning.enabled }}
+            {{- if and .Values.controlplane.keylessSigning.enabled (eq "fileCA" .Values.controlplane.keylessSigning.backend) }}
             - name: file-ca-cert
+              mountPath: /ca_secrets
+            {{- end }}
+            {{- if and .Values.controlplane.keylessSigning.enabled (eq "ejbcaCA" .Values.controlplane.keylessSigning.backend) }}
+            - name: ejbca-ca-client
               mountPath: /ca_secrets
             {{- end }}
             {{- if .Values.controlplane.tlsConfig.secret.name  }}
@@ -91,6 +98,13 @@ spec:
             - name: gcp-secretmanager-serviceaccountkey
               mountPath: /gcp-secrets
             {{- end }}
+            {{- if (not (empty .Values.controlplane.customCAs)) }}
+            - name: custom-cas
+              # NOTE: /etc/ssl/certs already contains the system CA certs
+              # Let's use another known path https://go.dev/src/crypto/x509/root_linux.go
+              mountPath: /etc/pki/tls/certs
+              readOnly: true
+            {{- end }}
       volumes:
         - name: config
           projected:
@@ -99,6 +113,13 @@ spec:
                 name: {{ include "chainloop.controlplane.fullname" . }}
             - configMap:
                name: {{ include "chainloop.controlplane.fullname" . }}
+        {{- if (not (empty .Values.controlplane.customCAs)) }}
+        - name: custom-cas
+          projected:
+            sources:
+            - secret:
+               name: {{ include "chainloop.controlplane.fullname" . }}-custom-cas
+        {{- end }}
         # required for the plugins to store the socket files
         - name: tmp
           emptyDir: {}
@@ -115,8 +136,13 @@ spec:
           secret:
             secretName: {{ include "chainloop.controlplane.fullname" . }}-gcp-secretmanager-serviceaccountkey
         {{- end }}
-        {{- if .Values.controlplane.keylessSigning.enabled }}
+        {{- if and .Values.controlplane.keylessSigning.enabled (eq "fileCA" .Values.controlplane.keylessSigning.backend) }}
         - name: file-ca-cert
           secret:
             secretName: {{ include "chainloop.controlplane.fullname" . }}-keyless-file-ca
+        {{- end }}
+        {{- if and .Values.controlplane.keylessSigning.enabled (eq "ejbcaCA" .Values.controlplane.keylessSigning.backend) }}
+        - name: ejbca-ca-client
+          secret:
+            secretName: {{ include "chainloop.controlplane.fullname" . }}-keyless-ejbca-ca
         {{- end }}

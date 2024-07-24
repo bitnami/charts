@@ -7,9 +7,9 @@ description: Chainloop is an open source software supply chain control plane, a 
 
 type: application
 # Bump the patch (not minor, not major) version on each change in the Chart Source code
-version: 1.56.1
+version: 1.81.0
 # Do not update appVersion, this is handled automatically by the release process
-appVersion: v0.91.1
+appVersion: v0.94.2
 
 dependencies:
   - name: common
@@ -20,7 +20,7 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 12.x.x
+    version: 15.x.x
   - condition: development
     name: vault
     repository: https://charts.bitnami.com/bitnami
@@ -29,3 +29,12 @@ dependencies:
     condition: development
     repository: https://charts.dexidp.io
     version: 0.18.0
+
+annotations:
+    images: |
+        - image: ghcr.io/chainloop-dev/chainloop/artifact-cas:v0.94.2
+          name: artifact-cas
+        - image: ghcr.io/chainloop-dev/chainloop/control-plane:v0.94.2
+          name: control-plane
+        - image: ghcr.io/chainloop-dev/chainloop/control-plane-migrations:v0.94.2
+          name: control-plane-migrations

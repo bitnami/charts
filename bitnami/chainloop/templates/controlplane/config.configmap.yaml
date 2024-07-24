@@ -10,13 +10,11 @@ metadata:
   labels:
     {{- include "chainloop.controlplane.labels" . | nindent 4 }}
 data:
-  {{- if .Values.controlplane.allowList }}
+  {{- if .Values.controlplane.auth.allowList }}
   allow_list.yaml: |
     auth:
       allow_list:
-        {{- range .Values.controlplane.allowList }}
-        - {{ . | quote }}
-        {{- end }}
+        {{- toYaml .Values.controlplane.auth.allowList | nindent 8 }}
   {{- end }}
   config.yaml: |
     server:
@@ -37,8 +35,16 @@ data:
     cas_server:
       grpc:
         addr: {{ printf "%s-api:%.0f" (include "chainloop.cas.fullname" .) .Values.cas.serviceAPI.port }}
-      insecure: true
+      insecure: {{ empty .Values.cas.tlsConfig.secret.name }}
       download_url: {{ include "chainloop.cas.external_url" . }}/download
     plugins_dir: {{ .Values.controlplane.pluginsDir }}
     referrer_shared_index:
       {{- toYaml .Values.controlplane.referrerSharedIndex | nindent 6 }}
+    {{ if .Values.controlplane.onboarding }}
+    onboarding:
+      {{- toYaml .Values.controlplane.onboarding | nindent 6 }}
+    {{- end }}
+    {{ if .Values.controlplane.prometheus_org_metrics }}
+    prometheus_integration:
+      {{- toYaml .Values.controlplane.prometheus_org_metrics | nindent 6 }}
+    {{- end }}
