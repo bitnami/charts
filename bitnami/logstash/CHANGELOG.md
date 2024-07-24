@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.12 (2024-07-16)
+## 6.2.13 (2024-07-24)
 
-* [bitnami/logstash] Global StorageClass as default value ([#28048](https://github.com/bitnami/charts/pull/28048))
+* [bitnami/logstash] Release 6.2.13 ([#28305](https://github.com/bitnami/charts/pull/28305))
+
+## <small>6.2.12 (2024-07-16)</small>
+
+* [bitnami/logstash] Global StorageClass as default value (#28048) ([a6f7aa2](https://github.com/bitnami/charts/commit/a6f7aa2bcf8c5f2108bb7636b51bad6cb422d300)), closes [#28048](https://github.com/bitnami/charts/issues/28048)
 
 ## <small>6.2.11 (2024-07-11)</small>
 
