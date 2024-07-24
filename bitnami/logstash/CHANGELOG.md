@@ -1,12 +1,12 @@
 # Changelog
 
-## 6.3.0 (2024-07-23)
+## 6.3.0 (2024-07-24)
 
 * [bitnami/logstash] Add extra inputs and ports to pod and svc ([#27763](https://github.com/bitnami/charts/pull/27763))
 
-## <small>6.2.13<small> (2024-07-24)
+## <small>6.2.13 (2024-07-24)</small>
 
-* [bitnami/logstash] Release 6.2.13 ([#28305](https://github.com/bitnami/charts/pull/28305))
+* [bitnami/logstash] Release 6.2.13 (#28305) ([8ee9deb](https://github.com/bitnami/charts/commit/8ee9deb7972c9bdeeef87667ffec2cbc9a17e84b)), closes [#28305](https://github.com/bitnami/charts/issues/28305)
 
 ## <small>6.2.12 (2024-07-16)</small>
 
