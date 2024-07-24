@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.7 (2024-07-16)
+## 16.2.8 (2024-07-24)
 
-* [bitnami/dokuwiki] Global StorageClass as default value ([#28011](https://github.com/bitnami/charts/pull/28011))
+* [bitnami/dokuwiki] Release 16.2.8 ([#28243](https://github.com/bitnami/charts/pull/28243))
+
+## <small>16.2.7 (2024-07-16)</small>
+
+* [bitnami/dokuwiki] Global StorageClass as default value (#28011) ([2ad2f57](https://github.com/bitnami/charts/commit/2ad2f572554d1d7d2bea24321fbce9d960f5b25d)), closes [#28011](https://github.com/bitnami/charts/issues/28011)
 
 ## <small>16.2.6 (2024-07-03)</small>
 
