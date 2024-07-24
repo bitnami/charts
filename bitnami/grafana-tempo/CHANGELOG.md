@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.7.1 (2024-07-18)
+## 3.7.2 (2024-07-23)
 
-* [bitnami/grafana-tempo] Global StorageClass as default value ([#28028](https://github.com/bitnami/charts/pull/28028))
+* [bitnami/grafana-tempo] Release 3.7.2 ([#28248](https://github.com/bitnami/charts/pull/28248))
+
+## <small>3.7.1 (2024-07-19)</small>
+
+* [bitnami/grafana-tempo] Global StorageClass as default value (#28028) ([bcfcaef](https://github.com/bitnami/charts/commit/bcfcaef6e471b113e491631a5d78d19a8943e4a1)), closes [#28028](https://github.com/bitnami/charts/issues/28028)
 
 ## 3.7.0 (2024-07-17)
 
