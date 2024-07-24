@@ -6,19 +6,19 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: harbor-adapter-trivy
-      image: docker.io/bitnami/harbor-adapter-trivy:2.11.0-debian-12-r5
+      image: docker.io/bitnami/harbor-adapter-trivy:2.11.0-debian-12-r6
     - name: harbor-core
-      image: docker.io/bitnami/harbor-core:2.11.0-debian-12-r4
+      image: docker.io/bitnami/harbor-core:2.11.0-debian-12-r5
     - name: harbor-exporter
-      image: docker.io/bitnami/harbor-exporter:2.11.0-debian-12-r4
+      image: docker.io/bitnami/harbor-exporter:2.11.0-debian-12-r5
     - name: harbor-jobservice
-      image: docker.io/bitnami/harbor-jobservice:2.11.0-debian-12-r5
+      image: docker.io/bitnami/harbor-jobservice:2.11.0-debian-12-r6
     - name: harbor-portal
-      image: docker.io/bitnami/harbor-portal:2.11.0-debian-12-r3
+      image: docker.io/bitnami/harbor-portal:2.11.0-debian-12-r4
     - name: harbor-registry
-      image: docker.io/bitnami/harbor-registry:2.11.0-debian-12-r4
+      image: docker.io/bitnami/harbor-registry:2.11.0-debian-12-r5
     - name: harbor-registryctl
-      image: docker.io/bitnami/harbor-registryctl:2.11.0-debian-12-r4
+      image: docker.io/bitnami/harbor-registryctl:2.11.0-debian-12-r5
     - name: nginx
       image: docker.io/bitnami/nginx:1.27.0-debian-12-r3
     - name: os-shell
@@ -55,4 +55,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 22.0.6
+version: 22.0.7
