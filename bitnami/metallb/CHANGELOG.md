@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.3.9 (2024-07-23)
+## 6.3.9 (2024-07-24)
 
 * [bitnami/metallb] Remove duplicate keys ([#28203](https://github.com/bitnami/charts/pull/28203))
 
