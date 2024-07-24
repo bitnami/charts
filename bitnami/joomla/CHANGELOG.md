@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.0.1 (2024-07-16)
+## 20.0.2 (2024-07-24)
 
-* [bitnami/joomla] Global StorageClass as default value ([#28036](https://github.com/bitnami/charts/pull/28036))
+* [bitnami/joomla] Release 20.0.2 ([#28293](https://github.com/bitnami/charts/pull/28293))
+
+## <small>20.0.1 (2024-07-18)</small>
+
+* [bitnami/joomla] Global StorageClass as default value (#28036) ([2400910](https://github.com/bitnami/charts/commit/24009106ce051a0029fde8dbf41b9e544d41b177)), closes [#28036](https://github.com/bitnami/charts/issues/28036)
 
 ## 20.0.0 (2024-07-12)
 
