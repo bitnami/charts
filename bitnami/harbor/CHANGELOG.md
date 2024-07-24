@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.5 (2024-07-16)
+## 22.0.6 (2024-07-24)
 
-* [bitnami/harbor] Global StorageClass as default value ([#28030](https://github.com/bitnami/charts/pull/28030))
+* [bitnami/harbor] Release 22.0.6 ([#28255](https://github.com/bitnami/charts/pull/28255))
+
+## <small>22.0.5 (2024-07-19)</small>
+
+* [bitnami/harbor] Global StorageClass as default value (#28030) ([fb9252b](https://github.com/bitnami/charts/commit/fb9252ba06e4da0c967503e1fcca4e4edd496fdd)), closes [#28030](https://github.com/bitnami/charts/issues/28030)
 
 ## <small>22.0.4 (2024-07-16)</small>
 
