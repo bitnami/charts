@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.9 (2024-07-24)
+## 1.0.10 (2024-07-24)
 
-* [bitnami/cilium] Compatible with read-only fs - part ii ([#28329](https://github.com/bitnami/charts/pull/28329))
+* [bitnami/cilium] Release 1.0.10 ([#28343](https://github.com/bitnami/charts/pull/28343))
+
+## <small>1.0.9 (2024-07-24)</small>
+
+* [bitnami/cilium] Compatible with read-only fs - part ii (#28329) ([ec2a7d2](https://github.com/bitnami/charts/commit/ec2a7d2a1ff7890bfa2e4a0e25af436f8dcb042a)), closes [#28329](https://github.com/bitnami/charts/issues/28329)
 
 ## <small>1.0.8 (2024-07-23)</small>
 
