@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.12 (2024-07-24)
+## 7.2.13 (2024-07-25)
 
-* [bitnami/jupyterhub] Release 7.2.12 ([#28303](https://github.com/bitnami/charts/pull/28303))
+* [bitnami/jupyterhub] Release 7.2.13 ([#28424](https://github.com/bitnami/charts/pull/28424))
+
+## <small>7.2.12 (2024-07-24)</small>
+
+* [bitnami/jupyterhub] Release 7.2.12 (#28303) ([121ee25](https://github.com/bitnami/charts/commit/121ee2543a1f4ccc3f7f08f13f4e5dcc04a985bb)), closes [#28303](https://github.com/bitnami/charts/issues/28303)
 
 ## <small>7.2.11 (2024-07-24)</small>
 
