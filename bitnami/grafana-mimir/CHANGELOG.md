@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.2.8 (2024-07-24)
+## 1.2.10 (2024-07-25)
 
-* [bitnami/grafana-mimir] Release 1.2.8 ([#28247](https://github.com/bitnami/charts/pull/28247))
+* [bitnami/grafana-mimir] Release 1.2.10 ([#28415](https://github.com/bitnami/charts/pull/28415))
+
+## <small>1.2.9 (2024-07-24)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.9 (#28312) ([7b1b3bc](https://github.com/bitnami/charts/commit/7b1b3bc73e04c57a69400851ff47ef110fbf24a9)), closes [#28312](https://github.com/bitnami/charts/issues/28312)
+
+## <small>1.2.8 (2024-07-24)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.8 (#28247) ([923cd57](https://github.com/bitnami/charts/commit/923cd57a07cae06635b7bbc82816f1d802e58532)), closes [#28247](https://github.com/bitnami/charts/issues/28247)
 
 ## <small>1.2.7 (2024-07-22)</small>
 

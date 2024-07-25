@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.9 (2024-07-24)
+## 1.2.10 (2024-07-25)
 
-* [bitnami/kuberay] Release 1.2.9 ([#28306](https://github.com/bitnami/charts/pull/28306))
+* [bitnami/kuberay] Release 1.2.10 ([#28430](https://github.com/bitnami/charts/pull/28430))
+
+## <small>1.2.9 (2024-07-24)</small>
+
+* [bitnami/kuberay] Release 1.2.9 (#28306) ([2d2531f](https://github.com/bitnami/charts/commit/2d2531fd491cb6701d78d548a17c1c80c257fcfd)), closes [#28306](https://github.com/bitnami/charts/issues/28306)
 
 ## <small>1.2.8 (2024-07-16)</small>
 
