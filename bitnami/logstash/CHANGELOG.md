@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.13 (2024-07-24)
+## 6.2.14 (2024-07-25)
 
-* [bitnami/logstash] Release 6.2.13 ([#28305](https://github.com/bitnami/charts/pull/28305))
+* [bitnami/logstash] Release 6.2.14 ([#28445](https://github.com/bitnami/charts/pull/28445))
+
+## <small>6.2.13 (2024-07-24)</small>
+
+* [bitnami/logstash] Release 6.2.13 (#28305) ([8ee9deb](https://github.com/bitnami/charts/commit/8ee9deb7972c9bdeeef87667ffec2cbc9a17e84b)), closes [#28305](https://github.com/bitnami/charts/issues/28305)
 
 ## <small>6.2.12 (2024-07-16)</small>
 
