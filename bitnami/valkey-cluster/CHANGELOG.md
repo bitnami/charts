@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.5 (2024-07-24)
+## 0.1.6 (2024-07-25)
 
-* [bitnami/valkey-cluster] Release 0.1.5 ([#28377](https://github.com/bitnami/charts/pull/28377))
+* [bitnami/valkey-cluster] Release 0.1.6 ([#28492](https://github.com/bitnami/charts/pull/28492))
+
+## <small>0.1.5 (2024-07-24)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.5 (#28377) ([463a4ec](https://github.com/bitnami/charts/commit/463a4ecb66163eea70aea9cdcd85907360c7bf2c)), closes [#28377](https://github.com/bitnami/charts/issues/28377)
 
 ## <small>0.1.4 (2024-07-22)</small>
 
