@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.1.9 (2024-07-23)
+## 9.1.11 (2024-07-25)
 
-* [bitnami/argo-workflows] Release 9.1.9 ([#28229](https://github.com/bitnami/charts/pull/28229))
+* [bitnami/argo-workflows] Release 9.1.11 ([#28395](https://github.com/bitnami/charts/pull/28395))
+
+## <small>9.1.10 (2024-07-24)</small>
+
+* [bitnami/argo-workflows] Release 9.1.10 (#28274) ([54d7a18](https://github.com/bitnami/charts/commit/54d7a18ebd7406fc10c070949a2d774815f303b7)), closes [#28274](https://github.com/bitnami/charts/issues/28274)
+
+## <small>9.1.9 (2024-07-23)</small>
+
+* [bitnami/argo-workflows] Release 9.1.9 (#28229) ([cd68de2](https://github.com/bitnami/charts/commit/cd68de2cdbe260791b81051c441c2ea9c0342894)), closes [#28229](https://github.com/bitnami/charts/issues/28229)
 
 ## <small>9.1.8 (2024-07-23)</small>
 

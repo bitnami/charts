@@ -1,8 +1,20 @@
 # Changelog
 
-## 6.3.11 (2024-07-16)
+## 6.3.14 (2024-07-25)
 
-* [bitnami/influxdb] Global StorageClass as default value ([#28031](https://github.com/bitnami/charts/pull/28031))
+* [bitnami/influxdb] Release 6.3.14 ([#28438](https://github.com/bitnami/charts/pull/28438))
+
+## <small>6.3.13 (2024-07-24)</small>
+
+* [bitnami/influxdb] Release 6.3.13 (#28295) ([6402fd4](https://github.com/bitnami/charts/commit/6402fd430bc436310bc626e08b01578396fbabb4)), closes [#28295](https://github.com/bitnami/charts/issues/28295)
+
+## <small>6.3.12 (2024-07-24)</small>
+
+* [bitnami/influxdb] Release 6.3.12 (#28260) ([a77b528](https://github.com/bitnami/charts/commit/a77b5284bb4d415a8092a9c7efc032bbf5bf731f)), closes [#28260](https://github.com/bitnami/charts/issues/28260)
+
+## <small>6.3.11 (2024-07-18)</small>
+
+* [bitnami/influxdb] Global StorageClass as default value (#28031) ([dac8ad1](https://github.com/bitnami/charts/commit/dac8ad15fe36fa191884a2d6e10367991b67390c)), closes [#28031](https://github.com/bitnami/charts/issues/28031)
 
 ## <small>6.3.10 (2024-07-11)</small>
 

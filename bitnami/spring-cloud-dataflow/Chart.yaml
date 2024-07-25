@@ -6,15 +6,15 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.30.3-debian-12-r0
+      image: docker.io/bitnami/kubectl:1.30.3-debian-12-r3
     - name: mariadb
-      image: docker.io/bitnami/mariadb:10.11.8-debian-12-r4
+      image: docker.io/bitnami/mariadb:10.11.8-debian-12-r5
     - name: prometheus-rsocket-proxy
-      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r24
+      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r25
     - name: spring-cloud-dataflow
-      image: docker.io/bitnami/spring-cloud-dataflow:2.11.4-debian-12-r0
+      image: docker.io/bitnami/spring-cloud-dataflow:2.11.4-debian-12-r1
     - name: spring-cloud-dataflow-composed-task-runner
-      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.4-debian-12-r0
+      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.4-debian-12-r1
     - name: spring-cloud-skipper
       image: docker.io/bitnami/spring-cloud-skipper:2.11.4-debian-12-r0
 apiVersion: v2
@@ -43,14 +43,14 @@ description: Spring Cloud Data Flow is a microservices-based toolkit for buildin
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
 keywords:
-  - spring-cloud
-  - dataflow
-  - skipper
-  - spring
+- spring-cloud
+- dataflow
+- skipper
+- spring
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 30.0.2
+version: 30.0.3

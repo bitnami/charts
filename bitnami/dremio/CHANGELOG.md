@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.1.6 (2024-07-22)
+## 0.1.8 (2024-07-24)
 
-* [bitnami/dremio] Global StorageClass as default value ([#28012](https://github.com/bitnami/charts/pull/28012))
+* [bitnami/dremio] Release 0.1.8 ([#28359](https://github.com/bitnami/charts/pull/28359))
+
+## <small>0.1.7 (2024-07-24)</small>
+
+* [bitnami/dremio] Release 0.1.7 (#28249) ([ae7590f](https://github.com/bitnami/charts/commit/ae7590f3f3c538f03961784a7698529d58ccb901)), closes [#28249](https://github.com/bitnami/charts/issues/28249)
+
+## <small>0.1.6 (2024-07-22)</small>
+
+* [bitnami/dremio] Global StorageClass as default value (#28012) ([97e506b](https://github.com/bitnami/charts/commit/97e506bb3d54b34bb3ccb9bfb63b2d801f2c6fd3)), closes [#28012](https://github.com/bitnami/charts/issues/28012)
 
 ## <small>0.1.5 (2024-07-05)</small>
 

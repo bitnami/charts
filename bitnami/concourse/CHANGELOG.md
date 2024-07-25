@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.9 (2024-07-16)
+## 4.2.10 (2024-07-24)
 
-* [bitnami/concourse] Global StorageClass as default value ([#28006](https://github.com/bitnami/charts/pull/28006))
+* [bitnami/concourse] Release 4.2.10 ([#28385](https://github.com/bitnami/charts/pull/28385))
+
+## <small>4.2.9 (2024-07-16)</small>
+
+* [bitnami/concourse] Global StorageClass as default value (#28006) ([841a853](https://github.com/bitnami/charts/commit/841a853202dc4f7eef67cd5b26990eecaa3c781e)), closes [#28006](https://github.com/bitnami/charts/issues/28006)
 
 ## <small>4.2.8 (2024-07-03)</small>
 

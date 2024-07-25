@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.13 (2024-07-18)
+## 8.2.14 (2024-07-24)
 
-* [bitnami/nats] Global StorageClass as default value ([#28067](https://github.com/bitnami/charts/pull/28067))
+* [bitnami/nats] Release 8.2.14 ([#28328](https://github.com/bitnami/charts/pull/28328))
+
+## <small>8.2.13 (2024-07-18)</small>
+
+* [bitnami/nats] Global StorageClass as default value (#28067) ([5656011](https://github.com/bitnami/charts/commit/56560114a9166e7912a8a25ab4c0db7805efd42a)), closes [#28067](https://github.com/bitnami/charts/issues/28067)
 
 ## <small>8.2.12 (2024-07-17)</small>
 

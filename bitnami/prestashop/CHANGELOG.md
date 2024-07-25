@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.1 (2024-07-16)
+## 22.0.2 (2024-07-24)
 
-* [bitnami/prestashop] Global StorageClass as default value ([#28084](https://github.com/bitnami/charts/pull/28084))
+* [bitnami/prestashop] Release 22.0.2 ([#28356](https://github.com/bitnami/charts/pull/28356))
+
+## <small>22.0.1 (2024-07-16)</small>
+
+* [bitnami/prestashop] Global StorageClass as default value (#28084) ([dea5a3f](https://github.com/bitnami/charts/commit/dea5a3fa81f740dfa36c7c0dbf7de19b0b19a98d)), closes [#28084](https://github.com/bitnami/charts/issues/28084)
 
 ## 22.0.0 (2024-07-13)
 
