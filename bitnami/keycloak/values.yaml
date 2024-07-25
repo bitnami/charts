@@ -620,6 +620,11 @@ ingress:
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param ingress.controller The ingress controller type. Currently supports `default` and `gce`
+  ## leave as `default` for most ingress controllers.
+  ## set to `gce` if using the GCE ingress controller
+  ##
+  controller: default
   ## @param ingress.hostname Default host for the ingress record (evaluated as template)
   ##
   hostname: keycloak.local
@@ -727,6 +732,11 @@ adminIngress:
   ## @param adminIngress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param adminIngress.controller The ingress controller type. Currently supports `default` and `gce`
+  ## leave as `default` for most ingress controllers.
+  ## set to `gce` if using the GCE ingress controller
+  ##
+  controller: default
   ## @param adminIngress.hostname Default host for the admin ingress record (evaluated as template)
   ##
   hostname: keycloak.local
