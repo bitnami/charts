@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.15 (2024-07-24)
+## 2.0.16 (2024-07-25)
 
-* [bitnami/haproxy] Release 2.0.15 ([#28280](https://github.com/bitnami/charts/pull/28280))
+* [bitnami/haproxy] Release 2.0.16 ([#28414](https://github.com/bitnami/charts/pull/28414))
+
+## <small>2.0.15 (2024-07-24)</small>
+
+* [bitnami/haproxy] Release 2.0.15 (#28280) ([b8366d6](https://github.com/bitnami/charts/commit/b8366d66076e66f2210fb9a4d80fac77a7d59687)), closes [#28280](https://github.com/bitnami/charts/issues/28280)
 
 ## <small>2.0.14 (2024-07-24)</small>
 
