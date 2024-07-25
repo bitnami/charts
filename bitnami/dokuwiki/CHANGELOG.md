@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.9 (2024-07-24)
+## 16.2.10 (2024-07-25)
 
-* [bitnami/dokuwiki] Release 16.2.9 ([#28311](https://github.com/bitnami/charts/pull/28311))
+* [bitnami/dokuwiki] Release 16.2.10 ([#28411](https://github.com/bitnami/charts/pull/28411))
+
+## <small>16.2.9 (2024-07-24)</small>
+
+* [bitnami/dokuwiki] Release 16.2.9 (#28311) ([01a71a6](https://github.com/bitnami/charts/commit/01a71a60b1941866ebaf3f491cbc87dc8fdf454e)), closes [#28311](https://github.com/bitnami/charts/issues/28311)
 
 ## <small>16.2.8 (2024-07-24)</small>
 
