@@ -1,8 +1,25 @@
 # Changelog
 
-## 15.3.6 (2024-07-03)
+## 15.3.10 (2024-07-25)
 
-* [bitnami/kubeapps] Release 15.3.6 ([#27706](https://github.com/bitnami/charts/pull/27706))
+* [bitnami/kubeapps] Release 15.3.10 ([#28437](https://github.com/bitnami/charts/pull/28437))
+
+## <small>15.3.9 (2024-07-24)</small>
+
+* [bitnami/kubeapps] Release 15.3.9 (#28300) ([71e533d](https://github.com/bitnami/charts/commit/71e533daec43cc9010911439a1f3e0ad9f5ccf86)), closes [#28300](https://github.com/bitnami/charts/issues/28300)
+
+## <small>15.3.8 (2024-07-23)</small>
+
+* [bitnami/kubeapps] Release 15.3.8 (#28214) ([f44f329](https://github.com/bitnami/charts/commit/f44f329af1153385a569d735b0d5cd46391d0a67)), closes [#28214](https://github.com/bitnami/charts/issues/28214)
+
+## <small>15.3.7 (2024-07-18)</small>
+
+* [bitnami/kubeapps] Global StorageClass as default value (#28045) ([44a64a8](https://github.com/bitnami/charts/commit/44a64a8adb3b1e66aa43a41f85cb3d51f14b322a)), closes [#28045](https://github.com/bitnami/charts/issues/28045)
+
+## <small>15.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/kubeapps] Release 15.3.6 (#27706) ([ea5443f](https://github.com/bitnami/charts/commit/ea5443fd9bdb8a27e10bf03824d8d37f4189a834)), closes [#27706](https://github.com/bitnami/charts/issues/27706)
 
 ## <small>15.3.5 (2024-06-19)</small>
 

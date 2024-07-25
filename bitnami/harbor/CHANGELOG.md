@@ -1,8 +1,24 @@
 # Changelog
 
-## 22.0.4 (2024-07-16)
+## 22.0.8 (2024-07-25)
 
-* [bitnami/harbor] Dont set redis DB if Sentinel is enabled ([#27977](https://github.com/bitnami/charts/pull/27977))
+* [bitnami/harbor] Release 22.0.8 ([#28418](https://github.com/bitnami/charts/pull/28418))
+
+## <small>22.0.7 (2024-07-24)</small>
+
+* [bitnami/harbor] Release 22.0.7 (#28301) ([1cdbafd](https://github.com/bitnami/charts/commit/1cdbafd8c129514011bd8118ae77eb128a5b3f50)), closes [#28301](https://github.com/bitnami/charts/issues/28301)
+
+## <small>22.0.6 (2024-07-24)</small>
+
+* [bitnami/harbor] Release 22.0.6 (#28255) ([1aedb99](https://github.com/bitnami/charts/commit/1aedb9946c5129e77f0841425ba3ddfb647fdca7)), closes [#28255](https://github.com/bitnami/charts/issues/28255)
+
+## <small>22.0.5 (2024-07-19)</small>
+
+* [bitnami/harbor] Global StorageClass as default value (#28030) ([fb9252b](https://github.com/bitnami/charts/commit/fb9252ba06e4da0c967503e1fcca4e4edd496fdd)), closes [#28030](https://github.com/bitnami/charts/issues/28030)
+
+## <small>22.0.4 (2024-07-16)</small>
+
+* [bitnami/harbor] Dont set redis DB if Sentinel is enabled (#27977) ([e1d2920](https://github.com/bitnami/charts/commit/e1d2920e6db5696ed0b96c578c6806f7d097056a)), closes [#27977](https://github.com/bitnami/charts/issues/27977)
 
 ## <small>22.0.3 (2024-07-15)</small>
 

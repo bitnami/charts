@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.0.1 (2024-07-16)
+## 21.0.3 (2024-07-25)
 
-* [bitnami/mediawiki] Global StorageClass as default value ([#28054](https://github.com/bitnami/charts/pull/28054))
+* [bitnami/mediawiki] Release 21.0.3 ([#28459](https://github.com/bitnami/charts/pull/28459))
+
+## <small>21.0.2 (2024-07-24)</small>
+
+* [bitnami/mediawiki] Release 21.0.2 (#28337) ([47587af](https://github.com/bitnami/charts/commit/47587afb86e9feff88a1689cc86e35672c147ca7)), closes [#28337](https://github.com/bitnami/charts/issues/28337)
+
+## <small>21.0.1 (2024-07-16)</small>
+
+* [bitnami/mediawiki] Global StorageClass as default value (#28054) ([a142306](https://github.com/bitnami/charts/commit/a142306961690b5699c406a287ac061940732c03)), closes [#28054](https://github.com/bitnami/charts/issues/28054)
 
 ## 21.0.0 (2024-07-13)
 

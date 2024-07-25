@@ -1,8 +1,24 @@
 # Changelog
 
-## 21.3.2 (2024-07-16)
+## 21.3.6 (2024-07-25)
 
-* [bitnami/elasticsearch] Global StorageClass as default value ([#28015](https://github.com/bitnami/charts/pull/28015))
+* [bitnami/elasticsearch] Release 21.3.6 ([#28412](https://github.com/bitnami/charts/pull/28412))
+
+## <small>21.3.5 (2024-07-24)</small>
+
+* [bitnami/elasticsearch] Release 21.3.5 (#28288) ([f899c65](https://github.com/bitnami/charts/commit/f899c65084282e2e18a7dff3e4b52cf98163a9b0)), closes [#28288](https://github.com/bitnami/charts/issues/28288)
+
+## <small>21.3.4 (2024-07-23)</small>
+
+* [bitnami/elasticsearch] Release 21.3.4 (#28238) ([8c06742](https://github.com/bitnami/charts/commit/8c06742db35862ae3531880d57e758ab233afffc)), closes [#28238](https://github.com/bitnami/charts/issues/28238)
+
+## <small>21.3.3 (2024-07-23)</small>
+
+* [bitnami/elasticsearch] fix: Unable to run the image using the root user (#27491) ([5482b11](https://github.com/bitnami/charts/commit/5482b114975e9d120786515f2473cc339806b71a)), closes [#27491](https://github.com/bitnami/charts/issues/27491)
+
+## <small>21.3.2 (2024-07-18)</small>
+
+* [bitnami/elasticsearch] Global StorageClass as default value (#28015) ([5b0fd56](https://github.com/bitnami/charts/commit/5b0fd56ff9b697a0a4cba205df9c869fb2075fa9)), closes [#28015](https://github.com/bitnami/charts/issues/28015)
 
 ## <small>21.3.1 (2024-07-11)</small>
 

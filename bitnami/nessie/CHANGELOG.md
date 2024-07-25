@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.1.17 (2024-07-16)
+## 0.1.20 (2024-07-25)
 
-* [bitnami/nessie] Global StorageClass as default value ([#28069](https://github.com/bitnami/charts/pull/28069))
+* [bitnami/nessie] Release 0.1.20 ([#28452](https://github.com/bitnami/charts/pull/28452))
+
+## <small>0.1.19 (2024-07-24)</small>
+
+* [bitnami/nessie] Release 0.1.19 (#28340) ([9294405](https://github.com/bitnami/charts/commit/9294405dbbbc31c06d5b88aefa2d56f5951657e4)), closes [#28340](https://github.com/bitnami/charts/issues/28340)
+
+## <small>0.1.18 (2024-07-23)</small>
+
+* [bitnami/nessie] Release 0.1.18 (#28220) ([e8c7f33](https://github.com/bitnami/charts/commit/e8c7f33f93ccd489b727c69795697f8bf7cf990a)), closes [#28220](https://github.com/bitnami/charts/issues/28220)
+
+## <small>0.1.17 (2024-07-18)</small>
+
+* [bitnami/nessie] Global StorageClass as default value (#28069) ([41639e2](https://github.com/bitnami/charts/commit/41639e2df960132b55fe9d4fb1489b0524537a51)), closes [#28069](https://github.com/bitnami/charts/issues/28069)
 
 ## <small>0.1.16 (2024-07-13)</small>
 
@@ -60,8 +72,11 @@
 
 ## <small>0.1.3 (2024-06-06)</small>
 
-* [bitnami/nessie] Release 0.1.2 (#26717) ([e37e901](https://github.com/bitnami/charts/commit/e37e901db99a91932d03129e136643e5072417df)), closes [#26717](https://github.com/bitnami/charts/issues/26717)
 * [bitnami/nessie] Release 0.1.3 (#26996) ([06c9536](https://github.com/bitnami/charts/commit/06c95361634f1500479e433d529c9a4e224c09fc)), closes [#26996](https://github.com/bitnami/charts/issues/26996)
+
+## <small>0.1.2 (2024-06-04)</small>
+
+* [bitnami/nessie] Release 0.1.2 (#26717) ([e37e901](https://github.com/bitnami/charts/commit/e37e901db99a91932d03129e136643e5072417df)), closes [#26717](https://github.com/bitnami/charts/issues/26717)
 
 ## <small>0.1.1 (2024-06-04)</small>
 

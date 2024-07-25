@@ -1,8 +1,24 @@
 # Changelog
 
-## 3.3.15 (2024-07-16)
+## 3.3.19 (2024-07-25)
 
-* [bitnami/appsmith] Global StorageClass as default value ([#27998](https://github.com/bitnami/charts/pull/27998))
+* [bitnami/appsmith] Release 3.3.19 ([#28423](https://github.com/bitnami/charts/pull/28423))
+
+## <small>3.3.18 (2024-07-24)</small>
+
+* [bitnami/appsmith] Release 3.3.18 (#28286) ([071ce23](https://github.com/bitnami/charts/commit/071ce237d727798d925bdb3c53b6c62ecd689cb4)), closes [#28286](https://github.com/bitnami/charts/issues/28286)
+
+## <small>3.3.17 (2024-07-23)</small>
+
+* [bitnami/appsmith] Release 3.3.17 (#28234) ([ca1fb19](https://github.com/bitnami/charts/commit/ca1fb19733d604ac94f7aa4c25a74d0a5a427ff8)), closes [#28234](https://github.com/bitnami/charts/issues/28234)
+
+## <small>3.3.16 (2024-07-18)</small>
+
+* [bitnami/appsmith] Release 3.3.16 (#28164) ([e30899f](https://github.com/bitnami/charts/commit/e30899f8361ec75b2fd2b7362c19be1796d214fb)), closes [#28164](https://github.com/bitnami/charts/issues/28164)
+
+## <small>3.3.15 (2024-07-16)</small>
+
+* [bitnami/appsmith] Global StorageClass as default value (#27998) ([d2b827b](https://github.com/bitnami/charts/commit/d2b827b6ab00dec78b36e24e5e878bffb89bf864)), closes [#27998](https://github.com/bitnami/charts/issues/27998)
 
 ## <small>3.3.14 (2024-07-15)</small>
 
