@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.2.9 (2024-07-24)
+## 12.2.10 (2024-07-25)
 
-* [bitnami/kong] Release 12.2.9 ([#28390](https://github.com/bitnami/charts/pull/28390))
+* [bitnami/kong] Release 12.2.10 ([#28509](https://github.com/bitnami/charts/pull/28509))
+
+## <small>12.2.9 (2024-07-24)</small>
+
+* [bitnami/kong] Release 12.2.9 (#28390) ([8e11928](https://github.com/bitnami/charts/commit/8e1192888a7930e11c8cd259456869348e742743)), closes [#28390](https://github.com/bitnami/charts/issues/28390)
 
 ## <small>12.2.8 (2024-07-23)</small>
 
