@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.2.11 (2024-07-24)
+## 23.2.12 (2024-07-25)
 
-* [bitnami/parse] Release 23.2.11 ([#28346](https://github.com/bitnami/charts/pull/28346))
+* [bitnami/parse] Release 23.2.12 ([#28458](https://github.com/bitnami/charts/pull/28458))
+
+## <small>23.2.11 (2024-07-24)</small>
+
+* [bitnami/parse] Release 23.2.11 (#28346) ([53113b9](https://github.com/bitnami/charts/commit/53113b90dfd6ed4f4d9b3702ee4e3254b39e2b9e)), closes [#28346](https://github.com/bitnami/charts/issues/28346)
 
 ## <small>23.2.10 (2024-07-18)</small>
 
