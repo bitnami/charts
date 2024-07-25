@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.27 (2024-07-24)
+## 14.6.28 (2024-07-25)
 
-* [bitnami/minio] Release 14.6.27 ([#28320](https://github.com/bitnami/charts/pull/28320))
+* [bitnami/minio] Release 14.6.28 ([#28444](https://github.com/bitnami/charts/pull/28444))
+
+## <small>14.6.27 (2024-07-24)</small>
+
+* [bitnami/minio] Release 14.6.27 (#28320) ([70ca413](https://github.com/bitnami/charts/commit/70ca413aee4bc937aa1bc530c11261ef75bab800)), closes [#28320](https://github.com/bitnami/charts/issues/28320)
 
 ## <small>14.6.26 (2024-07-23)</small>
 
