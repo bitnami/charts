@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.3 (2024-07-24)
+## 15.0.4 (2024-07-25)
 
-* [bitnami/ejbca] Release 15.0.3 ([#28284](https://github.com/bitnami/charts/pull/28284))
+* [bitnami/ejbca] Release 15.0.4 ([#28416](https://github.com/bitnami/charts/pull/28416))
+
+## <small>15.0.3 (2024-07-24)</small>
+
+* [bitnami/ejbca] Release 15.0.3 (#28284) ([e8a9cf1](https://github.com/bitnami/charts/commit/e8a9cf16f0e315e620e19f2c4133f5246b1a8a9c)), closes [#28284](https://github.com/bitnami/charts/issues/28284)
 
 ## <small>15.0.2 (2024-07-23)</small>
 
