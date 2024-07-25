@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.3.1 (2024-07-16)
+## 5.3.2 (2024-07-24)
 
-* [bitnami/supabase] Global StorageClass as default value ([#28101](https://github.com/bitnami/charts/pull/28101))
+* [bitnami/supabase] Release 5.3.2 ([#28384](https://github.com/bitnami/charts/pull/28384))
+
+## <small>5.3.1 (2024-07-16)</small>
+
+* [bitnami/supabase] Global StorageClass as default value (#28101) ([fa97110](https://github.com/bitnami/charts/commit/fa97110d0ce47f0079a03e45eef39b7c80c6ad38)), closes [#28101](https://github.com/bitnami/charts/issues/28101)
 
 ## 5.3.0 (2024-07-09)
 

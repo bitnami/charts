@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.10 (2024-07-16)
+## 0.3.11 (2024-07-24)
 
-* [bitnami/valkey] Global StorageClass as default value ([#28105](https://github.com/bitnami/charts/pull/28105))
+* [bitnami/valkey] Release 0.3.11 ([#28376](https://github.com/bitnami/charts/pull/28376))
+
+## <small>0.3.10 (2024-07-16)</small>
+
+* [bitnami/valkey] Global StorageClass as default value (#28105) ([2ea2f2a](https://github.com/bitnami/charts/commit/2ea2f2af9a27ca6b15c6b9becfbf2e8bfff0da9a)), closes [#28105](https://github.com/bitnami/charts/issues/28105)
 
 ## <small>0.3.9 (2024-07-11)</small>
 
