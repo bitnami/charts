@@ -1,8 +1,16 @@
 # Changelog
 
-## 20.2.11 (2024-07-17)
+## 20.2.13 (2024-07-25)
 
-* [bitnami/wildfly] Release 20.2.11 ([#28147](https://github.com/bitnami/charts/pull/28147))
+* [bitnami/wildfly] Release 20.2.13 ([#28501](https://github.com/bitnami/charts/pull/28501))
+
+## <small>20.2.12 (2024-07-24)</small>
+
+* [bitnami/wildfly] Release 20.2.12 (#28383) ([4e885b1](https://github.com/bitnami/charts/commit/4e885b17c4738267aa5b16812c26d1de198e3094)), closes [#28383](https://github.com/bitnami/charts/issues/28383)
+
+## <small>20.2.11 (2024-07-17)</small>
+
+* [bitnami/wildfly] Release 20.2.11 (#28147) ([106681d](https://github.com/bitnami/charts/commit/106681da723acbe5d1ed850ed5e327aa1545a57b)), closes [#28147](https://github.com/bitnami/charts/issues/28147)
 
 ## <small>20.2.10 (2024-07-17)</small>
 

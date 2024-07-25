@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.3.12 (2024-07-24)
+## 29.3.13 (2024-07-25)
 
-* [bitnami/kafka] Release 29.3.12 ([#28336](https://github.com/bitnami/charts/pull/28336))
+* [bitnami/kafka] Release 29.3.13 ([#28426](https://github.com/bitnami/charts/pull/28426))
+
+## <small>29.3.12 (2024-07-24)</small>
+
+* [bitnami/kafka] Release 29.3.12 (#28336) ([bdaaf9c](https://github.com/bitnami/charts/commit/bdaaf9c86a9da3c586f6fe9fdfb4972811d558f3)), closes [#28336](https://github.com/bitnami/charts/issues/28336)
 
 ## <small>29.3.11 (2024-07-23)</small>
 

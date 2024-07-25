@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.3.9 (2024-07-24)
+## 15.3.10 (2024-07-25)
 
-* [bitnami/kubeapps] Release 15.3.9 ([#28300](https://github.com/bitnami/charts/pull/28300))
+* [bitnami/kubeapps] Release 15.3.10 ([#28437](https://github.com/bitnami/charts/pull/28437))
+
+## <small>15.3.9 (2024-07-24)</small>
+
+* [bitnami/kubeapps] Release 15.3.9 (#28300) ([71e533d](https://github.com/bitnami/charts/commit/71e533daec43cc9010911439a1f3e0ad9f5ccf86)), closes [#28300](https://github.com/bitnami/charts/issues/28300)
 
 ## <small>15.3.8 (2024-07-23)</small>
 

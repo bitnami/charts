@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.8 (2024-07-24)
+## 10.2.9 (2024-07-25)
 
-* [bitnami/redis-cluster] Release 10.2.8 ([#28367](https://github.com/bitnami/charts/pull/28367))
+* [bitnami/redis-cluster] Release 10.2.9 ([#28475](https://github.com/bitnami/charts/pull/28475))
+
+## <small>10.2.8 (2024-07-24)</small>
+
+* [bitnami/redis-cluster] Release 10.2.8 (#28367) ([125073f](https://github.com/bitnami/charts/commit/125073f413c2e041ad1bcca1f2877d700a1f3b58)), closes [#28367](https://github.com/bitnami/charts/issues/28367)
 
 ## <small>10.2.7 (2024-07-16)</small>
 
