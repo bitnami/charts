@@ -468,6 +468,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.hostname`                      | Default host for the ingress record (evaluated as template)                                                                      | `keycloak.local`         |
 | `ingress.path`                          | Default path for the ingress record (evaluated as template)                                                                      | `""`                     |
+| `ingress.hostnameUrl`                   | Hostname url to pass to the keycloak service.                                                                                    | `""`                     |
 | `ingress.servicePort`                   | Backend service port to use                                                                                                      | `http`                   |
 | `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.labels`                        | Additional labels for the Ingress resource.                                                                                      | `{}`                     |
@@ -484,6 +485,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `adminIngress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `adminIngress.hostname`                 | Default host for the admin ingress record (evaluated as template)                                                                | `keycloak.local`         |
 | `adminIngress.path`                     | Default path for the admin ingress record (evaluated as template)                                                                | `""`                     |
+| `adminIngress.hostnameUrl`              | Admin hostname url to pass to the keycloak service.                                                                              | `""`                     |
 | `adminIngress.servicePort`              | Backend service port to use                                                                                                      | `http`                   |
 | `adminIngress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `adminIngress.labels`                   | Additional labels for the Ingress resource.                                                                                      | `{}`                     |

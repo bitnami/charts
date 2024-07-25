@@ -218,23 +218,24 @@ spec:
             {{- if and .Values.adminIngress.enabled .Values.adminIngress.hostname }}
             - name: KC_HOSTNAME_ADMIN_URL
               value: |-
-                {{ ternary "https://" "http://" ( or .Values.adminIngress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
-                {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) -}}
-                {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.path "context" $) }}
+                {{ if .Values.adminIngress.hostnameUrl }}
+                  {{- .Values.adminIngress.path }}
+                {{- else }}
+                  {{- ternary "https://" "http://" ( or .Values.adminIngress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) -}}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.path "context" $) }}
+                {{- end }}
             {{- end }}
             {{- if and .Values.ingress.enabled .Values.ingress.hostname }}
             - name: KC_HOSTNAME_URL
               value: |-
-                {{ ternary "https://" "http://" ( or .Values.ingress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
-                {{- include "common.tplvalues.render" (dict "value" .Values.ingress.hostname "context" $) -}}
-                {{- include "common.tplvalues.render" (dict "value" .Values.ingress.path "context" $) }}
-            {{- end }}
-            {{- if .Values.adminRealm }}
-            - name: KC_SPI_ADMIN_REALM
-              value: "{{ .Values.adminRealm }}"
-            {{- end }}
-            {{- if .Values.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+                {{ if .Values.ingress.hostnameUrl -}}
+                  {{- .Values.ingress.hostnameUrl }}
+                {{- else -}}
+                  {{- ternary "https://" "http://" ( or .Values.ingress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.ingress.hostname "context" $) -}}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.ingress.path "context" $) }}
+                {{- end -}}
             {{- end }}
           envFrom:
             - configMapRef:

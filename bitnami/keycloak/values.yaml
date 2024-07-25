@@ -625,6 +625,10 @@ ingress:
   hostname: keycloak.local
   ## @param ingress.path [string] Default path for the ingress record (evaluated as template)
   ##
+  hostnameUrl: ""
+  ## @param ingress.hostnameUrl [string] Hostname url to pass to the keycloak service.
+  ## Default this will be automatically constructed with ingress.hostname and ingress.path
+  ##
   path: "{{ .Values.httpRelativePath }}"
   ## @param ingress.servicePort Backend service port to use
   ## Default is http. Alternative is https.
@@ -731,6 +735,10 @@ adminIngress:
   ##
   hostname: keycloak.local
   ## @param adminIngress.path [string] Default path for the admin ingress record (evaluated as template)
+  ##
+  hostnameUrl: ""
+  ## @param adminIngress.hostnameUrl [string] Admin hostname url to pass to the keycloak service.
+  ## Default this will be automatically constructed with adminIngress.hostname and adminIngress.path
   ##
   path: "{{ .Values.httpRelativePath }}"
   ## @param adminIngress.servicePort Backend service port to use
