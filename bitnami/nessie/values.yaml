@@ -116,7 +116,7 @@ javaOpts: ""
 image:
   registry: docker.io
   repository: bitnami/nessie
-  tag: 0.93.1-debian-12-r1
+  tag: 0.93.1-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -745,7 +745,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r25
+    tag: 12-debian-12-r26
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -800,7 +800,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 16.3.0-debian-12-r21
+    tag: 16.3.0-debian-12-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
