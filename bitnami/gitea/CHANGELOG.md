@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.16 (2024-07-24)
+## 2.3.17 (2024-07-25)
 
-* [bitnami/gitea] Release 2.3.16 ([#28278](https://github.com/bitnami/charts/pull/28278))
+* [bitnami/gitea] Release 2.3.17 ([#28406](https://github.com/bitnami/charts/pull/28406))
+
+## <small>2.3.16 (2024-07-24)</small>
+
+* [bitnami/gitea] Release 2.3.16 (#28278) ([ec73679](https://github.com/bitnami/charts/commit/ec7367976ea372796d7825cd7854e2ef125501ae)), closes [#28278](https://github.com/bitnami/charts/issues/28278)
 
 ## <small>2.3.15 (2024-07-24)</small>
 
