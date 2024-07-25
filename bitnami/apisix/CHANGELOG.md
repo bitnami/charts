@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.3.8 (2024-07-24)
+## 3.3.9 (2024-07-25)
 
-* [bitnami/apisix] Release 3.3.8 ([#28267](https://github.com/bitnami/charts/pull/28267))
+* [bitnami/apisix] Release 3.3.9 ([#28396](https://github.com/bitnami/charts/pull/28396))
+
+## <small>3.3.8 (2024-07-24)</small>
+
+* [bitnami/apisix] Release 3.3.8 (#28267) ([1cfe3bc](https://github.com/bitnami/charts/commit/1cfe3bcd8be4dbff16ef68fd40037befe97bc656)), closes [#28267](https://github.com/bitnami/charts/issues/28267)
+
+## <small>3.3.7 (2024-07-23)</small>
+
+* [bitnami/apisix] Release 3.3.7 (#28227) ([fd667ad](https://github.com/bitnami/charts/commit/fd667ad8d2e343247b389e5f5f128a634c41d68e)), closes [#28227](https://github.com/bitnami/charts/issues/28227)
 
 ## <small>3.3.6 (2024-07-16)</small>
 
