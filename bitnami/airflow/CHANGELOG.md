@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.3.13 (2024-07-24)
+## 18.3.14 (2024-07-25)
 
-* [bitnami/airflow] Release 18.3.13 ([#28282](https://github.com/bitnami/charts/pull/28282))
+* [bitnami/airflow] Release 18.3.14 ([#28413](https://github.com/bitnami/charts/pull/28413))
+
+## <small>18.3.13 (2024-07-24)</small>
+
+* [bitnami/airflow] Release 18.3.13 (#28282) ([d44d7ed](https://github.com/bitnami/charts/commit/d44d7ed4c401f57e86f85f936b16a3577ab8f0d7)), closes [#28282](https://github.com/bitnami/charts/issues/28282)
 
 ## <small>18.3.12 (2024-07-24)</small>
 
