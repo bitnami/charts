@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.13 (2024-07-24)
+## 1.3.14 (2024-07-25)
 
-* [bitnami/prometheus] Release 1.3.13 ([#28353](https://github.com/bitnami/charts/pull/28353))
+* [bitnami/prometheus] Release 1.3.14 ([#28513](https://github.com/bitnami/charts/pull/28513))
+
+## <small>1.3.13 (2024-07-24)</small>
+
+* [bitnami/prometheus] Release 1.3.13 (#28353) ([553547c](https://github.com/bitnami/charts/commit/553547cd6c62a7b03807a7cd835ce024398dc9ad)), closes [#28353](https://github.com/bitnami/charts/issues/28353)
 
 ## <small>1.3.12 (2024-07-18)</small>
 
