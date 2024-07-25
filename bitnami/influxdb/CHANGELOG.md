@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.14 (2024-07-25)
+## 6.3.15 (2024-07-25)
 
-* [bitnami/influxdb] Release 6.3.14 ([#28438](https://github.com/bitnami/charts/pull/28438))
+* [bitnami/influxdb] Release 6.3.15 ([#28527](https://github.com/bitnami/charts/pull/28527))
+
+## <small>6.3.14 (2024-07-25)</small>
+
+* [bitnami/influxdb] Release 6.3.14 (#28438) ([32509d3](https://github.com/bitnami/charts/commit/32509d3670ff9002d47c601b31ae58c8b2b7851a)), closes [#28438](https://github.com/bitnami/charts/issues/28438)
 
 ## <small>6.3.13 (2024-07-24)</small>
 
