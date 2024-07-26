@@ -22,8 +22,10 @@ data:
     {{- if .Values.configuration.server.basePath }}
     server.basePath: {{ .Values.configuration.server.basePath | quote }}
     {{- end }}
+    {{ if .Values.configuration.server.publicBaseUrl }}
+    server.publicBaseUrl: {{ .Values.configuration.server.publicBaseUrl | quote }}
+    {{- end }}
     server.rewriteBasePath: {{ .Values.configuration.server.rewriteBasePath }}
-    server.publicBaseUrl: {{ .Values.configuration.publicBaseUrl}}
     {{- if .Values.extraConfiguration }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraConfiguration "context" $ ) | nindent 4 }}
     {{- end }}
