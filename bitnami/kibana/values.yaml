@@ -708,6 +708,7 @@ configuration:
   server:
     basePath: ""
     rewriteBasePath: false
+    publicBaseUrl: ""
 ## Prometheus metrics (requires the kibana-prometheus-exporter plugin)
 ##
 metrics:
