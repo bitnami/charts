@@ -895,6 +895,10 @@ secondary:
     ## @param secondary.persistence.enabled Enable persistence on MariaDB secondary replicas using a `PersistentVolumeClaim`
     ##
     enabled: true
+    ## @param secondary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB secondary replicas
+    ## NOTE: When it's set the rest of persistence parameters are ignored
+    ##
+    existingClaim: ""
     ## @param secondary.persistence.subPath Subdirectory of the volume to mount at
     ##
     subPath: ""
