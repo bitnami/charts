@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.6.9 (2024-07-25)
+## 6.6.9 (2024-07-26)
 
 * [bitnami/argo-cd] Bugfix cluster-config.yaml nil pointer evaluating interface {}.XXX ([#28522](https://github.com/bitnami/charts/pull/28522))
 
