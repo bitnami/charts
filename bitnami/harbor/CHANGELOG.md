@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.0.9 (2024-07-25)
+## 22.0.9 (2024-07-26)
 
 * fix: core-secret-envvars.yaml now handles variables individually ([#28474](https://github.com/bitnami/charts/pull/28474))
 
