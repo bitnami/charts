@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.7.5 (2024-07-25)
+## 21.7.6 (2024-07-26)
 
-* [bitnami/keycloak] Release 21.7.5 ([#28428](https://github.com/bitnami/charts/pull/28428))
+* [bitnami/keycloak] Fix invalid value of proxy headers when legacy proxy is used ([#28530](https://github.com/bitnami/charts/pull/28530))
+
+## <small>21.7.5 (2024-07-25)</small>
+
+* [bitnami/keycloak] Release 21.7.5 (#28428) ([8c7be7d](https://github.com/bitnami/charts/commit/8c7be7d0937fb83efb89b26fdd44cd055c2c118e)), closes [#28428](https://github.com/bitnami/charts/issues/28428)
 
 ## <small>21.7.4 (2024-07-24)</small>
 
