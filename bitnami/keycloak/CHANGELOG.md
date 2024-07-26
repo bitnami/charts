@@ -1,8 +1,8 @@
 # Changelog
 
-## 21.8.0 (2024-07-26)
+## 21.7.6 (2024-07-26)
 
-* [bitnami/keycloak] Allow support for gce based ingress controllers ([#28519](https://github.com/bitnami/charts/pull/28519))
+* [bitnami/keycloak] Fix invalid value of proxy headers when legacy proxy is used ([#28530](https://github.com/bitnami/charts/pull/28530))
 
 ## <small>21.7.5 (2024-07-25)</small>
 
