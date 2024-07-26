@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.8.0 (2024-07-25)
+## 21.8.0 (2024-07-26)
 
 * [bitnami/keycloak] Allow support for gce based ingress controllers ([#28519](https://github.com/bitnami/charts/pull/28519))
 
