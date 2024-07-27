@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.1.3 (2024-07-26)
+## 19.1.3 (2024-07-27)
 
 * [bitnami/mariadb] ExistingClaim option for secondary persistence (#13962) ([#28542](https://github.com/bitnami/charts/pull/28542))
 
