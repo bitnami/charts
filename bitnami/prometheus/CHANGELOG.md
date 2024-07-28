@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.15 (2024-07-26)
+## 1.3.15 (2024-07-28)
 
 * bitnami/prometheus- Disable server configmap when existingConfigMap is provided ([#28532](https://github.com/bitnami/charts/pull/28532))
 
