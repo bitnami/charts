@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.15 (2024-07-29)
+## 13.4.16 (2024-07-29)
 
-* [bitnami/jenkins] Release 13.4.15 ([#28556](https://github.com/bitnami/charts/pull/28556))
+* [bitnami/jenkins] Release 13.4.16 ([#28566](https://github.com/bitnami/charts/pull/28566))
+
+## <small>13.4.15 (2024-07-29)</small>
+
+* [bitnami/jenkins] Release 13.4.15 (#28556) ([2bbe48e](https://github.com/bitnami/charts/commit/2bbe48e177ccecf51f6e1adf6aefc7150aa39eb8)), closes [#28556](https://github.com/bitnami/charts/issues/28556)
 
 ## <small>13.4.14 (2024-07-29)</small>
 
