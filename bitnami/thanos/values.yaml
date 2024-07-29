@@ -4650,6 +4650,9 @@ receiveDistributor:
   ## @param receiveDistributor.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
+  ## @param receiveDistributor.terminationGracePeriodSeconds for the Thanos Receive containers(s) to extend the grace period
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param receiveDistributor.initContainers Add additional init containers to the Thanos Receive Distributor pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
