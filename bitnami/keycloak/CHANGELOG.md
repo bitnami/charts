@@ -1,8 +1,8 @@
 # Changelog
 
-## 22.0.0 (2024-07-29)
+## 21.7.6 (2024-07-29)
 
-* [bitnami/keycloak] Release 22.0.0 ([#28563](https://github.com/bitnami/charts/pull/28563))
+* [bitnami/keycloak] Preserve data on writable dirs ([#28550](https://github.com/bitnami/charts/pull/28550))
 
 ## 21.8.0 (2024-07-26)
 
