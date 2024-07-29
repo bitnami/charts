@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.2.16 (2024-07-27)
+## 11.2.16 (2024-07-29)
 
 * add publicBaseUrl param ([#28543](https://github.com/bitnami/charts/pull/28543))
 
