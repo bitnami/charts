@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.0.0 (2024-07-29)
+
+* [bitnami/keycloak] Release 22.0.0 ([#28563](https://github.com/bitnami/charts/pull/28563))
+
 ## 21.8.0 (2024-07-26)
 
-* [bitnami/keycloak] Allow support for gce based ingress controllers ([#28519](https://github.com/bitnami/charts/pull/28519))
+* [bitnami/keycloak] Allow support for gce based ingress controllers (#28519) ([87b60d7](https://github.com/bitnami/charts/commit/87b60d7526474cc22fd8295732f6b1ed7b3771a6)), closes [#28519](https://github.com/bitnami/charts/issues/28519)
 
 ## <small>21.7.6 (2024-07-26)</small>
 
