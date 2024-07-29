@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.8 (2024-07-24)
+## 1.2.9 (2024-07-25)
 
-* [bitnami/opensearch] Release 1.2.8 ([#28349](https://github.com/bitnami/charts/pull/28349))
+* [bitnami/opensearch] Release 1.2.9 ([#28466](https://github.com/bitnami/charts/pull/28466))
+
+## <small>1.2.8 (2024-07-24)</small>
+
+* [bitnami/opensearch] Release 1.2.8 (#28349) ([b6793e4](https://github.com/bitnami/charts/commit/b6793e4d5ff88d6d37783cc7bc8790bae0506f38)), closes [#28349](https://github.com/bitnami/charts/issues/28349)
 
 ## <small>1.2.7 (2024-07-16)</small>
 

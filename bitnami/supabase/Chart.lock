@@ -4,9 +4,9 @@ dependencies:
   version: 15.5.19
 - name: kong
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.2.8
+  version: 12.2.9
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.20.5
-digest: sha256:bec79f3b7344fd8e1540dfdffa967b0380b8cf79d9225eaf90a3834b67f510bd
-generated: "2024-07-24T20:05:10.695767482Z"
+digest: sha256:01f3396a00e77966fd01dfdb1f1d91118f32c2d8ac420be59408075f4bdbdaeb
+generated: "2024-07-25T10:09:29.571329062Z"

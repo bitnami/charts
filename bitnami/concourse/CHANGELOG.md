@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.10 (2024-07-24)
+## 4.2.11 (2024-07-25)
 
-* [bitnami/concourse] Release 4.2.10 ([#28385](https://github.com/bitnami/charts/pull/28385))
+* [bitnami/concourse] Release 4.2.11 ([#28503](https://github.com/bitnami/charts/pull/28503))
+
+## <small>4.2.10 (2024-07-24)</small>
+
+* [bitnami/concourse] Release 4.2.10 (#28385) ([39f4fe2](https://github.com/bitnami/charts/commit/39f4fe20c02e73c49c068b3a0b3f2a0647371507)), closes [#28385](https://github.com/bitnami/charts/issues/28385)
 
 ## <small>4.2.9 (2024-07-16)</small>
 

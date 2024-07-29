@@ -1,8 +1,20 @@
 # Changelog
 
-## 21.7.4 (2024-07-24)
+## 21.8.0 (2024-07-26)
 
-* Fix broken theme assets by append the httpRelativeURL to the KC-HOSTNAME ([#28176](https://github.com/bitnami/charts/pull/28176))
+* [bitnami/keycloak] Allow support for gce based ingress controllers ([#28519](https://github.com/bitnami/charts/pull/28519))
+
+## <small>21.7.6 (2024-07-26)</small>
+
+* [bitnami/keycloak] Fix invalid value of proxy headers when legacy proxy is used (#28530) ([372d263](https://github.com/bitnami/charts/commit/372d2638677330da509c8ff2783a2efd48484d45)), closes [#28530](https://github.com/bitnami/charts/issues/28530)
+
+## <small>21.7.5 (2024-07-25)</small>
+
+* [bitnami/keycloak] Release 21.7.5 (#28428) ([8c7be7d](https://github.com/bitnami/charts/commit/8c7be7d0937fb83efb89b26fdd44cd055c2c118e)), closes [#28428](https://github.com/bitnami/charts/issues/28428)
+
+## <small>21.7.4 (2024-07-24)</small>
+
+* [bitnami/keycloak] Fix broken theme assets by append the httpRelativeURL to the KC-HOSTNAME (#28176) ([2b15502](https://github.com/bitnami/charts/commit/2b15502a03c16d5c38877244650ff0d1f8f764b9)), closes [#28176](https://github.com/bitnami/charts/issues/28176)
 
 ## <small>21.7.3 (2024-07-24)</small>
 

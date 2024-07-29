@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.2 (2024-07-24)
+## 19.0.3 (2024-07-25)
 
-* [bitnami/opencart] Release 19.0.2 ([#28341](https://github.com/bitnami/charts/pull/28341))
+* [bitnami/opencart] Release 19.0.3 ([#28456](https://github.com/bitnami/charts/pull/28456))
+
+## <small>19.0.2 (2024-07-24)</small>
+
+* [bitnami/opencart] Release 19.0.2 (#28341) ([bcb6e5d](https://github.com/bitnami/charts/commit/bcb6e5d1dc1e7f179def88e9588a2b19c87f2513)), closes [#28341](https://github.com/bitnami/charts/issues/28341)
 
 ## <small>19.0.1 (2024-07-17)</small>
 

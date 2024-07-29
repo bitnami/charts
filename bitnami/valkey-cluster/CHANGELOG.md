@@ -2,7 +2,7 @@
 
 ## 0.1.6 (2024-07-25)
 
-* [bitnami/valkey-cluster] update metrics-svc template name format ([#27993](https://github.com/bitnami/charts/pull/27993))
+* [bitnami/valkey-cluster] Release 0.1.6 ([#28492](https://github.com/bitnami/charts/pull/28492))
 
 ## <small>0.1.5 (2024-07-24)</small>
 
