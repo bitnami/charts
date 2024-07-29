@@ -51,8 +51,23 @@ data:
     mastodon_ensure_admin_user_exists
     {{- end }}
   {{- end }}
-
   {{- if .Values.initJob.precompileAssets }}
+  {{- if .Values.enableS3 }}
+  wait-for-s3.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+
+    # Load libraries
+    . /opt/bitnami/scripts/libmastodon.sh
+
+    # Load Mastodon environment variables
+    . /opt/bitnami/scripts/mastodon-env.sh
+
+    mastodon_wait_for_s3_connection "$MASTODON_S3_HOSTNAME" "$MASTODON_S3_PORT_NUMBER"
+  {{- end }}
   precompile-assets.sh: |-
     #!/bin/bash
 

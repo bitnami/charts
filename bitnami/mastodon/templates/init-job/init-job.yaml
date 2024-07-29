@@ -61,6 +61,47 @@ spec:
             - name: empty-dir
               mountPath: /public
               subPath: app-public-dir
+        {{- if and .Values.initJob.precompileAssets .Values.enableS3 }}
+        - name: wait-for-s3
+          image: {{ template "mastodon.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/bash
+            - -ec
+          args:
+            - /scripts/wait-for-s3.sh
+          {{- if .Values.initJob.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.initJob.resources }}
+          resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: MASTODON_S3_HOSTNAME
+              value: {{ include "mastodon.s3.host" . | quote }}
+            - name: MASTODON_S3_PORT_NUMBER
+              value: {{ include "mastodon.s3.port" . | quote }}
+            - name: MASTODON_AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.s3.secretName" . }}
+                  key: {{ include "mastodon.s3.accessKeyIDKey" . | quote }}
+            - name: MASTODON_AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.s3.secretName" . }}
+                  key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: scripts
+              mountPath: /scripts
+        {{- end }}
       containers:
         # We separate the job in multiple containers to be able to run them in parallel. We put everything on the same job
         # as it follows the Job Pattern best practices
