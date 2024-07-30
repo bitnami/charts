@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.10 (2024-07-29)
+## 6.2.11 (2024-07-30)
 
-* [bitnami/mastodon] Improve init-job stability ([#28553](https://github.com/bitnami/charts/pull/28553))
+* [bitnami/mastodon] Release 6.2.10 ([#28479](https://github.com/bitnami/charts/pull/28479))
+
+## <small>6.2.10 (2024-07-29)</small>
+
+* [bitnami/mastodon] Improve init-job stability (#28553) ([befdf07](https://github.com/bitnami/charts/commit/befdf07bececdf47b43c0b5e0abf9981457e6f3d)), closes [#28553](https://github.com/bitnami/charts/issues/28553)
 
 ## <small>6.2.9 (2024-07-22)</small>
 
