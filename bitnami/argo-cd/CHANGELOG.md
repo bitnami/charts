@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.8 (2024-07-25)
+## 6.6.9 (2024-07-26)
 
-* [bitnami/argo-cd] Release 6.6.8 ([#28399](https://github.com/bitnami/charts/pull/28399))
+* [bitnami/argo-cd] Bugfix cluster-config.yaml nil pointer evaluating interface {}.XXX ([#28522](https://github.com/bitnami/charts/pull/28522))
+
+## <small>6.6.8 (2024-07-25)</small>
+
+* [bitnami/argo-cd] Release 6.6.8 (#28399) ([2c1ca0f](https://github.com/bitnami/charts/commit/2c1ca0fa691652683f0a644b67f4b08bc24fdc09)), closes [#28399](https://github.com/bitnami/charts/issues/28399)
 
 ## <small>6.6.7 (2024-07-24)</small>
 

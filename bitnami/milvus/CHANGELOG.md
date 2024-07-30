@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.6 (2024-07-25)
+## 8.3.7 (2024-07-25)
 
-* [bitnami/milvus] Release 8.3.6 ([#28439](https://github.com/bitnami/charts/pull/28439))
+* [bitnami/milvus] fix: :bug: Set cache directory fully writable in attu ([#28521](https://github.com/bitnami/charts/pull/28521))
+
+## <small>8.3.6 (2024-07-25)</small>
+
+* [bitnami/milvus] Release 8.3.6 (#28439) ([33e113a](https://github.com/bitnami/charts/commit/33e113a21a95f4c6c6075a1bb83b485d885f0e52)), closes [#28439](https://github.com/bitnami/charts/issues/28439)
 
 ## <small>8.3.5 (2024-07-24)</small>
 

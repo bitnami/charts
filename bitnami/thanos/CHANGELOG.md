@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.14 (2024-07-24)
+## 15.7.15 (2024-07-25)
 
-* [bitnami/thanos] Release 15.7.14 ([#28386](https://github.com/bitnami/charts/pull/28386))
+* [bitnami/thanos] Release 15.7.15 ([#28508](https://github.com/bitnami/charts/pull/28508))
+
+## <small>15.7.14 (2024-07-24)</small>
+
+* [bitnami/thanos] Release 15.7.14 (#28386) ([edf6bd2](https://github.com/bitnami/charts/commit/edf6bd206e61401919388afae48c86202c6adc88)), closes [#28386](https://github.com/bitnami/charts/issues/28386)
 
 ## <small>15.7.13 (2024-07-18)</small>
 
