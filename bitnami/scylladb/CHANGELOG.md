@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.9 (2024-07-30)
+## 1.0.10 (2024-07-30)
 
 * [bitnami/scylladb] Improve Ginkgo tests ([#28575](https://github.com/bitnami/charts/pull/28575))
 
