@@ -34,6 +34,7 @@ var _ = Describe("Scylladb", Ordered, func() {
 		It("should have access to the created database", func() {
 			By("checking all the replicas are available")
 			getAvailableReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.AvailableReplicas }
+			getObservedGeneration := func(ss *appsv1.StatefulSet) int64 { return ss.Status.ObservedGeneration }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 			getOpts := metav1.GetOptions{}
 
@@ -71,18 +72,18 @@ var _ = Describe("Scylladb", Ordered, func() {
 				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
-			By("scaling down to 0 replicas")
+			By("deleting the job once it has succeeded")
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, createDBJobName, metav1.DeleteOptions{})
+			Expect(err).NotTo(HaveOccurred())
 
-			ss, err = utils.StsScale(ctx, c, ss, 0)
+			By("rollout restart the statefulset")
+			initialRevision := ss.Status.ObservedGeneration
+			_, err = utils.StsRolloutRestart(ctx, c, ss)
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
-
-			By("scaling up to the original replicas")
-			ss, err = utils.StsScale(ctx, c, ss, origReplicas)
-			Expect(err).NotTo(HaveOccurred())
+			}, timeout, PollingInterval).Should(WithTransform(getObservedGeneration, BeNumerically(">", initialRevision)))
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
@@ -97,6 +98,10 @@ var _ = Describe("Scylladb", Ordered, func() {
 			Eventually(func() (*batchv1.Job, error) {
 				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
+
+			By("deleting the job once it has succeeded")
+			err = c.BatchV1().Jobs(namespace).Delete(ctx, deleteDBJobName, metav1.DeleteOptions{})
+			Expect(err).NotTo(HaveOccurred())
 		})
 	})
 
