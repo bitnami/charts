@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.4 (2024-07-24)
+## 14.6.5 (2024-07-25)
 
-* [bitnami/rabbitmq] Release 14.6.4 ([#28361](https://github.com/bitnami/charts/pull/28361))
+* [bitnami/rabbitmq] Release 14.6.5 ([#28473](https://github.com/bitnami/charts/pull/28473))
+
+## <small>14.6.4 (2024-07-24)</small>
+
+* [bitnami/rabbitmq] Release 14.6.4 (#28361) ([ab8d156](https://github.com/bitnami/charts/commit/ab8d1562d3da46daeca8f0a70119b57aa5f402c5)), closes [#28361](https://github.com/bitnami/charts/issues/28361)
 
 ## <small>14.6.3 (2024-07-23)</small>
 
