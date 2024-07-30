@@ -14,7 +14,7 @@ annotations:
     - name: harbor-jobservice
       image: docker.io/bitnami/harbor-jobservice:2.11.0-debian-12-r7
     - name: harbor-portal
-      image: docker.io/bitnami/harbor-portal:2.11.0-debian-12-r6
+      image: docker.io/bitnami/harbor-portal:2.11.0-debian-12-r7
     - name: harbor-registry
       image: docker.io/bitnami/harbor-registry:2.11.0-debian-12-r6
     - name: harbor-registryctl
@@ -55,4 +55,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 22.0.9
+version: 22.0.10
