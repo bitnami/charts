@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.15 (2024-07-25)
+## 11.2.16 (2024-07-29)
 
-* [bitnami/kibana] Release 11.2.15 ([#28471](https://github.com/bitnami/charts/pull/28471))
+* add publicBaseUrl param ([#28543](https://github.com/bitnami/charts/pull/28543))
+
+## <small>11.2.15 (2024-07-25)</small>
+
+* [bitnami/kibana] Release 11.2.15 (#28471) ([bf1bafa](https://github.com/bitnami/charts/commit/bf1bafaf00358d46360f229ff3a362eb6a642eff)), closes [#28471](https://github.com/bitnami/charts/issues/28471)
 
 ## <small>11.2.14 (2024-07-24)</small>
 
