@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.10 (2024-07-24)
+## 7.4.11 (2024-07-25)
 
-* [bitnami/memcached] Release 7.4.10 ([#28321](https://github.com/bitnami/charts/pull/28321))
+* [bitnami/memcached] Release 7.4.11 ([#28434](https://github.com/bitnami/charts/pull/28434))
+
+## <small>7.4.10 (2024-07-24)</small>
+
+* [bitnami/memcached] Release 7.4.10 (#28321) ([21df996](https://github.com/bitnami/charts/commit/21df996c7dc8521febae5d3ac286db0e79dac8c4)), closes [#28321](https://github.com/bitnami/charts/issues/28321)
 
 ## <small>7.4.9 (2024-07-17)</small>
 

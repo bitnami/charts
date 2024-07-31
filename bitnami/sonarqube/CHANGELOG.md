@@ -1,8 +1,16 @@
 # Changelog
 
-## 5.2.10 (2024-07-16)
+## 5.2.12 (2024-07-25)
 
-* [bitnami/sonarqube] Global StorageClass as default value ([#28097](https://github.com/bitnami/charts/pull/28097))
+* [bitnami/sonarqube] Release 5.2.12 ([#28496](https://github.com/bitnami/charts/pull/28496))
+
+## <small>5.2.11 (2024-07-24)</small>
+
+* [bitnami/sonarqube] Release 5.2.11 (#28372) ([ad643fb](https://github.com/bitnami/charts/commit/ad643fb7e913cf2d3a88ccd95613ff68b6a06f8f)), closes [#28372](https://github.com/bitnami/charts/issues/28372)
+
+## <small>5.2.10 (2024-07-16)</small>
+
+* [bitnami/sonarqube] Global StorageClass as default value (#28097) ([08dbee6](https://github.com/bitnami/charts/commit/08dbee687e0a8f407953ee4e63ef573860e9bfc4)), closes [#28097](https://github.com/bitnami/charts/issues/28097)
 
 ## <small>5.2.9 (2024-07-12)</small>
 

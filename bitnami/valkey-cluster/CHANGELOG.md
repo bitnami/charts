@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.1.4 (2024-07-19)
+## 0.1.7 (2024-07-29)
 
-* [bitanami/valkey-cluster] fix name generation loop in the external access template ([#28163](https://github.com/bitnami/charts/pull/28163))
+* [bitnami/valkey-cluster] update metrics-svc template name format ([#27993](https://github.com/bitnami/charts/pull/27993))
+
+## <small>0.1.6 (2024-07-25)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.6 (#28492) ([979a50b](https://github.com/bitnami/charts/commit/979a50b707efbfee186c31b84fc91c839b116768)), closes [#28492](https://github.com/bitnami/charts/issues/28492)
+
+## <small>0.1.5 (2024-07-24)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.5 (#28377) ([463a4ec](https://github.com/bitnami/charts/commit/463a4ecb66163eea70aea9cdcd85907360c7bf2c)), closes [#28377](https://github.com/bitnami/charts/issues/28377)
+
+## <small>0.1.4 (2024-07-22)</small>
+
+* [bitanami/valkey-cluster] fix name generation loop in the external access template (#28163) ([0acace4](https://github.com/bitnami/charts/commit/0acace4851bcfee9ff90935194a9d3acf371f9dc)), closes [#28163](https://github.com/bitnami/charts/issues/28163)
 
 ## <small>0.1.3 (2024-07-18)</small>
 
