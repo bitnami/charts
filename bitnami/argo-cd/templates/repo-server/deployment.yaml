@@ -162,14 +162,9 @@ spec:
           args:
             - |-
               {{- range $additionalBinary := .Values.repoServer.configManagementPlugins.additionalBinaries }}
-              {{- if $additionalBinary.customScript }}
-              # downloading {{ $additionalBinary.name }}
-              {{ $additionalBinary.customScript | nindent 14 }}
-              {{- else }}
               # downloading {{ $additionalBinary.name }}
               curl -L {{ $additionalBinary.url }} -o /additional-binaries/{{ $additionalBinary.name }}
               chmod +x /additional-binaries/{{ $additionalBinary.name }}
-              {{- end }}
               {{- end }}
           volumeMounts:
             - mountPath: /additional-binaries
