@@ -218,7 +218,7 @@ spec:
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
             {{- if and .Values.adminIngress.enabled .Values.adminIngress.hostname }}
-            - name: KC_HOSTNAME_ADMIN_URL
+            - name: KEYCLOAK_HOSTNAME_ADMIN
               value: |-
                 {{ ternary "https://" "http://" ( or .Values.adminIngress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
                 {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) -}}
@@ -233,7 +233,7 @@ spec:
                 {{- end }}
             {{- end }}
             {{- if and .Values.ingress.enabled .Values.ingress.hostname }}
-            - name: KC_HOSTNAME_URL
+            - name: KEYCLOAK_HOSTNAME
               value: |-
                 {{ ternary "https://" "http://" ( or .Values.ingress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
                 {{- include "common.tplvalues.render" (dict "value" .Values.ingress.hostname "context" $) -}}
