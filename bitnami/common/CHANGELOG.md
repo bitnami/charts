@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.21.0 (2024-07-30)
+## 2.21.0 (2024-07-31)
 
 * [bitnami/common] Allow handling of new secrets after initial installation ([#28581](https://github.com/bitnami/charts/pull/28581))
 
