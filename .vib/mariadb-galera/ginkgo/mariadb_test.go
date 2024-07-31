@@ -70,17 +70,8 @@ var _ = Describe("MariaDB Galera", Ordered, func() {
 				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
-			By("scaling down to 0 replicas")
-			ss, err = utils.StsScale(ctx, c, ss, 0)
-			Expect(err).NotTo(HaveOccurred())
-
-			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
-
-			By("scaling up to the original replicas")
-			ss, err = utils.StsScale(ctx, c, ss, origReplicas)
-			Expect(err).NotTo(HaveOccurred())
+			By("running rollout restart")
+			ss, err = utils.StsRolloutRestart(ctx, c, ss)
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
