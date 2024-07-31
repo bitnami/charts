@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.7 (2024-07-30)
+## 1.0.7 (2024-07-31)
 
 * [bitnami/seaweedfs] Fix mounting the S3 auth config.json from secret ([#28583](https://github.com/bitnami/charts/pull/28583))
 
