@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"maps"
 	"strconv"
 	"time"
 
@@ -109,7 +108,9 @@ func StsPodAnnotate(ctx context.Context, c kubernetes.Interface, ss *appsv1.Stat
 		if ss.Spec.Template.Annotations == nil {
 			ss.Spec.Template.Annotations = make(map[string]string)
 		}
-		maps.Copy(ss.Spec.Template.Annotations, annotations)
+		for k, v := range annotations {
+			ss.Spec.Template.Annotations[k] = v
+		}
 		ss, err = c.AppsV1().StatefulSets(ns).Update(ctx, ss, metav1.UpdateOptions{})
 		if err == nil {
 			return ss, nil
