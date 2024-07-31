@@ -22,6 +22,9 @@ data:
     {{- if .Values.configuration.server.basePath }}
     server.basePath: {{ .Values.configuration.server.basePath | quote }}
     {{- end }}
+    {{- if or .Values.configuration.server.publicBaseUrl .Values.ingress.enabled }}
+    server.publicBaseUrl: {{ default .Values.ingress.hostname .Values.configuration.server.publicBaseUrl }}
+    {{- end }}
     server.rewriteBasePath: {{ .Values.configuration.server.rewriteBasePath }}
     {{- if .Values.extraConfiguration }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraConfiguration "context" $ ) | nindent 4 }}

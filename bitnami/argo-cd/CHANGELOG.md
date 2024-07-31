@@ -1,8 +1,32 @@
 # Changelog
 
-## 6.6.3 (2024-07-16)
+## 6.6.9 (2024-07-26)
 
-* [bitnami/argo-cd] Global StorageClass as default value ([#27999](https://github.com/bitnami/charts/pull/27999))
+* [bitnami/argo-cd] Bugfix cluster-config.yaml nil pointer evaluating interface {}.XXX ([#28522](https://github.com/bitnami/charts/pull/28522))
+
+## <small>6.6.8 (2024-07-25)</small>
+
+* [bitnami/argo-cd] Release 6.6.8 (#28399) ([2c1ca0f](https://github.com/bitnami/charts/commit/2c1ca0fa691652683f0a644b67f4b08bc24fdc09)), closes [#28399](https://github.com/bitnami/charts/issues/28399)
+
+## <small>6.6.7 (2024-07-24)</small>
+
+* [bitnami/argo-cd] Release 6.6.7 (#28363) ([4d99194](https://github.com/bitnami/charts/commit/4d99194aa1da4c00d2838540770bc7befe982683)), closes [#28363](https://github.com/bitnami/charts/issues/28363)
+
+## <small>6.6.6 (2024-07-24)</small>
+
+* [bitnami/argo-cd] Release 6.6.6 (#28344) ([95e78c0](https://github.com/bitnami/charts/commit/95e78c03303a22ff50bc639d06548bc1eaa0095f)), closes [#28344](https://github.com/bitnami/charts/issues/28344)
+
+## <small>6.6.5 (2024-07-24)</small>
+
+* [bitnami/argo-cd] Release 6.6.5 (#28232) ([5e5bd07](https://github.com/bitnami/charts/commit/5e5bd0720ad4d4c40287ef412c019186a073ffe3)), closes [#28232](https://github.com/bitnami/charts/issues/28232)
+
+## <small>6.6.4 (2024-07-23)</small>
+
+* [bitnami/argo-cd] Release 6.6.4 (#28208) ([374fda5](https://github.com/bitnami/charts/commit/374fda56e3d11e5fa75710b58f92b85e6fc14aff)), closes [#28208](https://github.com/bitnami/charts/issues/28208)
+
+## <small>6.6.3 (2024-07-18)</small>
+
+* [bitnami/argo-cd] Global StorageClass as default value (#27999) ([61c4086](https://github.com/bitnami/charts/commit/61c408671f7e016213ca8ac1e129c44b8ae96bc9)), closes [#27999](https://github.com/bitnami/charts/issues/27999)
 
 ## <small>6.6.2 (2024-07-16)</small>
 

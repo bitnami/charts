@@ -1,8 +1,20 @@
 # Changelog
 
-## 8.0.2 (2024-07-18)
+## 8.0.5 (2024-07-25)
 
-* [bitnami/matomo] Global StorageClass as default value ([#28053](https://github.com/bitnami/charts/pull/28053))
+* [bitnami/matomo] Release 8.0.5 ([#28484](https://github.com/bitnami/charts/pull/28484))
+
+## <small>8.0.4 (2024-07-24)</small>
+
+* [bitnami/matomo] Release 8.0.4 (#28319) ([2f1007f](https://github.com/bitnami/charts/commit/2f1007ff57aea8c2cbe82e906fc5899fd82dbef2)), closes [#28319](https://github.com/bitnami/charts/issues/28319)
+
+## <small>8.0.3 (2024-07-23)</small>
+
+* [bitnami/matomo] Release 8.0.3 (#28215) ([649ace7](https://github.com/bitnami/charts/commit/649ace7b2dec277b84fe9c03330e3dd619f7ea04)), closes [#28215](https://github.com/bitnami/charts/issues/28215)
+
+## <small>8.0.2 (2024-07-18)</small>
+
+* [bitnami/matomo] Global StorageClass as default value (#28053) ([a5458d4](https://github.com/bitnami/charts/commit/a5458d432a23c8694bf7505892aef4326800f198)), closes [#28053](https://github.com/bitnami/charts/issues/28053)
 
 ## <small>8.0.1 (2024-07-16)</small>
 

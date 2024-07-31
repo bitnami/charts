@@ -1,8 +1,16 @@
 # Changelog
 
-## 23.0.1 (2024-07-16)
+## 23.0.3 (2024-07-25)
 
-* [bitnami/moodle] Global StorageClass as default value ([#28063](https://github.com/bitnami/charts/pull/28063))
+* [bitnami/moodle] Release 23.0.3 ([#28481](https://github.com/bitnami/charts/pull/28481))
+
+## <small>23.0.2 (2024-07-24)</small>
+
+* [bitnami/moodle] Release 23.0.2 (#28326) ([d34f453](https://github.com/bitnami/charts/commit/d34f4534561dcdf2b71fadfe6293b40ff7dc5ca2)), closes [#28326](https://github.com/bitnami/charts/issues/28326)
+
+## <small>23.0.1 (2024-07-18)</small>
+
+* [bitnami/moodle] Global StorageClass as default value (#28063) ([486e76a](https://github.com/bitnami/charts/commit/486e76ac4581cbd1f64f40407e5427b49b6ca452)), closes [#28063](https://github.com/bitnami/charts/issues/28063)
 
 ## 23.0.0 (2024-07-13)
 

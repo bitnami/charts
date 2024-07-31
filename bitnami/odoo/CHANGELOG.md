@@ -1,8 +1,20 @@
 # Changelog
 
-## 26.2.11 (2024-07-16)
+## 26.2.14 (2024-07-30)
 
-* [bitnami/odoo] Global StorageClass as default value ([#28074](https://github.com/bitnami/charts/pull/28074))
+* [bitnami/odoo] Release 26.2.14 ([#28582](https://github.com/bitnami/charts/pull/28582))
+
+## <small>26.2.13 (2024-07-25)</small>
+
+* [bitnami/odoo] Release 26.2.13 (#28464) ([c7ddcbd](https://github.com/bitnami/charts/commit/c7ddcbd968233c8d812b09cea0ddf876a9816f4f)), closes [#28464](https://github.com/bitnami/charts/issues/28464)
+
+## <small>26.2.12 (2024-07-24)</small>
+
+* [bitnami/odoo] Release 26.2.12 (#28351) ([3f7dc35](https://github.com/bitnami/charts/commit/3f7dc35cb6d60e2a9e45e576c520d7f27e07fb5e)), closes [#28351](https://github.com/bitnami/charts/issues/28351)
+
+## <small>26.2.11 (2024-07-18)</small>
+
+* [bitnami/odoo] Global StorageClass as default value (#28074) ([4e782d5](https://github.com/bitnami/charts/commit/4e782d5a4cdedb9984a10175ff8144711d09c452)), closes [#28074](https://github.com/bitnami/charts/issues/28074)
 
 ## <small>26.2.10 (2024-07-05)</small>
 
