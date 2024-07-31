@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"maps"
 	"strconv"
 	"time"
 
@@ -81,6 +82,34 @@ func StsRolloutRestart(ctx context.Context, c kubernetes.Interface, ss *appsv1.S
 			ss.Spec.Template.Annotations = make(map[string]string)
 		}
 		ss.Spec.Template.Annotations["kubectl.kubernetes.io/restartedAt"] = time.Now().Format(time.RFC3339)
+		ss, err = c.AppsV1().StatefulSets(ns).Update(ctx, ss, metav1.UpdateOptions{})
+		if err == nil {
+			return ss, nil
+		}
+		if !apierrors.IsConflict(err) && !apierrors.IsServerTimeout(err) {
+			return nil, fmt.Errorf("failed to update statefulset %q: %v", name, err)
+		}
+	}
+
+	return nil, fmt.Errorf("too many retries draining statefulset %q", name)
+}
+
+// StsPodAnnotate annotate pods. This also performs a rollout restart in StatefulSet instances
+func StsPodAnnotate(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSet, annotations map[string]string) (*appsv1.StatefulSet, error) {
+	name := ss.Name
+	ns := ss.Namespace
+	const maxRetries = 3
+
+	for i := 0; i < maxRetries; i++ {
+		ss, err := c.AppsV1().StatefulSets(ns).Get(ctx, name, metav1.GetOptions{})
+		if err != nil {
+			return nil, fmt.Errorf("failed to get statefulset %q: %v", name, err)
+		}
+		// Update the statefulset's annotation to trigger a restart
+		if ss.Spec.Template.Annotations == nil {
+			ss.Spec.Template.Annotations = make(map[string]string)
+		}
+		maps.Copy(ss.Spec.Template.Annotations, annotations)
 		ss, err = c.AppsV1().StatefulSets(ns).Update(ctx, ss, metav1.UpdateOptions{})
 		if err == nil {
 			return ss, nil
