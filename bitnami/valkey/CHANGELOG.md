@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.11 (2024-07-24)
+## 0.3.12 (2024-07-25)
 
-* [bitnami/valkey] Release 0.3.11 ([#28376](https://github.com/bitnami/charts/pull/28376))
+* [bitnami/valkey] Release 0.3.12 ([#28493](https://github.com/bitnami/charts/pull/28493))
+
+## <small>0.3.11 (2024-07-24)</small>
+
+* [bitnami/valkey] Release 0.3.11 (#28376) ([04f440d](https://github.com/bitnami/charts/commit/04f440d1b013f19fc76ac04bcc40d2574db09c60)), closes [#28376](https://github.com/bitnami/charts/issues/28376)
 
 ## <small>0.3.10 (2024-07-16)</small>
 

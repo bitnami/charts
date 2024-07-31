@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.0 (2024-07-25)
+## 2.1.0 (2024-07-31)
 
 * [bitnami/haproxy] Support deployment annotations ([#28334](https://github.com/bitnami/charts/pull/28334))
+
+## 2.0.17 (2024-07-29)
+
+* [bitnami/haproxy] Release 2.0.17 ([#28557](https://github.com/bitnami/charts/pull/28557))
 
 ## <small>2.0.16 (2024-07-25)</small>
 

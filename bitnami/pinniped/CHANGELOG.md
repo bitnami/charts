@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.11 (2024-07-24)
+## 2.2.12 (2024-07-25)
 
-* [bitnami/pinniped] Release 2.2.11 ([#28350](https://github.com/bitnami/charts/pull/28350))
+* [bitnami/pinniped] Release 2.2.12 ([#28467](https://github.com/bitnami/charts/pull/28467))
+
+## <small>2.2.11 (2024-07-24)</small>
+
+* [bitnami/pinniped] Release 2.2.11 (#28350) ([9a50783](https://github.com/bitnami/charts/commit/9a50783a3d1a12ce80b94f6d30ecdc127cf80b92)), closes [#28350](https://github.com/bitnami/charts/issues/28350)
 
 ## <small>2.2.10 (2024-07-16)</small>
 
