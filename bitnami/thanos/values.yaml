@@ -3305,6 +3305,10 @@ ruler:
   ## Specify content for ruler.yml
   ##
   config: ""
+  ## @param ruler.dataPath Path to the data directory
+  ##
+  ## e.g. /data
+  dataPath: ""
   ## @param ruler.existingConfigmap Name of existing ConfigMap with Ruler configuration
   ## NOTE: This will override ruler.config
   ##
