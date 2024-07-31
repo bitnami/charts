@@ -1,8 +1,24 @@
 # Changelog
 
-## 0.1.6 (2024-07-11)
+## 0.1.10 (2024-07-31)
 
 * [bitnami/dremio] rename http-web port name to http ([#27894](https://github.com/bitnami/charts/pull/27894))
+
+## 0.1.9 (2024-07-25)
+
+* [bitnami/dremio] Release 0.1.9 ([#28486](https://github.com/bitnami/charts/pull/28486))
+
+## <small>0.1.8 (2024-07-24)</small>
+
+* [bitnami/dremio] Release 0.1.8 (#28359) ([48934e0](https://github.com/bitnami/charts/commit/48934e0672b4027bafa4ecb48ac14089d76d7818)), closes [#28359](https://github.com/bitnami/charts/issues/28359)
+
+## <small>0.1.7 (2024-07-24)</small>
+
+* [bitnami/dremio] Release 0.1.7 (#28249) ([ae7590f](https://github.com/bitnami/charts/commit/ae7590f3f3c538f03961784a7698529d58ccb901)), closes [#28249](https://github.com/bitnami/charts/issues/28249)
+
+## <small>0.1.6 (2024-07-22)</small>
+
+* [bitnami/dremio] Global StorageClass as default value (#28012) ([97e506b](https://github.com/bitnami/charts/commit/97e506bb3d54b34bb3ccb9bfb63b2d801f2c6fd3)), closes [#28012](https://github.com/bitnami/charts/issues/28012)
 
 ## <small>0.1.5 (2024-07-05)</small>
 

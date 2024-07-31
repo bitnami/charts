@@ -340,7 +340,7 @@ keycloak: tls.enabled
 
 {{/* Validate values of Keycloak - Production mode enabled */}}
 {{- define "keycloak.validateValues.production" -}}
-{{- if and .Values.production (not .Values.tls.enabled) (not (eq .Values.proxy "edge")) -}}
+{{- if and .Values.production (not .Values.tls.enabled) (not (eq .Values.proxy "edge")) (empty .Values.proxyHeaders) -}}
 keycloak: production
     In order to enable Production mode, you also need to enable HTTPS/TLS
     using the value 'tls.enabled' and providing an existing secret containing the Keystore and Trustore.

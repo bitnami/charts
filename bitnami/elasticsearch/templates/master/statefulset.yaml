@@ -105,6 +105,32 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.sysctlImage.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: copy-tls-certificates
+          image: bitnami/os-shell:12-debian-12-r22
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              ls -l /
+              ls -l /certs
+              for file in /certs/*; do
+                  if [ -f "$file" ]; then
+                      filename=$(basename "$file")
+                      dst_file="/tmp/$filename"
+                      cat "$file" > "$dst_file"
+                      echo "Copied $file to $dst_file"
+                  fi
+              done
+              echo "All files have been copied." 
+          volumeMounts:
+            - name: elasticsearch-certificates
+              mountPath: /certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: certs
+        {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.master.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "elasticsearch.volumePermissions.image" . }}
@@ -319,9 +345,9 @@ spec:
               subPath: my_elasticsearch.yml
             {{- end }}
             {{- if .Values.security.enabled }}
-            - name: elasticsearch-certificates
+            - name: empty-dir
               mountPath: /opt/bitnami/elasticsearch/config/certs
-              readOnly: true
+              subPath: certs
             {{- end }}
             {{- if .Values.initScripts }}
             - name: custom-init-scripts
@@ -391,6 +417,11 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.master.persistence.existingClaim }}
   {{- else }}
+  {{- if .Values.master.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: "data"

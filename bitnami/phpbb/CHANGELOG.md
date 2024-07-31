@@ -1,8 +1,25 @@
 # Changelog
 
-## 18.2.8 (2024-07-03)
+## 19.0.3 (2024-07-25)
 
-* [bitnami/phpbb] Release 18.2.8 ([#27710](https://github.com/bitnami/charts/pull/27710))
+* [bitnami/phpbb] Release 19.0.3 ([#28465](https://github.com/bitnami/charts/pull/28465))
+
+## <small>19.0.2 (2024-07-24)</small>
+
+* [bitnami/phpbb] Release 19.0.2 (#28354) ([fec8587](https://github.com/bitnami/charts/commit/fec858740431410abb301d0be8d9d8e67566b58a)), closes [#28354](https://github.com/bitnami/charts/issues/28354)
+
+## <small>19.0.1 (2024-07-16)</small>
+
+* [bitnami/phpbb] Global StorageClass as default value (#28079) ([cab3bb8](https://github.com/bitnami/charts/commit/cab3bb8b41f8f09dde60b2c5d64f6c14c8d6a8e4)), closes [#28079](https://github.com/bitnami/charts/issues/28079)
+
+## 19.0.0 (2024-07-12)
+
+* [bitnami/phpbb] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27929) ([72a6347](https://github.com/bitnami/charts/commit/72a63477d7342a93ff073e9d32efffa49a3269a9)), closes [#27929](https://github.com/bitnami/charts/issues/27929)
+
+## <small>18.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/phpbb] Release 18.2.8 (#27710) ([2a714b6](https://github.com/bitnami/charts/commit/2a714b6970842c734b2a469e5d265c02c03f8588)), closes [#27710](https://github.com/bitnami/charts/issues/27710)
 
 ## <small>18.2.7 (2024-06-18)</small>
 

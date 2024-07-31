@@ -1,8 +1,29 @@
 # Changelog
 
-## 29.0.9 (2024-07-03)
+## 30.0.4 (2024-07-25)
 
-* [bitnami/spring-cloud-dataflow] Release 29.0.9 ([#27721](https://github.com/bitnami/charts/pull/27721))
+* [bitnami/spring-cloud-dataflow] Release 30.0.4 ([#28490](https://github.com/bitnami/charts/pull/28490))
+
+## <small>30.0.3 (2024-07-24)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 30.0.3 (#28378) ([91ec994](https://github.com/bitnami/charts/commit/91ec994833dd0be99c363e4ff7c817b99dd8bacf)), closes [#28378](https://github.com/bitnami/charts/issues/28378)
+
+## <small>30.0.2 (2024-07-19)</small>
+
+* [bitnami/spring-cloud-dataflow] Global StorageClass as default value (#28099) ([8adda63](https://github.com/bitnami/charts/commit/8adda63eaf319c373fb0e822aa3bf7da263dafea)), closes [#28099](https://github.com/bitnami/charts/issues/28099)
+
+## <small>30.0.1 (2024-07-19)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 30.0.1 (#28170) ([5acbf5d](https://github.com/bitnami/charts/commit/5acbf5d9c113a265e65d4b5f91e1676d37a578fe)), closes [#28170](https://github.com/bitnami/charts/issues/28170)
+
+## 30.0.0 (2024-07-16)
+
+* [bitnami/spring-cloud-dataflow] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27931) ([e319e16](https://github.com/bitnami/charts/commit/e319e16c3ca9b4390de72f20550a09e037cc023f)), closes [#27931](https://github.com/bitnami/charts/issues/27931)
+
+## <small>29.0.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/spring-cloud-dataflow] Release 29.0.9 (#27721) ([118d637](https://github.com/bitnami/charts/commit/118d63706b4d9709d1f806dc9ade176de7028124)), closes [#27721](https://github.com/bitnami/charts/issues/27721)
 
 ## <small>29.0.8 (2024-06-18)</small>
 

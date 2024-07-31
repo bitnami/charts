@@ -1,8 +1,21 @@
 # Changelog
 
-## 4.2.8 (2024-07-03)
+## 4.2.11 (2024-07-25)
 
-* [bitnami/concourse] Release 4.2.8 ([#27727](https://github.com/bitnami/charts/pull/27727))
+* [bitnami/concourse] Release 4.2.11 ([#28503](https://github.com/bitnami/charts/pull/28503))
+
+## <small>4.2.10 (2024-07-24)</small>
+
+* [bitnami/concourse] Release 4.2.10 (#28385) ([39f4fe2](https://github.com/bitnami/charts/commit/39f4fe20c02e73c49c068b3a0b3f2a0647371507)), closes [#28385](https://github.com/bitnami/charts/issues/28385)
+
+## <small>4.2.9 (2024-07-16)</small>
+
+* [bitnami/concourse] Global StorageClass as default value (#28006) ([841a853](https://github.com/bitnami/charts/commit/841a853202dc4f7eef67cd5b26990eecaa3c781e)), closes [#28006](https://github.com/bitnami/charts/issues/28006)
+
+## <small>4.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/concourse] Release 4.2.8 (#27727) ([620335f](https://github.com/bitnami/charts/commit/620335fb27cad38074d5ce6b3bb18e9f1c8f16b2)), closes [#27727](https://github.com/bitnami/charts/issues/27727)
 
 ## <small>4.2.7 (2024-06-18)</small>
 
