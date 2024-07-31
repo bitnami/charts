@@ -4,9 +4,9 @@
 
 * [bitnami/dremio] rename http-web port name to http ([#27894](https://github.com/bitnami/charts/pull/27894))
 
-## 0.1.9 (2024-07-25)
+## <small>0.1.9 (2024-07-25)</small>
 
-* [bitnami/dremio] Release 0.1.9 ([#28486](https://github.com/bitnami/charts/pull/28486))
+* [bitnami/dremio] Release 0.1.9 (#28486) ([55975e8](https://github.com/bitnami/charts/commit/55975e8a9a58d7901657631ac19af3fcda1ac0c8)), closes [#28486](https://github.com/bitnami/charts/issues/28486)
 
 ## <small>0.1.8 (2024-07-24)</small>
 
