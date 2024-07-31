@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.0.5 (2024-07-25)
+## 14.0.6 (2024-07-31)
 
-* [bitnami/mariadb-galera] Release 14.0.5 ([#28433](https://github.com/bitnami/charts/pull/28433))
+* [bitnami/mariadb-galera] fix: ginkgo tests ([#28598](https://github.com/bitnami/charts/pull/28598))
+
+## <small>14.0.5 (2024-07-25)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.5 (#28433) ([9bebacc](https://github.com/bitnami/charts/commit/9bebaccf79d025738864c7baa54394259005023b)), closes [#28433](https://github.com/bitnami/charts/issues/28433)
 
 ## <small>14.0.4 (2024-07-24)</small>
 
