@@ -76,7 +76,7 @@ var _ = Describe("MariaDB Galera", Ordered, func() {
 
 			By("running rollout restart")
 			// Annotate pods to force a rollout restart
-			ss, err = utils.StsPodAnnotate(ctx, c, ss, restartAnnotation)
+			ss, err = utils.StsAnnotateTemplate(ctx, c, ss, restartAnnotation)
 
 			// Wait for the new annotation in the existing pods
 			for i := int(origReplicas) - 1; i >= 0; i-- {

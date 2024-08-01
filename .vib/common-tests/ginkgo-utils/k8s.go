@@ -93,8 +93,8 @@ func StsRolloutRestart(ctx context.Context, c kubernetes.Interface, ss *appsv1.S
 	return nil, fmt.Errorf("too many retries draining statefulset %q", name)
 }
 
-// StsPodAnnotate annotate pods. This also performs a rollout restart in StatefulSet instances
-func StsPodAnnotate(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSet, annotations map[string]string) (*appsv1.StatefulSet, error) {
+// StsAnnotateTemplate annotate pods. This also performs a rollout restart in StatefulSet instances
+func StsAnnotateTemplate(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSet, annotations map[string]string) (*appsv1.StatefulSet, error) {
 	name := ss.Name
 	ns := ss.Namespace
 	const maxRetries = 3
