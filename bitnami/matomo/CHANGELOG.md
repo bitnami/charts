@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.0.4 (2024-07-24)
+## 8.0.5 (2024-07-25)
 
-* [bitnami/matomo] Release 8.0.4 ([#28319](https://github.com/bitnami/charts/pull/28319))
+* [bitnami/matomo] Release 8.0.5 ([#28484](https://github.com/bitnami/charts/pull/28484))
+
+## <small>8.0.4 (2024-07-24)</small>
+
+* [bitnami/matomo] Release 8.0.4 (#28319) ([2f1007f](https://github.com/bitnami/charts/commit/2f1007ff57aea8c2cbe82e906fc5899fd82dbef2)), closes [#28319](https://github.com/bitnami/charts/issues/28319)
 
 ## <small>8.0.3 (2024-07-23)</small>
 
