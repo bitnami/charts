@@ -1,16 +1,12 @@
 # Changelog
 
+## 22.0.1 (2024-08-01)
+
+* bitnami/Keycloak] Allow manual override fo KC_HOSTNAME_URL and KC_ADMIN_HOSTNAME_URL ([#28523](https://github.com/bitnami/charts/pull/28523))
+
 ## 22.0.0 (2024-07-29)
 
-* [bitnami/keycloak] Release 22.0.0 ([#28563](https://github.com/bitnami/charts/pull/28563))
-
-## 21.8.0 (2024-07-26)
-
-* [bitnami/keycloak] Allow support for gce based ingress controllers (#28519) ([87b60d7](https://github.com/bitnami/charts/commit/87b60d7526474cc22fd8295732f6b1ed7b3771a6)), closes [#28519](https://github.com/bitnami/charts/issues/28519)
-
-## <small>21.7.6 (2024-07-26)</small>
-
-* [bitnami/keycloak] Fix invalid value of proxy headers when legacy proxy is used (#28530) ([372d263](https://github.com/bitnami/charts/commit/372d2638677330da509c8ff2783a2efd48484d45)), closes [#28530](https://github.com/bitnami/charts/issues/28530)
+* [bitnami/keycloak] Release 22.0.0 (#28563) ([81162c4](https://github.com/bitnami/charts/commit/81162c45a2a9759ac00ae26ad0bb5310af4597e4)), closes [#28563](https://github.com/bitnami/charts/issues/28563)
 
 ## 21.8.0 (2024-07-26)
 
