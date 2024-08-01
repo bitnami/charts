@@ -1,8 +1,13 @@
 # Changelog
 
+
 ## 29.3.15 (2024-08-01)
 
 * bitnami/kafka Fix pem auth with custom encrypted private key ([#28618](https://github.com/bitnami/charts/pull/28618))
+
+## 29.3.14 (2024-08-01)
+
+* bitnami/kafka Add extraListeners to kafka.listeners in _helpers.tpl ([#28604](https://github.com/bitnami/charts/pull/28604))
 
 ## <small>29.3.13 (2024-07-25)</small>
 

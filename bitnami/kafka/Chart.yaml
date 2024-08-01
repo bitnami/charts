@@ -41,3 +41,4 @@ name: kafka
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kafka
 version: 29.3.15
+
