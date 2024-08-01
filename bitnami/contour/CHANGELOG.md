@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.10 (2024-07-22)
+## 18.2.11 (2024-08-01)
 
-* [bitnami/contour] Global StorageClass as default value ([#28008](https://github.com/bitnami/charts/pull/28008))
+* [bitnami/contour] Release 18.2.11 ([#28614](https://github.com/bitnami/charts/pull/28614))
+
+## <small>18.2.10 (2024-07-22)</small>
+
+* [bitnami/contour] Global StorageClass as default value (#28008) ([6c4a9bb](https://github.com/bitnami/charts/commit/6c4a9bb690baa192c5ff853950a9bc47ec5dfe68)), closes [#28008](https://github.com/bitnami/charts/issues/28008)
 
 ## <small>18.2.9 (2024-07-04)</small>
 
