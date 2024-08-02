@@ -1,12 +1,8 @@
 # Changelog
 
-## 15.7.18 (2024-08-01)
+## 15.7.18 (2024-08-02)
 
 * [bitnami/thanos] add terminationGracePeriod receiveDistributor ([#28570](https://github.com/bitnami/charts/pull/28570))
-
-## 15.7.17 (2024-08-01)
-
-* [bitnami/thanos] Release 15.7.18 ([#28752](https://github.com/bitnami/charts/pull/28752))
 
 ## <small>15.7.17 (2024-08-02)</small>
 
