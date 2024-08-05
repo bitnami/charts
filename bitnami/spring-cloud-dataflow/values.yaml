@@ -9,7 +9,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -19,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -130,9 +128,6 @@ server:
     ##     authorization-type: dockeroauth2
     ##
     containerRegistries: {}
-    ## @param server.configuration.grafanaInfo Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)
-    ##
-    grafanaInfo: ""
     ## @param server.configuration.metricsDashboard Endpoint to the metricsDashboard instance
     ##
     metricsDashboard: ""
@@ -499,10 +494,6 @@ server:
     ## @param server.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param server.ingress.hostname Default host for the ingress resource
     ##
     hostname: dataflow.local
@@ -1922,15 +1913,6 @@ externalDatabase:
   ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
   hibernateDialect: ""
-  ## @param externalDatabase.password External database password (DEPRECATED: use dataflow.password and skipper.password instead)
-  ##
-  password: ""
-  ## @param externalDatabase.existingPasswordSecret Existing secret with database password (DEPRECATED: use dataflow.existingSecret and skipper.existingSecret instead)
-  ##
-  existingPasswordSecret: ""
-  ## @param externalDatabase.existingPasswordKey Key of the existing secret with database password (DEPRECATED: use dataflow.existingSecretPasswordKey and skipper.existingSecretPasswordKey instead)
-  ##
-  existingPasswordKey: ""
   ## Data Flow user and database
   ##
   dataflow:
@@ -2040,9 +2022,6 @@ externalRabbitmq:
   ## vhost: /
   ##
   vhost: ""
-  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password (DEPRECATED: use externalRabbitmq.existingSecret instead)
-  ##
-  existingPasswordSecret: ""
   ## @param externalRabbitmq.existingSecret Name of the existing secret containing RabbitMQ credentials
   ##
   existingSecret: ""
