@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.0.0 (2024-08-02)
+## 19.0.0 (2024-08-05)
 
 * [bitnami/contour] Release 19.0.0 ([#28636](https://github.com/bitnami/charts/pull/28636))
 
