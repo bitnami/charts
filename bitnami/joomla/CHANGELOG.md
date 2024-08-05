@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.0.3 (2024-07-25)
+## 20.0.4 (2024-08-02)
 
-* [bitnami/joomla] Release 20.0.3 ([#28421](https://github.com/bitnami/charts/pull/28421))
+* [bitnami/joomla] Add deprecation notice ([#28634](https://github.com/bitnami/charts/pull/28634))
+
+## <small>20.0.3 (2024-07-25)</small>
+
+* [bitnami/joomla] Release 20.0.3 (#28421) ([eda8ab2](https://github.com/bitnami/charts/commit/eda8ab246fea5c669026eed0d7fccb3d0eee0b01)), closes [#28421](https://github.com/bitnami/charts/issues/28421)
 
 ## <small>20.0.2 (2024-07-24)</small>
 
