@@ -385,10 +385,14 @@ spec:
         {{- if .Values.secondary.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.secondary.persistence.enabled }}
+  {{- if and .Values.secondary.persistence.enabled .Values.secondary.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.secondary.persistence.existingClaim . }}
+  {{- else if not .Values.secondary.persistence.enabled }}
         - name: data
           emptyDir: {}
-  {{- else }}
+  {{- else if and .Values.secondary.persistence.enabled (not .Values.secondary.persistence.existingClaim) }}
   volumeClaimTemplates:
     - metadata:
         name: data
