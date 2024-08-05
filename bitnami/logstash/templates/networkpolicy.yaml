@@ -55,6 +55,12 @@ spec:
         {{- range .Values.containerPorts }}
         - port: {{ .containerPort }}
         {{- end }}
+        {{- range .Values.extraContainerPorts }}
+        - port: {{ . }}
+        {{- end }}
+        {{- if .Values.enableMonitoringAPI }}
+        - port: {{ .Values.monitoringAPIPort }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
