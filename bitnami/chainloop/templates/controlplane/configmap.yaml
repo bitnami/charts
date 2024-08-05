@@ -7,8 +7,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "chainloop.controlplane.fullname" . }}
-  labels:
-    {{- include "chainloop.controlplane.labels" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "chainloop.controlplane.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   {{- if .Values.controlplane.auth.allowList }}
   allow_list.yaml: |
@@ -34,7 +37,7 @@ data:
         {{- end }}
     cas_server:
       grpc:
-        addr: {{ printf "%s-api:%.0f" (include "chainloop.cas.fullname" .) .Values.cas.serviceAPI.port }}
+        addr: {{ printf "%s-api:%.0f" (include "chainloop.cas.fullname" .) (coalesce .Values.cas.serviceAPI.port .Values.cas.serviceAPI.ports.http) }}
       insecure: {{ empty .Values.cas.tlsConfig.secret.name }}
       download_url: {{ include "chainloop.cas.external_url" . }}/download
     plugins_dir: {{ .Values.controlplane.pluginsDir }}

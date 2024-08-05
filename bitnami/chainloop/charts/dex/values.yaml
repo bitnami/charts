@@ -1,0 +1,574 @@
+## @section Common parameters
+##
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+
+## @section Secrets Backend
+##
+
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: false
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+
+# IMPORTANT: This is not meant to run in production
+# Dex server
+## Dex configuration running in development mode --set development=true
+##
+dex:
+  ## Bitnami Dex image
+  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
+  ## @skip dex.staticUsers[0].email
+  ## @skip dex.staticUsers[0].hash
+  ## @skip dex.staticUsers[1].email
+  ## @skip dex.staticUsers[1].hash
+  staticUsers:
+    - email: "john@chainloop.local"
+      # password: "password"
+      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+    - email: "sarah@chainloop.local"
+      # password: "password"
+      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+  ## @param dex.image.registry [default: REGISTRY_NAME] Dex image registry
+  ## @param dex.image.repository [default: REPOSITORY_NAME/dex] Dex image repository
+  ## @skip dex.image.tag Dex image tag (immutable tags are recommended)
+  ## @param dex.image.pullPolicy Dex image pull policy
+  ## @param dex.image.pullSecrets Dex image pull secrets
+  ## @param dex.image.debug Enable Dex image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/dex
+    tag: 2.40.0-debian-12-r1
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param dex.replicaCount Number of Dex replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Dex containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param dex.startupProbe.enabled Enable startupProbe on Dex nodes
+  ## @param dex.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param dex.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param dex.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param dex.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param dex.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param dex.livenessProbe.enabled Enable livenessProbe on Dex nodes
+  ## @param dex.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param dex.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param dex.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param dex.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param dex.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param dex.readinessProbe.enabled Enable readinessProbe on Dex nodes
+  ## @param dex.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param dex.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param dex.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param dex.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param dex.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param dex.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param dex.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param dex.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## Dex resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param dex.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dex.resources is set (dex.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param dex.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dex.podSecurityContext.enabled Enabled Dex pods' Security Context
+  ## @param dex.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dex.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dex.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param dex.podSecurityContext.fsGroup Set Dex pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dex.containerSecurityContext.enabled Enabled Dex containers' Security Context
+  ## @param dex.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param dex.containerSecurityContext.runAsUser Set Dex containers' Security Context runAsUser
+  ## @param dex.containerSecurityContext.runAsGroup Set Dex containers' Security Context runAsGroup
+  ## @param dex.containerSecurityContext.allowPrivilegeEscalation Set Dex containers' Security Context allowPrivilegeEscalation
+  ## @param dex.containerSecurityContext.readOnlyRootFilesystem Set Dex containers' server Security Context readOnlyRootFilesystem
+  ## @param dex.containerSecurityContext.runAsNonRoot Set Dex containers' Security Context runAsNonRoot
+  ## @param dex.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
+  ## @param dex.containerSecurityContext.privileged Set dex container's Security Context privileged
+  ## @param dex.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Dex service parameters
+  ##
+  service:
+    ## @param dex.service.type Dex service type
+    ##
+    type: ClusterIP
+    ## @param dex.service.ports.http Dex HTTP service port
+    ## @param dex.service.ports.grpc Dex grpc service port
+    ##
+    ports:
+      http: 5556
+      grpc: 5557
+    ## Node ports to expose
+    ## @param dex.service.nodePorts.http HTTP node port for the Dex service
+    ## @param dex.service.nodePorts.grpc gRPC node port for the Dex service
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param dex.service.clusterIP Dex service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param dex.service.loadBalancerIP Dex service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param dex.service.loadBalancerSourceRanges Dex service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param dex.service.externalTrafficPolicy Dex service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param dex.service.annotations Additional custom annotations for Dex service
+    ##
+    annotations: {}
+    ## @param dex.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param dex.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param dex.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param dex.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param dex.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param dex.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param dex.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param dex.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param dex.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param dex.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param dex.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Dex container ports
+  ## @param dex.containerPorts.http Dex container HTTP port
+  ## @param dex.containerPorts.grpc Dex gRPC port
+  ## @param dex.containerPorts.metrics Dex metrics port
+  ##
+  containerPorts:
+    http: 5556
+    grpc: 5557
+    metrics: 5558
+  ## Metrics configuration for Dex
+  ##
+  metrics:
+    ## Enable metrics for Argo Dex
+    ## @param dex.metrics.enabled Enable metrics service for Dex
+    ##
+    enabled: false
+    service:
+      ## @param dex.metrics.service.type Dex service type
+      ##
+      type: ClusterIP
+      ## @param dex.metrics.service.ports.metrics Dex metrics service port
+      ##
+      ports:
+        metrics: 5558
+      ## Node ports to expose
+      ## @param dex.metrics.service.nodePorts.metrics Node port for the Dex service
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        metrics: ""
+      ## @param dex.metrics.service.clusterIP Dex service metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param dex.metrics.service.loadBalancerIP Dex service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param dex.metrics.service.loadBalancerSourceRanges Dex service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param dex.metrics.service.externalTrafficPolicy Dex service external traffic policy
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param dex.metrics.service.annotations Additional custom annotations for Dex service
+      ##
+      annotations: {}
+      ## @param dex.metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param dex.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      sessionAffinityConfig: {}
+    ## Dex metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param dex.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param dex.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param dex.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param dex.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param dex.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param dex.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param dex.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param dex.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param dex.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+  ## ServiceAccount configuration for the Dex
+  ##
+  serviceAccount:
+    ## @param dex.serviceAccount.create Specifies whether a ServiceAccount should be created for Dex
+    ##
+    create: true
+    ## @param dex.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param dex.serviceAccount.automountServiceAccountToken Automount service account token for the Dex service account
+    ##
+    automountServiceAccountToken: false
+    ## @param dex.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ##
+    annotations: {}
+  ## @param dex.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param dex.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param dex.extraArgs Add extra args to the default args for Dex
+  ##
+  extraArgs: []
+  ## @param dex.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param dex.hostAliases Dex pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param dex.podLabels Extra labels for Dex pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param dex.podAnnotations Annotations for Dex pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param dex.podAffinityPreset Pod affinity preset. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param dex.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node dex.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param dex.nodeAffinityPreset.type Node affinity preset type. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param dex.nodeAffinityPreset.key Node label key to match. Ignored if `dex.affinity` is set
+    ##
+    key: ""
+    ## @param dex.nodeAffinityPreset.values Node label values to match. Ignored if `dex.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param dex.affinity Affinity for Dex pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `dex.podAffinityPreset`, `dex.podAntiAffinityPreset`, and `dex.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param dex.nodeSelector Node labels for Dex pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param dex.tolerations Tolerations for Dex pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param dex.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param dex.shareProcessNamespace Enable shared process namespace in a pod.
+  ## If set to false (default), each container will run in separate namespace, dex will have PID=1.
+  ## If set to true, the /pause will run as init process and will reap any zombie PIDs,
+  ## for example, generated by a custom exec probe running longer than a probe timeoutSeconds.
+  ## Enable this only if customLivenessProbe or customReadinessProbe is used and zombie PIDs are accumulating.
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+  ##
+  shareProcessNamespace: false
+  ## @param dex.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
+  ## @param dex.updateStrategy.type Dex statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param dex.priorityClassName Dex pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param dex.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
+  ## @param dex.lifecycleHooks for the Dex container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param dex.extraEnvVars Array with extra environment variables to add to Dex nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param dex.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Dex nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param dex.extraEnvVarsSecret Name of existing Secret containing extra env vars for Dex nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param dex.extraVolumes Optionally specify extra list of additional volumes for the Dex pod(s)
+  ##
+  extraVolumes: []
+  ## @param dex.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Dex container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param dex.sidecars Add additional sidecar containers to the Dex pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param dex.initContainers Add additional init containers to the Dex pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param dex.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param dex.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param dex.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dex.pdb.minAvailable` and `dex.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""

@@ -1,0 +1,52 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chainloop.controlplane.fullname" . }}-api
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "chainloop.controlplane.labels" . | nindent 4 }}
+  {{- if or .Values.controlplane.serviceAPI.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.controlplane.serviceAPI.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.controlplane.serviceAPI.type }}
+  {{- if and .Values.controlplane.serviceAPI.clusterIP (eq .Values.controlplane.serviceAPI.type "ClusterIP") }}
+  clusterIP: {{ .Values.controlplane.serviceAPI.clusterIP }}
+  {{- end }}
+  {{- if .Values.controlplane.serviceAPI.sessionAffinity }}
+  sessionAffinity: {{ .Values.controlplane.serviceAPI.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.controlplane.serviceAPI.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.serviceAPI.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.controlplane.serviceAPI.type "LoadBalancer") (eq .Values.controlplane.serviceAPI.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.controlplane.serviceAPI.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.controlplane.serviceAPI.type "LoadBalancer") (not (empty .Values.controlplane.serviceAPI.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.controlplane.serviceAPI.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.controlplane.serviceAPI.type "LoadBalancer") (not (empty .Values.controlplane.serviceAPI.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.controlplane.serviceAPI.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: grpc
+      {{- $port := coalesce .Values.controlplane.serviceAPI.port .Values.controlplane.serviceAPI.ports.http }}
+      port: {{ $port }}
+      {{- if not (eq $port .Values.controlplane.containerPorts.grpc) }}
+      targetPort: {{ .Values.controlplane.containerPorts.grpc }}
+      {{- end }}
+      protocol: TCP
+      {{- if and (or (eq .Values.controlplane.serviceAPI.type "NodePort") (eq .Values.controlplane.serviceAPI.type "LoadBalancer")) (not (empty .Values.controlplane.serviceAPI.nodePorts.http)) }}
+      nodePort: {{ .Values.controlplane.serviceAPI.nodePorts.http }}
+      {{- else if eq .Values.controlplane.serviceAPI.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.controlplane.serviceAPI.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.serviceAPI.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{ include "chainloop.controlplane.selectorLabels" . | nindent 4 }}

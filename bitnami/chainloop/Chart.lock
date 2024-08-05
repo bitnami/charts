@@ -1,15 +1,15 @@
 dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.20.4
+  version: 2.20.5
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 15.5.16
+  version: 15.5.20
 - name: vault
   repository: https://charts.bitnami.com/bitnami
-  version: 1.4.11
+  version: 1.4.16
 - name: dex
-  repository: https://charts.dexidp.io
-  version: 0.18.0
-digest: sha256:94515adbbfef1d109d520d44ef61cd0f07681afd5f14d4f104b68e9a9e1bec87
-generated: "2024-07-13T08:52:36.287808567+02:00"
+  repository: file://charts/dex
+  version: 0.0.1
+digest: sha256:856d6ca9a125209c6aeb718bdbaa14d61eb542d009d1b7e6f004d5d5d2efd898
+generated: "2024-08-02T13:56:45.701274+02:00"

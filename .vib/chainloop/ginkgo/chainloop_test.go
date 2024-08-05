@@ -3,8 +3,6 @@ package chainloop_test
 import (
 	"context"
 	"fmt"
-	"time"
-
 	utils "github.com/bitnami/charts/.vib/common-tests/ginkgo-utils"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -12,10 +10,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-const (
-	PollingInterval = 1 * time.Second
-)
-
+// portDefinition is a struct to define a port in a service
 type portDefinition struct {
 	name   string
 	number string
@@ -96,6 +91,18 @@ var _ = Describe("Chainloop", Ordered, func() {
 						},
 					},
 				},
+				{
+					name: "dex",
+					ports: []portDefinition{
+						{
+							name:   "http",
+							number: "5556",
+						}, {
+							name:   "grpc",
+							number: "5557",
+						},
+					},
+				},
 			}
 
 			for _, inSvc := range svcs {
@@ -119,6 +126,17 @@ var _ = Describe("Chainloop", Ordered, func() {
 			for _, pod := range pods.Items {
 				_, err := utils.IsPodRunning(ctx, c.CoreV1(), namespace, pod.Name)
 				Expect(err).NotTo(HaveOccurred())
+			}
+		})
+
+		It("all deployments are running", func() {
+			dpls := []string{"cas", "controlplane", "dex", "vault-injector"}
+
+			for _, dplName := range dpls {
+				dpl, err := c.AppsV1().Deployments(namespace).Get(ctx, fmt.Sprintf("%v-%v", releaseName, dplName), metav1.GetOptions{})
+				Expect(err).NotTo(HaveOccurred())
+
+				Expect(dpl.Status.ReadyReplicas).To(Equal(*dpl.Spec.Replicas))
 			}
 		})
 	})

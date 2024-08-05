@@ -22,11 +22,7 @@ Compatibility with the following Ingress Controllers has been verified, other co
 Deploy Chainloop in [development mode](#development) by running
 
 ```console
-helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
-    --set development=true \
-    --set controlplane.auth.oidc.url=[OIDC URL] \
-    --set controlplane.auth.oidc.clientID=[clientID] \
-    --set controlplane.auth.oidc.clientSecret=[clientSecret]
+helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop --set development=true
 ```
 
 > **CAUTION**: Do not use this mode in production, for that, use the [standard mode](#standard-default) instead.
@@ -152,25 +148,27 @@ The Helm Chart in this mode includes
 - Chainloop [Artifact proxy](https://github.com/chainloop-dev/chainloop/tree/main/app/artifact-cas)
 - A PostgreSQL dependency enabled by default
 - **A pre-configured Hashicorp Vault instance running in development mode (unsealed, in-memory, insecure)**
+- **A pre-configured Dex OIDC instance.**
+
+The pre-setup users configuration on the Chart include two users, the information is as follows:
+```text
+username: sarah@chainloop.local
+password: password
+
+username: john@chainloop.local
+password: password
+```
+
+The overall OIDC configuration can be found at [dex-values.yaml](./charts/dex/values.yaml)
 
 > **CAUTION**: Do not use this mode in production, for that, use the [standard mode](#standard-default) instead.
-
-During installation, you'll need to provide
-
-- Open ID Connect Identity Provider (IDp) settings i.e [Auth0 settings](https://auth0.com/docs/get-started/applications/application-settings#basic-information)
-- ~~Connection settings for a secrets storage backend, either [Hashicorp Vault](https://www.vaultproject.io/) or [AWS Secrets Manager](https://aws.amazon.com/secrets-manager)~~
-- ~~ECDSA (ES512) key-pair used for Controlplane to CAS Authentication~~
 
 #### Installation examples for development mode
 
 Deploy by leveraging built-in Vault and PostgreSQL instances
 
 ```console
-helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
-    --set development=true \
-    --set controlplane.auth.oidc.url=[OIDC URL] \
-    --set controlplane.auth.oidc.clientID=[clientID] \
-    --set controlplane.auth.oidc.clientSecret=[clientSecret]
+helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop --set development=true
 ```
 
 ## AirGap and Relocation Support
@@ -480,18 +478,20 @@ chainloop config save \
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| Name                      | Description                                                                                                                                                            | Value   |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`    | Global Docker image registry                                                                                                                                           | `""`    |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array                                                                                                                        | `[]`    |
+| `development`             | Deploys Chainloop pre-configured FOR DEVELOPMENT ONLY. It includes a Vault instance in development mode and pre-configured authentication certificates and passphrases | `false` |
 
 ### Common parameters
 
-| Name                    | Description                                                                                                                                                            | Value   |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `kubeVersion`           | Override Kubernetes version                                                                                                                                            | `""`    |
-| `development`           | Deploys Chainloop pre-configured FOR DEVELOPMENT ONLY. It includes a Vault instance in development mode and pre-configured authentication certificates and passphrases | `false` |
-| `GKEMonitoring.enabled` | Enable GKE podMonitoring (prometheus.io scrape) to scrape the controlplane and CAS /metrics endpoints                                                                  | `false` |
+| Name                | Description                                       | Value |
+| ------------------- | ------------------------------------------------- | ----- |
+| `kubeVersion`       | Override Kubernetes version                       | `""`  |
+| `commonAnnotations` | Annotations to add to all deployed objects        | `{}`  |
+| `commonLabels`      | Labels to add to all deployed objects             | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release | `[]`  |
 
 ### Secrets Backend
 
@@ -525,6 +525,9 @@ chainloop config save \
 | `controlplane.replicaCount`                    | Number of replicas                                                                              | `2`               |
 | `controlplane.image.registry`                  | Image registry                                                                                  | `REGISTRY_NAME`   |
 | `controlplane.image.repository`                | Image repository                                                                                | `REPOSITORY_NAME` |
+| `controlplane.containerPorts.http`             | controlplane HTTP container port                                                                | `8000`            |
+| `controlplane.containerPorts.grpc`             | controlplane gRPC container port                                                                | `9000`            |
+| `controlplane.containerPorts.metrics`          | controlplane prometheus metrics container port                                                  | `5000`            |
 | `controlplane.tlsConfig.secret.name`           | name of a secret containing TLS certificate to be used by the controlplane grpc server.         | `""`              |
 | `controlplane.pluginsDir`                      | Directory where to look for plugins                                                             | `/plugins`        |
 | `controlplane.referrerSharedIndex`             | Configure the shared, public index API endpoint that can be used to discover metadata referrers |                   |
@@ -539,17 +542,14 @@ chainloop config save \
 
 ### Control Plane Database
 
-| Name                                     | Description                                                                                           | Value   |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------- |
-| `controlplane.externalDatabase`          | External PostgreSQL configuration. These values are only used when postgresql.enabled is set to false |         |
-| `controlplane.externalDatabase.host`     | Database host                                                                                         | `""`    |
-| `controlplane.externalDatabase.port`     | Database port number                                                                                  | `5432`  |
-| `controlplane.externalDatabase.user`     | Non-root username                                                                                     | `""`    |
-| `controlplane.externalDatabase.database` | Database name                                                                                         | `""`    |
-| `controlplane.externalDatabase.password` | Password for the non-root username                                                                    | `""`    |
-| `controlplane.sqlProxy.enabled`          | Enable sidecar to connect to DB via Google Cloud SQL proxy                                            | `false` |
-| `controlplane.sqlProxy.connectionName`   | Google Cloud SQL connection name                                                                      | `""`    |
-| `controlplane.sqlProxy.resources`        | Sidecar container resources                                                                           | `{}`    |
+| Name                                     | Description                                                                                           | Value  |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------ |
+| `controlplane.externalDatabase`          | External PostgreSQL configuration. These values are only used when postgresql.enabled is set to false |        |
+| `controlplane.externalDatabase.host`     | Database host                                                                                         | `""`   |
+| `controlplane.externalDatabase.port`     | Database port number                                                                                  | `5432` |
+| `controlplane.externalDatabase.user`     | Non-root username                                                                                     | `""`   |
+| `controlplane.externalDatabase.database` | Database name                                                                                         | `""`   |
+| `controlplane.externalDatabase.password` | Password for the non-root username                                                                    | `""`   |
 
 ### Control Plane Authentication
 
@@ -567,176 +567,300 @@ chainloop config save \
 
 ### Control Plane Networking
 
-| Name                                       | Description                                                                                                                      | Value                    |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `controlplane.service.type`                | Service type                                                                                                                     | `ClusterIP`              |
-| `controlplane.service.port`                | Service port                                                                                                                     | `80`                     |
-| `controlplane.service.targetPort`          | Service target Port                                                                                                              | `http`                   |
-| `controlplane.service.nodePorts.http`      | Node port for HTTP. NOTE: choose port between [30000-32767]                                                                      |                          |
-| `controlplane.serviceAPI.type`             | Service type                                                                                                                     | `ClusterIP`              |
-| `controlplane.serviceAPI.port`             | Service port                                                                                                                     | `80`                     |
-| `controlplane.serviceAPI.targetPort`       | Service target Port                                                                                                              | `grpc`                   |
-| `controlplane.serviceAPI.annotations`      | Service annotations                                                                                                              |                          |
-| `controlplane.serviceAPI.nodePorts.http`   | Node port for HTTP. NOTE: choose port between [30000-32767]                                                                      |                          |
-| `controlplane.ingress.enabled`             | Enable ingress record generation for %%MAIN_CONTAINER_NAME%%                                                                     | `false`                  |
-| `controlplane.ingress.pathType`            | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `controlplane.ingress.hostname`            | Default host for the ingress record                                                                                              | `cp.dev.local`           |
-| `controlplane.ingress.ingressClassName`    | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `controlplane.ingress.path`                | Default path for the ingress record                                                                                              | `/`                      |
-| `controlplane.ingress.annotations`         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `controlplane.ingress.tls`                 | Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter                                       | `false`                  |
-| `controlplane.ingress.selfSigned`          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `controlplane.ingress.extraHosts`          | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `controlplane.ingress.extraPaths`          | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `controlplane.ingress.extraTls`            | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `controlplane.ingress.secrets`             | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `controlplane.ingress.extraRules`          | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `controlplane.ingressAPI.enabled`          | Enable ingress record generation for %%MAIN_CONTAINER_NAME%%                                                                     | `false`                  |
-| `controlplane.ingressAPI.pathType`         | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `controlplane.ingressAPI.hostname`         | Default host for the ingress record                                                                                              | `api.cp.dev.local`       |
-| `controlplane.ingressAPI.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `controlplane.ingressAPI.path`             | Default path for the ingress record                                                                                              | `/`                      |
-| `controlplane.ingressAPI.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. |                          |
-| `controlplane.ingressAPI.tls`              | Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter                                       | `false`                  |
-| `controlplane.ingressAPI.selfSigned`       | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `controlplane.ingressAPI.extraHosts`       | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `controlplane.ingressAPI.extraPaths`       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `controlplane.ingressAPI.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `controlplane.ingressAPI.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `controlplane.ingressAPI.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                               | Description                                                                                                                      | Value                    |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `controlplane.service.type`                        | Service type                                                                                                                     | `ClusterIP`              |
+| `controlplane.service.ports.http`                  | controlplane service HTTP port                                                                                                   | `80`                     |
+| `controlplane.service.ports.https`                 | controlplane service HTTPS port                                                                                                  | `443`                    |
+| `controlplane.service.nodePorts.http`              | Node port for HTTP                                                                                                               | `""`                     |
+| `controlplane.service.nodePorts.https`             | Node port for HTTPS                                                                                                              | `""`                     |
+| `controlplane.service.clusterIP`                   | controlplane service Cluster IP                                                                                                  | `""`                     |
+| `controlplane.service.loadBalancerIP`              | controlplane service Load Balancer IP                                                                                            | `""`                     |
+| `controlplane.service.loadBalancerSourceRanges`    | controlplane service Load Balancer sources                                                                                       | `[]`                     |
+| `controlplane.service.externalTrafficPolicy`       | controlplane service external traffic policy                                                                                     | `Cluster`                |
+| `controlplane.service.annotations`                 | Additional custom annotations for controlplane service                                                                           | `{}`                     |
+| `controlplane.service.extraPorts`                  | Extra ports to expose in controlplane service (normally used with the `sidecars` value)                                          | `[]`                     |
+| `controlplane.service.sessionAffinity`             | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `controlplane.service.sessionAffinityConfig`       | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `controlplane.serviceAPI.type`                     | Service type                                                                                                                     | `ClusterIP`              |
+| `controlplane.serviceAPI.ports.http`               | controlplane service HTTP port                                                                                                   | `80`                     |
+| `controlplane.serviceAPI.ports.https`              | controlplane service HTTPS port                                                                                                  | `443`                    |
+| `controlplane.serviceAPI.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `controlplane.serviceAPI.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
+| `controlplane.serviceAPI.clusterIP`                | controlplane service Cluster IP                                                                                                  | `""`                     |
+| `controlplane.serviceAPI.loadBalancerIP`           | controlplane service Load Balancer IP                                                                                            | `""`                     |
+| `controlplane.serviceAPI.loadBalancerSourceRanges` | controlplane service Load Balancer sources                                                                                       | `[]`                     |
+| `controlplane.serviceAPI.externalTrafficPolicy`    | controlplane service external traffic policy                                                                                     | `Cluster`                |
+| `controlplane.serviceAPI.annotations`              | Additional custom annotations for controlplane service                                                                           |                          |
+| `controlplane.serviceAPI.extraPorts`               | Extra ports to expose in controlplane service (normally used with the `sidecars` value)                                          | `[]`                     |
+| `controlplane.serviceAPI.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `controlplane.serviceAPI.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `controlplane.ingress.enabled`                     | Enable ingress record generation for controlplane                                                                                | `false`                  |
+| `controlplane.ingress.pathType`                    | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `controlplane.ingress.hostname`                    | Default host for the ingress record                                                                                              | `cp.dev.local`           |
+| `controlplane.ingress.ingressClassName`            | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `controlplane.ingress.path`                        | Default path for the ingress record                                                                                              | `/`                      |
+| `controlplane.ingress.annotations`                 | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `controlplane.ingress.tls`                         | Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter                                       | `false`                  |
+| `controlplane.ingress.selfSigned`                  | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `controlplane.ingress.extraHosts`                  | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `controlplane.ingress.extraPaths`                  | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `controlplane.ingress.extraTls`                    | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `controlplane.ingress.secrets`                     | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `controlplane.ingress.extraRules`                  | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `controlplane.ingressAPI.enabled`                  | Enable ingress record generation for controlplane                                                                                | `false`                  |
+| `controlplane.ingressAPI.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `controlplane.ingressAPI.hostname`                 | Default host for the ingress record                                                                                              | `api.cp.dev.local`       |
+| `controlplane.ingressAPI.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `controlplane.ingressAPI.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `controlplane.ingressAPI.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. |                          |
+| `controlplane.ingressAPI.tls`                      | Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter                                       | `false`                  |
+| `controlplane.ingressAPI.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `controlplane.ingressAPI.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `controlplane.ingressAPI.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `controlplane.ingressAPI.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `controlplane.ingressAPI.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `controlplane.ingressAPI.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### Controlplane Misc
 
-| Name                                                         | Description                        | Value        |
-| ------------------------------------------------------------ | ---------------------------------- | ------------ |
-| `controlplane.resources.limits.cpu`                          | Container resource limits CPU      | `250m`       |
-| `controlplane.resources.limits.memory`                       | Container resource limits memory   | `512Mi`      |
-| `controlplane.resources.requests.cpu`                        | Container resource requests CPU    | `250m`       |
-| `controlplane.resources.requests.memory`                     | Container resource requests memory | `512Mi`      |
-| `controlplane.autoscaling.enabled`                           | Enable deployment autoscaling      | `false`      |
-| `controlplane.autoscaling.minReplicas`                       | Minimum number of replicas         | `1`          |
-| `controlplane.autoscaling.maxReplicas`                       | Maximum number of replicas         | `100`        |
-| `controlplane.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage              | `80`         |
-| `controlplane.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                  | `80`         |
-| `controlplane.sentry.enabled`                                | Enable sentry.io alerting          | `false`      |
-| `controlplane.sentry.dsn`                                    | DSN endpoint                       | `""`         |
-| `controlplane.sentry.environment`                            | Environment tag                    | `production` |
+| Name                                                             | Description                                                                                                                                                                                                                                         | Value            |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `controlplane.resourcesPreset`                                   | Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `micro`          |
+| `controlplane.resources`                                         | Set controlplane container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                      | `{}`             |
+| `controlplane.podSecurityContext.enabled`                        | Enable controlplane pods' Security Context                                                                                                                                                                                                          | `true`           |
+| `controlplane.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy for controlplane pods                                                                                                                                                                                            | `Always`         |
+| `controlplane.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface for controlplane pods                                                                                                                                                                                | `[]`             |
+| `controlplane.podSecurityContext.supplementalGroups`             | Set filesystem extra groups for controlplane pods                                                                                                                                                                                                   | `[]`             |
+| `controlplane.podSecurityContext.fsGroup`                        | Set fsGroup in controlplane pods' Security Context                                                                                                                                                                                                  | `1001`           |
+| `controlplane.containerSecurityContext.enabled`                  | Enabled controlplane container' Security Context                                                                                                                                                                                                    | `true`           |
+| `controlplane.containerSecurityContext.seLinuxOptions`           | Set SELinux options in controlplane container                                                                                                                                                                                                       | `{}`             |
+| `controlplane.containerSecurityContext.runAsUser`                | Set runAsUser in controlplane container' Security Context                                                                                                                                                                                           | `1001`           |
+| `controlplane.containerSecurityContext.runAsGroup`               | Set runAsGroup in controlplane container' Security Context                                                                                                                                                                                          | `1001`           |
+| `controlplane.containerSecurityContext.runAsNonRoot`             | Set runAsNonRoot in controlplane container' Security Context                                                                                                                                                                                        | `true`           |
+| `controlplane.containerSecurityContext.readOnlyRootFilesystem`   | Set readOnlyRootFilesystem in controlplane container' Security Context                                                                                                                                                                              | `true`           |
+| `controlplane.containerSecurityContext.privileged`               | Set privileged in controlplane container' Security Context                                                                                                                                                                                          | `false`          |
+| `controlplane.containerSecurityContext.allowPrivilegeEscalation` | Set allowPrivilegeEscalation in controlplane container' Security Context                                                                                                                                                                            | `false`          |
+| `controlplane.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped in controlplane container                                                                                                                                                                                        | `["ALL"]`        |
+| `controlplane.containerSecurityContext.seccompProfile.type`      | Set seccomp profile in controlplane container                                                                                                                                                                                                       | `RuntimeDefault` |
+| `controlplane.sentry.enabled`                                    | Enable sentry.io alerting                                                                                                                                                                                                                           | `false`          |
+| `controlplane.sentry.dsn`                                        | DSN endpoint                                                                                                                                                                                                                                        | `""`             |
+| `controlplane.sentry.environment`                                | Environment tag                                                                                                                                                                                                                                     | `production`     |
 
 ### Keyless signing configuration
 
-| Name                                                       | Description                                                             | Value    |
-| ---------------------------------------------------------- | ----------------------------------------------------------------------- | -------- |
-| `controlplane.keylessSigning.enabled`                      | Activates or deactivates the feature                                    | `false`  |
-| `controlplane.keylessSigning.backend`                      | The backend to use. Currently only "fileCA" and "ejbcaCA" are supported | `fileCA` |
-| `controlplane.keylessSigning.fileCA.cert`                  | The PEM-encoded certificate of the file based CA                        | `""`     |
-| `controlplane.keylessSigning.fileCA.key`                   | The PEM-encoded private key of the file based CA                        | `""`     |
-| `controlplane.keylessSigning.fileCA.keyPass`               | The secret key pass                                                     | `""`     |
-| `controlplane.keylessSigning.ejbcaCA.serverURL`            | The url of the EJBCA service ("https://host/ejbca")                     | `""`     |
-| `controlplane.keylessSigning.ejbcaCA.clientKey`            | PEM-encoded the private key for EJBCA cert authentication               | `""`     |
-| `controlplane.keylessSigning.ejbcaCA.clientCert`           | PEM-encoded certificate for EJBCA cert authentication                   | `""`     |
-| `controlplane.keylessSigning.ejbcaCA.certProfileName`      | Name of the certificate profile to use in EJBCA                         | `""`     |
-| `controlplane.keylessSigning.ejbcaCA.endEntityProfileName` | Name of the Entity Profile to use in EJBCA                              | `""`     |
-| `controlplane.keylessSigning.ejbcaCA.caName`               | Name of the CA issuer to use in EJBCA                                   | `""`     |
-| `controlplane.customCAs`                                   | List of custom CA certificates content                                  | `[]`     |
+| Name                                                       | Description                                                                                                                                                              | Value           |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `controlplane.keylessSigning.enabled`                      | Activates or deactivates the feature                                                                                                                                     | `false`         |
+| `controlplane.keylessSigning.backend`                      | The backend to use. Currently only "fileCA" and "ejbcaCA" are supported                                                                                                  | `fileCA`        |
+| `controlplane.keylessSigning.fileCA.cert`                  | The PEM-encoded certificate of the file based CA                                                                                                                         | `""`            |
+| `controlplane.keylessSigning.fileCA.key`                   | The PEM-encoded private key of the file based CA                                                                                                                         | `""`            |
+| `controlplane.keylessSigning.fileCA.keyPass`               | The secret key pass                                                                                                                                                      | `""`            |
+| `controlplane.keylessSigning.ejbcaCA.serverURL`            | The url of the EJBCA service ("https://host/ejbca")                                                                                                                      | `""`            |
+| `controlplane.keylessSigning.ejbcaCA.clientKey`            | PEM-encoded the private key for EJBCA cert authentication                                                                                                                | `""`            |
+| `controlplane.keylessSigning.ejbcaCA.clientCert`           | PEM-encoded certificate for EJBCA cert authentication                                                                                                                    | `""`            |
+| `controlplane.keylessSigning.ejbcaCA.certProfileName`      | Name of the certificate profile to use in EJBCA                                                                                                                          | `""`            |
+| `controlplane.keylessSigning.ejbcaCA.endEntityProfileName` | Name of the Entity Profile to use in EJBCA                                                                                                                               | `""`            |
+| `controlplane.keylessSigning.ejbcaCA.caName`               | Name of the CA issuer to use in EJBCA                                                                                                                                    | `""`            |
+| `controlplane.customCAs`                                   | List of custom CA certificates content                                                                                                                                   | `[]`            |
+| `controlplane.automountServiceAccountToken`                | Mount Service Account token in controlplane pods                                                                                                                         | `false`         |
+| `controlplane.hostAliases`                                 | controlplane pods host aliases                                                                                                                                           | `[]`            |
+| `controlplane.deploymentAnnotations`                       | Annotations for controlplane deployment                                                                                                                                  | `{}`            |
+| `controlplane.podLabels`                                   | Extra labels for controlplane pods                                                                                                                                       | `{}`            |
+| `controlplane.podAffinityPreset`                           | Pod affinity preset. Ignored if `controlplane.affinity` is set. Allowed values: `soft` or `hard`                                                                         | `""`            |
+| `controlplane.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `controlplane.affinity` is set. Allowed values: `soft` or `hard`                                                                    | `soft`          |
+| `controlplane.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `controlplane.affinity` is set. Allowed values: `soft` or `hard`                                                                   | `""`            |
+| `controlplane.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `controlplane.affinity` is set                                                                                                       | `""`            |
+| `controlplane.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `controlplane.affinity` is set                                                                                                    | `[]`            |
+| `controlplane.affinity`                                    | Affinity for controlplane pods assignment                                                                                                                                | `{}`            |
+| `controlplane.nodeSelector`                                | Node labels for controlplane pods assignment                                                                                                                             | `{}`            |
+| `controlplane.tolerations`                                 | Tolerations for controlplane pods assignment                                                                                                                             | `[]`            |
+| `controlplane.updateStrategy.type`                         | controlplane deployment strategy type                                                                                                                                    | `RollingUpdate` |
+| `controlplane.priorityClassName`                           | controlplane pods' priorityClassName                                                                                                                                     | `""`            |
+| `controlplane.topologySpreadConstraints`                   | Topology Spread Constraints for controlplane pod assignment spread across your cluster among failure-domains                                                             | `[]`            |
+| `controlplane.schedulerName`                               | Name of the k8s scheduler (other than default) for controlplane pods                                                                                                     | `""`            |
+| `controlplane.terminationGracePeriodSeconds`               | Seconds controlplane pods need to terminate gracefully                                                                                                                   | `""`            |
+| `controlplane.lifecycleHooks`                              | for controlplane containers to automate configuration before or after startup                                                                                            | `{}`            |
+| `controlplane.extraEnvVars`                                | Array with extra environment variables to add to controlplane containers                                                                                                 | `[]`            |
+| `controlplane.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for controlplane containers                                                                                         | `""`            |
+| `controlplane.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for controlplane containers                                                                                            | `""`            |
+| `controlplane.extraVolumes`                                | Optionally specify extra list of additional volumes for the controlplane pods                                                                                            | `[]`            |
+| `controlplane.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the controlplane containers                                                                                 | `[]`            |
+| `controlplane.sidecars`                                    | Add additional sidecar containers to the controlplane pods                                                                                                               | `[]`            |
+| `controlplane.initContainers`                              | Add additional init containers to the controlplane pods                                                                                                                  | `[]`            |
+| `controlplane.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                                          | `true`          |
+| `controlplane.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                                           | `""`            |
+| `controlplane.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controlplane.pdb.minAvailable` and `controlplane.pdb.maxUnavailable` are empty. | `""`            |
+| `controlplane.autoscaling.vpa.enabled`                     | Enable VPA for controlplane pods                                                                                                                                         | `false`         |
+| `controlplane.autoscaling.vpa.annotations`                 | Annotations for VPA resource                                                                                                                                             | `{}`            |
+| `controlplane.autoscaling.vpa.controlledResources`         | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory                                                                           | `[]`            |
+| `controlplane.autoscaling.vpa.maxAllowed`                  | VPA Max allowed resources for the pod                                                                                                                                    | `{}`            |
+| `controlplane.autoscaling.vpa.minAllowed`                  | VPA Min allowed resources for the pod                                                                                                                                    | `{}`            |
+| `controlplane.autoscaling.vpa.updatePolicy.updateMode`     | Autoscaling update policy                                                                                                                                                | `Auto`          |
+| `controlplane.autoscaling.hpa.enabled`                     | Enable HPA for controlplane pods                                                                                                                                         | `false`         |
+| `controlplane.autoscaling.hpa.minReplicas`                 | Minimum number of replicas                                                                                                                                               | `""`            |
+| `controlplane.autoscaling.hpa.maxReplicas`                 | Maximum number of replicas                                                                                                                                               | `""`            |
+| `controlplane.autoscaling.hpa.targetCPU`                   | Target CPU utilization percentage                                                                                                                                        | `""`            |
+| `controlplane.autoscaling.hpa.targetMemory`                | Target Memory utilization percentage                                                                                                                                     | `""`            |
 
 ### Artifact Content Addressable (CAS) API
 
-| Name                        | Description                                                                             | Value             |
-| --------------------------- | --------------------------------------------------------------------------------------- | ----------------- |
-| `cas.replicaCount`          | Number of replicas                                                                      | `2`               |
-| `cas.image.registry`        | Image registry                                                                          | `REGISTRY_NAME`   |
-| `cas.image.repository`      | Image repository                                                                        | `REPOSITORY_NAME` |
-| `cas.tlsConfig.secret.name` | name of a secret containing TLS certificate to be used by the controlplane grpc server. | `""`              |
+| Name                         | Description                                                                             | Value             |
+| ---------------------------- | --------------------------------------------------------------------------------------- | ----------------- |
+| `cas.replicaCount`           | Number of replicas                                                                      | `2`               |
+| `cas.image.registry`         | Image registry                                                                          | `REGISTRY_NAME`   |
+| `cas.image.repository`       | Image repository                                                                        | `REPOSITORY_NAME` |
+| `cas.containerPorts.http`    | controlplane HTTP container port                                                        | `8000`            |
+| `cas.containerPorts.grpc`    | controlplane gRPC container port                                                        | `9000`            |
+| `cas.containerPorts.metrics` | controlplane prometheus metrics container port                                          | `5000`            |
+| `cas.tlsConfig.secret.name`  | name of a secret containing TLS certificate to be used by the controlplane grpc server. | `""`              |
 
 ### CAS Networking
 
-| Name                              | Description                                                                                                                      | Value                    |
-| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `cas.service.type`                | Service type                                                                                                                     | `ClusterIP`              |
-| `cas.service.port`                | Service port                                                                                                                     | `80`                     |
-| `cas.service.targetPort`          | Service target Port                                                                                                              | `http`                   |
-| `cas.service.nodePorts.http`      | Node port for HTTP. NOTE: choose port between [30000-32767]                                                                      |                          |
-| `cas.serviceAPI.type`             | Service type                                                                                                                     | `ClusterIP`              |
-| `cas.serviceAPI.port`             | Service port                                                                                                                     | `80`                     |
-| `cas.serviceAPI.targetPort`       | Service target Port                                                                                                              | `grpc`                   |
-| `cas.serviceAPI.annotations`      | Service annotations                                                                                                              |                          |
-| `cas.serviceAPI.nodePorts.http`   | Node port for HTTP. NOTE: choose port between [30000-32767]                                                                      |                          |
-| `cas.ingress.enabled`             | Enable ingress record generation for %%MAIN_CONTAINER_NAME%%                                                                     | `false`                  |
-| `cas.ingress.pathType`            | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `cas.ingress.hostname`            | Default host for the ingress record                                                                                              | `cas.dev.local`          |
-| `cas.ingress.ingressClassName`    | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `cas.ingress.path`                | Default path for the ingress record                                                                                              | `/`                      |
-| `cas.ingress.annotations`         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `cas.ingress.tls`                 | Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter                                       | `false`                  |
-| `cas.ingress.selfSigned`          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `cas.ingress.extraHosts`          | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `cas.ingress.extraPaths`          | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `cas.ingress.extraTls`            | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `cas.ingress.secrets`             | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `cas.ingress.extraRules`          | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `cas.ingressAPI.enabled`          | Enable ingress record generation for %%MAIN_CONTAINER_NAME%%                                                                     | `false`                  |
-| `cas.ingressAPI.pathType`         | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `cas.ingressAPI.hostname`         | Default host for the ingress record                                                                                              | `api.cas.dev.local`      |
-| `cas.ingressAPI.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `cas.ingressAPI.path`             | Default path for the ingress record                                                                                              | `/`                      |
-| `cas.ingressAPI.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. |                          |
-| `cas.ingressAPI.tls`              | Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter                                       | `false`                  |
-| `cas.ingressAPI.selfSigned`       | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `cas.ingressAPI.extraHosts`       | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `cas.ingressAPI.extraPaths`       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `cas.ingressAPI.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `cas.ingressAPI.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `cas.ingressAPI.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                      | Description                                                                                                                      | Value                    |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `cas.service.type`                        | Service type                                                                                                                     | `ClusterIP`              |
+| `cas.service.ports.http`                  | cas service HTTP port                                                                                                            | `80`                     |
+| `cas.service.ports.https`                 | cas service HTTPS port                                                                                                           | `443`                    |
+| `cas.service.nodePorts.http`              | Node port for HTTP                                                                                                               | `""`                     |
+| `cas.service.nodePorts.https`             | Node port for HTTPS                                                                                                              | `""`                     |
+| `cas.service.clusterIP`                   | cas service Cluster IP                                                                                                           | `""`                     |
+| `cas.service.loadBalancerIP`              | cas service Load Balancer IP                                                                                                     | `""`                     |
+| `cas.service.loadBalancerSourceRanges`    | cas service Load Balancer sources                                                                                                | `[]`                     |
+| `cas.service.externalTrafficPolicy`       | cas service external traffic policy                                                                                              | `Cluster`                |
+| `cas.service.annotations`                 | Additional custom annotations for cas service                                                                                    | `{}`                     |
+| `cas.service.extraPorts`                  | Extra ports to expose in cas service (normally used with the `sidecars` value)                                                   | `[]`                     |
+| `cas.service.sessionAffinity`             | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `cas.service.sessionAffinityConfig`       | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `cas.serviceAPI.type`                     | Service type                                                                                                                     | `ClusterIP`              |
+| `cas.serviceAPI.ports.http`               | cas service HTTP port                                                                                                            | `80`                     |
+| `cas.serviceAPI.ports.https`              | cas service HTTPS port                                                                                                           | `443`                    |
+| `cas.serviceAPI.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `cas.serviceAPI.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
+| `cas.serviceAPI.clusterIP`                | cas service Cluster IP                                                                                                           | `""`                     |
+| `cas.serviceAPI.loadBalancerIP`           | cas service Load Balancer IP                                                                                                     | `""`                     |
+| `cas.serviceAPI.loadBalancerSourceRanges` | cas service Load Balancer sources                                                                                                | `[]`                     |
+| `cas.serviceAPI.externalTrafficPolicy`    | cas service external traffic policy                                                                                              | `Cluster`                |
+| `cas.serviceAPI.annotations`              | Additional custom annotations for cas service                                                                                    |                          |
+| `cas.serviceAPI.extraPorts`               | Extra ports to expose in cas service (normally used with the `sidecars` value)                                                   | `[]`                     |
+| `cas.serviceAPI.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `cas.serviceAPI.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `cas.ingress.enabled`                     | Enable ingress record generation for controlplane                                                                                | `false`                  |
+| `cas.ingress.pathType`                    | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `cas.ingress.hostname`                    | Default host for the ingress record                                                                                              | `cas.dev.local`          |
+| `cas.ingress.ingressClassName`            | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `cas.ingress.path`                        | Default path for the ingress record                                                                                              | `/`                      |
+| `cas.ingress.annotations`                 | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `cas.ingress.tls`                         | Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter                                       | `false`                  |
+| `cas.ingress.selfSigned`                  | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `cas.ingress.extraHosts`                  | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `cas.ingress.extraPaths`                  | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `cas.ingress.extraTls`                    | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `cas.ingress.secrets`                     | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `cas.ingress.extraRules`                  | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `cas.ingressAPI.enabled`                  | Enable ingress record generation for controlplane                                                                                | `false`                  |
+| `cas.ingressAPI.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `cas.ingressAPI.hostname`                 | Default host for the ingress record                                                                                              | `api.cas.dev.local`      |
+| `cas.ingressAPI.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `cas.ingressAPI.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `cas.ingressAPI.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. |                          |
+| `cas.ingressAPI.tls`                      | Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter                                       | `false`                  |
+| `cas.ingressAPI.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `cas.ingressAPI.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `cas.ingressAPI.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `cas.ingressAPI.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `cas.ingressAPI.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `cas.ingressAPI.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### CAS Misc
 
-| Name                                                | Description                            | Value        |
-| --------------------------------------------------- | -------------------------------------- | ------------ |
-| `cas.resources.limits.cpu`                          | Container resource limits CPU          | `250m`       |
-| `cas.resources.limits.memory`                       | Container resource limits memory       | `512Mi`      |
-| `cas.resources.requests.cpu`                        | Container resource requests CPU        | `250m`       |
-| `cas.resources.requests.memory`                     | Container resource requests memory     | `512Mi`      |
-| `cas.autoscaling.enabled`                           | Enable deployment autoscaling          | `false`      |
-| `cas.autoscaling.minReplicas`                       | Minimum number of replicas             | `1`          |
-| `cas.autoscaling.maxReplicas`                       | Maximum number of replicas             | `100`        |
-| `cas.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage                  | `80`         |
-| `cas.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                      | `80`         |
-| `cas.sentry.enabled`                                | Enable sentry.io alerting              | `false`      |
-| `cas.sentry.dsn`                                    | DSN endpoint                           | `""`         |
-| `cas.sentry.environment`                            | Environment tag                        | `production` |
-| `cas.customCAs`                                     | List of custom CA certificates content | `[]`         |
+| Name                     | Description                            | Value        |
+| ------------------------ | -------------------------------------- | ------------ |
+| `cas.sentry.enabled`     | Enable sentry.io alerting              | `false`      |
+| `cas.sentry.dsn`         | DSN endpoint                           | `""`         |
+| `cas.sentry.environment` | Environment tag                        | `production` |
+| `cas.customCAs`          | List of custom CA certificates content | `[]`         |
+
+### CAS Misc
+
+| Name                                                    | Description                                                                                                                                                                                                                                         | Value            |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `cas.resourcesPreset`                                   | Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `micro`          |
+| `cas.resources`                                         | Set cas container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                               | `{}`             |
+| `cas.podSecurityContext.enabled`                        | Enable cas pods' Security Context                                                                                                                                                                                                                   | `true`           |
+| `cas.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy for cas pods                                                                                                                                                                                                     | `Always`         |
+| `cas.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface for cas pods                                                                                                                                                                                         | `[]`             |
+| `cas.podSecurityContext.supplementalGroups`             | Set filesystem extra groups for cas pods                                                                                                                                                                                                            | `[]`             |
+| `cas.podSecurityContext.fsGroup`                        | Set fsGroup in cas pods' Security Context                                                                                                                                                                                                           | `1001`           |
+| `cas.containerSecurityContext.enabled`                  | Enabled cas container' Security Context                                                                                                                                                                                                             | `true`           |
+| `cas.containerSecurityContext.seLinuxOptions`           | Set SELinux options in cas container                                                                                                                                                                                                                | `{}`             |
+| `cas.containerSecurityContext.runAsUser`                | Set runAsUser in cas container' Security Context                                                                                                                                                                                                    | `1001`           |
+| `cas.containerSecurityContext.runAsGroup`               | Set runAsGroup in cas container' Security Context                                                                                                                                                                                                   | `1001`           |
+| `cas.containerSecurityContext.runAsNonRoot`             | Set runAsNonRoot in cas container' Security Context                                                                                                                                                                                                 | `true`           |
+| `cas.containerSecurityContext.readOnlyRootFilesystem`   | Set readOnlyRootFilesystem in cas container' Security Context                                                                                                                                                                                       | `true`           |
+| `cas.containerSecurityContext.privileged`               | Set privileged in cas container' Security Context                                                                                                                                                                                                   | `false`          |
+| `cas.containerSecurityContext.allowPrivilegeEscalation` | Set allowPrivilegeEscalation in cas container' Security Context                                                                                                                                                                                     | `false`          |
+| `cas.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped in cas container                                                                                                                                                                                                 | `["ALL"]`        |
+| `cas.containerSecurityContext.seccompProfile.type`      | Set seccomp profile in cas container                                                                                                                                                                                                                | `RuntimeDefault` |
+| `cas.automountServiceAccountToken`                      | Mount Service Account token in cas pods                                                                                                                                                                                                             | `false`          |
+| `cas.hostAliases`                                       | cas pods host aliases                                                                                                                                                                                                                               | `[]`             |
+| `cas.deploymentAnnotations`                             | Annotations for cas deployment                                                                                                                                                                                                                      | `{}`             |
+| `cas.podLabels`                                         | Extra labels for cas pods                                                                                                                                                                                                                           | `{}`             |
+| `cas.podAffinityPreset`                                 | Pod affinity preset. Ignored if `cas.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                             | `""`             |
+| `cas.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `cas.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                        | `soft`           |
+| `cas.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `cas.affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                       | `""`             |
+| `cas.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `cas.affinity` is set                                                                                                                                                                                           | `""`             |
+| `cas.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `cas.affinity` is set                                                                                                                                                                                        | `[]`             |
+| `cas.affinity`                                          | Affinity for cas pods assignment                                                                                                                                                                                                                    | `{}`             |
+| `cas.nodeSelector`                                      | Node labels for cas pods assignment                                                                                                                                                                                                                 | `{}`             |
+| `cas.tolerations`                                       | Tolerations for cas pods assignment                                                                                                                                                                                                                 | `[]`             |
+| `cas.updateStrategy.type`                               | cas deployment strategy type                                                                                                                                                                                                                        | `RollingUpdate`  |
+| `cas.priorityClassName`                                 | cas pods' priorityClassName                                                                                                                                                                                                                         | `""`             |
+| `cas.topologySpreadConstraints`                         | Topology Spread Constraints for cas pod assignment spread across your cluster among failure-domains                                                                                                                                                 | `[]`             |
+| `cas.schedulerName`                                     | Name of the k8s scheduler (other than default) for cas pods                                                                                                                                                                                         | `""`             |
+| `cas.terminationGracePeriodSeconds`                     | Seconds cas pods need to terminate gracefully                                                                                                                                                                                                       | `""`             |
+| `cas.lifecycleHooks`                                    | for cas containers to automate configuration before or after startup                                                                                                                                                                                | `{}`             |
+| `cas.extraEnvVars`                                      | Array with extra environment variables to add to cas containers                                                                                                                                                                                     | `[]`             |
+| `cas.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for cas containers                                                                                                                                                                             | `""`             |
+| `cas.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for cas containers                                                                                                                                                                                | `""`             |
+| `cas.extraVolumes`                                      | Optionally specify extra list of additional volumes for the cas pods                                                                                                                                                                                | `[]`             |
+| `cas.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the cas containers                                                                                                                                                                     | `[]`             |
+| `cas.sidecars`                                          | Add additional sidecar containers to the cas pods                                                                                                                                                                                                   | `[]`             |
+| `cas.initContainers`                                    | Add additional init containers to the cas pods                                                                                                                                                                                                      | `[]`             |
+| `cas.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                     | `true`           |
+| `cas.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                      | `""`             |
+| `cas.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `cas.pdb.minAvailable` and `cas.pdb.maxUnavailable` are empty.                                                                                              | `""`             |
+| `cas.autoscaling.vpa.enabled`                           | Enable VPA for cas pods                                                                                                                                                                                                                             | `false`          |
+| `cas.autoscaling.vpa.annotations`                       | Annotations for VPA resource                                                                                                                                                                                                                        | `{}`             |
+| `cas.autoscaling.vpa.controlledResources`               | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory                                                                                                                                                      | `[]`             |
+| `cas.autoscaling.vpa.maxAllowed`                        | VPA Max allowed resources for the pod                                                                                                                                                                                                               | `{}`             |
+| `cas.autoscaling.vpa.minAllowed`                        | VPA Min allowed resources for the pod                                                                                                                                                                                                               | `{}`             |
+| `cas.autoscaling.vpa.updatePolicy.updateMode`           | Autoscaling update policy                                                                                                                                                                                                                           | `Auto`           |
+| `cas.autoscaling.hpa.enabled`                           | Enable HPA for cas pods                                                                                                                                                                                                                             | `false`          |
+| `cas.autoscaling.hpa.minReplicas`                       | Minimum number of replicas                                                                                                                                                                                                                          | `""`             |
+| `cas.autoscaling.hpa.maxReplicas`                       | Maximum number of replicas                                                                                                                                                                                                                          | `""`             |
+| `cas.autoscaling.hpa.targetCPU`                         | Target CPU utilization percentage                                                                                                                                                                                                                   | `""`             |
+| `cas.autoscaling.hpa.targetMemory`                      | Target Memory utilization percentage                                                                                                                                                                                                                | `""`             |
 
 ### Dependencies
 
-| Name                                       | Description                                                                                            | Value                                                                                    |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| `postgresql.enabled`                       | Switch to enable or disable the PostgreSQL helm chart                                                  | `true`                                                                                   |
-| `postgresql.auth.enablePostgresUser`       | Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user | `false`                                                                                  |
-| `postgresql.auth.username`                 | Name for a custom user to create                                                                       | `chainloop`                                                                              |
-| `postgresql.auth.password`                 | Password for the custom user to create                                                                 | `chainlooppwd`                                                                           |
-| `postgresql.auth.database`                 | Name for a custom database to create                                                                   | `chainloop-cp`                                                                           |
-| `postgresql.auth.existingSecret`           | Name of existing secret to use for PostgreSQL credentials                                              | `""`                                                                                     |
-| `vault.server.args`                        | Arguments to pass to the vault server. This is useful for setting the server in development mode       | `["server","-dev"]`                                                                      |
-| `vault.server.config`                      | Configuration for the vault server. Small override of default Bitnami configuration                    | `storage "inmem" {}
+| Name                                 | Description                                                                                            | Value                                                                                    |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `postgresql.enabled`                 | Switch to enable or disable the PostgreSQL helm chart                                                  | `true`                                                                                   |
+| `postgresql.auth.enablePostgresUser` | Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user | `false`                                                                                  |
+| `postgresql.auth.username`           | Name for a custom user to create                                                                       | `chainloop`                                                                              |
+| `postgresql.auth.password`           | Password for the custom user to create                                                                 | `chainlooppwd`                                                                           |
+| `postgresql.auth.database`           | Name for a custom database to create                                                                   | `chainloop-cp`                                                                           |
+| `postgresql.auth.existingSecret`     | Name of existing secret to use for PostgreSQL credentials                                              | `""`                                                                                     |
+| `vault.server.args`                  | Arguments to pass to the vault server. This is useful for setting the server in development mode       | `["server","-dev"]`                                                                      |
+| `vault.server.config`                | Configuration for the vault server. Small override of default Bitnami configuration                    | `storage "inmem" {}
 disable_mlock = true
 ui = true
 service_registration "kubernetes" {}` |
-| `vault.server.extraEnvVars[0].name`        | Root token for the vault server                                                                        | `VAULT_DEV_ROOT_TOKEN_ID`                                                                |
-| `vault.server.extraEnvVars[0].value`       | The value of the root token. Default: notasecret                                                       | `notasecret`                                                                             |
-| `vault.server.extraEnvVars[1].name`        | Address to listen on development mode                                                                  | `VAULT_DEV_LISTEN_ADDRESS`                                                               |
-| `vault.server.extraEnvVars[1].value`       | The address to listen on. Default: [::]:8200                                                           | `[::]:8200`                                                                              |
-| `dex.config.issuer`                        | The issuer URL of the Identity provider (IDp)                                                          | `http://chainloop-dex:5556/dex`                                                          |
-| `dex.config.storage.type`                  | Storage type for the dex server                                                                        | `memory`                                                                                 |
-| `dex.config.web.http`                      | HTTP address for the dex server                                                                        | `0.0.0.0:5556`                                                                           |
-| `dex.config.staticClients[0].id`           | Client ID for the static client                                                                        | `chainloop-dev`                                                                          |
-| `dex.config.staticClients[0].redirectURIs` | Redirect URIs for the static client                                                                    | `["http://0.0.0.0:8000/auth/callback","http://localhost:8000/auth/callback"]`            |
-| `dex.config.staticClients[0].name`         | Name for the static client                                                                             | `Chainloop Dev`                                                                          |
-| `dex.config.staticClients[0].secret`       | Secret for the static client                                                                           | `ZXhhbXBsZS1hcHAtc2VjcmV0`                                                               |
-| `dex.config.enablePasswordDB`              | Enable static passwords                                                                                | `true`                                                                                   |
-| `dex.config.staticPasswords[0].email`      | Email for the static password                                                                          | `john@chainloop.local`                                                                   |
-| `dex.config.staticPasswords[0].hash`       | Hash for the static password                                                                           | `$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W`                           |
-| `dex.config.staticPasswords[1].email`      | Email for the static password                                                                          | `sarah@chainloop.local`                                                                  |
-| `dex.config.staticPasswords[1].hash`       | Hash for the static password                                                                           | `$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W`                           |
+| `vault.server.extraEnvVars[0].name`  | Root token for the vault server                                                                        | `VAULT_DEV_ROOT_TOKEN_ID`                                                                |
+| `vault.server.extraEnvVars[0].value` | The value of the root token. Default: notasecret                                                       | `notasecret`                                                                             |
+| `vault.server.extraEnvVars[1].name`  | Address to listen on development mode                                                                  | `VAULT_DEV_LISTEN_ADDRESS`                                                               |
+| `vault.server.extraEnvVars[1].value` | The address to listen on. Default: [::]:8200                                                           | `[::]:8200`                                                                              |
 
 ## License
 
