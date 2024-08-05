@@ -125,7 +125,7 @@ extraDeploy:
   - apiVersion: helm.toolkit.fluxcd.io/v2beta2
     kind: HelmRelease
     metadata:
-      name: vib-dokuwiki
+      name: vib-nginx
       namespace: '{{ include "common.names.namespace" . }}'
       annotations:
         "helm.sh/hook": post-install
@@ -133,7 +133,7 @@ extraDeploy:
       interval: 5m
       chart:
         spec:
-          chart: ./bitnami/dokuwiki
+          chart: ./bitnami/nginx
           sourceRef:
             kind: GitRepository
             name: vib-bitnami-charts
@@ -144,7 +144,7 @@ extraDeploy:
           compatibility:
             openshift:
               adaptSecurityContext: auto
-        fullnameOverride: vib-dokuwiki
+        fullnameOverride: vib-nginx
         persistence:
           enabled: false
   # This is for image-notification-controller. We will use the metrics to ensure that it is consumed
