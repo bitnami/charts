@@ -6,7 +6,7 @@
 
 ## <small>29.3.14 (2024-08-01)</small>
 
-* bitnami/kafka Add extraListeners to kafka.listeners in _helpers.tpl ([#28604](https://github.com/bitnami/charts/pull/28604))
+* bitnami/kafka Add extraListeners to kafka.listeners in _helpers.tpl (#28604) ([940b7bd](https://github.com/bitnami/charts/commit/940b7bddfe28023ba102d391745bf6552265c293)), closes [#28604](https://github.com/bitnami/charts/issues/28604)
 
 ## <small>29.3.13 (2024-07-25)</small>
 
