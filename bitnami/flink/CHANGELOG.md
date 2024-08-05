@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.3.8 (2024-07-16)
+## 1.3.12 (2024-08-01)
 
-* [bitnami/flink] Global StorageClass as default value ([#28018](https://github.com/bitnami/charts/pull/28018))
+* [bitnami/flink] Release 1.3.12 ([#28625](https://github.com/bitnami/charts/pull/28625))
+
+## <small>1.3.11 (2024-07-25)</small>
+
+* [bitnami/flink] Release 1.3.11 (#28435) ([77ddf10](https://github.com/bitnami/charts/commit/77ddf10ac9a4c6b5ba9c20284158d257858557f6)), closes [#28435](https://github.com/bitnami/charts/issues/28435)
+
+## <small>1.3.10 (2024-07-24)</small>
+
+* [bitnami/flink] Release 1.3.10 (#28302) ([725a84c](https://github.com/bitnami/charts/commit/725a84c9e47c4531f337b41289aaba75f076794a)), closes [#28302](https://github.com/bitnami/charts/issues/28302)
+
+## <small>1.3.9 (2024-07-23)</small>
+
+* [bitnami/flink] Release 1.3.9 (#28242) ([49846ce](https://github.com/bitnami/charts/commit/49846ce3fb792db7a24ac5126481f67ec5d795ad)), closes [#28242](https://github.com/bitnami/charts/issues/28242)
+
+## <small>1.3.8 (2024-07-16)</small>
+
+* [bitnami/flink] Global StorageClass as default value (#28018) ([39fa01e](https://github.com/bitnami/charts/commit/39fa01e344c574edcea71c3f0d9f38f571fc7fdb)), closes [#28018](https://github.com/bitnami/charts/issues/28018)
 
 ## <small>1.3.7 (2024-07-03)</small>
 

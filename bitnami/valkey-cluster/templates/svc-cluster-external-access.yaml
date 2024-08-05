@@ -14,7 +14,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: Service
 metadata:
-  name: name: {{ printf "%s-%s-svc" ((include "common.names.fullname" . ) | replace "+" "_" | trunc 63 | trimSuffix "-") $i }}
+  name: {{ template "common.names.fullname" $ }}-{{ $i }}-svc
   namespace: {{ $.Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     pod: {{ $targetPod }}

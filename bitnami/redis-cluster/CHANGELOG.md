@@ -1,8 +1,20 @@
 # Changelog
 
-## 10.2.7 (2024-07-16)
+## 10.3.0 (2024-07-25)
 
-* [bitnami/redis-cluster] Global StorageClass as default value ([#28090](https://github.com/bitnami/charts/pull/28090))
+* [bitnami/redis-cluster] Add configurable appProtocol for metrics service port ([#28380](https://github.com/bitnami/charts/pull/28380))
+
+## <small>10.2.9 (2024-07-25)</small>
+
+* [bitnami/redis-cluster] Release 10.2.9 (#28475) ([465b7b2](https://github.com/bitnami/charts/commit/465b7b290d014884801e307dc6281a8af83513b1)), closes [#28475](https://github.com/bitnami/charts/issues/28475)
+
+## <small>10.2.8 (2024-07-24)</small>
+
+* [bitnami/redis-cluster] Release 10.2.8 (#28367) ([125073f](https://github.com/bitnami/charts/commit/125073f413c2e041ad1bcca1f2877d700a1f3b58)), closes [#28367](https://github.com/bitnami/charts/issues/28367)
+
+## <small>10.2.7 (2024-07-16)</small>
+
+* [bitnami/redis-cluster] Global StorageClass as default value (#28090) ([d80ea5c](https://github.com/bitnami/charts/commit/d80ea5c578a13a27eafd5733aabab31bccc86fe8)), closes [#28090](https://github.com/bitnami/charts/issues/28090)
 
 ## <small>10.2.6 (2024-07-03)</small>
 

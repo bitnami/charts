@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.4.13 (2024-07-16)
+## 1.4.16 (2024-07-25)
 
-* [bitnami/vault] Global StorageClass as default value ([#28107](https://github.com/bitnami/charts/pull/28107))
+* [bitnami/vault] Release 1.4.16 ([#28497](https://github.com/bitnami/charts/pull/28497))
+
+## <small>1.4.15 (2024-07-24)</small>
+
+* [bitnami/vault] Release 1.4.15 (#28391) ([20a67f5](https://github.com/bitnami/charts/commit/20a67f5ae532b65d5767fd08a26ed5ae28fa0eea)), closes [#28391](https://github.com/bitnami/charts/issues/28391)
+
+## <small>1.4.14 (2024-07-22)</small>
+
+* [bitnami/vault] Only mount data volume if persistence is enabled (#27986) ([3942449](https://github.com/bitnami/charts/commit/3942449403e5d39d45b4a23c980adcd816a26322)), closes [#27986](https://github.com/bitnami/charts/issues/27986)
+
+## <small>1.4.13 (2024-07-18)</small>
+
+* [bitnami/vault] Global StorageClass as default value (#28107) ([3ad8853](https://github.com/bitnami/charts/commit/3ad885391c5c6e655078b6c65792616e3553ec44)), closes [#28107](https://github.com/bitnami/charts/issues/28107)
 
 ## <small>1.4.12 (2024-07-10)</small>
 

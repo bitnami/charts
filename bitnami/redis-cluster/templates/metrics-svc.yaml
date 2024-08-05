@@ -27,6 +27,9 @@ spec:
   ports:
     - name: metrics
       port: {{ .Values.metrics.service.ports.http }}
+      {{- if .Values.metrics.service.ports.appProtocol }}
+      appProtocol: {{ .Values.metrics.service.ports.appProtocol }}
+      {{- end }}
       targetPort: http-metrics
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.redis.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}

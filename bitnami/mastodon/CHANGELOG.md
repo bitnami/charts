@@ -1,8 +1,20 @@
 # Changelog
 
-## 6.2.8 (2024-07-04)
+## 6.2.11 (2024-07-30)
 
-* [bitnami/mastodon] Release 6.2.8 ([#27784](https://github.com/bitnami/charts/pull/27784))
+* [bitnami/mastodon] Release 6.2.10 ([#28479](https://github.com/bitnami/charts/pull/28479))
+
+## <small>6.2.10 (2024-07-29)</small>
+
+* [bitnami/mastodon] Improve init-job stability (#28553) ([befdf07](https://github.com/bitnami/charts/commit/befdf07bececdf47b43c0b5e0abf9981457e6f3d)), closes [#28553](https://github.com/bitnami/charts/issues/28553)
+
+## <small>6.2.9 (2024-07-22)</small>
+
+* [bitnami/mastodon] Global StorageClass as default value (#28052) ([f3ba3c5](https://github.com/bitnami/charts/commit/f3ba3c5c7a1015f0c60a1d13de63bb2bbc43d786)), closes [#28052](https://github.com/bitnami/charts/issues/28052)
+
+## <small>6.2.8 (2024-07-04)</small>
+
+* [bitnami/mastodon] Release 6.2.8 (#27784) ([6d194a4](https://github.com/bitnami/charts/commit/6d194a4b0befdf6e0ae786db6431cb759253367e)), closes [#27784](https://github.com/bitnami/charts/issues/27784)
 
 ## <small>6.2.7 (2024-07-03)</small>
 

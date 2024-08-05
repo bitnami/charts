@@ -1,8 +1,20 @@
 # Changelog
 
-## 13.2.12 (2024-07-17)
+## 13.2.15 (2024-07-30)
 
-* [bitnami/discourse] fix: :bug: Remove incorrect CHMOD capability ([#27982](https://github.com/bitnami/charts/pull/27982))
+* [bitnami/discourse] Release 13.2.15 ([#28578](https://github.com/bitnami/charts/pull/28578))
+
+## <small>13.2.14 (2024-07-25)</small>
+
+* [bitnami/discourse] Release 13.2.14 (#28448) ([a1c04d9](https://github.com/bitnami/charts/commit/a1c04d937c775cbd265b5b7174217f013af208a5)), closes [#28448](https://github.com/bitnami/charts/issues/28448)
+
+## <small>13.2.13 (2024-07-24)</small>
+
+* [bitnami/discourse] Release 13.2.13 (#28291) ([b094b74](https://github.com/bitnami/charts/commit/b094b74156c4915dd01b6aee5c68e8bac39acd80)), closes [#28291](https://github.com/bitnami/charts/issues/28291)
+
+## <small>13.2.12 (2024-07-18)</small>
+
+* [bitnami/discourse] fix: :bug: Remove incorrect CHMOD capability (#27982) ([4decca8](https://github.com/bitnami/charts/commit/4decca8eb92c6f98dce549f9d01d8ef6a191c75d)), closes [#27982](https://github.com/bitnami/charts/issues/27982)
 
 ## <small>13.2.11 (2024-07-16)</small>
 

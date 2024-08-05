@@ -1,8 +1,28 @@
 # Changelog
 
-## 22.0.5 (2024-07-16)
+## 22.0.10 (2024-07-30)
 
-* [bitnami/harbor] Global StorageClass as default value ([#28030](https://github.com/bitnami/charts/pull/28030))
+* [bitnami/harbor] Release 22.0.10 ([#28577](https://github.com/bitnami/charts/pull/28577))
+
+## <small>22.0.9 (2024-07-30)</small>
+
+* [bitnami/harbor] Release 22.0.9 (#28576) ([1761333](https://github.com/bitnami/charts/commit/17613339419ca10ec90e950dd7a73a26eec1d603)), closes [#28576](https://github.com/bitnami/charts/issues/28576)
+
+## <small>22.0.8 (2024-07-25)</small>
+
+* [bitnami/harbor] Release 22.0.8 (#28418) ([9b0cf6a](https://github.com/bitnami/charts/commit/9b0cf6a0f148016fe140a69050034cb7563a5e68)), closes [#28418](https://github.com/bitnami/charts/issues/28418)
+
+## <small>22.0.7 (2024-07-24)</small>
+
+* [bitnami/harbor] Release 22.0.7 (#28301) ([1cdbafd](https://github.com/bitnami/charts/commit/1cdbafd8c129514011bd8118ae77eb128a5b3f50)), closes [#28301](https://github.com/bitnami/charts/issues/28301)
+
+## <small>22.0.6 (2024-07-24)</small>
+
+* [bitnami/harbor] Release 22.0.6 (#28255) ([1aedb99](https://github.com/bitnami/charts/commit/1aedb9946c5129e77f0841425ba3ddfb647fdca7)), closes [#28255](https://github.com/bitnami/charts/issues/28255)
+
+## <small>22.0.5 (2024-07-19)</small>
+
+* [bitnami/harbor] Global StorageClass as default value (#28030) ([fb9252b](https://github.com/bitnami/charts/commit/fb9252ba06e4da0c967503e1fcca4e4edd496fdd)), closes [#28030](https://github.com/bitnami/charts/issues/28030)
 
 ## <small>22.0.4 (2024-07-16)</small>
 
