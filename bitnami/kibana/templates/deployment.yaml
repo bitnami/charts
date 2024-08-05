@@ -239,10 +239,8 @@ spec:
             httpGet:
               path: {{- if .Values.configuration.server.basePath }}
                       {{- printf "%s/status" .Values.configuration.server.basePath }}
-                    {{- else if .Values.extraConfiguration }}
-                      {{- if .Values.extraConfiguration.server.basePath }}
-                      {{- printf "%s/status" .Values.extraConfiguration.server.basePath }}
-                      {{- end }}
+                    {{- else if and .Values.extraConfiguration .Values.extraConfiguration.server .Values.extraConfiguration.server.basePath}}
+                          {{- printf "%s/status" .Values.extraConfiguration.server.basePath }}
                     {{- else }}
                       {{- printf "/status" }}
                     {{- end }}
