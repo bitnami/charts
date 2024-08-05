@@ -237,7 +237,13 @@ spec:
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: {{ printf "%s/status" (default "" .Values.configuration.server.basePath) }}
+              path: {{ if .Values.configuration.server.basePath -}}
+              {{- printf "%s/status" .Values.configuration.server.basePath -}}
+              {{- else if .Values.extraConfiguration.server.basePath -}}
+              {{- printf "%s/status" .Values.extraConfiguration.server.basePath -}}
+              {{- else -}}
+              {{- printf "/status" -}}
+              {{- end }}
               port: http
               scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}
           {{- end }}
