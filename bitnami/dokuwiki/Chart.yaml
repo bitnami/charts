@@ -19,7 +19,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: DokuWiki is a standards-compliant wiki optimized for creating documentation. Designed to be simple to use for small organizations, it stores all data in plain text files so no database is required.
+deprecated: true
+description: DEPRECATED DokuWiki is a standards-compliant wiki optimized for creating documentation. Designed to be simple to use for small organizations, it stores all data in plain text files so no database is required.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/dokuwiki/img/dokuwiki-stack-220x234.png
 keywords:
@@ -29,10 +30,8 @@ keywords:
 - web
 - application
 - php
-maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+maintainers: []
 name: dokuwiki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/dokuwiki
-version: 16.2.10
+version: 16.2.11
