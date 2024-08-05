@@ -10,6 +10,6 @@ dependencies:
   version: 1.4.16
 - name: dex
   repository: file://charts/dex
-  version: 0.0.1
-digest: sha256:856d6ca9a125209c6aeb718bdbaa14d61eb542d009d1b7e6f004d5d5d2efd898
-generated: "2024-08-02T13:56:45.701274+02:00"
+  version: 0.0.2
+digest: sha256:186b6a8e2395bc52b78f521048030c77df132274848d321b60991c8fee3e575a
+generated: "2024-08-05T12:32:20.172363+02:00"

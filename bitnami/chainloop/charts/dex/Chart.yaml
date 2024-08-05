@@ -7,7 +7,7 @@ description: Dex is an identity service that uses OpenID Connect to drive authen
 
 type: application
 # Bump the patch (not minor, not major) version on each change in the Chart Source code
-version: 0.0.1
+version: 0.0.2
 # Do not update appVersion, this is handled automatically by the release process
 appVersion: v0.0.1
 

@@ -159,7 +159,7 @@ username: john@chainloop.local
 password: password
 ```
 
-The overall OIDC configuration can be found at [dex-values.yaml](./charts/dex/values.yaml)
+The overall OIDC configuration can be found at `charts/dex/values.yaml`.
 
 > **CAUTION**: Do not use this mode in production, for that, use the [standard mode](#standard-default) instead.
 
