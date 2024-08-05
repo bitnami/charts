@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.0.5 (2024-07-25)
+## 8.0.6 (2024-08-05)
 
-* [bitnami/matomo] Release 8.0.5 ([#28484](https://github.com/bitnami/charts/pull/28484))
+* [bitnami/matomo] Remove dokuwiki reference ([#28661](https://github.com/bitnami/charts/pull/28661))
+
+## <small>8.0.5 (2024-07-25)</small>
+
+* [bitnami/matomo] Release 8.0.5 (#28484) ([d08a865](https://github.com/bitnami/charts/commit/d08a86525aa160ba1c9595123d2f4913ecb33540)), closes [#28484](https://github.com/bitnami/charts/issues/28484)
 
 ## <small>8.0.4 (2024-07-24)</small>
 
