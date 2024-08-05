@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.20.5 (2024-07-16)
+## 2.21.0 (2024-07-31)
 
-* [bitnami/common] [bitnami/wordpress] Use global.storageClass for fallback, not override ([#24863](https://github.com/bitnami/charts/pull/24863))
+* [bitnami/common] Allow handling of new secrets after initial installation ([#28581](https://github.com/bitnami/charts/pull/28581))
+
+## <small>2.20.5 (2024-07-16)</small>
+
+* [bitnami/common] [bitnami/wordpress] Use global.storageClass for fallback, not override (#24863) ([2b78e13](https://github.com/bitnami/charts/commit/2b78e137ac278cdf9d54523e8d37833a4ff0cd5b)), closes [#24863](https://github.com/bitnami/charts/issues/24863)
 
 ## <small>2.20.4 (2024-07-11)</small>
 
