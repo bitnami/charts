@@ -25,10 +25,6 @@ dependencies:
     name: vault
     repository: https://charts.bitnami.com/bitnami
     version: 1.4.x
-  - condition: development
-    repository: file://charts/dex
-    name: dex
-    version: 0.0.2
 
 annotations:
     images: |
@@ -38,3 +34,5 @@ annotations:
           name: control-plane
         - image: ghcr.io/chainloop-dev/chainloop/control-plane-migrations:v0.95.3
           name: control-plane-migrations
+        - image: docker.io/bitnami/dex:2.40.0-debian-12-r1
+          name: dex

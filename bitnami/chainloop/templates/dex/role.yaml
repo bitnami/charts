@@ -3,8 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.dex.serviceAccount.create .Values.rbac.create }}
-kind: RoleBinding
+{{- if and .Values.development .Values.rbac.create }}
+kind: Role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ include "chainloop.dex" . }}
@@ -15,11 +15,14 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-subjects:
-  - kind: ServiceAccount
-    name: {{ include "chainloop.dex.serviceAccountName" . }}
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: {{ include "chainloop.dex" . }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
 {{- end }}

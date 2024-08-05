@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.dex.metrics.enabled .Values.dex.metrics.serviceMonitor.enabled }}
+{{- if and .Values.development .Values.dex.metrics.enabled .Values.dex.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
