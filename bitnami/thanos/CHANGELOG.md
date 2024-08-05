@@ -1,8 +1,28 @@
 # Changelog
 
-## 15.7.12 (2024-07-04)
+## 15.7.17 (2024-08-01)
 
-* [bitnami/thanos] Release 15.7.12 ([#27792](https://github.com/bitnami/charts/pull/27792))
+* [bitnami/thanos] add ruler custom data path ([#28606](https://github.com/bitnami/charts/pull/28606))
+
+## <small>15.7.16 (2024-07-31)</small>
+
+* [bitnami/thanos] Release 15.7.16 (#28607) ([d966dfe](https://github.com/bitnami/charts/commit/d966dfe78fbadcd456bd08185f9eb67c1c3221b1)), closes [#28607](https://github.com/bitnami/charts/issues/28607)
+
+## <small>15.7.15 (2024-07-25)</small>
+
+* [bitnami/thanos] Release 15.7.15 (#28508) ([5dbafa2](https://github.com/bitnami/charts/commit/5dbafa2940605911ead5777fc34219e1e7814333)), closes [#28508](https://github.com/bitnami/charts/issues/28508)
+
+## <small>15.7.14 (2024-07-24)</small>
+
+* [bitnami/thanos] Release 15.7.14 (#28386) ([edf6bd2](https://github.com/bitnami/charts/commit/edf6bd206e61401919388afae48c86202c6adc88)), closes [#28386](https://github.com/bitnami/charts/issues/28386)
+
+## <small>15.7.13 (2024-07-18)</small>
+
+* [bitnami/thanos] Global StorageClass as default value (#28103) ([e239a85](https://github.com/bitnami/charts/commit/e239a8575d54acb106885d4861690d037d0ff7dc)), closes [#28103](https://github.com/bitnami/charts/issues/28103)
+
+## <small>15.7.12 (2024-07-04)</small>
+
+* [bitnami/thanos] Release 15.7.12 (#27792) ([f4bd712](https://github.com/bitnami/charts/commit/f4bd7126c3617faa30c875b68a1f974d72c53ca6)), closes [#27792](https://github.com/bitnami/charts/issues/27792)
 
 ## <small>15.7.11 (2024-07-03)</small>
 

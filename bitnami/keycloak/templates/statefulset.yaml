@@ -22,6 +22,9 @@ spec:
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy:
     {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  {{- if .Values.minReadySeconds }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -212,13 +215,35 @@ spec:
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
-            {{- if .Values.adminIngress.enabled }}
+            {{- if and .Values.adminIngress.enabled .Values.adminIngress.hostname }}
             - name: KC_HOSTNAME_ADMIN_URL
-              value: "http{{ if or .Values.adminIngress.tls (eq .Values.proxy "edge") }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
+              value: |-
+                {{ ternary "https://" "http://" ( or .Values.adminIngress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
+                {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) -}}
+                {{- if eq .Values.adminIngress.controller "default" }}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.path "context" $) }}
+                {{- else if eq .Values.adminIngress.controller "gce" }}
+                  {{- $path := .Values.adminIngress.path -}}
+                  {{- if hasSuffix "*" $path -}}
+                    {{- $path = trimSuffix "*" $path -}}
+                  {{- end -}}
+                  {{- include "common.tplvalues.render" (dict "value" $path "context" $) }}
+                {{- end }}
             {{- end }}
-            {{- if and .Values.adminIngress.enabled (not .Values.ingress.enabled) }}
+            {{- if and .Values.ingress.enabled .Values.ingress.hostname }}
             - name: KC_HOSTNAME_URL
-              value: "http{{ if or .Values.adminIngress.tls (eq .Values.proxy "edge") }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
+              value: |-
+                {{ ternary "https://" "http://" ( or .Values.ingress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
+                {{- include "common.tplvalues.render" (dict "value" .Values.ingress.hostname "context" $) -}}
+                {{- if eq .Values.ingress.controller "default" }}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.ingress.path "context" $) }}
+                {{- else if eq .Values.ingress.controller "gce" }}
+                  {{- $path := .Values.ingress.path -}}
+                  {{- if hasSuffix "*" $path -}}
+                    {{- $path = trimSuffix "*" $path -}}
+                  {{- end -}}
+                  {{- include "common.tplvalues.render" (dict "value" $path "context" $) }}
+                {{- end }}
             {{- end }}
             {{- if .Values.adminRealm }}
             - name: KC_SPI_ADMIN_REALM

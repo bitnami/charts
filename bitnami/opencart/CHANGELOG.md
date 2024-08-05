@@ -1,8 +1,25 @@
 # Changelog
 
-## 18.2.8 (2024-07-03)
+## 19.0.3 (2024-07-25)
 
-* [bitnami/opencart] Release 18.2.8 ([#27709](https://github.com/bitnami/charts/pull/27709))
+* [bitnami/opencart] Release 19.0.3 ([#28456](https://github.com/bitnami/charts/pull/28456))
+
+## <small>19.0.2 (2024-07-24)</small>
+
+* [bitnami/opencart] Release 19.0.2 (#28341) ([bcb6e5d](https://github.com/bitnami/charts/commit/bcb6e5d1dc1e7f179def88e9588a2b19c87f2513)), closes [#28341](https://github.com/bitnami/charts/issues/28341)
+
+## <small>19.0.1 (2024-07-17)</small>
+
+* [bitnami/opencart] Global StorageClass as default value (#28075) ([f5f46bf](https://github.com/bitnami/charts/commit/f5f46bfb9aeec144bf3986797e901ad5f87aae99)), closes [#28075](https://github.com/bitnami/charts/issues/28075)
+
+## 19.0.0 (2024-07-12)
+
+* [bitnami/opencart] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27939) ([b2f89a0](https://github.com/bitnami/charts/commit/b2f89a06db1af17352f085be208bee1825d2e938)), closes [#27939](https://github.com/bitnami/charts/issues/27939)
+
+## <small>18.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/opencart] Release 18.2.8 (#27709) ([e616ca0](https://github.com/bitnami/charts/commit/e616ca0eb7ec83e4cbb7b2f619f22bf73698a675)), closes [#27709](https://github.com/bitnami/charts/issues/27709)
 
 ## <small>18.2.7 (2024-06-18)</small>
 

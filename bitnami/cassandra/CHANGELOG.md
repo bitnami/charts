@@ -1,8 +1,41 @@
 # Changelog
 
-## 11.3.4 (2024-07-03)
+## 11.3.12 (2024-07-31)
 
-* [bitnami/cassandra] Release 11.3.4 ([#27687](https://github.com/bitnami/charts/pull/27687))
+* [bitnami/cassandra] Improve Ginkgo test ([#28603](https://github.com/bitnami/charts/pull/28603))
+
+## <small>11.3.11 (2024-07-25)</small>
+
+* [bitnami/cassandra] Release 11.3.11 (#28408) ([8a65384](https://github.com/bitnami/charts/commit/8a6538440b1ca408369ec814831f6239fe47fa3b)), closes [#28408](https://github.com/bitnami/charts/issues/28408)
+
+## <small>11.3.10 (2024-07-24)</small>
+
+* [bitnami/cassandra] Release 11.3.10 (#28273) ([b022c3b](https://github.com/bitnami/charts/commit/b022c3b7535e7d063ee7302357c20257c4022c57)), closes [#28273](https://github.com/bitnami/charts/issues/28273)
+
+## <small>11.3.9 (2024-07-23)</small>
+
+* [bitnami/cassandra] Release 11.3.9 (#28236) ([4c14b4d](https://github.com/bitnami/charts/commit/4c14b4d164e705409e1a6b1126ff7da2400895fb)), closes [#28236](https://github.com/bitnami/charts/issues/28236)
+
+## <small>11.3.8 (2024-07-23)</small>
+
+* [bitnami/cassandra] Release 11.3.8 (#28209) ([97f5aaa](https://github.com/bitnami/charts/commit/97f5aaaa2a19c9ed3a8581db26e7c74de423c456)), closes [#28209](https://github.com/bitnami/charts/issues/28209)
+
+## <small>11.3.7 (2024-07-17)</small>
+
+* [bitnami/cassandra] Fix for cassandra.commitstorage.class helper (#28119) ([18acada](https://github.com/bitnami/charts/commit/18acada4400bdf5bde6d8c5b36d93ee57bb54b22)), closes [#28119](https://github.com/bitnami/charts/issues/28119)
+
+## <small>11.3.6 (2024-07-16)</small>
+
+* [bitnami/cassandra] Global StorageClass as default value (#28002) ([691d719](https://github.com/bitnami/charts/commit/691d71984aa90d993cc8d869950bb2ef8ea46374)), closes [#28002](https://github.com/bitnami/charts/issues/28002)
+
+## <small>11.3.5 (2024-07-12)</small>
+
+* [bitnami/cassandra] Release 11.3.5 (#27932) ([c70f93d](https://github.com/bitnami/charts/commit/c70f93dfc0bbfa494c94b248ea9219c2c1a3918b)), closes [#27932](https://github.com/bitnami/charts/issues/27932)
+
+## <small>11.3.4 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/cassandra] Release 11.3.4 (#27687) ([7d04f02](https://github.com/bitnami/charts/commit/7d04f020dd9e7c697dcc3433234ebf98be704377)), closes [#27687](https://github.com/bitnami/charts/issues/27687)
 
 ## <small>11.3.3 (2024-06-18)</small>
 

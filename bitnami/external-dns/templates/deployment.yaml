@@ -13,6 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   replicas: 1
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -277,6 +278,9 @@ spec:
               {{- else }}
             - --infoblox-ssl-verify
               {{- end }}
+              {{- if .Values.infoblox.createPtr }}
+            - --infoblox-create-ptr
+              {{- end }}
               {{- if .Values.infoblox.maxResults }}
             - --infoblox-max-results={{ .Values.infoblox.maxResults }}
               {{- end }}
@@ -330,6 +334,12 @@ spec:
             # TransIP arguments
             - --transip-account={{ .Values.transip.account }}
             - --transip-keyfile=/transip/transip-api-key
+            {{- end }}
+            {{- if .Values.traefik.disableLegacy }}
+            - --traefik-disable-legacy
+            {{- end }}
+            {{- if .Values.traefik.disableNew }}
+            - --traefik-disable-new
             {{- end }}
             {{- if .Values.txtEncrypt.enabled }}
             # TXT registry encryption
@@ -574,14 +584,14 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "scaleway" }}
             # Scaleway environment variables
-            {{- if .Values.scaleway.scwAccessKey }}
+            {{- if or (.Values.scaleway.scwAccessKey) (.Values.scaleway.secretName) }}
             - name: SCW_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: scw_access_key
             {{- end }}
-            {{- if .Values.scaleway.scwSecretKey }}
+            {{- if or (.Values.scaleway.scwSecretKey) (.Values.scaleway.secretName) }}
             - name: SCW_SECRET_KEY
               valueFrom:
                 secretKeyRef:

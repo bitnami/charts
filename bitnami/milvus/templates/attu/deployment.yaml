@@ -161,7 +161,7 @@ spec:
               mountPath: /.yarn
               subPath: yarn-dir
             - name: empty-dir
-              mountPath: /.cache/yarn
+              mountPath: /.cache
               subPath: yarn-cache-dir
           {{- if .Values.attu.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumeMounts "context" $) | nindent 12 }}

@@ -1,8 +1,24 @@
 # Changelog
 
-## 5.2.9 (2024-07-04)
+## 5.3.3 (2024-07-25)
 
-* [bitnami/supabase] Do not render any resources for disabled components ([#27580](https://github.com/bitnami/charts/pull/27580))
+* [bitnami/supabase] Release 5.3.3 ([#28502](https://github.com/bitnami/charts/pull/28502))
+
+## <small>5.3.2 (2024-07-24)</small>
+
+* [bitnami/supabase] Release 5.3.2 (#28384) ([630736a](https://github.com/bitnami/charts/commit/630736ab6e7df374d16f01cb716c93de1a9f92bf)), closes [#28384](https://github.com/bitnami/charts/issues/28384)
+
+## <small>5.3.1 (2024-07-16)</small>
+
+* [bitnami/supabase] Global StorageClass as default value (#28101) ([fa97110](https://github.com/bitnami/charts/commit/fa97110d0ce47f0079a03e45eef39b7c80c6ad38)), closes [#28101](https://github.com/bitnami/charts/issues/28101)
+
+## 5.3.0 (2024-07-09)
+
+* [bitnami/supabase] chore: :arrow_up: Update supabase-storage to 1.6.8 (#27857) ([d2b1182](https://github.com/bitnami/charts/commit/d2b11820e25a73ee35b7bbbe7dcb47cf12c2de9f)), closes [#27857](https://github.com/bitnami/charts/issues/27857)
+
+## <small>5.2.9 (2024-07-04)</small>
+
+* [bitnami/supabase] Do not render any resources for disabled components (#27580) ([5d703ba](https://github.com/bitnami/charts/commit/5d703bad49025ab95654a09ecacef304de7492bd)), closes [#27580](https://github.com/bitnami/charts/issues/27580) [#27540](https://github.com/bitnami/charts/issues/27540)
 
 ## <small>5.2.8 (2024-07-04)</small>
 

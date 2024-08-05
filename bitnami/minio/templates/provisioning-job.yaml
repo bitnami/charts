@@ -141,7 +141,7 @@ spec:
               mc admin config set {{ $minioAlias }} {{ $config.name }} {{ $options }};
               {{- end }}
 
-              mc admin service restart {{ $minioAlias }};
+              mc admin service restart {{ $minioAlias }} --wait --json;
 
               {{- range $policy := .Values.provisioning.policies }}
               mc admin policy create {{ $minioAlias }} {{ $policy.name }} /etc/ilm/policy-{{ $policy.name }}.json;

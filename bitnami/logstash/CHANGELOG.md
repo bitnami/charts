@@ -1,8 +1,28 @@
 # Changelog
 
-## 6.2.10 (2024-07-04)
+## 6.3.0 (2024-08-01)
 
-* [bitnami/logstash] Release 6.2.10 ([#27785](https://github.com/bitnami/charts/pull/27785))
+* [bitnami/logstash] Add extra inputs and ports to pod and svc ([#27763](https://github.com/bitnami/charts/pull/27763))
+
+## <small>6.2.14 (2024-07-25)</small>
+
+* [bitnami/logstash] Release 6.2.14 (#28445) ([75944e6](https://github.com/bitnami/charts/commit/75944e6df9e9672dec0c0f462ec5b3bb73fc9e39)), closes [#28445](https://github.com/bitnami/charts/issues/28445)
+
+## <small>6.2.13 (2024-07-24)</small>
+
+* [bitnami/logstash] Release 6.2.13 (#28305) ([8ee9deb](https://github.com/bitnami/charts/commit/8ee9deb7972c9bdeeef87667ffec2cbc9a17e84b)), closes [#28305](https://github.com/bitnami/charts/issues/28305)
+
+## <small>6.2.12 (2024-07-16)</small>
+
+* [bitnami/logstash] Global StorageClass as default value (#28048) ([a6f7aa2](https://github.com/bitnami/charts/commit/a6f7aa2bcf8c5f2108bb7636b51bad6cb422d300)), closes [#28048](https://github.com/bitnami/charts/issues/28048)
+
+## <small>6.2.11 (2024-07-11)</small>
+
+* [bitnami/logstash] Release 6.2.11 (#27907) ([92b1967](https://github.com/bitnami/charts/commit/92b1967e8dccbc53ce55a29477ea8c79f3e00c18)), closes [#27907](https://github.com/bitnami/charts/issues/27907)
+
+## <small>6.2.10 (2024-07-04)</small>
+
+* [bitnami/logstash] Release 6.2.10 (#27785) ([25e9429](https://github.com/bitnami/charts/commit/25e94295ff332c3d8ba22c0cdc19cfd9c89aea88)), closes [#27785](https://github.com/bitnami/charts/issues/27785)
 
 ## <small>6.2.9 (2024-07-03)</small>
 

@@ -1,8 +1,32 @@
 # Changelog
 
-## 8.3.2 (2024-06-28)
+## 8.3.8 (2024-08-02)
 
-* [bitnami/milvus] Release 8.3.2 ([#27573](https://github.com/bitnami/charts/pull/27573))
+* [bitnami/milvus] Release 8.3.8 ([#28642](https://github.com/bitnami/charts/pull/28642))
+
+## <small>8.3.7 (2024-07-25)</small>
+
+* [bitnami/milvus] fix: :bug: Set cache directory fully writable in attu (#28521) ([901c5f3](https://github.com/bitnami/charts/commit/901c5f3577a895211a53205c47e3093169d00d81)), closes [#28521](https://github.com/bitnami/charts/issues/28521)
+
+## <small>8.3.6 (2024-07-25)</small>
+
+* [bitnami/milvus] Release 8.3.6 (#28439) ([33e113a](https://github.com/bitnami/charts/commit/33e113a21a95f4c6c6075a1bb83b485d885f0e52)), closes [#28439](https://github.com/bitnami/charts/issues/28439)
+
+## <small>8.3.5 (2024-07-24)</small>
+
+* [bitnami/milvus] Release 8.3.5 (#28339) ([b06e2d7](https://github.com/bitnami/charts/commit/b06e2d76f39e5994cb026e9833e47c51ecba964f)), closes [#28339](https://github.com/bitnami/charts/issues/28339)
+
+## <small>8.3.4 (2024-07-22)</small>
+
+* [bitnami/milvus] Global StorageClass as default value (#28058) ([f706402](https://github.com/bitnami/charts/commit/f70640229e5e26e1e1357e404955dfa877c035f6)), closes [#28058](https://github.com/bitnami/charts/issues/28058)
+
+## <small>8.3.3 (2024-07-08)</small>
+
+* [bitnami/milvus] Release 8.3.3 (#27807) ([9cfaffe](https://github.com/bitnami/charts/commit/9cfaffeeb9f4145f26bb2f03a868d4fe2bd295a2)), closes [#27807](https://github.com/bitnami/charts/issues/27807)
+
+## <small>8.3.2 (2024-06-28)</small>
+
+* [bitnami/milvus] Release 8.3.2 (#27573) ([05453cb](https://github.com/bitnami/charts/commit/05453cbeae31cd9cffcd9fcf98cffc16233e5a47)), closes [#27573](https://github.com/bitnami/charts/issues/27573)
 
 ## <small>8.3.1 (2024-06-27)</small>
 

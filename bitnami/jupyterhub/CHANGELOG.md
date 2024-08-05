@@ -1,8 +1,33 @@
 # Changelog
 
-## 7.2.8 (2024-07-03)
+## 7.2.14 (2024-07-31)
 
-* [bitnami/jupyterhub] Release 7.2.8 ([#27699](https://github.com/bitnami/charts/pull/27699))
+* [bitnami/jupyterhub] Release 7.2.14 ([#28600](https://github.com/bitnami/charts/pull/28600))
+
+## <small>7.2.13 (2024-07-25)</small>
+
+* [bitnami/jupyterhub] Release 7.2.13 (#28424) ([6f40a5e](https://github.com/bitnami/charts/commit/6f40a5e2e7cad17e69198f28c7ca55b02e9d9cec)), closes [#28424](https://github.com/bitnami/charts/issues/28424)
+
+## <small>7.2.12 (2024-07-24)</small>
+
+* [bitnami/jupyterhub] Release 7.2.12 (#28303) ([121ee25](https://github.com/bitnami/charts/commit/121ee2543a1f4ccc3f7f08f13f4e5dcc04a985bb)), closes [#28303](https://github.com/bitnami/charts/issues/28303)
+
+## <small>7.2.11 (2024-07-24)</small>
+
+* [bitnami/jupyterhub] Release 7.2.11 (#28265) ([ea7930c](https://github.com/bitnami/charts/commit/ea7930c34512e665b9633fd23a0b37a61e680fde)), closes [#28265](https://github.com/bitnami/charts/issues/28265)
+
+## <small>7.2.10 (2024-07-16)</small>
+
+* [bitnami/jupyterhub] Fix for jupyterhub.storage.class helper (#28120) ([16e6f01](https://github.com/bitnami/charts/commit/16e6f01507f1aef5f5a575e4b550e0734a238045)), closes [#28120](https://github.com/bitnami/charts/issues/28120)
+
+## <small>7.2.9 (2024-07-16)</small>
+
+* [bitnami/jupyterhub] Global StorageClass as default value (#28037) ([ca95359](https://github.com/bitnami/charts/commit/ca95359cf47bd71df8e091049bce8d5c55ab990d)), closes [#28037](https://github.com/bitnami/charts/issues/28037)
+
+## <small>7.2.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/jupyterhub] Release 7.2.8 (#27699) ([9263ae2](https://github.com/bitnami/charts/commit/9263ae265214c69b4581035cd70890b9d07153fc)), closes [#27699](https://github.com/bitnami/charts/issues/27699)
 
 ## <small>7.2.7 (2024-06-18)</small>
 

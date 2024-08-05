@@ -1,8 +1,20 @@
 # Changelog
 
-## 8.3.1 (2024-06-29)
+## 8.3.4 (2024-07-25)
 
-* [bitnami/mongodb-sharded] Release 8.3.1 ([#27591](https://github.com/bitnami/charts/pull/27591))
+* [bitnami/mongodb-sharded] Release 8.3.4 ([#28476](https://github.com/bitnami/charts/pull/28476))
+
+## <small>8.3.3 (2024-07-24)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.3 (#28324) ([cc102ed](https://github.com/bitnami/charts/commit/cc102ed5dc00e4e755c7c467214debb4a8c31dc6)), closes [#28324](https://github.com/bitnami/charts/issues/28324)
+
+## <small>8.3.2 (2024-07-16)</small>
+
+* [bitnami/mongodb-sharded] Global StorageClass as default value (#28062) ([d432ce0](https://github.com/bitnami/charts/commit/d432ce00fd96cc8b19f482467543dee2519e1b1d)), closes [#28062](https://github.com/bitnami/charts/issues/28062)
+
+## <small>8.3.1 (2024-06-29)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.1 (#27591) ([d572425](https://github.com/bitnami/charts/commit/d57242503ec47daca1a284e6cbdaa039383347db)), closes [#27591](https://github.com/bitnami/charts/issues/27591)
 
 ## 8.3.0 (2024-06-28)
 

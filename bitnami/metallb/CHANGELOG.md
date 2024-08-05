@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.3.7 (2024-07-04)
+## 6.3.9 (2024-07-24)
 
-* [bitnami/metallb] Release 6.3.7 ([#27796](https://github.com/bitnami/charts/pull/27796))
+* [bitnami/metallb] Remove duplicate keys ([#28203](https://github.com/bitnami/charts/pull/28203))
+
+## <small>6.3.8 (2024-07-16)</small>
+
+* [bitnami/metallb] Global StorageClass as default value (#28056) ([d0ab955](https://github.com/bitnami/charts/commit/d0ab95565e69472a14c13408893b8207fe5ec578)), closes [#28056](https://github.com/bitnami/charts/issues/28056)
+
+## <small>6.3.7 (2024-07-04)</small>
+
+* [bitnami/metallb] Release 6.3.7 (#27796) ([bfd90e5](https://github.com/bitnami/charts/commit/bfd90e589210411ecf58128c2c92dc178ff3299b)), closes [#27796](https://github.com/bitnami/charts/issues/27796)
 
 ## <small>6.3.6 (2024-07-03)</small>
 

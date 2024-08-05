@@ -1,9 +1,9 @@
 dependencies:
 - name: etcd
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 10.2.4
+  version: 10.2.10
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.20.3
-digest: sha256:864cbe2680cb3fba383113e4cd477ba911596dff5c2c655224df898ef2706b1b
-generated: "2024-07-03T07:18:17.501908863Z"
+  version: 2.20.5
+digest: sha256:172880e46f5a6ef9ed5093bb0771d6057e26b1377697dcf992d5efdcdf856416
+generated: "2024-07-25T03:06:26.862684121Z"

@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,6 +19,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   ## We need to add the existing secret in global in order to make it accessible to the Kong subchart
   ##
@@ -112,7 +114,7 @@ jwt:
     image:
       registry: docker.io
       repository: bitnami/jwt-cli
-      tag: 6.1.0-debian-12-r2
+      tag: 6.1.0-debian-12-r5
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -139,7 +141,7 @@ jwt:
       ##
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.30.2-debian-12-r2
+      tag: 1.30.3-debian-12-r4
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -444,7 +446,7 @@ auth:
   image:
     registry: docker.io
     repository: bitnami/gotrue
-    tag: 2.154.2-debian-12-r2
+    tag: 2.155.6-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -856,7 +858,7 @@ meta:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres-meta
-    tag: 0.83.1-debian-12-r0
+    tag: 0.83.2-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1283,7 +1285,7 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.29.15-debian-12-r0
+    tag: 2.30.14-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1693,7 +1695,7 @@ rest:
   image:
     registry: docker.io
     repository: bitnami/postgrest
-    tag: 11.2.2-debian-12-r28
+    tag: 11.2.2-debian-12-r31
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2109,7 +2111,7 @@ storage:
   image:
     registry: docker.io
     repository: bitnami/supabase-storage
-    tag: 1.6.4-debian-12-r1
+    tag: 1.8.2-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2570,7 +2572,7 @@ studio:
   image:
     registry: docker.io
     repository: bitnami/supabase-studio
-    tag: 1.24.5-debian-12-r1
+    tag: 1.24.5-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3064,7 +3066,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r27
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3115,7 +3117,7 @@ volumePermissions:
 psqlImage:
   registry: docker.io
   repository: bitnami/supabase-postgres
-  tag: 15.1.1-debian-12-r79
+  tag: 15.6.1-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3290,7 +3292,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres
-    tag: 15.1.1-debian-12-r79
+    tag: 15.6.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

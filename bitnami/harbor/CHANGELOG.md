@@ -1,8 +1,53 @@
 # Changelog
 
-## 21.4.7 (2024-07-03)
+## 22.0.10 (2024-07-30)
 
-* [bitnami/harbor] Release 21.4.7 ([#27691](https://github.com/bitnami/charts/pull/27691))
+* [bitnami/harbor] Release 22.0.10 ([#28577](https://github.com/bitnami/charts/pull/28577))
+
+## <small>22.0.9 (2024-07-30)</small>
+
+* [bitnami/harbor] Release 22.0.9 (#28576) ([1761333](https://github.com/bitnami/charts/commit/17613339419ca10ec90e950dd7a73a26eec1d603)), closes [#28576](https://github.com/bitnami/charts/issues/28576)
+
+## <small>22.0.8 (2024-07-25)</small>
+
+* [bitnami/harbor] Release 22.0.8 (#28418) ([9b0cf6a](https://github.com/bitnami/charts/commit/9b0cf6a0f148016fe140a69050034cb7563a5e68)), closes [#28418](https://github.com/bitnami/charts/issues/28418)
+
+## <small>22.0.7 (2024-07-24)</small>
+
+* [bitnami/harbor] Release 22.0.7 (#28301) ([1cdbafd](https://github.com/bitnami/charts/commit/1cdbafd8c129514011bd8118ae77eb128a5b3f50)), closes [#28301](https://github.com/bitnami/charts/issues/28301)
+
+## <small>22.0.6 (2024-07-24)</small>
+
+* [bitnami/harbor] Release 22.0.6 (#28255) ([1aedb99](https://github.com/bitnami/charts/commit/1aedb9946c5129e77f0841425ba3ddfb647fdca7)), closes [#28255](https://github.com/bitnami/charts/issues/28255)
+
+## <small>22.0.5 (2024-07-19)</small>
+
+* [bitnami/harbor] Global StorageClass as default value (#28030) ([fb9252b](https://github.com/bitnami/charts/commit/fb9252ba06e4da0c967503e1fcca4e4edd496fdd)), closes [#28030](https://github.com/bitnami/charts/issues/28030)
+
+## <small>22.0.4 (2024-07-16)</small>
+
+* [bitnami/harbor] Dont set redis DB if Sentinel is enabled (#27977) ([e1d2920](https://github.com/bitnami/charts/commit/e1d2920e6db5696ed0b96c578c6806f7d097056a)), closes [#27977](https://github.com/bitnami/charts/issues/27977)
+
+## <small>22.0.3 (2024-07-15)</small>
+
+* [bitnami/harbor] Remove duplicated security context (#27955) ([ddef5d9](https://github.com/bitnami/charts/commit/ddef5d9ebe14c95ba2c4637dac462f4db8603915)), closes [#27955](https://github.com/bitnami/charts/issues/27955)
+
+## <small>22.0.2 (2024-07-12)</small>
+
+* [bitnami/harbor] initContainer for certificate vol (#27753) ([e924679](https://github.com/bitnami/charts/commit/e924679c363b1c2b2df6e602a691a6d9624c9391)), closes [#27753](https://github.com/bitnami/charts/issues/27753)
+
+## <small>22.0.1 (2024-07-11)</small>
+
+* [bitnami/harbor] Fix typo in exporter secretKeyRef (#27851) ([56b64a0](https://github.com/bitnami/charts/commit/56b64a06a06b253bfc49746369eb62596614fd6a)), closes [#27851](https://github.com/bitnami/charts/issues/27851)
+
+## 22.0.0 (2024-07-09)
+
+* [bitnami/harbor] Add service account for Harbor resources (#27067) ([0f01d69](https://github.com/bitnami/charts/commit/0f01d69a6bd94fc4b3a68012fea301490c3b5e07)), closes [#27067](https://github.com/bitnami/charts/issues/27067)
+
+## <small>21.4.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/harbor] Release 21.4.7 (#27691) ([6b5d149](https://github.com/bitnami/charts/commit/6b5d14984d42ec77ecb495e82be4fe40a6f16f91)), closes [#27691](https://github.com/bitnami/charts/issues/27691)
 
 ## <small>21.4.6 (2024-06-18)</small>
 
