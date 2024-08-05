@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.14 (2024-07-25)
+## 1.0.15 (2024-08-05)
 
-* [bitnami/cilium] Release 1.0.14 ([#28517](https://github.com/bitnami/charts/pull/28517))
+* [bitnami/cilium] Release 1.0.15 ([#28667](https://github.com/bitnami/charts/pull/28667))
+
+## <small>1.0.14 (2024-07-25)</small>
+
+* [bitnami/cilium] Release 1.0.14 (#28517) ([450fa38](https://github.com/bitnami/charts/commit/450fa381d9c3fb758decca419ee6886353d2f89e)), closes [#28517](https://github.com/bitnami/charts/issues/28517)
 
 ## <small>1.0.13 (2024-07-25)</small>
 
