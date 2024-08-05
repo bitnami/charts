@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.3 (2024-07-25)
+## 21.0.4 (2024-08-05)
 
-* [bitnami/mediawiki] Release 21.0.3 ([#28459](https://github.com/bitnami/charts/pull/28459))
+* [bitnami/mediawiki] Remove Dokuwiki references ([#28658](https://github.com/bitnami/charts/pull/28658))
+
+## <small>21.0.3 (2024-07-25)</small>
+
+* [bitnami/mediawiki] Release 21.0.3 (#28459) ([88442af](https://github.com/bitnami/charts/commit/88442af26ff029f3f3c96ce25341192e779c597b)), closes [#28459](https://github.com/bitnami/charts/issues/28459)
 
 ## <small>21.0.2 (2024-07-24)</small>
 
