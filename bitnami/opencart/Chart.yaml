@@ -23,7 +23,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: OpenCart is free open source ecommerce platform for online merchants. OpenCart provides a professional and reliable foundation from which to build a successful online store.
+deprecated: true
+description: DEPRECATED OpenCart is free open source ecommerce platform for online merchants. OpenCart provides a professional and reliable foundation from which to build a successful online store.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/opencart/img/opencart-stack-220x234.png
 keywords:
@@ -32,10 +33,8 @@ keywords:
 - http
 - web
 - php
-maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+maintainers: []
 name: opencart
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/opencart
-version: 19.0.3
+version: 19.0.4
