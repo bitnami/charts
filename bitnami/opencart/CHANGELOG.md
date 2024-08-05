@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.3 (2024-07-25)
+## 19.0.4 (2024-08-05)
 
-* [bitnami/opencart] Release 19.0.3 ([#28456](https://github.com/bitnami/charts/pull/28456))
+* [bitnami/opencart] chore: :memo: :wastebasket: Add deprecation notice ([#28665](https://github.com/bitnami/charts/pull/28665))
+
+## <small>19.0.3 (2024-07-25)</small>
+
+* [bitnami/opencart] Release 19.0.3 (#28456) ([ef1a48c](https://github.com/bitnami/charts/commit/ef1a48c8587bf09e828d162142891027bdb25338)), closes [#28456](https://github.com/bitnami/charts/issues/28456)
 
 ## <small>19.0.2 (2024-07-24)</small>
 
