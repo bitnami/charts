@@ -54,7 +54,7 @@ clusterDomain: cluster.local
 extraDeploy: []
 ## @section Mediawiki parameters
 
-## Bitnami DokuWiki image version
+## Bitnami MediaWiki image version
 ## ref: https://hub.docker.com/r/bitnami/mediawiki/tags/
 ## @param image.registry [default: REGISTRY_NAME] MediaWiki image registry
 ## @param image.repository [default: REPOSITORY_NAME/mediawiki] MediaWiki image repository
@@ -461,7 +461,7 @@ persistence:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for Dokuwiki pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for MediaWiki pod
   ##
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
