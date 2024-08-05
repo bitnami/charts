@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.10 (2024-07-25)
+## 16.2.11 (2024-08-05)
 
-* [bitnami/dokuwiki] Release 16.2.10 ([#28411](https://github.com/bitnami/charts/pull/28411))
+* [bitnami/dokuwiki] Add deprecation notice ([#28660](https://github.com/bitnami/charts/pull/28660))
+
+## <small>16.2.10 (2024-07-25)</small>
+
+* [bitnami/dokuwiki] Release 16.2.10 (#28411) ([33ae0dd](https://github.com/bitnami/charts/commit/33ae0dd6ea41e0144b55691f3f26385d58616b6b)), closes [#28411](https://github.com/bitnami/charts/issues/28411)
 
 ## <small>16.2.9 (2024-07-24)</small>
 
