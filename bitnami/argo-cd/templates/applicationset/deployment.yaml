@@ -119,9 +119,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.applicationSet.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /healthz
-              port: probe
+            exec:
+              command:
+                - pgrep
+                - -f
+                - argocd-applicationset-controller
             initialDelaySeconds: {{ .Values.applicationSet.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.applicationSet.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.applicationSet.livenessProbe.timeoutSeconds }}

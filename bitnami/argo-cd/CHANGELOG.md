@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.9 (2024-07-26)
+## 6.6.10 (2024-08-02)
 
-* [bitnami/argo-cd] Bugfix cluster-config.yaml nil pointer evaluating interface {}.XXX ([#28522](https://github.com/bitnami/charts/pull/28522))
+* [bitnami/argo-cd] Remove usage of health check that does not exist (#26547) ([#28348](https://github.com/bitnami/charts/pull/28348))
+
+## <small>6.6.9 (2024-07-26)</small>
+
+* [bitnami/argo-cd] Bugfix cluster-config.yaml nil pointer evaluating interface {}.XXX (#28522) ([1e2a00d](https://github.com/bitnami/charts/commit/1e2a00dda16d30472078b762aa399cf353ba840a)), closes [#28522](https://github.com/bitnami/charts/issues/28522)
 
 ## <small>6.6.8 (2024-07-25)</small>
 
