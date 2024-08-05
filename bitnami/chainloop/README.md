@@ -151,6 +151,7 @@ The Helm Chart in this mode includes
 - **A pre-configured Dex OIDC instance.**
 
 The pre-setup users configuration on the Chart include two users, the information is as follows:
+
 ```text
 username: sarah@chainloop.local
 password: password
@@ -774,17 +775,12 @@ chainloop config save \
 
 ### CAS Misc
 
-| Name                     | Description                            | Value        |
-| ------------------------ | -------------------------------------- | ------------ |
-| `cas.sentry.enabled`     | Enable sentry.io alerting              | `false`      |
-| `cas.sentry.dsn`         | DSN endpoint                           | `""`         |
-| `cas.sentry.environment` | Environment tag                        | `production` |
-| `cas.customCAs`          | List of custom CA certificates content | `[]`         |
-
-### CAS Misc
-
 | Name                                                    | Description                                                                                                                                                                                                                                         | Value            |
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `cas.sentry.enabled`                                    | Enable sentry.io alerting                                                                                                                                                                                                                           | `false`          |
+| `cas.sentry.dsn`                                        | DSN endpoint                                                                                                                                                                                                                                        | `""`             |
+| `cas.sentry.environment`                                | Environment tag                                                                                                                                                                                                                                     | `production`     |
+| `cas.customCAs`                                         | List of custom CA certificates content                                                                                                                                                                                                              | `[]`             |
 | `cas.resourcesPreset`                                   | Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `micro`          |
 | `cas.resources`                                         | Set cas container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                               | `{}`             |
 | `cas.podSecurityContext.enabled`                        | Enable cas pods' Security Context                                                                                                                                                                                                                   | `true`           |

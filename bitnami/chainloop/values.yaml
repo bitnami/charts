@@ -1211,8 +1211,6 @@ cas:
   ## @param cas.customCAs List of custom CA certificates content
   customCAs: []
 
-  ## @section CAS Misc
-
   ## Init container's resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param cas.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
