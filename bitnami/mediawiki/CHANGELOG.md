@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.4 (2024-08-05)
+## 21.0.5 (2024-08-06)
 
-* [bitnami/mediawiki] Remove Dokuwiki references ([#28658](https://github.com/bitnami/charts/pull/28658))
+* [bitnami/mediawiki] Add deprecation notice ([#28686](https://github.com/bitnami/charts/pull/28686))
+
+## <small>21.0.4 (2024-08-05)</small>
+
+* [bitnami/mediawiki] Remove Dokuwiki references (#28658) ([f8036b3](https://github.com/bitnami/charts/commit/f8036b334e3b6afd998aa9d8b98cecd7d3899b4e)), closes [#28658](https://github.com/bitnami/charts/issues/28658)
 
 ## <small>21.0.3 (2024-07-25)</small>
 
