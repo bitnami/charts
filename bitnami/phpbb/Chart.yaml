@@ -23,7 +23,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: phpBB is a popular bulletin board that features robust messaging capabilities such as flat message structure, subforums, topic split/merge/lock, user groups, full-text search, and attachments.
+deprecated: true
+description: DEPRECATED phpBB is a popular bulletin board that features robust messaging capabilities such as flat message structure, subforums, topic split/merge/lock, user groups, full-text search, and attachments.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/phpbb/img/phpbb-stack-220x234.png
 keywords:
@@ -31,10 +32,8 @@ keywords:
 - forum
 - http
 - php
-maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+maintainers: []
 name: phpbb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/phpbb
-version: 19.0.3
+version: 19.0.4

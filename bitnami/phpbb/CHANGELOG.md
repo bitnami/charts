@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.3 (2024-07-25)
+## 19.0.4 (2024-08-06)
 
-* [bitnami/phpbb] Release 19.0.3 ([#28465](https://github.com/bitnami/charts/pull/28465))
+* [bitnami/phpbb] Add deprecation notice ([#28684](https://github.com/bitnami/charts/pull/28684))
+
+## <small>19.0.3 (2024-07-25)</small>
+
+* [bitnami/phpbb] Release 19.0.3 (#28465) ([89a9f71](https://github.com/bitnami/charts/commit/89a9f71078d2ae203f1457ba8e215a0e67793a7f)), closes [#28465](https://github.com/bitnami/charts/issues/28465)
 
 ## <small>19.0.2 (2024-07-24)</small>
 
