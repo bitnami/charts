@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.0.1 (2024-08-01)
+
+* bitnami/Keycloak] Allow manual override fo KC_HOSTNAME_URL and KC_ADMIN_HOSTNAME_URL ([#28523](https://github.com/bitnami/charts/pull/28523))
+
 ## 22.0.0 (2024-07-29)
 
-* [bitnami/keycloak] Release 22.0.0 ([#28563](https://github.com/bitnami/charts/pull/28563))
+* [bitnami/keycloak] Release 22.0.0 (#28563) ([81162c4](https://github.com/bitnami/charts/commit/81162c45a2a9759ac00ae26ad0bb5310af4597e4)), closes [#28563](https://github.com/bitnami/charts/issues/28563)
 
 ## 21.8.0 (2024-07-26)
 
