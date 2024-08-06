@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.2 (2024-08-06)
+## 22.1.0 (2024-08-06)
 
-* [bitnami/keycloak] Release 22.0.2 ([#28692](https://github.com/bitnami/charts/pull/28692))
+* [bitnami/keycloak] use hostname v2 options ([#28611](https://github.com/bitnami/charts/pull/28611))
+
+## <small>22.0.2 (2024-08-06)</small>
+
+* [bitnami/keycloak] Release 22.0.2 (#28692) ([af28509](https://github.com/bitnami/charts/commit/af285099f496589b4d3ad8379c00ae96628baab5)), closes [#28692](https://github.com/bitnami/charts/issues/28692)
 
 ## <small>22.0.1 (2024-08-06)</small>
 
