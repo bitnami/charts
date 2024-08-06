@@ -113,7 +113,7 @@ Return true if a secret object should be created
 {{- define "minio.createSecret" -}}
 {{- if .Values.auth.existingSecret -}}
 {{- else -}}
-    {{- true -}}
+    {{- .Values.auth.useSecret -}}
 {{- end -}}
 {{- end -}}
 
