@@ -849,6 +849,11 @@ txtEncrypt:
 ## @param extraArgs Extra arguments to be passed to external-dns
 ##
 extraArgs: {}
+##extraArgs:
+##  rfc2136-zone:
+##    - extra-zone1.com
+##    - extra-zone2.com
+##  rfc2136-zone: extra-zone.com
 ## @param extraEnvVars An array to add extra env vars
 ##
 extraEnvVars: []
