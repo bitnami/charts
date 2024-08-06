@@ -265,6 +265,14 @@ spec:
             - name: SMTP_PROTOCOL
               value: {{ .Values.smtpProtocol | quote }}
             {{- end }}
+            {{- if .Values.smtpFromEmail }}
+            - name: WORDPRESS_SMTP_FROM_EMAIL
+              value: {{ .Values.smtpFromEmail | quote }}
+            {{- end }}
+            {{- if .Values.smtpFromName }}
+            - name: WORDPRESS_SMTP_FROM_NAME
+              value: {{ .Values.smtpFromName | quote }}
+            {{- end }}
             - name: APACHE_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
