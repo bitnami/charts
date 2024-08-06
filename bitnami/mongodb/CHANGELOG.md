@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.16 (2024-07-25)
+## 15.6.17 (2024-08-06)
 
-* [bitnami/mongodb] Release 15.6.16 ([#28453](https://github.com/bitnami/charts/pull/28453))
+* [bitnami/mongodb] Release 15.6.17 ([#28697](https://github.com/bitnami/charts/pull/28697))
+
+## <small>15.6.16 (2024-07-25)</small>
+
+* [bitnami/mongodb] Release 15.6.16 (#28453) ([86d3ac8](https://github.com/bitnami/charts/commit/86d3ac8763d831263d8436ce890cd54ef62a9a17)), closes [#28453](https://github.com/bitnami/charts/issues/28453)
 
 ## <small>15.6.15 (2024-07-24)</small>
 
