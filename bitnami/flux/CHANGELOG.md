@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.12 (2024-07-25)
+## 2.3.13 (2024-08-05)
 
-* [bitnami/flux] Release 2.3.12 ([#28429](https://github.com/bitnami/charts/pull/28429))
+* [bitnami/flux] Use nginx instead of dokuwiki for testing ([#28671](https://github.com/bitnami/charts/pull/28671))
+
+## <small>2.3.12 (2024-07-25)</small>
+
+* [bitnami/flux] Release 2.3.12 (#28429) ([d37fda0](https://github.com/bitnami/charts/commit/d37fda0b2b83f0f961b3cbb2d8dc985cf5ce3de2)), closes [#28429](https://github.com/bitnami/charts/issues/28429)
 
 ## <small>2.3.11 (2024-07-24)</small>
 
