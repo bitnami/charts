@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.3 (2024-07-25)
+## 22.0.5 (2024-08-06)
 
-* [bitnami/prestashop] Release 22.0.3 ([#28470](https://github.com/bitnami/charts/pull/28470))
+* [bitnami/prestashop] Add deprecation note ([#28695](https://github.com/bitnami/charts/pull/28695))
+
+## <small>22.0.3 (2024-07-25)</small>
+
+* [bitnami/prestashop] Release 22.0.3 (#28470) ([9d37e72](https://github.com/bitnami/charts/commit/9d37e7279907e8f271ec5ee19fa8b3874beb1de1)), closes [#28470](https://github.com/bitnami/charts/issues/28470)
 
 ## <small>22.0.2 (2024-07-24)</small>
 
