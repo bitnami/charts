@@ -226,13 +226,13 @@ controlplane:
 
   # Database migration
   ## @param controlplane.migration.ssl Connect to the database using SSL (required fro AWS RDS, etc)
-  ## @param controlplane.migration.image.tag
+  ## @skip controlplane.migration.image.tag
   migration:
     ## Bitnami Chainloop Controlplane migration image
     ## ref: https://hub.docker.com/r/bitnami/chainloop-control-plane-migrations/tags/
     ## @param controlplane.migration.image.registry [default: REGISTRY_NAME] image registry
     ## @param controlplane.migration.image.repository [default: REPOSITORY_NAME/chainloop-control-plane-migrations] image repository
-    ## @param controlplane.migration.image.tag image tag (immutable tags are recommended)
+    ## @skip controlplane.migration.image.tag image tag (immutable tags are recommended)
     ## @param controlplane.migration.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param controlplane.migration.image.pullPolicy image pull policy
     ## @param controlplane.migration.image.pullSecrets image pull secrets
@@ -949,7 +949,7 @@ cas:
   ## ref: https://hub.docker.com/r/bitnami/chainloop-artifact-cas/tags/
   ## @param cas.image.registry [default: REGISTRY_NAME] image registry
   ## @param cas.image.repository [default: REPOSITORY_NAME/chainloop-artifact-cas] image repository
-  ## @param cas.image.tag image tag (immutable tags are recommended)
+  ## @skip cas.image.tag image tag (immutable tags are recommended)
   ## @param cas.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param cas.image.pullPolicy image pull policy
   ## @param cas.image.pullSecrets image pull secrets
@@ -1674,7 +1674,7 @@ dex:
       hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
   ## @param dex.image.registry [default: REGISTRY_NAME] Dex image registry
   ## @param dex.image.repository [default: REPOSITORY_NAME/dex] Dex image repository
-  ## @param dex.image.tag Dex image tag (immutable tags are recommended)
+  ## @skip dex.image.tag Dex image tag (immutable tags are recommended)
   ## @param dex.image.pullPolicy Dex image pull policy
   ## @param dex.image.pullSecrets Dex image pull secrets
   ## @param dex.image.debug Enable Dex image debug mode
