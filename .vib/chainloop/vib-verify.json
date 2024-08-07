@@ -38,7 +38,8 @@
             },
             "params": {
               "kubeconfig": "{{kubeconfig}}",
-              "namespace": "{{namespace}}"
+              "namespace": "{{namespace}}",
+              "name": "chainloop"
             }
           }
         }
