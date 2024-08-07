@@ -1,3 +1,5 @@
+<!--- app-name: Chainloop -->
+
 # Chainloop Helm Chart
 
 [Chainloop](https://github.com/chainloop-dev/chainloop) is an open-source software supply chain control plane, a single source of truth for artifacts plus a declarative attestation crafting process.
@@ -17,19 +19,9 @@ Compatibility with the following Ingress Controllers has been verified, other co
 - [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/)
 - [Traefik](https://doc.traefik.io/traefik/providers/kubernetes-ingress/)
 
-## TL;DR
-
-Deploy Chainloop in [development mode](#development) by running
-
-```console
-helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop --set development=true
-```
-
-> **CAUTION**: Do not use this mode in production, for that, use the [standard mode](#standard-default) instead.
-
 ## Installing the Chart
 
-This chart comes in **two flavors**, `standard` and [`development`](#development).
+This chart comes in **two flavors**, [`standard`](#standard-default) and [`development`](#development).
 
 ### Standard (default)
 
@@ -58,7 +50,7 @@ Instructions on how to create the ECDSA keypair can be found [here](#generate-a-
 Deploy Chainloop configured to talk to the bundled PostgreSQL an external OIDC IDp and a Vault instance.
 
 ```console
-helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
+helm install [RELEASE_NAME] oci://REGISTRY_NAME/REPOSITORY_NAME/chainloop \
     # Open ID Connect (OIDC)
     --set controlplane.auth.oidc.url=[OIDC URL] \
     --set controlplane.auth.oidc.clientID=[clientID] \
@@ -74,7 +66,7 @@ helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
 Deploy using AWS Secrets Manager instead of Vault
 
 ```console
-helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
+helm install [RELEASE_NAME] oci://REGISTRY_NAME/REPOSITORY_NAME/chainloop \
     # Open ID Connect (OIDC)
     # ...
     # Secrets backend
@@ -89,7 +81,7 @@ helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
 or using GCP Secret Manager
 
 ```console
-helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
+helm install [RELEASE_NAME] oci://REGISTRY_NAME/REPOSITORY_NAME/chainloop \
     # Open ID Connect (OIDC)
     # ...
     # Secrets backend
@@ -103,7 +95,7 @@ helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
 or Azure KeyVault
 
 ```console
-helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
+helm install [RELEASE_NAME] oci://REGISTRY_NAME/REPOSITORY_NAME/chainloop \
     # Open ID Connect (OIDC)
     # ...
     # Secrets backend
@@ -119,7 +111,7 @@ helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
 Connect to an external PostgreSQL database instead
 
 ```console
-helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop \
+helm install [RELEASE_NAME] oci://REGISTRY_NAME/REPOSITORY_NAME/chainloop \
     # Open ID Connect (OIDC)
     # ...
     # Secrets backend
@@ -169,7 +161,7 @@ The overall OIDC configuration can be found at the `values.yaml` file.
 Deploy by leveraging built-in Vault and PostgreSQL instances
 
 ```console
-helm install [RELEASE_NAME] oci://ghcr.io/chainloop-dev/charts/chainloop --set development=true
+helm install [RELEASE_NAME] oci://REGISTRY_NAME/REPOSITORY_NAME/chainloop --set development=true
 ```
 
 ## AirGap and Relocation Support
@@ -184,7 +176,7 @@ This is a two-step process (wrap -> unwrap)
 For example: to relocate to an Azure Container Registry
 
 ```sh
-helm dt wrap oci://ghcr.io/chainloop-dev/charts/chainloop
+helm dt wrap oci://REGISTRY_NAME/REPOSITORY_NAME/chainloop
 # 🎉  Helm chart wrapped into "chainloop-1.77.0.wrap.tgz"
 
 # Now you can take the tarball to an air-gapped environment and unwrap it like this
