@@ -10,7 +10,7 @@ metadata:
   name: {{ printf "%s-cas" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: web
+    app.kubernetes.io/component: cas
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -18,7 +18,7 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.cas.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: web
+      app.kubernetes.io/component: cas
   policyTypes:
     - Ingress
     - Egress
@@ -52,7 +52,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ printf "%s-web" (include "common.names.fullname" .) }}-client: "true"
+              {{ printf "%s-cas" (include "common.names.fullname" .) }}: "true"
         {{- if .Values.cas.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:

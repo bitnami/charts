@@ -937,6 +937,17 @@ controlplane:
       targetCPU: ""
       targetMemory: ""
 
+  ## Pod disruption budget configuration
+  ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param server.pdb.enabled Create Pod Disruption Budget for the server component
+  ## @param server.pdb.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
+  ## @param server.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ##
+  pdb:
+    enabled: true
+    minAvailable: ""
+    maxUnavailable: ""
+
 ## @section Artifact Content Addressable (CAS) API
 ##################################
 #         Artifacts CAS          #
@@ -1606,6 +1617,17 @@ cas:
       maxReplicas: ""
       targetCPU: ""
       targetMemory: ""
+
+  ## Pod disruption budget configuration
+  ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param server.pdb.enabled Create Pod Disruption Budget for the server component
+  ## @param server.pdb.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
+  ## @param server.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ##
+  pdb:
+    enabled: true
+    minAvailable: ""
+    maxUnavailable: ""
 
 
 ## @section Dependencies
