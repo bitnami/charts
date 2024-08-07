@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.0.2 (2024-08-07)
+## 30.0.3 (2024-08-07)
 
 * [bitnami/kafka] * Allow podSelector from any namespaceSelector ([#28719](https://github.com/bitnami/charts/pull/28719))
+
+## 30.0.2 (2024-08-07)
+
+* [bitnami/kafka] Release 30.0.2 ([#28734](https://github.com/bitnami/charts/pull/28734))
 
 ## <small>30.0.1 (2024-08-06)</small>
 
