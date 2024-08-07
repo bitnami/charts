@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.4.1 (2024-09-03)
+## 11.5.0 (2024-09-04)
 
-* [bitnami/cassandra] test: :white_check_mark: Improve ginkgo testing reliability ([#29177](https://github.com/bitnami/charts/pull/29177))
+* [bitnami/cassandra] Making TLS existingSecrets more configurable ([#28746](https://github.com/bitnami/charts/pull/28746))
+
+## <small>11.4.1 (2024-09-03)</small>
+
+* [bitnami/cassandra] test: :white_check_mark: Improve ginkgo testing reliability (#29177) ([28cf5f7](https://github.com/bitnami/charts/commit/28cf5f7b8e48370b31d79ed596fd26697ac4a0dc)), closes[#29177](https://github.com/bitnami/charts/issues/29177)
 
 ## <small>11.3.14 (2024-08-28)</small>
 
