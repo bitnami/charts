@@ -219,10 +219,22 @@ Calculate New Heap Size based on the given values
 {{- end -}}
 
 {{/*
-Return the Cassandra TLS    credentials secret
+Return the Cassandra TLS keystore secret
 */}}
-{{- define "cassandra.tlsSecretName" -}}
+{{- define "cassandra.keystoreSecretName" -}}
 {{- $secretName := coalesce .Values.tls.existingSecret .Values.tls.tlsEncryptionSecretName -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+{{/*
+
+Return the Cassandra TLS truststore secret
+*/}}
+{{- define "cassandra.truststoreSecretName" -}}
+{{- $secretName := coalesce .Values.tls.existingTrustSecret .Values.tls.existingSecret .Values.tls.tlsEncryptionSecretName -}}
 {{- if $secretName -}}
     {{- printf "%s" (tpl $secretName $) -}}
 {{- else -}}
@@ -279,7 +291,7 @@ otherwise it generates a random value.
     {{- if .Values.tls.keystorePassword }}
         {{- .Values.tls.keystorePassword }}
     {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "keystore-password")  -}}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" .Values.tls.secretKeys.keystorePassword)  -}}
     {{- end }}
 {{- end -}}
 
@@ -287,7 +299,7 @@ otherwise it generates a random value.
     {{- if .Values.tls.truststorePassword }}
         {{- .Values.tls.truststorePassword }}
     {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "truststore-password")  -}}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" .Values.tls.secretKeys.truststorePassword)  -}}
     {{- end }}
 {{- end -}}
 
