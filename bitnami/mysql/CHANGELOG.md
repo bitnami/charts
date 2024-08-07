@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.1.14 (2024-07-25)
+## 11.1.15 (2024-08-07)
 
-* [bitnami/mysql] Release 11.1.14 ([#28478](https://github.com/bitnami/charts/pull/28478))
+* [bitnami/mysql] Include database in service binding secret when using root user ([#28693](https://github.com/bitnami/charts/pull/28693))
+
+## <small>11.1.14 (2024-07-25)</small>
+
+* [bitnami/mysql] Release 11.1.14 (#28478) ([2405890](https://github.com/bitnami/charts/commit/24058909b3d44a845a90ab63898076348c0fe1a6)), closes [#28478](https://github.com/bitnami/charts/issues/28478)
+* [bnitnami/mysql] Update documentation to use bash instead of sh (#28252) ([672cab7](https://github.com/bitnami/charts/commit/672cab7251e9aa1a0081aadedd6d8322ce2235b6)), closes [#28252](https://github.com/bitnami/charts/issues/28252) [#28195](https://github.com/bitnami/charts/issues/28195)
 
 ## <small>11.1.13 (2024-07-24)</small>
 
