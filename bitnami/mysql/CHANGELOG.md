@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.1.15 (2024-08-06)
+## 11.1.15 (2024-08-07)
 
 * [bitnami/mysql] Include database in service binding secret when using root user ([#28693](https://github.com/bitnami/charts/pull/28693))
 
