@@ -939,12 +939,12 @@ controlplane:
 
   ## Pod disruption budget configuration
   ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-  ## @param controlplane.pdb.enabled Create Pod Disruption Budget for the server component
+  ## @param controlplane.pdb.enabled Create Pod Disruption Budget for the controlplane component
   ## @param controlplane.pdb.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
   ## @param controlplane.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
   ##
   pdb:
-    enabled: true
+    enabled: false
     minAvailable: ""
     maxUnavailable: ""
 
@@ -1620,12 +1620,12 @@ cas:
 
   ## Pod disruption budget configuration
   ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-  ## @param cas.pdb.enabled Create Pod Disruption Budget for the server component
-  ## @param cas.pdb.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
+  ## @param cas.pdb.enabled Create Pod Disruption Budget for the cas component
+  ## @param cas.pdb.minAvailable Sets the min number of pods available for the Pod Disruption Budget
   ## @param cas.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
   ##
   pdb:
-    enabled: true
+    enabled: false
     minAvailable: ""
     maxUnavailable: ""
 

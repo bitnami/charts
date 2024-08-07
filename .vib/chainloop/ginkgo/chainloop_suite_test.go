@@ -21,7 +21,7 @@ func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
 	flag.StringVar(&releaseName, "name", "", "name of the primary statefulset")
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
-	flag.IntVar(&timeoutSeconds, "timeout", 300, "timeout in seconds")
+	flag.IntVar(&timeoutSeconds, "timeout", 500, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
