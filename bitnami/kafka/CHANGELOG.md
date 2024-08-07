@@ -1,8 +1,12 @@
 # Changelog
 
+## 30.0.1 (2024-08-06)
+
+* [bitnami/kafka] Release 30.0.1 ([#28699](https://github.com/bitnami/charts/pull/28699))
+
 ## 30.0.0 (2024-08-05)
 
-* [bitnami/kafka] Release 30.0.0 ([#28666](https://github.com/bitnami/charts/pull/28666))
+* [bitnami/kafka] Release 30.0.0 (#28666) ([a6625ec](https://github.com/bitnami/charts/commit/a6625ec0dd042d9848107dd853ff0cc58178800c)), closes [#28666](https://github.com/bitnami/charts/issues/28666)
 
 ## <small>29.3.14 (2024-08-01)</small>
 

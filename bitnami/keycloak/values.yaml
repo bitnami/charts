@@ -103,7 +103,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 25.0.2-debian-12-r0
+  tag: 25.0.2-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -628,6 +628,11 @@ ingress:
   ## @param ingress.hostname Default host for the ingress record (evaluated as template)
   ##
   hostname: keycloak.local
+  ## @param ingress.hostnameStrict Disables dynamically resolving the hostname from request headers.
+  ## Should always be set to true in production, unless your reverse proxy overwrites the Host header.
+  ## If enabled, the hostname option needs to be specified.
+  ##
+  hostnameStrict: false
   ## @param ingress.path [string] Default path for the ingress record (evaluated as template)
   ##
   path: "{{ .Values.httpRelativePath }}"
