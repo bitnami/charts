@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.18 (2024-08-07)
+## 15.7.19 (2024-08-07)
 
 * [bitnami/thanos] Update index cache config for sharded statefulset ([#28747](https://github.com/bitnami/charts/pull/28747))
+
+## 15.7.18 (2024-08-07)
+
+* [bitnami/thanos] Release 15.7.18 ([#28752](https://github.com/bitnami/charts/pull/28752))
 
 ## <small>15.7.17 (2024-08-02)</small>
 
