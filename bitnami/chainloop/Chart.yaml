@@ -5,11 +5,11 @@ annotations:
   category: DeveloperTools
   license: Apache-2.0
   images: |
-    - image: ghcr.io/chainloop-dev/chainloop/artifact-cas:v0.95.3
+    - image: docker.io/bitnami/chainloop-artifact-cas:0.95.3-debian-12-r0
       name: artifact-cas
-    - image: ghcr.io/chainloop-dev/chainloop/control-plane:v0.95.3
+    - image: docker.io/bitnami/chainloop-control-plane:0.95.3-debian-12-r0
       name: control-plane
-    - image: ghcr.io/chainloop-dev/chainloop/control-plane-migrations:v0.95.3
+    - image: docker.io/bitnami/chainloop-control-plane-migrations:0.95.3-debian-12-r0
       name: control-plane-migrations
     - image: docker.io/bitnami/dex:2.40.0-debian-12-r1
       name: dex

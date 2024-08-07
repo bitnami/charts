@@ -162,9 +162,9 @@ controlplane:
   ## @param controlplane.image.pullSecrets image pull secrets
   ##
   image:
-    registry: ghcr.io
-    repository: chainloop-dev/chainloop/control-plane
-    tag: v0.95.3
+    registry: docker.io
+    repository: bitnami/chainloop-control-plane
+    tag: 0.95.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -237,9 +237,9 @@ controlplane:
     ## @param controlplane.migration.image.pullSecrets image pull secrets
     ##
     image:
-      registry: ghcr.io
-      repository: chainloop-dev/chainloop/control-plane-migrations
-      tag: v0.95.3
+      registry: docker.io
+      repository: bitnami/chainloop-control-plane-migrations
+      tag: 0.95.3-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -898,9 +898,9 @@ cas:
   ## @param cas.image.pullSecrets image pull secrets
   ##
   image:
-    registry: ghcr.io
-    repository: chainloop-dev/chainloop/artifact-cas
-    tag: v0.95.3
+    registry: docker.io
+    repository: bitnami/chainloop-artifact-cas
+    tag: 0.95.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

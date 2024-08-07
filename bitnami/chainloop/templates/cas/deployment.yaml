@@ -75,6 +75,8 @@ spec:
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cas.containerSecurityContext "context" $) | nindent 12 }}
           image: {{ include "chainloop.cas.image" . }}
           imagePullPolicy: {{ .Values.cas.image.pullPolicy }}
+          command: [ "./artifact-cas" ]
+          args: [ "--conf", "/data/conf" ]
           ports:
             - name: http
               containerPort: {{ .Values.cas.containerPorts.http }}

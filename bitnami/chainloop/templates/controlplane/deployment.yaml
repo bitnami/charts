@@ -74,6 +74,7 @@ spec:
         - name: migrate
           image: {{ include "chainloop.controlplane.migration.image" . }}
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
+          command: [ "./atlas" ]
           args:
             - migrate
             - apply
@@ -92,6 +93,8 @@ spec:
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlplane.containerSecurityContext "context" $) | nindent 12 }}
           image: {{ include "chainloop.controlplane.image" . }}
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
+          command: [ "./control-plane" ]
+          args: [ "--conf", "/data/conf" ]
           ports:
             - name: http
               containerPort: {{ .Values.controlplane.containerPorts.http }}
