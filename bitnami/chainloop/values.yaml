@@ -19,6 +19,16 @@ global:
   ##
   imagePullSecrets: []
 
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+
 ## @param development Deploys Chainloop pre-configured FOR DEVELOPMENT ONLY. It includes a Vault instance in development mode and pre-configured authentication certificates and passphrases
 ##
 development: false
@@ -63,7 +73,8 @@ rbac:
 ## @section Secrets Backend
 ##
 
-## Location where to store sensitive data. If development.true? and no overrides provided, the setup will connect to a development instance of Vault
+## Location where to store sensitive data. If development=true and no overrides are provided, the setup will connect to a development instance of Vault
+##
 secretsBackend:
   ## @param secretsBackend.backend Secrets backend type ("vault", "awsSecretManager" or "gcpSecretManager", "azureKeyVault")
   ##
@@ -141,14 +152,33 @@ controlplane:
   ## @param controlplane.replicaCount Number of replicas
   replicaCount: 2
 
-  ## @param controlplane.image.registry [default: REGISTRY_NAME] Image registry
-  ## @param controlplane.image.repository [default: REPOSITORY_NAME] Image repository
-  ## @skip controlplane.image.tag
+  ## Bitnami Chainloop Controlplane image
+  ## ref: https://hub.docker.com/r/bitnami/chainloop-control-plane/tags/
+  ## @param controlplane.image.registry [default: REGISTRY_NAME] image registry
+  ## @param controlplane.image.repository [default: REPOSITORY_NAME/chainloop-control-plane] image repository
+  ## @skip controlplane.image.tag image tag (immutable tags are recommended)
+  ## @param controlplane.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param controlplane.image.pullPolicy image pull policy
+  ## @param controlplane.image.pullSecrets image pull secrets
+  ##
   image:
     registry: ghcr.io
     repository: chainloop-dev/chainloop/control-plane
-    tag: "v0.95.3"
-
+    tag: v0.95.3
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: [ ]
 
   ## @param controlplane.containerPorts.http controlplane HTTP container port
   ## @param controlplane.containerPorts.grpc controlplane gRPC container port
@@ -159,11 +189,19 @@ controlplane:
     grpc: 9000
     metrics: 5000
 
-  ## @param controlplane.tlsConfig.secret.name name of a secret containing TLS certificate to be used by the controlplane grpc server.
-  tlsConfig:
-    secret:
-      # the secret must contains 2 keys: tls.crt and tls.key respectively containing the certificate and private key.
-      name: ""
+  ##
+  ## TLS configuration
+  ##
+  tls:
+    ## @param controlplane.tls.existingSecret Existing secret with TLS certificates. The secret must contains 2 keys: tls.crt and tls.key respectively containing the certificate and private key.
+    ## NOTE: When it's set it will disable secret creation.
+    ##
+    existingSecret: ""
+
+  ## Use an existing configmap instead of creating a configmap with the specified parameters
+  ## @param controlplane.existingConfigMap
+  ##
+  existingConfigMap: ""
 
   ## @param controlplane.pluginsDir Directory where to look for plugins
   pluginsDir: /plugins
@@ -186,27 +224,50 @@ controlplane:
   #    - org_name: "read-only-demo"
 
   # Database migration
-  ## @param controlplane.migration.image.registry [default: REGISTRY_NAME] Image registry
-  ## @param controlplane.migration.image.repository [default: REPOSITORY_NAME] Image repository
   ## @param controlplane.migration.ssl Connect to the database using SSL (required fro AWS RDS, etc)
   ## @skip controlplane.migration.image.tag
   migration:
+    ## Bitnami Chainloop Controlplane migration image
+    ## ref: https://hub.docker.com/r/bitnami/chainloop-control-plane-migrations/tags/
+    ## @param controlplane.migration.image.registry [default: REGISTRY_NAME] image registry
+    ## @param controlplane.migration.image.repository [default: REPOSITORY_NAME/chainloop-control-plane-migrations] image repository
+    ## @skip controlplane.migration.image.tag image tag (immutable tags are recommended)
+    ## @param controlplane.migration.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param controlplane.migration.image.pullPolicy image pull policy
+    ## @param controlplane.migration.image.pullSecrets image pull secrets
+    ##
     image:
       registry: ghcr.io
       repository: chainloop-dev/chainloop/control-plane-migrations
-      tag: "v0.95.3"
+      tag: v0.95.3
+      digest: ""
+      ## Specify a imagePullPolicy
+      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## e.g:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: [ ]
     # Run the migration job forcing SSL, required in AWS RDS for PostgreSQL 15
     ssl: false
 
-  ## @skip controlplane.serviceAccount
+  ## ServiceAccount configuration for the Controlplane Migration
+  ##
+  ## @param controlplane.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param controlplane.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ## @param controlplane.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param controlplane.serviceAccount.automountServiceAccountToken Mount Service Account token in controlplane pods
   serviceAccount:
-    # Specifies whether a service account should be created
     create: true
-    # Annotations to add to the service account
     annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
     name: ""
+    automountServiceAccountToken: false
 
   ## @section Control Plane Database
 
@@ -802,38 +863,10 @@ controlplane:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-  ## @param controlplane.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param controlplane.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param controlplane.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controlplane.pdb.minAvailable` and `controlplane.pdb.maxUnavailable` are empty.
-  ##
-  pdb:
-    create: true
-    minAvailable: ""
-    maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
-    ## @param controlplane.autoscaling.vpa.enabled Enable VPA for controlplane pods
-    ## @param controlplane.autoscaling.vpa.annotations Annotations for VPA resource
-    ## @param controlplane.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
-    ## @param controlplane.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
-    ## @param controlplane.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
-    ##
-    vpa:
-      enabled: false
-      annotations: {}
-      controlledResources: []
-      maxAllowed: {}
-      minAllowed: {}
-      ## @param controlplane.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
-      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
-      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
-      ##
-      updatePolicy:
-        updateMode: Auto
     ## @param controlplane.autoscaling.hpa.enabled Enable HPA for controlplane pods
     ## @param controlplane.autoscaling.hpa.minReplicas Minimum number of replicas
     ## @param controlplane.autoscaling.hpa.maxReplicas Maximum number of replicas
@@ -855,13 +888,33 @@ cas:
   ## @param cas.replicaCount Number of replicas
   replicaCount: 2
 
-  ## @param cas.image.registry [default: REGISTRY_NAME] Image registry
-  ## @param cas.image.repository [default: REPOSITORY_NAME] Image repository
-  ## @skip cas.image.tag
+  ## Bitnami Chainloop Artifact CAS image
+  ## ref: https://hub.docker.com/r/bitnami/chainloop-artifact-cas/tags/
+  ## @param cas.image.registry [default: REGISTRY_NAME] image registry
+  ## @param cas.image.repository [default: REPOSITORY_NAME/chainloop-artifact-cas] image repository
+  ## @skip cas.image.tag image tag (immutable tags are recommended)
+  ## @param cas.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param cas.image.pullPolicy image pull policy
+  ## @param cas.image.pullSecrets image pull secrets
+  ##
   image:
     registry: ghcr.io
     repository: chainloop-dev/chainloop/artifact-cas
-    tag: "v0.95.3"
+    tag: v0.95.3
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: [ ]
 
   ## @param cas.containerPorts.http controlplane HTTP container port
   ## @param cas.containerPorts.grpc controlplane gRPC container port
@@ -872,21 +925,31 @@ cas:
     grpc: 9000
     metrics: 5000
 
-  ## @param cas.tlsConfig.secret.name name of a secret containing TLS certificate to be used by the controlplane grpc server.
-  tlsConfig:
-    secret:
-      # the secret must contains 2 keys: tls.crt and tls.key respectively containing the certificate and private key.
-      name: ""
+  ##
+  ## TLS configuration
+  ##
+  tls:
+    ## @param cas.tls.existingSecret Existing secret with TLS certificates. The secret must contains 2 keys: tls.crt and tls.key respectively containing the certificate and private key.
+    ## NOTE: When it's set it will disable secret creation.
+    ##
+    existingSecret: ""
 
-  ## @skip cas.serviceAccount
+  ## Use an existing configmap instead of creating a configmap with the specified parameters
+  ## @param cas.existingConfigMap
+  ##
+  existingConfigMap: ""
+
+  ## ServiceAccount configuration for the Controlplane Artifact CAS
+  ##
+  ## @param cas.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param cas.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ## @param cas.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param cas.serviceAccount.automountServiceAccountToken Mount Service Account token in controlplane pods
   serviceAccount:
-    # Specifies whether a service account should be created
     create: true
-    # Annotations to add to the service account
     annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
     name: ""
+    automountServiceAccountToken: false
 
   ## @section CAS Networking
   service:
@@ -1414,38 +1477,10 @@ cas:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-  ## @param cas.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param cas.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param cas.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `cas.pdb.minAvailable` and `cas.pdb.maxUnavailable` are empty.
-  ##
-  pdb:
-    create: true
-    minAvailable: ""
-    maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
-    ## @param cas.autoscaling.vpa.enabled Enable VPA for cas pods
-    ## @param cas.autoscaling.vpa.annotations Annotations for VPA resource
-    ## @param cas.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
-    ## @param cas.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
-    ## @param cas.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
-    ##
-    vpa:
-      enabled: false
-      annotations: {}
-      controlledResources: []
-      maxAllowed: {}
-      minAllowed: {}
-      ## @param cas.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
-      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
-      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
-      ##
-      updatePolicy:
-        updateMode: Auto
     ## @param cas.autoscaling.hpa.enabled Enable HPA for cas pods
     ## @param cas.autoscaling.hpa.minReplicas Minimum number of replicas
     ## @param cas.autoscaling.hpa.maxReplicas Maximum number of replicas

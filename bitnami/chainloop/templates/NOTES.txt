@@ -5,14 +5,45 @@ APP VERSION: {{ .Chart.AppVersion  }}
 ** Please be patient while the chart is being deployed **
 
 ###########################################################################
+  DEVELOPMENT MODE
+###########################################################################
+
+██████╗ ███████╗██╗    ██╗ █████╗ ██████╗ ███████╗
+██╔══██╗██╔════╝██║    ██║██╔══██╗██╔══██╗██╔════╝
+██████╔╝█████╗  ██║ █╗ ██║███████║██████╔╝█████╗
+██╔══██╗██╔══╝  ██║███╗██║██╔══██║██╔══██╗██╔══╝
+██████╔╝███████╗╚███╔███╔╝██║  ██║██║  ██║███████╗
+╚═════╝ ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚══════╝
+
+Instance running in development mode!
+
+Development mode, by default
+
+- Runs an insecure, unsealed, non-persistent instance of Vault
+- Is configured with development authentication keys
+
+###########################################################################
+Pre-configured static users
+###########################################################################
+
+Development configuration comes with two pre-setup users:
+- username: sarah@chainloop.local
+- password: password
+
+- username: john@chainloop.local
+- password: password
+
+DO NOT USE IT FOR PRODUCTION PURPOSES
+
+###########################################################################
   CONFIGURE CLI
 ###########################################################################
 
 Configure the CLI to point to this instance, for example
 
   chainloop --insecure config save \
-    --control-plane my-controlplane.acme.com:80 \
-    --artifact-cas cas.acme.com:80
+    --control-plane {{ include "chainloop.controlplane.grpc_url" . }} \
+    --artifact-cas {{ include "chainloop.cas.grpc_url" . }}
 
 Refer to this link for more information
 https://docs.chainloop.dev/getting-started/installation#configure-cli-optional
@@ -28,5 +59,4 @@ https://docs.chainloop.dev/getting-started/installation#configure-cli-optional
 {{- include "common.warnings.rollingTag" .Values.controlplane.image }}
 {{- include "common.warnings.rollingTag" .Values.cas.image }}
 {{- include "common.warnings.rollingTag" .Values.controlplane.migration.image }}
-{{- include "chainloop.validateValues" . }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.controlplane.image .Values.cas.image .Values.controlplane.migration.image) "context" $) }}

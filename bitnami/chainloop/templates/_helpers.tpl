@@ -320,6 +320,22 @@ null
 {{- end -}}
 {{- end -}}
 
+{{/*
+Figure out the gRPC URL the controlplane can be reached at
+*/}}
+{{- define "chainloop.controlplane.grpc_url" -}}
+{{- $service := .Values.controlplane.serviceAPI }}
+{{- $ingress := .Values.controlplane.ingress }}
+
+{{- if (and $ingress $ingress.enabled $ingress.hostname) }}
+{{- printf "api.%s" $ingress.hostname }}
+{{- else if (not (empty $service.ports.https)) }}
+{{- printf "localhost:%d" ($service.ports.https | int) }}
+{{- else  }}
+{{- printf "localhost:%d" ($service.ports.http | int) }}
+{{- end -}}
+{{- end -}}
+
 {{- define "chainloop.sentry" -}}
 observability:
   sentry:
@@ -396,24 +412,55 @@ NOTE: Load balancer service type is not supported
 {{- end -}}
 
 {{/*
-Check for Development mode
+Figure out the gRPC URL the cas can be reached at
 */}}
-{{- define "chainloop.validateValues.development" -}}
-{{- if .Values.development }}
-{{-     printf "###########################################################################\n  DEVELOPMENT MODE\n###########################################################################\n\n██████╗ ███████╗██╗    ██╗ █████╗ ██████╗ ███████╗\n██╔══██╗██╔════╝██║    ██║██╔══██╗██╔══██╗██╔════╝\n██████╔╝█████╗  ██║ █╗ ██║███████║██████╔╝█████╗\n██╔══██╗██╔══╝  ██║███╗██║██╔══██║██╔══██╗██╔══╝\n██████╔╝███████╗╚███╔███╔╝██║  ██║██║  ██║███████╗\n╚═════╝ ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚══════╝\n\nInstance running in development mode!\n\nDevelopment mode, by default\n\n- Runs an insecure, unsealed, non-persistent instance of Vault\n- Is configured with development authentication keys\n\n###########################################################################\nPre-configured static users\n###########################################################################\n\nDevelopment configuration comes with two pre-setup users:\n- username: sarah@chainloop.local\n- password: password\n\n- username: john@chainloop.local\n- password: password\n\nDO NOT USE IT FOR PRODUCTION PURPOSES" -}}
+{{- define "chainloop.cas.grpc_url" -}}
+{{- $service := .Values.cas.serviceAPI }}
+{{- $ingress := .Values.cas.ingress }}
+
+{{- if (and $ingress $ingress.enabled $ingress.hostname) }}
+{{- printf "api.%s" $ingress.hostname }}
+{{- else if (not (empty $service.ports.https)) }}
+{{- printf "localhost:%d" ($service.ports.https | int) }}
+{{- else  }}
+{{- printf "localhost:%d" ($service.ports.http | int) }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Compile all warning messages into a single one
+##############################################################################
+Dex helpers
+##############################################################################
 */}}
-{{- define "chainloop.validateValues" -}}
-{{- $messages := list -}}
-{{- $messages := append $messages (include "chainloop.validateValues.development" .) -}}
-{{- $messages := without $messages "" -}}
-{{- $message := join "\n" $messages -}}
 
-{{- if $message -}}
-{{-   printf "\n\nVALUES VALIDATION:\n%s" $message -}}
+{{/*
+Return the proper Dex image name
+*/}}
+{{- define "chainloop.dex.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.dex.image "global" .Values.global) }}
 {{- end -}}
+
+{{/*
+Return the proper service name for Dex
+*/}}
+{{- define "chainloop.dex" -}}
+{{- printf "%s-dex" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for Dex
+*/}}
+{{- define "chainloop.dex.serviceAccountName" -}}
+{{- if .Values.dex.serviceAccount.create -}}
+    {{ default (printf "%s-dex" (include "common.names.fullname" .)) .Values.dex.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.dex.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Chainloop Dex release name
+*/}}
+{{- define "chainloop.dex.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "dex" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

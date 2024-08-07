@@ -88,7 +88,7 @@ spec:
                   name: {{ include "chainloop.controlplane.fullname" . }}
                   key: db_migrate_source
       containers:
-        - name: {{ .Chart.Name }}
+        - name: controlplane
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlplane.containerSecurityContext "context" $) | nindent 12 }}
           image: {{ include "chainloop.controlplane.image" . }}
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
@@ -150,7 +150,7 @@ spec:
             - name: ejbca-ca-client
               mountPath: /ca_secrets
             {{- end }}
-            {{- if .Values.controlplane.tlsConfig.secret.name  }}
+            {{- if .Values.controlplane.tls.existingSecret  }}
             - name: server-certs
               mountPath: /data/server-certs
             {{- end }}
@@ -192,10 +192,10 @@ spec:
         - name: jwt-cas-private-key
           secret:
             secretName: {{ include "chainloop.controlplane.fullname" . }}-jwt-cas
-        {{- if .Values.controlplane.tlsConfig.secret.name }}
+        {{- if .Values.controlplane.tls.existingSecret }}
         - name: server-certs
           secret:
-            secretName: {{ .Values.controlplane.tlsConfig.secret.name  }}
+            secretName: {{ .Values.controlplane.tls.existingSecret  }}
         {{- end }}
         {{- if eq "gcpSecretManager" .Values.secretsBackend.backend  }}
         - name: gcp-secretmanager-serviceaccountkey

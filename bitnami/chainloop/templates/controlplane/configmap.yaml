@@ -3,6 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if (empty .Values.controlplane.existingConfigMap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -22,15 +23,15 @@ data:
   config.yaml: |
     server:
       http:
-        addr: 0.0.0.0:8000
+        addr: "0.0.0.0:{{ .Values.controlplane.containerPorts.http }}"
         timeout: 10s
         external_url: {{ include "chainloop.controlplane.external_url" . }}
       http_metrics:
-        addr: 0.0.0.0:5000
+        addr: "0.0.0.0:{{ .Values.controlplane.containerPorts.metrics }}"
       grpc:
-        addr: 0.0.0.0:9000
+        addr: "0.0.0.0:{{ .Values.controlplane.containerPorts.grpc }}"
         timeout: 10s
-        {{- if .Values.controlplane.tlsConfig.secret.name  }}
+        {{- if .Values.controlplane.tls.existingSecret  }}
         tls_config:
           certificate: /data/server-certs/tls.crt
           private_key: /data/server-certs/tls.key
@@ -38,7 +39,7 @@ data:
     cas_server:
       grpc:
         addr: {{ printf "%s-api:%.0f" (include "chainloop.cas.fullname" .) (coalesce .Values.cas.serviceAPI.port .Values.cas.serviceAPI.ports.http) }}
-      insecure: {{ empty .Values.cas.tlsConfig.secret.name }}
+      insecure: {{ empty .Values.cas.tls.existingSecret }}
       download_url: {{ include "chainloop.cas.external_url" . }}/download
     plugins_dir: {{ .Values.controlplane.pluginsDir }}
     referrer_shared_index:
@@ -51,3 +52,4 @@ data:
     prometheus_integration:
       {{- toYaml .Values.controlplane.prometheus_org_metrics | nindent 6 }}
     {{- end }}
+{{- end }}

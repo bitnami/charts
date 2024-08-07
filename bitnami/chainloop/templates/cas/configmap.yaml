@@ -3,6 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if (empty .Values.cas.existingConfigMap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,18 +17,19 @@ data:
   server.yaml: |
     server:
       http:
-        addr: 0.0.0.0:8000
+        addr: "0.0.0.0:{{ .Values.cas.containerPorts.http }}"
         # Timeouts for http downloads
         # grpc downloads/uploads don't require this because they don't have timeouts
         timeout: 300s
       grpc:
-        {{- if .Values.cas.tlsConfig.secret.name  }}
+        {{- if .Values.cas.tls.existingSecret  }}
         tls_config:
           certificate: /data/server-certs/tls.crt
           private_key: /data/server-certs/tls.key
         {{- end }}
-        addr: 0.0.0.0:9000
+        addr: "0.0.0.0:{{ .Values.cas.containerPorts.grpc }}"
         # Some unary RPCs are slow, so we need to increase the timeout
         timeout: 5s
       http_metrics:
-        addr: 0.0.0.0:5000
+        addr: "0.0.0.0:{{ .Values.cas.containerPorts.metrics}}"
+{{- end }}

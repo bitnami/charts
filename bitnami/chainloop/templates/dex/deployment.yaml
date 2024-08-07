@@ -60,7 +60,7 @@ spec:
       shareProcessNamespace: {{ .Values.dex.shareProcessNamespace }}
       {{- end }}
       {{- if .Values.dex.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dex.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.dex.priorityClassName }}
       priorityClassName: {{ .Values.dex.priorityClassName | quote }}
