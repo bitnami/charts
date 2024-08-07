@@ -706,6 +706,9 @@ chainloop config save \
 | `controlplane.autoscaling.hpa.maxReplicas`                 | Maximum number of replicas                                                                                   | `""`            |
 | `controlplane.autoscaling.hpa.targetCPU`                   | Target CPU utilization percentage                                                                            | `""`            |
 | `controlplane.autoscaling.hpa.targetMemory`                | Target Memory utilization percentage                                                                         | `""`            |
+| `controlplane.pdb.enabled`                                 | Create Pod Disruption Budget for the server component                                                        | `true`          |
+| `controlplane.pdb.minAvailable`                            | Sets the min number of pods availables for the Pod Disruption Budget                                         | `""`            |
+| `controlplane.pdb.maxUnavailable`                          | Sets the max number of pods unavailable for the Pod Disruption Budget                                        | `""`            |
 
 ### Artifact Content Addressable (CAS) API
 
@@ -846,6 +849,9 @@ chainloop config save \
 | `cas.autoscaling.hpa.maxReplicas`                       | Maximum number of replicas                                                                                                                                                                                                                          | `""`             |
 | `cas.autoscaling.hpa.targetCPU`                         | Target CPU utilization percentage                                                                                                                                                                                                                   | `""`             |
 | `cas.autoscaling.hpa.targetMemory`                      | Target Memory utilization percentage                                                                                                                                                                                                                | `""`             |
+| `cas.pdb.enabled`                                       | Create Pod Disruption Budget for the server component                                                                                                                                                                                               | `true`           |
+| `cas.pdb.minAvailable`                                  | Sets the min number of pods availables for the Pod Disruption Budget                                                                                                                                                                                | `""`             |
+| `cas.pdb.maxUnavailable`                                | Sets the max number of pods unavailable for the Pod Disruption Budget                                                                                                                                                                               | `""`             |
 
 ### Dependencies
 
