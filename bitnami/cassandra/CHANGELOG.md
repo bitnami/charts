@@ -6,7 +6,7 @@
 
 ## <small>11.3.12 (2024-07-31)</small>
 
-* [bitnami/cassandra] Improve Ginkgo test ([bcf704a](bcf704adf1f2140df4ca8e6c2f60cbeabeca1711)), closes [#28603](https://github.com/bitnami/charts/issues/28603)
+* [bitnami/cassandra] Improve Ginkgo test (#28603) ([bcf704a](https://github.com/bitnami/charts/commit/bcf704adf1f2140df4ca8e6c2f60cbeabeca1711)), closes [#28603](https://github.com/bitnami/charts/issues/28603)
 
 ## <small>11.3.11 (2024-07-25)</small>
 
