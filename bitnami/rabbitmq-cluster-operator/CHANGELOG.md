@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.3.17 (2024-08-06)
+## 4.3.17 (2024-08-07)
 
 * [bitnami/rabbitmq-cluster-operator] Fix msg topology operator podmonitor ([#28705](https://github.com/bitnami/charts/pull/28705))
 
