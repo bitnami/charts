@@ -4,9 +4,9 @@
 
 * [bitnami/kafka] * Allow podSelector from any namespaceSelector ([#28719](https://github.com/bitnami/charts/pull/28719))
 
-## 30.0.2 (2024-08-07)
+## <small>30.0.2 (2024-08-07)</small>
 
-* [bitnami/kafka] Release 30.0.2 ([#28734](https://github.com/bitnami/charts/pull/28734))
+* [bitnami/kafka] Release 30.0.2 (#28734) ([b7dbfe6](https://github.com/bitnami/charts/commit/b7dbfe6c90679ab6ccab521cba8a0ee08595073b)), closes [#28734](https://github.com/bitnami/charts/issues/28734)
 
 ## <small>30.0.1 (2024-08-06)</small>
 
