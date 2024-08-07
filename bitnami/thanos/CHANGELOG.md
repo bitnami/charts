@@ -2,11 +2,11 @@
 
 ## 15.7.19 (2024-08-07)
 
-* [bitnami/thanos] Update index cache config for sharded statefulset ([#28747](https://github.com/bitnami/charts/pull/28747))
+* [bitnami/thanos] Update index cache config for sharded store gateway ([#28747](https://github.com/bitnami/charts/pull/28747))
 
-## 15.7.18 (2024-08-07)
+## <small>15.7.18 (2024-08-07)</small>
 
-* [bitnami/thanos] Release 15.7.18 ([#28752](https://github.com/bitnami/charts/pull/28752))
+* [bitnami/thanos] Release 15.7.18 (#28752) ([8994d7b](https://github.com/bitnami/charts/commit/8994d7b7c5d751a90b2a65cd970cc4bed56471be)), closes [#28752](https://github.com/bitnami/charts/issues/28752)
 
 ## <small>15.7.17 (2024-08-02)</small>
 
