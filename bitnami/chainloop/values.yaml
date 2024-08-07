@@ -83,39 +83,39 @@ secretsBackend:
   ##
   secretPrefix: "chainloop"
 
-  ## @extra secretsBackend.vault.address Vault address
-  ## @extra secretsBackend.vault.token Vault authentication token
+  ## @param secretsBackend.vault.address Vault address
+  ## @param secretsBackend.vault.token Vault authentication token
   ##
-  # vault:
-  #   address: ""
-  #   token: ""
+  vault:
+    address: ""
+    token: ""
 
-  ## @extra secretsBackend.awsSecretManager.accessKey AWS Access KEY ID
-  ## @extra secretsBackend.awsSecretManager.secretKey AWS Secret Key
-  ## @extra secretsBackend.awsSecretManager.region AWS Secrets Manager Region
+  ## @param secretsBackend.awsSecretManager.accessKey AWS Access KEY ID
+  ## @param secretsBackend.awsSecretManager.secretKey AWS Secret Key
+  ## @param secretsBackend.awsSecretManager.region AWS Secrets Manager Region
   ##
-  # awsSecretManager:
-  #   accessKey: ""
-  #   secretKey: ""
-  #   region: ""
+  awsSecretManager:
+    accessKey: ""
+    secretKey: ""
+    region: ""
 
-  ## @extra secretsBackend.gcpSecretManager.projectId GCP Project ID
-  ## @extra secretsBackend.gcpSecretManager.serviceAccountKey GCP Auth Key
+  ## @param secretsBackend.gcpSecretManager.projectId GCP Project ID
+  ## @param secretsBackend.gcpSecretManager.serviceAccountKey GCP Auth Key
   ##
-  # gcpSecretManager:
-  #   projectId: ""
-  #   serviceAccountKey: ""
+  gcpSecretManager:
+    projectId: ""
+    serviceAccountKey: ""
 
-  ## @extra secretsBackend.azureKeyVault.tenantID Active Directory Tenant ID
-  ## @extra secretsBackend.azureKeyVault.clientID Registered application / service principal client ID
-  ## @extra secretsBackend.azureKeyVault.clientSecret Service principal client secret
-  ## @extra secretsBackend.azureKeyVault.vaultURI Azure Key Vault URL
+  ## @param secretsBackend.azureKeyVault.tenantID Active Directory Tenant ID
+  ## @param secretsBackend.azureKeyVault.clientID Registered application / service principal client ID
+  ## @param secretsBackend.azureKeyVault.clientSecret Service principal client secret
+  ## @param secretsBackend.azureKeyVault.vaultURI Azure Key Vault URL
   ##
-  # azureKeyVault:
-  #   tenantID: ""
-  #   clientID: ""
-  #   clientSecret: ""
-  #   vaultURI: ""
+  azureKeyVault:
+    tenantID: ""
+    clientID: ""
+    clientSecret: ""
+    vaultURI: ""
 
 ## @section Authentication
 ##
@@ -213,11 +213,12 @@ controlplane:
     enabled: false
     allowedOrgs: []
 
-  ## @extra controlplane.onboarding.name Name of the organization to onboard
-  ## @extra controlplane.onboarding.role Role of the organization to onboard
+  ## @extra controlplane.onboarding List of organizations to automatically onboard when a user logs in
+  ## @skip controlplane.onboarding[0].name Name of the organization to onboard
+  ## @skip controlplane.onboarding[0].role Role of the organization to onboard
   #  onboarding:
-  #    - name: "read-only-demo"
-  #      role: "MEMBERSHIP_ROLE_ORG_VIEWER"
+  #    - name: ""
+  #      role: ""
 
   ## @extra controlplane.prometheus_org_metrics List of organizations to expose metrics for using Prometheus
   #  prometheus_org_metrics:
@@ -225,13 +226,13 @@ controlplane:
 
   # Database migration
   ## @param controlplane.migration.ssl Connect to the database using SSL (required fro AWS RDS, etc)
-  ## @skip controlplane.migration.image.tag
+  ## @param controlplane.migration.image.tag
   migration:
     ## Bitnami Chainloop Controlplane migration image
     ## ref: https://hub.docker.com/r/bitnami/chainloop-control-plane-migrations/tags/
     ## @param controlplane.migration.image.registry [default: REGISTRY_NAME] image registry
     ## @param controlplane.migration.image.repository [default: REPOSITORY_NAME/chainloop-control-plane-migrations] image repository
-    ## @skip controlplane.migration.image.tag image tag (immutable tags are recommended)
+    ## @param controlplane.migration.image.tag image tag (immutable tags are recommended)
     ## @param controlplane.migration.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param controlplane.migration.image.pullPolicy image pull policy
     ## @param controlplane.migration.image.pullSecrets image pull secrets
@@ -294,14 +295,14 @@ controlplane:
     ## @param controlplane.auth.oidc.url Full authentication path, it should match the issuer URL of the Identity provider (IDp)
     ## @param controlplane.auth.oidc.clientID OIDC IDp clientID
     ## @param controlplane.auth.oidc.clientSecret OIDC IDp clientSecret
-    ## @extra controlplane.auth.oidc.loginURLOverride Optional OIDC login URL override, useful to point to custom login pages
-    ## @extra controlplane.auth.oidc.externalURL Optional External URL for the controlplane to the outside world
+    ## @param controlplane.auth.oidc.loginURLOverride Optional OIDC login URL override, useful to point to custom login pages
+    ## @param controlplane.auth.oidc.externalURL Optional External URL for the controlplane to the outside world
     oidc:
       url: ""
       clientID: ""
       clientSecret: ""
-      # loginURLOverride: ""
-      # externalURL: ""
+      loginURLOverride: ""
+      externalURL: ""
 
     ## @extra controlplane.auth.allowList.rules List of domains or emails to allow
     ## @extra controlplane.auth.allowList.selectedRoutes List of selected routes to allow. If not set it applies to all routes
@@ -410,7 +411,7 @@ controlplane:
     ##
     annotations:
       ## @skip controlplane.serviceAPI.annotations.traefik.ingress.kubernetes.io/service.serversscheme
-      traefik.ingress.kubernetes.io/service.serversscheme: h2c 
+      traefik.ingress.kubernetes.io/service.serversscheme: h2c
     ## @param controlplane.serviceAPI.extraPorts Extra ports to expose in controlplane service (normally used with the `sidecars` value)
     ##
     extraPorts: []
@@ -853,6 +854,62 @@ controlplane:
   ##
   sidecars: []
 
+  ## Controlplane Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param controlplane.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param controlplane.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports Web is listening
+    ## on. When true, Web will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param controlplane.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param controlplane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: [ ]
+    ## @param controlplane.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: [ ]
+    ## @param controlplane.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param controlplane.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+
   ## @param controlplane.initContainers Add additional init containers to the controlplane pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -892,7 +949,7 @@ cas:
   ## ref: https://hub.docker.com/r/bitnami/chainloop-artifact-cas/tags/
   ## @param cas.image.registry [default: REGISTRY_NAME] image registry
   ## @param cas.image.repository [default: REPOSITORY_NAME/chainloop-artifact-cas] image repository
-  ## @skip cas.image.tag image tag (immutable tags are recommended)
+  ## @param cas.image.tag image tag (immutable tags are recommended)
   ## @param cas.image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param cas.image.pullPolicy image pull policy
   ## @param cas.image.pullSecrets image pull secrets
@@ -1467,6 +1524,62 @@ cas:
   ##
   sidecars: []
 
+  ## Web Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param cas.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param cas.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports Web is listening
+    ## on. When true, Web will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param cas.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param cas.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: [ ]
+    ## @param cas.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: [ ]
+    ## @param cas.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param cas.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+
   ## @param cas.initContainers Add additional init containers to the cas pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1561,7 +1674,7 @@ dex:
       hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
   ## @param dex.image.registry [default: REGISTRY_NAME] Dex image registry
   ## @param dex.image.repository [default: REPOSITORY_NAME/dex] Dex image repository
-  ## @skip dex.image.tag Dex image tag (immutable tags are recommended)
+  ## @param dex.image.tag Dex image tag (immutable tags are recommended)
   ## @param dex.image.pullPolicy Dex image pull policy
   ## @param dex.image.pullSecrets Dex image pull secrets
   ## @param dex.image.debug Enable Dex image debug mode

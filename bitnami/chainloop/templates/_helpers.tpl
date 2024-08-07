@@ -72,7 +72,7 @@ secretPrefix: {{ required "secret prefix required" .secretPrefix | quote }}
   {{- end }}
 {{- end }}
 vault:
-  {{- if and $.Values.development (or (not .vault) not .vault.address) }}
+  {{- if and $.Values.development (or (not .vault) (not .vault.address)) }}
   address: {{ printf "http://%s-server:8200" (include "chainloop.vault.fullname" $) | quote }}
   {{- if $tokenEnvVar }}
   token: {{ $tokenEnvVar | quote }}

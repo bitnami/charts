@@ -4,6 +4,8 @@ APP VERSION: {{ .Chart.AppVersion  }}
 
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.development }}
+
 ###########################################################################
   DEVELOPMENT MODE
 ###########################################################################
@@ -34,6 +36,8 @@ Development configuration comes with two pre-setup users:
 - password: password
 
 DO NOT USE IT FOR PRODUCTION PURPOSES
+
+{{- end }}
 
 ###########################################################################
   CONFIGURE CLI
