@@ -76,6 +76,7 @@ To get the password for "{{ $user }}" run:
     export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ include "mongodb.namespace" $ }} {{ include "mongodb.secretName" $ }} -o jsonpath="{.data.mongodb-passwords}" | base64 -d | awk -F',' '{print ${{ add 1 $index }}}')
 
 {{- end }}
+{{- end }}
 
 To connect to your database, create a MongoDB&reg; client container:
 
@@ -146,7 +147,6 @@ To connect to your database from outside the cluster execute the following comma
     kubectl port-forward --namespace {{ template "mongodb.namespace" . }} svc/{{ template "mongodb.service.nameOverride" . }} {{ $portNumber }}:{{ $portNumber }} &
     mongosh --host 127.0.0.1 {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
-{{- end }}
 {{- end }}
 {{- end }}
 
