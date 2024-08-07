@@ -6,7 +6,7 @@
 
 ## <small>15.6.17 (2024-08-06)</small>
 
-* [bitnami/mongodb] Release 15.6.17 ([#28697](https://github.com/bitnami/charts/pull/28697))
+* [bitnami/mongodb] Release 15.6.17 (#28697) ([b6d6a24](https://github.com/bitnami/charts/commit/b6d6a2449195d87387cce9aec88cc6215763c569)), closes [#28697](https://github.com/bitnami/charts/issues/28697)
 
 ## <small>15.6.16 (2024-07-25)</small>
 
