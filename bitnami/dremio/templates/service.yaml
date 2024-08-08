@@ -37,7 +37,7 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: http-web
+    - name: http
       port: {{ .Values.service.ports.web }}
       targetPort: web
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.web)) }}
