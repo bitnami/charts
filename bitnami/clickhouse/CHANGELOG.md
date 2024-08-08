@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.2.14 (2024-07-25)
+## 6.2.16 (2024-08-01)
 
-* [bitnami/clickhouse] Release 6.2.14 ([#28402](https://github.com/bitnami/charts/pull/28402))
+* [bitnami/clickhouse] Release 6.2.16 ([#28621](https://github.com/bitnami/charts/pull/28621))
+
+## <small>6.2.15 (2024-07-30)</small>
+
+* [bitnami/clickhouse] Release 6.2.15 (#28596) ([f18d525](https://github.com/bitnami/charts/commit/f18d525139ff39ddbbe6119ed8d38ff59417126a)), closes [#28596](https://github.com/bitnami/charts/issues/28596)
+
+## <small>6.2.14 (2024-07-25)</small>
+
+* [bitnami/clickhouse] Release 6.2.14 (#28402) ([eb8c256](https://github.com/bitnami/charts/commit/eb8c256165237d8e069cb73e45491cebee3e3b16)), closes [#28402](https://github.com/bitnami/charts/issues/28402)
 
 ## <small>6.2.13 (2024-07-24)</small>
 

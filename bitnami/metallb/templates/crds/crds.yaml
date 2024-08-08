@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/metallb/metallb/v{version}/charts/metallb/charts/crds/templates/crds.yaml
-# Version: 0.14.5
+# Version: 0.14.8
 # Conditional: .Values.installCRDs
 {{- if .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
@@ -233,11 +233,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -292,11 +294,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -529,6 +533,16 @@ spec:
                 ebgpMultiHop:
                   description: To set if the BGPPeer is multi-hops away. Needed for FRR mode only.
                   type: boolean
+                enableGracefulRestart:
+                  description: |-
+                    EnableGracefulRestart allows BGP peer to continue to forward data packets along
+                    known routes while the routing protocol information is being restored.
+                    This field is immutable because it requires restart of the BGP session
+                    Supported for FRR mode only.
+                  type: boolean
+                  x-kubernetes-validations:
+                    - message: EnableGracefulRestart cannot be changed after creation
+                      rule: self == oldSelf
                 holdTime:
                   description: Requested BGP hold time, per RFC4271.
                   type: string
@@ -575,11 +589,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -831,11 +847,13 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                                  x-kubernetes-list-type: atomic
                               required:
                                 - key
                                 - operator
                               type: object
                             type: array
+                            x-kubernetes-list-type: atomic
                           matchLabels:
                             additionalProperties:
                               type: string
@@ -889,11 +907,13 @@ spec:
                                   items:
                                     type: string
                                   type: array
+                                  x-kubernetes-list-type: atomic
                               required:
                                 - key
                                 - operator
                               type: object
                             type: array
+                            x-kubernetes-list-type: atomic
                           matchLabels:
                             additionalProperties:
                               type: string
@@ -1017,11 +1037,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -1070,11 +1092,13 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           required:
                             - key
                             - operator
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       matchLabels:
                         additionalProperties:
                           type: string
@@ -1114,6 +1138,12 @@ spec:
     - additionalPrinterColumns:
         - jsonPath: .status.node
           name: Allocated Node
+          type: string
+        - jsonPath: .status.serviceName
+          name: Service Name
+          type: string
+        - jsonPath: .status.serviceNamespace
+          name: Service Namespace
           type: string
       name: v1beta1
       schema:
@@ -1156,6 +1186,21 @@ spec:
                 node:
                   description: Node indicates the node that receives the directed traffic
                   type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                serviceName:
+                  description: ServiceName indicates the service this status represents
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                serviceNamespace:
+                  description: ServiceNamespace indicates the namespace of the service
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
               type: object
           type: object
       served: true

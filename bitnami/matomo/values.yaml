@@ -117,7 +117,7 @@ matomoWebsiteHost: https://example.org
 ##
 matomoSkipInstall: false
 ## @param customPostInitScripts Custom post-init.d user scripts
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo
 ## NOTE: supported formats are `.sh` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
 ## e.g:

@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: cilium
-      image: docker.io/bitnami/cilium:1.16.0-debian-12-r3
+      image: docker.io/bitnami/cilium:1.16.0-debian-12-r5
     - name: cilium-operator
-      image: docker.io/bitnami/cilium-operator:1.16.0-debian-12-r1
+      image: docker.io/bitnami/cilium-operator:1.16.0-debian-12-r4
     - name: cilium-proxy
-      image: docker.io/bitnami/cilium-proxy:1.29.7-debian-12-r6
+      image: docker.io/bitnami/cilium-proxy:1.29.7-debian-12-r7
     - name: hubble-relay
       image: docker.io/bitnami/hubble-relay:1.16.0-debian-12-r1
     - name: hubble-ui
@@ -52,4 +52,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
-version: 1.0.14
+version: 1.0.16

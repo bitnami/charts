@@ -92,7 +92,7 @@ spec:
       {{- if or .Values.enableDefaultInitContainers .Values.initContainers }}
       initContainers:
         {{- if .Values.enableDefaultInitContainers }}
-        - name: init-quarkus-directory
+        - name: prepare-write-dirs
           image: {{ template "keycloak.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
@@ -100,8 +100,14 @@ spec:
           args:
             - -ec
             - |
-              #!/bin/bash
-              cp -r /opt/bitnami/keycloak/lib/quarkus/* /quarkus
+              . /opt/bitnami/scripts/liblog.sh
+
+              info "Copying writable dirs to empty dir"
+              # In order to not break the application functionality we need to make some
+              # directories writable, so we need to copy it to an empty dir volume
+              cp -r --preserve=mode /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
+              cp -r --preserve=mode /opt/bitnami/keycloak/data /emptydir/app-data-dir
+              info "Copy operation completed"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -111,12 +117,8 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            - name: empty-dir
-              mountPath: /quarkus
-              subPath: app-quarkus-dir
+           - name: empty-dir
+             mountPath: /emptydir
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -216,7 +218,7 @@ spec:
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
             {{- if and .Values.adminIngress.enabled .Values.adminIngress.hostname }}
-            - name: KC_HOSTNAME_ADMIN_URL
+            - name: KEYCLOAK_HOSTNAME_ADMIN
               value: |-
                 {{ ternary "https://" "http://" ( or .Values.adminIngress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
                 {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) -}}
@@ -231,7 +233,7 @@ spec:
                 {{- end }}
             {{- end }}
             {{- if and .Values.ingress.enabled .Values.ingress.hostname }}
-            - name: KC_HOSTNAME_URL
+            - name: KEYCLOAK_HOSTNAME
               value: |-
                 {{ ternary "https://" "http://" ( or .Values.ingress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
                 {{- include "common.tplvalues.render" (dict "value" .Values.ingress.hostname "context" $) -}}
