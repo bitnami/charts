@@ -17,37 +17,6 @@ rules:
       - ""
     resources:
       - configmaps
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - coordination.k8s.io
-    resources:
-      - leases
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - ""
-    resources:
-      - events
-    verbs:
-      - create
-      - patch
-  - apiGroups:
-      - ""
-    resources:
-      - configmaps
       - persistentvolumeclaims
       - secrets
       - serviceaccounts
@@ -83,6 +52,44 @@ rules:
       - update
       - watch
   - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanaalertrulegroups
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanaalertrulegroups/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanaalertrulegroups/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
       - grafana.integreatly.org
     resources:
       - grafanacontactpoints
@@ -95,7 +102,7 @@ rules:
       - update
       - watch
   - apiGroups:
-     - grafana.integreatly.org
+      - grafana.integreatly.org
     resources:
       - grafanacontactpoints/finalizers
     verbs:
@@ -189,6 +196,32 @@ rules:
   - apiGroups:
       - grafana.integreatly.org
     resources:
+      - grafananotificationpolicies
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafananotificationpolicies/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafananotificationpolicies/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
       - grafanas
     verbs:
       - create
@@ -212,30 +245,6 @@ rules:
       - get
       - patch
       - update
-  - apiGroups:
-      - grafana.integreatly.org
-    resources:
-      - grafanaalertrulegroups
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - grafana.integreatly.org
-    resources:
-      - grafanaalertrulegroups/finalizers
-    verbs:
-      - update
-  - apiGroups:
-      - grafana.integreatly.org
-    resources:
-      - grafanaalertrulegroups/status
-    verbs:
-      - get
   - apiGroups:
       - networking.k8s.io
     resources:
