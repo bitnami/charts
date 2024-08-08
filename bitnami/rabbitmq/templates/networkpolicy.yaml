@@ -59,6 +59,9 @@ spec:
         - port: {{ .Values.containerPorts.amqpTls }}
         - port: {{ .Values.containerPorts.dist }}
         - port: {{ .Values.containerPorts.manager }}
+        {{ - range .Values.extraContainerPorts }}
+        - port: {{ . }}
+        {{ - end }}
         {{- if .Values.metrics.enabled }}
         - port: {{ .Values.containerPorts.metrics }}
         {{- end }}
