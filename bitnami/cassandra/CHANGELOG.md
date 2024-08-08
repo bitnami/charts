@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.4.0 (2024-08-07)
+## 11.4.0 (2024-08-08)
 
 * [bitnami/cassandra] Making TLS existingSecrets more configurable ([#28746](https://github.com/bitnami/charts/pull/28746))
 
