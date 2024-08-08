@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.3.10 (2024-08-07)
+## 6.3.10 (2024-08-08)
 
 * [bitnami/metallb] Release 6.3.10 ([#28760](https://github.com/bitnami/charts/pull/28760))
 
