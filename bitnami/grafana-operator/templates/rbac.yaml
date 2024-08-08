@@ -3,11 +3,18 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.operator.rbac.create (not .Values.operator.namespaceScope) }}
+{{- if .Values.operator.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.operator.namespaceScope }}
+kind: Role
+{{- else }}
 kind: ClusterRole
+{{- end }}
 metadata:
   name: {{ include "common.names.fullname.namespace" . }}
+  {{- if .Values.operator.namespaceScope }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -271,19 +278,30 @@ rules:
       - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.operator.namespaceScope }}
+kind: RoleBinding
+{{- else }}
 kind: ClusterRoleBinding
+{{- end }}
 metadata:
   name: {{ include "common.names.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+  {{- if .Values.operator.namespaceScope }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
 subjects:
   - kind: ServiceAccount
     name:  {{ include "grafana-operator.serviceAccountName" . }}
-    namespace: {{ include "common.names.namespace" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
+  {{- if .Values.operator.namespaceScope }}
+  kind: Role
+  {{- else }}
   kind: ClusterRole
+  {{- end }}
   name: {{ include "common.names.fullname.namespace" . }}
   apiGroup: rbac.authorization.k8s.io
 {{- end }}
