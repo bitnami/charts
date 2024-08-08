@@ -230,15 +230,13 @@ Return the Cassandra TLS keystore secret
 {{- end -}}
 {{- end -}}
 {{/*
-
-Return the Cassandra TLS truststore secret
+Return the Cassandra TLS truststore secret. If not provided we assume the trustore is stored in the keystore secret.
 */}}
 {{- define "cassandra.truststoreSecretName" -}}
-{{- $secretName := coalesce .Values.tls.existingTrustSecret .Values.tls.existingSecret .Values.tls.tlsEncryptionSecretName -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+{{- if .Values.tls.existingTrustSecret -}}
+    {{- print (tpl .Values.tls.existingTrustSecret $) -}}
 {{- else -}}
-    {{- printf "%s-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- print (include "cassandra.keystoreSecretName" .) -}}
 {{- end -}}
 {{- end -}}
 
