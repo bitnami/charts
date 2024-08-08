@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.6.11 (2024-08-07)
+## 6.6.11 (2024-08-08)
 
 * [bitnami/argo-cd] fix: Add namespace to service account's bindings ([#28737](https://github.com/bitnami/charts/pull/28737))
 
