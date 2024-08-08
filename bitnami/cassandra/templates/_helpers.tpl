@@ -233,8 +233,8 @@ Return the Cassandra TLS keystore secret
 Return the Cassandra TLS truststore secret. If not provided we assume the trustore is stored in the keystore secret.
 */}}
 {{- define "cassandra.truststoreSecretName" -}}
-{{- if .Values.tls.existingTrustSecret -}}
-    {{- print (tpl .Values.tls.existingTrustSecret $) -}}
+{{- if .Values.tls.existingTruststoreSecret -}}
+    {{- print (tpl .Values.tls.existingTruststoreSecret $) -}}
 {{- else -}}
     {{- print (include "cassandra.keystoreSecretName" .) -}}
 {{- end -}}
