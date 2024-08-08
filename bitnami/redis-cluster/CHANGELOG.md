@@ -1,5 +1,9 @@
 # Changelog
 
+## 10.3.1 (2024-08-08)
+
+* [bitnami/redis-cluster] Remove template variables from values file
+
 ## 10.3.0 (2024-07-25)
 
 * [bitnami/redis-cluster] Add configurable appProtocol for metrics service port ([#28380](https://github.com/bitnami/charts/pull/28380))
