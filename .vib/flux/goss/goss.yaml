@@ -84,10 +84,10 @@ http:
       - /ImageUpdateAutomation.*{{ $imageUpdateAutomationName }}/
   # Ensure that the deployment done by the helm controller worked
   {{ if not ( has "air-gapped" .Vars.target_platform_properties ) }}
-  http://{{ $chartReleaseName }}/doku.php:
+  http://{{ $chartReleaseName }}/:
     status: 200
     body:
-      - /DokuWiki/
+      - /Welcome to nginx/
   # Ensure that the deployment done by the kustomize controller worked
   # This name is hardcoded in the git repository
   http://podinfo:9898:

@@ -1066,6 +1066,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 30.0.0
+
+This major release bumps the Kafka version to 3.8. Find notable changes in [kafka upgrade notes](https://kafka.apache.org/38/documentation.html#upgrade).
+
 ### To 29.0.0
 
 This major version of Kafka deprecates Kafka Exporter component.

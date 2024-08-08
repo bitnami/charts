@@ -1,8 +1,20 @@
 # Changelog
 
+## 22.1.0 (2024-08-06)
+
+* [bitnami/keycloak] use hostname v2 options ([#28611](https://github.com/bitnami/charts/pull/28611))
+
+## <small>22.0.2 (2024-08-06)</small>
+
+* [bitnami/keycloak] Release 22.0.2 (#28692) ([af28509](https://github.com/bitnami/charts/commit/af285099f496589b4d3ad8379c00ae96628baab5)), closes [#28692](https://github.com/bitnami/charts/issues/28692)
+
+## <small>22.0.1 (2024-08-06)</small>
+
+* [bitnami/keycloak] Preserve data on writable dirs (#28550) ([80bc148](https://github.com/bitnami/charts/commit/80bc148b1af4e75ff8619c68f20ec2be90015a37)), closes [#28550](https://github.com/bitnami/charts/issues/28550)
+
 ## 22.0.0 (2024-07-29)
 
-* [bitnami/keycloak] Release 22.0.0 ([#28563](https://github.com/bitnami/charts/pull/28563))
+* [bitnami/keycloak] Release 22.0.0 (#28563) ([81162c4](https://github.com/bitnami/charts/commit/81162c45a2a9759ac00ae26ad0bb5310af4597e4)), closes [#28563](https://github.com/bitnami/charts/issues/28563)
 
 ## 21.8.0 (2024-07-26)
 
