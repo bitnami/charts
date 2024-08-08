@@ -33,7 +33,7 @@ dependencies:
 - condition: kafka.enabled
   name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 29.x.x
+  version: 30.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -53,4 +53,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 30.0.4
+version: 31.0.0

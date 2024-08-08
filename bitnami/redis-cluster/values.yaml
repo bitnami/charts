@@ -1092,10 +1092,13 @@ metrics:
   ##
   service:
     type: ClusterIP
-    ## @param metrics.service.ports.http Metrics HTTP service port
-    ##
     ports:
+      ## @param metrics.service.ports.http Metrics HTTP service port
+      ##
       http: 9121
+      ## @param metrics.service.ports.appProtocol Metrics service appProtocol
+      ##
+      appProtocol: ""
     ## @param metrics.service.clusterIP Service Cluster IP
     ## e.g.:
     ## clusterIP: None

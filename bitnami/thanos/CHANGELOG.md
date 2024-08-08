@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.7.16 (2024-07-31)
+## 15.7.18 (2024-08-07)
 
-* [bitnami/thanos] Release 15.7.16 ([#28607](https://github.com/bitnami/charts/pull/28607))
+* [bitnami/thanos] Release 15.7.18 ([#28752](https://github.com/bitnami/charts/pull/28752))
+
+## <small>15.7.17 (2024-08-02)</small>
+
+* [bitnami/thanos] add ruler custom data path (#28606) ([125fb1b](https://github.com/bitnami/charts/commit/125fb1b454c3395444609a43dc4686cba2148fa2)), closes [#28606](https://github.com/bitnami/charts/issues/28606)
+
+## <small>15.7.16 (2024-07-31)</small>
+
+* [bitnami/thanos] Release 15.7.16 (#28607) ([d966dfe](https://github.com/bitnami/charts/commit/d966dfe78fbadcd456bd08185f9eb67c1c3221b1)), closes [#28607](https://github.com/bitnami/charts/issues/28607)
 
 ## <small>15.7.15 (2024-07-25)</small>
 
