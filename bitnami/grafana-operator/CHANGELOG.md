@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.15 (2024-08-08)
+## 4.4.16 (2024-08-08)
 
-* [bitnami/grafana-operator] Release 4.4.15 ([#28772](https://github.com/bitnami/charts/pull/28772))
+* [bitnami/grafana-operator] Add missing CRD + RBAC ([#28780](https://github.com/bitnami/charts/pull/28780))
+
+## <small>4.4.15 (2024-08-08)</small>
+
+* [bitnami/grafana-operator] Release 4.4.15 (#28772) ([294d425](https://github.com/bitnami/charts/commit/294d42520609ea39b9465f5c0df7ea9d1738363d)), closes [#28772](https://github.com/bitnami/charts/issues/28772)
 
 ## <small>4.4.14 (2024-08-07)</small>
 
