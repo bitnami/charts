@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.11 (2024-08-08)
+## 22.0.12 (2024-08-08)
 
-* [bitnami/harbor] Release 22.0.11 ([#28773](https://github.com/bitnami/charts/pull/28773))
+* [bitnami/harbor] fix: core-secret-envvars.yaml now handles variables individually ([#28474](https://github.com/bitnami/charts/pull/28474))
+
+## <small>22.0.11 (2024-08-08)</small>
+
+* [bitnami/harbor] Release 22.0.11 (#28773) ([f0e8c01](https://github.com/bitnami/charts/commit/f0e8c019d74a51a4f5af64c9f6db549c2be23d0e)), closes [#28773](https://github.com/bitnami/charts/issues/28773)
 
 ## <small>22.0.10 (2024-07-30)</small>
 
