@@ -17,9 +17,12 @@ data:
   KEYCLOAK_ADMIN: {{ .Values.auth.adminUser | quote }}
   KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
   {{- if and .Values.proxy (empty .Values.proxyHeaders) }}
-  KEYCLOAK_PROXY_HEADERS: {{ ternary "" "forwarded|xforwarded" (eq .Values.proxy "passthrough") }}
+  KEYCLOAK_PROXY_HEADERS: {{ ternary "" "xforwarded" (eq .Values.proxy "passthrough") }}
   {{- else }}
   KEYCLOAK_PROXY_HEADERS: {{ .Values.proxyHeaders | quote }}
+  {{- end }}
+  {{- if .Values.ingress.enabled }}
+  KEYCLOAK_HOSTNAME_STRICT: {{ ternary "true" "false" .Values.ingress.hostnameStrict | quote }}
   {{- end }}
   KEYCLOAK_ENABLE_STATISTICS: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
   {{- if not .Values.externalDatabase.existingSecretHostKey }}
@@ -34,7 +37,7 @@ data:
   {{- if not .Values.externalDatabase.existingSecretUserKey }}
   KEYCLOAK_DATABASE_USER: {{ include "keycloak.databaseUser" . | quote }}
   {{- end }}
-  KEYCLOAK_PRODUCTION:  {{ ternary "true" "false" .Values.production | quote }}
+  KEYCLOAK_PRODUCTION: {{ ternary "true" "false" .Values.production | quote }}
   KEYCLOAK_ENABLE_HTTPS: {{ ternary "true" "false" .Values.tls.enabled | quote }}
   {{- if .Values.customCaExistingSecret }}
   KC_TRUSTSTORE_PATHS: "/opt/bitnami/keycloak/custom-ca"
@@ -59,10 +62,10 @@ data:
   {{- if .Values.cache.enabled }}
   KEYCLOAK_CACHE_TYPE: "ispn"
   {{- if .Values.cache.stackName }}
-  KEYCLOAK_CACHE_STACK: {{ .Values.cache.stackName | quote }} 
+  KEYCLOAK_CACHE_STACK: {{ .Values.cache.stackName | quote }}
   {{- end }}
   {{- if .Values.cache.stackFile }}
-  KEYCLOAK_CACHE_CONFIG_FILE: {{ .Values.cache.stackFile | quote }} 
+  KEYCLOAK_CACHE_CONFIG_FILE: {{ .Values.cache.stackFile | quote }}
   {{- end }}
   JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
   {{- else }}

@@ -139,6 +139,10 @@ input: |-
   #   type => syslog
   # }
   http { port => 8080 }
+## @param extraInput [string] Extra Input Plugins configuration
+## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
+##
+extraInput: ""
 ## @param filter Filter Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/filter-plugins.html
 ## e.g:
@@ -220,9 +224,6 @@ containerPorts:
   - name: http
     containerPort: 8080
     protocol: TCP
-  - name: monitoring
-    containerPort: 9600
-    protocol: TCP
     ## - name: syslog-udp
     ##   containerPort: 1514
     ##   protocol: UDP
@@ -230,6 +231,16 @@ containerPorts:
     ##   containerPort: 1514
     ##   protocol: TCP
     ##
+## @param extraContainerPorts [array] Array containing extra ports to open in the Logstash container (evaluated as a template)
+##
+extraContainerPorts: []
+  ## - name: syslog-udp
+  ##   containerPort: 1514
+  ##   protocol: UDP
+  ## - name: syslog-tcp
+  ##   containerPort: 1514
+  ##   protocol: TCP
+##
 ## @param initContainers Add additional init containers to the Logstash pod(s)
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -465,6 +476,18 @@ service:
       port: 8080
       targetPort: http
       protocol: TCP
+      ## - name: syslog-udp
+      ##   port: 1514
+      ##   targetPort: syslog-udp
+      ##   protocol: UDP
+      ## - name: syslog-tcp
+      ##   port: 1514
+      ##   targetPort: syslog-tcp
+      ##   protocol: TCP
+      ##
+  ## @param service.extraPorts [array] Extra Logstash service ports (evaluated as a template)
+  ##
+  extraPorts: []
       ## - name: syslog-udp
       ##   port: 1514
       ##   targetPort: syslog-udp

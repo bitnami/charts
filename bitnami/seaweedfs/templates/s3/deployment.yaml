@@ -190,12 +190,14 @@ spec:
               mountPath: /tmp
               subPath: tmp-dir
             {{- if .Values.s3.auth.enabled }}
-            - mountPath: /auth
-              readOnly: true
             {{- if .Values.s3.auth.existingSecret }}
+            - mountPath: {{ printf "/auth/%s" (default "config.json" .Values.s3.auth.existingSecretConfigKey) }}
+              readOnly: true
               name: auth
               subPath: {{ default "config.json" .Values.s3.auth.existingSecretConfigKey }}
             {{- else }}
+            - mountPath: /auth
+              readOnly: true
               name: empty-dir
               subPath: auth-dir
             {{- end }}

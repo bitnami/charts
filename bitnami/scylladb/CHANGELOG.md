@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.0.8 (2024-07-25)
+## 1.0.10 (2024-07-30)
 
-* [bitnami/scylladb] Release 1.0.8 ([#28487](https://github.com/bitnami/charts/pull/28487))
+* [bitnami/scylladb] Improve Ginkgo tests ([#28575](https://github.com/bitnami/charts/pull/28575))
+
+## <small>1.0.9 (2024-07-29)</small>
+
+* [bitnami/scylladb] Release 1.0.9 (#28559) ([e93d30c](https://github.com/bitnami/charts/commit/e93d30ce0b85f634295c2881e1a947bf47161864)), closes [#28559](https://github.com/bitnami/charts/issues/28559)
+
+## <small>1.0.8 (2024-07-25)</small>
+
+* [bitnami/scylladb] Release 1.0.8 (#28487) ([a49612c](https://github.com/bitnami/charts/commit/a49612c075f8492deccc6d74a5f408f4d0be5674)), closes [#28487](https://github.com/bitnami/charts/issues/28487)
 
 ## <small>1.0.7 (2024-07-24)</small>
 

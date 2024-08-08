@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.0.5 (2024-07-25)
+## 1.0.8 (2024-08-07)
 
-* [bitnami/seaweedfs] Release 1.0.5 ([#28483](https://github.com/bitnami/charts/pull/28483))
+* [bitnami/seaweedfs] Release 1.0.8 ([#28750](https://github.com/bitnami/charts/pull/28750))
+
+## <small>1.0.7 (2024-07-31)</small>
+
+* [bitnami/seaweedfs] Fix mounting the S3 auth config.json from secret (#28583) ([40d557a](https://github.com/bitnami/charts/commit/40d557addf28bc8c253fb99f3060220e43499632)), closes [#28583](https://github.com/bitnami/charts/issues/28583)
+
+## <small>1.0.6 (2024-07-30)</small>
+
+* [bitnami/seaweedfs] Fix tests (#28572) ([ef36337](https://github.com/bitnami/charts/commit/ef36337c5ffeedf577bb6fcadabbb3a92cf5d8e6)), closes [#28572](https://github.com/bitnami/charts/issues/28572)
+
+## <small>1.0.5 (2024-07-25)</small>
+
+* [bitnami/seaweedfs] Release 1.0.5 (#28483) ([f8b7481](https://github.com/bitnami/charts/commit/f8b7481b1c4b5cb35adf6c82e78f132592fe3335)), closes [#28483](https://github.com/bitnami/charts/issues/28483)
 
 ## <small>1.0.4 (2024-07-24)</small>
 

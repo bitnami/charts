@@ -54,6 +54,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param deploymentAnnotations Annotations to add to the deployment
+##
+deploymentAnnotations: {}
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -306,7 +309,7 @@ terminationGracePeriodSeconds: ""
 image:
   registry: docker.io
   repository: bitnami/haproxy
-  tag: 3.0.3-debian-12-r3
+  tag: 3.0.3-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

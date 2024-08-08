@@ -1,8 +1,28 @@
 # Changelog
 
-## 14.6.28 (2024-07-25)
+## 14.6.33 (2024-08-07)
 
-* [bitnami/minio] Release 14.6.28 ([#28444](https://github.com/bitnami/charts/pull/28444))
+* [bitnami/minio] Release 14.6.33 ([#28731](https://github.com/bitnami/charts/pull/28731))
+
+## <small>14.6.32 (2024-08-03)</small>
+
+* [bitnami/minio] Release 14.6.32 (#28650) ([eea4d67](https://github.com/bitnami/charts/commit/eea4d67577c35ec1a206109ec7e59fe565922fa8)), closes [#28650](https://github.com/bitnami/charts/issues/28650)
+
+## <small>14.6.31 (2024-07-31)</small>
+
+* [bitnami/minio] Release 14.6.31 (#28601) ([fc1b36e](https://github.com/bitnami/charts/commit/fc1b36e440777f392e63d3b96c0d56704e1ba8d9)), closes [#28601](https://github.com/bitnami/charts/issues/28601)
+
+## <small>14.6.30 (2024-07-30)</small>
+
+* [bitnami/minio] Release 14.6.30 (#28571) ([0fab2f8](https://github.com/bitnami/charts/commit/0fab2f865f80a24b4444b1d8f8e5e9c9d6fb6d6f)), closes [#28571](https://github.com/bitnami/charts/issues/28571)
+
+## <small>14.6.29 (2024-07-27)</small>
+
+* [bitnami/minio] Release 14.6.29 (#28544) ([0bfb0b5](https://github.com/bitnami/charts/commit/0bfb0b5d597cdf8213135dfcd60b5389ebe7fced)), closes [#28544](https://github.com/bitnami/charts/issues/28544)
+
+## <small>14.6.28 (2024-07-25)</small>
+
+* [bitnami/minio] Release 14.6.28 (#28444) ([dcd6067](https://github.com/bitnami/charts/commit/dcd6067c602314c2e2f88881a158059cf8b11f2f)), closes [#28444](https://github.com/bitnami/charts/issues/28444)
 
 ## <small>14.6.27 (2024-07-24)</small>
 
@@ -50,8 +70,11 @@
 
 ## <small>14.6.16 (2024-06-29)</small>
 
-* [bitnami/minio] Release 14.6.15 (#27588) ([7e1d994](https://github.com/bitnami/charts/commit/7e1d9945dd0515dd317c6f6f12564757df66c8d7)), closes [#27588](https://github.com/bitnami/charts/issues/27588)
 * [bitnami/minio] Release 14.6.16 (#27598) ([055dab8](https://github.com/bitnami/charts/commit/055dab873a739e58cba8ffdc4a3d6ec5523e2df0)), closes [#27598](https://github.com/bitnami/charts/issues/27598)
+
+## <small>14.6.15 (2024-06-28)</small>
+
+* [bitnami/minio] Release 14.6.15 (#27588) ([7e1d994](https://github.com/bitnami/charts/commit/7e1d9945dd0515dd317c6f6f12564757df66c8d7)), closes [#27588](https://github.com/bitnami/charts/issues/27588)
 
 ## <small>14.6.14 (2024-06-28)</small>
 

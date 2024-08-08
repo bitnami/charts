@@ -707,6 +707,7 @@ pdb:
 configuration:
   server:
     basePath: ""
+    publicBaseUrl: ""
     rewriteBasePath: false
 ## Prometheus metrics (requires the kibana-prometheus-exporter plugin)
 ##

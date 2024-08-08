@@ -303,6 +303,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `smtpUser`                             | SMTP username                                                                         | `""`               |
 | `smtpPassword`                         | SMTP user password                                                                    | `""`               |
 | `smtpProtocol`                         | SMTP protocol                                                                         | `""`               |
+| `smtpFromEmail`                        | SMTP from email (default is `smtpUser`)                                               | `""`               |
+| `smtpFromName`                         | SMTP from name  (default is `wordpressFirstName` and `wordpressLastName`)             | `""`               |
 | `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                  | `""`               |
 | `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                | `true`             |
 | `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                | `false`            |

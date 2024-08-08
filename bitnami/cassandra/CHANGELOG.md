@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.11 (2024-07-25)
+## 11.3.12 (2024-07-31)
 
-* [bitnami/cassandra] Release 11.3.11 ([#28408](https://github.com/bitnami/charts/pull/28408))
+* [bitnami/cassandra] Improve Ginkgo test ([#28603](https://github.com/bitnami/charts/pull/28603))
+
+## <small>11.3.11 (2024-07-25)</small>
+
+* [bitnami/cassandra] Release 11.3.11 (#28408) ([8a65384](https://github.com/bitnami/charts/commit/8a6538440b1ca408369ec814831f6239fe47fa3b)), closes [#28408](https://github.com/bitnami/charts/issues/28408)
 
 ## <small>11.3.10 (2024-07-24)</small>
 
