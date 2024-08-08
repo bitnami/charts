@@ -67,11 +67,15 @@ spec:
               {{ include "common.names.fullname" . }}-client: "true"
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+        {{- if or .Values.networkPolicy.ingressNSMatchLabels .Values.networkPolicy.ingressNSPodMatchLabels }}
         - namespaceSelector:
             matchLabels:
-              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
+              {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+                {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+                {{ $key | quote }}: {{ $value | quote }}
+                {{- end }}
+              {{ else }}
+                {}
               {{- end }}
           {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
