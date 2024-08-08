@@ -213,16 +213,18 @@ controlplane:
     enabled: false
     allowedOrgs: []
 
-  ## @extra controlplane.onboarding List of organizations to automatically onboard when a user logs in
-  ## @skip controlplane.onboarding[0].name Name of the organization to onboard
-  ## @skip controlplane.onboarding[0].role Role of the organization to onboard
-  #  onboarding:
-  #    - name: ""
-  #      role: ""
+  ## @param controlplane.onboarding List of organizations to automatically onboard when a user logs in
+  ##  e.g:
+  ## onboarding:
+  ##    - name: ""
+  ##      role: ""
+  onboarding: []
 
-  ## @extra controlplane.prometheus_org_metrics List of organizations to expose metrics for using Prometheus
-  #  prometheus_org_metrics:
-  #    - org_name: "read-only-demo"
+  ## @param controlplane.prometheus_org_metrics List of organizations to expose metrics for using Prometheus
+  ##  e.g.:
+  ##  prometheus_org_metrics:
+  ##    - org_name: "read-only-demo"
+  prometheus_org_metrics: []
 
   # Database migration
   ## @param controlplane.migration.ssl Connect to the database using SSL (required fro AWS RDS, etc)
@@ -304,13 +306,16 @@ controlplane:
       loginURLOverride: ""
       externalURL: ""
 
+    ## @param controlplane.auth.allowList Content of the allow_list.yaml config file
     ## @extra controlplane.auth.allowList.rules List of domains or emails to allow
     ## @extra controlplane.auth.allowList.selectedRoutes List of selected routes to allow. If not set it applies to all routes
     ## @extra controlplane.auth.allowList.customMessage Custom message to display when a user is not allowed
-    #    allowList:
-    #      rules: []
-    #      selectedRoutes: []
-    #      customMessage: ""
+    ## e.g.
+    ##    allowList:
+    ##      rules: []
+    ##      selectedRoutes: []
+    ##      customMessage: ""
+    allowList: {}
 
   ## @section Control Plane Networking
   service:
@@ -318,11 +323,9 @@ controlplane:
     type: ClusterIP
 
     ## @param controlplane.service.ports.http controlplane service HTTP port
-    ## @param controlplane.service.ports.https controlplane service HTTPS port
     ##
     ports:
       http: 80
-      https: 443
     ## Node ports to expose
     ## @param controlplane.service.nodePorts.http Node port for HTTP
     ## @param controlplane.service.nodePorts.https Node port for HTTPS
@@ -1720,7 +1723,6 @@ vault:
 ##
 dex:
   ## Bitnami Dex image
-  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
   ## @skip dex.staticUsers[0].email
   ## @skip dex.staticUsers[0].hash
   ## @skip dex.staticUsers[1].email
@@ -1855,7 +1857,7 @@ dex:
   ## @param dex.containerSecurityContext.allowPrivilegeEscalation Set Dex containers' Security Context allowPrivilegeEscalation
   ## @param dex.containerSecurityContext.readOnlyRootFilesystem Set Dex containers' server Security Context readOnlyRootFilesystem
   ## @param dex.containerSecurityContext.runAsNonRoot Set Dex containers' Security Context runAsNonRoot
-  ## @param dex.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
+  ## @param dex.containerSecurityContext.capabilities.drop Set Chainloop containers' Security Context capabilities to be dropped
   ## @param dex.containerSecurityContext.privileged Set dex container's Security Context privileged
   ## @param dex.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
@@ -1998,7 +2000,7 @@ dex:
   ## Metrics configuration for Dex
   ##
   metrics:
-    ## Enable metrics for Argo Dex
+    ## Enable metrics for Chainloop Dex
     ## @param dex.metrics.enabled Enable metrics service for Dex
     ##
     enabled: false

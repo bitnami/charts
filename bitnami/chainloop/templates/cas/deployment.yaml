@@ -61,7 +61,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.cas.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.cas.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.cas.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cas.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.cas.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.cas.terminationGracePeriodSeconds }}
@@ -72,7 +72,9 @@ spec:
         {{- end }}
       containers:
         - name: cas
+          {{- if .Values.cas.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cas.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           image: {{ include "chainloop.cas.image" . }}
           imagePullPolicy: {{ .Values.cas.image.pullPolicy }}
           command: [ "./artifact-cas" ]

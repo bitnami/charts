@@ -62,7 +62,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controlplane.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.controlplane.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.controlplane.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlplane.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.controlplane.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.controlplane.terminationGracePeriodSeconds }}
@@ -90,7 +90,9 @@ spec:
                   key: db_migrate_source
       containers:
         - name: controlplane
+          {{- if .Values.controlplane.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlplane.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           image: {{ include "chainloop.controlplane.image" . }}
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
           command: [ "./control-plane" ]

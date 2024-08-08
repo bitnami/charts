@@ -17,17 +17,17 @@ apiVersion: v2
 appVersion: 0.95.3
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
   - condition: postgresql.enabled
     name: postgresql
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 15.x.x
   - condition: development
     name: vault
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 1.4.x
 description: Chainloop is an open source software supply chain control plane, a single source of truth for artifacts plus a declarative attestation crafting process.
 home: https://bitnami.com
