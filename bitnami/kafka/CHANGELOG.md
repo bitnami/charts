@@ -1,12 +1,8 @@
 # Changelog
 
-## 30.0.4 (2024-08-01)
+## 30.0.4 (2024-08-08)
 
 * bitnami/kafka Fix pem auth with custom encrypted private key ([#28618](https://github.com/bitnami/charts/pull/28618))
-
-## 30.0.3 (2024-08-08)
-
-* [bitnami/kafka] Add support IMDSv2 for getting brokerRackAwareness data ([#27921](https://github.com/bitnami/charts/pull/27921))
 
 ## <small>30.0.2 (2024-08-07)</small>
 
