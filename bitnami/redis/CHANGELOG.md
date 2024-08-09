@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.6.4 (2024-07-25)
+## 20.0.0 (2024-08-09)
 
-* [bitnami/redis] Release 19.6.4 ([#28499](https://github.com/bitnami/charts/pull/28499))
+* [bitnami/redis] Release 20.0.0 ([#28810](https://github.com/bitnami/charts/pull/28810))
+
+## <small>19.6.4 (2024-07-25)</small>
+
+* [bitnami/redis] Release 19.6.4 (#28499) ([aaa7a7c](https://github.com/bitnami/charts/commit/aaa7a7cd11bfd8821d0464ef312ef0f66a3afce5)), closes [#28499](https://github.com/bitnami/charts/issues/28499)
 
 ## <small>19.6.3 (2024-07-24)</small>
 
