@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.msgTopologyOperator.enabled }}
+{{- if and (eq .Values.msgTopologyOperator.enabled true) (not .Values.msgTopologyOperator.skipCreateAdmissionWebhookConfig) }}
 {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
 {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
 {{/*
