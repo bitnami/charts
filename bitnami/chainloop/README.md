@@ -4,6 +4,14 @@
 
 [Chainloop](https://github.com/chainloop-dev/chainloop) is an open-source software supply chain control plane, a single source of truth for artifacts plus a declarative attestation crafting process.
 
+## TL;DR
+
+```console
+helm install my-release oci://registry-1.docker.io/bitnamicharts/chainloop
+```
+
+Looking to use Chainloop in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+
 ## Introduction
 
 This chart bootstraps a [Chainloop](https://github.com/chainloop-dev/chainloop) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
@@ -408,10 +416,10 @@ controlplane:
         ...
         -----END CERTIFICATE-----
       key: |
-        -----BEGIN ENCRYPTED PRIVATE KEY-----    
+        -----BEGIN ENCRYPTED PRIVATE KEY-----
         ...
         -----END ENCRYPTED PRIVATE KEY-----
-      keyPass: "REDACTED"  
+      keyPass: "REDACTED"
 ```
 
 ### Insert custom Certificate Authorities (CAs)
