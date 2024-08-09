@@ -152,18 +152,12 @@ spec:
             - name: DATABASE_ENABLE_SSL
               value: {{ ternary "yes" "no" .Values.db.enableSsl | quote }}
             {{- if .Values.db.enableSsl }}
-            {{- if not (empty .Values.db.ssl.clientKey) }}
             - name: DATABASE_SSL_KEY
-              value: "/db_certs/server_key.pem"
-            {{- end }}
-            {{- if not (empty .Values.db.ssl.clientCertificate) }}
+              value: {{ printf "/opt/bitnami/db_certs/%s" .Values.db.ssl.certKeyFilename}}
             - name: DATABASE_SSL_CERT
-              value: "/db_certs/server_certificate.pem"
-            {{- end }}
-            {{- if not (empty .Values.db.ssl.caCertificate) }}
+              value: {{ printf "/opt/bitnami/db_certs/%s" .Values.db.ssl.certFilename}}
             - name: DATABASE_SSL_CA
-              value: "/db_certs/ca_certificate.pem"
-            {{- end }}
+              value: {{ printf "/opt/bitnami/db_certs/%s" .Values.db.ssl.certCAFilename}}
             {{- if .Values.db.ssl.ciphers }}
             - name: DATABASE_SSL_CIPHERS
               values: {{ .Values.db.ssl.ciphers | quote }}
@@ -242,7 +236,7 @@ spec:
               subPath: app-base-dir
             {{- if .Values.db.enableSsl }}
             - name: ssl-certs
-              mountPath: /db_certs
+              mountPath: /opt/bitnami/phpmyadmin/db_certs
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -286,20 +280,7 @@ spec:
         {{- if .Values.db.enableSsl }}
         - name: ssl-certs
           secret:
-            secretName: {{ printf "%s-certs" (include "common.names.fullname" .) }}
-            items:
-              {{- if not (empty .Values.db.ssl.clientKey) }}
-              - key: server_key.pem
-                path: server_key.pem
-              {{- end }}
-              {{- if not (empty .Values.db.ssl.clientCertificate) }}
-              - key: server_certificate.pem
-                path: server_certificate.pem
-              {{- end }}
-              {{- if not (empty .Values.db.ssl.caCertificate) }}
-              - key: ca_certificate.pem
-                path: ca_certificate.pem
-              {{- end }}
+            secretName: {{ template "phpmyadmin.db.ssl.secretName" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
