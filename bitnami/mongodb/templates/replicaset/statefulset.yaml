@@ -467,7 +467,8 @@ spec:
         {{- end }}
       volumes:
         - name: empty-dir
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: {{ .Values.global.emptyDirSizeLimit }}
         - name: common-scripts
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
@@ -484,7 +485,8 @@ spec:
         {{- end }}
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
         - name: shared
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: {{ .Values.global.emptyDirSizeLimit }}
         {{- end }}
         - name: scripts
           configMap:
@@ -495,7 +497,8 @@ spec:
         {{- end }}
         {{- if .Values.tls.enabled }}
         - name: certs
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: {{ .Values.global.emptyDirSizeLimit }}
         {{- if (include "mongodb.autoGenerateCerts" .) }}
         - name: certs-volume
           secret:
