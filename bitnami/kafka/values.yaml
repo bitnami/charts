@@ -308,7 +308,7 @@ tls:
   ## When using 'pem' format for certificates, each secret should contain a public CA certificate, a public certificate and one private key.
   ## Create these secrets following the steps below:
   ## 1) Create a certificate key and signing request per Kafka broker, and sign the signing request with your CA
-  ## 2) Rename your CA file to `kafka.ca.crt`.
+  ## 2) Rename your CA file to `kafka-ca.crt`.
   ## 3) Rename your certificates to `kafka-X.tls.crt` where X is the ID of each Kafka broker.
   ## 3) Rename your keys to `kafka-X.tls.key` where X is the ID of each Kafka broker.
   ## 4) Run the command below one time per broker to create its associated secret (SECRET_NAME_X is the name of the secret you want to create):
