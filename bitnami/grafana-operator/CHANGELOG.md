@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.4.16 (2024-08-09)
+## 4.5.0 (2024-08-09)
 
 * [bitnami/grafana-operator] Add missing CRD + RBAC ([#28780](https://github.com/bitnami/charts/pull/28780))
 
