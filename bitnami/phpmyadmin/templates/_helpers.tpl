@@ -54,6 +54,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Returns the name of the secret containing the database SSL certificates
+*/}}
+{{- define "phpmyadmin.db.ssl.secretName" -}}
+{{- if .Values.db.ssl.existingSecret -}}
+{{- print (tpl .Values.db.ssl.existingSecret $) -}}
+{{- else -}}
+{{- printf "%s-certs" (include "common.names.fullname" .) }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "phpmyadmin.validateValues" -}}

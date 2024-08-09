@@ -581,12 +581,22 @@ db:
     ## @param db.ssl.caCertificate CA file when using SSL
     ##
     caCertificate: ""
+    ## @param db.ssl.existingSecret Name of the existing secret containing the SSL certificates
+    ##
+    existingSecret: ""
     ## @param db.ssl.ciphers List of allowable ciphers for connections when using SSL
     ##
     ciphers: []
     ## @param db.ssl.verify Enable SSL certificate validation
     ##
     verify: true
+    ## @param db.ssl.certFilename Name of the file containing the certificate
+    ## @param db.ssl.certKeyFilename Name of the file containing the private key
+    ## @param db.ssl.caFilename Name of the file containing the CA certificate
+    ##
+    certFilename: "server_certificate.pem"
+    certKeyFilename: "server_key.pem"
+    certCAFilename: "ca_certificate.pem"
 ## @param mariadb MariaDB chart configuration
 ## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
