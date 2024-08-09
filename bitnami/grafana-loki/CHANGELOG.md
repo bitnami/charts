@@ -3,6 +3,7 @@
 ## 4.6.11 (2024-08-08)
 
 * [bitnami/grafana-loki] bugfix: bug issue on bitnami/charts #28768 ([#28769](https://github.com/bitnami/charts/pull/28769))
+* [bitnami/grafana-loki] Release 4.6.11 ([#28791](https://github.com/bitnami/charts/pull/28791))
 
 ## <small>4.6.10 (2024-08-07)</small>
 

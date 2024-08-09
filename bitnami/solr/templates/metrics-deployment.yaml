@@ -16,6 +16,7 @@ metadata:
   {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.metrics.revisionHistoryLimit }}
   {{- if .Values.metrics.updateStrategy }}
   strategy: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.updateStrategy "context" $) | nindent 4 }}
   {{- end }}

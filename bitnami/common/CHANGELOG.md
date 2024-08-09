@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.21.0 (2024-07-31)
+## 2.22.0 (2024-08-07)
 
-* [bitnami/common] Allow handling of new secrets after initial installation ([#28581](https://github.com/bitnami/charts/pull/28581))
+* [bitnami/common] Fallback to chart appVersion in common.images.image ([#28764](https://github.com/bitnami/charts/pull/28764))
+
+## 2.21.0 (2024-08-05)
+
+* [bitnami/common] Allow handling of new secrets after initial installation (#28581) ([07062ee](https://github.com/bitnami/charts/commit/07062ee01382e24b8204b27083ff3e8102110c2f)), closes [#28581](https://github.com/bitnami/charts/issues/28581)
 
 ## <small>2.20.5 (2024-07-16)</small>
 

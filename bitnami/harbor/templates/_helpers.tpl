@@ -143,10 +143,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-{{- define "harbor.database.encryptedPassword" -}}
-  {{- include "harbor.database.rawPassword" . | b64enc | quote -}}
-{{- end -}}
-
 {{- define "harbor.database.coreDatabase" -}}
 {{- ternary "registry" .Values.externalDatabase.coreDatabase .Values.postgresql.enabled -}}
 {{- end -}}

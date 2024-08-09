@@ -382,7 +382,8 @@ data:
     {{- if eq .Values.brokerRackAssignment "aws-az" }}
     # Broker rack awareness
     echo "Obtaining broker.rack for aws-az rack assignment"
-    export BROKER_RACK=$(curl "http://169.254.169.254/latest/meta-data/placement/availability-zone-id")
+    EC2_METADATA_TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 60")
+    export BROKER_RACK=$(curl -H "X-aws-ec2-metadata-token: $EC2_METADATA_TOKEN" "http://169.254.169.254/latest/meta-data/placement/availability-zone-id")
     kafka_conf_set "$KAFKA_CONFIG_FILE" "broker.rack" "$BROKER_RACK"
     {{- end }}
     if [ -f /secret-config/server-secret.properties ]; then

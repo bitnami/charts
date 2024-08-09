@@ -5,8 +5,9 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Return the proper image name
-{{ include "common.images.image" ( dict "imageRoot" .Values.path.to.the.image "global" .Values.global ) }}
+Return the proper image name.
+If image tag and digest are not defined, termination fallbacks to chart appVersion.
+{{ include "common.images.image" ( dict "imageRoot" .Values.path.to.the.image "global" .Values.global "chart" .Chart ) }}
 */}}
 {{- define "common.images.image" -}}
 {{- $registryName := default .imageRoot.registry ((.global).imageRegistry) -}}
@@ -14,6 +15,11 @@ Return the proper image name
 {{- $separator := ":" -}}
 {{- $termination := .imageRoot.tag | toString -}}
 
+{{- if not .imageRoot.tag }}
+  {{- if .chart }}
+    {{- $termination = .chart.AppVersion | toString -}}
+  {{- end -}}
+{{- end -}}
 {{- if .imageRoot.digest }}
     {{- $separator = "@" -}}
     {{- $termination = .imageRoot.digest | toString -}}

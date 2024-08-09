@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if not .Values.existingConfigmap }}
+{{- if not .Values.server.existingConfigmap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
