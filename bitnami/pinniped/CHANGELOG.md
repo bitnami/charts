@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.14 (2024-08-08)
+## 2.2.15 (2024-08-08)
 
 * [bitnami/pinniped] Release 2.2.14 ([#28779](https://github.com/bitnami/charts/pull/28779))
+
+## 2.2.14 (2024-08-09)
+
+* [bitnami/pinniped] fix: :bug: Add missing rbac resources ([#28804](https://github.com/bitnami/charts/pull/28804))
 
 ## <small>2.2.13 (2024-08-07)</small>
 
