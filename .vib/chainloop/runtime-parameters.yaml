@@ -1,0 +1,7 @@
+development: true
+controlplane:
+  auth:
+    oidc:
+      url: http://chainloop-dex:5556/dex
+      clientID: chainloop-dev
+      clientSecret: ZXhhbXBsZS1hcHAtc2VjcmV0
