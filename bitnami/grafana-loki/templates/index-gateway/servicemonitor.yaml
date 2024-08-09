@@ -12,6 +12,9 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: index-gateway
+    {{- if .Values.metrics.serviceMonitor.labels }}
+    {{- .Values.metrics.serviceMonitor.labels | toYaml | nindent 4 }}
+    {{- end }}
    {{- if or .Values.commonAnnotations .Values.metrics.serviceMonitor.annotations }}
    {{- $annotations := merge.Values.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}

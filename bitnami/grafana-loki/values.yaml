@@ -4730,13 +4730,13 @@ promtail:
   enableServiceLinks: true
   ## @param promtail.configuration [string] Promtail configuration
   ##
-  configuration: |
-    server:
+  configuration:
+    server: |
       log_level: {{ .Values.promtail.logLevel }}
       http_listen_port: {{ .Values.promtail.containerPorts.http }}
       grpc_listen_port: {{ .Values.promtail.containerPorts.grpc }}
 
-    clients:
+    clients: |
       - url: http://{{ include "grafana-loki.gateway.fullname" . }}:{{ .Values.gateway.service.ports.http }}/loki/api/v1/push
         {{- if .Values.gateway.auth.enabled }}
         basic_auth:
@@ -4744,14 +4744,41 @@ promtail:
           username: {{ .Values.gateway.auth.username }}
           password_file: /bitnami/promtail/conf/secrets/password
         {{- end }}
-    positions:
+    positions: |
       filename: /run/promtail/positions.yaml
 
-    scrape_configs:
+    scrape_configs: |
       # See also https://github.com/grafana/loki/blob/master/production/ksonnet/promtail/scrape_config.libsonnet for reference
       - job_name: kubernetes-pods
         pipeline_stages:
           - cri: {}
+          ## Logging format pattern is here defined.
+          ## docs: https://grafana.com/docs/loki/latest/send-data/promtail/stages/
+          ## example:
+          ## - match:
+          ##     selector: '{namespace="test", stream="stdout", container!="istio-proxy"}'
+          ##     stages:
+          ##       - multiline:
+          ##           firstline: '\d{4}-\d{2}-\d{2}\s(\d{2}:){2}\d{2}.\d{1,3}\s+\[[\w,\s.\-]+\]\s+'
+          ##           max_wait_time: 5s
+          ##       - regex:
+          ##           expression: '(?P<time>\d{4}-\d{2}-\d{2}\s(\d{2}:){2}\d{2}.\d{1,3})\s+\[(?P<thread>[\w,\s.\-]+)\]\s+\[(?P<traceID>([[:xdigit:]]{32}|.{0})),(?P<spanIDs>([[:xdigit:]]{16}|.{0}))\]\s(?P<level>[[:upper:]]{4,5})\s+(?P<msg>(.|\n)*$)'
+          ##       - template:
+          ##           # Log Level value to lowercase
+          ##           source: level
+          ##           template: '{{ ToLower .Value }}'
+          ##       - labels:
+          ##           level:
+          ##       - timestamp:
+          ##           source: time
+          ##           format: '2006-01-02 15:04:05.999'
+          ##           location: "UTC"
+          ##       - template:
+          ##           ## regenerate log message column
+          ##           source: msg
+          ##           template: '{{ .thread }} {{ .level }} TraceID:{{ .traceID | default "none" }} spanIDs:{{ .spanIDs | default "none" }} {{ .Value }}'
+          ##       - output:
+          ##           source: msg
         kubernetes_sd_configs:
           - role: pod
         relabel_configs:
