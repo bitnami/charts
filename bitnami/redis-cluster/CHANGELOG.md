@@ -1,8 +1,16 @@
 # Changelog
 
-## 10.3.1 (2024-08-08)
+## 11.0.2 (2024-08-09)
 
 * Remove template variables from values file ([#28782](https://github.com/bitnami/charts/pull/28782))
+
+## <small>11.0.1 (2024-08-09)</small>
+
+* [bitnami/redis-cluster] fix: Use rollout restart in ginkgo tests ([#28814](https://github.com/bitnami/charts/pull/28814))
+
+## 11.0.0 (2024-08-09)
+
+* [bitnami/redis-cluster] Release 11.0.0 (#28806) ([6dcde75](https://github.com/bitnami/charts/commit/6dcde759edb811d3b59211b7d18fe1cd8010bb6f)), closes [#28806](https://github.com/bitnami/charts/issues/28806)
 
 ## 10.3.0 (2024-08-01)
 

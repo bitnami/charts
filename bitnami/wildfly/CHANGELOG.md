@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.1 (2024-08-07)
+## 21.0.2 (2024-08-09)
 
-* [bitnami/wildfly] Release 21.0.1 ([#28748](https://github.com/bitnami/charts/pull/28748))
+* [bitnami/wildfly] Release 21.0.2 ([#28811](https://github.com/bitnami/charts/pull/28811))
+
+## <small>21.0.1 (2024-08-07)</small>
+
+* [bitnami/wildfly] Release 21.0.1 (#28748) ([fae7b77](https://github.com/bitnami/charts/commit/fae7b773c31a84aa5876c40c04ffaafc38383207)), closes [#28748](https://github.com/bitnami/charts/issues/28748)
 
 ## 21.0.0 (2024-08-06)
 
