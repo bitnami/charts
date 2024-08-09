@@ -2,7 +2,7 @@
 
 ## 14.6.7 (2024-08-09)
 
-* [bitnami/rabbitmq] Fix to extraContainerPorts not being pulled in from values file ([#28792](https://github.com/bitnami/charts/pull/28792))
+* [bitnami/rabbitmq] Fix NetworkPolicy to include extraContainerPorts in ingress rule ([#28792](https://github.com/bitnami/charts/pull/28792))
 
 ## <small>14.6.6 (2024-08-08)</small>
 
