@@ -1,8 +1,12 @@
 # Changelog
 
+## 20.0.1 (2024-08-09)
+
+* [bitnami/redis] fix: Use rollout restart in ginkgo tests ([#28813](https://github.com/bitnami/charts/pull/28813))
+
 ## 20.0.0 (2024-08-09)
 
-* [bitnami/redis] Release 20.0.0 ([#28810](https://github.com/bitnami/charts/pull/28810))
+* [bitnami/redis] Release 20.0.0 (#28810) ([9e08d34](https://github.com/bitnami/charts/commit/9e08d34b938aebbe3ed955f4224b8e525313821d)), closes [#28810](https://github.com/bitnami/charts/issues/28810)
 
 ## <small>19.6.4 (2024-07-25)</small>
 
