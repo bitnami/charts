@@ -1,8 +1,12 @@
 <!--- app-name: Chainloop -->
 
-# Chainloop Helm Chart
+# Bitnami package for Chainloop
 
-[Chainloop](https://github.com/chainloop-dev/chainloop) is an open-source software supply chain control plane, a single source of truth for artifacts plus a declarative attestation crafting process.
+Chainloop is an open-source Software Supply Chain control plane, a single source of truth for metadata and artifacts, plus a declarative attestation process.
+
+[Overview of Chainloop](https://chainloop.dev)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
