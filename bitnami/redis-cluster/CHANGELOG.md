@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.3.0 (2024-07-25)
+## 11.0.0 (2024-08-09)
 
-* [bitnami/redis-cluster] Add configurable appProtocol for metrics service port ([#28380](https://github.com/bitnami/charts/pull/28380))
+* [bitnami/redis-cluster] Release 11.0.0 ([#28806](https://github.com/bitnami/charts/pull/28806))
+
+## 10.3.0 (2024-08-01)
+
+* [bitnami/redis-cluster] Add configurable appProtocol for metrics service port (#28380) ([879530f](https://github.com/bitnami/charts/commit/879530fe23bd410471024c57f15dae27266913fb)), closes [#28380](https://github.com/bitnami/charts/issues/28380)
 
 ## <small>10.2.9 (2024-07-25)</small>
 
