@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.4 (2024-08-01)
+## 17.0.5 (2024-08-09)
 
-* [bitnami/phpmyadmin] Release 17.0.4 ([#28631](https://github.com/bitnami/charts/pull/28631))
+* [bitnami/phpmyadmin] Release 17.0.5 ([#28803](https://github.com/bitnami/charts/pull/28803))
+
+## <small>17.0.4 (2024-08-01)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.4 (#28631) ([129edbe](https://github.com/bitnami/charts/commit/129edbed24efdf6af9a779c348aeb3285fa14e26)), closes [#28631](https://github.com/bitnami/charts/issues/28631)
 
 ## <small>17.0.3 (2024-07-25)</small>
 
