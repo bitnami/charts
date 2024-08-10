@@ -1,6 +1,6 @@
 # Changelog
 
-## 30.0.4 (2024-08-08)
+## 30.0.4 (2024-08-10)
 
 * bitnami/kafka Fix pem auth with custom encrypted private key ([#28618](https://github.com/bitnami/charts/pull/28618))
 
