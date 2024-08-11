@@ -776,7 +776,7 @@ networkPolicy:
 metrics:
   ## @param metrics.enabled Enable Prometheus metrics via exporter side-car
   ##
-  enabled: true
+  enabled: false
   ## metrics exporter containers' liveness probe.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param metrics.livenessProbe.enabled Enable livenessProbe
