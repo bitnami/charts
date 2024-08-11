@@ -776,7 +776,33 @@ networkPolicy:
 metrics:
   ## @param metrics.enabled Enable Prometheus metrics via exporter side-car
   ##
-  enabled: false
+  enabled: true
+  ## metrics exporter containers' liveness probe.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    timeoutSeconds: 5
+  ## metrics exporter containers' readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+  ## @param metrics.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: { }
+  ## @param metrics.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: { }
   ## @param metrics.image.registry [default: REGISTRY_NAME] Prometheus metrics exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/nats-exporter] Prometheus metrics exporter image repository
   ## @skip metrics.image.tag Prometheus metrics exporter image tag (immutable tags are recommended)
