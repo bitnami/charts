@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.15 (2024-08-09)
+## 2.2.15 (2024-08-12)
 
 * [bitnami/pinniped] Release 2.2.15 ([#28779](https://github.com/bitnami/charts/pull/28779))
 
