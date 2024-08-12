@@ -1,8 +1,8 @@
 # Changelog
 
-## 14.6.33 (2024-08-07)
+## 14.7.0 (2024-08-12)
 
-* [bitnami/minio] Release 14.6.33 ([#28731](https://github.com/bitnami/charts/pull/28731))
+* [bitnami/minio]: Option to use a secret. ([#27837](https://github.com/bitnami/charts/pull/27837))
 
 ## <small>14.6.32 (2024-08-03)</small>
 
