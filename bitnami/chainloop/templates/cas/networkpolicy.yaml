@@ -48,11 +48,14 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.cas.containerPorts.http }}
+        - port: {{ .Values.cas.containerPorts.grpc }}
       {{- if not .Values.cas.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
               {{ printf "%s-cas" (include "common.names.fullname" .) }}: "true"
+        - podSelector:
+            matchLabels: {{ include "chainloop.controlplane.selectorLabels" . | nindent 14 }}
         {{- if .Values.cas.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
