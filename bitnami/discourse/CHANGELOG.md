@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.2.16 (2024-08-08)
+## 13.2.16 (2024-08-12)
 
 * [bitnami/discourse] Release 13.2.16 ([#28786](https://github.com/bitnami/charts/pull/28786))
 
