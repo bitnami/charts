@@ -80,6 +80,9 @@ kustomizeController:
   ## @param kustomizeController.installCRDs Flag to install Kustomize Controller CRDs
   ##
   installCRDs: true
+  ## @param kustomizeController.lookupCRDs Flag to check for existing Kustomize Controller CRDs when installing
+  ##
+  lookupCRDs: true
   ## @param kustomizeController.watchAllNamespaces Watch for custom resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -595,6 +598,9 @@ helmController:
   ## @param helmController.installCRDs Flag to install Helm Controller CRDs
   ##
   installCRDs: true
+  ## @param helmController.lookupCRDs Flag to check for existing Kustomize Controller CRDs when installing
+  ##
+  lookupCRDs: true
   ## @param helmController.watchAllNamespaces Watch for custom resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -1110,6 +1116,9 @@ sourceController:
   ## @param sourceController.installCRDs Flag to install Source Controller CRDs
   ##
   installCRDs: true
+  ## @param sourceController.lookupCRDs Flag to check for existing Source Controller CRDs when installing
+  ##
+  lookupCRDs: true
   ## @param sourceController.watchAllNamespaces Watch for custom resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -1724,6 +1733,9 @@ notificationController:
   ## @param notificationController.installCRDs Flag to install Notification Controller CRDs
   ##
   installCRDs: true
+  ## @param notificationController.lookupCRDs Flag to check for existing Notification Controller CRDs when installing
+  ##
+  lookupCRDs: true
   ## @param notificationController.watchAllNamespaces Watch for custom resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -2351,6 +2363,9 @@ imageAutomationController:
   ## @param imageAutomationController.installCRDs Flag to install Image Automation Controller CRDs
   ##
   installCRDs: true
+  ## @param imageAutomationController.lookupCRDs Flag to check for existing Image Automation Controller CRDs when installing
+  ##
+  lookupCRDs: true
   ## @param imageAutomationController.watchAllNamespaces Watch for custom resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -2866,6 +2881,9 @@ imageReflectorController:
   ## @param imageReflectorController.installCRDs Flag to install Image Reflector Controller CRDs
   ##
   installCRDs: true
+  ## @param imageReflectorController.lookupCRDs Flag to check for existing Image Reflector Controller CRDs when installing
+  ##
+  lookupCRDs: true
   ## @param imageReflectorController.watchAllNamespaces Watch for custom resources in all namespaces
   ##
   watchAllNamespaces: true

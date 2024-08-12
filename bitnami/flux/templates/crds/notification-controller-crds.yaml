@@ -3,6 +3,7 @@
 # VersionOf: fluxcd-notification-controller
 # Conditional: .Values.notificationController.installCRDs
 {{- if .Values.notificationController.installCRDs }}
+{{- if or (not .Values.notificationController.lookupCRDs) (not (lookup "apiextensions.k8s.io/v1" "CustomResourceDefinition" "" "alerts.notification.toolkit.fluxcd.io")) }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -604,6 +605,8 @@ spec:
     storage: true
     subresources: {}
 ---
+{{- end }}
+{{- if or (not .Values.notificationController.lookupCRDs) (not (lookup "apiextensions.k8s.io/v1" "CustomResourceDefinition" "" "providers.notification.toolkit.fluxcd.io")) }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -1167,6 +1170,8 @@ spec:
     storage: true
     subresources: {}
 ---
+{{- end }}
+{{- if or (not .Values.notificationController.lookupCRDs) (not (lookup "apiextensions.k8s.io/v1" "CustomResourceDefinition" "" "receivers.notification.toolkit.fluxcd.io")) }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -1871,4 +1876,5 @@ spec:
     storage: false
     subresources:
       status: {}
+{{- end }}
 {{- end }}

@@ -3,6 +3,7 @@
 # VersionOf: fluxcd-kustomize-controller
 # Conditional: .Values.kustomizeController.installCRDs
 {{- if .Values.kustomizeController.installCRDs }}
+{{- if or (not .Values.kustomizeController.lookupCRDs) (not (lookup "apiextensions.k8s.io/v1" "CustomResourceDefinition" "" "kustomizations.kustomize.toolkit.fluxcd.io")) }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -1756,4 +1757,5 @@ spec:
     storage: false
     subresources:
       status: {}
+{{- end }}
 {{- end }}
