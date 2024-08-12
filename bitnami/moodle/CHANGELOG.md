@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.3 (2024-07-25)
+## 23.0.4 (2024-08-12)
 
-* [bitnami/moodle] Release 23.0.3 ([#28481](https://github.com/bitnami/charts/pull/28481))
+* [bitnami/moodle] Release 23.0.4 ([#28829](https://github.com/bitnami/charts/pull/28829))
+
+## <small>23.0.3 (2024-07-25)</small>
+
+* [bitnami/moodle] Release 23.0.3 (#28481) ([77d4a8a](https://github.com/bitnami/charts/commit/77d4a8a5d2d520b988c9285c14a114a729971a0e)), closes [#28481](https://github.com/bitnami/charts/issues/28481)
 
 ## <small>23.0.2 (2024-07-24)</small>
 
