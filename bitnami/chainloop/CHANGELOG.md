@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.3 (2024-08-12)
+## 0.1.4 (2024-08-12)
 
-* [bitnami/chainloop] fix: Little issues ([#28837](https://github.com/bitnami/charts/pull/28837))
+* [bitnami/chainloop] Release 0.1.4 ([#28842](https://github.com/bitnami/charts/pull/28842))
+
+## <small>0.1.3 (2024-08-12)</small>
+
+* [bitnami/chainloop] fix: Little issues (#28837) ([1fe5125](https://github.com/bitnami/charts/commit/1fe5125f24ac2adc4be32c0d401184e1d24261fc)), closes [#28837](https://github.com/bitnami/charts/issues/28837)
 
 ## <small>0.1.2 (2024-08-09)</small>
 
