@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.15 (2024-08-12)
+## 2.4.0 (2024-08-12)
 
 * [bitnami/flux] Added Lookup Flag when Installing CRDs ([#28843](https://github.com/bitnami/charts/pull/28843))
 
