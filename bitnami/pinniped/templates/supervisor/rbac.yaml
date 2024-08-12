@@ -29,6 +29,14 @@ rules:
       - watch
       - delete
   - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
       - config.supervisor.pinniped.dev
     resources:
       - federationdomains

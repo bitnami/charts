@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/concierge/authentication.concierge.pinniped.dev_jwtauthenticators.yaml
-# Version: 0.32.0
+# Version: 0.33.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -26,6 +26,9 @@ spec:
       type: string
     - jsonPath: .spec.audience
       name: Audience
+      type: string
+    - jsonPath: .status.phase
+      name: Status
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -94,6 +97,39 @@ spec:
                     description: X.509 Certificate Authority (base64-encoded PEM bundle).
                       If omitted, a default set of system roots will be trusted.
                     type: string
+                  certificateAuthorityDataSource:
+                    description: |-
+                      Reference to a CA bundle in a secret or a configmap.
+                      Any changes to the CA bundle in the secret or configmap will be dynamically reloaded.
+                    properties:
+                      key:
+                        description: |-
+                          Key is the key name within the secret or configmap from which to read the CA bundle.
+                          The value found at this key in the secret or configmap must not be empty, and must be a valid PEM-encoded
+                          certificate bundle.
+                        minLength: 1
+                        type: string
+                      kind:
+                        description: |-
+                          Kind configures whether the CA bundle is being sourced from a Kubernetes secret or a configmap.
+                          Allowed values are "Secret" or "ConfigMap".
+                          "ConfigMap" uses a Kubernetes configmap to source CA Bundles.
+                          "Secret" uses Kubernetes secrets of type kubernetes.io/tls or Opaque to source CA Bundles.
+                        enum:
+                        - Secret
+                        - ConfigMap
+                        type: string
+                      name:
+                        description: |-
+                          Name is the resource name of the secret or configmap from which to read the CA bundle.
+                          The referenced secret or configmap must be created in the same namespace where Pinniped Concierge is installed.
+                        minLength: 1
+                        type: string
+                    required:
+                    - key
+                    - kind
+                    - name
+                    type: object
                 type: object
             required:
             - audience
