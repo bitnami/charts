@@ -761,6 +761,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 19.0.0
+
+This major update the Redis&reg; subchart to its newest major, 20.0.0, which updates Redis&reg; from its version 7.2 to the latest 7.4.
+
 ### To 18.0.0
 
 This major bump changes the following security defaults:
