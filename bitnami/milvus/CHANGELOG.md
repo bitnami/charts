@@ -1,8 +1,16 @@
 # Changelog
 
-## 8.3.8 (2024-08-02)
+## 9.0.1 (2024-08-07)
 
-* [bitnami/milvus] Release 8.3.8 ([#28642](https://github.com/bitnami/charts/pull/28642))
+* [bitnami/milvus] Release 9.0.1 ([#28729](https://github.com/bitnami/charts/pull/28729))
+
+## 9.0.0 (2024-08-05)
+
+* [bitnami/milvus] Update chart dependency (kafka) (#28674) ([97bfd61](https://github.com/bitnami/charts/commit/97bfd615761d546da012fc0aaf093f2ee0fdcbc0)), closes [#28674](https://github.com/bitnami/charts/issues/28674)
+
+## <small>8.3.8 (2024-08-02)</small>
+
+* [bitnami/milvus] Release 8.3.8 (#28642) ([c0e7077](https://github.com/bitnami/charts/commit/c0e7077b6d65a0442334ae1da0eacdaf3505e5f4)), closes [#28642](https://github.com/bitnami/charts/issues/28642)
 
 ## <small>8.3.7 (2024-07-25)</small>
 

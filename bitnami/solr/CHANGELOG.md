@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.10 (2024-07-25)
+## 9.4.0 (2024-07-25)
 
-* [bitnami/solr] Release 9.3.10 ([#28511](https://github.com/bitnami/charts/pull/28511))
+* [bitnami/solr] Add revisionHistoryLimit variable for metrics-deployment ([#28137](https://github.com/bitnami/charts/pull/28137))
+
+## <small>9.3.10 (2024-07-25)</small>
+
+* [bitnami/solr] Release 9.3.10 (#28511) ([1bd973f](https://github.com/bitnami/charts/commit/1bd973fafea0e2e802bd48cbdf353b0da0f6a06b)), closes [#28511](https://github.com/bitnami/charts/issues/28511)
 
 ## <small>9.3.9 (2024-07-24)</small>
 
