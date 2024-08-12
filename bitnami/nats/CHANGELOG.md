@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.2.17 (2024-08-12)
+## 8.3.0 (2024-08-12)
 
 * [bitnami/nats] metrics exporter probe configuration ([#28825](https://github.com/bitnami/charts/pull/28825))
 
