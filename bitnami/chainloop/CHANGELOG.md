@@ -2,7 +2,7 @@
 
 ## 0.1.3 (2024-08-12)
 
-* [bitnami/chainloop] fix: Little fixes ([#28837](https://github.com/bitnami/charts/pull/28837))
+* [bitnami/chainloop] fix: Little issues ([#28837](https://github.com/bitnami/charts/pull/28837))
 
 ## <small>0.1.2 (2024-08-09)</small>
 
