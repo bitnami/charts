@@ -71,7 +71,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.cas.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: cas
+        - name: cas-proxy
           {{- if .Values.cas.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cas.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}

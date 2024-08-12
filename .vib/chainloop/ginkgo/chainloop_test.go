@@ -90,7 +90,7 @@ var _ = Describe("Chainloop", Ordered, func() {
 			}
 
 			By("checking main container image is running")
-			_, err = utils.DplGetContainerImage(dpl, "cas")
+			_, err = utils.DplGetContainerImage(dpl, "cas-proxy")
 			Expect(err).NotTo(HaveOccurred())
 		})
 
