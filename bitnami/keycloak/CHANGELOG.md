@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.1.1 (2024-08-13)
+
+* [bitnami/keycloak] move hostname variables to config map to allow override ([#28838](https://github.com/bitnami/charts/pull/28838))
+
 ## 22.1.0 (2024-08-06)
 
-* [bitnami/keycloak] use hostname v2 options ([#28611](https://github.com/bitnami/charts/pull/28611))
+* [bitnami/keycloak] use hostname v2 options (#28611) ([559b860](https://github.com/bitnami/charts/commit/559b8604bb021798592ee276e9553d80d0735bbf)), closes [#28611](https://github.com/bitnami/charts/issues/28611)
 
 ## <small>22.0.2 (2024-08-06)</small>
 
