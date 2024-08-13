@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.0.6 (2024-08-05)
+## 8.0.7 (2024-08-13)
 
-* [bitnami/matomo] Remove dokuwiki reference ([#28661](https://github.com/bitnami/charts/pull/28661))
+* [bitnami/matomo] Increase readiness probes' initial delay for VIB tests ([#28847](https://github.com/bitnami/charts/pull/28847))
+
+## <small>8.0.6 (2024-08-05)</small>
+
+* [bitnami/matomo] Remove dokuwiki reference (#28661) ([e786767](https://github.com/bitnami/charts/commit/e786767a8aaabefd3dc8d834a5176ca5bde3bbc9)), closes [#28661](https://github.com/bitnami/charts/issues/28661)
 
 ## <small>8.0.5 (2024-07-25)</small>
 
