@@ -77,8 +77,6 @@ spec:
           {{- end }}
           image: {{ include "chainloop.cas.image" . }}
           imagePullPolicy: {{ .Values.cas.image.pullPolicy }}
-          command: [ "./artifact-cas" ]
-          args: [ "--conf", "/data/conf" ]
           ports:
             - name: http
               containerPort: {{ .Values.cas.containerPorts.http }}

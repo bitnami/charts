@@ -98,8 +98,6 @@ spec:
           {{- end }}
           image: {{ include "chainloop.controlplane.image" . }}
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
-          command: [ "./control-plane" ]
-          args: [ "--conf", "/data/conf" ]
           ports:
             - name: http
               containerPort: {{ .Values.controlplane.containerPorts.http }}
