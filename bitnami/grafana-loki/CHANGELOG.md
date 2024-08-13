@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.6.12 (2024-08-12)
+## 4.6.12 (2024-08-13)
 
 * [bitnami/grafana-loki] bugfix: bug issue on bitnami/charts #28768 ([#28822](https://github.com/bitnami/charts/pull/28822))
 
