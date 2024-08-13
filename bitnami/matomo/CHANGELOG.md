@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.0.7 (2024-08-13)
+## 8.0.8 (2024-08-13)
 
-* [bitnami/matomo] Increase readiness probes' initial delay for VIB tests ([#28847](https://github.com/bitnami/charts/pull/28847))
+* [bitnami/matomo] Release 8.0.8 ([#28860](https://github.com/bitnami/charts/pull/28860))
+
+## <small>8.0.7 (2024-08-13)</small>
+
+* [bitnami/matomo] Increase readiness probes' initial delay for VIB tests (#28847) ([fc93db0](https://github.com/bitnami/charts/commit/fc93db0404297d794a010c76e80d3ae7e0459128)), closes [#28847](https://github.com/bitnami/charts/issues/28847)
 
 ## <small>8.0.6 (2024-08-05)</small>
 
