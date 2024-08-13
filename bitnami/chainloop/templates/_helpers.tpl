@@ -176,7 +176,7 @@ OIDC settings, will fallback to development settings if needed
 {{- define "controlplane.oidc_settings" -}}
   {{- if .Values.development }}
     {{- with .Values.controlplane.auth }}
-    domain: "{{ coalesce .oidc.url "http://chainloop-dex:5556/dex" }}"
+    domain: "{{ coalesce .oidc.url ( printf "http://%s:%d/dex" ( include  "chainloop.dex" $ ) ( int $.Values.dex.service.ports.http ) ) }}"
     client_id: "{{ coalesce .oidc.clientID "chainloop-dev" }}"
     client_secret: "{{ coalesce .oidc.clientSecret "ZXhhbXBsZS1hcHAtc2VjcmV0" }}"
     {{- if .oidc.loginURLOverride }}

@@ -74,6 +74,9 @@ spec:
         - name: migrate
           image: {{ include "chainloop.controlplane.migration.image" . }}
           imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
+          {{- if .Values.controlplane.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controlplane.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           command: [ "./atlas" ]
           args:
             - migrate
