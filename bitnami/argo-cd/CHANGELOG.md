@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.12 (2024-08-12)
+## 7.0.0 (2024-08-13)
 
-* [bitnami/argo-cd] Release 6.6.12 ([#28828](https://github.com/bitnami/charts/pull/28828))
+* [bitnami/argo-cd] Update dependencies ([#28851](https://github.com/bitnami/charts/pull/28851))
+
+## <small>6.6.12 (2024-08-12)</small>
+
+* [bitnami/argo-cd] Release 6.6.12 (#28828) ([e3c8931](https://github.com/bitnami/charts/commit/e3c893177b27a510e933db97d4f57f1d80d1bfc7)), closes [#28828](https://github.com/bitnami/charts/issues/28828)
 
 ## <small>6.6.11 (2024-08-09)</small>
 
