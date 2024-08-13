@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.3.7 (2024-08-13)
+## 21.3.8 (2024-08-13)
 
-* [bitnami/elasticsearch] Release 21.3.7 ([#28863](https://github.com/bitnami/charts/pull/28863))
+* [bitnami/elasticsearch] Release 21.3.8 ([#28864](https://github.com/bitnami/charts/pull/28864))
+
+## <small>21.3.7 (2024-08-13)</small>
+
+* [bitnami/elasticsearch] Release 21.3.7 (#28863) ([5d0202f](https://github.com/bitnami/charts/commit/5d0202fb38d904ff23f34c03bfca5438e212faf1)), closes [#28863](https://github.com/bitnami/charts/issues/28863)
 
 ## <small>21.3.6 (2024-07-25)</small>
 
