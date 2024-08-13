@@ -1,5 +1,4 @@
-# Source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/v{version}/docs/contributing/crd-source/crd-manifest.yaml
-# Version: 0.14.2
+# NOTE: Header with source was intentionally removed to avoid updates in the CRD. Ref: https://github.com/bitnami/charts/issues/25967
 # Conditional: .Values.crd.create
 {{- if .Values.crd.create }}
 ---
