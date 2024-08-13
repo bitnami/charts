@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.1.1 (2024-08-12)
+## 22.1.1 (2024-08-13)
 
 * [bitnami/keycloak] move hostname variables to config map to allow override ([#28838](https://github.com/bitnami/charts/pull/28838))
 
