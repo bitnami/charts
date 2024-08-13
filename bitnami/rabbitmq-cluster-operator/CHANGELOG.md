@@ -1,8 +1,24 @@
 # Changelog
 
-## 4.3.14 (2024-07-16)
+## 4.3.18 (2024-08-08)
 
-* [bitnami/rabbitmq-cluster-operator] Global StorageClass as default value ([#28088](https://github.com/bitnami/charts/pull/28088))
+* [bitnami/rabbitmq-cluster-operator] Fix msg topology operator podmonitor ([#28705](https://github.com/bitnami/charts/pull/28705))
+
+## <small>4.3.17 (2024-08-07)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.17 (#28759) ([89fe1c1](https://github.com/bitnami/charts/commit/89fe1c1263f71339a04b1992276d2c24d9c38d32)), closes [#28759](https://github.com/bitnami/charts/issues/28759)
+
+## <small>4.3.16 (2024-07-25)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.16 (#28468) ([a326d97](https://github.com/bitnami/charts/commit/a326d97d5b16895e56c2ca42c934f4eedf451103)), closes [#28468](https://github.com/bitnami/charts/issues/28468)
+
+## <small>4.3.15 (2024-07-24)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.15 (#28358) ([81f7c0f](https://github.com/bitnami/charts/commit/81f7c0fc420b4fe4090665b3c288b20f3576a5b4)), closes [#28358](https://github.com/bitnami/charts/issues/28358)
+
+## <small>4.3.14 (2024-07-16)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Global StorageClass as default value (#28088) ([ee4fdcd](https://github.com/bitnami/charts/commit/ee4fdcd6d6faed9ebd489cd8f9814640aa6ba270)), closes [#28088](https://github.com/bitnami/charts/issues/28088)
 
 ## <small>4.3.13 (2024-07-08)</small>
 

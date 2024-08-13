@@ -1,8 +1,56 @@
 # Changelog
 
-## 23.0.7 (2024-07-18)
+## 23.1.3 (2024-08-13)
 
-* [bitnami/wordpress] Global StorageClass as default value ([#28110](https://github.com/bitnami/charts/pull/28110))
+* [bitnami/wordpress] Release 23.1.3 ([#28844](https://github.com/bitnami/charts/pull/28844))
+
+## <small>23.1.2 (2024-08-12)</small>
+
+* [bitnami/wordpress] Release 23.1.2 (#28839) ([ae815be](https://github.com/bitnami/charts/commit/ae815be89c155525d1d1356a6157773405ad35ca)), closes [#28839](https://github.com/bitnami/charts/issues/28839)
+
+## <small>23.1.1 (2024-08-08)</small>
+
+* [bitnami/wordpress] Release 23.1.1 (#28776) ([e727cd8](https://github.com/bitnami/charts/commit/e727cd8b0f898bda9e8739b908c5b77e0173c412)), closes [#28776](https://github.com/bitnami/charts/issues/28776)
+
+## 23.1.0 (2024-08-06)
+
+* [bitnami/wordpress] Add the possibility to set `smtpFromEmail` and `smtpFromName` (#28648) ([5210d9c](https://github.com/bitnami/charts/commit/5210d9cc7cdb0b66fe3d93d92745b5c2b304f7f8)), closes [#28648](https://github.com/bitnami/charts/issues/28648)
+
+## <small>23.0.15 (2024-08-05)</small>
+
+* [bitnami/wordpress] Release 23.0.15 (#28679) ([7ddd441](https://github.com/bitnami/charts/commit/7ddd4419c6bdab3b310e484c5f3dba66e0c176b6)), closes [#28679](https://github.com/bitnami/charts/issues/28679)
+
+## <small>23.0.14 (2024-08-05)</small>
+
+* [bitnami/wordpress] Release 23.0.14 (#28659) ([0240860](https://github.com/bitnami/charts/commit/024086025e4cc2a2577c160833d69451767918c2)), closes [#28659](https://github.com/bitnami/charts/issues/28659)
+
+## <small>23.0.13 (2024-08-02)</small>
+
+* [bitnami/wordpress] Release 23.0.13 (#28635) ([52d364e](https://github.com/bitnami/charts/commit/52d364e64340a19c4ea5292842fe7f590751809c)), closes [#28635](https://github.com/bitnami/charts/issues/28635)
+
+## <small>23.0.12 (2024-08-01)</small>
+
+* [bitnami/wordpress] Release 23.0.12 (#28629) ([4424381](https://github.com/bitnami/charts/commit/4424381c6c6735d8dcc54c8bf37f48f09b51f4cc)), closes [#28629](https://github.com/bitnami/charts/issues/28629)
+
+## <small>23.0.11 (2024-07-25)</small>
+
+* [bitnami/wordpress] Release 23.0.11 (#28500) ([2960ca0](https://github.com/bitnami/charts/commit/2960ca0f6cd2c3d2ff789a546aa32b6d046b450f)), closes [#28500](https://github.com/bitnami/charts/issues/28500)
+
+## <small>23.0.10 (2024-07-24)</small>
+
+* [bitnami/wordpress] Release 23.0.10 (#28382) ([ae18320](https://github.com/bitnami/charts/commit/ae1832071fbb1b47625bb7db565ede5776d5139b)), closes [#28382](https://github.com/bitnami/charts/issues/28382)
+
+## <small>23.0.9 (2024-07-20)</small>
+
+* [bitnami/wordpress] Release 23.0.9 (#28182) ([8cf3a79](https://github.com/bitnami/charts/commit/8cf3a792d4ec1db94d581b12e342a892404a0461)), closes [#28182](https://github.com/bitnami/charts/issues/28182)
+
+## <small>23.0.8 (2024-07-18)</small>
+
+* [bitnami/wordpress] Release 23.0.8 (#28159) ([51eeb01](https://github.com/bitnami/charts/commit/51eeb01d38beed95f3cbb0f2e538cb5fe09bb42c)), closes [#28159](https://github.com/bitnami/charts/issues/28159)
+
+## <small>23.0.7 (2024-07-18)</small>
+
+* [bitnami/wordpress] Global StorageClass as default value (#28110) ([6f6094f](https://github.com/bitnami/charts/commit/6f6094f72801a5abd10c81fa86c02a903cc27ecf)), closes [#28110](https://github.com/bitnami/charts/issues/28110)
 
 ## <small>23.0.6 (2024-07-17)</small>
 

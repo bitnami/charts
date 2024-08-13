@@ -1,8 +1,28 @@
 # Changelog
 
-## 10.2.7 (2024-07-16)
+## 10.2.12 (2024-08-07)
 
-* [bitnami/etcd] Global StorageClass as default value ([#28016](https://github.com/bitnami/charts/pull/28016))
+* [bitnami/etcd] Release 10.2.12 ([#28712](https://github.com/bitnami/charts/pull/28712))
+
+## <small>10.2.11 (2024-07-25)</small>
+
+* [bitnami/etcd] Release 10.2.11 (#28404) ([993529a](https://github.com/bitnami/charts/commit/993529a5f95e8d5126108f40fc1cb0b07cc04526)), closes [#28404](https://github.com/bitnami/charts/issues/28404)
+
+## <small>10.2.10 (2024-07-24)</small>
+
+* [bitnami/etcd] Release 10.2.10 (#28309) ([c247f40](https://github.com/bitnami/charts/commit/c247f40778e1183d69e7956d39a277f425600d61)), closes [#28309](https://github.com/bitnami/charts/issues/28309)
+
+## <small>10.2.9 (2024-07-24)</small>
+
+* [bitnami/etcd] Release 10.2.9 (#28240) ([9f7651d](https://github.com/bitnami/charts/commit/9f7651d9e6790103a6ece29d28aaa5c3e3c5b944)), closes [#28240](https://github.com/bitnami/charts/issues/28240)
+
+## <small>10.2.8 (2024-07-23)</small>
+
+* [bitnami/etcd] Release 10.2.8 (#28218) ([b4cc3af](https://github.com/bitnami/charts/commit/b4cc3af8434acad96153e3e35bffd80dfab7f3c8)), closes [#28218](https://github.com/bitnami/charts/issues/28218)
+
+## <small>10.2.7 (2024-07-16)</small>
+
+* [bitnami/etcd] Global StorageClass as default value (#28016) ([983fdc1](https://github.com/bitnami/charts/commit/983fdc186ab87520e8d06ff02a8bbbcb817edb82)), closes [#28016](https://github.com/bitnami/charts/issues/28016)
 
 ## <small>10.2.6 (2024-07-04)</small>
 

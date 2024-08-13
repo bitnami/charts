@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.0.1 (2024-07-16)
+## 15.0.5 (2024-08-02)
 
-* [bitnami/ejbca] Global StorageClass as default value ([#28014](https://github.com/bitnami/charts/pull/28014))
+* [bitnami/ejbca] Release 15.0.5 ([#28640](https://github.com/bitnami/charts/pull/28640))
+
+## <small>15.0.4 (2024-07-25)</small>
+
+* [bitnami/ejbca] Release 15.0.4 (#28416) ([a9bc424](https://github.com/bitnami/charts/commit/a9bc424d20229cdeaabf7f16eed51152e1b8d110)), closes [#28416](https://github.com/bitnami/charts/issues/28416)
+
+## <small>15.0.3 (2024-07-24)</small>
+
+* [bitnami/ejbca] Release 15.0.3 (#28284) ([e8a9cf1](https://github.com/bitnami/charts/commit/e8a9cf16f0e315e620e19f2c4133f5246b1a8a9c)), closes [#28284](https://github.com/bitnami/charts/issues/28284)
+
+## <small>15.0.2 (2024-07-23)</small>
+
+* [bitnami/ejbca] Release 15.0.2 (#28237) ([b5b248f](https://github.com/bitnami/charts/commit/b5b248fb3bd13a87aaba20ba28d81697edd69814)), closes [#28237](https://github.com/bitnami/charts/issues/28237)
+
+## <small>15.0.1 (2024-07-18)</small>
+
+* [bitnami/ejbca] Global StorageClass as default value (#28014) ([bf16551](https://github.com/bitnami/charts/commit/bf16551caa06e09e5274eb2e88c3a31f6a7d3ca8)), closes [#28014](https://github.com/bitnami/charts/issues/28014)
 
 ## 15.0.0 (2024-07-12)
 

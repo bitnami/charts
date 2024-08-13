@@ -1,8 +1,32 @@
 # Changelog
 
-## 15.7.13 (2024-07-16)
+## 15.7.19 (2024-08-09)
 
-* [bitnami/thanos] Global StorageClass as default value ([#28103](https://github.com/bitnami/charts/pull/28103))
+* [bitnami/thanos] add receive distributor termination grace period ([#28793](https://github.com/bitnami/charts/pull/28793))
+
+## <small>15.7.18 (2024-08-07)</small>
+
+* [bitnami/thanos] Release 15.7.18 (#28752) ([8994d7b](https://github.com/bitnami/charts/commit/8994d7b7c5d751a90b2a65cd970cc4bed56471be)), closes [#28752](https://github.com/bitnami/charts/issues/28752)
+
+## <small>15.7.17 (2024-08-02)</small>
+
+* [bitnami/thanos] add ruler custom data path (#28606) ([125fb1b](https://github.com/bitnami/charts/commit/125fb1b454c3395444609a43dc4686cba2148fa2)), closes [#28606](https://github.com/bitnami/charts/issues/28606)
+
+## <small>15.7.16 (2024-07-31)</small>
+
+* [bitnami/thanos] Release 15.7.16 (#28607) ([d966dfe](https://github.com/bitnami/charts/commit/d966dfe78fbadcd456bd08185f9eb67c1c3221b1)), closes [#28607](https://github.com/bitnami/charts/issues/28607)
+
+## <small>15.7.15 (2024-07-25)</small>
+
+* [bitnami/thanos] Release 15.7.15 (#28508) ([5dbafa2](https://github.com/bitnami/charts/commit/5dbafa2940605911ead5777fc34219e1e7814333)), closes [#28508](https://github.com/bitnami/charts/issues/28508)
+
+## <small>15.7.14 (2024-07-24)</small>
+
+* [bitnami/thanos] Release 15.7.14 (#28386) ([edf6bd2](https://github.com/bitnami/charts/commit/edf6bd206e61401919388afae48c86202c6adc88)), closes [#28386](https://github.com/bitnami/charts/issues/28386)
+
+## <small>15.7.13 (2024-07-18)</small>
+
+* [bitnami/thanos] Global StorageClass as default value (#28103) ([e239a85](https://github.com/bitnami/charts/commit/e239a8575d54acb106885d4861690d037d0ff7dc)), closes [#28103](https://github.com/bitnami/charts/issues/28103)
 
 ## <small>15.7.12 (2024-07-04)</small>
 

@@ -503,7 +503,7 @@ Retrieve key of the PostgreSQL secret
 Retrieve the URI of the database
 */}}
 {{- define "mlflow.v0.database.uri" -}}
-{{- printf "postgresql://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database.name" .) -}}
+{{- printf "%s://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.dialectDriver" .) (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database.name" .) -}}
 {{- end -}}
 
 {{/*

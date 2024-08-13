@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.2.10 (2024-07-16)
+## 2.2.15 (2024-08-12)
 
-* [bitnami/pinniped] Global StorageClass as default value ([#28081](https://github.com/bitnami/charts/pull/28081))
+* [bitnami/pinniped] Release 2.2.15 ([#28779](https://github.com/bitnami/charts/pull/28779))
+
+## <small>2.2.13 (2024-08-07)</small>
+
+* [bitnami/pinniped] Release 2.2.13 (#28753) ([5984af4](https://github.com/bitnami/charts/commit/5984af460eebd9a1763528e818d88c359f5298fb)), closes [#28753](https://github.com/bitnami/charts/issues/28753)
+
+## <small>2.2.12 (2024-07-25)</small>
+
+* [bitnami/pinniped] Release 2.2.12 (#28467) ([c0cffd9](https://github.com/bitnami/charts/commit/c0cffd9774a31807ef78abeeae962c4b023f23af)), closes [#28467](https://github.com/bitnami/charts/issues/28467)
+
+## <small>2.2.11 (2024-07-24)</small>
+
+* [bitnami/pinniped] Release 2.2.11 (#28350) ([9a50783](https://github.com/bitnami/charts/commit/9a50783a3d1a12ce80b94f6d30ecdc127cf80b92)), closes [#28350](https://github.com/bitnami/charts/issues/28350)
+
+## <small>2.2.10 (2024-07-16)</small>
+
+* [bitnami/pinniped] Global StorageClass as default value (#28081) ([887f3c3](https://github.com/bitnami/charts/commit/887f3c3091ee17b846fe3a9734d88ba0d7604c0e)), closes [#28081](https://github.com/bitnami/charts/issues/28081)
 
 ## <small>2.2.9 (2024-07-04)</small>
 

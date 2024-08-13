@@ -1,8 +1,32 @@
 # Changelog
 
-## 9.1.7 (2024-07-16)
+## 9.1.13 (2024-08-07)
 
-* [bitnami/argo-workflows] Global StorageClass as default value ([#28000](https://github.com/bitnami/charts/pull/28000))
+* [bitnami/argo-workflows] Release 9.1.13 ([#28761](https://github.com/bitnami/charts/pull/28761))
+
+## <small>9.1.12 (2024-08-07)</small>
+
+* [bitnami/argo-workflows] Release 9.1.12 (#28619) ([85cd823](https://github.com/bitnami/charts/commit/85cd8233362289969013a69462cc8355fc6687de)), closes [#28619](https://github.com/bitnami/charts/issues/28619)
+
+## <small>9.1.11 (2024-07-25)</small>
+
+* [bitnami/argo-workflows] Release 9.1.11 (#28395) ([9caaa0a](https://github.com/bitnami/charts/commit/9caaa0ad21a82e2e66c574a4e48ef3e839396117)), closes [#28395](https://github.com/bitnami/charts/issues/28395)
+
+## <small>9.1.10 (2024-07-24)</small>
+
+* [bitnami/argo-workflows] Release 9.1.10 (#28274) ([54d7a18](https://github.com/bitnami/charts/commit/54d7a18ebd7406fc10c070949a2d774815f303b7)), closes [#28274](https://github.com/bitnami/charts/issues/28274)
+
+## <small>9.1.9 (2024-07-23)</small>
+
+* [bitnami/argo-workflows] Release 9.1.9 (#28229) ([cd68de2](https://github.com/bitnami/charts/commit/cd68de2cdbe260791b81051c441c2ea9c0342894)), closes [#28229](https://github.com/bitnami/charts/issues/28229)
+
+## <small>9.1.8 (2024-07-23)</small>
+
+* [bitnami/argo-workflows] Release 9.1.8 (#28210) ([2b3d53c](https://github.com/bitnami/charts/commit/2b3d53c81e0ac4c778bba41496c4bb347d910a60)), closes [#28210](https://github.com/bitnami/charts/issues/28210)
+
+## <small>9.1.7 (2024-07-18)</small>
+
+* [bitnami/argo-workflows] Global StorageClass as default value (#28000) ([19060c8](https://github.com/bitnami/charts/commit/19060c83fe5a16f1b3b7e9f705b178f25d4a2984)), closes [#28000](https://github.com/bitnami/charts/issues/28000)
 
 ## <small>9.1.6 (2024-07-04)</small>
 

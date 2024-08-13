@@ -1,8 +1,36 @@
 # Changelog
 
-## 6.3.10 (2024-07-11)
+## 6.3.17 (2024-08-09)
 
-* [bitnami/influxdb] Release 6.3.10 ([#27917](https://github.com/bitnami/charts/pull/27917))
+* [bitnami/influxdb] Release 6.3.17 ([#28816](https://github.com/bitnami/charts/pull/28816))
+
+## <small>6.3.16 (2024-08-07)</small>
+
+* [bitnami/influxdb] Release 6.3.16 (#28721) ([76291c3](https://github.com/bitnami/charts/commit/76291c3150023ef99c4903f71efe4975ab56ef2c)), closes [#28721](https://github.com/bitnami/charts/issues/28721)
+
+## <small>6.3.15 (2024-07-25)</small>
+
+* [bitnami/influxdb] Release 6.3.15 (#28527) ([84b5e74](https://github.com/bitnami/charts/commit/84b5e7467caa6c9f8e730f2e84748a3aef98b3a1)), closes [#28527](https://github.com/bitnami/charts/issues/28527)
+
+## <small>6.3.14 (2024-07-25)</small>
+
+* [bitnami/influxdb] Release 6.3.14 (#28438) ([32509d3](https://github.com/bitnami/charts/commit/32509d3670ff9002d47c601b31ae58c8b2b7851a)), closes [#28438](https://github.com/bitnami/charts/issues/28438)
+
+## <small>6.3.13 (2024-07-24)</small>
+
+* [bitnami/influxdb] Release 6.3.13 (#28295) ([6402fd4](https://github.com/bitnami/charts/commit/6402fd430bc436310bc626e08b01578396fbabb4)), closes [#28295](https://github.com/bitnami/charts/issues/28295)
+
+## <small>6.3.12 (2024-07-24)</small>
+
+* [bitnami/influxdb] Release 6.3.12 (#28260) ([a77b528](https://github.com/bitnami/charts/commit/a77b5284bb4d415a8092a9c7efc032bbf5bf731f)), closes [#28260](https://github.com/bitnami/charts/issues/28260)
+
+## <small>6.3.11 (2024-07-18)</small>
+
+* [bitnami/influxdb] Global StorageClass as default value (#28031) ([dac8ad1](https://github.com/bitnami/charts/commit/dac8ad15fe36fa191884a2d6e10367991b67390c)), closes [#28031](https://github.com/bitnami/charts/issues/28031)
+
+## <small>6.3.10 (2024-07-11)</small>
+
+* [bitnami/influxdb] Release 6.3.10 (#27917) ([cef04f1](https://github.com/bitnami/charts/commit/cef04f14d5e284fc714462282f50a7fe5ac9600e)), closes [#27917](https://github.com/bitnami/charts/issues/27917)
 
 ## <small>6.3.9 (2024-07-04)</small>
 

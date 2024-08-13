@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.4.9 (2024-07-16)
+## 4.4.12 (2024-08-07)
 
-* [bitnami/node-exporter] Global StorageClass as default value ([#28072](https://github.com/bitnami/charts/pull/28072))
+* [bitnami/node-exporter] Release 4.4.12 ([#28736](https://github.com/bitnami/charts/pull/28736))
+
+## <small>4.4.11 (2024-07-25)</small>
+
+* [bitnami/node-exporter] Release 4.4.11 (#28454) ([b2e316f](https://github.com/bitnami/charts/commit/b2e316f2b53897ecc0ed52ccf28b64a72e046260)), closes [#28454](https://github.com/bitnami/charts/issues/28454)
+
+## <small>4.4.10 (2024-07-24)</small>
+
+* [bitnami/node-exporter] Release 4.4.10 (#28331) ([1fd9642](https://github.com/bitnami/charts/commit/1fd96423650c9bfc1f5ee1501473f3aa344c2f37)), closes [#28331](https://github.com/bitnami/charts/issues/28331)
+
+## <small>4.4.9 (2024-07-16)</small>
+
+* [bitnami/node-exporter] Global StorageClass as default value (#28072) ([4977903](https://github.com/bitnami/charts/commit/49779038f6c5f8c0a6ba24c3cfeaf29285418455)), closes [#28072](https://github.com/bitnami/charts/issues/28072)
 
 ## <small>4.4.8 (2024-07-14)</small>
 

@@ -584,14 +584,14 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "scaleway" }}
             # Scaleway environment variables
-            {{- if .Values.scaleway.scwAccessKey }}
+            {{- if or (.Values.scaleway.scwAccessKey) (.Values.scaleway.secretName) }}
             - name: SCW_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: scw_access_key
             {{- end }}
-            {{- if .Values.scaleway.scwSecretKey }}
+            {{- if or (.Values.scaleway.scwSecretKey) (.Values.scaleway.secretName) }}
             - name: SCW_SECRET_KEY
               valueFrom:
                 secretKeyRef:

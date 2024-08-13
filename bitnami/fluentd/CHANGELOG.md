@@ -1,8 +1,20 @@
 # Changelog
 
-## 6.5.8 (2024-07-16)
+## 6.5.11 (2024-07-25)
 
-* [bitnami/fluentd] Global StorageClass as default value ([#28020](https://github.com/bitnami/charts/pull/28020))
+* [bitnami/fluentd] Release 6.5.11 ([#28407](https://github.com/bitnami/charts/pull/28407))
+
+## <small>6.5.10 (2024-07-24)</small>
+
+* [bitnami/fluentd] Release 6.5.10 (#28276) ([119de24](https://github.com/bitnami/charts/commit/119de24388e5e3b2d43ea07dbb6708c597b57253)), closes [#28276](https://github.com/bitnami/charts/issues/28276)
+
+## <small>6.5.9 (2024-07-24)</small>
+
+* [bitnami/fluentd] Release 6.5.9 (#28254) ([a263832](https://github.com/bitnami/charts/commit/a2638328cea667f5a53889b611705db551a77517)), closes [#28254](https://github.com/bitnami/charts/issues/28254)
+
+## <small>6.5.8 (2024-07-16)</small>
+
+* [bitnami/fluentd] Global StorageClass as default value (#28020) ([79df4a4](https://github.com/bitnami/charts/commit/79df4a43da2d9b1076c44cbd7fda282a683c00d6)), closes [#28020](https://github.com/bitnami/charts/issues/28020)
 
 ## <small>6.5.7 (2024-07-03)</small>
 

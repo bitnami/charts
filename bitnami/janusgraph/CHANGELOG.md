@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.3.15 (2024-07-16)
+## 0.3.18 (2024-07-25)
 
-* [bitnami/janusgraph] Global StorageClass as default value ([#28033](https://github.com/bitnami/charts/pull/28033))
+* [bitnami/janusgraph] Release 0.3.18 ([#28441](https://github.com/bitnami/charts/pull/28441))
+
+## <small>0.3.17 (2024-07-24)</small>
+
+* [bitnami/janusgraph] Release 0.3.17 (#28297) ([3714673](https://github.com/bitnami/charts/commit/371467338b1b7a8e0248e9259d7eb81d2873e6c6)), closes [#28297](https://github.com/bitnami/charts/issues/28297)
+
+## <small>0.3.16 (2024-07-24)</small>
+
+* [bitnami/janusgraph] Release 0.3.16 (#28256) ([911c81e](https://github.com/bitnami/charts/commit/911c81e8749f3c24078fb849cf8ce670464f150f)), closes [#28256](https://github.com/bitnami/charts/issues/28256)
+
+## <small>0.3.15 (2024-07-18)</small>
+
+* [bitnami/janusgraph] Global StorageClass as default value (#28033) ([227a2ce](https://github.com/bitnami/charts/commit/227a2ce1da9ccb452635061bd57ca57e737e203d)), closes [#28033](https://github.com/bitnami/charts/issues/28033)
 
 ## <small>0.3.14 (2024-07-05)</small>
 

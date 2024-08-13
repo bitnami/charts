@@ -1,8 +1,24 @@
 # Changelog
 
-## 11.2.12 (2024-07-17)
+## 11.2.16 (2024-08-07)
 
-* [bitnami/tomcat] Release 11.2.12 ([#28145](https://github.com/bitnami/charts/pull/28145))
+* [bitnami/tomcat] Release 11.2.16 ([#28756](https://github.com/bitnami/charts/pull/28756))
+
+## <small>11.2.15 (2024-07-25)</small>
+
+* [bitnami/tomcat] Release 11.2.15 (#28504) ([922f44d](https://github.com/bitnami/charts/commit/922f44de1141c1474ac3b82b0d8876fee0baea3a)), closes [#28504](https://github.com/bitnami/charts/issues/28504)
+
+## <small>11.2.14 (2024-07-25)</small>
+
+* [bitnami/tomcat] Release 11.2.14 (#28397) ([47d9008](https://github.com/bitnami/charts/commit/47d9008376a2c4885785379e6602325d0ce23c9e)), closes [#28397](https://github.com/bitnami/charts/issues/28397)
+
+## <small>11.2.13 (2024-07-24)</small>
+
+* [bitnami/tomcat] Release 11.2.13 (#28389) ([85ba54e](https://github.com/bitnami/charts/commit/85ba54e0b138e49516429a169ffa6df4f44ff9ed)), closes [#28389](https://github.com/bitnami/charts/issues/28389)
+
+## <small>11.2.12 (2024-07-17)</small>
+
+* [bitnami/tomcat] Release 11.2.12 (#28145) ([d6071a1](https://github.com/bitnami/charts/commit/d6071a135a4fe52c3b62fdde46bea74d7cfda795)), closes [#28145](https://github.com/bitnami/charts/issues/28145)
 
 ## <small>11.2.11 (2024-07-16)</small>
 

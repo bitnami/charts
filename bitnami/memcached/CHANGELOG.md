@@ -1,8 +1,16 @@
 # Changelog
 
-## 7.4.9 (2024-07-16)
+## 7.4.11 (2024-07-25)
 
-* [bitnami/memcached] Global StorageClass as default value ([#28055](https://github.com/bitnami/charts/pull/28055))
+* [bitnami/memcached] Release 7.4.11 ([#28434](https://github.com/bitnami/charts/pull/28434))
+
+## <small>7.4.10 (2024-07-24)</small>
+
+* [bitnami/memcached] Release 7.4.10 (#28321) ([21df996](https://github.com/bitnami/charts/commit/21df996c7dc8521febae5d3ac286db0e79dac8c4)), closes [#28321](https://github.com/bitnami/charts/issues/28321)
+
+## <small>7.4.9 (2024-07-17)</small>
+
+* [bitnami/memcached] Global StorageClass as default value (#28055) ([d11158b](https://github.com/bitnami/charts/commit/d11158babda56185a8821f51e6c22b193cdcab3b)), closes [#28055](https://github.com/bitnami/charts/issues/28055)
 
 ## <small>7.4.8 (2024-06-29)</small>
 

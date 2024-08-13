@@ -1,8 +1,52 @@
 # Changelog
 
-## 21.7.1 (2024-07-17)
+## 22.1.1 (2024-08-13)
 
-* [bitnami/keycloak] Global StorageClass as default value ([#28039](https://github.com/bitnami/charts/pull/28039))
+* [bitnami/keycloak] move hostname variables to config map to allow override ([#28838](https://github.com/bitnami/charts/pull/28838))
+
+## 22.1.0 (2024-08-06)
+
+* [bitnami/keycloak] use hostname v2 options (#28611) ([559b860](https://github.com/bitnami/charts/commit/559b8604bb021798592ee276e9553d80d0735bbf)), closes [#28611](https://github.com/bitnami/charts/issues/28611)
+
+## <small>22.0.2 (2024-08-06)</small>
+
+* [bitnami/keycloak] Release 22.0.2 (#28692) ([af28509](https://github.com/bitnami/charts/commit/af285099f496589b4d3ad8379c00ae96628baab5)), closes [#28692](https://github.com/bitnami/charts/issues/28692)
+
+## <small>22.0.1 (2024-08-06)</small>
+
+* [bitnami/keycloak] Preserve data on writable dirs (#28550) ([80bc148](https://github.com/bitnami/charts/commit/80bc148b1af4e75ff8619c68f20ec2be90015a37)), closes [#28550](https://github.com/bitnami/charts/issues/28550)
+
+## 22.0.0 (2024-07-29)
+
+* [bitnami/keycloak] Release 22.0.0 (#28563) ([81162c4](https://github.com/bitnami/charts/commit/81162c45a2a9759ac00ae26ad0bb5310af4597e4)), closes [#28563](https://github.com/bitnami/charts/issues/28563)
+
+## 21.8.0 (2024-07-26)
+
+* [bitnami/keycloak] Allow support for gce based ingress controllers (#28519) ([87b60d7](https://github.com/bitnami/charts/commit/87b60d7526474cc22fd8295732f6b1ed7b3771a6)), closes [#28519](https://github.com/bitnami/charts/issues/28519)
+
+## <small>21.7.6 (2024-07-26)</small>
+
+* [bitnami/keycloak] Fix invalid value of proxy headers when legacy proxy is used (#28530) ([372d263](https://github.com/bitnami/charts/commit/372d2638677330da509c8ff2783a2efd48484d45)), closes [#28530](https://github.com/bitnami/charts/issues/28530)
+
+## <small>21.7.5 (2024-07-25)</small>
+
+* [bitnami/keycloak] Release 21.7.5 (#28428) ([8c7be7d](https://github.com/bitnami/charts/commit/8c7be7d0937fb83efb89b26fdd44cd055c2c118e)), closes [#28428](https://github.com/bitnami/charts/issues/28428)
+
+## <small>21.7.4 (2024-07-24)</small>
+
+* [bitnami/keycloak] Fix broken theme assets by append the httpRelativeURL to the KC-HOSTNAME (#28176) ([2b15502](https://github.com/bitnami/charts/commit/2b15502a03c16d5c38877244650ff0d1f8f764b9)), closes [#28176](https://github.com/bitnami/charts/issues/28176)
+
+## <small>21.7.3 (2024-07-24)</small>
+
+* [bitnami/keycloak] Release 21.7.3 (#28299) ([06e9a9d](https://github.com/bitnami/charts/commit/06e9a9dfb2dc0bd10089947810fdf8867b2ffa37)), closes [#28299](https://github.com/bitnami/charts/issues/28299)
+
+## <small>21.7.2 (2024-07-24)</small>
+
+* [bitnami/keycloak] Release 21.7.2 (#28262) ([ec3f085](https://github.com/bitnami/charts/commit/ec3f085e78cd45e66fb2d782dec3c07654cbde56)), closes [#28262](https://github.com/bitnami/charts/issues/28262)
+
+## <small>21.7.1 (2024-07-18)</small>
+
+* [bitnami/keycloak] Global StorageClass as default value (#28039) ([b81cbe1](https://github.com/bitnami/charts/commit/b81cbe126960f5dd0d8cab5c40c00a2ab31fb68f)), closes [#28039](https://github.com/bitnami/charts/issues/28039)
 
 ## 21.7.0 (2024-07-17)
 

@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.6.14 (2024-07-16)
+## 15.6.18 (2024-08-07)
 
-* [bitnami/mongodb] Global StorageClass as default value ([#28061](https://github.com/bitnami/charts/pull/28061))
+* [bitnami/mongodb] fix(NOTES.txt): Missing messages ([#28685](https://github.com/bitnami/charts/pull/28685))
+
+## <small>15.6.17 (2024-08-06)</small>
+
+* [bitnami/mongodb] Release 15.6.17 (#28697) ([b6d6a24](https://github.com/bitnami/charts/commit/b6d6a2449195d87387cce9aec88cc6215763c569)), closes [#28697](https://github.com/bitnami/charts/issues/28697)
+
+## <small>15.6.16 (2024-07-25)</small>
+
+* [bitnami/mongodb] Release 15.6.16 (#28453) ([86d3ac8](https://github.com/bitnami/charts/commit/86d3ac8763d831263d8436ce890cd54ef62a9a17)), closes [#28453](https://github.com/bitnami/charts/issues/28453)
+
+## <small>15.6.15 (2024-07-24)</small>
+
+* [bitnami/mongodb] Release 15.6.15 (#28332) ([e107031](https://github.com/bitnami/charts/commit/e107031d3833f020d47d5fddcc24c7f43859443e)), closes [#28332](https://github.com/bitnami/charts/issues/28332)
+
+## <small>15.6.14 (2024-07-18)</small>
+
+* [bitnami/mongodb] Global StorageClass as default value (#28061) ([0661fba](https://github.com/bitnami/charts/commit/0661fbaf3436de16452d82cbf244a616c5892e64)), closes [#28061](https://github.com/bitnami/charts/issues/28061)
 
 ## <small>15.6.13 (2024-07-16)</small>
 
@@ -15,8 +31,11 @@
 
 ## <small>15.6.11 (2024-06-25)</small>
 
-* [bitnami/mongodb] add space back so script works again (#27183) ([e880657](https://github.com/bitnami/charts/commit/e880657e7744f7871d04c55283f34fad9d04598a)), closes [#27183](https://github.com/bitnami/charts/issues/27183)
 * [bitnami/mongodb] Recover logging to stdout (#27510) ([33bbddd](https://github.com/bitnami/charts/commit/33bbddd532d0debbe775a13a1b0c31e59ccd3c35)), closes [#27510](https://github.com/bitnami/charts/issues/27510)
+
+## <small>15.6.10 (2024-06-20)</small>
+
+* [bitnami/mongodb] add space back so script works again (#27183) ([e880657](https://github.com/bitnami/charts/commit/e880657e7744f7871d04c55283f34fad9d04598a)), closes [#27183](https://github.com/bitnami/charts/issues/27183)
 
 ## <small>15.6.9 (2024-06-18)</small>
 

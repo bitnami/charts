@@ -1,8 +1,16 @@
 # Changelog
 
-## 23.2.10 (2024-07-16)
+## 23.2.12 (2024-07-25)
 
-* [bitnami/parse] Global StorageClass as default value ([#28078](https://github.com/bitnami/charts/pull/28078))
+* [bitnami/parse] Release 23.2.12 ([#28458](https://github.com/bitnami/charts/pull/28458))
+
+## <small>23.2.11 (2024-07-24)</small>
+
+* [bitnami/parse] Release 23.2.11 (#28346) ([53113b9](https://github.com/bitnami/charts/commit/53113b90dfd6ed4f4d9b3702ee4e3254b39e2b9e)), closes [#28346](https://github.com/bitnami/charts/issues/28346)
+
+## <small>23.2.10 (2024-07-18)</small>
+
+* [bitnami/parse] Global StorageClass as default value (#28078) ([4ae4f9b](https://github.com/bitnami/charts/commit/4ae4f9bf3c738bf40d1d57e1ff334cb66b263f77)), closes [#28078](https://github.com/bitnami/charts/issues/28078)
 
 ## <small>23.2.9 (2024-07-10)</small>
 

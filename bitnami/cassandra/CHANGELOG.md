@@ -1,8 +1,28 @@
 # Changelog
 
-## 11.3.7 (2024-07-16)
+## 11.3.12 (2024-07-31)
 
-* [bitnami/cassandra] Fix for cassandra.commitstorage.class helper ([#28119](https://github.com/bitnami/charts/pull/28119))
+* [bitnami/cassandra] Improve Ginkgo test ([#28603](https://github.com/bitnami/charts/pull/28603))
+
+## <small>11.3.11 (2024-07-25)</small>
+
+* [bitnami/cassandra] Release 11.3.11 (#28408) ([8a65384](https://github.com/bitnami/charts/commit/8a6538440b1ca408369ec814831f6239fe47fa3b)), closes [#28408](https://github.com/bitnami/charts/issues/28408)
+
+## <small>11.3.10 (2024-07-24)</small>
+
+* [bitnami/cassandra] Release 11.3.10 (#28273) ([b022c3b](https://github.com/bitnami/charts/commit/b022c3b7535e7d063ee7302357c20257c4022c57)), closes [#28273](https://github.com/bitnami/charts/issues/28273)
+
+## <small>11.3.9 (2024-07-23)</small>
+
+* [bitnami/cassandra] Release 11.3.9 (#28236) ([4c14b4d](https://github.com/bitnami/charts/commit/4c14b4d164e705409e1a6b1126ff7da2400895fb)), closes [#28236](https://github.com/bitnami/charts/issues/28236)
+
+## <small>11.3.8 (2024-07-23)</small>
+
+* [bitnami/cassandra] Release 11.3.8 (#28209) ([97f5aaa](https://github.com/bitnami/charts/commit/97f5aaaa2a19c9ed3a8581db26e7c74de423c456)), closes [#28209](https://github.com/bitnami/charts/issues/28209)
+
+## <small>11.3.7 (2024-07-17)</small>
+
+* [bitnami/cassandra] Fix for cassandra.commitstorage.class helper (#28119) ([18acada](https://github.com/bitnami/charts/commit/18acada4400bdf5bde6d8c5b36d93ee57bb54b22)), closes [#28119](https://github.com/bitnami/charts/issues/28119)
 
 ## <small>11.3.6 (2024-07-16)</small>
 

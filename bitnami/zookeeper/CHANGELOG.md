@@ -1,8 +1,16 @@
 # Changelog
 
-## 13.4.8 (2024-07-16)
+## 13.4.10 (2024-07-25)
 
-* [bitnami/zookeeper] Global StorageClass as default value ([#28111](https://github.com/bitnami/charts/pull/28111))
+* [bitnami/zookeeper] Release 13.4.10 ([#28507](https://github.com/bitnami/charts/pull/28507))
+
+## <small>13.4.9 (2024-07-24)</small>
+
+* [bitnami/zookeeper] Release 13.4.9 (#28387) ([b706c77](https://github.com/bitnami/charts/commit/b706c770002e437b33ef0ab6685ad7aee863a998)), closes [#28387](https://github.com/bitnami/charts/issues/28387)
+
+## <small>13.4.8 (2024-07-16)</small>
+
+* [bitnami/zookeeper] Global StorageClass as default value (#28111) ([101d9b9](https://github.com/bitnami/charts/commit/101d9b943793ddd2383149562cf8505ea684a238)), closes [#28111](https://github.com/bitnami/charts/issues/28111)
 
 ## <small>13.4.7 (2024-07-11)</small>
 

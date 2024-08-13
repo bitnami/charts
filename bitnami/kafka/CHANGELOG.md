@@ -1,8 +1,45 @@
 # Changelog
 
-## 29.3.9 (2024-07-16)
+## 30.0.3 (2024-08-08)
 
-* [bitnami/kafka] Global StorageClass as default value ([#28038](https://github.com/bitnami/charts/pull/28038))
+* [bitnami/kafka] Add support IMDSv2 for getting brokerRackAwareness data ([#27921](https://github.com/bitnami/charts/pull/27921))
+
+## <small>30.0.2 (2024-08-07)</small>
+
+* [bitnami/kafka] Release 30.0.2 (#28734) ([b7dbfe6](https://github.com/bitnami/charts/commit/b7dbfe6c90679ab6ccab521cba8a0ee08595073b)), closes [#28734](https://github.com/bitnami/charts/issues/28734)
+
+## <small>30.0.1 (2024-08-06)</small>
+
+* [bitnami/kafka] Release 30.0.1 (#28699) ([65eac83](https://github.com/bitnami/charts/commit/65eac83c6640522e479f7d07923a934b9f657d99)), closes [#28699](https://github.com/bitnami/charts/issues/28699)
+* [bitnami/kafka] Upgrade notes (#28673) ([cae42b9](https://github.com/bitnami/charts/commit/cae42b9674c5ce54aeb693aa5973954e1d0162f4)), closes [#28673](https://github.com/bitnami/charts/issues/28673)
+
+## 30.0.0 (2024-08-05)
+
+* [bitnami/kafka] Release 30.0.0 (#28666) ([a6625ec](https://github.com/bitnami/charts/commit/a6625ec0dd042d9848107dd853ff0cc58178800c)), closes [#28666](https://github.com/bitnami/charts/issues/28666)
+
+## <small>29.3.14 (2024-08-01)</small>
+
+* bitnami/kafka Add extraListeners to kafka.listeners in _helpers.tpl (#28604) ([940b7bd](https://github.com/bitnami/charts/commit/940b7bddfe28023ba102d391745bf6552265c293)), closes [#28604](https://github.com/bitnami/charts/issues/28604)
+
+## <small>29.3.13 (2024-07-25)</small>
+
+* [bitnami/kafka] Release 29.3.13 (#28426) ([f922a04](https://github.com/bitnami/charts/commit/f922a041e5af921fa4b4a48f2ee549720f55a577)), closes [#28426](https://github.com/bitnami/charts/issues/28426)
+
+## <small>29.3.12 (2024-07-24)</small>
+
+* [bitnami/kafka] Release 29.3.12 (#28336) ([bdaaf9c](https://github.com/bitnami/charts/commit/bdaaf9c86a9da3c586f6fe9fdfb4972811d558f3)), closes [#28336](https://github.com/bitnami/charts/issues/28336)
+
+## <small>29.3.11 (2024-07-23)</small>
+
+* [bitnami/kafka] Fix issue on how to provision access to all topics / groups (#27877) ([6535067](https://github.com/bitnami/charts/commit/65350670e7249108972fa137b0aaf0423f65f74f)), closes [#27877](https://github.com/bitnami/charts/issues/27877)
+
+## <small>29.3.10 (2024-07-18)</small>
+
+* [bitnami/kafka] Release 29.3.10 (#28157) ([4fc0181](https://github.com/bitnami/charts/commit/4fc0181dd3f334c71cb5adad90c8e2a67ff482fa)), closes [#28157](https://github.com/bitnami/charts/issues/28157)
+
+## <small>29.3.9 (2024-07-18)</small>
+
+* [bitnami/kafka] Global StorageClass as default value (#28038) ([0e596df](https://github.com/bitnami/charts/commit/0e596df1d5e6c9e9d3d1854788d5485408cd49f5)), closes [#28038](https://github.com/bitnami/charts/issues/28038)
 
 ## <small>29.3.8 (2024-07-16)</small>
 
@@ -75,9 +112,15 @@
 
 ## <small>29.0.3 (2024-05-24)</small>
 
-* [bitnami/kafka] Deprecate Kafka Exporter (#26395) ([bf9a653](https://github.com/bitnami/charts/commit/bf9a6535fabdd4c0ad3210920cdd6c4963c5511c)), closes [#26395](https://github.com/bitnami/charts/issues/26395)
 * [bitnami/kafka] Fix linter rules after deprecating Kafka Exporter (#26411) ([69856e9](https://github.com/bitnami/charts/commit/69856e985f1325b3e72cd126b6990647d35f1cbb)), closes [#26411](https://github.com/bitnami/charts/issues/26411)
+
+## <small>29.0.2 (2024-05-24)</small>
+
 * [bitnami/kafka] Release 28.3.1 (#26403) ([0428ec7](https://github.com/bitnami/charts/commit/0428ec724a1e6b139b12e8c3a6ab489a6459660c)), closes [#26403](https://github.com/bitnami/charts/issues/26403)
+
+## 29.0.0 (2024-05-24)
+
+* [bitnami/kafka] Deprecate Kafka Exporter (#26395) ([bf9a653](https://github.com/bitnami/charts/commit/bf9a6535fabdd4c0ad3210920cdd6c4963c5511c)), closes [#26395](https://github.com/bitnami/charts/issues/26395)
 
 ## 28.3.0 (2024-05-21)
 

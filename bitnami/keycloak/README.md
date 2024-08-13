@@ -466,7 +466,9 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.controller`                    | The ingress controller type. Currently supports `default` and `gce`                                                              | `default`                |
 | `ingress.hostname`                      | Default host for the ingress record (evaluated as template)                                                                      | `keycloak.local`         |
+| `ingress.hostnameStrict`                | Disables dynamically resolving the hostname from request headers.                                                                | `false`                  |
 | `ingress.path`                          | Default path for the ingress record (evaluated as template)                                                                      | `""`                     |
 | `ingress.servicePort`                   | Backend service port to use                                                                                                      | `http`                   |
 | `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
@@ -482,6 +484,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `adminIngress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `adminIngress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `adminIngress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `adminIngress.controller`               | The ingress controller type. Currently supports `default` and `gce`                                                              | `default`                |
 | `adminIngress.hostname`                 | Default host for the admin ingress record (evaluated as template)                                                                | `keycloak.local`         |
 | `adminIngress.path`                     | Default path for the admin ingress record (evaluated as template)                                                                | `""`                     |
 | `adminIngress.servicePort`              | Backend service port to use                                                                                                      | `http`                   |

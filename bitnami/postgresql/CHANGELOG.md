@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.5.17 (2024-07-16)
+## 15.5.21 (2024-08-09)
 
-* [bitnami/postgresql] Global StorageClass as default value ([#28082](https://github.com/bitnami/charts/pull/28082))
+* [bitnami/postgresql] Release 15.5.21 ([#28800](https://github.com/bitnami/charts/pull/28800))
+
+## <small>15.5.20 (2024-07-25)</small>
+
+* [bitnami/postgresql] Release 15.5.20 (#28489) ([89f10d4](https://github.com/bitnami/charts/commit/89f10d4d1b7c4e88015f9f4c3c9002dc1d749860)), closes [#28489](https://github.com/bitnami/charts/issues/28489)
+
+## <small>15.5.19 (2024-07-24)</small>
+
+* [bitnami/postgresql] Release 15.5.19 (#28352) ([59696e9](https://github.com/bitnami/charts/commit/59696e992ceec9b12255560d346e59f2f62b543e)), closes [#28352](https://github.com/bitnami/charts/issues/28352)
+
+## <small>15.5.18 (2024-07-23)</small>
+
+* [bitnami/postgresql] Release 15.5.18 (#28221) ([8976498](https://github.com/bitnami/charts/commit/8976498507646c6a690381a38d690aa32b25a2f7)), closes [#28221](https://github.com/bitnami/charts/issues/28221)
+
+## <small>15.5.17 (2024-07-16)</small>
+
+* [bitnami/postgresql] Global StorageClass as default value (#28082) ([6267bb7](https://github.com/bitnami/charts/commit/6267bb792f70eb0b67800132f5fbd488087e347b)), closes [#28082](https://github.com/bitnami/charts/issues/28082)
 
 ## <small>15.5.16 (2024-07-11)</small>
 

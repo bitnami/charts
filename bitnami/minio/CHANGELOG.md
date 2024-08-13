@@ -1,8 +1,44 @@
 # Changelog
 
-## 14.6.24 (2024-07-17)
+## 14.7.0 (2024-08-12)
 
-* [bitnami/minio] Release 14.6.24 ([#28143](https://github.com/bitnami/charts/pull/28143))
+* [bitnami/minio]: Option to use a secret. ([#27837](https://github.com/bitnami/charts/pull/27837))
+
+## <small>14.6.32 (2024-08-03)</small>
+
+* [bitnami/minio] Release 14.6.32 (#28650) ([eea4d67](https://github.com/bitnami/charts/commit/eea4d67577c35ec1a206109ec7e59fe565922fa8)), closes [#28650](https://github.com/bitnami/charts/issues/28650)
+
+## <small>14.6.31 (2024-07-31)</small>
+
+* [bitnami/minio] Release 14.6.31 (#28601) ([fc1b36e](https://github.com/bitnami/charts/commit/fc1b36e440777f392e63d3b96c0d56704e1ba8d9)), closes [#28601](https://github.com/bitnami/charts/issues/28601)
+
+## <small>14.6.30 (2024-07-30)</small>
+
+* [bitnami/minio] Release 14.6.30 (#28571) ([0fab2f8](https://github.com/bitnami/charts/commit/0fab2f865f80a24b4444b1d8f8e5e9c9d6fb6d6f)), closes [#28571](https://github.com/bitnami/charts/issues/28571)
+
+## <small>14.6.29 (2024-07-27)</small>
+
+* [bitnami/minio] Release 14.6.29 (#28544) ([0bfb0b5](https://github.com/bitnami/charts/commit/0bfb0b5d597cdf8213135dfcd60b5389ebe7fced)), closes [#28544](https://github.com/bitnami/charts/issues/28544)
+
+## <small>14.6.28 (2024-07-25)</small>
+
+* [bitnami/minio] Release 14.6.28 (#28444) ([dcd6067](https://github.com/bitnami/charts/commit/dcd6067c602314c2e2f88881a158059cf8b11f2f)), closes [#28444](https://github.com/bitnami/charts/issues/28444)
+
+## <small>14.6.27 (2024-07-24)</small>
+
+* [bitnami/minio] Release 14.6.27 (#28320) ([70ca413](https://github.com/bitnami/charts/commit/70ca413aee4bc937aa1bc530c11261ef75bab800)), closes [#28320](https://github.com/bitnami/charts/issues/28320)
+
+## <small>14.6.26 (2024-07-23)</small>
+
+* [bitnami/minio] getValueFromSecret missing key bug fix (#27517) ([95aed4d](https://github.com/bitnami/charts/commit/95aed4d1d55a0b54a8497ad2b975e416adc57c10)), closes [#27517](https://github.com/bitnami/charts/issues/27517)
+
+## <small>14.6.25 (2024-07-18)</small>
+
+* [bitnami/minio] Global StorageClass as default value (#28151) ([28211ff](https://github.com/bitnami/charts/commit/28211ff2987c23993e5787e5b776215bb3eac6f4)), closes [#28151](https://github.com/bitnami/charts/issues/28151)
+
+## <small>14.6.24 (2024-07-17)</small>
+
+* [bitnami/minio] Release 14.6.24 (#28143) ([e364bc2](https://github.com/bitnami/charts/commit/e364bc2f5534b619f30962fd94c05fcb0f2308c0)), closes [#28143](https://github.com/bitnami/charts/issues/28143)
 
 ## <small>14.6.23 (2024-07-17)</small>
 
@@ -34,8 +70,11 @@
 
 ## <small>14.6.16 (2024-06-29)</small>
 
-* [bitnami/minio] Release 14.6.15 (#27588) ([7e1d994](https://github.com/bitnami/charts/commit/7e1d9945dd0515dd317c6f6f12564757df66c8d7)), closes [#27588](https://github.com/bitnami/charts/issues/27588)
 * [bitnami/minio] Release 14.6.16 (#27598) ([055dab8](https://github.com/bitnami/charts/commit/055dab873a739e58cba8ffdc4a3d6ec5523e2df0)), closes [#27598](https://github.com/bitnami/charts/issues/27598)
+
+## <small>14.6.15 (2024-06-28)</small>
+
+* [bitnami/minio] Release 14.6.15 (#27588) ([7e1d994](https://github.com/bitnami/charts/commit/7e1d9945dd0515dd317c6f6f12564757df66c8d7)), closes [#27588](https://github.com/bitnami/charts/issues/27588)
 
 ## <small>14.6.14 (2024-06-28)</small>
 
