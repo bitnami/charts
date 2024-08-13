@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.2.15 (2024-07-30)
+## 14.0.0 (2024-08-13)
 
-* [bitnami/discourse] Release 13.2.15 ([#28578](https://github.com/bitnami/charts/pull/28578))
+* [bitnami/discourse] Update dependencies ([#28852](https://github.com/bitnami/charts/pull/28852))
+
+## <small>13.2.15 (2024-07-30)</small>
+
+* [bitnami/discourse] Release 13.2.15 (#28578) ([1e0e9c7](https://github.com/bitnami/charts/commit/1e0e9c79d42cbd3dbe4b3ad89201e229bb39215c)), closes [#28578](https://github.com/bitnami/charts/issues/28578)
 
 ## <small>13.2.14 (2024-07-25)</small>
 
