@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.19 (2024-08-09)
+## 15.7.20 (2024-08-13)
 
-* [bitnami/thanos] add receive distributor termination grace period ([#28793](https://github.com/bitnami/charts/pull/28793))
+* [bitnami/thanos] Release 15.7.20 ([#28859](https://github.com/bitnami/charts/pull/28859))
+
+## <small>15.7.19 (2024-08-09)</small>
+
+* [bitnami/thanos] add receive distributor termination grace period (#28793) ([6838ae1](https://github.com/bitnami/charts/commit/6838ae1092db9c66327d03f1955c6b0cc3afa0ad)), closes [#28793](https://github.com/bitnami/charts/issues/28793)
 
 ## <small>15.7.18 (2024-08-07)</small>
 
