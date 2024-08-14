@@ -128,6 +128,9 @@ auth:
   ## @param auth.useCredentialsFiles Mount credentials as a files instead of using an environment variable
   ##
   useCredentialsFiles: false
+  ## @param auth.useSecret Uses a secret to mount the credential files.
+  ##
+  useSecret: true
   ## @param auth.forceNewKeys Force root credentials (user and password) to be reconfigured every time they change in the secrets
   ##
   forceNewKeys: false

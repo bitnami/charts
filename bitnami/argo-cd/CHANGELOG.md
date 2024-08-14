@@ -1,8 +1,20 @@
 # Changelog
 
-## 6.6.10 (2024-08-02)
+## 7.0.0 (2024-08-13)
 
-* [bitnami/argo-cd] Remove usage of health check that does not exist (#26547) ([#28348](https://github.com/bitnami/charts/pull/28348))
+* [bitnami/argo-cd] Update dependencies ([#28851](https://github.com/bitnami/charts/pull/28851))
+
+## <small>6.6.12 (2024-08-12)</small>
+
+* [bitnami/argo-cd] Release 6.6.12 (#28828) ([e3c8931](https://github.com/bitnami/charts/commit/e3c893177b27a510e933db97d4f57f1d80d1bfc7)), closes [#28828](https://github.com/bitnami/charts/issues/28828)
+
+## <small>6.6.11 (2024-08-09)</small>
+
+* [bitnami/argo-cd] Release 6.6.11 (#28762) ([6c7ef92](https://github.com/bitnami/charts/commit/6c7ef92618d321e18fd1a7e20ba8faf90f3661a2)), closes [#28762](https://github.com/bitnami/charts/issues/28762)
+
+## <small>6.6.10 (2024-08-05)</small>
+
+* [bitnami/argo-cd] Remove usage of health check that does not exist (#26547) (#28348) ([9e03640](https://github.com/bitnami/charts/commit/9e0364083d0fdf0c7126b90b54fbe184bff71741)), closes [#26547](https://github.com/bitnami/charts/issues/26547) [#28348](https://github.com/bitnami/charts/issues/28348)
 
 ## <small>6.6.9 (2024-07-26)</small>
 

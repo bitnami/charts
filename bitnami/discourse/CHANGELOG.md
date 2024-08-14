@@ -3,6 +3,9 @@
 ## 13.2.16 (2024-08-08)
 
 * [bitnami/discourse] Release 13.2.16 ([#28786](https://github.com/bitnami/charts/pull/28786))
+## 14.0.0 (2024-08-13)
+
+* [bitnami/discourse] Update dependencies ([#28852](https://github.com/bitnami/charts/pull/28852))
 
 ## <small>13.2.15 (2024-07-30)</small>
 

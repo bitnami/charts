@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.13 (2024-08-07)
+## 2.2.15 (2024-08-12)
 
-* [bitnami/pinniped] Release 2.2.13 ([#28753](https://github.com/bitnami/charts/pull/28753))
+* [bitnami/pinniped] Release 2.2.15 ([#28779](https://github.com/bitnami/charts/pull/28779))
+
+## <small>2.2.13 (2024-08-07)</small>
+
+* [bitnami/pinniped] Release 2.2.13 (#28753) ([5984af4](https://github.com/bitnami/charts/commit/5984af460eebd9a1763528e818d88c359f5298fb)), closes [#28753](https://github.com/bitnami/charts/issues/28753)
 
 ## <small>2.2.12 (2024-07-25)</small>
 
