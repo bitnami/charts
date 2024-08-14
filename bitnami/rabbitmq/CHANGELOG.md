@@ -1,12 +1,12 @@
 # Changelog
 
-## 14.6.7 (2024-08-13)
+## 14.6.7 (2024-08-14)
 
-* [bitnami/rabbitmq] Split metrics servicemonitor to expose alternate metrics endpoints
+* [bitnami/rabbitmq] Breaking out RabbitMQ metrics endpoints to configure separately ([#28891](https://github.com/bitnami/charts/pull/28891))
 
-## 14.6.6 (2024-07-25)
+## <small>14.6.6 (2024-08-08)</small>
 
-* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts ([#27900](https://github.com/bitnami/charts/pull/27900))
+* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts (#27900) ([95148a9](https://github.com/bitnami/charts/commit/95148a9ae1363f9da6415b64085aadfd8add1413)), closes [#27900](https://github.com/bitnami/charts/issues/27900)
 
 ## <small>14.6.5 (2024-07-25)</small>
 
