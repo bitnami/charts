@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.13 (2024-07-25)
+## 11.2.14 (2024-08-14)
 
-* [bitnami/apache] Release 11.2.13 ([#28398](https://github.com/bitnami/charts/pull/28398))
+* [bitnami/apache] fix CrashLoopBackOff when using cloneHtdocsFromGit ([#28868](https://github.com/bitnami/charts/pull/28868))
+
+## <small>11.2.13 (2024-07-25)</small>
+
+* [bitnami/apache] Release 11.2.13 (#28398) ([08be0e2](https://github.com/bitnami/charts/commit/08be0e271998c1046f66d815ac5c411b46e3af29)), closes [#28398](https://github.com/bitnami/charts/issues/28398)
 
 ## <small>11.2.12 (2024-07-24)</small>
 
