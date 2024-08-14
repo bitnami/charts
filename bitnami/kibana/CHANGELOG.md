@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.2.17 (2024-08-09)
+## 11.2.17 (2024-08-14)
 
 * [bitnami/kibana] Release 11.2.17 ([#28796](https://github.com/bitnami/charts/pull/28796))
 
