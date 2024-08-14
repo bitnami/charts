@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.6.0 (2024-08-13)
+## 4.6.0 (2024-08-14)
 
 * [bitnami/grafana-operator] Add some pod scheduling directives ([#28861](https://github.com/bitnami/charts/pull/28861))
 
