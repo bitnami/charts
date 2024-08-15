@@ -2,7 +2,7 @@
 
 ## 14.1.0 (2024-08-14)
 
-* [bitnami/discourse] Release 13.2.16 ([#28786](https://github.com/bitnami/charts/pull/28786))
+* [bitnami/discourse] Bump discourse to 3.3.0 ([#28786](https://github.com/bitnami/charts/pull/28786))
 
 ## <small>13.2.15 (2024-07-30)</small>
 
