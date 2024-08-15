@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.0.1 (2024-08-14)
+## 7.0.1 (2024-08-15)
 
 * [bitnami/argo-cd] Missing namespace in ArgoCD known-hosts cm ([#28877](https://github.com/bitnami/charts/pull/28877))
 
