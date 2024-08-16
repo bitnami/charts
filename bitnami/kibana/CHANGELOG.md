@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.16 (2024-07-29)
+## 11.2.17 (2024-08-14)
 
-* add publicBaseUrl param ([#28543](https://github.com/bitnami/charts/pull/28543))
+* [bitnami/kibana] Release 11.2.17 ([#28796](https://github.com/bitnami/charts/pull/28796))
+
+## <small>11.2.16 (2024-07-30)</small>
+
+* [bitnami/kibana] add publicBaseUrl param (#28543) ([edad571](https://github.com/bitnami/charts/commit/edad571366b89d72d52b30bbdc850535c87f96d6)), closes [#28543](https://github.com/bitnami/charts/issues/28543)
 
 ## <small>11.2.15 (2024-07-25)</small>
 
