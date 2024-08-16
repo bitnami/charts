@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.1 (2024-08-16)
+## 7.0.2 (2024-08-16)
 
-* [bitnami/argo-cd] Release 7.0.1 ([#28911](https://github.com/bitnami/charts/pull/28911))
+* [bitnami/argo-cd] Add missing verbs to ApplicationSet role ([#28914](https://github.com/bitnami/charts/pull/28914))
+
+## <small>7.0.1 (2024-08-16)</small>
+
+* [bitnami/argo-cd] Release 7.0.1 (#28911) ([179665c](https://github.com/bitnami/charts/commit/179665c13f0dc2baaf3432655ed62ca1b81cbf4d)), closes [#28911](https://github.com/bitnami/charts/issues/28911)
 
 ## 7.0.0 (2024-08-13)
 
