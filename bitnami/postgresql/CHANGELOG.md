@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.5.22 (2024-08-16)
+## 15.6.0 (2024-08-16)
 
-* [bitnami/postgresql] Release 15.5.22 ([#28905](https://github.com/bitnami/charts/pull/28905))
+* bitnami/postgresql Automatically clean out backups ([#28910](https://github.com/bitnami/charts/pull/28910))
+
+## <small>15.5.22 (2024-08-16)</small>
+
+* [bitnami/postgresql] Release 15.5.22 (#28905) ([9666e6a](https://github.com/bitnami/charts/commit/9666e6a662dfb6985b537794e8617949c51178fe)), closes [#28905](https://github.com/bitnami/charts/issues/28905)
 
 ## <small>15.5.21 (2024-08-09)</small>
 
