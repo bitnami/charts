@@ -136,8 +136,14 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.dataPlane.containerPorts.http }}
+              {{- if $.Values.dataPlane.hostPort.enabled }}
+              hostPort: {{ index $.Values.dataPlane.hostPort.ports.http }}
+              {{- end }}
             - name: https
               containerPort: {{ .Values.dataPlane.containerPorts.https }}
+              {{- if $.Values.dataPlane.hostPort.enabled }}
+              hostPort: {{ index $.Values.dataPlane.hostPort.ports.https }}
+              {{- end }}
             - name: http-control
               containerPort: {{ .Values.dataPlane.containerPorts.control }}
             {{- if .Values.dataPlane.metrics.enabled }}

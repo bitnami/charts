@@ -183,6 +183,31 @@
                         }
                     }
                 },
+                "hostPort": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable hostPort",
+                            "default": false
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "number",
+                                    "description": "hostPort HTTP port",
+                                    "default": 80
+                                },
+                                "https": {
+                                    "type": "number",
+                                    "description": "hostPort HTTPS port",
+                                    "default": 443
+                                }
+                            }
+                        }
+                    }
+                },
                 "livenessProbe": {
                     "type": "object",
                     "properties": {

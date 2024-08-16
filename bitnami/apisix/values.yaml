@@ -127,6 +127,15 @@ dataPlane:
     https: 9443
     control: 9090
     metrics: 9099
+  ## @param dataPlane.hostPort.enabled Enable hostPort
+  ## @param dataPlane.hostPort.ports.http hostPort HTTP port
+  ## @param dataPlane.hostPort.ports.https hostPort HTTPS port
+  ##
+  hostPort:
+    enabled: false
+    ports:
+      http: 80
+      https: 443
   ## Configure extra options for APISIX containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param dataPlane.livenessProbe.enabled Enable livenessProbe on APISIX containers
