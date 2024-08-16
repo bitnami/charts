@@ -107,7 +107,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 16.4.0-debian-12-r1
+  tag: 16.4.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1349,6 +1349,38 @@ backup:
     labels: {}
     ## @param backup.cronjob.annotations Set the cronjob annotations
     annotations: {}
+    ## @param backup.cronjob.podAffinityPreset PostgreSQL primary pod affinity preset. Ignored if `backup.cronjob.affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAffinityPreset: ""
+    ## @param backup.cronjob.podAntiAffinityPreset PostgreSQL backup job pod anti-affinity preset. Ignored if `backup.cronjob.affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAntiAffinityPreset: soft
+    ## PostgreSQL Backup job node affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ##
+    nodeAffinityPreset:
+      ## @param backup.cronjob.nodeAffinityPreset.type PostgreSQL backup job node affinity preset type. Ignored if `backup.cronjob.affinity` is set. Allowed values: `soft` or `hard`
+      ##
+      type: ""
+      ## @param backup.cronjob.nodeAffinityPreset.key PostgreSQL backup job node label key to match Ignored if `backup.cronjob.affinity` is set.
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## @param backup.cronjob.nodeAffinityPreset.values PostgreSQL backup job node label values to match. Ignored if `backup.cronjob.affinity` is set.
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## @param backup.cronjob.affinity Affinity for PostgreSQL backup job pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: backup.cronjob.podAffinityPreset, backup.cronjob.podAntiAffinityPreset, and backup.cronjob.nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
     ## @param backup.cronjob.nodeSelector Node labels for PostgreSQL backup CronJob pod assignment
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
     ##
