@@ -1349,7 +1349,11 @@ backup:
     labels: {}
     ## @param backup.cronjob.annotations Set the cronjob annotations
     annotations: {}
-    ## @param backup.cronjob.podAnnotations Map of annotations to add to the pods (postgresql backup cronjob)
+    ## @param primary.podAnnotations Map of annotations to add to the pods (postgresql primary)
+    ##
+    podAnnotations: {}
+    ## @param primary.podAffinityPreset PostgreSQL primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
     podAffinityPreset: ""
     ## @param backup.cronjob.podAntiAffinityPreset PostgreSQL backup job pod anti-affinity preset. Ignored if `backup.cronjob.affinity` is set. Allowed values: `soft` or `hard`
