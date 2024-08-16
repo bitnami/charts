@@ -42,6 +42,14 @@ spec:
           {{- end }}
         spec:
           {{- include "postgresql.v1.imagePullSecrets" . | nindent 10 }}
+          {{- if .Values.backup.cronjob.affinity }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.affinity "context" $) | nindent 8 }}
+          {{- else }}
+          affinity:
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.cronjob.podAffinityPreset "component" "pg_dumpall" "customLabels" $labels "context" $) | nindent 10 }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.cronjob.podAntiAffinityPreset "component" "pg_dumpall" "customLabels" $labels "context" $) | nindent 10 }}
+            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.backup.cronjob.nodeAffinityPreset.type "key" .Values.backup.cronjob.nodeAffinityPreset.key "values" .Values.backup.cronjob.nodeAffinityPreset.values) | nindent 10 }}
+          {{- end }}
           {{- if .Values.backup.cronjob.nodeSelector }}
           nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.nodeSelector "context" $) | nindent 12 }}
           {{- end }}
