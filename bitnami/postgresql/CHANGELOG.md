@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.5.23 (2024-08-16)
+## 15.5.23 (2024-08-17)
 
 * [bitnami/postgresql] Add affinity for backup cronjob ([#28908](https://github.com/bitnami/charts/pull/28908))
 
