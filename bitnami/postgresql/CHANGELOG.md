@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.6.0 (2024-08-16)
+## 15.6.0 (2024-08-17)
 
 * bitnami/postgresql Automatically clean out backups ([#28910](https://github.com/bitnami/charts/pull/28910))
 
