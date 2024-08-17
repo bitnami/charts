@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.0.2 (2024-08-16)
+## 7.0.2 (2024-08-17)
 
 * [bitnami/argo-cd] Add missing verbs to ApplicationSet role ([#28914](https://github.com/bitnami/charts/pull/28914))
 
