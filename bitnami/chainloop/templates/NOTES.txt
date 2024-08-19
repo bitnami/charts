@@ -37,6 +37,10 @@ Development configuration comes with two pre-setup users:
 
 DO NOT USE IT FOR PRODUCTION PURPOSES
 
+In order to use this chart in production, provide the value `--set development=false` and configure an OICD and Secrets Manager.
+
+More information can be found in the chart README.
+
 {{- end }}
 
 ###########################################################################

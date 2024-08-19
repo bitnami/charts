@@ -1021,6 +1021,12 @@ service_registration "kubernetes" {}` |
 | `dex.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                            | `""`                                                                                     |
 | `dex.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dex.pdb.minAvailable` and `dex.pdb.maxUnavailable` are empty.                                                                    | `""`                                                                                     |
 
+## Upgrading
+
+### To 1.0.0
+
+This major changes default mode from Standard mode to Development mode. This way the chart should not need any default values when running `helm install`, but adding the value `development=false` would be required if willing to use the standard mode.
+
 ## License
 
 Copyright &copy; 2023 The Chainloop Authors
