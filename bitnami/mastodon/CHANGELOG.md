@@ -1,8 +1,12 @@
 # Changelog
 
+## 7.0.1 (2024-08-16)
+
+* [bitnami/mastodon] Release 7.0.1 ([#28907](https://github.com/bitnami/charts/pull/28907))
+
 ## 7.0.0 (2024-08-13)
 
-* [bitnami/mastodon] Update dependencies ([#28855](https://github.com/bitnami/charts/pull/28855))
+* [bitnami/mastodon] Update dependencies (#28855) ([161cd16](https://github.com/bitnami/charts/commit/161cd168cefeb099b85a1a688581b2003c3699cc)), closes [#28855](https://github.com/bitnami/charts/issues/28855)
 
 ## <small>6.2.11 (2024-07-30)</small>
 

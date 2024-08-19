@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.5.21 (2024-08-09)
+## 15.5.22 (2024-08-16)
 
-* [bitnami/postgresql] Release 15.5.21 ([#28800](https://github.com/bitnami/charts/pull/28800))
+* [bitnami/postgresql] Release 15.5.22 ([#28905](https://github.com/bitnami/charts/pull/28905))
+
+## <small>15.5.21 (2024-08-09)</small>
+
+* [bitnami/postgresql] Release 15.5.21 (#28800) ([da5f1c5](https://github.com/bitnami/charts/commit/da5f1c5478a8033a7a3cfa44a7ed6618952509af)), closes [#28800](https://github.com/bitnami/charts/issues/28800)
 
 ## <small>15.5.20 (2024-07-25)</small>
 
