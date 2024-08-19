@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.3.13 (2024-07-30)
+## 11.3.15 (2024-08-14)
 
-* [bitnami/grafana] Release 11.3.13 ([#28588](https://github.com/bitnami/charts/pull/28588))
+* [bitnami/grafana] Release 11.3.15 ([#28890](https://github.com/bitnami/charts/pull/28890))
+
+## <small>11.3.14 (2024-08-08)</small>
+
+* [bitnami/grafana] Release 11.3.14 (#28785) ([6f8056b](https://github.com/bitnami/charts/commit/6f8056b1c76f37874d8e666670726b5d3022bfb0)), closes [#28785](https://github.com/bitnami/charts/issues/28785)
+
+## <small>11.3.13 (2024-07-30)</small>
+
+* [bitnami/grafana] Release 11.3.13 (#28588) ([248c78d](https://github.com/bitnami/charts/commit/248c78d78a7fc1303101069ba6d52b4e5d894d75)), closes [#28588](https://github.com/bitnami/charts/issues/28588)
 
 ## <small>11.3.12 (2024-07-26)</small>
 

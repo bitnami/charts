@@ -46,19 +46,13 @@ it('allows creating a dashboard and visualization', () => {
     cy.get('[data-test-subj="savedObjectTitle"]').type(
       `${visualization.newVisualization.title}.${random}`
     );
-    cy.get('[data-test-subj="viewDescription"]').type(
-      `${visualization.newVisualization.description}.${random}`
-    );
   });
   cy.get('[id="new-dashboard-option"]').forceClick();
   cy.get('[data-test-subj="confirmSaveSavedObjectButton"]').forceClick();
-  cy.get('[data-test-subj="dashboardSaveMenuItem"]').click();
+  cy.get('[data-test-subj="dashboardInteractiveSaveMenuItem"]').click();
   cy.fixture('dashboards').then((dashboard) => {
     cy.get('[data-test-subj="savedObjectTitle"]').type(
       `${dashboard.newDashboard.title}.${random}`
-    );
-    cy.get('[data-test-subj="viewDescription"]').type(
-      `${dashboard.newDashboard.description}.${random}`
     );
     cy.get('[data-test-subj="confirmSaveSavedObjectButton"]').forceClick();
     cy.visit('/app/dashboards/list');
