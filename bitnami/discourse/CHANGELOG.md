@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.1.0 (2024-08-15)
+## 14.1.0 (2024-08-19)
 
 * [bitnami/discourse] Bump discourse to 3.3.0 ([#28786](https://github.com/bitnami/charts/pull/28786))
 
