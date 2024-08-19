@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.8 (2024-07-31)
+## 0.1.9 (2024-08-14)
 
-* [bitnami/valkey-cluster] Release 0.1.8 ([#28609](https://github.com/bitnami/charts/pull/28609))
+* [bitnami/valkey-cluster] Fix env-vars for metrics container ([#28885](https://github.com/bitnami/charts/pull/28885))
+
+## <small>0.1.8 (2024-07-31)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.8 (#28609) ([449f0fc](https://github.com/bitnami/charts/commit/449f0fcc372bd0a5e0eff5fb36acf34956143fd9)), closes [#28609](https://github.com/bitnami/charts/issues/28609)
 
 ## <small>0.1.7 (2024-07-29)</small>
 
