@@ -926,6 +926,10 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services
   ##
   ipFamilies: []
+  ## @param service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+  ##
+  loadBalancerClass: ""
   ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
