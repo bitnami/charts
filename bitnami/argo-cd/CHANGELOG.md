@@ -4,9 +4,9 @@
 
 * [bitnami/argo-cd] Missing namespace in ArgoCD known-hosts cm ([#28877](https://github.com/bitnami/charts/pull/28877))
 
-## 7.0.2 (2024-08-17)
+## <small>7.0.2 (2024-08-19)</small>
 
-* [bitnami/argo-cd] Add missing verbs to ApplicationSet role ([#28914](https://github.com/bitnami/charts/pull/28914))
+* [bitnami/argo-cd] Add missing verbs to ApplicationSet role (#28914) ([69e8d7b](https://github.com/bitnami/charts/commit/69e8d7bfa54ff1892f0405d31d29aa988bd79440)), closes [#28914](https://github.com/bitnami/charts/issues/28914)
 
 ## <small>7.0.1 (2024-08-16)</small>
 
