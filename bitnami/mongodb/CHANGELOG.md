@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.6.20 (2024-08-16)
+## 15.6.20 (2024-08-19)
 
 * [bitnami/mongodb] Fix logic to add custom annotations to external-access service ([#28883](https://github.com/bitnami/charts/pull/28883))
 
