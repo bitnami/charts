@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.16 (2024-08-07)
+## 1.0.17 (2024-08-14)
 
-* [bitnami/cilium] Release 1.0.16 ([#28708](https://github.com/bitnami/charts/pull/28708))
+* [bitnami/cilium] Release 1.0.17 ([#28873](https://github.com/bitnami/charts/pull/28873))
+
+## <small>1.0.16 (2024-08-07)</small>
+
+* [bitnami/cilium] Release 1.0.16 (#28708) ([6f90880](https://github.com/bitnami/charts/commit/6f9088035d1c54f94c610f9704f5b5e505791310)), closes [#28708](https://github.com/bitnami/charts/issues/28708)
 
 ## <small>1.0.15 (2024-08-05)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.2.15 (2024-08-12)
+## 2.3.0 (2024-08-14)
 
-* [bitnami/pinniped] Release 2.2.15 ([#28779](https://github.com/bitnami/charts/pull/28779))
+* [bitnami/pinniped] chore: :arrow_up: Bump common subchart ([#28869](https://github.com/bitnami/charts/pull/28869))
+
+## <small>2.2.15 (2024-08-12)</small>
+
+* [bitnami/pinniped] Release 2.2.15 (#28779) ([e50f759](https://github.com/bitnami/charts/commit/e50f759a375b74e15bdcb07c1c69361792c0cbef)), closes [#28779](https://github.com/bitnami/charts/issues/28779)
+
+## <small>2.2.14 (2024-08-09)</small>
+
+* [bitnami/pinniped] fix: :bug: Add missing rbac resources (#28804) ([b3d9e4a](https://github.com/bitnami/charts/commit/b3d9e4aef4314a608f98c2f9d6afb470dd37aacd)), closes [#28804](https://github.com/bitnami/charts/issues/28804)
 
 ## <small>2.2.13 (2024-08-07)</small>
 
