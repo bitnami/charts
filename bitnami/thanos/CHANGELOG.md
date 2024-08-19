@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.20 (2024-08-13)
+## 15.7.21 (2024-08-19)
 
-* [bitnami/thanos] Release 15.7.20 ([#28859](https://github.com/bitnami/charts/pull/28859))
+* [bitnami/thanos] Update index cache config for sharded store gateway ([#28747](https://github.com/bitnami/charts/pull/28747))
+
+## <small>15.7.20 (2024-08-13)</small>
+
+* [bitnami/thanos] Release 15.7.20 (#28859) ([73a02f4](https://github.com/bitnami/charts/commit/73a02f4120fcf42be703443a888f5ed0b5c34477)), closes [#28859](https://github.com/bitnami/charts/issues/28859)
 
 ## <small>15.7.19 (2024-08-09)</small>
 
