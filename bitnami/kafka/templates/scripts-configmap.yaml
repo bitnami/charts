@@ -196,7 +196,7 @@ data:
         elif [[ -f /mounted-certs/kafka.crt && -f /mounted-certs/kafka.key ]]; then
           cp "/mounted-certs/kafka.crt" /certs/tls.crt
           # Copy the PEM key ensuring the key used PEM format with PKCS#8
-          openssl pkcs8 -topk8 -passin pass:"${KAFKA_TLS_PEM_KEY_PASSWORD}" -nocrypt -in "/mounted-certs/kafka.key" > /certs/tls.key
+          openssl pkcs8 -topk8 -passin pass:"${KAFKA_TLS_PEM_KEY_PASSWORD:-}" -nocrypt -in "/mounted-certs/kafka.key" > /certs/tls.key
         elif [[ -f /mounted-certs/tls.crt && -f /mounted-certs/tls.key ]]; then
           cp "/mounted-certs/tls.crt" /certs/tls.crt
           # Copy the PEM key ensuring the key used PEM format with PKCS#8
