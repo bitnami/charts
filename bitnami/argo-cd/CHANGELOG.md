@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.2 (2024-08-17)
+## 7.0.3 (2024-08-20)
 
-* [bitnami/argo-cd] Add missing verbs to ApplicationSet role ([#28914](https://github.com/bitnami/charts/pull/28914))
+* [bitnami/argo-cd] test: :white_check_mark: Improve resilience of cypress test ([#28936](https://github.com/bitnami/charts/pull/28936))
+
+## <small>7.0.2 (2024-08-19)</small>
+
+* [bitnami/argo-cd] Add missing verbs to ApplicationSet role (#28914) ([69e8d7b](https://github.com/bitnami/charts/commit/69e8d7bfa54ff1892f0405d31d29aa988bd79440)), closes [#28914](https://github.com/bitnami/charts/issues/28914)
 
 ## <small>7.0.1 (2024-08-16)</small>
 
