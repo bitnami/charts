@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.18 (2024-08-07)
+## 15.6.19 (2024-08-14)
 
-* [bitnami/mongodb] fix(NOTES.txt): Missing messages ([#28685](https://github.com/bitnami/charts/pull/28685))
+* [bitnami/mongodb] Release 15.6.19 ([#28889](https://github.com/bitnami/charts/pull/28889))
+
+## <small>15.6.18 (2024-08-07)</small>
+
+* [bitnami/mongodb] fix(NOTES.txt): Missing messages (#28685) ([7e31f12](https://github.com/bitnami/charts/commit/7e31f12208a7ae11060d3eaa68c09f74cbc4a6a4)), closes [#28685](https://github.com/bitnami/charts/issues/28685)
 
 ## <small>15.6.17 (2024-08-06)</small>
 

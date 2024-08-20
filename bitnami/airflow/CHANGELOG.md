@@ -1,8 +1,16 @@
 # Changelog
 
-## 18.3.17 (2024-08-06)
+## 19.0.1 (2024-08-16)
 
-* [bitnami/airflow] Release 18.3.17 ([#28702](https://github.com/bitnami/charts/pull/28702))
+* [bitnami/airflow] Release 19.0.1 ([#28902](https://github.com/bitnami/charts/pull/28902))
+
+## 19.0.0 (2024-08-13)
+
+* [bitnami/airflow] Update dependencies (#28849) ([48c36e4](https://github.com/bitnami/charts/commit/48c36e48e8dde68be650c62eb412c99a112a05b1)), closes [#28849](https://github.com/bitnami/charts/issues/28849)
+
+## <small>18.3.17 (2024-08-06)</small>
+
+* [bitnami/airflow] Release 18.3.17 (#28702) ([3e6f5f9](https://github.com/bitnami/charts/commit/3e6f5f969a926151eb0d8925678ff2e69ba0d5f1)), closes [#28702](https://github.com/bitnami/charts/issues/28702)
 
 ## <small>18.3.16 (2024-08-01)</small>
 

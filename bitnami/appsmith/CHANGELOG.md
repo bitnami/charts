@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.21 (2024-08-02)
+## 4.0.0 (2024-08-13)
 
-* [bitnami/appsmith] Release 3.3.21 ([#28646](https://github.com/bitnami/charts/pull/28646))
+* [bitnami/appsmith] Update dependencies ([#28850](https://github.com/bitnami/charts/pull/28850))
+
+## <small>3.3.21 (2024-08-02)</small>
+
+* [bitnami/appsmith] Release 3.3.21 (#28646) ([b0e9f61](https://github.com/bitnami/charts/commit/b0e9f61e36f14247dc0e1f3068d81a33da5ae73b)), closes [#28646](https://github.com/bitnami/charts/issues/28646)
 
 ## <small>3.3.20 (2024-07-29)</small>
 

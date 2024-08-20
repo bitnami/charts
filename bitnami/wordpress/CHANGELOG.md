@@ -1,8 +1,24 @@
 # Changelog
 
+## 23.1.4 (2024-08-15)
+
+* [bitnami/wordpress] Release 23.1.4 ([#28896](https://github.com/bitnami/charts/pull/28896))
+
+## <small>23.1.3 (2024-08-13)</small>
+
+* [bitnami/wordpress] Release 23.1.3 (#28844) ([141e52f](https://github.com/bitnami/charts/commit/141e52fbb02909e3e9803319727e646a984f7bae)), closes [#28844](https://github.com/bitnami/charts/issues/28844)
+
+## <small>23.1.2 (2024-08-12)</small>
+
+* [bitnami/wordpress] Release 23.1.2 (#28839) ([ae815be](https://github.com/bitnami/charts/commit/ae815be89c155525d1d1356a6157773405ad35ca)), closes [#28839](https://github.com/bitnami/charts/issues/28839)
+
+## <small>23.1.1 (2024-08-08)</small>
+
+* [bitnami/wordpress] Release 23.1.1 (#28776) ([e727cd8](https://github.com/bitnami/charts/commit/e727cd8b0f898bda9e8739b908c5b77e0173c412)), closes [#28776](https://github.com/bitnami/charts/issues/28776)
+
 ## 23.1.0 (2024-08-06)
 
-* [bitnami/wordpress] Add the possibility to set `smtpFromEmail` and `smtpFromName` ([#28648](https://github.com/bitnami/charts/pull/28648))
+* [bitnami/wordpress] Add the possibility to set `smtpFromEmail` and `smtpFromName` (#28648) ([5210d9c](https://github.com/bitnami/charts/commit/5210d9cc7cdb0b66fe3d93d92745b5c2b304f7f8)), closes [#28648](https://github.com/bitnami/charts/issues/28648)
 
 ## <small>23.0.15 (2024-08-05)</small>
 
