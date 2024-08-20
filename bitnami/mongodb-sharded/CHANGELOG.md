@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.4 (2024-07-25)
+## 8.3.5 (2024-08-20)
 
-* [bitnami/mongodb-sharded] Release 8.3.4 ([#28476](https://github.com/bitnami/charts/pull/28476))
+* [bitnami/mongodb-sharded]Ginkgo tests: Use rollout instead of scale down ([#28937](https://github.com/bitnami/charts/pull/28937))
+
+## <small>8.3.4 (2024-07-25)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.4 (#28476) ([a0f15d4](https://github.com/bitnami/charts/commit/a0f15d4092aab507d6a2e98f457bda516f5caf80)), closes [#28476](https://github.com/bitnami/charts/issues/28476)
 
 ## <small>8.3.3 (2024-07-24)</small>
 
