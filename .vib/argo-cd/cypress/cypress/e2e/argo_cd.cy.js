@@ -55,7 +55,7 @@ it('allows deploying a healthy app for a new project', () => {
     cy.get('[qe-id="applications-list-button-create"]').click();
 
     cy.get('.applications-list').within(() => {
-      cy.contains(`${applications.newApplication.name}-${random}`, {timeout: 60000}).click();
+      cy.contains(`${applications.newApplication.name}-${random}`, {timeout: 60000}).click({force: true});
     });
   });
   // Ensure that UI shows the basic K8s objects
