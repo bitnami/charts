@@ -152,16 +152,17 @@ spec:
           volumeMounts:
             - mountPath: /additional-binaries
               name: cmp-additional-binaries
-        {{- if .Values.repoServer.configManagementPlugins.additionalBinaries }}
+        {{- with .Values.repoServer.configManagementPlugins.additionalBinaries }}
+        {{- if .binaries }}
         - name: download-additional-binaries
-          image: {{ include "common.images.image" (dict "imageRoot" (dict "repository" "curlimages/curl" "tag" "latest") "global" .Values.global) }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ include "common.images.image" (dict "imageRoot" .image "global" $.Values.global) }}
+          imagePullPolicy: {{ .image.pullPolicy }}
           command:
             - sh
             - -c
           args:
             - |-
-              {{- range $additionalBinary := .Values.repoServer.configManagementPlugins.additionalBinaries }}
+              {{- range $additionalBinary := .binaries }}
               # downloading {{ $additionalBinary.name }}
               curl -L {{ $additionalBinary.url }} -o /additional-binaries/{{ $additionalBinary.name }}
               chmod +x /additional-binaries/{{ $additionalBinary.name }}
@@ -169,6 +170,7 @@ spec:
           volumeMounts:
             - mountPath: /additional-binaries
               name: cmp-additional-binaries
+        {{- end }}
         {{- end }}
         {{- end }}
         {{- if .Values.repoServer.initContainers }}

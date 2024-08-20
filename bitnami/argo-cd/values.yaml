@@ -3159,13 +3159,37 @@ repoServer:
   configManagementPlugins:
     ## @param repoServer.configManagementPlugins.enabled Whether the config management plugins are enabled or not.
     enabled: false
-    ## @param repoServer.configManagementPlugins.additionalBinaries Additional binaries necessary for the config management plugins.
-    ## Will be downloaded from the given URL and made available as `name` in the configured `additionalBinariesDir` of the plugin.
-    ## E.g.
-    ## additionalBinaries:
-    ##   - name: my-custom-binary
-    ##     url: https://www.example.com/my-custom-binary-1.2.3
-    additionalBinaries: []
+    additionalBinaries:
+      ## OS Shell + Utility image
+      ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+      ## @param repoServer.configManagementPlugins.additionalBinaries.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+      ## @param repoServer.configManagementPlugins.additionalBinaries.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+      ## @skip repoServer.configManagementPlugins.additionalBinaries.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+      ## @param repoServer.configManagementPlugins.additionalBinaries.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+      ## @param repoServer.configManagementPlugins.additionalBinaries.image.pullPolicy OS Shell + Utility image pull policy
+      ## @param repoServer.configManagementPlugins.additionalBinaries.image.pullSecrets OS Shell + Utility image pull secrets
+      ##
+      image:
+        registry: docker.io
+        repository: bitnami/os-shell
+        tag: 12-debian-12-r27
+        digest: ""
+        pullPolicy: IfNotPresent
+        ## Optionally specify an array of imagePullSecrets.
+        ## Secrets must be manually created in the namespace.
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ## e.g:
+        ## pullSecrets:
+        ##   - myRegistryKeySecretName
+        ##
+        pullSecrets: [ ]
+      ## @param repoServer.configManagementPlugins.additionalBinaries.binaries Additional binaries necessary for the config management plugins.
+      ## Will be downloaded from the given URL and made available as `name` in the configured `additionalBinariesDir` of the plugin.
+      ## E.g.
+      ## binaries:
+      ##   - name: my-custom-binary
+      ##     url: https://www.example.com/my-custom-binary-1.2.3
+      binaries: []
     ## @param repoServer.configManagementPlugins.plugins The config management plugins to be provided as sidecars alongside the repo server.
     ## E.g.
     ## plugins:
