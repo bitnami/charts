@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.0.4 (2024-08-14)
+## 30.0.5 (2024-08-20)
 
-* [bitnami/kafka] Release 30.0.4 ([#28878](https://github.com/bitnami/charts/pull/28878))
+* bitnami/kafka Fix pem auth with custom encrypted private key ([#28618](https://github.com/bitnami/charts/pull/28618))
+
+## <small>30.0.4 (2024-08-14)</small>
+
+* [bitnami/kafka] Release 30.0.4 (#28878) ([3ff1490](https://github.com/bitnami/charts/commit/3ff14908c56a481e551f94cee08ad0488042d186)), closes [#28878](https://github.com/bitnami/charts/issues/28878)
 
 ## <small>30.0.3 (2024-08-08)</small>
 
