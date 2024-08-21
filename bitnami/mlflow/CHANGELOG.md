@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.22 (2024-08-06)
+## 1.4.23 (2024-08-21)
 
-* [bitnami/mlflow] Release 1.4.22 ([#28698](https://github.com/bitnami/charts/pull/28698))
+* [bitnami/mlflow] Update externalS3.host example ([#28955](https://github.com/bitnami/charts/pull/28955))
+
+## <small>1.4.22 (2024-08-06)</small>
+
+* [bitnami/mlflow] Release 1.4.22 (#28698) ([b135917](https://github.com/bitnami/charts/commit/b135917f329846d61cb2510b87a717c99aa4cda3)), closes [#28698](https://github.com/bitnami/charts/issues/28698)
 
 ## <small>1.4.21 (2024-07-29)</small>
 
