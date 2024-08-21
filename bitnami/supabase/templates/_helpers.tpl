@@ -332,6 +332,17 @@ Supabase Realtime credential secret key
 {{- end -}}
 
 {{/*
+Supabase Realtime encryption secret key
+*/}}
+{{- define "supabase.realtime.encryptionSecretKey" -}}
+{{- if .Values.realtime.existingEncryptionSecretKey -}}
+    {{- print .Values.realtime.existingEncryptionSecretKey -}}
+{{- else -}}
+    {{- print "db-enc-key" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 JWT credential anon secret key
 */}}
 {{- define "supabase.jwt.anonSecretKey" -}}

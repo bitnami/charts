@@ -1249,6 +1249,9 @@ realtime:
   ## @param realtime.existingSecretKey Key in the existing secret containing the key base for Supabase realtime
   ##
   existingSecretKey: "key-base"
+  ## @param realtime.existingEncryptionSecretKey Key in the existing secret containing the db encryption key for Supabase realtime
+  ##
+  existingEncryptionSecretKey: "db-enc-key"
   ## @param realtime.defaultConfig [string] Default configuration for Supabase realtime
   ##
   defaultConfig: |
@@ -1257,13 +1260,15 @@ realtime:
     DB_NAME: {{ include "supabase.database.name" . | quote }}
     DB_SSL: {{ .Values.dbSSL | quote }}
     PORT: {{ .Values.realtime.containerPorts.http | quote }}
-    APP_NAME: "realtime"
+    APP_NAME: "supabase-realtime"
     ERL_AFLAGS: "-proto_dist inet_tcp"
     REPLICATION_MODE: "RLS"
     REPLICATION_POLL_INTERVAL: "100"
     SECURE_CHANNELS: "true"
     SLOT_NAME: "supabase_realtime_rls"
     TEMPORARY_SLOT: "true"
+    DB_AFTER_CONNECT_QUERY: "DO $body$ BEGIN CREATE SCHEMA IF NOT EXISTS _realtime; ALTER SCHEMA _realtime OWNER TO postgres; SET search_path TO _realtime; END $body$;"
+    DNS_NODES: "supabase-realtime"
   ## @param realtime.extraConfig Extra configuration for Supabase realtime
   ##
   extraConfig: {}
@@ -3347,6 +3352,9 @@ postgresql:
     ##     memory: 1024Mi
     ##
     resources: {}
+    ## @param postgresql.primary.extendedConfiguration Extended PostgreSQL configuration
+    ##
+    extendedConfiguration: "wal_level = logical"
 
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
