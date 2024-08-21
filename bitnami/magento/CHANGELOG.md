@@ -1,8 +1,12 @@
 # Changelog
 
-## 28.0.3 (2024-07-25)
+## 28.0.4 (2024-08-21)
 
-* [bitnami/magento] Release 28.0.3 ([#28442](https://github.com/bitnami/charts/pull/28442))
+* [bitnami/magento] Release 28.0.4 ([#28960](https://github.com/bitnami/charts/pull/28960))
+
+## <small>28.0.3 (2024-07-25)</small>
+
+* [bitnami/magento] Release 28.0.3 (#28442) ([2cfdbe4](https://github.com/bitnami/charts/commit/2cfdbe420a1cdc209ca865675e75bce9164c4ab1)), closes [#28442](https://github.com/bitnami/charts/issues/28442)
 
 ## <small>28.0.2 (2024-07-24)</small>
 
