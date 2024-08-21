@@ -80,7 +80,7 @@ spec:
         # it had the binary wait-for-port.
         # This init container is for avoiding CrashLoopback errors in the Hub container because the PostgreSQL container is not ready
         - name: wait-for-db
-          image: {{{ include "common.images.image" (dict "imageRoot" .Values.postgresql.image "global" .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.postgresql.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.postgresql.image.pullPolicy  }}
           command:
             - /bin/bash
