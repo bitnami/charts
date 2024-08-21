@@ -3949,7 +3949,7 @@ config:
     ##
     argocdServerAdminPasswordMtime: ""
     ## Create a secret with optional repository credentials
-    ## @param config.secret.repositoryCredentials Repository credentials to add to the Argo CD server confgi secret
+    ## @param config.secret.repositoryCredentials Repository credentials to add to the Argo CD server config secret
     ## E.g.
     ## repositoryCredentials:
     ##   sample-ssh-key: |
