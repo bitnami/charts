@@ -103,9 +103,9 @@ data:
                 - admin
                 - anon
 
-      - name: realtime-v1-ws
-        _comment: "Realtime: /realtime/v1/* -> ws://supabase-realtime:80/socket/websocket/*"
-        url: http://supabase-realtime:80/socket/websocket
+      - name: realtime-v1
+        _comment: "Realtime: /realtime/v1/* -> ws://{{ include "supabase.realtime.fullname" . }}:{{ .Values.realtime.service.ports.http }}/socket/websocket/*"
+        url: http://{{ include "supabase.realtime.fullname" . }}:{{ .Values.realtime.service.ports.http }}/socket/websocket
         routes:
           - name: realtime-v1-ws
             strip_path: true
@@ -124,8 +124,8 @@ data:
                 - anon
 
       - name: realtime-v1-api
-        _comment: "Realtime: /realtime/v1/* -> http://supabase-realtime:80/*"
-        url: http://supabase-realtime:80
+        _comment: "Realtime: /realtime/v1/* -> http://{{ include "supabase.realtime.fullname" . }}:{{ .Values.realtime.service.ports.http }}/*"
+        url: http://{{ include "supabase.realtime.fullname" . }}:{{ .Values.realtime.service.ports.http }}
         routes:
           - name: realtime-v1-api
             strip_path: true
