@@ -801,7 +801,6 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | Name                                         | Description                                                             | Value                |
 | -------------------------------------------- | ----------------------------------------------------------------------- | -------------------- |
 | `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                   | `true`               |
-| `postgresql.image`                           | Postgres Image                                                          | `""`                 |
 | `postgresql.auth.username`                   | Name for a custom user to create                                        | `bn_jupyterhub`      |
 | `postgresql.auth.password`                   | Password for the custom user to create                                  | `""`                 |
 | `postgresql.auth.database`                   | Name for a custom database to create                                    | `bitnami_jupyterhub` |
