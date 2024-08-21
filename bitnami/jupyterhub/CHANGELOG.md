@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.2.15 (2024-08-13)
+## 7.2.15 (2024-08-21)
 
 * [bitnami/juypterhub] postgres image missing when postgres is disabled (fluxCD/argoCD) ([#28841](https://github.com/bitnami/charts/pull/28841))
 
