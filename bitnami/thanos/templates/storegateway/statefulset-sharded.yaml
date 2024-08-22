@@ -172,6 +172,9 @@ spec:
                 - action: keep
                   source_labels: ["shard"]
                   regex: {{ $index }}
+            {{- if $.Values.storegateway.sharded.hashPartitioning.customRelabelConfig }}
+            {{- $.Values.storegateway.sharded.hashPartitioning.customRelabelConfig | toYaml | nindent 16 }}
+            {{- end }} 
             {{- end }}
             {{- if $timePartitioning }}
             {{- $partion := (slice $.Values.storegateway.sharded.timePartitioning  $index) | first }}
