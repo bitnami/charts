@@ -1,6 +1,6 @@
 # Changelog
 
-## 28.0.4 (2024-08-21)
+## 28.0.4 (2024-08-22)
 
 * [bitnami/magento] Release 28.0.4 ([#28960](https://github.com/bitnami/charts/pull/28960))
 
