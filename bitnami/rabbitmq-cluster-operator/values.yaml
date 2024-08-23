@@ -749,6 +749,9 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
+  ## @param msgTopologyOperator.skipCreateAdmissionWebhookConfig skip creation of ValidationWebhookConfiguration
+  ##
+  skipCreateAdmissionWebhookConfig: false
   ## @param msgTopologyOperator.existingWebhookCertSecret name of a secret containing the certificates (use it to avoid certManager creating one)
   ##
   existingWebhookCertSecret: ""
