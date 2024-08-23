@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.5 (2024-08-23)
+## 7.0.6 (2024-08-23)
 
-* [bitnami/argo-cd] fix: Add namespace to service account's bindings ([#28737](https://github.com/bitnami/charts/pull/28737))
+* [bitnami/argo-cd] Release 7.0.6 ([#28994](https://github.com/bitnami/charts/pull/28994))
+
+## <small>7.0.5 (2024-08-23)</small>
+
+* [bitnami/argo-cd] fix: Add namespace to service account's bindings (#28737) ([b75dcd7](https://github.com/bitnami/charts/commit/b75dcd716410ec623eb832104ffe6f25df0e5a13)), closes [#28737](https://github.com/bitnami/charts/issues/28737)
 
 ## <small>7.0.4 (2024-08-23)</small>
 
