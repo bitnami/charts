@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.5.10 (2024-07-25)
+## 9.5.12 (2024-08-14)
 
-* [bitnami/kube-prometheus] Release 9.5.10 ([#28461](https://github.com/bitnami/charts/pull/28461))
+* [bitnami/kube-prometheus] Release 9.5.12 ([#28879](https://github.com/bitnami/charts/pull/28879))
+
+## <small>9.5.11 (2024-08-07)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.11 (#28757) ([9738e0c](https://github.com/bitnami/charts/commit/9738e0c6bbca488bf137edaead8dfad44a1b62c1)), closes [#28757](https://github.com/bitnami/charts/issues/28757)
+
+## <small>9.5.10 (2024-07-25)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.10 (#28461) ([1a3bd4e](https://github.com/bitnami/charts/commit/1a3bd4e2175ce02ed5dc088db10bcfa3acc9cd83)), closes [#28461](https://github.com/bitnami/charts/issues/28461)
 
 ## <small>9.5.9 (2024-07-24)</small>
 

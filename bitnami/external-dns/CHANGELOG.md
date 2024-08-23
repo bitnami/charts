@@ -1,8 +1,8 @@
 # Changelog
 
-## 8.3.5 (2024-08-07)
+## 8.3.5 (2024-08-13)
 
-* [bitnami/external-dns] Allow rfc2136-zone to specify multiple zones ([#28681](https://github.com/bitnami/charts/pull/28681))
+* [bitnami/external-dns]  Fix crd.create=true ([#27434](https://github.com/bitnami/charts/pull/27434))
 
 ## <small>8.3.4 (2024-08-07)</small>
 

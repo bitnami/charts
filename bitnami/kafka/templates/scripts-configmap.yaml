@@ -192,15 +192,15 @@ data:
         if [[ -f "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.crt" && "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.key" ]]; then
           cp "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.crt" /certs/tls.crt
           # Copy the PEM key ensuring the key used PEM format with PKCS#8
-          openssl pkcs8 -topk8 -nocrypt -in "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.key" > /certs/tls.key
+          openssl pkcs8 -topk8 -nocrypt -passin pass:"${KAFKA_TLS_PEM_KEY_PASSWORD:-}" -in "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.key" > /certs/tls.key
         elif [[ -f /mounted-certs/kafka.crt && -f /mounted-certs/kafka.key ]]; then
           cp "/mounted-certs/kafka.crt" /certs/tls.crt
           # Copy the PEM key ensuring the key used PEM format with PKCS#8
-          openssl pkcs8 -topk8 -nocrypt -in "/mounted-certs/kafka.key" > /certs/tls.key
+          openssl pkcs8 -topk8 -passin pass:"${KAFKA_TLS_PEM_KEY_PASSWORD:-}" -nocrypt -in "/mounted-certs/kafka.key" > /certs/tls.key
         elif [[ -f /mounted-certs/tls.crt && -f /mounted-certs/tls.key ]]; then
           cp "/mounted-certs/tls.crt" /certs/tls.crt
           # Copy the PEM key ensuring the key used PEM format with PKCS#8
-          openssl pkcs8 -topk8 -nocrypt -in "/mounted-certs/tls.key" > /certs/tls.key
+          openssl pkcs8 -topk8 -passin pass:"${KAFKA_TLS_PEM_KEY_PASSWORD:-}" -nocrypt -in "/mounted-certs/tls.key" > /certs/tls.key
         else
           error "PEM key and cert files not found"
         fi
@@ -382,7 +382,8 @@ data:
     {{- if eq .Values.brokerRackAssignment "aws-az" }}
     # Broker rack awareness
     echo "Obtaining broker.rack for aws-az rack assignment"
-    export BROKER_RACK=$(curl "http://169.254.169.254/latest/meta-data/placement/availability-zone-id")
+    EC2_METADATA_TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 60")
+    export BROKER_RACK=$(curl -H "X-aws-ec2-metadata-token: $EC2_METADATA_TOKEN" "http://169.254.169.254/latest/meta-data/placement/availability-zone-id")
     kafka_conf_set "$KAFKA_CONFIG_FILE" "broker.rack" "$BROKER_RACK"
     {{- end }}
     if [ -f /secret-config/server-secret.properties ]; then

@@ -1,8 +1,16 @@
 # Changelog
 
-## 5.3.11 (2024-07-25)
+## 6.0.0 (2024-08-13)
 
-* [bitnami/oauth2-proxy] Release 5.3.11 ([#28451](https://github.com/bitnami/charts/pull/28451))
+* [bitnami/oauth2-proxy] Update dependencies ([#28856](https://github.com/bitnami/charts/pull/28856))
+
+## <small>5.3.12 (2024-08-07)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.12 (#28733) ([1f2bc8b](https://github.com/bitnami/charts/commit/1f2bc8b4bdbbb6bdcae14b6849c962b279824177)), closes [#28733](https://github.com/bitnami/charts/issues/28733)
+
+## <small>5.3.11 (2024-07-25)</small>
+
+* [bitnami/oauth2-proxy] Release 5.3.11 (#28451) ([2c92255](https://github.com/bitnami/charts/commit/2c922556df1f63c7f8396621c65e31d3d9d4bfe2)), closes [#28451](https://github.com/bitnami/charts/issues/28451)
 
 ## <small>5.3.10 (2024-07-24)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
+## 19.0.2 (2024-08-07)
+
+* [bitnami/contour] Release 19.0.2 ([#28709](https://github.com/bitnami/charts/pull/28709))
+
+## <small>19.0.1 (2024-08-06)</small>
+
+* [bitnami/contour] Release 19.0.1 (#28683) ([801c69a](https://github.com/bitnami/charts/commit/801c69a1b644ecf2ba19307977a9bfc8eccd21cb)), closes [#28683](https://github.com/bitnami/charts/issues/28683)
+
 ## 19.0.0 (2024-08-05)
 
-* [bitnami/contour] Release 19.0.0 ([#28636](https://github.com/bitnami/charts/pull/28636))
+* [bitnami/contour] Release 19.0.0 (#28636) ([694171f](https://github.com/bitnami/charts/commit/694171f0690fc656a36cf7f48cd9a98a1838f149)), closes [#28636](https://github.com/bitnami/charts/issues/28636)
 
 ## <small>18.2.11 (2024-08-01)</small>
 
