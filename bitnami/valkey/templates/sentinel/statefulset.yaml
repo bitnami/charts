@@ -547,7 +547,7 @@ spec:
             - -c
             - |
               if [[ -f '/secrets/valkey-password' ]]; then
-                  export VALKEY_PASSWORD=$(cat /secrets/valkey-password)
+                  export REDIS_PASSWORD=$(cat /secrets/valkey-password)
               fi
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
@@ -555,15 +555,15 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            - name: VALKEY_ALIAS
+            - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
-            - name: VALKEY_EXPORTER_WEB_LISTEN_ADDRESS
+            - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
               value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
             {{- if .Values.auth.enabled }}
-            - name: VALKEY_USER
+            - name: REDIS_USER
               value: default
             {{- if (not .Values.auth.usePasswordFiles) }}
-            - name: VALKEY_PASSWORD
+            - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "valkey.secretName" . }}
@@ -571,15 +571,15 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.tls.enabled }}
-            - name: VALKEY_ADDR
+            - name: REDIS_ADDR
               value: valkeys://{{ .Values.metrics.valkeyTargetHost }}:{{ .Values.replica.containerPorts.valkey }}
             {{- if .Values.tls.authClients }}
-            - name: VALKEY_EXPORTER_TLS_CLIENT_KEY_FILE
+            - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "valkey.tlsCertKey" . }}
-            - name: VALKEY_EXPORTER_TLS_CLIENT_CERT_FILE
+            - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "valkey.tlsCert" . }}
             {{- end }}
-            - name: VALKEY_EXPORTER_TLS_CA_CERT_FILE
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "valkey.tlsCACert" . }}
             {{- end }}
             {{- if .Values.metrics.extraEnvVars }}

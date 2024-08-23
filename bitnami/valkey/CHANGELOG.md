@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.14 (2024-08-14)
+## 0.3.15 (2024-08-19)
 
-* [bitnami/valkey] Release 0.3.14 ([#28887](https://github.com/bitnami/charts/pull/28887))
+* [bitnami/valkey] Fix env-vars for metrics container ([#28884](https://github.com/bitnami/charts/pull/28884))
+
+## <small>0.3.14 (2024-08-14)</small>
+
+* [bitnami/valkey] Release 0.3.14 (#28887) ([87846b8](https://github.com/bitnami/charts/commit/87846b85ad80bf586ea9d8966c597f5492f0bb03)), closes [#28887](https://github.com/bitnami/charts/issues/28887)
 
 ## <small>0.3.13 (2024-07-31)</small>
 

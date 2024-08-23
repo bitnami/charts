@@ -1,8 +1,13 @@
 # Changelog
 
-## 14.0.0 (2024-08-13)
+## 14.1.1 (2024-08-22)
 
-* [bitnami/discourse] Update dependencies ([#28852](https://github.com/bitnami/charts/pull/28852))
+* [bitnami/discourse] Release 14.1.1 ([#28966](https://github.com/bitnami/charts/pull/28966))
+
+## 14.1.0 (2024-08-20)
+
+* [bitnami/discourse] Bump discourse to 3.3.0 (#28786) ([439b8c7](https://github.com/bitnami/charts/commit/439b8c7b48980952615ca0290defa6180a2164ed)), closes [#28786](https://github.com/bitnami/charts/issues/28786)
+* [bitnami/discourse] Update dependencies (#28852) ([279c2bd](https://github.com/bitnami/charts/commit/279c2bd4db105ad48a25419958e318f3e522338b)), closes [#28852](https://github.com/bitnami/charts/issues/28852)
 
 ## <small>13.2.15 (2024-07-30)</small>
 
