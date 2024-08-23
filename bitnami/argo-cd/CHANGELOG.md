@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.3 (2024-08-20)
+## 7.0.4 (2024-08-23)
 
-* [bitnami/argo-cd] test: :white_check_mark: Improve resilience of cypress test ([#28936](https://github.com/bitnami/charts/pull/28936))
+* [bitnami/argo-cd] Release 7.0.4 ([#28987](https://github.com/bitnami/charts/pull/28987))
+
+## <small>7.0.3 (2024-08-20)</small>
+
+* [bitnami/argo-cd] test: :white_check_mark: Improve resilience of cypress test (#28936) ([b290de1](https://github.com/bitnami/charts/commit/b290de196fdd3e0aa5bc55c5257fe5384dde39d1)), closes [#28936](https://github.com/bitnami/charts/issues/28936)
 
 ## <small>7.0.2 (2024-08-19)</small>
 
