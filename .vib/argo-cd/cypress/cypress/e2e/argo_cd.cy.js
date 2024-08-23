@@ -43,19 +43,19 @@ it('allows deploying a healthy app for a new project', () => {
     cy.get('[qe-id="application-create-field-repository-url"]').type(
       applications.newApplication.repoUrl
     );
-    cy.get('[qe-id="application-create-field-path"]').type(
-      applications.newApplication.repoPath
-    );
     cy.get('[qe-id="application-create-field-cluster-url"]').type(
       applications.newApplication.clusterUrl
     );
     cy.get('[qeid="application-create-field-namespace"]').type(
       applications.newApplication.namespace
     );
+    cy.get('[qe-id="application-create-field-path"]').type(
+      applications.newApplication.repoPath
+    );
     cy.get('[qe-id="applications-list-button-create"]').click();
 
     cy.get('.applications-list').within(() => {
-      cy.contains(`${applications.newApplication.name}-${random}`, {timeout: 60000}).click();
+      cy.contains(`${applications.newApplication.name}-${random}`, {timeout: 60000}).click({force: true});
     });
   });
   // Ensure that UI shows the basic K8s objects

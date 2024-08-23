@@ -1,0 +1,52 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chainloop.cas.fullname" . }}-api
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "chainloop.cas.labels" . | nindent 4 }}
+  {{- if or .Values.cas.serviceAPI.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.cas.serviceAPI.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.cas.serviceAPI.type }}
+  {{- if and .Values.cas.serviceAPI.clusterIP (eq .Values.cas.serviceAPI.type "ClusterIP") }}
+  clusterIP: {{ .Values.cas.serviceAPI.clusterIP }}
+  {{- end }}
+  {{- if .Values.cas.serviceAPI.sessionAffinity }}
+  sessionAffinity: {{ .Values.cas.serviceAPI.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.cas.serviceAPI.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.cas.serviceAPI.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.cas.serviceAPI.type "LoadBalancer") (eq .Values.cas.serviceAPI.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.cas.serviceAPI.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.cas.serviceAPI.type "LoadBalancer") (not (empty .Values.cas.serviceAPI.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.cas.serviceAPI.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.cas.serviceAPI.type "LoadBalancer") (not (empty .Values.cas.serviceAPI.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.cas.serviceAPI.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: grpc
+      {{- $port := coalesce .Values.cas.serviceAPI.port .Values.cas.serviceAPI.ports.http }}
+      port: {{ $port }}
+      {{- if not (eq $port .Values.cas.containerPorts.grpc) }}
+      targetPort: {{ .Values.cas.containerPorts.grpc }}
+      {{- end }}
+      protocol: TCP
+      {{- if and (or (eq .Values.cas.serviceAPI.type "NodePort") (eq .Values.cas.serviceAPI.type "LoadBalancer")) (not (empty .Values.cas.serviceAPI.nodePorts.http)) }}
+      nodePort: {{ .Values.cas.serviceAPI.nodePorts.http }}
+      {{- else if eq .Values.cas.serviceAPI.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.cas.serviceAPI.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.cas.serviceAPI.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{ include "chainloop.cas.selectorLabels" . | nindent 4 }}

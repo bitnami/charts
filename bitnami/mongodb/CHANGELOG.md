@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.6.18 (2024-08-07)
+## 15.6.20 (2024-08-19)
 
-* [bitnami/mongodb] fix(NOTES.txt): Missing messages ([#28685](https://github.com/bitnami/charts/pull/28685))
+* [bitnami/mongodb] Fix logic to add custom annotations to external-access service ([#28883](https://github.com/bitnami/charts/pull/28883))
+
+## <small>15.6.19 (2024-08-14)</small>
+
+* [bitnami/mongodb] Release 15.6.19 (#28889) ([8b3cb57](https://github.com/bitnami/charts/commit/8b3cb57c221f0f035e020cecc70b44e26cfd8040)), closes [#28889](https://github.com/bitnami/charts/issues/28889)
+
+## <small>15.6.18 (2024-08-07)</small>
+
+* [bitnami/mongodb] fix(NOTES.txt): Missing messages (#28685) ([7e31f12](https://github.com/bitnami/charts/commit/7e31f12208a7ae11060d3eaa68c09f74cbc4a6a4)), closes [#28685](https://github.com/bitnami/charts/issues/28685)
 
 ## <small>15.6.17 (2024-08-06)</small>
 
