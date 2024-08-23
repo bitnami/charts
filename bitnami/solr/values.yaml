@@ -815,6 +815,9 @@ metrics:
   ## @param metrics.enabled Deploy a Solr Prometheus exporter deployment to expose metrics
   ##
   enabled: false
+  ## @param metrics.revisionHistoryLimit The number of old history to retain to allow rollback
+  ## NOTE: Explicitly setting this field to 0, will result in cleaning up all the history of your Deployment, thus that Deployment will not be able to rollback.
+  revisionHistoryLimit: 10
   ## @param metrics.configFile Config file with metrics to export by the Solr prometheus metrics. To change it mount a different file using `extraConfigMaps`
   ##
   configFile: "/opt/bitnami/solr/prometheus-exporter/conf/solr-exporter-config.xml"

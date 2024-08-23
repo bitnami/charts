@@ -1,8 +1,20 @@
 # Changelog
 
+## 22.1.3 (2024-08-22)
+
+* [bitnami/keycloak] Release 22.1.3 ([#28984](https://github.com/bitnami/charts/pull/28984))
+
+## <small>22.1.2 (2024-08-19)</small>
+
+* [bitnami/keycloak] Release 22.1.2 (#28929) ([0ab3f3a](https://github.com/bitnami/charts/commit/0ab3f3a85f1ecbcf558977de0c5f584de495b1e4)), closes [#28929](https://github.com/bitnami/charts/issues/28929)
+
+## <small>22.1.1 (2024-08-13)</small>
+
+* [bitnami/keycloak] move hostname variables to config map to allow override (#28838) ([f919441](https://github.com/bitnami/charts/commit/f9194415ccfa5e6a06007e9bf24376a02b20bb05)), closes [#28838](https://github.com/bitnami/charts/issues/28838)
+
 ## 22.1.0 (2024-08-06)
 
-* [bitnami/keycloak] use hostname v2 options ([#28611](https://github.com/bitnami/charts/pull/28611))
+* [bitnami/keycloak] use hostname v2 options (#28611) ([559b860](https://github.com/bitnami/charts/commit/559b8604bb021798592ee276e9553d80d0735bbf)), closes [#28611](https://github.com/bitnami/charts/issues/28611)
 
 ## <small>22.0.2 (2024-08-06)</small>
 

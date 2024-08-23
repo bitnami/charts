@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.18 (2024-08-06)
+## 13.4.19 (2024-08-07)
 
-* [bitnami/jenkins] Release 13.4.18 ([#28700](https://github.com/bitnami/charts/pull/28700))
+* [bitnami/jenkins] Release 13.4.19 ([#28754](https://github.com/bitnami/charts/pull/28754))
+
+## <small>13.4.18 (2024-08-06)</small>
+
+* [bitnami/jenkins] Release 13.4.18 (#28700) ([f342e6b](https://github.com/bitnami/charts/commit/f342e6b01421346152e1c393c8b68fe52435a05a)), closes [#28700](https://github.com/bitnami/charts/issues/28700)
 
 ## <small>13.4.17 (2024-07-29)</small>
 

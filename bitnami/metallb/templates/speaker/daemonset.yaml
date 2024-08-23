@@ -137,6 +137,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: METALLB_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: METALLB_HOST
               valueFrom:
                 fieldRef:
