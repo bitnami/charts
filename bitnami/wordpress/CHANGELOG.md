@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.1.7 (2024-08-22)
+## 23.1.8 (2024-08-22)
 
-* [bitnami/wordpress] Release 23.1.7 ([#28979](https://github.com/bitnami/charts/pull/28979))
+* [bitnami/wordpress] Fix php session mgmt ([#28974](https://github.com/bitnami/charts/pull/28974))
+
+## <small>23.1.7 (2024-08-22)</small>
+
+* [bitnami/wordpress] Release 23.1.7 (#28979) ([899c4cc](https://github.com/bitnami/charts/commit/899c4cc32132ba25475c51444175f33e445bc53b)), closes [#28979](https://github.com/bitnami/charts/issues/28979)
 
 ## <small>23.1.6 (2024-08-22)</small>
 
