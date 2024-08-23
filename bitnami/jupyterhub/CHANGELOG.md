@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.14 (2024-07-31)
+## 7.2.15 (2024-08-21)
 
-* [bitnami/jupyterhub] Release 7.2.14 ([#28600](https://github.com/bitnami/charts/pull/28600))
+* [bitnami/juypterhub] postgres image missing when postgres is disabled (fluxCD/argoCD) ([#28841](https://github.com/bitnami/charts/pull/28841))
+
+## <small>7.2.14 (2024-07-31)</small>
+
+* [bitnami/jupyterhub] Release 7.2.14 (#28600) ([b6af234](https://github.com/bitnami/charts/commit/b6af23429e898606e2ec2a2fd0bdfc2c26cb1bb7)), closes [#28600](https://github.com/bitnami/charts/issues/28600)
 
 ## <small>7.2.13 (2024-07-25)</small>
 
