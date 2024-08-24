@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.3.14 (2024-08-23)
+## 11.3.14 (2024-08-24)
 
 * [bitnami/cassandra] Release 11.3.14 ([#28995](https://github.com/bitnami/charts/pull/28995))
 
