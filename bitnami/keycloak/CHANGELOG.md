@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.2.0 (2024-08-23)
+## 22.2.0 (2024-08-25)
 
 * [bitnami/keycloak] Use database user secret key from PostgreSQL chart ([#29008](https://github.com/bitnami/charts/pull/29008))
 
