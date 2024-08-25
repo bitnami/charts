@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.0.3 (2024-08-23)
+## 19.0.3 (2024-08-25)
 
 * [bitnami/airflow] add resources to loaddags initcontainer try 2 ([#28992](https://github.com/bitnami/charts/pull/28992))
 
