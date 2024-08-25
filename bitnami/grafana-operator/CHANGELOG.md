@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.6.0 (2024-08-14)
+## 4.6.1 (2024-08-23)
 
-* [bitnami/grafana-operator] Add some pod scheduling directives ([#28861](https://github.com/bitnami/charts/pull/28861))
+* [bitnami/grafana-operator] Release 4.6.1 ([#29002](https://github.com/bitnami/charts/pull/29002))
+
+## 4.6.0 (2024-08-20)
+
+* [bitnami/grafana-operator] Add some pod scheduling directives (#28861) ([6cf09be](https://github.com/bitnami/charts/commit/6cf09bebecb993ed045ab7f4147254ea2bebe72f)), closes [#28861](https://github.com/bitnami/charts/issues/28861)
 
 ## 4.5.0 (2024-08-12)
 

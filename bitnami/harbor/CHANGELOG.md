@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.1 (2024-08-23)
+## 23.0.2 (2024-08-23)
 
 * [bitnami/harbor] fix: secret envvars and their documentation ([#28989](https://github.com/bitnami/charts/pull/28989))
+
+## 23.0.1 (2024-08-24)
+
+* [bitnami/harbor] Release 23.0.1 ([#29012](https://github.com/bitnami/charts/pull/29012))
 
 ## <small>22.0.12 (2024-08-08)</small>
 
