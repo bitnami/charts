@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.24 (2024-08-24)
+## 1.4.24 (2024-08-26)
 
 * [bitnami/mlflow] Release 1.4.24 ([#29010](https://github.com/bitnami/charts/pull/29010))
 
