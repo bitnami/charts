@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.6 (2024-07-25)
+## 14.6.7 (2024-08-26)
 
-* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts ([#27900](https://github.com/bitnami/charts/pull/27900))
+* [bitnami/rabbitmq] Release 14.6.7 ([#29018](https://github.com/bitnami/charts/pull/29018))
+
+## <small>14.6.6 (2024-08-08)</small>
+
+* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts (#27900) ([95148a9](https://github.com/bitnami/charts/commit/95148a9ae1363f9da6415b64085aadfd8add1413)), closes [#27900](https://github.com/bitnami/charts/issues/27900)
 
 ## <small>14.6.5 (2024-07-25)</small>
 
