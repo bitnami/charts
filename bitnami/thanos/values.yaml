@@ -3217,9 +3217,9 @@ storegateway:
   ## Sharded parameters
   ## @param storegateway.sharded.enabled Enable sharding for Thanos Store Gateway
   ## @param storegateway.sharded.hashPartitioning.shards Setting hashPartitioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks
-  ## @param storegateway.sharded.hashPartitioning.customRelabelConfig Setting custom relabel config
+  ## @param storegateway.sharded.hashPartitioning.extraRelabelingConfigs Setting extra relabel config
   ## e,g:
-  ## customRelabelConfig: 
+  ## extraRelabelingConfigs: 
   ##   - action: keep
   ##     source_labels: ["region"]
   ##     regex: cn-zhangjiakou
@@ -3249,7 +3249,7 @@ storegateway:
     enabled: false
     hashPartitioning:
       shards: ""
-      customRelabelConfig: []
+      extraRelabelingConfigs: []
     timePartitioning:
       - min: ""
         max: ""
