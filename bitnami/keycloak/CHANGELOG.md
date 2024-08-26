@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.1.3 (2024-08-22)
+## 22.2.0 (2024-08-25)
 
-* [bitnami/keycloak] Release 22.1.3 ([#28984](https://github.com/bitnami/charts/pull/28984))
+* [bitnami/keycloak] Use database user secret key from PostgreSQL chart ([#29008](https://github.com/bitnami/charts/pull/29008))
+
+## <small>22.1.3 (2024-08-22)</small>
+
+* [bitnami/keycloak] Release 22.1.3 (#28984) ([bb21c84](https://github.com/bitnami/charts/commit/bb21c84c422bdef42fad01db0252798d33e3499d)), closes [#28984](https://github.com/bitnami/charts/issues/28984)
 
 ## <small>22.1.2 (2024-08-19)</small>
 
