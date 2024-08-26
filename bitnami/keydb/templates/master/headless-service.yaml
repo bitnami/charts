@@ -1,0 +1,33 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-hl" (include "keydb.master.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: keydb
+    app.kubernetes.io/component: master
+  {{- if or .Values.master.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.master.service.headless.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: tcp-keydb
+      port: {{ .Values.master.service.ports.keydb }}
+      targetPort: keydb
+      {{- if and (or (eq .Values.master.service.type "NodePort") (eq .Values.master.service.type "LoadBalancer")) (not (empty .Values.master.service.nodePorts.keydb)) }}
+      nodePort: {{ .Values.master.service.nodePorts.keydb }}
+      {{- else if eq .Values.master.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.master.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: keydb
+    app.kubernetes.io/component: master
