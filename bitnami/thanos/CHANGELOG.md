@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.7.22 (2024-08-22)
+## 15.7.22 (2024-08-26)
 
 * add custom relabel config while thanos storegateway hash shard ([#28969](https://github.com/bitnami/charts/pull/28969))
 
