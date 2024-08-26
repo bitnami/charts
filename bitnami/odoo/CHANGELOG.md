@@ -1,6 +1,6 @@
 # Changelog
 
-## 26.2.16 (2024-08-24)
+## 26.2.16 (2024-08-26)
 
 * [bitnami/odoo] Release 26.2.16 ([#29004](https://github.com/bitnami/charts/pull/29004))
 
