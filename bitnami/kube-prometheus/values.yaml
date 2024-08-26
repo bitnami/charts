@@ -1464,6 +1464,22 @@ prometheus:
     objectStorageConfig:
       secretName: ""
       secretKey: thanos.yaml
+    ## @param prometheus.thanos.extraEnvVars Array with extra environment variables to add to the thanos sidecar container
+    ## For example:
+    ## extraEnvVars:
+    ##  - name: REQUEST_LOGGING_CONFIG
+    ##    valueFrom:
+    ##      secretKeyRef:
+    ##        name: thanos-request-logging-config
+    ##        key: request-logging-config.yml
+    ##
+    extraEnvVars: []
+    ## @param prometheus.thanos.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsCM: ""
+    ## @param prometheus.thanos.extraEnvVarsSecret Name of existing Secret containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsSecret: ""
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
     ## @param prometheus.thanos.extraVolumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
     ## extraVolumeMounts:
