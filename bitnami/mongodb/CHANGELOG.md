@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.20 (2024-08-19)
+## 15.6.21 (2024-08-26)
 
-* [bitnami/mongodb] Fix logic to add custom annotations to external-access service ([#28883](https://github.com/bitnami/charts/pull/28883))
+* Bitnami/mongodb] add security context to init container dns check ([#29026](https://github.com/bitnami/charts/pull/29026))
+
+## <small>15.6.20 (2024-08-20)</small>
+
+* [bitnami/mongodb] Fix logic to add custom annotations to external-access service (#28883) ([785e59b](https://github.com/bitnami/charts/commit/785e59bccf87c5ecae2b472901e7f6e7fbf2c196)), closes [#28883](https://github.com/bitnami/charts/issues/28883)
 
 ## <small>15.6.19 (2024-08-14)</small>
 
