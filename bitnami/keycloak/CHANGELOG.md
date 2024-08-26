@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.2.0 (2024-08-25)
+## 22.2.1 (2024-08-26)
 
-* [bitnami/keycloak] Use database user secret key from PostgreSQL chart ([#29008](https://github.com/bitnami/charts/pull/29008))
+* [bitnami/keycloak] fix: :bug: Add emptyDir at /bitnami to allow init scripts ([#29020](https://github.com/bitnami/charts/pull/29020))
+
+## 22.2.0 (2024-08-26)
+
+* [bitnami/keycloak] Use database user secret key from PostgreSQL chart (#29008) ([bf7ea4a](https://github.com/bitnami/charts/commit/bf7ea4a17dbe47ea0171dfae8415c4d035e7c8ad)), closes [#29008](https://github.com/bitnami/charts/issues/29008)
 
 ## <small>22.1.3 (2024-08-22)</small>
 
