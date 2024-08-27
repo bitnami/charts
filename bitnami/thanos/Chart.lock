@@ -1,9 +1,9 @@
 dependencies:
 - name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.7.0
+  version: 14.7.1
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.22.0
-digest: sha256:35200964cc3de0b51453eb0ce12cf6c58bc4b7c5547e136294918ed2d569379c
-generated: "2024-08-13T15:04:37.391622891Z"
+digest: sha256:5e0d813bbf2de533fb1982644e7886bdf444e77e5d3473a437bd5ab088ff5b60
+generated: "2024-08-27T20:11:55.928543608Z"
