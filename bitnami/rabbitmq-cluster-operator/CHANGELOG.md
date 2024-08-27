@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.19 (2024-08-10)
+## 4.3.20 (2024-08-27)
 
-* [bitnami/rabbitmq-cluster-operator] Add AdmissionWebhookConfig toggle ([#28801](https://github.com/bitnami/charts/pull/28801))
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.20 ([#29061](https://github.com/bitnami/charts/pull/29061))
+
+## <small>4.3.19 (2024-08-23)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Add AdmissionWebhookConfig toggle (#28801) ([8513e0e](https://github.com/bitnami/charts/commit/8513e0e35eb37fb18a747090c979a17e3625e672)), closes [#28801](https://github.com/bitnami/charts/issues/28801)
 
 ## <small>4.3.18 (2024-08-08)</small>
 
