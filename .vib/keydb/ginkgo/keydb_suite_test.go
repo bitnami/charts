@@ -68,7 +68,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 							Command: []string{
 								"keydb-cli",
 								"--tls",
-								"--cacert", "/opt/bitnami/keydb/certs/ca.crt",
+								"--cacert", "/certs/ca.crt",
 								"-h", stsName,
 								"-p", port,
 								stmt,
