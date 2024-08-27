@@ -529,6 +529,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `replica.service.extraPorts`                    | Extra ports to expose in KeyDB replicas service (normally used with the `sidecars` value)                     | `[]`        |
 | `replica.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                              | `None`      |
 | `replica.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                   | `{}`        |
+| `replica.service.headless.annotations`          | Annotations for the headless service.                                                                         | `{}`        |
 | `replica.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for KeyDB replicas                                        | `true`      |
 | `replica.networkPolicy.allowExternal`           | Don't require server label for connections                                                                    | `true`      |
 | `replica.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                               | `true`      |

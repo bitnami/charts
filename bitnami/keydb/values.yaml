@@ -1101,6 +1101,12 @@ replica:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param replica.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## KeyDB Replicas Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##

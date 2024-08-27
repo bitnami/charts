@@ -62,9 +62,16 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 					RestartPolicy: "Never",
 					Containers: []v1.Container{
 						{
-							Name:    "keydb",
-							Image:   image,
-							Command: []string{"keydb-cli", "-h", stsName, "-p", port, stmt},
+							Name:  "keydb",
+							Image: image,
+							Command: []string{
+								"keydb-cli",
+								"--tls",
+								"--cacert", "/opt/bitnami/keydb/certs/ca.crt",
+								"-h", stsName,
+								"-p", port,
+								stmt,
+							},
 							Env: []v1.EnvVar{
 								{
 									Name:  "REDISCLI_AUTH",

@@ -28,7 +28,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: keydb
       app.kubernetes.io/component: replica
-  serviceName: {{ template "keydb.replica.fullname" . }}
+  serviceName: {{ printf "%s-hl" (include "keydb.replica.fullname" .) }}
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
