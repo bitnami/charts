@@ -305,20 +305,24 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Database parameters
 
-| Name                       | Description                                                       | Value   |
-| -------------------------- | ----------------------------------------------------------------- | ------- |
-| `db.allowArbitraryServer`  | Enable connection to arbitrary MySQL server                       | `true`  |
-| `db.port`                  | Database port to use to connect                                   | `3306`  |
-| `db.chartName`             | Database suffix if included in the same release                   | `""`    |
-| `db.host`                  | Database Hostname. Ignored when `db.chartName` is set.            | `""`    |
-| `db.bundleTestDB`          | Deploy a MariaDB instance for testing purposes                    | `false` |
-| `db.enableSsl`             | Enable SSL for the connection between phpMyAdmin and the database | `false` |
-| `db.ssl.clientKey`         | Client key file when using SSL                                    | `""`    |
-| `db.ssl.clientCertificate` | Client certificate file when using SSL                            | `""`    |
-| `db.ssl.caCertificate`     | CA file when using SSL                                            | `""`    |
-| `db.ssl.ciphers`           | List of allowable ciphers for connections when using SSL          | `[]`    |
-| `db.ssl.verify`            | Enable SSL certificate validation                                 | `true`  |
-| `mariadb`                  | MariaDB chart configuration                                       | `{}`    |
+| Name                       | Description                                                       | Value                    |
+| -------------------------- | ----------------------------------------------------------------- | ------------------------ |
+| `db.allowArbitraryServer`  | Enable connection to arbitrary MySQL server                       | `true`                   |
+| `db.port`                  | Database port to use to connect                                   | `3306`                   |
+| `db.chartName`             | Database suffix if included in the same release                   | `""`                     |
+| `db.host`                  | Database Hostname. Ignored when `db.chartName` is set.            | `""`                     |
+| `db.bundleTestDB`          | Deploy a MariaDB instance for testing purposes                    | `false`                  |
+| `db.enableSsl`             | Enable SSL for the connection between phpMyAdmin and the database | `false`                  |
+| `db.ssl.clientKey`         | Client key file when using SSL                                    | `""`                     |
+| `db.ssl.clientCertificate` | Client certificate file when using SSL                            | `""`                     |
+| `db.ssl.caCertificate`     | CA file when using SSL                                            | `""`                     |
+| `db.ssl.existingSecret`    | Name of the existing secret containing the SSL certificates       | `""`                     |
+| `db.ssl.ciphers`           | List of allowable ciphers for connections when using SSL          | `[]`                     |
+| `db.ssl.verify`            | Enable SSL certificate validation                                 | `true`                   |
+| `db.ssl.certFilename`      | Name of the file containing the certificate                       | `server_certificate.pem` |
+| `db.ssl.certKeyFilename`   | Name of the file containing the private key                       | `server_key.pem`         |
+| `db.ssl.certCAFilename`    | Name of the file containing the CA certificate                    | `ca_certificate.pem`     |
+| `mariadb`                  | MariaDB chart configuration                                       | `{}`                     |
 
 ### Other Parameters
 
