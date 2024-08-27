@@ -28,12 +28,21 @@ spec:
     {{- if .Values.replica.networkPolicy.allowExternalEgress }}
     - {}
     {{- else }}
+    # Allow dns resolution
     - ports:
-        # Allow dns resolution
         - port: 53
           protocol: UDP
         - port: 53
           protocol: TCP
+    # Allow outbound connections to master pods
+    - ports:
+        - port: {{ .Values.master.containerPorts.redis }}
+      to:
+        - podSelector:
+            {{- $masterPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.podLabels .Values.commonLabels ) "context" . ) }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $masterPodLabels "context" $ ) | nindent 6 }}
+              app.kubernetes.io/part-of: keydb
+              app.kubernetes.io/component: master
     {{- if .Values.replica.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.replica.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}

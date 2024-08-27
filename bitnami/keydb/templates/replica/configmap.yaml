@@ -26,6 +26,7 @@ data:
     # Disable RDB persistence, AOF persistence already enabled
     # ref: https://docs.keydb.dev/docs/persistence/#rdb-disadvantages
     save ""
+    loglevel notice
   {{- end }}
   {{- if .Values.replica.configuration }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.replica.configuration "context" $ ) | nindent 4 }}

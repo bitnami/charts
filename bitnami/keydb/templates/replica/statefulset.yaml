@@ -153,7 +153,7 @@ spec:
             {{- $replicaHlSvcName := printf "%s-hl" (include "keydb.replica.fullname" .) }}
             {{- $releaseNamespace := include "common.names.namespace" . }}
             {{- $clusterDomain := .Values.clusterDomain }}
-            {{- $masterPort := int .Values.master.service.ports.keydb }}
+            {{- $masterPort := int .Values.master.containerPorts.keydb }}
             {{- range $i := until $masterReplicaCount }}
               args+=("--replicaof" "{{ printf "%s-%d.%s.%s.svc.%s" $masterFullname $i $masterHlSvcName $releaseNamespace $clusterDomain }}" {{ $masterPort }})              
             {{- end }}

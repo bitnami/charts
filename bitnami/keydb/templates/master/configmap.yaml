@@ -46,9 +46,6 @@ data:
   {{- else }}
     port {{ .Values.master.containerPorts.keydb }}
   {{- end }}
-  {{- if eq .Values.architecture "replication" }}
-    replica-announce-port {{ .Values.master.service.ports.keydb }}
-  {{- end }}
   {{- range .Values.master.disableCommands }}
     rename-command {{ . }} ""
   {{- end }}

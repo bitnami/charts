@@ -20,13 +20,8 @@ spec:
   clusterIP: None
   ports:
     - name: tcp-keydb
-      port: {{ .Values.master.service.ports.keydb }}
+      port: {{ .Values.master.containerPorts.keydb }}
       targetPort: keydb
-      {{- if and (or (eq .Values.master.service.type "NodePort") (eq .Values.master.service.type "LoadBalancer")) (not (empty .Values.master.service.nodePorts.keydb)) }}
-      nodePort: {{ .Values.master.service.nodePorts.keydb }}
-      {{- else if eq .Values.master.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.master.podLabels .Values.commonLabels) "context" .) | fromYaml }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: keydb

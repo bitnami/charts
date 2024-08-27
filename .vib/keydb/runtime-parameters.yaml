@@ -21,7 +21,7 @@ master:
     runAsUser: 1002
   persistence:
     enabled: true
-    path: /data
+    mountPath: /data
   service:
     ports:
       keydb: 80
@@ -42,7 +42,7 @@ replica:
     runAsUser: 1002
   persistence:
     enabled: true
-    path: /data
+    mountPath: /data
   service:
     ports:
       keydb: 6378

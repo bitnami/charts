@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 {{- $auth := printf "REDISCLI_AUTH='%s'" .Vars.auth.password }}
+{{- $tls := print "--tls --cacert /opt/bitnami/keydb/certs/ca.crt" }}
 {{- $master_endpoint := printf "-h keydb-master -p %d" .Vars.master.service.ports.keydb }}
 {{- $replicas_endpoint := printf "-h keydb-replicas -p %d" .Vars.replica.service.ports.keydb }}
 {{- $replicas := .Vars.replica.replicaCount }}
@@ -9,17 +10,17 @@ command:
   {{- $key := printf "key_%s" (randAlpha 5) }}
   {{- $value := printf "value_%s" (randAlpha 5) }}
   keydb-set-key-value-pairs:
-    exec: export {{ $auth }} && keydb-cli {{ $master_endpoint }} SET {{ $key }} {{ $value }} {{ range $e, $i := until $replicas }} && keydb-cli -h keydb-replicas-{{ $i }}.keydb-headless -p {{ $.Vars.replica.containerPorts.keydb }} GET {{ $key }} | grep -q {{ $value }}{{ end }}
+    exec: export {{ $auth }} && keydb-cli {{ $tls }} {{ $master_endpoint }} SET {{ $key }} {{ $value }} {{ range $e, $i := until $replicas }} && keydb-cli {{ $tls }} -h keydb-replicas-{{ $i }}.keydb-headless -p {{ $.Vars.replica.containerPorts.keydb }} GET {{ $key }} | grep -q {{ $value }}{{ end }}
     exit-status: 0
   {{ range $command := .Vars.master.disableCommands }}
   keydb-disabled-{{ $command }}:
-    exec: {{ $auth }} keydb-cli {{ $master_endpoint }} {{ $command }}
+    exec: export {{ $auth }} && keydb-cli {{ $tls }} {{ $master_endpoint }} {{ $command }}
     exit-status: 0
     stdout:
       - "ERR unknown command"
   {{ end }}
   keydb-master-role:
-    exec: {{ $auth }} keydb-cli {{ $master_endpoint }} ROLE
+    exec: export {{ $auth }} && keydb-cli {{ $tls }} {{ $master_endpoint }} ROLE
     exit-status: 0
     stdout:
       - "master"
@@ -27,7 +28,7 @@ command:
       - "keydb-replicas-{{ $i }}"
       {{ end }}
   keydb-replicas-role:
-    exec: {{ $auth }} keydb-cli {{ $replicas_endpoint }} ROLE
+    exec: export {{ $auth }} && keydb-cli {{ $tls }} {{ $replicas_endpoint }} ROLE
     exit-status: 0
     stdout:
       - "slave"
@@ -46,7 +47,7 @@ command:
     - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
   {{ end }}
 file:
-  {{ .Vars.master.persistence.path }}:
+  {{ .Vars.master.persistence.mountPath }}:
     filetype: directory
     exists: true
     mode: "2775"
