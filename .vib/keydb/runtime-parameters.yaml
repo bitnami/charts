@@ -1,7 +1,4 @@
 architecture: replication
-image:
-  repository: juanariza131/keydb
-  tag: latest
 auth:
   enabled: true
   password: ComplicatedPassword123!4
