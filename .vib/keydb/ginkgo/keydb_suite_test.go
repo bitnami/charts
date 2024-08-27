@@ -3,6 +3,7 @@ package keydb_test
 import (
 	"context"
 	"flag"
+	"fmt"
 	"testing"
 	"time"
 
@@ -79,6 +80,22 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 								},
 							},
 							SecurityContext: securityContext,
+							VolumeMounts: []v1.VolumeMount{
+								{
+									Name:      "keydb-certificates",
+									MountPath: "/certs",
+								},
+							},
+						},
+					},
+					Volumes: []v1.Volume{
+						{
+							Name: "keydb-certificates",
+							VolumeSource: v1.VolumeSource{
+								Secret: &v1.SecretVolumeSource{
+									SecretName: fmt.Sprintf("%s-crt", stsName),
+								},
+							},
 						},
 					},
 				},
