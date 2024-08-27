@@ -592,7 +592,7 @@ db:
     verify: true
     ## @param db.ssl.certFilename Name of the file containing the certificate
     ## @param db.ssl.certKeyFilename Name of the file containing the private key
-    ## @param db.ssl.caFilename Name of the file containing the CA certificate
+    ## @param db.ssl.certCAFilename Name of the file containing the CA certificate
     ##
     certFilename: "server_certificate.pem"
     certKeyFilename: "server_key.pem"
