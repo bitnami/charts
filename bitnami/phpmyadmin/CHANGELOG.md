@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.6 (2024-08-25)
+## 17.1.0 (2024-08-27)
 
-* [bitnami/phpmyadmin] Release 17.0.6 ([#29017](https://github.com/bitnami/charts/pull/29017))
+* [bitnami/phpmyadmin] Add support for existingSecret ([#28802](https://github.com/bitnami/charts/pull/28802))
+
+## <small>17.0.6 (2024-08-25)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.6 (#29017) ([3cf1fc6](https://github.com/bitnami/charts/commit/3cf1fc67b905a3ffd7466e84895d06c8138da6da)), closes [#29017](https://github.com/bitnami/charts/issues/29017)
 
 ## <small>17.0.5 (2024-08-09)</small>
 
