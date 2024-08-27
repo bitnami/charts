@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.5.24 (2024-08-23)
+## 15.5.25 (2024-08-27)
 
-* [bitnami/postgresql] eval. certificatesSecret as template ([#28831](https://github.com/bitnami/charts/pull/28831))
+* [bitnami/postgresql] Release 15.5.25 ([#29037](https://github.com/bitnami/charts/pull/29037))
+
+## <small>15.5.24 (2024-08-23)</small>
+
+* [bitnami/postgresql] eval. certificatesSecret as template (#28831) ([05c09db](https://github.com/bitnami/charts/commit/05c09dbb8e60cde19c44ee6d795e31a48f9f77ba)), closes [#28831](https://github.com/bitnami/charts/issues/28831)
 
 ## <small>15.5.23 (2024-08-19)</small>
 
