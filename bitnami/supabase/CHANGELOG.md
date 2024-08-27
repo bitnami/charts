@@ -1,12 +1,12 @@
 # Changelog
 
-## 5.4.0 (2024-08-21)
+## 5.4.0 (2024-08-27)
 
 * [bitnami/supabase] Updates Supabase Realtime configuration to work with postgres_changes with and without RLS ([#28944](https://github.com/bitnami/charts/pull/28944))
 
-## 5.3.5 (2024-08-27)
+## <small>5.3.5 (2024-08-27)</small>
 
-* [bitnami/supabase] Release 5.3.5 ([#29041](https://github.com/bitnami/charts/pull/29041))
+* [bitnami/supabase] Release 5.3.5 (#29041) ([4866284](https://github.com/bitnami/charts/commit/48662840ace409bf539915c2219e9f46fe598cca)), closes [#29041](https://github.com/bitnami/charts/issues/29041)
 
 ## <small>5.3.4 (2024-08-14)</small>
 
