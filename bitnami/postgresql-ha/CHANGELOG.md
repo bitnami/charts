@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.18 (2024-08-24)
+## 14.2.19 (2024-08-27)
 
-* [bitnami/postgresql-ha] Release 14.2.18 ([#29015](https://github.com/bitnami/charts/pull/29015))
+* [bitnami/postgresql-ha] Release 14.2.19 ([#29036](https://github.com/bitnami/charts/pull/29036))
+
+## <small>14.2.18 (2024-08-24)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.18 (#29015) ([d1b3761](https://github.com/bitnami/charts/commit/d1b37614f31bdefc096f70998532c60c5d394d98)), closes [#29015](https://github.com/bitnami/charts/issues/29015)
 
 ## <small>14.2.17 (2024-08-22)</small>
 
