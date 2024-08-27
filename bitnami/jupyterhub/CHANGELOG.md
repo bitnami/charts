@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.2.17 (2024-08-26)
+## 7.2.17 (2024-08-27)
 
 * [bitnami/jupyterhub] Fix indents of singleuser extra volumes & mounts for #24458 ([#29032](https://github.com/bitnami/charts/pull/29032))
 
