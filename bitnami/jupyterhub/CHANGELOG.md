@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.16 (2024-08-24)
+## 7.2.17 (2024-08-27)
 
-* [bitnami/jupyterhub] Release 7.2.16 ([#29014](https://github.com/bitnami/charts/pull/29014))
+* [bitnami/juypterhub] fix extraVolume-volMount chart values.yaml ([#29067](https://github.com/bitnami/charts/pull/29067))
+
+## <small>7.2.16 (2024-08-24)</small>
+
+* [bitnami/jupyterhub] Release 7.2.16 (#29014) ([eaa5262](https://github.com/bitnami/charts/commit/eaa526250ca6eafe1ed19f78c81a5544c46ba1c8)), closes [#29014](https://github.com/bitnami/charts/issues/29014)
 
 ## <small>7.2.15 (2024-08-23)</small>
 
