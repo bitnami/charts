@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.1 (2024-08-27)
+## 8.3.2 (2024-08-27)
 
-* [bitnami/nats] Release 8.3.1 ([#29059](https://github.com/bitnami/charts/pull/29059))
+* [bitnami/nats] Release 8.3.2 ([#29073](https://github.com/bitnami/charts/pull/29073))
+
+## <small>8.3.1 (2024-08-27)</small>
+
+* [bitnami/nats] Release 8.3.1 (#29059) ([1537655](https://github.com/bitnami/charts/commit/1537655b0bb2e68d9a1977c21c0c4a7a65c8f63a)), closes [#29059](https://github.com/bitnami/charts/issues/29059)
 
 ## 8.3.0 (2024-08-13)
 
