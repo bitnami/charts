@@ -345,6 +345,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `service.externalIPs`                   | Controller Service external IP addresses                                                                                               | `[]`           |
 | `service.ipFamilyPolicy`                | Controller Service ipFamilyPolicy (optional, cloud specific)                                                                           | `""`           |
 | `service.ipFamilies`                    | Controller Service ipFamilies (optional, cloud specific)                                                                               | `[]`           |
+| `service.loadBalancerClass`             | Load balancer class if service type is `LoadBalancer`                                                                                  | `""`           |
 | `service.loadBalancerIP`                | Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)                                                         | `""`           |
 | `service.loadBalancerSourceRanges`      | List of IP CIDRs allowed access to load balancer (if supported)                                                                        | `[]`           |
 | `service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                         | `[]`           |

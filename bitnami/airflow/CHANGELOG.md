@@ -1,8 +1,16 @@
 # Changelog
 
-## 19.0.1 (2024-08-16)
+## 19.0.3 (2024-08-25)
 
-* [bitnami/airflow] Release 19.0.1 ([#28902](https://github.com/bitnami/charts/pull/28902))
+* [bitnami/airflow] add resources to loaddags initcontainer try 2 ([#28992](https://github.com/bitnami/charts/pull/28992))
+
+## <small>19.0.2 (2024-08-22)</small>
+
+* [bitnami/airflow] Release 19.0.2 (#28971) ([c03dc2b](https://github.com/bitnami/charts/commit/c03dc2b82fa1fb4cddb1e6f90541463d61374713)), closes [#28971](https://github.com/bitnami/charts/issues/28971)
+
+## <small>19.0.1 (2024-08-16)</small>
+
+* [bitnami/airflow] Release 19.0.1 (#28902) ([6375d6a](https://github.com/bitnami/charts/commit/6375d6aa360c7b699f25b32f4c882cceb6ee463b)), closes [#28902](https://github.com/bitnami/charts/issues/28902)
 
 ## 19.0.0 (2024-08-13)
 
