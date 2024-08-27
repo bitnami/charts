@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.6.21 (2024-08-26) 
+## 15.6.21 (2024-08-26)
 
 * Bitnami/mongodb] add security context to init container dns check ([#29026](https://github.com/bitnami/charts/pull/29026))
 
