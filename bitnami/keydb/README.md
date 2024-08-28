@@ -1,6 +1,6 @@
 <!--- app-name: KeyDB -->
 
-# KeyDB
+# Bitnami package for KeyDB
 
 KeyDB is a high performance fork of Redis with a focus on multithreading, memory efficiency, and high throughput.
 
