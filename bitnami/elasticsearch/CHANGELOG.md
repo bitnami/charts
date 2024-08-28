@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.3.8 (2024-08-13)
+## 21.3.9 (2024-08-28)
 
-* [bitnami/elasticsearch] Release 21.3.8 ([#28864](https://github.com/bitnami/charts/pull/28864))
+* [bitnami/elasticsearch] fix: Remove hardcoded image for copy-tls-certificates ([#29083](https://github.com/bitnami/charts/pull/29083))
+
+## <small>21.3.8 (2024-08-13)</small>
+
+* [bitnami/elasticsearch] Release 21.3.8 (#28864) ([3f417b0](https://github.com/bitnami/charts/commit/3f417b0ef543904d9cb8b02aa6a899c6eb8a7343)), closes [#28864](https://github.com/bitnami/charts/issues/28864)
 
 ## <small>21.3.7 (2024-08-13)</small>
 
