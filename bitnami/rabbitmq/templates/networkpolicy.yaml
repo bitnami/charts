@@ -60,7 +60,7 @@ spec:
         - port: {{ .Values.containerPorts.dist }}
         - port: {{ .Values.containerPorts.manager }}
         {{- range .Values.extraContainerPorts }}
-        - port: {{ . }}
+        - port: {{ .containerPort }}
         {{- end }}
         {{- if .Values.metrics.enabled }}
         - port: {{ .Values.containerPorts.metrics }}
