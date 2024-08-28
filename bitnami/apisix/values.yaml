@@ -2678,10 +2678,12 @@ ingressController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ingressController.ingressClass.create Specifies whether a IngressClass should be created
   ## @param ingressController.ingressClass.name IngressClass that will be be used to implement the APISIX Ingress
   ## @param ingressController.ingressClass.annotations Additional annotations for the APISIX IngressClass
   ##
   ingressClass:
+    create: true
     name: "apisix"
     annotations: {}
   ## @param ingressController.defaultConfig [string] APISIX Dashboard configuration (evaluated as a template)
