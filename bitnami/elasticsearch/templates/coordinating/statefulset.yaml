@@ -108,7 +108,7 @@ spec:
         {{- if .Values.security.enabled }}
         - name: copy-tls-certificates
           image: {{ include "elasticsearch.copyTlsCerts.image" . }}
-          imagePullPolicy: {{ .Values.copyTlsCerts.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.copyTlsCerts.image.pullPolicy | quote }}
           command:
             - /bin/sh
             - -c
