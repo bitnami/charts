@@ -78,6 +78,7 @@ var _ = Describe("Valkey Cluster", Ordered, func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			for i := 0; i < int(origReplicas); i++ {
+				By(fmt.Sprintf("Restart statefulset %s-%d", statName, i))
 				Eventually(func() (*v1.Pod, error) {
 					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", stsName, i), getOpts)
 				}, timeout, PollingInterval).Should(WithTransform(getRestartedAtAnnotation, Not(BeEmpty())))
