@@ -34,6 +34,7 @@ var _ = Describe("Valkey Cluster", Ordered, func() {
 		It("should have access to the created key-value", func() {
 
 			getAvailableReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.AvailableReplicas }
+			getRestartedAtAnnotation := func(pod *v1.Pod) string { return pod.Annotations["kubectl.kubernetes.io/restartedAt"] }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 			getOpts := metav1.GetOptions{}
 
@@ -71,17 +72,15 @@ var _ = Describe("Valkey Cluster", Ordered, func() {
 				return c.BatchV1().Jobs(namespace).Get(ctx, createKEYJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
-			By("scaling down to 0 replicas")
-			ss, err = utils.StsScale(ctx, c, ss, 0)
+			By("rollout restart the statefulset")
+			_, err = utils.StsRolloutRestart(ctx, c, ss)
 			Expect(err).NotTo(HaveOccurred())
 
-			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
-
-			By("scaling up to the original replicas")
-			ss, err = utils.StsScale(ctx, c, ss, origReplicas)
-			Expect(err).NotTo(HaveOccurred())
+			for i := 0; i < int(origReplicas); i++ {
+				Eventually(func() (*v1.Pod, error) {
+					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", stsName, i), getOpts)
+				}, timeout, PollingInterval).Should(WithTransform(getRestartedAtAnnotation, Not(BeEmpty())))
+			}
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
