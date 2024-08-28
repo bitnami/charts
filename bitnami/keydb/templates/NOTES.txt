@@ -92,10 +92,10 @@ To connect to your KeyDB server:
 2. Connect using the KeyDB CLI:
 
 {{- if eq .Values.architecture "replication" }}
-    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h {{ include "keydb.master.fullname" . }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
-    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h {{ include "keydb.replica.fullname" . }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h {{ include "keydb.master.fullname" . }} -p {{ .Values.master.service.ports.keydb }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h {{ include "keydb.replica.fullname" . }} -p {{ .Values.replica.service.ports.keydb }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 {{- else }}
-    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h {{ include "keydb.master.fullname" . }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$KEYDB_PASSWORD" {{ end }}keydb-cli -h {{ include "keydb.master.fullname" . }} -p {{ .Values.master.service.ports.keydb }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 {{- end }}
 
 {{- if and .Values.master.networkPolicy.enabled (not .Values.master.networkPolicy.allowExternal) }}
@@ -159,4 +159,5 @@ To connect to your Replica nodes from outside the cluster execute the following 
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "keydb.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "master" "replica" "metrics" "volumePermissions") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image  .Values.metrics.image .Values.volumePermissions.image) "context" $) }}
