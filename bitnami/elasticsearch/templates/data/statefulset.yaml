@@ -132,8 +132,8 @@ spec:
         {{- end }}
         {{- if .Values.security.enabled }}
         - name: copy-tls-certificates
-          image: bitnami/os-shell:12-debian-12-r22
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          image: {{ include "elasticsearch.copyTlsCerts.image" . }}
+          imagePullPolicy: {{ .Values.copyTlsCerts.pullPolicy | quote }}
           command:
             - /bin/sh
             - -c
@@ -155,6 +155,11 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: certs
+          {{- if .Values.copyTlsCerts.resources }}
+          resources: {{- toYaml .Values.copyTlsCerts.resources | nindent 12 }}
+          {{- else if ne .Values.copyTlsCerts.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.copyTlsCerts.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         - name: copy-default-plugins
           image: {{ include "elasticsearch.image" . }}
