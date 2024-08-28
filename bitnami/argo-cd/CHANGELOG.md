@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.7 (2024-08-27)
+## 7.0.8 (2024-08-28)
 
-* [bitnami/argo-cd] Release 7.0.7 ([#29042](https://github.com/bitnami/charts/pull/29042))
+* [bitnami/argo-cd] Release 7.0.8 ([#29074](https://github.com/bitnami/charts/pull/29074))
+
+## <small>7.0.7 (2024-08-27)</small>
+
+* [bitnami/argo-cd] Release 7.0.7 (#29042) ([b4c9c5f](https://github.com/bitnami/charts/commit/b4c9c5fb6b48a20b04ed0cfe7cc56e559773e151)), closes [#29042](https://github.com/bitnami/charts/issues/29042)
 
 ## <small>7.0.6 (2024-08-23)</small>
 
