@@ -77,7 +77,7 @@ var _ = Describe("Valkey Cluster", Ordered, func() {
 			_, err = utils.StsRolloutRestart(ctx, c, ss)
 			Expect(err).NotTo(HaveOccurred())
 
-			for i := int(origReplicas) - 1; i >= int(origReplicas); i-- {
+			for i := int(origReplicas) - 1; i >= 0; i-- {
 				By(fmt.Sprintf("Restart statefulset %s-%d", stsName, i))
 				Eventually(func() (*v1.Pod, error) {
 					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", stsName, i), getOpts)
