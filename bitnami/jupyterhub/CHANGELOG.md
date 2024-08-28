@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.17 (2024-08-27)
+## 7.2.18 (2024-08-27)
 
 * [bitnami/juypterhub] fix extraVolume-volMount chart values.yaml ([#29067](https://github.com/bitnami/charts/pull/29067))
+
+## 7.2.17 (2024-08-27)
+
+* [bitnami/jupyterhub] Fix indents of singleuser extra volumes & mounts for #24458 ([#29032](https://github.com/bitnami/charts/pull/29032))
 
 ## <small>7.2.16 (2024-08-24)</small>
 
