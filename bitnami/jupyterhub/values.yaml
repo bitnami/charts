@@ -227,14 +227,14 @@ hub:
           - name: empty-dir
             emptyDir: {}
           {{- if .Values.singleuser.extraVolumes }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 4 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 6 }}
           {{- end }}
         extraVolumeMounts:
           - name: empty-dir
             mountPath: /tmp
             subPath: tmp-dir
           {{- if .Values.singleuser.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 4 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 6 }}
           {{- end }}
         capacity: {{ .Values.singleuser.persistence.size }}
         homeMountPath: {{ .Values.singleuser.notebookDir }}
