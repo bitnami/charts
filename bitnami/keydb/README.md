@@ -179,7 +179,8 @@ master:
 If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
 ```yaml
-initContainers:
+master:
+  initContainers:
   - name: your-image-name
     image: your-image
     imagePullPolicy: Always
@@ -198,7 +199,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## Persistence
 
-The [Bitnami KeyDB](https://github.com/bitnami/containers/tree/main/bitnami/keydb) image stores the KeyDB data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami KeyDB](https://github.com/bitnami/containers/tree/main/bitnami/keydb) image stores the KeyDB data and configurations at the `/bitnami/keydb/data` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
