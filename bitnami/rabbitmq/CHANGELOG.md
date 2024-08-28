@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.8 (2024-08-28)
+## 14.6.9 (2024-08-28)
 
-* [bitnami/rabbitmq] Improve Ginkgo test ([#29082](https://github.com/bitnami/charts/pull/29082))
+* [bitnami/rabbitmq] Release 14.6.9 ([#29092](https://github.com/bitnami/charts/pull/29092))
+
+## <small>14.6.8 (2024-08-28)</small>
+
+* [bitnami/rabbitmq] Improve Ginkgo test (#29082) ([778a269](https://github.com/bitnami/charts/commit/778a269c23fd9e6534c3c15e85f016c38f498e81)), closes [#29082](https://github.com/bitnami/charts/issues/29082)
 
 ## <small>14.6.7 (2024-08-26)</small>
 
