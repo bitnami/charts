@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.10 (2024-08-07)
+## 2.5.11 (2024-08-27)
 
-* [bitnami/jaeger] Release 2.5.10 ([#28724](https://github.com/bitnami/charts/pull/28724))
+* [bitnami/jaeger] Release 2.5.11 ([#29053](https://github.com/bitnami/charts/pull/29053))
+
+## <small>2.5.10 (2024-08-07)</small>
+
+* [bitnami/jaeger] Release 2.5.10 (#28724) ([af0ed90](https://github.com/bitnami/charts/commit/af0ed90ed8da2fc475ef96dfc75082200743ca92)), closes [#28724](https://github.com/bitnami/charts/issues/28724)
 
 ## <small>2.5.9 (2024-08-06)</small>
 
