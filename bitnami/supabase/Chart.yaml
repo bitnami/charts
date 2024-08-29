@@ -41,7 +41,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Supabase is an open source Firebase alternative. Provides all the necessary backend features to build your application in a scalable way. Uses PostgreSQL as datastore.
+# The Supabase chart is deprecated and no longer maintained.
+deprecated: true
+description: DEPRECATED Supabase is an open source Firebase alternative. Provides all the necessary backend features to build your application in a scalable way. Uses PostgreSQL as datastore.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/supabase/img/supabase-stack-220x234.png
 keywords:
@@ -53,4 +55,4 @@ maintainers:
 name: supabase
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 5.3.5
+version: 5.3.6
