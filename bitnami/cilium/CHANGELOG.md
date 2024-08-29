@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.19 (2024-08-29)
+## 1.0.20 (2024-08-29)
 
-* [bitnami/cilium] test: :white_check_mark: Improve resiliency of goss test ([#29104](https://github.com/bitnami/charts/pull/29104))
+* [bitnami/cilium] test: :white_check_mark: Add a wait before goss test ([#29108](https://github.com/bitnami/charts/pull/29108))
+
+## <small>1.0.19 (2024-08-29)</small>
+
+* [bitnami/cilium] test: :white_check_mark: Improve resiliency of goss test (#29104) ([2bb5384](https://github.com/bitnami/charts/commit/2bb5384294ed233bf040d87e1004fd885ce4a8e6)), closes [#29104](https://github.com/bitnami/charts/issues/29104)
 
 ## <small>1.0.18 (2024-08-28)</small>
 
