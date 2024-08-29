@@ -1518,7 +1518,7 @@
           "description": "List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)",
           "default": "[]",
           "items": {
-            "type": "string"
+            "type": "integer"
           }
         },
         "allowExternal": {
