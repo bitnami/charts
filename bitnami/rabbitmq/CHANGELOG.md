@@ -2,7 +2,7 @@
 
 ## 14.6.9 (2024-08-28)
 
-* [bitnami/rabbitmq] Fix NetworkPolicy to include extraContainerPorts in ingress rule ([#28792](https://github.com/bitnami/charts/pull/28792))
+* [bitnami/rabbitmq] Release 14.6.9 ([#29092](https://github.com/bitnami/charts/pull/29092))
 
 ## <small>14.6.8 (2024-08-28)</small>
 
