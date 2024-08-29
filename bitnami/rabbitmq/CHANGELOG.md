@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.6.10 (2024-08-28)
+## 14.6.10 (2024-08-29)
 
 * [bitnami/rabbitmq] update values.schema.json ([#29095](https://github.com/bitnami/charts/pull/29095))
 
