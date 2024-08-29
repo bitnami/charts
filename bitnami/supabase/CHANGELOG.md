@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.3.5 (2024-08-27)
+## 5.3.6 (2024-08-29)
 
-* [bitnami/supabase] Release 5.3.5 ([#29041](https://github.com/bitnami/charts/pull/29041))
+* [bitnami/supabase] Add deprecation notice ([#29099](https://github.com/bitnami/charts/pull/29099))
+
+## <small>5.3.5 (2024-08-27)</small>
+
+* [bitnami/supabase] Release 5.3.5 (#29041) ([4866284](https://github.com/bitnami/charts/commit/48662840ace409bf539915c2219e9f46fe598cca)), closes [#29041](https://github.com/bitnami/charts/issues/29041)
 
 ## <small>5.3.4 (2024-08-14)</small>
 
