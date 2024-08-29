@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: dremio
-      image: docker.io/bitnami/dremio:25.0.0-debian-12-r11
+      image: docker.io/bitnami/dremio:25.0.0-debian-12-r12
     - name: jmx-exporter
       image: docker.io/bitnami/jmx-exporter:1.0.1-debian-12-r6
     - name: os-shell
@@ -41,4 +41,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/dremio
 - https://github.com/bitnami/containers/tree/main/bitnami/dremio
 - https://github.com/dremio/dremio-oss
-version: 0.1.10
+version: 0.1.11
