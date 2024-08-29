@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.3 (2024-08-16)
+## 9.0.4 (2024-08-29)
 
-* [bitnami/milvus] Release 9.0.3 ([#28903](https://github.com/bitnami/charts/pull/28903))
+* [bitnami/milvus] Release 9.0.4 ([#29113](https://github.com/bitnami/charts/pull/29113))
+
+## <small>9.0.3 (2024-08-16)</small>
+
+* [bitnami/milvus] Release 9.0.3 (#28903) ([b556a6e](https://github.com/bitnami/charts/commit/b556a6e3e2a0eabf61baa240c142cef635bff4c5)), closes [#28903](https://github.com/bitnami/charts/issues/28903)
 
 ## <small>9.0.2 (2024-08-13)</small>
 
