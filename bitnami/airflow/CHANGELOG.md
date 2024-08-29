@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.3 (2024-08-25)
+## 19.0.4 (2024-08-29)
 
-* [bitnami/airflow] add resources to loaddags initcontainer try 2 ([#28992](https://github.com/bitnami/charts/pull/28992))
+* [bitnami/airflow] Allow use of multiple executors ([#29107](https://github.com/bitnami/charts/pull/29107))
+
+## <small>19.0.3 (2024-08-26)</small>
+
+* [bitnami/airflow] add resources to loaddags initcontainer try 2 (#28992) ([77376c3](https://github.com/bitnami/charts/commit/77376c3e6777c47f950f6fdc6d7e7bc6a8889f89)), closes [#28992](https://github.com/bitnami/charts/issues/28992)
 
 ## <small>19.0.2 (2024-08-22)</small>
 
