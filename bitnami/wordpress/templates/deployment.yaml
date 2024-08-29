@@ -148,6 +148,11 @@ spec:
               info "Copying default PHP config"
               cp -r --preserve=mode /opt/bitnami/php/etc /emptydir/php-conf-dir
 
+              info "Copying php var directory"
+              if ! is_dir_empty /opt/bitnami/php/var; then
+                cp -r /opt/bitnami/php/var /emptydir/php-var-dir
+              fi
+
               info "Copy operation completed"
           volumeMounts:
             - name: empty-dir

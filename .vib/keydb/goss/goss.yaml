@@ -1,0 +1,59 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+{{- $auth := printf "REDISCLI_AUTH='%s'" .Vars.auth.password }}
+{{- $tls := print "--tls --cacert /opt/bitnami/keydb/certs/ca.crt" }}
+{{- $master_endpoint := printf "-h 127.0.0.1 -p %d" .Vars.master.containerPorts.keydb }}
+{{- $replicas_endpoint := printf "-h keydb-replica -p %d" .Vars.replica.service.ports.keydb }}
+{{- $replicas := .Vars.replica.replicaCount }}
+command:
+  {{- $key := printf "key_%s" (randAlpha 5) }}
+  {{- $value := printf "value_%s" (randAlpha 5) }}
+  keydb-set-key-value-pairs:
+    exec: export {{ $auth }} && keydb-cli {{ $tls }} {{ $master_endpoint }} SET {{ $key }} {{ $value }} {{ range $e, $i := until $replicas }} && keydb-cli {{ $tls }} -h keydb-replica-{{ $i }}.keydb-replica-hl -p {{ $.Vars.replica.containerPorts.keydb }} GET {{ $key }} | grep -q {{ $value }}{{ end }}
+    exit-status: 0
+  {{ range $command := .Vars.master.disableCommands }}
+  keydb-disabled-{{ $command }}:
+    exec: export {{ $auth }} && keydb-cli {{ $tls }} {{ $master_endpoint }} {{ $command }}
+    exit-status: 0
+    stdout:
+      - "ERR unknown command"
+  {{ end }}
+  keydb-master-role:
+    exec: export {{ $auth }} && keydb-cli {{ $tls }} {{ $master_endpoint }} ROLE
+    exit-status: 0
+    stdout:
+      - "master"
+      {{ range $e, $i := until $replicas }}
+      - "keydb-replica-{{ $i }}"
+      {{ end }}
+  keydb-replicas-role:
+    exec: export {{ $auth }} && keydb-cli {{ $tls }} {{ $replicas_endpoint }} ROLE
+    exit-status: 0
+    stdout:
+      - "active-replica"
+  {{- $uid := .Vars.master.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.master.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.master.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}
+file:
+  {{ .Vars.master.persistence.mountPath }}:
+    filetype: directory
+    exists: true
+    mode: "2775"
+    owner: root
+  /opt/bitnami/keydb/etc:
+    filetype: directory
+    exists: true
+    mode: "2777"
+    owner: root

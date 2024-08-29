@@ -1068,6 +1068,10 @@ This issue can be mitigated by splitting the upgrade into two stages: one for al
 - Stage 2 (anything else that is not up to date, in this case only master):
 `helm upgrade oci://REGISTRY_NAME/REPOSITORY_NAME/redis`
 
+### To 20.0.0
+
+This major version updates the Redis&reg; docker image version used from `7.2` to `7.4`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.4 release notes](https://raw.githubusercontent.com/redis/redis/7.4/00-RELEASENOTES) before upgrading.
+
 ### To 19.0.0
 
 This major bump changes the following security defaults:

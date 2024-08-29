@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.4.15 (2024-08-08)
+## 4.6.1 (2024-08-23)
 
-* [bitnami/grafana-operator] Release 4.4.15 ([#28772](https://github.com/bitnami/charts/pull/28772))
+* [bitnami/grafana-operator] Release 4.6.1 ([#29002](https://github.com/bitnami/charts/pull/29002))
+
+## 4.6.0 (2024-08-20)
+
+* [bitnami/grafana-operator] Add some pod scheduling directives (#28861) ([6cf09be](https://github.com/bitnami/charts/commit/6cf09bebecb993ed045ab7f4147254ea2bebe72f)), closes [#28861](https://github.com/bitnami/charts/issues/28861)
+
+## 4.5.0 (2024-08-12)
+
+* [bitnami/grafana-operator] Add missing CRD + RBAC (#28780) ([d9075fa](https://github.com/bitnami/charts/commit/d9075fa4000414377ae8b2be67cc8a5616894fff)), closes [#28780](https://github.com/bitnami/charts/issues/28780)
+
+## <small>4.4.15 (2024-08-08)</small>
+
+* [bitnami/grafana-operator] Release 4.4.15 (#28772) ([294d425](https://github.com/bitnami/charts/commit/294d42520609ea39b9465f5c0df7ea9d1738363d)), closes [#28772](https://github.com/bitnami/charts/issues/28772)
 
 ## <small>4.4.14 (2024-08-07)</small>
 

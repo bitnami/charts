@@ -217,36 +217,6 @@ spec:
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
-            {{- if and .Values.adminIngress.enabled .Values.adminIngress.hostname }}
-            - name: KEYCLOAK_HOSTNAME_ADMIN
-              value: |-
-                {{ ternary "https://" "http://" ( or .Values.adminIngress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
-                {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) -}}
-                {{- if eq .Values.adminIngress.controller "default" }}
-                  {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.path "context" $) }}
-                {{- else if eq .Values.adminIngress.controller "gce" }}
-                  {{- $path := .Values.adminIngress.path -}}
-                  {{- if hasSuffix "*" $path -}}
-                    {{- $path = trimSuffix "*" $path -}}
-                  {{- end -}}
-                  {{- include "common.tplvalues.render" (dict "value" $path "context" $) }}
-                {{- end }}
-            {{- end }}
-            {{- if and .Values.ingress.enabled .Values.ingress.hostname }}
-            - name: KEYCLOAK_HOSTNAME
-              value: |-
-                {{ ternary "https://" "http://" ( or .Values.ingress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
-                {{- include "common.tplvalues.render" (dict "value" .Values.ingress.hostname "context" $) -}}
-                {{- if eq .Values.ingress.controller "default" }}
-                  {{- include "common.tplvalues.render" (dict "value" .Values.ingress.path "context" $) }}
-                {{- else if eq .Values.ingress.controller "gce" }}
-                  {{- $path := .Values.ingress.path -}}
-                  {{- if hasSuffix "*" $path -}}
-                    {{- $path = trimSuffix "*" $path -}}
-                  {{- end -}}
-                  {{- include "common.tplvalues.render" (dict "value" $path "context" $) }}
-                {{- end }}
-            {{- end }}
             {{- if .Values.adminRealm }}
             - name: KC_SPI_ADMIN_REALM
               value: "{{ .Values.adminRealm }}"
@@ -314,6 +284,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /bitnami
+              subPath: app-volume-dir
             - name: empty-dir
               mountPath: /opt/bitnami/keycloak/conf
               subPath: app-conf-dir

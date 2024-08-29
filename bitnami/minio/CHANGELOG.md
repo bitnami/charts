@@ -1,8 +1,17 @@
 # Changelog
 
-## 14.6.33 (2024-08-07)
+## 14.7.2 (2024-08-26)
 
-* [bitnami/minio] Release 14.6.33 ([#28731](https://github.com/bitnami/charts/pull/28731))
+* [bitnami/minio] Release 14.7.2 ([#29030](https://github.com/bitnami/charts/pull/29030))
+
+## <small>14.7.1 (2024-08-17)</small>
+
+* [bitnami/minio] Release 14.7.1 (#28915) ([ea7247a](https://github.com/bitnami/charts/commit/ea7247a9eae7026f6385e6ad4ac4609cef72ec1a)), closes [#28915](https://github.com/bitnami/charts/issues/28915)
+
+## 14.7.0 (2024-08-12)
+
+* [bitnami/minio] Release 14.6.33 (#28731) ([558c1f8](https://github.com/bitnami/charts/commit/558c1f8056152e5d16fdf35db29c4028a31453fe)), closes [#28731](https://github.com/bitnami/charts/issues/28731)
+* [bitnami/minio]: Option to use a secret. (#27837) ([5c21623](https://github.com/bitnami/charts/commit/5c2162370dd5d99d4df91f36b1fcc778ac604673)), closes [#27837](https://github.com/bitnami/charts/issues/27837)
 
 ## <small>14.6.32 (2024-08-03)</small>
 

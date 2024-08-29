@@ -1,8 +1,52 @@
 # Changelog
 
-## 6.6.10 (2024-08-02)
+## 7.0.8 (2024-08-28)
 
-* [bitnami/argo-cd] Remove usage of health check that does not exist (#26547) ([#28348](https://github.com/bitnami/charts/pull/28348))
+* [bitnami/argo-cd] Release 7.0.8 ([#29074](https://github.com/bitnami/charts/pull/29074))
+
+## <small>7.0.7 (2024-08-27)</small>
+
+* [bitnami/argo-cd] Release 7.0.7 (#29042) ([b4c9c5f](https://github.com/bitnami/charts/commit/b4c9c5fb6b48a20b04ed0cfe7cc56e559773e151)), closes [#29042](https://github.com/bitnami/charts/issues/29042)
+
+## <small>7.0.6 (2024-08-23)</small>
+
+* [bitnami/argo-cd] Release 7.0.6 (#28994) ([1ec7b5c](https://github.com/bitnami/charts/commit/1ec7b5c14a818bdc4f26fcf3ad53e78c102d10b2)), closes [#28994](https://github.com/bitnami/charts/issues/28994)
+
+## <small>7.0.5 (2024-08-23)</small>
+
+* [bitnami/argo-cd] fix: Add namespace to service account's bindings (#28737) ([b75dcd7](https://github.com/bitnami/charts/commit/b75dcd716410ec623eb832104ffe6f25df0e5a13)), closes [#28737](https://github.com/bitnami/charts/issues/28737)
+
+## <small>7.0.4 (2024-08-23)</small>
+
+* [bitnami/argo-cd] Release 7.0.4 (#28987) ([dd40e6e](https://github.com/bitnami/charts/commit/dd40e6e3dc01ef62a9e631540e660416bc6cadf6)), closes [#28987](https://github.com/bitnami/charts/issues/28987)
+
+## <small>7.0.3 (2024-08-20)</small>
+
+* [bitnami/argo-cd] test: :white_check_mark: Improve resilience of cypress test (#28936) ([b290de1](https://github.com/bitnami/charts/commit/b290de196fdd3e0aa5bc55c5257fe5384dde39d1)), closes [#28936](https://github.com/bitnami/charts/issues/28936)
+
+## <small>7.0.2 (2024-08-19)</small>
+
+* [bitnami/argo-cd] Add missing verbs to ApplicationSet role (#28914) ([69e8d7b](https://github.com/bitnami/charts/commit/69e8d7bfa54ff1892f0405d31d29aa988bd79440)), closes [#28914](https://github.com/bitnami/charts/issues/28914)
+
+## <small>7.0.1 (2024-08-16)</small>
+
+* [bitnami/argo-cd] Release 7.0.1 (#28911) ([179665c](https://github.com/bitnami/charts/commit/179665c13f0dc2baaf3432655ed62ca1b81cbf4d)), closes [#28911](https://github.com/bitnami/charts/issues/28911)
+
+## 7.0.0 (2024-08-13)
+
+* [bitnami/argo-cd] Update dependencies (#28851) ([7789c76](https://github.com/bitnami/charts/commit/7789c76851b38db4a34ab0a079fbe636923efbec)), closes [#28851](https://github.com/bitnami/charts/issues/28851)
+
+## <small>6.6.12 (2024-08-12)</small>
+
+* [bitnami/argo-cd] Release 6.6.12 (#28828) ([e3c8931](https://github.com/bitnami/charts/commit/e3c893177b27a510e933db97d4f57f1d80d1bfc7)), closes [#28828](https://github.com/bitnami/charts/issues/28828)
+
+## <small>6.6.11 (2024-08-09)</small>
+
+* [bitnami/argo-cd] Release 6.6.11 (#28762) ([6c7ef92](https://github.com/bitnami/charts/commit/6c7ef92618d321e18fd1a7e20ba8faf90f3661a2)), closes [#28762](https://github.com/bitnami/charts/issues/28762)
+
+## <small>6.6.10 (2024-08-05)</small>
+
+* [bitnami/argo-cd] Remove usage of health check that does not exist (#26547) (#28348) ([9e03640](https://github.com/bitnami/charts/commit/9e0364083d0fdf0c7126b90b54fbe184bff71741)), closes [#26547](https://github.com/bitnami/charts/issues/26547) [#28348](https://github.com/bitnami/charts/issues/28348)
 
 ## <small>6.6.9 (2024-07-26)</small>
 

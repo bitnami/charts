@@ -9,7 +9,7 @@ SPDX-License-Identifier: APACHE-2.0
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ template "cilium.hubble.ui.fullname" . }}
+  name: {{ template "cilium.hubble.ui.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
     app.kubernetes.io/component: hubble-ui
@@ -61,7 +61,7 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ template "cilium.hubble.ui.fullname" . }}
+  name: {{ template "cilium.hubble.ui.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
     app.kubernetes.io/component: hubble-ui
@@ -71,7 +71,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "cilium.hubble.ui.fullname" . }}
+  name: {{ template "cilium.hubble.ui.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "cilium.hubble.ui.serviceAccountName" . }}

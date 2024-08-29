@@ -1,8 +1,40 @@
 # Changelog
 
-## 23.1.1 (2024-08-08)
+## 23.1.9 (2024-08-23)
 
-* [bitnami/wordpress] Release 23.1.1 ([#28776](https://github.com/bitnami/charts/pull/28776))
+* [bitnami/wordpress] Release 23.1.9 ([#29005](https://github.com/bitnami/charts/pull/29005))
+
+## <small>23.1.8 (2024-08-23)</small>
+
+* [bitnami/wordpress] Fix php session mgmt (#28974) ([d3d8cab](https://github.com/bitnami/charts/commit/d3d8cabe66aaffaf7b49c827174e49681fd1121c)), closes [#28974](https://github.com/bitnami/charts/issues/28974)
+
+## <small>23.1.7 (2024-08-22)</small>
+
+* [bitnami/wordpress] Release 23.1.7 (#28979) ([899c4cc](https://github.com/bitnami/charts/commit/899c4cc32132ba25475c51444175f33e445bc53b)), closes [#28979](https://github.com/bitnami/charts/issues/28979)
+
+## <small>23.1.6 (2024-08-22)</small>
+
+* [bitnami/wordpress] Release 23.1.6 (#28977) ([373d2c0](https://github.com/bitnami/charts/commit/373d2c0da8e09386a15b01100d32faa037016902)), closes [#28977](https://github.com/bitnami/charts/issues/28977)
+
+## <small>23.1.5 (2024-08-21)</small>
+
+* [bitnami/wordpress] Release 23.1.5 (#28957) ([1f647f0](https://github.com/bitnami/charts/commit/1f647f06d1e2c4d1494f1ff5ca50964b10d48ec0)), closes [#28957](https://github.com/bitnami/charts/issues/28957)
+
+## <small>23.1.4 (2024-08-15)</small>
+
+* [bitnami/wordpress] Release 23.1.4 (#28896) ([8ca5e6f](https://github.com/bitnami/charts/commit/8ca5e6f278c61151b83f29752b3f6d88796c621b)), closes [#28896](https://github.com/bitnami/charts/issues/28896)
+
+## <small>23.1.3 (2024-08-13)</small>
+
+* [bitnami/wordpress] Release 23.1.3 (#28844) ([141e52f](https://github.com/bitnami/charts/commit/141e52fbb02909e3e9803319727e646a984f7bae)), closes [#28844](https://github.com/bitnami/charts/issues/28844)
+
+## <small>23.1.2 (2024-08-12)</small>
+
+* [bitnami/wordpress] Release 23.1.2 (#28839) ([ae815be](https://github.com/bitnami/charts/commit/ae815be89c155525d1d1356a6157773405ad35ca)), closes [#28839](https://github.com/bitnami/charts/issues/28839)
+
+## <small>23.1.1 (2024-08-08)</small>
+
+* [bitnami/wordpress] Release 23.1.1 (#28776) ([e727cd8](https://github.com/bitnami/charts/commit/e727cd8b0f898bda9e8739b908c5b77e0173c412)), closes [#28776](https://github.com/bitnami/charts/issues/28776)
 
 ## 23.1.0 (2024-08-06)
 

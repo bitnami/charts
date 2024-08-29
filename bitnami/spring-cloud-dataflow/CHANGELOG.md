@@ -1,8 +1,12 @@
 # Changelog
 
+## 31.0.1 (2024-08-14)
+
+* [bitnami/spring-cloud-dataflow] Release 31.0.1 ([#28880](https://github.com/bitnami/charts/pull/28880))
+
 ## 31.0.0 (2024-08-05)
 
-* [bitnami/spring-cloud-dataflow] Update chart dependency (kafka) ([#28675](https://github.com/bitnami/charts/pull/28675))
+* [bitnami/spring-cloud-dataflow] Update chart dependency (kafka) (#28675) ([0468258](https://github.com/bitnami/charts/commit/04682586de34b78a0e85daf68ce91aea6f4e1e8f)), closes [#28675](https://github.com/bitnami/charts/issues/28675)
 
 ## <small>30.0.4 (2024-07-25)</small>
 

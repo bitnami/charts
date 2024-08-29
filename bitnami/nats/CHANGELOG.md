@@ -1,8 +1,20 @@
 # Changelog
 
-## 8.2.16 (2024-08-07)
+## 8.3.2 (2024-08-27)
 
-* [bitnami/nats] Release 8.2.16 ([#28730](https://github.com/bitnami/charts/pull/28730))
+* [bitnami/nats] Release 8.3.2 ([#29073](https://github.com/bitnami/charts/pull/29073))
+
+## <small>8.3.1 (2024-08-27)</small>
+
+* [bitnami/nats] Release 8.3.1 (#29059) ([1537655](https://github.com/bitnami/charts/commit/1537655b0bb2e68d9a1977c21c0c4a7a65c8f63a)), closes [#29059](https://github.com/bitnami/charts/issues/29059)
+
+## 8.3.0 (2024-08-13)
+
+* [bitnami/nats] metrics exporter probe configuration (#28825) ([4c8a589](https://github.com/bitnami/charts/commit/4c8a58943b7d3fd3841d6acc883533c87ec67457)), closes [#28825](https://github.com/bitnami/charts/issues/28825)
+
+## <small>8.2.16 (2024-08-07)</small>
+
+* [bitnami/nats] Release 8.2.16 (#28730) ([86ae138](https://github.com/bitnami/charts/commit/86ae13804ecc635e0ef36df7f71283215cfbfe75)), closes [#28730](https://github.com/bitnami/charts/issues/28730)
 
 ## <small>8.2.15 (2024-07-25)</small>
 

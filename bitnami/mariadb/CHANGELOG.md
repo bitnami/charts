@@ -1,8 +1,16 @@
 # Changelog
 
-## 19.0.3 (2024-07-25)
+## 19.0.5 (2024-08-26)
 
-* [bitnami/mariadb] Release 19.0.3 ([#28455](https://github.com/bitnami/charts/pull/28455))
+* [bitnami/mariadb] Fix deprecation warnings in checks ([#29021](https://github.com/bitnami/charts/pull/29021))
+
+## <small>19.0.4 (2024-08-14)</small>
+
+* [bitnami/mariadb] Release 19.0.4 (#28874) ([0f767f1](https://github.com/bitnami/charts/commit/0f767f1e215d103c10fa8e1661f023f807382036)), closes [#28874](https://github.com/bitnami/charts/issues/28874)
+
+## <small>19.0.3 (2024-07-25)</small>
+
+* [bitnami/mariadb] Release 19.0.3 (#28455) ([3c84a4f](https://github.com/bitnami/charts/commit/3c84a4fdf417cedde724beca82fa5123281769ed)), closes [#28455](https://github.com/bitnami/charts/issues/28455)
 
 ## <small>19.0.2 (2024-07-24)</small>
 

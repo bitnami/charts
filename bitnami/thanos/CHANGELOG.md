@@ -1,8 +1,28 @@
 # Changelog
 
-## 15.7.18 (2024-08-07)
+## 15.7.23 (2024-08-27)
 
-* [bitnami/thanos] Release 15.7.18 ([#28752](https://github.com/bitnami/charts/pull/28752))
+* [bitnami/thanos] Release 15.7.23 ([#29068](https://github.com/bitnami/charts/pull/29068))
+
+## <small>15.7.22 (2024-08-27)</small>
+
+* add custom relabel config while thanos storegateway hash shard (#28969) ([10a31bd](https://github.com/bitnami/charts/commit/10a31bdbf51328190ec3eebc269a780448f62e53)), closes [#28969](https://github.com/bitnami/charts/issues/28969)
+
+## <small>15.7.21 (2024-08-20)</small>
+
+* [bitnami/thanos] Update index cache config for sharded store gateway (#28747) ([f7caac5](https://github.com/bitnami/charts/commit/f7caac595cb3278bf69f8a5897003f864b8af172)), closes [#28747](https://github.com/bitnami/charts/issues/28747)
+
+## <small>15.7.20 (2024-08-13)</small>
+
+* [bitnami/thanos] Release 15.7.20 (#28859) ([73a02f4](https://github.com/bitnami/charts/commit/73a02f4120fcf42be703443a888f5ed0b5c34477)), closes [#28859](https://github.com/bitnami/charts/issues/28859)
+
+## <small>15.7.19 (2024-08-09)</small>
+
+* [bitnami/thanos] add receive distributor termination grace period (#28793) ([6838ae1](https://github.com/bitnami/charts/commit/6838ae1092db9c66327d03f1955c6b0cc3afa0ad)), closes [#28793](https://github.com/bitnami/charts/issues/28793)
+
+## <small>15.7.18 (2024-08-07)</small>
+
+* [bitnami/thanos] Release 15.7.18 (#28752) ([8994d7b](https://github.com/bitnami/charts/commit/8994d7b7c5d751a90b2a65cd970cc4bed56471be)), closes [#28752](https://github.com/bitnami/charts/issues/28752)
 
 ## <small>15.7.17 (2024-08-02)</small>
 
