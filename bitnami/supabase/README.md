@@ -8,6 +8,10 @@ Supabase is an open source Firebase alternative. Provides all the necessary back
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+## This Helm chart is deprecated
+
+This Helm chart is deprecated on our side and will not receive new updates.
+
 ## TL;DR
 
 ```console
