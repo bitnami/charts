@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:1.0.1-debian-12-r5
+      image: docker.io/bitnami/jmx-exporter:1.0.1-debian-12-r6
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r26
+      image: docker.io/bitnami/os-shell:12-debian-12-r28
     - name: sonarqube
-      image: docker.io/bitnami/sonarqube:10.6.0-debian-12-r5
+      image: docker.io/bitnami/sonarqube:10.6.0-debian-12-r6
 apiVersion: v2
 appVersion: 10.6.0
 dependencies:
@@ -37,4 +37,4 @@ maintainers:
 name: sonarqube
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/sonarqube
-version: 5.2.12
+version: 5.2.13
