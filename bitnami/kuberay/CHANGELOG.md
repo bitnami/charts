@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.14 (2024-08-29)
+## 1.2.14 (2024-08-30)
 
 * [bitnami/kuberay] Release 1.2.14 ([#29117](https://github.com/bitnami/charts/pull/29117))
 
