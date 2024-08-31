@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.7.4 (2024-08-30)
+## 14.7.5 (2024-08-31)
 
-* [bitnami/minio] Release 14.7.4 ([#29119](https://github.com/bitnami/charts/pull/29119))
+* [bitnami/minio] Bail early if defaultBuckets is used in distributed mode (#29034) ([#29141](https://github.com/bitnami/charts/pull/29141))
+
+## <small>14.7.4 (2024-08-30)</small>
+
+* [bitnami/minio] Release 14.7.4 (#29119) ([4bc57b5](https://github.com/bitnami/charts/commit/4bc57b5b222fc0b4d28a19c469b89d65cac6eb68)), closes [#29119](https://github.com/bitnami/charts/issues/29119)
 
 ## <small>14.7.3 (2024-08-29)</small>
 
