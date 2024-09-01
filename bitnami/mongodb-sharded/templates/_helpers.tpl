@@ -33,7 +33,7 @@ Usage:
   {{- if .Values.configsvr.external.host -}}
   {{- .Values.configsvr.external.host }}
   {{- else -}}
-  {{- printf "%s-configsvr-0.%s-headless.%s.svc.%s" (include "common.names.fullname" . ) (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain -}}
+  {{- printf "%s-configsvr-0.%s-headless.%s.svc.%s" (include "common.names.fullname" . ) (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain -}}
   {{- end -}}
 {{- end -}}
 
