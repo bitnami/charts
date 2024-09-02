@@ -1,8 +1,20 @@
 # Changelog
 
-## 18.1.8 (2024-08-09)
+## 18.1.11 (2024-08-23)
 
-* [bitnami/nginx] Support for Non-Bitnami Nginx Images in nginx Helm Chart ([#28741](https://github.com/bitnami/charts/pull/28741))
+* [bitnami/nginx] Release 18.1.11 ([#28993](https://github.com/bitnami/charts/pull/28993))
+
+## <small>18.1.10 (2024-08-21)</small>
+
+* [bitnami/nginx] Release 18.1.10 (#28959) ([83e2fa5](https://github.com/bitnami/charts/commit/83e2fa51d26df8b7f73b9e205cd91b4deabd49b7)), closes [#28959](https://github.com/bitnami/charts/issues/28959)
+
+## <small>18.1.9 (2024-08-14)</small>
+
+* [bitnami/nginx] Release 18.1.9 (#28886) ([1dccc11](https://github.com/bitnami/charts/commit/1dccc11c8e8cfa80aad6fc6628d1edc02c49b4a4)), closes [#28886](https://github.com/bitnami/charts/issues/28886)
+
+## <small>18.1.8 (2024-08-13)</small>
+
+* [bitnami/nginx] Support for Non-Bitnami Nginx Images in nginx Helm Chart (#28741) ([00a53e4](https://github.com/bitnami/charts/commit/00a53e4bccfc629e94bd07c4a46d584522ec5f7c)), closes [#28741](https://github.com/bitnami/charts/issues/28741)
 
 ## <small>18.1.7 (2024-07-25)</small>
 

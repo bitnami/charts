@@ -1,8 +1,25 @@
 # Changelog
 
+## 14.7.4 (2024-08-30)
+
+* [bitnami/minio] Release 14.7.4 ([#29119](https://github.com/bitnami/charts/pull/29119))
+
+## <small>14.7.3 (2024-08-29)</small>
+
+* [bitnami/minio] Fix MinIO Network Policy (#29089) ([49c78ee](https://github.com/bitnami/charts/commit/49c78ee31e173558b510a541e8b0c5e2e0dbe78e)), closes [#29089](https://github.com/bitnami/charts/issues/29089)
+
+## <small>14.7.2 (2024-08-26)</small>
+
+* [bitnami/minio] Release 14.7.2 (#29030) ([45f50fd](https://github.com/bitnami/charts/commit/45f50fdd11b956659d060c1e4fc59904d59043cc)), closes [#29030](https://github.com/bitnami/charts/issues/29030)
+
+## <small>14.7.1 (2024-08-17)</small>
+
+* [bitnami/minio] Release 14.7.1 (#28915) ([ea7247a](https://github.com/bitnami/charts/commit/ea7247a9eae7026f6385e6ad4ac4609cef72ec1a)), closes [#28915](https://github.com/bitnami/charts/issues/28915)
+
 ## 14.7.0 (2024-08-12)
 
-* [bitnami/minio]: Option to use a secret. ([#27837](https://github.com/bitnami/charts/pull/27837))
+* [bitnami/minio] Release 14.6.33 (#28731) ([558c1f8](https://github.com/bitnami/charts/commit/558c1f8056152e5d16fdf35db29c4028a31453fe)), closes [#28731](https://github.com/bitnami/charts/issues/28731)
+* [bitnami/minio]: Option to use a secret. (#27837) ([5c21623](https://github.com/bitnami/charts/commit/5c2162370dd5d99d4df91f36b1fcc778ac604673)), closes [#27837](https://github.com/bitnami/charts/issues/27837)
 
 ## <small>14.6.32 (2024-08-03)</small>
 

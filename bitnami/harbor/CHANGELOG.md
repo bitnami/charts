@@ -1,8 +1,8 @@
 # Changelog
 
-## 23.0.0 (2024-08-13)
+## 23.0.1 (2024-08-24)
 
-* [bitnami/harbor] Update dependencies ([#28853](https://github.com/bitnami/charts/pull/28853))
+* [bitnami/harbor] Release 23.0.1 ([#29012](https://github.com/bitnami/charts/pull/29012))
 
 ## <small>22.0.12 (2024-08-08)</small>
 

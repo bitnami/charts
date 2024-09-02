@@ -79,7 +79,7 @@ kubectl create secret generic my-exisiting-stores --from-file=./keystore --from-
 kubectl create secret generic my-stores-password --from-literal=keystore-password=KEYSTORE_PASSWORD --from-literal=truststore-password=TRUSTSTORE_PASSWORD
 ```
 
-Keystore and Truststore files can be dinamycally created from the certificates files. In this case a secret with the tls.crt, tls.key and ca.crt in pem format is required. The following example shows how the secret can be created and assumes that all certificate files are in the working directory:
+Keystore and Truststore files can be dynamically created from the certificates files. In this case a secret with the tls.crt, tls.key and ca.crt in pem format is required. The following example shows how the secret can be created and assumes that all certificate files are in the working directory:
 
 ```console
 kubectl create secret tls my-certs --cert ./tls.crt --key ./tls.key

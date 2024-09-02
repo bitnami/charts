@@ -152,7 +152,7 @@ spec:
             {{- if $.Values.bucketCacheConfig }}
             - --store.caching-bucket.config-file=/conf/cache/bucket-cache.yml
             {{- end }}
-            {{- if or (include "thanos.storegateway.createConfigmap" $) $.Values.storegateway.existingConfigmap }}
+            {{- if or $.Values.storegateway.config $.Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
             {{- end }}
             {{- if $.Values.storegateway.grpc.server.tls.enabled }}
@@ -172,6 +172,9 @@ spec:
                 - action: keep
                   source_labels: ["shard"]
                   regex: {{ $index }}
+            {{- if $.Values.storegateway.sharded.hashPartitioning.extraRelabelingConfigs }}
+            {{- $.Values.storegateway.sharded.hashPartitioning.extraRelabelingConfigs | toYaml | nindent 16 }}
+            {{- end }} 
             {{- end }}
             {{- if $timePartitioning }}
             {{- $partion := (slice $.Values.storegateway.sharded.timePartitioning  $index) | first }}
