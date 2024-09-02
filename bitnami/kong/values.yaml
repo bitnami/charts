@@ -84,7 +84,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 3.7.1-debian-12-r6
+  tag: 3.7.1-debian-12-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -665,7 +665,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 3.2.3-debian-12-r1
+    tag: 3.2.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -907,7 +907,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 14.12.0-debian-12-r22
+    tag: 14.13.0-debian-12-r2
     digest: ""
   auth:
     username: kong

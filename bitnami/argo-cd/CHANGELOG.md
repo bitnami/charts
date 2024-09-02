@@ -1,8 +1,32 @@
 # Changelog
 
-## 7.0.2 (2024-08-17)
+## 7.0.8 (2024-08-28)
 
-* [bitnami/argo-cd] Add missing verbs to ApplicationSet role ([#28914](https://github.com/bitnami/charts/pull/28914))
+* [bitnami/argo-cd] Release 7.0.8 ([#29074](https://github.com/bitnami/charts/pull/29074))
+
+## <small>7.0.7 (2024-08-27)</small>
+
+* [bitnami/argo-cd] Release 7.0.7 (#29042) ([b4c9c5f](https://github.com/bitnami/charts/commit/b4c9c5fb6b48a20b04ed0cfe7cc56e559773e151)), closes [#29042](https://github.com/bitnami/charts/issues/29042)
+
+## <small>7.0.6 (2024-08-23)</small>
+
+* [bitnami/argo-cd] Release 7.0.6 (#28994) ([1ec7b5c](https://github.com/bitnami/charts/commit/1ec7b5c14a818bdc4f26fcf3ad53e78c102d10b2)), closes [#28994](https://github.com/bitnami/charts/issues/28994)
+
+## <small>7.0.5 (2024-08-23)</small>
+
+* [bitnami/argo-cd] fix: Add namespace to service account's bindings (#28737) ([b75dcd7](https://github.com/bitnami/charts/commit/b75dcd716410ec623eb832104ffe6f25df0e5a13)), closes [#28737](https://github.com/bitnami/charts/issues/28737)
+
+## <small>7.0.4 (2024-08-23)</small>
+
+* [bitnami/argo-cd] Release 7.0.4 (#28987) ([dd40e6e](https://github.com/bitnami/charts/commit/dd40e6e3dc01ef62a9e631540e660416bc6cadf6)), closes [#28987](https://github.com/bitnami/charts/issues/28987)
+
+## <small>7.0.3 (2024-08-20)</small>
+
+* [bitnami/argo-cd] test: :white_check_mark: Improve resilience of cypress test (#28936) ([b290de1](https://github.com/bitnami/charts/commit/b290de196fdd3e0aa5bc55c5257fe5384dde39d1)), closes [#28936](https://github.com/bitnami/charts/issues/28936)
+
+## <small>7.0.2 (2024-08-19)</small>
+
+* [bitnami/argo-cd] Add missing verbs to ApplicationSet role (#28914) ([69e8d7b](https://github.com/bitnami/charts/commit/69e8d7bfa54ff1892f0405d31d29aa988bd79440)), closes [#28914](https://github.com/bitnami/charts/issues/28914)
 
 ## <small>7.0.1 (2024-08-16)</small>
 

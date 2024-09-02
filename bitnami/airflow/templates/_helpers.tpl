@@ -214,6 +214,11 @@ Load DAGs init-container
     - -ec
     - |
       cp /configmap/* /dags
+  {{- if $compDefinition.resources }}
+  resources: {{- toYaml $compDefinition.resources | nindent 4 }}
+  {{- else if ne $compDefinition.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" $compDefinition.resourcesPreset) | nindent 4 }}
+  {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp

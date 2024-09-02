@@ -87,7 +87,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.15.1-debian-12-r0
+  tag: 2.16.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -117,7 +117,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.46.0-debian-12-r0
+  tag: 2.46.0-debian-12-r1
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1210,7 +1210,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r27
+    tag: 12-debian-12-r28
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1259,7 +1259,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r27
+    tag: 12-debian-12-r28
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -1398,7 +1398,7 @@ minio:
 
 ## @section External S3 parameters
 ## All of these values are only used when minio.enabled is set to false
-## @param externalS3.host External S3 host, e.g. "s3.amazonaws.com"
+## @param externalS3.host External S3 host. When using AWS S3, include appropriate [regional code](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region), e.g. "eu-central-1.amazonaws.com
 ## @param externalS3.port External S3 port number
 ## @param externalS3.useCredentialsInSecret Whether to use a secret to store the S3 credentials
 ## @param externalS3.accessKeyID External S3 access key ID

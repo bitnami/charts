@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.5.23 (2024-08-19)
+## 15.5.27 (2024-08-30)
 
-* [bitnami/postgresql] Release 15.5.23 ([#28922](https://github.com/bitnami/charts/pull/28922))
+* [bitnami/postgresql] Release 15.5.27 ([#29122](https://github.com/bitnami/charts/pull/29122))
+
+## <small>15.5.26 (2024-08-27)</small>
+
+* [bitnami/postgresql] Release 15.5.26 (#29040) ([fd112fb](https://github.com/bitnami/charts/commit/fd112fb348a6f68686d863684e38e03e61f2e1a3)), closes [#29040](https://github.com/bitnami/charts/issues/29040)
+
+## <small>15.5.25 (2024-08-27)</small>
+
+* [bitnami/postgresql] Release 15.5.25 (#29037) ([8267ba0](https://github.com/bitnami/charts/commit/8267ba0828c6325d96b0c18fba40906c1718db26)), closes [#29037](https://github.com/bitnami/charts/issues/29037)
+
+## <small>15.5.24 (2024-08-23)</small>
+
+* [bitnami/postgresql] eval. certificatesSecret as template (#28831) ([05c09db](https://github.com/bitnami/charts/commit/05c09dbb8e60cde19c44ee6d795e31a48f9f77ba)), closes [#28831](https://github.com/bitnami/charts/issues/28831)
+
+## <small>15.5.23 (2024-08-19)</small>
+
+* [bitnami/postgresql] Release 15.5.23 (#28922) ([d60e431](https://github.com/bitnami/charts/commit/d60e4314329df6fd2490237ce13395cb391aaa7e)), closes [#28922](https://github.com/bitnami/charts/issues/28922)
 
 ## <small>15.5.22 (2024-08-16)</small>
 

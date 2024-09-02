@@ -285,6 +285,9 @@ spec:
               mountPath: /tmp
               subPath: tmp-dir
             - name: empty-dir
+              mountPath: /bitnami
+              subPath: app-volume-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/keycloak/conf
               subPath: app-conf-dir
             - name: empty-dir

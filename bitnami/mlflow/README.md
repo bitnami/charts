@@ -446,19 +446,19 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 
 ### External S3 parameters
 
-| Name                                      | Description                                                        | Value           |
-| ----------------------------------------- | ------------------------------------------------------------------ | --------------- |
-| `externalS3.host`                         | External S3 host, e.g. "s3.amazonaws.com"                          | `""`            |
-| `externalS3.port`                         | External S3 port number                                            | `443`           |
-| `externalS3.useCredentialsInSecret`       | Whether to use a secret to store the S3 credentials                | `true`          |
-| `externalS3.accessKeyID`                  | External S3 access key ID                                          | `""`            |
-| `externalS3.accessKeySecret`              | External S3 access key secret                                      | `""`            |
-| `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials  | `""`            |
-| `externalS3.existingSecretAccessKeyIDKey` | Name of an existing secret key containing the S3 access key ID     | `root-user`     |
-| `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret | `root-password` |
-| `externalS3.protocol`                     | External S3 protocol                                               | `https`         |
-| `externalS3.bucket`                       | External S3 bucket                                                 | `mlflow`        |
-| `externalS3.serveArtifacts`               | Whether artifact serving is enabled                                | `true`          |
+| Name                                      | Description                                                                                                                                                                 | Value           |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `externalS3.host`                         | External S3 host. When using AWS S3, include appropriate [regional code](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region), e.g. "eu-central-1.amazonaws.com | `""`            |
+| `externalS3.port`                         | External S3 port number                                                                                                                                                     | `443`           |
+| `externalS3.useCredentialsInSecret`       | Whether to use a secret to store the S3 credentials                                                                                                                         | `true`          |
+| `externalS3.accessKeyID`                  | External S3 access key ID                                                                                                                                                   | `""`            |
+| `externalS3.accessKeySecret`              | External S3 access key secret                                                                                                                                               | `""`            |
+| `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials                                                                                                           | `""`            |
+| `externalS3.existingSecretAccessKeyIDKey` | Name of an existing secret key containing the S3 access key ID                                                                                                              | `root-user`     |
+| `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret                                                                                                          | `root-password` |
+| `externalS3.protocol`                     | External S3 protocol                                                                                                                                                        | `https`         |
+| `externalS3.bucket`                       | External S3 bucket                                                                                                                                                          | `mlflow`        |
+| `externalS3.serveArtifacts`               | Whether artifact serving is enabled                                                                                                                                         | `true`          |
 
 ### External Google Cloud Storage parameters
 
