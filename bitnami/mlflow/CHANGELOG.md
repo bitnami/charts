@@ -1,12 +1,12 @@
 # Changelog
 
-## 1.5.0 (2024-08-21)
+## 1.5.0 (2024-09-02)
 
 * [bitnami/mlflow] Add support for Google Cloud Storage as artifact store ([#28938](https://github.com/bitnami/charts/pull/28938))
 
-## 1.4.25 (2024-08-31)
+## <small>1.4.25 (2024-08-31)</small>
 
-* [bitnami/mlflow] Release 1.4.25 ([#29139](https://github.com/bitnami/charts/pull/29139))
+* [bitnami/mlflow] Release 1.4.25 (#29139) ([07365a4](https://github.com/bitnami/charts/commit/07365a40a3e0246fdc926b421893782b9f17ccd7)), closes [#29139](https://github.com/bitnami/charts/issues/29139)
 
 ## <small>1.4.24 (2024-08-26)</small>
 
