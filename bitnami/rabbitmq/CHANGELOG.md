@@ -1,12 +1,12 @@
 # Changelog
 
-## 14.6.10 (2024-08-15)
+## 14.6.10 (2024-09-02)
 
 * [bitnami/rabbitmq] Breaking out RabbitMQ metrics endpoints to configure separately ([#28891](https://github.com/bitnami/charts/pull/28891))
 
-## 14.6.9 (2024-08-28)
+## <small>14.6.9 (2024-08-28)</small>
 
-* [bitnami/rabbitmq] Release 14.6.9 ([#29092](https://github.com/bitnami/charts/pull/29092))
+* [bitnami/rabbitmq] Release 14.6.9 (#29092) ([711e2f7](https://github.com/bitnami/charts/commit/711e2f720d92e936b9a67bbdc269d57c33a9dca6)), closes [#29092](https://github.com/bitnami/charts/issues/29092)
 
 ## <small>14.6.8 (2024-08-28)</small>
 
