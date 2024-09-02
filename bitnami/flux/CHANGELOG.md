@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.3.8 (2024-07-04)
+## 2.3.14 (2024-08-07)
 
-* [bitnami/flux] Release 2.3.8 ([#27782](https://github.com/bitnami/charts/pull/27782))
+* [bitnami/flux] Release 2.3.14 ([#28710](https://github.com/bitnami/charts/pull/28710))
+
+## <small>2.3.13 (2024-08-06)</small>
+
+* [bitnami/flux] Use nginx instead of dokuwiki for testing (#28671) ([fd31545](https://github.com/bitnami/charts/commit/fd31545aa00292995aeceb7e8d1338852e8a4514)), closes [#28671](https://github.com/bitnami/charts/issues/28671)
+
+## <small>2.3.12 (2024-07-25)</small>
+
+* [bitnami/flux] Release 2.3.12 (#28429) ([d37fda0](https://github.com/bitnami/charts/commit/d37fda0b2b83f0f961b3cbb2d8dc985cf5ce3de2)), closes [#28429](https://github.com/bitnami/charts/issues/28429)
+
+## <small>2.3.11 (2024-07-24)</small>
+
+* [bitnami/flux] Release 2.3.11 (#28275) ([b23d1cd](https://github.com/bitnami/charts/commit/b23d1cdc6a01cf2f9374174f022ec98a1da79f28)), closes [#28275](https://github.com/bitnami/charts/issues/28275)
+
+## <small>2.3.10 (2024-07-24)</small>
+
+* [bitnami/flux] Release 2.3.10 (#28266) ([dced3e4](https://github.com/bitnami/charts/commit/dced3e4856e1bcd7cc710c49443e17748638249c)), closes [#28266](https://github.com/bitnami/charts/issues/28266)
+
+## <small>2.3.9 (2024-07-18)</small>
+
+* [bitnami/flux] Global StorageClass as default value (#28021) ([d16095e](https://github.com/bitnami/charts/commit/d16095eb4fba118281fe9248d4cc22db31985043)), closes [#28021](https://github.com/bitnami/charts/issues/28021)
+
+## <small>2.3.8 (2024-07-04)</small>
+
+* [bitnami/flux] Release 2.3.8 (#27782) ([de06d71](https://github.com/bitnami/charts/commit/de06d71002305f8ec3f52a245ec4e25aeed084d1)), closes [#27782](https://github.com/bitnami/charts/issues/27782)
 
 ## <small>2.3.7 (2024-07-03)</small>
 

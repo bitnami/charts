@@ -1,8 +1,40 @@
 # Changelog
 
-## 3.6.3 (2024-07-08)
+## 3.7.7 (2024-08-27)
 
-* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) ([#27829](https://github.com/bitnami/charts/pull/27829))
+* [bitnami/grafana-tempo] Release 3.7.7 ([#29051](https://github.com/bitnami/charts/pull/29051))
+
+## <small>3.7.6 (2024-08-23)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.6 (#28997) ([ba1c140](https://github.com/bitnami/charts/commit/ba1c140a25e23c416f4bbbcba6ecaa8ad6ad623e)), closes [#28997](https://github.com/bitnami/charts/issues/28997)
+
+## <small>3.7.5 (2024-08-07)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.5 (#28717) ([4330da1](https://github.com/bitnami/charts/commit/4330da1a87f211fff8b87af418a1b615221fe139)), closes [#28717](https://github.com/bitnami/charts/issues/28717)
+
+## <small>3.7.4 (2024-07-25)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.4 (#28417) ([3ee0253](https://github.com/bitnami/charts/commit/3ee02539fa2d609f7b18237d83d493d67cd7df69)), closes [#28417](https://github.com/bitnami/charts/issues/28417)
+
+## <small>3.7.3 (2024-07-24)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.3 (#28287) ([c1cf555](https://github.com/bitnami/charts/commit/c1cf555eedd69f1841ad2c84ff4bc89e59490e5b)), closes [#28287](https://github.com/bitnami/charts/issues/28287)
+
+## <small>3.7.2 (2024-07-24)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.2 (#28248) ([0d0d073](https://github.com/bitnami/charts/commit/0d0d073eba178e9c1edd61eea87fca84d3deae11)), closes [#28248](https://github.com/bitnami/charts/issues/28248)
+
+## <small>3.7.1 (2024-07-19)</small>
+
+* [bitnami/grafana-tempo] Global StorageClass as default value (#28028) ([bcfcaef](https://github.com/bitnami/charts/commit/bcfcaef6e471b113e491631a5d78d19a8943e4a1)), closes [#28028](https://github.com/bitnami/charts/issues/28028)
+
+## 3.7.0 (2024-07-17)
+
+* [bitnami/grafana-tempo] Change OTLP HTTP port 55681 to 4318 (#27830) ([c14c3f9](https://github.com/bitnami/charts/commit/c14c3f9b47ad12a2ee5491ab66b3de26b27a40c1)), closes [#27830](https://github.com/bitnami/charts/issues/27830)
+
+## <small>3.6.3 (2024-07-08)</small>
+
+* [bitnami/grafana-tempo] Fix: bind correctly containerPorts (grpc and gossip-ring ports) (#27829) ([8eb5299](https://github.com/bitnami/charts/commit/8eb529978d6b43100dd43a7dc2d4a2bfaf0f4ed7)), closes [#27829](https://github.com/bitnami/charts/issues/27829)
 
 ## <small>3.6.2 (2024-07-04)</small>
 

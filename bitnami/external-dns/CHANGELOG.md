@@ -1,8 +1,44 @@
 # Changelog
 
+## 8.3.5 (2024-08-13)
+
+* [bitnami/external-dns]  Fix crd.create=true ([#27434](https://github.com/bitnami/charts/pull/27434))
+
+## <small>8.3.4 (2024-08-07)</small>
+
+* [bitnami/external-dns] Release 8.3.4 (#28711) ([773fcd7](https://github.com/bitnami/charts/commit/773fcd7b74b7231483b12f25c65a291a52cc2e9c)), closes [#28711](https://github.com/bitnami/charts/issues/28711)
+
+## <small>8.3.3 (2024-07-25)</small>
+
+* [bitnami/external-dns] Release 8.3.3 (#28422) ([2426090](https://github.com/bitnami/charts/commit/2426090e00e4dcec3435afeaf19d6156a00ab508)), closes [#28422](https://github.com/bitnami/charts/issues/28422)
+
+## <small>8.3.2 (2024-07-24)</small>
+
+* [bitnami/external-dns] Release 8.3.2 (#28315) ([25da286](https://github.com/bitnami/charts/commit/25da286e637c761bcdfbb7c6bbb66663eb3b96e5)), closes [#28315](https://github.com/bitnami/charts/issues/28315)
+
+## <small>8.3.1 (2024-07-24)</small>
+
+* [bitnami/external-dns] Release 8.3.1 (#28245) ([4ab8fdf](https://github.com/bitnami/charts/commit/4ab8fdfe3afda4afab13edeacfd7d0adb5a9dde2)), closes [#28245](https://github.com/bitnami/charts/issues/28245)
+
+## 8.3.0 (2024-07-23)
+
+* [bitnami/external-dns] feat: Add support for provider scaleway secretName (#24630) ([fdb8c86](https://github.com/bitnami/charts/commit/fdb8c86dfa81697619b5d5e798f41860c793ad3c)), closes [#24630](https://github.com/bitnami/charts/issues/24630)
+
+## <small>8.2.3 (2024-07-18)</small>
+
+* [bitnami/external-dns] Add value.yaml support for "--infoblox-create-ptr" argument flag (#27882) ([d50881f](https://github.com/bitnami/charts/commit/d50881f2b88c8c16711e98962121e75162c8e539)), closes [#27882](https://github.com/bitnami/charts/issues/27882)
+
+## <small>8.2.2 (2024-07-16)</small>
+
+* [bitnami/external-dns] add revisionHistoryLimit value (#27913) ([8cd1824](https://github.com/bitnami/charts/commit/8cd182450c2cc0e2f7136ee9a455a3aa3486d7dc)), closes [#27913](https://github.com/bitnami/charts/issues/27913)
+
+## <small>8.2.1 (2024-07-11)</small>
+
+* [bitnami/external-dns] docs: update registry doc url (#27505) ([cf18b0b](https://github.com/bitnami/charts/commit/cf18b0b65db5371bab05415066e31d5c80378922)), closes [#27505](https://github.com/bitnami/charts/issues/27505)
+
 ## 8.2.0 (2024-07-10)
 
-* [bitnami/external-dns] Added extra arguments for Traefik new/legacy resource support ([#27766](https://github.com/bitnami/charts/pull/27766))
+* [bitnami/external-dns] Added extra arguments for Traefik new/legacy resource support (#27766) ([31ff6e7](https://github.com/bitnami/charts/commit/31ff6e73fb7d3e89c4c821c38a711afbf2eab830)), closes [#27766](https://github.com/bitnami/charts/issues/27766)
 
 ## 8.1.0 (2024-07-08)
 

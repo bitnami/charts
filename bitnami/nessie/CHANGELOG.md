@@ -1,8 +1,57 @@
 # Changelog
 
-## 0.1.14 (2024-06-28)
+## 0.1.26 (2024-08-08)
 
-* [bitnami/nessie] Release 0.1.14 ([#27584](https://github.com/bitnami/charts/pull/27584))
+* [bitnami/nessie] Release 0.1.26 ([#28774](https://github.com/bitnami/charts/pull/28774))
+
+## <small>0.1.25 (2024-08-01)</small>
+
+* [bitnami/nessie] Release 0.1.25 (#28623) ([7fcf1d3](https://github.com/bitnami/charts/commit/7fcf1d33bc49e7ad407df366cb23343c66e9f714)), closes [#28623](https://github.com/bitnami/charts/issues/28623)
+
+## <small>0.1.24 (2024-07-29)</small>
+
+* [bitnami/nessie] Release 0.1.24 (#28552) ([b7ae834](https://github.com/bitnami/charts/commit/b7ae834d17d1e5d55e243290c4fc90dd00a99df1)), closes [#28552](https://github.com/bitnami/charts/issues/28552)
+
+## <small>0.1.23 (2024-07-26)</small>
+
+* [bitnami/nessie] Release 0.1.23 (#28540) ([7f159e3](https://github.com/bitnami/charts/commit/7f159e38f325b5dc4cf0cc1519c317e18b5ecde8)), closes [#28540](https://github.com/bitnami/charts/issues/28540)
+
+## <small>0.1.22 (2024-07-25)</small>
+
+* [bitnami/nessie] Release 0.1.22 (#28526) ([3a534a1](https://github.com/bitnami/charts/commit/3a534a1d28317d233112fd8d5c35081ba757b227)), closes [#28526](https://github.com/bitnami/charts/issues/28526)
+
+## <small>0.1.21 (2024-07-25)</small>
+
+* [bitnami/nessie] Release 0.1.21 (#28524) ([d7515b7](https://github.com/bitnami/charts/commit/d7515b7b08daac235298b2e49e80f850a09759b0)), closes [#28524](https://github.com/bitnami/charts/issues/28524)
+
+## <small>0.1.20 (2024-07-25)</small>
+
+* [bitnami/nessie] Release 0.1.20 (#28452) ([d8f5e6e](https://github.com/bitnami/charts/commit/d8f5e6e7614dee174634926c219bded12f9ad8f8)), closes [#28452](https://github.com/bitnami/charts/issues/28452)
+
+## <small>0.1.19 (2024-07-24)</small>
+
+* [bitnami/nessie] Release 0.1.19 (#28340) ([9294405](https://github.com/bitnami/charts/commit/9294405dbbbc31c06d5b88aefa2d56f5951657e4)), closes [#28340](https://github.com/bitnami/charts/issues/28340)
+
+## <small>0.1.18 (2024-07-23)</small>
+
+* [bitnami/nessie] Release 0.1.18 (#28220) ([e8c7f33](https://github.com/bitnami/charts/commit/e8c7f33f93ccd489b727c69795697f8bf7cf990a)), closes [#28220](https://github.com/bitnami/charts/issues/28220)
+
+## <small>0.1.17 (2024-07-18)</small>
+
+* [bitnami/nessie] Global StorageClass as default value (#28069) ([41639e2](https://github.com/bitnami/charts/commit/41639e2df960132b55fe9d4fb1489b0524537a51)), closes [#28069](https://github.com/bitnami/charts/issues/28069)
+
+## <small>0.1.16 (2024-07-13)</small>
+
+* [bitnami/nessie] Release 0.1.16 (#27958) ([35186e2](https://github.com/bitnami/charts/commit/35186e2891615a906aa0bed557861f9d7e092ac7)), closes [#27958](https://github.com/bitnami/charts/issues/27958)
+
+## <small>0.1.15 (2024-07-11)</small>
+
+* [bitnami/nessie] Release 0.1.15 (#27910) ([2a01142](https://github.com/bitnami/charts/commit/2a01142eca54e7974cc12aebb2272c8e3496922d)), closes [#27910](https://github.com/bitnami/charts/issues/27910)
+
+## <small>0.1.14 (2024-06-28)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/nessie] Release 0.1.14 (#27584) ([614604a](https://github.com/bitnami/charts/commit/614604a74713ce7c0a99b3aa0b31b6f0d9fcbcf9)), closes [#27584](https://github.com/bitnami/charts/issues/27584)
 
 ## <small>0.1.13 (2024-06-24)</small>
 
@@ -47,8 +96,11 @@
 
 ## <small>0.1.3 (2024-06-06)</small>
 
-* [bitnami/nessie] Release 0.1.2 (#26717) ([e37e901](https://github.com/bitnami/charts/commit/e37e901db99a91932d03129e136643e5072417df)), closes [#26717](https://github.com/bitnami/charts/issues/26717)
 * [bitnami/nessie] Release 0.1.3 (#26996) ([06c9536](https://github.com/bitnami/charts/commit/06c95361634f1500479e433d529c9a4e224c09fc)), closes [#26996](https://github.com/bitnami/charts/issues/26996)
+
+## <small>0.1.2 (2024-06-04)</small>
+
+* [bitnami/nessie] Release 0.1.2 (#26717) ([e37e901](https://github.com/bitnami/charts/commit/e37e901db99a91932d03129e136643e5072417df)), closes [#26717](https://github.com/bitnami/charts/issues/26717)
 
 ## <small>0.1.1 (2024-06-04)</small>
 

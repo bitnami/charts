@@ -313,7 +313,7 @@ jobs:
       threshold: ${{ steps.set-output.outputs.threshold }}
     if: needs.get-chart.outputs.result == 'ok'
     steps:
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         name: Checkout 'main' branch
         with:
           path: charts-main
@@ -329,6 +329,13 @@ jobs:
         run: |
           if [ -d "charts-main/bitnami/${CHART}" ]; then
             helm dep build charts-main/bitnami/${CHART}
+            if [ -d "charts-main/bitnami/${CHART}/charts" ]; then
+              cd charts-main/bitnami/${CHART}/charts
+              for filename in *.tgz; do
+                tar -xf "$filename"
+                rm -f "$filename"
+              done
+            fi
           fi
       - id: get-chart-score
         uses: addnab/docker-run-action@4f65fabd2431ebc8d299f8e5a018d79a769ae185

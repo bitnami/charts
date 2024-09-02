@@ -36,6 +36,9 @@
             "resources": {
               "path": "/.vib"
             },
+            "wait": {
+              "file": "gitea/goss/goss-wait.yaml"
+            },
             "tests_file": "gitea/goss/goss.yaml",
             "vars_file": "gitea/runtime-parameters.yaml",
             "remote": {
@@ -57,6 +60,12 @@
               "user": "vib-user@example.com",
               "password": "bitnami!1234"
             }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

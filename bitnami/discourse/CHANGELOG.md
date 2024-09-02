@@ -1,8 +1,49 @@
 # Changelog
 
-## 13.2.9 (2024-07-08)
+## 14.1.3 (2024-08-27)
 
-* [bitnami/discourse] Fix pgrep on livenessProbe typo ([#27824](https://github.com/bitnami/charts/pull/27824))
+* [bitnami/discourse] Release 14.1.3 ([#29064](https://github.com/bitnami/charts/pull/29064))
+
+## <small>14.1.2 (2024-08-27)</small>
+
+* [bitnami/discourse] Release 14.1.2 (#29047) ([8dca3b5](https://github.com/bitnami/charts/commit/8dca3b533b4683bf854f391cc2fb2727327e6b26)), closes [#29047](https://github.com/bitnami/charts/issues/29047)
+
+## <small>14.1.1 (2024-08-22)</small>
+
+* [bitnami/discourse] Release 14.1.1 (#28966) ([f4e8e0b](https://github.com/bitnami/charts/commit/f4e8e0bb0af6097e0fbdca1aa41463b0a960b484)), closes [#28966](https://github.com/bitnami/charts/issues/28966)
+
+## 14.1.0 (2024-08-20)
+
+* [bitnami/discourse] Bump discourse to 3.3.0 (#28786) ([439b8c7](https://github.com/bitnami/charts/commit/439b8c7b48980952615ca0290defa6180a2164ed)), closes [#28786](https://github.com/bitnami/charts/issues/28786)
+* [bitnami/discourse] Update dependencies (#28852) ([279c2bd](https://github.com/bitnami/charts/commit/279c2bd4db105ad48a25419958e318f3e522338b)), closes [#28852](https://github.com/bitnami/charts/issues/28852)
+
+## <small>13.2.15 (2024-07-30)</small>
+
+* [bitnami/discourse] Release 13.2.15 (#28578) ([1e0e9c7](https://github.com/bitnami/charts/commit/1e0e9c79d42cbd3dbe4b3ad89201e229bb39215c)), closes [#28578](https://github.com/bitnami/charts/issues/28578)
+
+## <small>13.2.14 (2024-07-25)</small>
+
+* [bitnami/discourse] Release 13.2.14 (#28448) ([a1c04d9](https://github.com/bitnami/charts/commit/a1c04d937c775cbd265b5b7174217f013af208a5)), closes [#28448](https://github.com/bitnami/charts/issues/28448)
+
+## <small>13.2.13 (2024-07-24)</small>
+
+* [bitnami/discourse] Release 13.2.13 (#28291) ([b094b74](https://github.com/bitnami/charts/commit/b094b74156c4915dd01b6aee5c68e8bac39acd80)), closes [#28291](https://github.com/bitnami/charts/issues/28291)
+
+## <small>13.2.12 (2024-07-18)</small>
+
+* [bitnami/discourse] fix: :bug: Remove incorrect CHMOD capability (#27982) ([4decca8](https://github.com/bitnami/charts/commit/4decca8eb92c6f98dce549f9d01d8ef6a191c75d)), closes [#27982](https://github.com/bitnami/charts/issues/27982)
+
+## <small>13.2.11 (2024-07-16)</small>
+
+* [bitnami/discourse] Global StorageClass as default value (#28010) ([84bce06](https://github.com/bitnami/charts/commit/84bce06012772a0a5c93072e4dd5a64878e54eec)), closes [#28010](https://github.com/bitnami/charts/issues/28010)
+
+## <small>13.2.10 (2024-07-15)</small>
+
+* [bitnami/discourse] Release 13.2.10 (#27984) ([d5f6db6](https://github.com/bitnami/charts/commit/d5f6db6dd719f2e2333a26d7651a18bda6e412aa)), closes [#27984](https://github.com/bitnami/charts/issues/27984)
+
+## <small>13.2.9 (2024-07-08)</small>
+
+* [bitnami/discourse] Fix pgrep on livenessProbe typo (#27824) ([5c4b604](https://github.com/bitnami/charts/commit/5c4b6040abe28a689f210bcd18572ad0e4a690ba)), closes [#27824](https://github.com/bitnami/charts/issues/27824)
 
 ## <small>13.2.8 (2024-07-03)</small>
 

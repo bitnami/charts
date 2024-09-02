@@ -1,8 +1,40 @@
 # Changelog
 
-## 6.2.8 (2024-07-04)
+## 7.0.4 (2024-08-23)
 
-* [bitnami/mastodon] Release 6.2.8 ([#27784](https://github.com/bitnami/charts/pull/27784))
+* [bitnami/mastodon] Release 7.0.4 ([#29009](https://github.com/bitnami/charts/pull/29009))
+
+## <small>7.0.3 (2024-08-22)</small>
+
+* [bitnami/mastodon] Release 7.0.3 (#28973) ([f4c3d49](https://github.com/bitnami/charts/commit/f4c3d494201bb09dd721466fb3ba9d8d66f9eeff)), closes [#28973](https://github.com/bitnami/charts/issues/28973)
+
+## <small>7.0.2 (2024-08-19)</small>
+
+* [bitnami/mastodon] Release 7.0.2 (#28928) ([f89985d](https://github.com/bitnami/charts/commit/f89985d1d5c1c4eacbc1a1e3376f957e5b8db462)), closes [#28928](https://github.com/bitnami/charts/issues/28928)
+
+## <small>7.0.1 (2024-08-16)</small>
+
+* [bitnami/mastodon] Release 7.0.1 (#28907) ([7c6b839](https://github.com/bitnami/charts/commit/7c6b839d9836292330040cb33681345584e08c1c)), closes [#28907](https://github.com/bitnami/charts/issues/28907)
+
+## 7.0.0 (2024-08-13)
+
+* [bitnami/mastodon] Update dependencies (#28855) ([161cd16](https://github.com/bitnami/charts/commit/161cd168cefeb099b85a1a688581b2003c3699cc)), closes [#28855](https://github.com/bitnami/charts/issues/28855)
+
+## <small>6.2.11 (2024-07-30)</small>
+
+* [bitnami/mastodon] Release 6.2.10 (#28479) ([b62efc4](https://github.com/bitnami/charts/commit/b62efc4fa8af8683c3a4f5add735ec1f670ed489)), closes [#28479](https://github.com/bitnami/charts/issues/28479)
+
+## <small>6.2.10 (2024-07-29)</small>
+
+* [bitnami/mastodon] Improve init-job stability (#28553) ([befdf07](https://github.com/bitnami/charts/commit/befdf07bececdf47b43c0b5e0abf9981457e6f3d)), closes [#28553](https://github.com/bitnami/charts/issues/28553)
+
+## <small>6.2.9 (2024-07-22)</small>
+
+* [bitnami/mastodon] Global StorageClass as default value (#28052) ([f3ba3c5](https://github.com/bitnami/charts/commit/f3ba3c5c7a1015f0c60a1d13de63bb2bbc43d786)), closes [#28052](https://github.com/bitnami/charts/issues/28052)
+
+## <small>6.2.8 (2024-07-04)</small>
+
+* [bitnami/mastodon] Release 6.2.8 (#27784) ([6d194a4](https://github.com/bitnami/charts/commit/6d194a4b0befdf6e0ae786db6431cb759253367e)), closes [#27784](https://github.com/bitnami/charts/issues/27784)
 
 ## <small>6.2.7 (2024-07-03)</small>
 

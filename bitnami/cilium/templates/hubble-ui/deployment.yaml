@@ -137,7 +137,7 @@ spec:
               value: {{ ternary "true" "false" .Values.hubble.tls.enabled | quote }}
             {{- if .Values.hubble.tls.enabled }}
             - name: TLS_RELAY_SERVER_NAME
-              value: {{ include "cilium.hubble.relay.fullname" . | quote }}
+              value: ui.hubble-relay.cilium.io
             - name: TLS_RELAY_CA_CERT_FILES
               value: /certs/client/ca.crt
             - name: TLS_RELAY_CLIENT_CERT_FILE

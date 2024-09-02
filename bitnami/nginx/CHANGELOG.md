@@ -1,8 +1,36 @@
 # Changelog
 
-## 18.1.4 (2024-07-03)
+## 18.1.11 (2024-08-23)
 
-* [bitnami/nginx] Release 18.1.4 ([#27743](https://github.com/bitnami/charts/pull/27743))
+* [bitnami/nginx] Release 18.1.11 ([#28993](https://github.com/bitnami/charts/pull/28993))
+
+## <small>18.1.10 (2024-08-21)</small>
+
+* [bitnami/nginx] Release 18.1.10 (#28959) ([83e2fa5](https://github.com/bitnami/charts/commit/83e2fa51d26df8b7f73b9e205cd91b4deabd49b7)), closes [#28959](https://github.com/bitnami/charts/issues/28959)
+
+## <small>18.1.9 (2024-08-14)</small>
+
+* [bitnami/nginx] Release 18.1.9 (#28886) ([1dccc11](https://github.com/bitnami/charts/commit/1dccc11c8e8cfa80aad6fc6628d1edc02c49b4a4)), closes [#28886](https://github.com/bitnami/charts/issues/28886)
+
+## <small>18.1.8 (2024-08-13)</small>
+
+* [bitnami/nginx] Support for Non-Bitnami Nginx Images in nginx Helm Chart (#28741) ([00a53e4](https://github.com/bitnami/charts/commit/00a53e4bccfc629e94bd07c4a46d584522ec5f7c)), closes [#28741](https://github.com/bitnami/charts/issues/28741)
+
+## <small>18.1.7 (2024-07-25)</small>
+
+* [bitnami/nginx] Release 18.1.7 (#28450) ([2ffa35e](https://github.com/bitnami/charts/commit/2ffa35ed405b77ab312413b1d7370e4f39c0281d)), closes [#28450](https://github.com/bitnami/charts/issues/28450)
+
+## <small>18.1.6 (2024-07-24)</small>
+
+* [bitnami/nginx] Release 18.1.6 (#28330) ([54dc332](https://github.com/bitnami/charts/commit/54dc332cf800c27dc4598c3e6b713733c59a085f)), closes [#28330](https://github.com/bitnami/charts/issues/28330)
+
+## <small>18.1.5 (2024-07-16)</small>
+
+* [bitnami/nginx] Global StorageClass as default value (#28070) ([7b70f12](https://github.com/bitnami/charts/commit/7b70f122ab1038b909cf94f690d4e6b0ba2914d9)), closes [#28070](https://github.com/bitnami/charts/issues/28070)
+
+## <small>18.1.4 (2024-07-03)</small>
+
+* [bitnami/nginx] Release 18.1.4 (#27743) ([a9c9841](https://github.com/bitnami/charts/commit/a9c9841d4f409ebcefb740fb323dd2268bc4930b)), closes [#27743](https://github.com/bitnami/charts/issues/27743)
 
 ## <small>18.1.3 (2024-07-03)</small>
 

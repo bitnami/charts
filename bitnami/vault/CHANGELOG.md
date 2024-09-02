@@ -1,8 +1,44 @@
 # Changelog
 
-## 1.4.11 (2024-07-04)
+## 1.4.20 (2024-08-31)
 
-* [bitnami/vault] Release 1.4.11 ([#27795](https://github.com/bitnami/charts/pull/27795))
+* [bitnami/vault] Release 1.4.20 ([#29140](https://github.com/bitnami/charts/pull/29140))
+
+## <small>1.4.19 (2024-08-29)</small>
+
+* [bitnami/vault] Release 1.4.19 (#29115) ([94f3eaf](https://github.com/bitnami/charts/commit/94f3eaf77153071646f392ae5e142eee08ca04c6)), closes [#29115](https://github.com/bitnami/charts/issues/29115)
+
+## <small>1.4.18 (2024-08-08)</small>
+
+* [bitnami/vault] Release 1.4.18 (#28781) ([ef9ddad](https://github.com/bitnami/charts/commit/ef9ddadb67fa4346667842b54e32108179fa344b)), closes [#28781](https://github.com/bitnami/charts/issues/28781)
+
+## <small>1.4.17 (2024-08-07)</small>
+
+* [bitnami/vault] Release 1.4.17 (#28751) ([82fc640](https://github.com/bitnami/charts/commit/82fc64001bda2695a56f5ffc71a5f73a2a45a057)), closes [#28751](https://github.com/bitnami/charts/issues/28751)
+
+## <small>1.4.16 (2024-07-25)</small>
+
+* [bitnami/vault] Release 1.4.16 (#28497) ([bd56214](https://github.com/bitnami/charts/commit/bd56214ec9c9bceffded3c59b445e149dfb5dc4b)), closes [#28497](https://github.com/bitnami/charts/issues/28497)
+
+## <small>1.4.15 (2024-07-24)</small>
+
+* [bitnami/vault] Release 1.4.15 (#28391) ([20a67f5](https://github.com/bitnami/charts/commit/20a67f5ae532b65d5767fd08a26ed5ae28fa0eea)), closes [#28391](https://github.com/bitnami/charts/issues/28391)
+
+## <small>1.4.14 (2024-07-22)</small>
+
+* [bitnami/vault] Only mount data volume if persistence is enabled (#27986) ([3942449](https://github.com/bitnami/charts/commit/3942449403e5d39d45b4a23c980adcd816a26322)), closes [#27986](https://github.com/bitnami/charts/issues/27986)
+
+## <small>1.4.13 (2024-07-18)</small>
+
+* [bitnami/vault] Global StorageClass as default value (#28107) ([3ad8853](https://github.com/bitnami/charts/commit/3ad885391c5c6e655078b6c65792616e3553ec44)), closes [#28107](https://github.com/bitnami/charts/issues/28107)
+
+## <small>1.4.12 (2024-07-10)</small>
+
+* [bitnami/vault] Release 1.4.12 (#27885) ([bba178f](https://github.com/bitnami/charts/commit/bba178ff953d1344f69b43879e5b295103f11e34)), closes [#27885](https://github.com/bitnami/charts/issues/27885)
+
+## <small>1.4.11 (2024-07-04)</small>
+
+* [bitnami/vault] Release 1.4.11 (#27795) ([28e75bc](https://github.com/bitnami/charts/commit/28e75bc3ec2e8e575c1231f1e2b0ad9e22f23301)), closes [#27795](https://github.com/bitnami/charts/issues/27795)
 
 ## <small>1.4.10 (2024-07-03)</small>
 

@@ -1,8 +1,33 @@
 # Changelog
 
-## 14.2.7 (2024-07-03)
+## 15.0.5 (2024-08-02)
 
-* [bitnami/ejbca] Release 14.2.7 ([#27690](https://github.com/bitnami/charts/pull/27690))
+* [bitnami/ejbca] Release 15.0.5 ([#28640](https://github.com/bitnami/charts/pull/28640))
+
+## <small>15.0.4 (2024-07-25)</small>
+
+* [bitnami/ejbca] Release 15.0.4 (#28416) ([a9bc424](https://github.com/bitnami/charts/commit/a9bc424d20229cdeaabf7f16eed51152e1b8d110)), closes [#28416](https://github.com/bitnami/charts/issues/28416)
+
+## <small>15.0.3 (2024-07-24)</small>
+
+* [bitnami/ejbca] Release 15.0.3 (#28284) ([e8a9cf1](https://github.com/bitnami/charts/commit/e8a9cf16f0e315e620e19f2c4133f5246b1a8a9c)), closes [#28284](https://github.com/bitnami/charts/issues/28284)
+
+## <small>15.0.2 (2024-07-23)</small>
+
+* [bitnami/ejbca] Release 15.0.2 (#28237) ([b5b248f](https://github.com/bitnami/charts/commit/b5b248fb3bd13a87aaba20ba28d81697edd69814)), closes [#28237](https://github.com/bitnami/charts/issues/28237)
+
+## <small>15.0.1 (2024-07-18)</small>
+
+* [bitnami/ejbca] Global StorageClass as default value (#28014) ([bf16551](https://github.com/bitnami/charts/commit/bf16551caa06e09e5274eb2e88c3a31f6a7d3ca8)), closes [#28014](https://github.com/bitnami/charts/issues/28014)
+
+## 15.0.0 (2024-07-12)
+
+* [bitnami/ejbca] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27935) ([2babab0](https://github.com/bitnami/charts/commit/2babab043054b955b319b017a3fe5860c582650b)), closes [#27935](https://github.com/bitnami/charts/issues/27935)
+
+## <small>14.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/ejbca] Release 14.2.7 (#27690) ([f90a453](https://github.com/bitnami/charts/commit/f90a453b01841ada3f196f3b62f0a4fd66aa7c57)), closes [#27690](https://github.com/bitnami/charts/issues/27690)
 
 ## <small>14.2.6 (2024-06-25)</small>
 

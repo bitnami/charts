@@ -105,12 +105,7 @@ Return  the proper Commit Storage Class
 {{ include "cassandra.commitstorage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
 */}}
 {{- define "cassandra.commitstorage.class" -}}
-{{- $storageClass := .persistence.commitStorageClass -}}
-{{- if .global -}}
-    {{- if .global.storageClass -}}
-        {{- $storageClass = .global.commitStorageClass -}}
-    {{- end -}}
-{{- end -}}
+{{- $storageClass := (.global).storageClass | default .persistence.commitStorageClass | default (.global).defaultStorageClass | default "" -}}
 
 {{- if $storageClass -}}
   {{- if (eq "-" $storageClass) -}}

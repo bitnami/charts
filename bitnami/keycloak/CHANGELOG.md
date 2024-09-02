@@ -1,8 +1,88 @@
 # Changelog
 
-## 21.6.0 (2024-07-08)
+## 22.2.1 (2024-08-26)
 
-* [bitnami/keycloak] Add support for minReadySeconds ([#27550](https://github.com/bitnami/charts/pull/27550))
+* [bitnami/keycloak] fix: :bug: Add emptyDir at /bitnami to allow init scripts ([#29020](https://github.com/bitnami/charts/pull/29020))
+
+## 22.2.0 (2024-08-26)
+
+* [bitnami/keycloak] Use database user secret key from PostgreSQL chart (#29008) ([bf7ea4a](https://github.com/bitnami/charts/commit/bf7ea4a17dbe47ea0171dfae8415c4d035e7c8ad)), closes [#29008](https://github.com/bitnami/charts/issues/29008)
+
+## <small>22.1.3 (2024-08-22)</small>
+
+* [bitnami/keycloak] Release 22.1.3 (#28984) ([bb21c84](https://github.com/bitnami/charts/commit/bb21c84c422bdef42fad01db0252798d33e3499d)), closes [#28984](https://github.com/bitnami/charts/issues/28984)
+
+## <small>22.1.2 (2024-08-19)</small>
+
+* [bitnami/keycloak] Release 22.1.2 (#28929) ([0ab3f3a](https://github.com/bitnami/charts/commit/0ab3f3a85f1ecbcf558977de0c5f584de495b1e4)), closes [#28929](https://github.com/bitnami/charts/issues/28929)
+
+## <small>22.1.1 (2024-08-13)</small>
+
+* [bitnami/keycloak] move hostname variables to config map to allow override (#28838) ([f919441](https://github.com/bitnami/charts/commit/f9194415ccfa5e6a06007e9bf24376a02b20bb05)), closes [#28838](https://github.com/bitnami/charts/issues/28838)
+
+## 22.1.0 (2024-08-06)
+
+* [bitnami/keycloak] use hostname v2 options (#28611) ([559b860](https://github.com/bitnami/charts/commit/559b8604bb021798592ee276e9553d80d0735bbf)), closes [#28611](https://github.com/bitnami/charts/issues/28611)
+
+## <small>22.0.2 (2024-08-06)</small>
+
+* [bitnami/keycloak] Release 22.0.2 (#28692) ([af28509](https://github.com/bitnami/charts/commit/af285099f496589b4d3ad8379c00ae96628baab5)), closes [#28692](https://github.com/bitnami/charts/issues/28692)
+
+## <small>22.0.1 (2024-08-06)</small>
+
+* [bitnami/keycloak] Preserve data on writable dirs (#28550) ([80bc148](https://github.com/bitnami/charts/commit/80bc148b1af4e75ff8619c68f20ec2be90015a37)), closes [#28550](https://github.com/bitnami/charts/issues/28550)
+
+## 22.0.0 (2024-07-29)
+
+* [bitnami/keycloak] Release 22.0.0 (#28563) ([81162c4](https://github.com/bitnami/charts/commit/81162c45a2a9759ac00ae26ad0bb5310af4597e4)), closes [#28563](https://github.com/bitnami/charts/issues/28563)
+
+## 21.8.0 (2024-07-26)
+
+* [bitnami/keycloak] Allow support for gce based ingress controllers (#28519) ([87b60d7](https://github.com/bitnami/charts/commit/87b60d7526474cc22fd8295732f6b1ed7b3771a6)), closes [#28519](https://github.com/bitnami/charts/issues/28519)
+
+## <small>21.7.6 (2024-07-26)</small>
+
+* [bitnami/keycloak] Fix invalid value of proxy headers when legacy proxy is used (#28530) ([372d263](https://github.com/bitnami/charts/commit/372d2638677330da509c8ff2783a2efd48484d45)), closes [#28530](https://github.com/bitnami/charts/issues/28530)
+
+## <small>21.7.5 (2024-07-25)</small>
+
+* [bitnami/keycloak] Release 21.7.5 (#28428) ([8c7be7d](https://github.com/bitnami/charts/commit/8c7be7d0937fb83efb89b26fdd44cd055c2c118e)), closes [#28428](https://github.com/bitnami/charts/issues/28428)
+
+## <small>21.7.4 (2024-07-24)</small>
+
+* [bitnami/keycloak] Fix broken theme assets by append the httpRelativeURL to the KC-HOSTNAME (#28176) ([2b15502](https://github.com/bitnami/charts/commit/2b15502a03c16d5c38877244650ff0d1f8f764b9)), closes [#28176](https://github.com/bitnami/charts/issues/28176)
+
+## <small>21.7.3 (2024-07-24)</small>
+
+* [bitnami/keycloak] Release 21.7.3 (#28299) ([06e9a9d](https://github.com/bitnami/charts/commit/06e9a9dfb2dc0bd10089947810fdf8867b2ffa37)), closes [#28299](https://github.com/bitnami/charts/issues/28299)
+
+## <small>21.7.2 (2024-07-24)</small>
+
+* [bitnami/keycloak] Release 21.7.2 (#28262) ([ec3f085](https://github.com/bitnami/charts/commit/ec3f085e78cd45e66fb2d782dec3c07654cbde56)), closes [#28262](https://github.com/bitnami/charts/issues/28262)
+
+## <small>21.7.1 (2024-07-18)</small>
+
+* [bitnami/keycloak] Global StorageClass as default value (#28039) ([b81cbe1](https://github.com/bitnami/charts/commit/b81cbe126960f5dd0d8cab5c40c00a2ab31fb68f)), closes [#28039](https://github.com/bitnami/charts/issues/28039)
+
+## 21.7.0 (2024-07-17)
+
+* [bitnami/keycloak] Add support for proxy-headers (#27890) ([eb2b3bd](https://github.com/bitnami/charts/commit/eb2b3bdd8612a754c1b7e28237e9a32f6661eaab)), closes [#27890](https://github.com/bitnami/charts/issues/27890)
+
+## <small>21.6.3 (2024-07-16)</small>
+
+* bitnami/keycloak Safer variable set of KC_HOSTNAME_URL (#27912) ([b713d56](https://github.com/bitnami/charts/commit/b713d56c29f99fa111d079c300fb1e1880be8553)), closes [#27912](https://github.com/bitnami/charts/issues/27912)
+
+## <small>21.6.2 (2024-07-15)</small>
+
+* [bitnami/keycloak] Release 21.6.2 (#27972) ([6b9fa9d](https://github.com/bitnami/charts/commit/6b9fa9d298f8651b50a73edbb87198ebc6d21f2b)), closes [#27972](https://github.com/bitnami/charts/issues/27972)
+
+## <small>21.6.1 (2024-07-11)</small>
+
+* [bitnami/keycloak] fix conditions for KC_HOSTNAME_URL (#27867) ([687d228](https://github.com/bitnami/charts/commit/687d2283b5806ab91a85b085f2477c68fbe4f260)), closes [#27867](https://github.com/bitnami/charts/issues/27867)
+
+## 21.6.0 (2024-07-09)
+
+* [bitnami/keycloak] Add support for minReadySeconds (#27550) ([bf357f9](https://github.com/bitnami/charts/commit/bf357f93bb2ad28d3a27826f4bae8a65a0bc3af5)), closes [#27550](https://github.com/bitnami/charts/issues/27550)
 
 ## 21.5.0 (2024-07-08)
 

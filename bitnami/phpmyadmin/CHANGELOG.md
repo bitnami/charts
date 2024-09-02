@@ -1,8 +1,37 @@
 # Changelog
 
-## 16.2.8 (2024-07-08)
+## 17.0.6 (2024-08-25)
 
-* [bitnami/phpmyadmin] Release 16.2.8 ([#27730](https://github.com/bitnami/charts/pull/27730))
+* [bitnami/phpmyadmin] Release 17.0.6 ([#29017](https://github.com/bitnami/charts/pull/29017))
+
+## <small>17.0.5 (2024-08-09)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.5 (#28803) ([903ad90](https://github.com/bitnami/charts/commit/903ad90e09a4efeea4ffe954a57c6ef71b2ca16a)), closes [#28803](https://github.com/bitnami/charts/issues/28803)
+
+## <small>17.0.4 (2024-08-01)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.4 (#28631) ([129edbe](https://github.com/bitnami/charts/commit/129edbed24efdf6af9a779c348aeb3285fa14e26)), closes [#28631](https://github.com/bitnami/charts/issues/28631)
+
+## <small>17.0.3 (2024-07-25)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.3 (#28460) ([5ce1599](https://github.com/bitnami/charts/commit/5ce1599aef1e96116dac08cec7940765226a279c)), closes [#28460](https://github.com/bitnami/charts/issues/28460)
+
+## <small>17.0.2 (2024-07-24)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.2 (#28381) ([ca46583](https://github.com/bitnami/charts/commit/ca4658383585ecf886dc451ea630df4552e41d9f)), closes [#28381](https://github.com/bitnami/charts/issues/28381)
+
+## <small>17.0.1 (2024-07-16)</small>
+
+* [bitnami/phpmyadmin] Global StorageClass as default value (#28080) ([a050713](https://github.com/bitnami/charts/commit/a0507136851f7881ee451f999a9687c398d0c1ba)), closes [#28080](https://github.com/bitnami/charts/issues/28080)
+
+## 17.0.0 (2024-07-12)
+
+* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27934) ([09715e6](https://github.com/bitnami/charts/commit/09715e61c495b3b2cb07f33aa2940b2c1ce17284)), closes [#27934](https://github.com/bitnami/charts/issues/27934)
+
+## <small>16.2.8 (2024-07-08)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/phpmyadmin] Release 16.2.8 (#27730) ([680549f](https://github.com/bitnami/charts/commit/680549f455dc5b6e55bd5202603b1a79d96f73d6)), closes [#27730](https://github.com/bitnami/charts/issues/27730)
 
 ## <small>16.2.7 (2024-06-18)</small>
 

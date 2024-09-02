@@ -1,8 +1,28 @@
 # Changelog
 
-## 18.2.9 (2024-07-04)
+## 19.0.2 (2024-08-07)
 
-* [bitnami/contour] Release 18.2.9 ([#27759](https://github.com/bitnami/charts/pull/27759))
+* [bitnami/contour] Release 19.0.2 ([#28709](https://github.com/bitnami/charts/pull/28709))
+
+## <small>19.0.1 (2024-08-06)</small>
+
+* [bitnami/contour] Release 19.0.1 (#28683) ([801c69a](https://github.com/bitnami/charts/commit/801c69a1b644ecf2ba19307977a9bfc8eccd21cb)), closes [#28683](https://github.com/bitnami/charts/issues/28683)
+
+## 19.0.0 (2024-08-05)
+
+* [bitnami/contour] Release 19.0.0 (#28636) ([694171f](https://github.com/bitnami/charts/commit/694171f0690fc656a36cf7f48cd9a98a1838f149)), closes [#28636](https://github.com/bitnami/charts/issues/28636)
+
+## <small>18.2.11 (2024-08-01)</small>
+
+* [bitnami/contour] Release 18.2.11 (#28614) ([59b5029](https://github.com/bitnami/charts/commit/59b5029f9600c6cdba796466c7f0eede2f79d876)), closes [#28614](https://github.com/bitnami/charts/issues/28614)
+
+## <small>18.2.10 (2024-07-22)</small>
+
+* [bitnami/contour] Global StorageClass as default value (#28008) ([6c4a9bb](https://github.com/bitnami/charts/commit/6c4a9bb690baa192c5ff853950a9bc47ec5dfe68)), closes [#28008](https://github.com/bitnami/charts/issues/28008)
+
+## <small>18.2.9 (2024-07-04)</small>
+
+* [bitnami/contour] Release 18.2.9 (#27759) ([3fc8c8d](https://github.com/bitnami/charts/commit/3fc8c8dd7a257e47498e531a734faad5ebb9c52d)), closes [#27759](https://github.com/bitnami/charts/issues/27759)
 
 ## <small>18.2.8 (2024-07-03)</small>
 

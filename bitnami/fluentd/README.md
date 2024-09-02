@@ -137,10 +137,10 @@ As an example, using the above configmap, you should specify the required parame
 
 ```console
 aggregator.configMap=elasticsearch-output
-aggregator.extraEnv[0].name=ELASTICSEARCH_HOST
-aggregator.extraEnv[0].value=your-ip-here
-aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
-aggregator.extraEnv[1].value=your-port-here
+aggregator.extraEnvVars[0].name=ELASTICSEARCH_HOST
+aggregator.extraEnvVars[0].value=your-ip-here
+aggregator.extraEnvVars[1].name=ELASTICSEARCH_PORT
+aggregator.extraEnvVars[1].value=your-port-here
 ```
 
 ### Using custom init scripts
@@ -204,7 +204,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters

@@ -1,8 +1,25 @@
 # Changelog
 
-## 2.20.3 (2024-06-17)
+## 2.22.0 (2024-08-07)
 
-* [bitnami/common] chore: :wrench: Relax large and xlarge presets resource requests ([#27312](https://github.com/bitnami/charts/pull/27312))
+* [bitnami/common] Fallback to chart appVersion in common.images.image ([#28764](https://github.com/bitnami/charts/pull/28764))
+
+## 2.21.0 (2024-08-05)
+
+* [bitnami/common] Allow handling of new secrets after initial installation (#28581) ([07062ee](https://github.com/bitnami/charts/commit/07062ee01382e24b8204b27083ff3e8102110c2f)), closes [#28581](https://github.com/bitnami/charts/issues/28581)
+
+## <small>2.20.5 (2024-07-16)</small>
+
+* [bitnami/common] [bitnami/wordpress] Use global.storageClass for fallback, not override (#24863) ([2b78e13](https://github.com/bitnami/charts/commit/2b78e137ac278cdf9d54523e8d37833a4ff0cd5b)), closes [#24863](https://github.com/bitnami/charts/issues/24863)
+
+## <small>2.20.4 (2024-07-11)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/common] Increase ephemeral-storage default limits (#27902) ([dc0000d](https://github.com/bitnami/charts/commit/dc0000d7b56f68991bb8d8fff473103ed9026f5f)), closes [#27902](https://github.com/bitnami/charts/issues/27902)
+
+## <small>2.20.3 (2024-06-17)</small>
+
+* [bitnami/common] chore: :wrench: Relax large and xlarge presets resource requests (#27312) ([6ca69f6](https://github.com/bitnami/charts/commit/6ca69f6769d0f65acc850fa0bcc08506de50cc41)), closes [#27312](https://github.com/bitnami/charts/issues/27312)
 
 ## <small>2.20.2 (2024-06-10)</small>
 

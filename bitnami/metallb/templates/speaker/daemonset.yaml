@@ -137,6 +137,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: METALLB_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: METALLB_HOST
               valueFrom:
                 fieldRef:
@@ -223,9 +227,6 @@ spec:
           {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.speaker.frr.image.pullPolicy }}
-          imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
-          {{- end }}
           volumeMounts:
             - name: frr-sockets
               mountPath: /var/run/frr
@@ -246,11 +247,6 @@ spec:
                 attempts=$(( $attempts + 1 ))
               done
               tail -f /etc/frr/frr.log
-          {{- if .Values.speaker.frr.resources }}
-          resources: {{- toYaml .Values.speaker.frr.resources | nindent 12 }}
-          {{- else if ne .Values.speaker.frr.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.speaker.frr.resourcesPreset) | nindent 12 }}
-          {{- end }}
           {{- if .Values.speaker.frr.resources }}
           resources: {{- toYaml .Values.speaker.frr.resources | nindent 12 }}
           {{- else if ne .Values.speaker.frr.resourcesPreset "none" }}
@@ -282,9 +278,6 @@ spec:
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command: ["/etc/frr_metrics/frr-metrics"]
-          {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
           args:
             - --metrics-port={{ .Values.speaker.frr.containerPorts.metrics }}
           ports:

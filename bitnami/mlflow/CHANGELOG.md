@@ -1,8 +1,57 @@
 # Changelog
 
-## 1.4.13 (2024-07-08)
+## 1.4.25 (2024-08-31)
 
-* [bitnami/mlflow] Release 1.4.13 ([#27841](https://github.com/bitnami/charts/pull/27841))
+* [bitnami/mlflow] Release 1.4.25 ([#29139](https://github.com/bitnami/charts/pull/29139))
+
+## <small>1.4.24 (2024-08-26)</small>
+
+* [bitnami/mlflow] Release 1.4.24 (#29010) ([b750bad](https://github.com/bitnami/charts/commit/b750badc6a2332a658cec43f04a055ab40aaded4)), closes [#29010](https://github.com/bitnami/charts/issues/29010)
+
+## <small>1.4.23 (2024-08-22)</small>
+
+* [bitnami/mlflow] Update externalS3.host example (#28955) ([ce491c1](https://github.com/bitnami/charts/commit/ce491c1c1c5ded613a8f5fd087351ac769db5c1b)), closes [#28955](https://github.com/bitnami/charts/issues/28955)
+
+## <small>1.4.22 (2024-08-06)</small>
+
+* [bitnami/mlflow] Release 1.4.22 (#28698) ([b135917](https://github.com/bitnami/charts/commit/b135917f329846d61cb2510b87a717c99aa4cda3)), closes [#28698](https://github.com/bitnami/charts/issues/28698)
+
+## <small>1.4.21 (2024-07-29)</small>
+
+* [bitnami/mlflow] Release 1.4.21 (#28568) ([f122907](https://github.com/bitnami/charts/commit/f1229071d5e472881fe01e8bdaa4a90a2abe1c34)), closes [#28568](https://github.com/bitnami/charts/issues/28568)
+
+## <small>1.4.20 (2024-07-25)</small>
+
+* [bitnami/mlflow] Release 1.4.20 (#28516) ([ffd6c43](https://github.com/bitnami/charts/commit/ffd6c43f18a473a19d1c7ab420f80ec2ac03f8b5)), closes [#28516](https://github.com/bitnami/charts/issues/28516)
+
+## <small>1.4.19 (2024-07-24)</small>
+
+* [bitnami/mlflow] Release 1.4.19 (#28322) ([709e1d4](https://github.com/bitnami/charts/commit/709e1d407c0ea0a3a5e6529cab764468feab85d4)), closes [#28322](https://github.com/bitnami/charts/issues/28322)
+
+## <small>1.4.18 (2024-07-24)</small>
+
+* [bitnami/mlflow] feat: Fixup to allow database dialects to be configured (#25965) (#28316) ([5b69392](https://github.com/bitnami/charts/commit/5b693921f0ef549e63bd2496b7f636110a5ed5f2)), closes [#25965](https://github.com/bitnami/charts/issues/25965) [#28316](https://github.com/bitnami/charts/issues/28316)
+
+## <small>1.4.17 (2024-07-19)</small>
+
+* [bitnami/mlflow] Global StorageClass as default value (#28060) ([ad82fbf](https://github.com/bitnami/charts/commit/ad82fbf05614fe2bbd5155164cee374aceb00bf5)), closes [#28060](https://github.com/bitnami/charts/issues/28060)
+
+## <small>1.4.16 (2024-07-17)</small>
+
+* [bitnami/mlflow] fix issue 26397 - allow MLFLOW_S3_ENDPOINT without minio (#26462) ([bfef7cf](https://github.com/bitnami/charts/commit/bfef7cf6e49f2f941d0ceea68e369d2c39a1f4ac)), closes [#26462](https://github.com/bitnami/charts/issues/26462)
+
+## <small>1.4.15 (2024-07-17)</small>
+
+* [bitnami/mlflow] Update deps (#28131) ([35854a2](https://github.com/bitnami/charts/commit/35854a2de3b24a3d307c8a6d2210ce849a13c81c)), closes [#28131](https://github.com/bitnami/charts/issues/28131)
+
+## <small>1.4.14 (2024-07-13)</small>
+
+* [bitnami/mlflow] Release 1.4.14 (#27949) ([88f5ff0](https://github.com/bitnami/charts/commit/88f5ff0e1ca35361e0cc4f2cf0c6d8b84c8ad2f7)), closes [#27949](https://github.com/bitnami/charts/issues/27949)
+
+## <small>1.4.13 (2024-07-08)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mlflow] Release 1.4.13 (#27841) ([8384d96](https://github.com/bitnami/charts/commit/8384d96ba8b92128a2d262499f8b54f4541db2a4)), closes [#27841](https://github.com/bitnami/charts/issues/27841)
 
 ## <small>1.4.12 (2024-06-20)</small>
 

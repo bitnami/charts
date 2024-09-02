@@ -1,12 +1,40 @@
 # Changelog
 
-## 2.3.12 (2024-07-08)
+## 2.3.19 (2024-09-02)
 
 * [bitnami/gitea] Update externaldb-secret logic ([#27596](https://github.com/bitnami/charts/pull/27596))
 
+## <small>2.3.18 (2024-08-07)</small>
+
+* [bitnami/gitea] Release 2.3.18 ([#28713](https://github.com/bitnami/charts/pull/28713))
+
+## <small>2.3.17 (2024-07-25)</small>
+
+* [bitnami/gitea] Release 2.3.17 (#28406) ([7e7d160](https://github.com/bitnami/charts/commit/7e7d16055a07b89fc6270a63eabf7f5629a33edf)), closes [#28406](https://github.com/bitnami/charts/issues/28406)
+
+## <small>2.3.16 (2024-07-24)</small>
+
+* [bitnami/gitea] Release 2.3.16 (#28278) ([ec73679](https://github.com/bitnami/charts/commit/ec7367976ea372796d7825cd7854e2ef125501ae)), closes [#28278](https://github.com/bitnami/charts/issues/28278)
+
+## <small>2.3.15 (2024-07-24)</small>
+
+* [bitnami/gitea] Release 2.3.15 (#28250) ([b3b4a50](https://github.com/bitnami/charts/commit/b3b4a5093a599091e18955b29bdff33fdcf88298)), closes [#28250](https://github.com/bitnami/charts/issues/28250)
+
+## <small>2.3.14 (2024-07-18)</small>
+
+* [bitnami/gitea] Global StorageClass as default value (#28023) ([36100a3](https://github.com/bitnami/charts/commit/36100a3f4471aabfeb2d4179fea56d153157e525)), closes [#28023](https://github.com/bitnami/charts/issues/28023)
+
+## <small>2.3.13 (2024-07-15)</small>
+
+* [bitnami/gitea] Include goss-wait test to improve test results (#27980) ([c690b0d](https://github.com/bitnami/charts/commit/c690b0d818d06feb79ad473ae1447d5b3b345518)), closes [#27980](https://github.com/bitnami/charts/issues/27980)
+
+## <small>2.3.12 (2024-07-15)</small>
+
+* [bitnami/gitea] Release 2.3.12 (#27964) ([48112ab](https://github.com/bitnami/charts/commit/48112ab4823167fd68daa82cda933f4f896acf7e)), closes [#27964](https://github.com/bitnami/charts/issues/27964)
+
 ## <small>2.3.11 (2024-07-05)</small>
 
-* [bitnami/gitea] Release 2.3.11 ([#27810](https://github.com/bitnami/charts/pull/27810))
+* [bitnami/gitea] Release 2.3.11 (#27810) ([f792844](https://github.com/bitnami/charts/commit/f7928444d215f77f582b06dd8b0cce317d538992)), closes [#27810](https://github.com/bitnami/charts/issues/27810)
 
 ## <small>2.3.10 (2024-07-04)</small>
 

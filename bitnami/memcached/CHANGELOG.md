@@ -1,8 +1,25 @@
 # Changelog
 
-## 7.4.8 (2024-06-29)
+## 7.4.12 (2024-08-27)
 
-* [bitnami/memcached] Release 7.4.8 ([#27592](https://github.com/bitnami/charts/pull/27592))
+* Enable publishNotReadyAddresses on memcached service ([#29045](https://github.com/bitnami/charts/pull/29045))
+
+## <small>7.4.11 (2024-07-25)</small>
+
+* [bitnami/memcached] Release 7.4.11 (#28434) ([3ed3327](https://github.com/bitnami/charts/commit/3ed33274e68fef3404eac7e3ad4732de10ab9ac3)), closes [#28434](https://github.com/bitnami/charts/issues/28434)
+
+## <small>7.4.10 (2024-07-24)</small>
+
+* [bitnami/memcached] Release 7.4.10 (#28321) ([21df996](https://github.com/bitnami/charts/commit/21df996c7dc8521febae5d3ac286db0e79dac8c4)), closes [#28321](https://github.com/bitnami/charts/issues/28321)
+
+## <small>7.4.9 (2024-07-17)</small>
+
+* [bitnami/memcached] Global StorageClass as default value (#28055) ([d11158b](https://github.com/bitnami/charts/commit/d11158babda56185a8821f51e6c22b193cdcab3b)), closes [#28055](https://github.com/bitnami/charts/issues/28055)
+
+## <small>7.4.8 (2024-06-29)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/memcached] Release 7.4.8 (#27592) ([4c4db1d](https://github.com/bitnami/charts/commit/4c4db1d960a2bb26ed2ae38ae9aea5700b4b4439)), closes [#27592](https://github.com/bitnami/charts/issues/27592)
 
 ## <small>7.4.7 (2024-06-18)</small>
 

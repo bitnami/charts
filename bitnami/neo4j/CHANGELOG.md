@@ -1,8 +1,24 @@
 # Changelog
 
-## 0.1.4 (2024-07-09)
+## 0.1.8 (2024-08-28)
 
-* [bitnami/neo4j] Release 0.1.4 ([#27862](https://github.com/bitnami/charts/pull/27862))
+* [bitnami/neo4j] Release 0.1.8 ([#29090](https://github.com/bitnami/charts/pull/29090))
+
+## <small>0.1.7 (2024-07-25)</small>
+
+* [bitnami/neo4j] Release 0.1.7 (#28457) ([faf9857](https://github.com/bitnami/charts/commit/faf98576a58b48ac3b3dcb514d01af518c1602c9)), closes [#28457](https://github.com/bitnami/charts/issues/28457)
+
+## <small>0.1.6 (2024-07-24)</small>
+
+* [bitnami/neo4j] Release 0.1.6 (#28368) ([acd84e2](https://github.com/bitnami/charts/commit/acd84e25a4954ba19eae6fe52662656bfa92745d)), closes [#28368](https://github.com/bitnami/charts/issues/28368)
+
+## <small>0.1.5 (2024-07-16)</small>
+
+* [bitnami/neo4j] Global StorageClass as default value (#28068) ([9ad4fcf](https://github.com/bitnami/charts/commit/9ad4fcfe96d37943e9f886723a217de6bd0c67f2)), closes [#28068](https://github.com/bitnami/charts/issues/28068)
+
+## <small>0.1.4 (2024-07-09)</small>
+
+* [bitnami/neo4j] Release 0.1.4 (#27862) ([5b70afc](https://github.com/bitnami/charts/commit/5b70afc341b67b30a8fff8e693ef4cea29217a28)), closes [#27862](https://github.com/bitnami/charts/issues/27862)
 
 ## <small>0.1.3 (2024-07-08)</small>
 

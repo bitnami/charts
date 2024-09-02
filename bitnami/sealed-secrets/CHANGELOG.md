@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.3.8 (2024-07-04)
+## 2.4.5 (2024-08-07)
 
-* [bitnami/sealed-secrets] Release 2.3.8 ([#27789](https://github.com/bitnami/charts/pull/27789))
+* [bitnami/sealed-secrets] Release 2.4.5 ([#28749](https://github.com/bitnami/charts/pull/28749))
+
+## <small>2.4.4 (2024-07-25)</small>
+
+* [bitnami/sealed-secrets] Release 2.4.4 (#28472) ([185eaed](https://github.com/bitnami/charts/commit/185eaed693b19f3d0ea47b66d7f25ff0c576ecc2)), closes [#28472](https://github.com/bitnami/charts/issues/28472)
+
+## <small>2.4.3 (2024-07-24)</small>
+
+* [bitnami/sealed-secrets] Release 2.4.3 (#28369) ([642152a](https://github.com/bitnami/charts/commit/642152a337365b65df6659ca25294ed03a65a93f)), closes [#28369](https://github.com/bitnami/charts/issues/28369)
+
+## <small>2.4.2 (2024-07-18)</small>
+
+* [bitnami/sealed-secrets] Release 2.4.2 (#28156) ([0d7dcb7](https://github.com/bitnami/charts/commit/0d7dcb71e6812a6b4060db73c60abe02edf23cb0)), closes [#28156](https://github.com/bitnami/charts/issues/28156)
+
+## <small>2.4.1 (2024-07-18)</small>
+
+* [bitnami/sealed-secrets] Remove global.storageClass (#28094) ([bed4701](https://github.com/bitnami/charts/commit/bed47017dd178fa7db81ec9042d5ee2a1ee4dc47)), closes [#28094](https://github.com/bitnami/charts/issues/28094)
+
+## 2.4.0 (2024-07-10)
+
+* bitnami/sealed-secrets: add loadbalancerclass (#27608) ([cfe40ce](https://github.com/bitnami/charts/commit/cfe40ce6ce725757329db1566fea83ec78cbd078)), closes [#27608](https://github.com/bitnami/charts/issues/27608)
+
+## <small>2.3.8 (2024-07-04)</small>
+
+* [bitnami/sealed-secrets] Release 2.3.8 (#27789) ([4338deb](https://github.com/bitnami/charts/commit/4338debda4d9f710bfc28399fc1fcf041d810325)), closes [#27789](https://github.com/bitnami/charts/issues/27789)
 
 ## <small>2.3.7 (2024-07-03)</small>
 

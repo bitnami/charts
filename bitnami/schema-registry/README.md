@@ -122,7 +122,7 @@ kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.
 In case you want to add extra environment variables to Schema Registry, you can use `extraEnvs` parameter. For instance:
 
 ```yaml
-extraEnvs:
+extraEnvVars:
   - name: FOO
     value: BAR
 ```
@@ -204,6 +204,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 | `kubeVersion`                                         | Override Kubernetes version                                                                                                                                                                                                                                                                                                                                         | `""`   |
 
@@ -427,6 +428,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/schem
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 21.0.0
+
+This major updates the Kafka subchart to its newest major, 30.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3000).
 
 ### To 19.0.0
 

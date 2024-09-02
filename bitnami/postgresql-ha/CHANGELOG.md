@@ -1,8 +1,41 @@
 # Changelog
 
-## 14.2.11 (2024-07-05)
+## 14.2.19 (2024-08-30)
 
-* [bitnami/postgresql-ha] Release 14.2.11 ([#27822](https://github.com/bitnami/charts/pull/27822))
+* [bitnami/postgresql-ha] Release 14.2.19 ([#29123](https://github.com/bitnami/charts/pull/29123))
+
+## <small>14.2.18 (2024-08-24)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.18 (#29015) ([d1b3761](https://github.com/bitnami/charts/commit/d1b37614f31bdefc096f70998532c60c5d394d98)), closes [#29015](https://github.com/bitnami/charts/issues/29015)
+
+## <small>14.2.17 (2024-08-22)</small>
+
+*  [bitnami/postgresql-ha] README tweaks (#28820) ([57ddfc5](https://github.com/bitnami/charts/commit/57ddfc5bf9f9d871ffe9682df329eee4212f7728)), closes [#28820](https://github.com/bitnami/charts/issues/28820)
+* [bitnami/postgresql-ha] Release 14.2.17 (#28799) ([59962aa](https://github.com/bitnami/charts/commit/59962aa88d456eefe40618e2d72ec56a0c60bf21)), closes [#28799](https://github.com/bitnami/charts/issues/28799)
+
+## <small>14.2.16 (2024-08-01)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.16 (#28622) ([1cf7a3a](https://github.com/bitnami/charts/commit/1cf7a3ad0fbd2a9e3d08dc315d741b14261b2f5a)), closes [#28622](https://github.com/bitnami/charts/issues/28622)
+
+## <small>14.2.15 (2024-07-29)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.15 (#28565) ([682178b](https://github.com/bitnami/charts/commit/682178b4759ddba94d0888a9ebdc866ce3abad24)), closes [#28565](https://github.com/bitnami/charts/issues/28565)
+
+## <small>14.2.14 (2024-07-25)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.14 (#28482) ([5888cc7](https://github.com/bitnami/charts/commit/5888cc7165ee1f2a59ef4737db1fec719f3b4a5a)), closes [#28482](https://github.com/bitnami/charts/issues/28482)
+
+## <small>14.2.13 (2024-07-24)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.13 (#28355) ([4d16872](https://github.com/bitnami/charts/commit/4d16872b0b27e9378201380cbe4f7ca02a16ba6f)), closes [#28355](https://github.com/bitnami/charts/issues/28355)
+
+## <small>14.2.12 (2024-07-16)</small>
+
+* [bitnami/postgresql-ha] Global StorageClass as default value (#28083) ([4b58cab](https://github.com/bitnami/charts/commit/4b58cab33ff3785af8826e921e6693ad3b785d8c)), closes [#28083](https://github.com/bitnami/charts/issues/28083)
+
+## <small>14.2.11 (2024-07-05)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.11 (#27822) ([83d474c](https://github.com/bitnami/charts/commit/83d474c3da0f1a82c5cd4400a5d66d9099e8cfc7)), closes [#27822](https://github.com/bitnami/charts/issues/27822)
 
 ## <small>14.2.10 (2024-07-03)</small>
 

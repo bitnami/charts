@@ -1,8 +1,48 @@
 # Changelog
 
+## 14.6.9 (2024-08-28)
+
+* [bitnami/rabbitmq] Release 14.6.9 ([#29092](https://github.com/bitnami/charts/pull/29092))
+
+## <small>14.6.8 (2024-08-28)</small>
+
+* [bitnami/rabbitmq] Improve Ginkgo test (#29082) ([778a269](https://github.com/bitnami/charts/commit/778a269c23fd9e6534c3c15e85f016c38f498e81)), closes [#29082](https://github.com/bitnami/charts/issues/29082)
+
+## <small>14.6.7 (2024-08-26)</small>
+
+* [bitnami/rabbitmq] Release 14.6.7 (#29018) ([8eb9085](https://github.com/bitnami/charts/commit/8eb9085b47699e839bae9f0238a775c1d0b0dfa5)), closes [#29018](https://github.com/bitnami/charts/issues/29018)
+
+## <small>14.6.6 (2024-08-08)</small>
+
+* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts (#27900) ([95148a9](https://github.com/bitnami/charts/commit/95148a9ae1363f9da6415b64085aadfd8add1413)), closes [#27900](https://github.com/bitnami/charts/issues/27900)
+
+## <small>14.6.5 (2024-07-25)</small>
+
+* [bitnami/rabbitmq] Release 14.6.5 (#28473) ([40abb28](https://github.com/bitnami/charts/commit/40abb284adcd42c0c27190899e9e3a115dbf46e8)), closes [#28473](https://github.com/bitnami/charts/issues/28473)
+
+## <small>14.6.4 (2024-07-24)</small>
+
+* [bitnami/rabbitmq] Release 14.6.4 (#28361) ([ab8d156](https://github.com/bitnami/charts/commit/ab8d1562d3da46daeca8f0a70119b57aa5f402c5)), closes [#28361](https://github.com/bitnami/charts/issues/28361)
+
+## <small>14.6.3 (2024-07-23)</small>
+
+* [bitnami/rabbitmq] Release 14.6.3 (#28204) ([5a213c4](https://github.com/bitnami/charts/commit/5a213c4352403949d91fb28f30361bb676121dc3)), closes [#28204](https://github.com/bitnami/charts/issues/28204)
+
+## <small>14.6.2 (2024-07-22)</small>
+
+* [bitnami/rabbitmq] Release 14.6.2 (#28192) ([69ced0b](https://github.com/bitnami/charts/commit/69ced0b8f41f3a3ebeeb595df864880a79cbdff2)), closes [#28192](https://github.com/bitnami/charts/issues/28192)
+
+## <small>14.6.1 (2024-07-18)</small>
+
+* [bitnami/rabbitmq] Global StorageClass as default value (#28087) ([a4143c5](https://github.com/bitnami/charts/commit/a4143c5e397df6a5124381f7531d2d508f526221)), closes [#28087](https://github.com/bitnami/charts/issues/28087)
+
+## 14.6.0 (2024-07-17)
+
+* [bitnami/rabbitmq] make queue_master_locator configurable (#27990) ([7266748](https://github.com/bitnami/charts/commit/726674875655c7f90ccd17370950c858f951a96a)), closes [#27990](https://github.com/bitnami/charts/issues/27990)
+
 ## 14.5.0 (2024-07-09)
 
-* [bitnami/rabbitmq] Replace extraPorts with extraPortsHeadless in headless service ([#27853](https://github.com/bitnami/charts/pull/27853))
+* [bitnami/rabbitmq] Replace extraPorts with extraPortsHeadless in headless service (#27853) ([b205f7a](https://github.com/bitnami/charts/commit/b205f7a39c528e0fe365568f955c25c460649c4f)), closes [#27853](https://github.com/bitnami/charts/issues/27853)
 
 ## <small>14.4.6 (2024-07-03)</small>
 

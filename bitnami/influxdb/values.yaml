@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global storage class for dynamic provisioning
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,6 +18,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -79,7 +81,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.6-debian-12-r15
+  tag: 2.7.10-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -895,7 +897,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r28
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1104,7 +1106,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.483.0-debian-12-r0
+        tag: 0.489.0-debian-12-r1
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1158,7 +1160,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.61.0-debian-12-r2
+        tag: 2.63.0-debian-12-r1
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1214,7 +1216,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.17.0-debian-12-r1
+        tag: 2.17.30-debian-12-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

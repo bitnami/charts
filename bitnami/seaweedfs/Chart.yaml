@@ -6,18 +6,18 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r24
+      image: docker.io/bitnami/os-shell:12-debian-12-r27
     - name: seaweedfs
-      image: docker.io/bitnami/seaweedfs:3.69.0-debian-12-r2
+      image: docker.io/bitnami/seaweedfs:3.72.0-debian-12-r0
 apiVersion: v2
-appVersion: 3.69.0
+appVersion: 3.72.0
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - seaweedfs-database
-  version: 18.x.x
+  version: 19.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -40,4 +40,4 @@ name: seaweedfs
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/seawwedfs
 - https://github.com/bitnami/containers/tree/main/bitnami/seaweedfs
-version: 0.4.5
+version: 1.0.9

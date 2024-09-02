@@ -167,7 +167,9 @@ data:
       {{- if ne "" (include "harbor.redis.sentinel.masterSet" .) }}
       sentinelMasterSet: "{{ template "harbor.redis.sentinel.masterSet" . }}"
       {{- end }}
+      {{- if and (eq .Values.externalRedis.sentinel.enabled false) (eq .Values.redis.sentinel.enabled false) }}
       db: {{ template "harbor.redis.registryDatabaseIndex" . }}
+      {{- end }}
     http:
       relativeurls: {{ .Values.registry.relativeurls }}
       addr: :{{ ternary .Values.registry.server.containerPorts.https .Values.registry.server.containerPorts.http .Values.internalTLS.enabled }}

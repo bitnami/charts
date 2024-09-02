@@ -246,7 +246,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -302,6 +303,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `smtpUser`                             | SMTP username                                                                         | `""`               |
 | `smtpPassword`                         | SMTP user password                                                                    | `""`               |
 | `smtpProtocol`                         | SMTP protocol                                                                         | `""`               |
+| `smtpFromEmail`                        | SMTP from email (default is `smtpUser`)                                               | `""`               |
+| `smtpFromName`                         | SMTP from name  (default is `wordpressFirstName` and `wordpressLastName`)             | `""`               |
 | `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                  | `""`               |
 | `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                | `true`             |
 | `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                | `false`            |
@@ -632,6 +635,10 @@ In addition, several new features have been implemented:
 To enable the new features, it is not possible to do it by upgrading an existing deployment. Instead, it is necessary to perform a fresh deploy.
 
 ## Upgrading
+
+### To 23.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
 
 ### To 22.0.0
 

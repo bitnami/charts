@@ -29,6 +29,16 @@ Returns an init-container that copies some dirs to an empty dir volume to make t
       # In order to not break the application functionality we need to make some
       # directories writable, so we need to copy it to an empty dir volume
       cp -r --preserve=mode /opt/bitnami/cilium/var/lib/bpf /emptydir/bpf-lib-dir
+      # We use the iptables-wrapper that dynamically adapts the iptables mode to use ("legacy" or "nft")
+      # This wrappers uses the "update-alternatives" command to switch between the iptables modes and
+      # therefore we need to ensure the directories used by this command are writable
+      # ref: https://www.man7.org/linux/man-pages/man1/update-alternatives.1.html#FILES
+      cp -r --preserve=mode /etc/alternatives /emptydir/alternatives-dir
+      if [ -d /var/lib/dpkg/alternatives ]; then
+          cp -r --preserve=mode /var/lib/dpkg/alternatives /emptydir/alternatives-admin-dir
+      elif [ -d /var/lib/alternatives ]; then
+          cp -r --preserve=mode /var/lib/alternatives /emptydir/alternatives-admin-dir
+      fi
       info "Copy operation completed"
   volumeMounts:
     - name: empty-dir

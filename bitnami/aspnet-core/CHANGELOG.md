@@ -1,8 +1,28 @@
 # Changelog
 
-## 6.2.6 (2024-07-09)
+## 6.2.11 (2024-08-13)
 
-* [bitnami/aspnet-core] Release 6.2.6 ([#27863](https://github.com/bitnami/charts/pull/27863))
+* [bitnami/aspnet-core] Release 6.2.11 ([#28867](https://github.com/bitnami/charts/pull/28867))
+
+## <small>6.2.10 (2024-07-25)</small>
+
+* [bitnami/aspnet-core] Release 6.2.10 (#28403) ([b0ecc1f](https://github.com/bitnami/charts/commit/b0ecc1f8a544ed8b7dff4a20ae80d50db16d62c4)), closes [#28403](https://github.com/bitnami/charts/issues/28403)
+
+## <small>6.2.9 (2024-07-24)</small>
+
+* [bitnami/aspnet-core] Release 6.2.9 (#28270) ([92e5c19](https://github.com/bitnami/charts/commit/92e5c194a3cbc9ea9f4f3475e40ccc2d7f18404a)), closes [#28270](https://github.com/bitnami/charts/issues/28270)
+
+## <small>6.2.8 (2024-07-24)</small>
+
+* [bitnami/aspnet-core] Release 6.2.8 (#28257) ([6301e0b](https://github.com/bitnami/charts/commit/6301e0b2faeb04375730eeaebd3c2a9427ab5b34)), closes [#28257](https://github.com/bitnami/charts/issues/28257)
+
+## <small>6.2.7 (2024-07-18)</small>
+
+* [bitnami/aspnet-core] Global StorageClass as default value (#28001) ([47f17a5](https://github.com/bitnami/charts/commit/47f17a5e6da81dfc4694b544ab3ef3d030b6977e)), closes [#28001](https://github.com/bitnami/charts/issues/28001)
+
+## <small>6.2.6 (2024-07-09)</small>
+
+* [bitnami/aspnet-core] Release 6.2.6 (#27863) ([f9e93eb](https://github.com/bitnami/charts/commit/f9e93eb8d4c798567ceab1849f63279f634a6d09)), closes [#27863](https://github.com/bitnami/charts/issues/27863)
 
 ## <small>6.2.5 (2024-07-03)</small>
 

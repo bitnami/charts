@@ -1,8 +1,28 @@
 # Changelog
 
-## 9.5.7 (2024-07-04)
+## 9.5.12 (2024-08-14)
 
-* [bitnami/kube-prometheus] Release 9.5.7 ([#27781](https://github.com/bitnami/charts/pull/27781))
+* [bitnami/kube-prometheus] Release 9.5.12 ([#28879](https://github.com/bitnami/charts/pull/28879))
+
+## <small>9.5.11 (2024-08-07)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.11 (#28757) ([9738e0c](https://github.com/bitnami/charts/commit/9738e0c6bbca488bf137edaead8dfad44a1b62c1)), closes [#28757](https://github.com/bitnami/charts/issues/28757)
+
+## <small>9.5.10 (2024-07-25)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.10 (#28461) ([1a3bd4e](https://github.com/bitnami/charts/commit/1a3bd4e2175ce02ed5dc088db10bcfa3acc9cd83)), closes [#28461](https://github.com/bitnami/charts/issues/28461)
+
+## <small>9.5.9 (2024-07-24)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.9 (#28362) ([1446078](https://github.com/bitnami/charts/commit/14460789c02e423610a6abf0b853d9a65bedf219)), closes [#28362](https://github.com/bitnami/charts/issues/28362)
+
+## <small>9.5.8 (2024-07-16)</small>
+
+* [bitnami/kube-prometheus] Global StorageClass as default value (#28043) ([6c1f29e](https://github.com/bitnami/charts/commit/6c1f29e17b1b7d777e1631846359c6c646b917da)), closes [#28043](https://github.com/bitnami/charts/issues/28043)
+
+## <small>9.5.7 (2024-07-04)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.7 (#27781) ([b507458](https://github.com/bitnami/charts/commit/b5074584ed43b0ac54ec9883a12da274ee64b6e0)), closes [#27781](https://github.com/bitnami/charts/issues/27781)
 
 ## <small>9.5.6 (2024-07-03)</small>
 

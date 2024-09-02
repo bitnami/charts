@@ -1,13 +1,57 @@
 # Changelog
 
-## 15.6.12 (2024-07-01)
+## 15.6.22 (2024-08-27)
 
-* [bitnami/mongodb] Release 15.6.12 ([#27590](https://github.com/bitnami/charts/pull/27590))
+* [bitnami/mongodb] add securityContext via helper to initContainter dns-check ([#29038](https://github.com/bitnami/charts/pull/29038))
+
+## <small>15.6.21 (2024-08-26)</small>
+
+* [bitnami/mongodb] Release 15.6.21 (#29035) ([21acb97](https://github.com/bitnami/charts/commit/21acb974bf8edca0550bccb71a1df126a277d59b)), closes [#29035](https://github.com/bitnami/charts/issues/29035)
+
+## <small>15.6.20 (2024-08-20)</small>
+
+* [bitnami/mongodb] Fix logic to add custom annotations to external-access service (#28883) ([785e59b](https://github.com/bitnami/charts/commit/785e59bccf87c5ecae2b472901e7f6e7fbf2c196)), closes [#28883](https://github.com/bitnami/charts/issues/28883)
+
+## <small>15.6.19 (2024-08-14)</small>
+
+* [bitnami/mongodb] Release 15.6.19 (#28889) ([8b3cb57](https://github.com/bitnami/charts/commit/8b3cb57c221f0f035e020cecc70b44e26cfd8040)), closes [#28889](https://github.com/bitnami/charts/issues/28889)
+
+## <small>15.6.18 (2024-08-07)</small>
+
+* [bitnami/mongodb] fix(NOTES.txt): Missing messages (#28685) ([7e31f12](https://github.com/bitnami/charts/commit/7e31f12208a7ae11060d3eaa68c09f74cbc4a6a4)), closes [#28685](https://github.com/bitnami/charts/issues/28685)
+
+## <small>15.6.17 (2024-08-06)</small>
+
+* [bitnami/mongodb] Release 15.6.17 (#28697) ([b6d6a24](https://github.com/bitnami/charts/commit/b6d6a2449195d87387cce9aec88cc6215763c569)), closes [#28697](https://github.com/bitnami/charts/issues/28697)
+
+## <small>15.6.16 (2024-07-25)</small>
+
+* [bitnami/mongodb] Release 15.6.16 (#28453) ([86d3ac8](https://github.com/bitnami/charts/commit/86d3ac8763d831263d8436ce890cd54ef62a9a17)), closes [#28453](https://github.com/bitnami/charts/issues/28453)
+
+## <small>15.6.15 (2024-07-24)</small>
+
+* [bitnami/mongodb] Release 15.6.15 (#28332) ([e107031](https://github.com/bitnami/charts/commit/e107031d3833f020d47d5fddcc24c7f43859443e)), closes [#28332](https://github.com/bitnami/charts/issues/28332)
+
+## <small>15.6.14 (2024-07-18)</small>
+
+* [bitnami/mongodb] Global StorageClass as default value (#28061) ([0661fba](https://github.com/bitnami/charts/commit/0661fbaf3436de16452d82cbf244a616c5892e64)), closes [#28061](https://github.com/bitnami/charts/issues/28061)
+
+## <small>15.6.13 (2024-07-16)</small>
+
+* [bitnami/mongodb] Fix autoDiscovery initContainer template (#27953) ([c3955b0](https://github.com/bitnami/charts/commit/c3955b0e2c0cd7fc287f3acc36990b8c0a8c09ac)), closes [#27953](https://github.com/bitnami/charts/issues/27953)
+
+## <small>15.6.12 (2024-07-01)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/mongodb] Release 15.6.12 (#27590) ([97d0ec8](https://github.com/bitnami/charts/commit/97d0ec8a20365d93a4121dd7df98352eac8e69a7)), closes [#27590](https://github.com/bitnami/charts/issues/27590)
 
 ## <small>15.6.11 (2024-06-25)</small>
 
-* [bitnami/mongodb] add space back so script works again (#27183) ([e880657](https://github.com/bitnami/charts/commit/e880657e7744f7871d04c55283f34fad9d04598a)), closes [#27183](https://github.com/bitnami/charts/issues/27183)
 * [bitnami/mongodb] Recover logging to stdout (#27510) ([33bbddd](https://github.com/bitnami/charts/commit/33bbddd532d0debbe775a13a1b0c31e59ccd3c35)), closes [#27510](https://github.com/bitnami/charts/issues/27510)
+
+## <small>15.6.10 (2024-06-20)</small>
+
+* [bitnami/mongodb] add space back so script works again (#27183) ([e880657](https://github.com/bitnami/charts/commit/e880657e7744f7871d04c55283f34fad9d04598a)), closes [#27183](https://github.com/bitnami/charts/issues/27183)
 
 ## <small>15.6.9 (2024-06-18)</small>
 

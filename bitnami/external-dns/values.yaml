@@ -69,7 +69,7 @@ watchReleaseNamespace: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.14.2-debian-12-r4
+  tag: 0.14.2-debian-12-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -84,6 +84,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+## @param revisionHistoryLimit sets number of replicaset to keep in k8s
+##
+revisionHistoryLimit: 10
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
@@ -547,6 +550,9 @@ infoblox:
   ## @param infoblox.maxResults When using the Infoblox provider, specify the Infoblox Max Results (optional)
   ##
   maxResults: ""
+  ## @param infoblox.createPtr When using the Infoblox provider, specify the Infoblox create PTR flag (optional)
+  ##
+  createPtr: false
 ## Linode configuration to be set via arguments/env. variables
 ##
 linode:
@@ -659,6 +665,10 @@ scaleway:
   ## @param scaleway.scwSecretKey When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)
   ##
   scwSecretKey: ""
+  ## @param scaleway.secretName Use an existing secret with keys "scaleway_access_key" and "scaleway_secret_key" defined (optional).
+  ## This ignores scaleway.scwAccessKey and scaleway.scwSecretKey
+  ##
+  secretName: ""
 ## RFC 2136 configuration to be set via arguments/env. variables
 ##
 rfc2136:
@@ -791,7 +801,7 @@ logFormat: text
 ##
 policy: upsert-only
 ## @param registry Registry method to use (options: txt, aws-sd, dynamodb, noop)
-## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/proposal/registry.md
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/registry.md
 ##
 registry: "txt"
 ## @param txtPrefix When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)<CNAME record> (Mutual exclusive with txt-suffix)

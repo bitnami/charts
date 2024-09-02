@@ -1,8 +1,52 @@
 # Changelog
 
-## 13.4.8 (2024-07-05)
+## 13.4.19 (2024-08-07)
 
-* [bitnami/jenkins] Release 13.4.8 ([#27813](https://github.com/bitnami/charts/pull/27813))
+* [bitnami/jenkins] Release 13.4.19 ([#28754](https://github.com/bitnami/charts/pull/28754))
+
+## <small>13.4.18 (2024-08-06)</small>
+
+* [bitnami/jenkins] Release 13.4.18 (#28700) ([f342e6b](https://github.com/bitnami/charts/commit/f342e6b01421346152e1c393c8b68fe52435a05a)), closes [#28700](https://github.com/bitnami/charts/issues/28700)
+
+## <small>13.4.17 (2024-07-29)</small>
+
+* [bitnami/jenkins] Release 13.4.17 (#28567) ([21ca8fc](https://github.com/bitnami/charts/commit/21ca8fcbb9449f46c62553a2358e4d8c0f6c9a16)), closes [#28567](https://github.com/bitnami/charts/issues/28567)
+
+## <small>13.4.16 (2024-07-29)</small>
+
+* [bitnami/jenkins] Release 13.4.16 (#28566) ([e634906](https://github.com/bitnami/charts/commit/e63490682ad99d1fc9ced07c4d2bd4b068d1e3f8)), closes [#28566](https://github.com/bitnami/charts/issues/28566)
+
+## <small>13.4.15 (2024-07-29)</small>
+
+* [bitnami/jenkins] Release 13.4.15 (#28556) ([2bbe48e](https://github.com/bitnami/charts/commit/2bbe48e177ccecf51f6e1adf6aefc7150aa39eb8)), closes [#28556](https://github.com/bitnami/charts/issues/28556)
+
+## <small>13.4.14 (2024-07-29)</small>
+
+* [bitnami/jenkins] Release 13.4.14 (#28555) ([f69cf4e](https://github.com/bitnami/charts/commit/f69cf4e7b60ab911a5542185e9a5377cac7d155b)), closes [#28555](https://github.com/bitnami/charts/issues/28555)
+
+## <small>13.4.13 (2024-07-25)</small>
+
+* [bitnami/jenkins] Release 13.4.13 (#28420) ([25bcfb3](https://github.com/bitnami/charts/commit/25bcfb31edae71286ad4020a3acce25f0e81a041)), closes [#28420](https://github.com/bitnami/charts/issues/28420)
+
+## <small>13.4.12 (2024-07-24)</small>
+
+* [bitnami/jenkins] Release 13.4.12 (#28298) ([bb1bfc8](https://github.com/bitnami/charts/commit/bb1bfc81c91b74e6ebc8199a421454125e5e3577)), closes [#28298](https://github.com/bitnami/charts/issues/28298)
+
+## <small>13.4.11 (2024-07-24)</small>
+
+* [bitnami/jenkins] Release 13.4.11 (#28261) ([0940cd0](https://github.com/bitnami/charts/commit/0940cd04b08754574e4d46d6da4709272c7fec02)), closes [#28261](https://github.com/bitnami/charts/issues/28261)
+
+## <small>13.4.10 (2024-07-18)</small>
+
+* [bitnami/jenkins] Global StorageClass as default value (#28035) ([43d852e](https://github.com/bitnami/charts/commit/43d852e10614d61558aeee9ca80d55e52c7495cb)), closes [#28035](https://github.com/bitnami/charts/issues/28035)
+
+## <small>13.4.9 (2024-07-10)</small>
+
+* [bitnami/jenkins] Release 13.4.9 (#27888) ([484ab86](https://github.com/bitnami/charts/commit/484ab8654f528decedde68c13942ce196d6cccf0)), closes [#27888](https://github.com/bitnami/charts/issues/27888)
+
+## <small>13.4.8 (2024-07-05)</small>
+
+* [bitnami/jenkins] Release 13.4.8 (#27813) ([ddb47f6](https://github.com/bitnami/charts/commit/ddb47f6f77ffeeb65698b38b7ab8fad6a0dfb06d)), closes [#27813](https://github.com/bitnami/charts/issues/27813)
 
 ## <small>13.4.7 (2024-07-03)</small>
 

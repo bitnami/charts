@@ -1,8 +1,41 @@
 # Changelog
 
-## 1.0.5 (2024-07-03)
+## 2.0.2 (2024-08-29)
 
-* [bitnami/scylladb] Release 1.0.5 ([#27718](https://github.com/bitnami/charts/pull/27718))
+* [bitnami/scylladb] Release 2.0.2 ([#29109](https://github.com/bitnami/charts/pull/29109))
+
+## <small>2.0.1 (2024-08-23)</small>
+
+* [bitnami/scylladb] Release 2.0.1 (#29007) ([16bbae8](https://github.com/bitnami/charts/commit/16bbae8dc8ccf2643ed00a99099fde1a9e78fc8a)), closes [#29007](https://github.com/bitnami/charts/issues/29007)
+
+## 2.0.0 (2024-08-21)
+
+* [bitnami/scylladb] Release 2.0.0 (#28950) ([39bec5c](https://github.com/bitnami/charts/commit/39bec5c39ad2a70949188e5992e6613600ec2510)), closes [#28950](https://github.com/bitnami/charts/issues/28950)
+
+## <small>1.0.10 (2024-07-30)</small>
+
+* [bitnami/scylladb] Improve Ginkgo tests (#28575) ([262da81](https://github.com/bitnami/charts/commit/262da81bdc64bb8576ed9207c8e76a892139527a)), closes [#28575](https://github.com/bitnami/charts/issues/28575)
+
+## <small>1.0.9 (2024-07-29)</small>
+
+* [bitnami/scylladb] Release 1.0.9 (#28559) ([e93d30c](https://github.com/bitnami/charts/commit/e93d30ce0b85f634295c2881e1a947bf47161864)), closes [#28559](https://github.com/bitnami/charts/issues/28559)
+
+## <small>1.0.8 (2024-07-25)</small>
+
+* [bitnami/scylladb] Release 1.0.8 (#28487) ([a49612c](https://github.com/bitnami/charts/commit/a49612c075f8492deccc6d74a5f408f4d0be5674)), closes [#28487](https://github.com/bitnami/charts/issues/28487)
+
+## <small>1.0.7 (2024-07-24)</small>
+
+* [bitnami/scylladb] Release 1.0.7 (#28370) ([6eee77f](https://github.com/bitnami/charts/commit/6eee77fb17bc3d841a83cea4c7899ca703c32d2d)), closes [#28370](https://github.com/bitnami/charts/issues/28370)
+
+## <small>1.0.6 (2024-07-16)</small>
+
+* [bitnami/scylladb] Global StorageClass as default value (#28093) ([dcbaf82](https://github.com/bitnami/charts/commit/dcbaf828c1c50e417260442ce95532fb2c340517)), closes [#28093](https://github.com/bitnami/charts/issues/28093)
+
+## <small>1.0.5 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/scylladb] Release 1.0.5 (#27718) ([c6adbd0](https://github.com/bitnami/charts/commit/c6adbd0855240c1b43c0bf1c658efe330f1d8ad4)), closes [#27718](https://github.com/bitnami/charts/issues/27718)
 
 ## <small>1.0.4 (2024-06-23)</small>
 

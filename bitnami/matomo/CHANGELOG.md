@@ -1,8 +1,57 @@
 # Changelog
 
-## 7.3.7 (2024-07-03)
+## 8.0.10 (2024-08-22)
 
-* [bitnami/matomo] Release 7.3.7 ([#27700](https://github.com/bitnami/charts/pull/27700))
+* [bitnami/matomo] Release 8.0.10 ([#28972](https://github.com/bitnami/charts/pull/28972))
+
+## <small>8.0.9 (2024-08-15)</small>
+
+* [bitnami/matomo] Release 8.0.9 (#28892) ([9ecfcbd](https://github.com/bitnami/charts/commit/9ecfcbd7219a77ddd6583aa8eb35b01b43ede5b8)), closes [#28892](https://github.com/bitnami/charts/issues/28892)
+
+## <small>8.0.8 (2024-08-13)</small>
+
+* [bitnami/matomo] Release 8.0.8 (#28860) ([a341719](https://github.com/bitnami/charts/commit/a341719d9454aa8cfd6f59303aa01bc581a0f3a2)), closes [#28860](https://github.com/bitnami/charts/issues/28860)
+
+## <small>8.0.7 (2024-08-13)</small>
+
+* [bitnami/matomo] Increase readiness probes' initial delay for VIB tests (#28847) ([fc93db0](https://github.com/bitnami/charts/commit/fc93db0404297d794a010c76e80d3ae7e0459128)), closes [#28847](https://github.com/bitnami/charts/issues/28847)
+
+## <small>8.0.6 (2024-08-05)</small>
+
+* [bitnami/matomo] Remove dokuwiki reference (#28661) ([e786767](https://github.com/bitnami/charts/commit/e786767a8aaabefd3dc8d834a5176ca5bde3bbc9)), closes [#28661](https://github.com/bitnami/charts/issues/28661)
+
+## <small>8.0.5 (2024-07-25)</small>
+
+* [bitnami/matomo] Release 8.0.5 (#28484) ([d08a865](https://github.com/bitnami/charts/commit/d08a86525aa160ba1c9595123d2f4913ecb33540)), closes [#28484](https://github.com/bitnami/charts/issues/28484)
+
+## <small>8.0.4 (2024-07-24)</small>
+
+* [bitnami/matomo] Release 8.0.4 (#28319) ([2f1007f](https://github.com/bitnami/charts/commit/2f1007ff57aea8c2cbe82e906fc5899fd82dbef2)), closes [#28319](https://github.com/bitnami/charts/issues/28319)
+
+## <small>8.0.3 (2024-07-23)</small>
+
+* [bitnami/matomo] Release 8.0.3 (#28215) ([649ace7](https://github.com/bitnami/charts/commit/649ace7b2dec277b84fe9c03330e3dd619f7ea04)), closes [#28215](https://github.com/bitnami/charts/issues/28215)
+
+## <small>8.0.2 (2024-07-18)</small>
+
+* [bitnami/matomo] Global StorageClass as default value (#28053) ([a5458d4](https://github.com/bitnami/charts/commit/a5458d432a23c8694bf7505892aef4326800f198)), closes [#28053](https://github.com/bitnami/charts/issues/28053)
+
+## <small>8.0.1 (2024-07-16)</small>
+
+* [bitnami/matomo] Fix wrong initContainers[0].imagePullSecrets value (#28115) ([424d58b](https://github.com/bitnami/charts/commit/424d58bc5bdde3c83a423a939b0493b72a5d0d26)), closes [#28115](https://github.com/bitnami/charts/issues/28115)
+
+## 8.0.0 (2024-07-13)
+
+* [bitnami/matomo] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27943) ([ee74a7f](https://github.com/bitnami/charts/commit/ee74a7fc02d22cbbdcd1eaec39960ea7215e50c0)), closes [#27943](https://github.com/bitnami/charts/issues/27943)
+
+## <small>7.3.8 (2024-07-12)</small>
+
+* [bitnami/matomo] Fix customCAs usage (#27938) ([91b7632](https://github.com/bitnami/charts/commit/91b763201c8bfff5722071c1d461e2c853407620)), closes [#27938](https://github.com/bitnami/charts/issues/27938)
+
+## <small>7.3.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/matomo] Release 7.3.7 (#27700) ([a6d7406](https://github.com/bitnami/charts/commit/a6d74060931be3c6f2944bfacc2f397a9220b75c)), closes [#27700](https://github.com/bitnami/charts/issues/27700)
 
 ## <small>7.3.6 (2024-06-19)</small>
 

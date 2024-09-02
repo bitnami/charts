@@ -1,8 +1,29 @@
 # Changelog
 
-## 9.3.6 (2024-07-03)
+## 9.4.0 (2024-07-25)
 
-* [bitnami/solr] Release 9.3.6 ([#27720](https://github.com/bitnami/charts/pull/27720))
+* [bitnami/solr] Add revisionHistoryLimit variable for metrics-deployment ([#28137](https://github.com/bitnami/charts/pull/28137))
+
+## <small>9.3.10 (2024-07-25)</small>
+
+* [bitnami/solr] Release 9.3.10 (#28511) ([1bd973f](https://github.com/bitnami/charts/commit/1bd973fafea0e2e802bd48cbdf353b0da0f6a06b)), closes [#28511](https://github.com/bitnami/charts/issues/28511)
+
+## <small>9.3.9 (2024-07-24)</small>
+
+* [bitnami/solr] Release 9.3.9 (#28374) ([1a45149](https://github.com/bitnami/charts/commit/1a45149d8dfe4f0a4ad0a62f87d202fdebe33079)), closes [#28374](https://github.com/bitnami/charts/issues/28374)
+
+## <small>9.3.8 (2024-07-23)</small>
+
+* [bitnami/solr] Change permissions of the Solr data directory (#28189) ([1590355](https://github.com/bitnami/charts/commit/159035583e70a5ded7d1b7aea22978e022c79660)), closes [#28189](https://github.com/bitnami/charts/issues/28189)
+
+## <small>9.3.7 (2024-07-18)</small>
+
+* [bitnami/solr] Global StorageClass as default value (#28096) ([6897cfa](https://github.com/bitnami/charts/commit/6897cfa75b4e26fc94e211c4984f6d9e713212ec)), closes [#28096](https://github.com/bitnami/charts/issues/28096)
+
+## <small>9.3.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/solr] Release 9.3.6 (#27720) ([9624189](https://github.com/bitnami/charts/commit/9624189a95b49082ca553c021c1d7ca749c776a1)), closes [#27720](https://github.com/bitnami/charts/issues/27720)
 
 ## <small>9.3.5 (2024-06-18)</small>
 

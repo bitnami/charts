@@ -1,8 +1,37 @@
 # Changelog
 
-## 0.3.8 (2024-07-03)
+## 0.3.15 (2024-08-19)
 
-* [bitnami/valkey] Release 0.3.8 ([#27723](https://github.com/bitnami/charts/pull/27723))
+* [bitnami/valkey] Fix env-vars for metrics container ([#28884](https://github.com/bitnami/charts/pull/28884))
+
+## <small>0.3.14 (2024-08-14)</small>
+
+* [bitnami/valkey] Release 0.3.14 (#28887) ([87846b8](https://github.com/bitnami/charts/commit/87846b85ad80bf586ea9d8966c597f5492f0bb03)), closes [#28887](https://github.com/bitnami/charts/issues/28887)
+
+## <small>0.3.13 (2024-07-31)</small>
+
+* [bitnami/valkey] Release 0.3.13 (#28610) ([adfc0d1](https://github.com/bitnami/charts/commit/adfc0d1faa58f735880f3cb4c37cbc7f7d70fefc)), closes [#28610](https://github.com/bitnami/charts/issues/28610)
+
+## <small>0.3.12 (2024-07-25)</small>
+
+* [bitnami/valkey] Release 0.3.12 (#28493) ([f001e7a](https://github.com/bitnami/charts/commit/f001e7a2033e1a3ee35c3b3ff7d952d9296326d0)), closes [#28493](https://github.com/bitnami/charts/issues/28493)
+
+## <small>0.3.11 (2024-07-24)</small>
+
+* [bitnami/valkey] Release 0.3.11 (#28376) ([04f440d](https://github.com/bitnami/charts/commit/04f440d1b013f19fc76ac04bcc40d2574db09c60)), closes [#28376](https://github.com/bitnami/charts/issues/28376)
+
+## <small>0.3.10 (2024-07-16)</small>
+
+* [bitnami/valkey] Global StorageClass as default value (#28105) ([2ea2f2a](https://github.com/bitnami/charts/commit/2ea2f2af9a27ca6b15c6b9becfbf2e8bfff0da9a)), closes [#28105](https://github.com/bitnami/charts/issues/28105)
+
+## <small>0.3.9 (2024-07-11)</small>
+
+* [bitnami/valkey] Release 0.3.9 (#27903) ([d0d6cbc](https://github.com/bitnami/charts/commit/d0d6cbc8ca22f8f27ea0147875ba5506c8f7a80b)), closes [#27903](https://github.com/bitnami/charts/issues/27903)
+
+## <small>0.3.8 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/valkey] Release 0.3.8 (#27723) ([2c282cd](https://github.com/bitnami/charts/commit/2c282cd32ef866e7babd70599919edf130495565)), closes [#27723](https://github.com/bitnami/charts/issues/27723)
 
 ## <small>0.3.7 (2024-06-18)</small>
 

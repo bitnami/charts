@@ -1,8 +1,36 @@
 # Changelog
 
-## 4.4.7 (2024-07-04)
+## 4.4.14 (2024-08-28)
 
-* [bitnami/node-exporter] Release 4.4.7 ([#27772](https://github.com/bitnami/charts/pull/27772))
+* [bitnami/node-exporter] Release 4.4.14 ([#29075](https://github.com/bitnami/charts/pull/29075))
+
+## <small>4.4.13 (2024-08-23)</small>
+
+* [bitnami/node-exporter] Release 4.4.13 (#29003) ([93801d0](https://github.com/bitnami/charts/commit/93801d0d347db778d1f494520b7bb4058a0220c2)), closes [#29003](https://github.com/bitnami/charts/issues/29003)
+
+## <small>4.4.12 (2024-08-07)</small>
+
+* [bitnami/node-exporter] Release 4.4.12 (#28736) ([cac3342](https://github.com/bitnami/charts/commit/cac33425ef531bc78dd21cb13ccfbb1a315059f7)), closes [#28736](https://github.com/bitnami/charts/issues/28736)
+
+## <small>4.4.11 (2024-07-25)</small>
+
+* [bitnami/node-exporter] Release 4.4.11 (#28454) ([b2e316f](https://github.com/bitnami/charts/commit/b2e316f2b53897ecc0ed52ccf28b64a72e046260)), closes [#28454](https://github.com/bitnami/charts/issues/28454)
+
+## <small>4.4.10 (2024-07-24)</small>
+
+* [bitnami/node-exporter] Release 4.4.10 (#28331) ([1fd9642](https://github.com/bitnami/charts/commit/1fd96423650c9bfc1f5ee1501473f3aa344c2f37)), closes [#28331](https://github.com/bitnami/charts/issues/28331)
+
+## <small>4.4.9 (2024-07-16)</small>
+
+* [bitnami/node-exporter] Global StorageClass as default value (#28072) ([4977903](https://github.com/bitnami/charts/commit/49779038f6c5f8c0a6ba24c3cfeaf29285418455)), closes [#28072](https://github.com/bitnami/charts/issues/28072)
+
+## <small>4.4.8 (2024-07-14)</small>
+
+* [bitnami/node-exporter] Release 4.4.8 (#27959) ([f83c58e](https://github.com/bitnami/charts/commit/f83c58e64c7c33a4594d2cd7a7f7ea5e02aeb59e)), closes [#27959](https://github.com/bitnami/charts/issues/27959)
+
+## <small>4.4.7 (2024-07-04)</small>
+
+* [bitnami/node-exporter] Release 4.4.7 (#27772) ([1205c88](https://github.com/bitnami/charts/commit/1205c887c4f450c380857f2f4bcab0e4a80a8a7e)), closes [#27772](https://github.com/bitnami/charts/issues/27772)
 
 ## <small>4.4.6 (2024-07-03)</small>
 

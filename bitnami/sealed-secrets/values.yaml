@@ -9,7 +9,6 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -18,7 +17,6 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -71,7 +69,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/sealed-secrets-controller
-  tag: 0.27.0-debian-12-r2
+  tag: 0.27.1-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -402,6 +400,10 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerClass Sealed Secret service Load Balancer Class
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+  ##
+  loadBalancerClass: ""
   ## @param service.loadBalancerSourceRanges [array] Sealed Secret service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:

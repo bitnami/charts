@@ -1,8 +1,28 @@
 # Changelog
 
-## 8.3.1 (2024-06-29)
+## 8.3.6 (2024-08-26)
 
-* [bitnami/mongodb-sharded] Release 8.3.1 ([#27591](https://github.com/bitnami/charts/pull/27591))
+* [bitnami/mongodb-sharded] Release 8.3.6 ([#29028](https://github.com/bitnami/charts/pull/29028))
+
+## <small>8.3.5 (2024-08-20)</small>
+
+* [bitnami/mongodb-sharded]Ginkgo tests: Use rollout instead of scale down (#28937) ([698baac](https://github.com/bitnami/charts/commit/698baac23bdd0f35da136ed7386b26ad7a6ea3bc)), closes [#28937](https://github.com/bitnami/charts/issues/28937)
+
+## <small>8.3.4 (2024-07-25)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.4 (#28476) ([a0f15d4](https://github.com/bitnami/charts/commit/a0f15d4092aab507d6a2e98f457bda516f5caf80)), closes [#28476](https://github.com/bitnami/charts/issues/28476)
+
+## <small>8.3.3 (2024-07-24)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.3 (#28324) ([cc102ed](https://github.com/bitnami/charts/commit/cc102ed5dc00e4e755c7c467214debb4a8c31dc6)), closes [#28324](https://github.com/bitnami/charts/issues/28324)
+
+## <small>8.3.2 (2024-07-16)</small>
+
+* [bitnami/mongodb-sharded] Global StorageClass as default value (#28062) ([d432ce0](https://github.com/bitnami/charts/commit/d432ce00fd96cc8b19f482467543dee2519e1b1d)), closes [#28062](https://github.com/bitnami/charts/issues/28062)
+
+## <small>8.3.1 (2024-06-29)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.1 (#27591) ([d572425](https://github.com/bitnami/charts/commit/d57242503ec47daca1a284e6cbdaa039383347db)), closes [#27591](https://github.com/bitnami/charts/issues/27591)
 
 ## 8.3.0 (2024-06-28)
 

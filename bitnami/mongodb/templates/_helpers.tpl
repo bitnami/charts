@@ -303,7 +303,6 @@ Init container definition to get external IP addresses.
   image: {{ include "mongodb.externalAccess.autoDiscovery.image" . }}
   imagePullPolicy: {{ .Values.externalAccess.autoDiscovery.image.pullPolicy | quote }}
   # We need the service account token for contacting the k8s API
-  automountServiceAccountToken: true
   command:
     - /scripts/auto-discovery.sh
   env:
@@ -345,6 +344,9 @@ Init container definition to wait external DNS names.
       while ! (getent ahosts "{{ include "mongodb.initialPrimaryHost" . }}" | grep STREAM); do
         sleep 10
       done
+  {{- if .Values.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+  {{- end }}
   {{- if .Values.externalAccess.dnsCheck.resources }}
   resources: {{- toYaml .Values.externalAccess.dnsCheck.resources | nindent 12 }}
   {{- else if ne .Values.externalAccess.dnsCheck.resourcesPreset "none" }}

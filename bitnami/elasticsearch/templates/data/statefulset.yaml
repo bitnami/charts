@@ -130,6 +130,37 @@ spec:
             - name: data
               mountPath: /bitnami/elasticsearch/data
         {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: copy-tls-certificates
+          image: {{ include "elasticsearch.copyTlsCerts.image" . }}
+          imagePullPolicy: {{ .Values.copyTlsCerts.image.pullPolicy | quote }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              ls -l /
+              ls -l /certs
+              for file in /certs/*; do
+                  if [ -f "$file" ]; then
+                      filename=$(basename "$file")
+                      dst_file="/tmp/$filename"
+                      cat "$file" > "$dst_file"
+                      echo "Copied $file to $dst_file"
+                  fi
+              done
+              echo "All files have been copied." 
+          volumeMounts:
+            - name: elasticsearch-certificates
+              mountPath: /certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: certs
+          {{- if .Values.copyTlsCerts.resources }}
+          resources: {{- toYaml .Values.copyTlsCerts.resources | nindent 12 }}
+          {{- else if ne .Values.copyTlsCerts.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.copyTlsCerts.resourcesPreset) | nindent 12 }}
+          {{- end }}
+        {{- end }}
         - name: copy-default-plugins
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -320,9 +351,9 @@ spec:
               subPath: my_elasticsearch.yml
             {{- end }}
             {{- if .Values.security.enabled }}
-            - name: elasticsearch-certificates
+            - name: empty-dir
               mountPath: /opt/bitnami/elasticsearch/config/certs
-              readOnly: true
+              subPath: certs
             {{- end }}
             {{- if .Values.initScripts }}
             - name: custom-init-scripts
@@ -392,6 +423,11 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.data.persistence.existingClaim }}
   {{- else }}
+  {{- if .Values.data.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.data.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.data.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: "data"

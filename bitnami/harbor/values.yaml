@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,6 +19,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -583,6 +585,26 @@ tracing:
 ##
 
 ## Init containers parameters:
+## certificateVolume: Copy /etc/ssl/certs to a volume so that they can be updated when a read-only volume is in use.
+##
+certificateVolume:
+  ## Init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param certificateVolume.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if certificateVolume.resources is set (certificateVolume.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param certificateVolume.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
 ##
 volumePermissions:
@@ -599,7 +621,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r27
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -654,7 +676,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.27.0-debian-12-r3
+    tag: 1.27.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1030,7 +1052,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.11.0-debian-12-r2
+    tag: 2.11.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1400,7 +1422,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.11.0-debian-12-r2
+    tag: 2.11.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1449,13 +1471,13 @@ core:
   existingSecret: ""
   ## @param core.existingEnvVarsSecret Existing secret for core envvars
   ## The secret must contain the keys:
-  ## `CSRF_KEY` (required),
-  ## `HARBOR_ADMIN_PASSWORD` (required),
-  ## `POSTGRESQL_PASSWORD` (required),
-  ## `REGISTRY_CREDENTIAL_USERNAME` (required),
-  ## `REGISTRY_CREDENTIAL_PASSWORD` (required),
-  ## `_REDIS_URL_CORE` (optional),
-  ## `_REDIS_URL_REG` (optional),
+  ## `CSRF_KEY` (optional - alternatively auto-generated),
+  ## `HARBOR_ADMIN_PASSWORD` (optional - alternatively auto-generated),
+  ## `POSTGRESQL_PASSWORD` (optional - alternatively uses upstream default. Read below if you set it),
+  ## `postgres-password` (required if POSTGRESQL_PASSWORD is set & must be the same as POSTGRESQL_PASSWORD.)
+  ## `HARBOR_DATABASE_PASSWORD` (required if POSTGRESQL_PASSWORD is set & must be the same as POSTGRESQL_PASSWORD.)
+  ## `REGISTRY_CREDENTIAL_USERNAME` (optional - alternatively auto-generated),
+  ## `REGISTRY_CREDENTIAL_PASSWORD` (optional - alternatively auto-generated),
   ##
   ## If you do not know how to start, let the chart generate a full secret for you before defining an existingEnvVarsSecret
   ## Notes:
@@ -1830,7 +1852,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.11.0-debian-12-r2
+    tag: 2.11.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2490,7 +2512,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.11.0-debian-12-r3
+      tag: 2.11.1-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2662,7 +2684,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.11.0-debian-12-r2
+      tag: 2.11.1-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2828,7 +2850,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.11.0-debian-12-r3
+    tag: 2.11.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3250,7 +3272,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.11.0-debian-12-r2
+    tag: 2.11.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3606,7 +3628,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.15.0-debian-12-r12
+    tag: 13.16.0-debian-12-r2
     digest: ""
   auth:
     enablePostgresUser: true

@@ -61,6 +61,72 @@ spec:
             - name: empty-dir
               mountPath: /public
               subPath: app-public-dir
+        - name: wait-for-backend
+          image: {{ template "mastodon.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/bash
+            - -ec
+          args:
+            - /scripts/wait-for-backend.sh
+          {{- if .Values.initJob.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.initJob.resources }}
+          resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: MASTODON_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.database.secretName" . }}
+                  key: {{ include "mastodon.database.passwordKey" . | quote }}
+            {{- if (include "mastodon.redis.auth.enabled" .) }}
+            # The rake db:migrate job requires access to Redis
+            - name: MASTODON_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.redis.secretName" . }}
+                  key: {{ include "mastodon.redis.passwordKey" . | quote }}
+            {{- end }}
+            {{- if (include "mastodon.elasticsearch.auth.enabled" .) }}
+            - name: MASTODON_ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.elasticsearch.secretName" . }}
+                  key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
+            {{- end }}
+            {{- if and .Values.initJob.precompileAssets .Values.enableS3 }}
+            - name: MASTODON_S3_HOSTNAME
+              value: {{ include "mastodon.s3.host" . | quote }}
+            - name: MASTODON_S3_PORT_NUMBER
+              value: {{ include "mastodon.s3.port" . | quote }}
+            - name: MASTODON_AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.s3.secretName" . }}
+                  key: {{ include "mastodon.s3.accessKeyIDKey" . | quote }}
+            - name: MASTODON_AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.s3.secretName" . }}
+                  key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "mastodon.defaultConfigmapName" . }}
+            - secretRef:
+                name: {{ include "mastodon.defaultSecretName" . }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: scripts
+              mountPath: /scripts
       containers:
         # We separate the job in multiple containers to be able to run them in parallel. We put everything on the same job
         # as it follows the Job Pattern best practices
@@ -208,6 +274,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /.cache
+              subPath: cache-dir
             - name: scripts
               mountPath: /scripts
           {{- if not .Values.enableS3 }}

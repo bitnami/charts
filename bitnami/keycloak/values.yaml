@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,6 +19,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -101,7 +103,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 24.0.5-debian-12-r1
+  tag: 25.0.4-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -211,10 +213,14 @@ adminRealm: "master"
 ## @param production Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.
 ##
 production: false
+## @param proxyHeaders Set Keycloak proxy headers
+##
+proxyHeaders: ""
 ## @param proxy reverse Proxy mode edge, reencrypt, passthrough or none
+## DEPRECATED: use proxyHeaders instead
 ## ref: https://www.keycloak.org/server/reverseproxy
 ##
-proxy: passthrough
+proxy: ""
 ## @param httpRelativePath Set the path relative to '/' for serving resources. Useful if you are migrating from older version which were using '/auth/'
 ## ref: https://www.keycloak.org/migration/migrating-to-quarkus#_default_context_path_changed
 ##
@@ -614,9 +620,19 @@ ingress:
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param ingress.controller The ingress controller type. Currently supports `default` and `gce`
+  ## leave as `default` for most ingress controllers.
+  ## set to `gce` if using the GCE ingress controller
+  ##
+  controller: default
   ## @param ingress.hostname Default host for the ingress record (evaluated as template)
   ##
   hostname: keycloak.local
+  ## @param ingress.hostnameStrict Disables dynamically resolving the hostname from request headers.
+  ## Should always be set to true in production, unless your reverse proxy overwrites the Host header.
+  ## If enabled, the hostname option needs to be specified.
+  ##
+  hostnameStrict: false
   ## @param ingress.path [string] Default path for the ingress record (evaluated as template)
   ##
   path: "{{ .Values.httpRelativePath }}"
@@ -721,6 +737,11 @@ adminIngress:
   ## @param adminIngress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param adminIngress.controller The ingress controller type. Currently supports `default` and `gce`
+  ## leave as `default` for most ingress controllers.
+  ## set to `gce` if using the GCE ingress controller
+  ##
+  controller: default
   ## @param adminIngress.hostname Default host for the admin ingress record (evaluated as template)
   ##
   hostname: keycloak.local
@@ -1090,7 +1111,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.12.0-debian-12-r6
+    tag: 6.1.6-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1280,6 +1301,7 @@ keycloakConfigCli:
 ## @param postgresql.auth.password Password for the custom user to create
 ## @param postgresql.auth.database Name for a custom database to create
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+## @param postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
 ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 postgresql:
@@ -1290,6 +1312,8 @@ postgresql:
     password: ""
     database: bitnami_keycloak
     existingSecret: ""
+    secretKeys:
+      userPasswordKey: password
   architecture: standalone
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false

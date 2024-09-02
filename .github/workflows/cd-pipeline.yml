@@ -230,7 +230,7 @@ jobs:
           for dependency in "${chart}/charts/"*.tgz; do
             if [[ -s "$dependency" ]]; then
               # Analyse all 'Chart.yaml' files in dependencies
-              while read -r chart_yaml_file; do 
+              while read -r chart_yaml_file; do
                 if [[ -n "${chart_yaml_file}" ]]; then
                   dependency_image_list="$(tar -xzO -f "$dependency" "$chart_yaml_file" | yq '.annotations.images' | yq '[ .[] | .image | sub("^[^/]+/", "") ] | tojson')"
                   image_list="$(jq -c --null-input --argjson arr1 "$image_list" --argjson arr2 "$dependency_image_list" '$arr1 + $arr2 | unique')"

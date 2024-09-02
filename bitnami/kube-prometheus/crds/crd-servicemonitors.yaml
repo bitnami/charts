@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
-# Version: 0.75.1
+# Version: 0.76.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.15.0
-    operator.prometheus.io/version: 0.75.1
+    operator.prometheus.io/version: 0.76.0
   name: servicemonitors.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -24,7 +24,16 @@ spec:
   - name: v1
     schema:
       openAPIV3Schema:
-        description: ServiceMonitor defines monitoring for a set of services.
+        description: |-
+          The `ServiceMonitor` custom resource definition (CRD) defines how `Prometheus` and `PrometheusAgent` can scrape metrics from a group of services.
+          Among other things, it allows to specify:
+          * The services to scrape via label selectors.
+          * The container ports to scrape.
+          * Authentication credentials to use.
+          * Target and metric relabeling.
+
+
+          `Prometheus` and `PrometheusAgent` objects select `ServiceMonitor` objects using label and namespace selectors.
         properties:
           apiVersion:
             description: |-
@@ -58,8 +67,12 @@ spec:
                 properties:
                   node:
                     description: |-
-                      When set to true, Prometheus must have the `get` permission on the
-                      `Nodes` objects.
+                      When set to true, Prometheus attaches node metadata to the discovered
+                      targets.
+
+
+                      The Prometheus service account must have the `list` and `watch`
+                      permissions on the `Nodes` objects.
                     type: boolean
                 type: object
               bodySizeLimit:
@@ -72,7 +85,10 @@ spec:
                 pattern: (^0|([0-9]*[.])?[0-9]+((K|M|G|T|E|P)i?)?B)$
                 type: string
               endpoints:
-                description: List of endpoints part of this ServiceMonitor.
+                description: |-
+                  List of endpoints part of this ServiceMonitor.
+                  Defines how to scrape metrics from Kubernetes [Endpoints](https://kubernetes.io/docs/concepts/services-networking/service/#endpoints) objects.
+                  In most cases, an Endpoints object is backed by a Kubernetes [Service](https://kubernetes.io/docs/concepts/services-networking/service/) object with the same name and labels.
                 items:
                   description: |-
                     Endpoint defines an endpoint serving Prometheus metrics to be scraped by
@@ -465,12 +481,253 @@ spec:
                             `endpointParams` configures the HTTP parameters to append to the token
                             URL.
                           type: object
+                        noProxy:
+                          description: |-
+                            `noProxy` is a comma-separated string that can contain IPs, CIDR notation, domain names
+                            that should be excluded from proxying. IP and domain names can
+                            contain port numbers.
+
+
+                            It requires Prometheus >= v2.43.0.
+                          type: string
+                        proxyConnectHeader:
+                          additionalProperties:
+                            items:
+                              description: SecretKeySelector selects a key of a Secret.
+                              properties:
+                                key:
+                                  description: The key of the secret to select from.  Must
+                                    be a valid secret key.
+                                  type: string
+                                name:
+                                  default: ""
+                                  description: |-
+                                    Name of the referent.
+                                    This field is effectively required, but due to backwards compatibility is
+                                    allowed to be empty. Instances of this type with an empty value here are
+                                    almost certainly wrong.
+                                    TODO: Add other useful fields. apiVersion, kind, uid?
+                                    More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
+                                  type: string
+                                optional:
+                                  description: Specify whether the Secret or its key
+                                    must be defined
+                                  type: boolean
+                              required:
+                              - key
+                              type: object
+                              x-kubernetes-map-type: atomic
+                            type: array
+                          description: |-
+                            ProxyConnectHeader optionally specifies headers to send to
+                            proxies during CONNECT requests.
+
+
+                            It requires Prometheus >= v2.43.0.
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        proxyFromEnvironment:
+                          description: |-
+                            Whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).
+                            If unset, Prometheus uses its default value.
+
+
+                            It requires Prometheus >= v2.43.0.
+                          type: boolean
+                        proxyUrl:
+                          description: |-
+                            `proxyURL` defines the HTTP proxy server to use.
+
+
+                            It requires Prometheus >= v2.43.0.
+                          pattern: ^http(s)?://.+$
+                          type: string
                         scopes:
                           description: '`scopes` defines the OAuth2 scopes used for
                             the token request.'
                           items:
                             type: string
                           type: array
+                        tlsConfig:
+                          description: |-
+                            TLS configuration to use when connecting to the OAuth2 server.
+                            It requires Prometheus >= v2.43.0.
+                          properties:
+                            ca:
+                              description: Certificate authority used when verifying
+                                server certificates.
+                              properties:
+                                configMap:
+                                  description: ConfigMap containing data to use for
+                                    the targets.
+                                  properties:
+                                    key:
+                                      description: The key to select.
+                                      type: string
+                                    name:
+                                      default: ""
+                                      description: |-
+                                        Name of the referent.
+                                        This field is effectively required, but due to backwards compatibility is
+                                        allowed to be empty. Instances of this type with an empty value here are
+                                        almost certainly wrong.
+                                        TODO: Add other useful fields. apiVersion, kind, uid?
+                                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
+                                      type: string
+                                    optional:
+                                      description: Specify whether the ConfigMap or
+                                        its key must be defined
+                                      type: boolean
+                                  required:
+                                  - key
+                                  type: object
+                                  x-kubernetes-map-type: atomic
+                                secret:
+                                  description: Secret containing data to use for the
+                                    targets.
+                                  properties:
+                                    key:
+                                      description: The key of the secret to select
+                                        from.  Must be a valid secret key.
+                                      type: string
+                                    name:
+                                      default: ""
+                                      description: |-
+                                        Name of the referent.
+                                        This field is effectively required, but due to backwards compatibility is
+                                        allowed to be empty. Instances of this type with an empty value here are
+                                        almost certainly wrong.
+                                        TODO: Add other useful fields. apiVersion, kind, uid?
+                                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
+                                      type: string
+                                    optional:
+                                      description: Specify whether the Secret or its
+                                        key must be defined
+                                      type: boolean
+                                  required:
+                                  - key
+                                  type: object
+                                  x-kubernetes-map-type: atomic
+                              type: object
+                            cert:
+                              description: Client certificate to present when doing
+                                client-authentication.
+                              properties:
+                                configMap:
+                                  description: ConfigMap containing data to use for
+                                    the targets.
+                                  properties:
+                                    key:
+                                      description: The key to select.
+                                      type: string
+                                    name:
+                                      default: ""
+                                      description: |-
+                                        Name of the referent.
+                                        This field is effectively required, but due to backwards compatibility is
+                                        allowed to be empty. Instances of this type with an empty value here are
+                                        almost certainly wrong.
+                                        TODO: Add other useful fields. apiVersion, kind, uid?
+                                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
+                                      type: string
+                                    optional:
+                                      description: Specify whether the ConfigMap or
+                                        its key must be defined
+                                      type: boolean
+                                  required:
+                                  - key
+                                  type: object
+                                  x-kubernetes-map-type: atomic
+                                secret:
+                                  description: Secret containing data to use for the
+                                    targets.
+                                  properties:
+                                    key:
+                                      description: The key of the secret to select
+                                        from.  Must be a valid secret key.
+                                      type: string
+                                    name:
+                                      default: ""
+                                      description: |-
+                                        Name of the referent.
+                                        This field is effectively required, but due to backwards compatibility is
+                                        allowed to be empty. Instances of this type with an empty value here are
+                                        almost certainly wrong.
+                                        TODO: Add other useful fields. apiVersion, kind, uid?
+                                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
+                                      type: string
+                                    optional:
+                                      description: Specify whether the Secret or its
+                                        key must be defined
+                                      type: boolean
+                                  required:
+                                  - key
+                                  type: object
+                                  x-kubernetes-map-type: atomic
+                              type: object
+                            insecureSkipVerify:
+                              description: Disable target certificate validation.
+                              type: boolean
+                            keySecret:
+                              description: Secret containing the client key file for
+                                the targets.
+                              properties:
+                                key:
+                                  description: The key of the secret to select from.  Must
+                                    be a valid secret key.
+                                  type: string
+                                name:
+                                  default: ""
+                                  description: |-
+                                    Name of the referent.
+                                    This field is effectively required, but due to backwards compatibility is
+                                    allowed to be empty. Instances of this type with an empty value here are
+                                    almost certainly wrong.
+                                    TODO: Add other useful fields. apiVersion, kind, uid?
+                                    More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
+                                  type: string
+                                optional:
+                                  description: Specify whether the Secret or its key
+                                    must be defined
+                                  type: boolean
+                              required:
+                              - key
+                              type: object
+                              x-kubernetes-map-type: atomic
+                            maxVersion:
+                              description: |-
+                                Maximum acceptable TLS version.
+
+
+                                It requires Prometheus >= v2.41.0.
+                              enum:
+                              - TLS10
+                              - TLS11
+                              - TLS12
+                              - TLS13
+                              type: string
+                            minVersion:
+                              description: |-
+                                Minimum acceptable TLS version.
+
+
+                                It requires Prometheus >= v2.35.0.
+                              enum:
+                              - TLS10
+                              - TLS11
+                              - TLS12
+                              - TLS13
+                              type: string
+                            serverName:
+                              description: Used to verify the hostname for the targets.
+                              type: string
+                          type: object
                         tokenUrl:
                           description: '`tokenURL` configures the URL to fetch the
                             token from.'
@@ -801,6 +1058,30 @@ spec:
                           - key
                           type: object
                           x-kubernetes-map-type: atomic
+                        maxVersion:
+                          description: |-
+                            Maximum acceptable TLS version.
+
+
+                            It requires Prometheus >= v2.41.0.
+                          enum:
+                          - TLS10
+                          - TLS11
+                          - TLS12
+                          - TLS13
+                          type: string
+                        minVersion:
+                          description: |-
+                            Minimum acceptable TLS version.
+
+
+                            It requires Prometheus >= v2.35.0.
+                          enum:
+                          - TLS10
+                          - TLS11
+                          - TLS12
+                          - TLS13
+                          type: string
                         serverName:
                           description: Used to verify the hostname for the targets.
                           type: string
@@ -866,8 +1147,8 @@ spec:
                 type: integer
               namespaceSelector:
                 description: |-
-                  Selector to select which namespaces the Kubernetes `Endpoints` objects
-                  are discovered from.
+                  `namespaceSelector` defines in which namespace(s) Prometheus should discover the services.
+                  By default, the services are discovered in the same namespace as the `ServiceMonitor` object but it is possible to select pods across different/all namespaces.
                 properties:
                   any:
                     description: |-
@@ -924,7 +1205,8 @@ spec:
                 type: array
                 x-kubernetes-list-type: set
               selector:
-                description: Label selector to select the Kubernetes `Endpoints` objects.
+                description: Label selector to select the Kubernetes `Endpoints` objects
+                  to scrape metrics from.
                 properties:
                   matchExpressions:
                     description: matchExpressions is a list of label selector requirements.
@@ -983,6 +1265,7 @@ spec:
                 format: int64
                 type: integer
             required:
+            - endpoints
             - selector
             type: object
         required:

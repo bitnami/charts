@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,6 +19,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -87,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.7.1-debian-12-r0
+  tag: 3.8.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -306,7 +308,7 @@ tls:
   ## When using 'pem' format for certificates, each secret should contain a public CA certificate, a public certificate and one private key.
   ## Create these secrets following the steps below:
   ## 1) Create a certificate key and signing request per Kafka broker, and sign the signing request with your CA
-  ## 2) Rename your CA file to `kafka.ca.crt`.
+  ## 2) Rename your CA file to `kafka-ca.crt`.
   ## 3) Rename your certificates to `kafka-X.tls.crt` where X is the ID of each Kafka broker.
   ## 3) Rename your keys to `kafka-X.tls.key` where X is the ID of each Kafka broker.
   ## 4) Run the command below one time per broker to create its associated secret (SECRET_NAME_X is the name of the secret you want to create):
@@ -1511,7 +1513,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.30.2-debian-12-r1
+      tag: 1.31.0-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1821,7 +1823,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r27
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1915,7 +1917,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.0.1-debian-12-r2
+      tag: 1.0.1-debian-12-r5
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2046,6 +2048,9 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.path Path where JMX exporter serves metrics
+    ##
+    path: /metrics
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -2131,7 +2136,7 @@ provisioning:
   ##   --command-config $CLIENT_CONF
   ##   --add
   ##   --allow-principal User:user
-  ##   --consumer --topic '*'
+  ##   --consumer --topic *
   ## - "/opt/bitnami/kafka/bin/kafka-acls.sh
   ##      --bootstrap-server $KAFKA_SERVICE
   ##      --command-config $CLIENT_CONF

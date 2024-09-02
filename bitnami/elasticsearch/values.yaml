@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ## @param global.elasticsearch.service.name Elasticsearch service name to be used in the Kibana subchart (ignored if kibanaEnabled=false)
 ## @param global.elasticsearch.service.ports.restAPI Elasticsearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false)
 ## @param global.kibanaEnabled Whether or not to enable Kibana
@@ -20,6 +21,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   elasticsearch:
     service:
@@ -194,7 +196,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.14.2-debian-12-r0
+  tag: 8.15.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -832,6 +834,19 @@ master:
     ## @param master.persistence.size Persistent Volume Size
     ##
     size: 8Gi
+  ## Master Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param master.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Master StatefulSet
+    ##
+    enabled: false
+    ## @param master.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain   
   ## Pods Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param master.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -1225,6 +1240,21 @@ data:
     ## @param data.persistence.size Persistent Volume Size
     ##
     size: 8Gi
+  ## Data Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param data.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Data StatefulSet
+    ##
+    enabled: false
+    ## @param data.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param data.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
+
+    
   ## Pods Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param data.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -2160,7 +2190,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.7.0-debian-12-r29
+    tag: 1.7.0-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2590,7 +2620,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r27
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2637,7 +2667,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r24
+  tag: 12-debian-12-r27
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2673,6 +2703,57 @@ sysctlImage:
   ##     memory: 1024Mi
   ##
   resources: {}
+
+## copy-tls-certificates init container definition
+##
+copyTlsCerts:
+  ## @param copyTlsCerts.image.registry [default: REGISTRY_NAME] Copy TLS certificates image registry
+  ## @param copyTlsCerts.image.repository [default: REPOSITORY_NAME/os-shell] Copy TLS certificates image repository
+  ## @skip copyTlsCerts.image.tag Copy TLS certificates image tag
+  ## @param copyTlsCerts.image.digest Copy TLS certificates image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param copyTlsCerts.image.pullPolicy Copy TLS certificates image pull policy
+  ## @param copyTlsCerts.image.pullSecrets Copy TLS certificates image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r27
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param copyTlsCerts.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if copyTlsCerts.resources is set (copyTlsCerts.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param copyTlsCerts.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+
 ## @section Kibana Parameters
 
 ## Bundled Kibana parameters

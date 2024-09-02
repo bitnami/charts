@@ -1,8 +1,32 @@
 # Changelog
 
-## 0.1.5 (2024-07-05)
+## 0.1.11 (2024-08-29)
 
-* [bitnami/dremio] Release 0.1.5 ([#27817](https://github.com/bitnami/charts/pull/27817))
+* [bitnami/dremio] Release 0.1.11 ([#29112](https://github.com/bitnami/charts/pull/29112))
+
+## <small>0.1.10 (2024-08-29)</small>
+
+* [bitnami/dremio] Release 0.1.10 (#29110) ([93489b1](https://github.com/bitnami/charts/commit/93489b17f70ce8b5bdfd2338099d3a84dbe8708a)), closes [#29110](https://github.com/bitnami/charts/issues/29110)
+
+## <small>0.1.9 (2024-07-25)</small>
+
+* [bitnami/dremio] Release 0.1.9 (#28486) ([55975e8](https://github.com/bitnami/charts/commit/55975e8a9a58d7901657631ac19af3fcda1ac0c8)), closes [#28486](https://github.com/bitnami/charts/issues/28486)
+
+## <small>0.1.8 (2024-07-24)</small>
+
+* [bitnami/dremio] Release 0.1.8 (#28359) ([48934e0](https://github.com/bitnami/charts/commit/48934e0672b4027bafa4ecb48ac14089d76d7818)), closes [#28359](https://github.com/bitnami/charts/issues/28359)
+
+## <small>0.1.7 (2024-07-24)</small>
+
+* [bitnami/dremio] Release 0.1.7 (#28249) ([ae7590f](https://github.com/bitnami/charts/commit/ae7590f3f3c538f03961784a7698529d58ccb901)), closes [#28249](https://github.com/bitnami/charts/issues/28249)
+
+## <small>0.1.6 (2024-07-22)</small>
+
+* [bitnami/dremio] Global StorageClass as default value (#28012) ([97e506b](https://github.com/bitnami/charts/commit/97e506bb3d54b34bb3ccb9bfb63b2d801f2c6fd3)), closes [#28012](https://github.com/bitnami/charts/issues/28012)
+
+## <small>0.1.5 (2024-07-05)</small>
+
+* [bitnami/dremio] Release 0.1.5 (#27817) ([4358b4c](https://github.com/bitnami/charts/commit/4358b4ce5f426a7b8a27ef7abf511669e30822d7)), closes [#27817](https://github.com/bitnami/charts/issues/27817)
 
 ## <small>0.1.4 (2024-06-27)</small>
 

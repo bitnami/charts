@@ -1,8 +1,56 @@
 # Changelog
 
-## 18.21.13 (2024-07-04)
+## 20.0.1 (2024-08-22)
 
-* [bitnami/drupal] Release 18.21.13 ([#27771](https://github.com/bitnami/charts/pull/27771))
+* [bitnami/drupal] Release 20.0.1 ([#28965](https://github.com/bitnami/charts/pull/28965))
+
+## 20.0.0 (2024-08-13)
+
+* [bitnami/drupal] Release 20.0.0 (#28846) ([4136b1d](https://github.com/bitnami/charts/commit/4136b1d1c8b8cbbe95c140f5fb89c334421baa59)), closes [#28846](https://github.com/bitnami/charts/issues/28846)
+
+## <small>19.0.9 (2024-08-08)</small>
+
+* [bitnami/drupal] Release 19.0.9 (#28783) ([5664e79](https://github.com/bitnami/charts/commit/5664e7995b849387dd4049a105ad83443808dce5)), closes [#28783](https://github.com/bitnami/charts/issues/28783)
+
+## <small>19.0.8 (2024-08-02)</small>
+
+* [bitnami/drupal] Release 19.0.8 (#28644) ([20e3a5c](https://github.com/bitnami/charts/commit/20e3a5cf50685e0d69144a0d287991592a15d21b)), closes [#28644](https://github.com/bitnami/charts/issues/28644)
+
+## <small>19.0.7 (2024-08-02)</small>
+
+* [bitnami/drupal] Release 19.0.7 (#28637) ([c6ad0ab](https://github.com/bitnami/charts/commit/c6ad0abd1e5c2eb64bbc3507c32108a7e6e2cc02)), closes [#28637](https://github.com/bitnami/charts/issues/28637)
+
+## <small>19.0.6 (2024-07-30)</small>
+
+* [bitnami/drupal] Release 19.0.6 (#28592) ([4296854](https://github.com/bitnami/charts/commit/4296854e4b338d83d607a322042dcc280cf36bfa)), closes [#28592](https://github.com/bitnami/charts/issues/28592)
+
+## <small>19.0.5 (2024-07-30)</small>
+
+* [bitnami/drupal] Release 19.0.5 (#28589) ([0447bf9](https://github.com/bitnami/charts/commit/0447bf9e56cae535e4d726d3e2705116808d2a4e)), closes [#28589](https://github.com/bitnami/charts/issues/28589)
+
+## <small>19.0.4 (2024-07-25)</small>
+
+* [bitnami/drupal] Release 19.0.4 (#28463) ([8f7e675](https://github.com/bitnami/charts/commit/8f7e675f2a12e23d641e00282bfb4cdd804dfc50)), closes [#28463](https://github.com/bitnami/charts/issues/28463)
+
+## <small>19.0.3 (2024-07-24)</small>
+
+* [bitnami/drupal] Release 19.0.3 (#28279) ([7ffd7e0](https://github.com/bitnami/charts/commit/7ffd7e0084cbc26dff684615750f1df4f27ad39c)), closes [#28279](https://github.com/bitnami/charts/issues/28279)
+
+## <small>19.0.2 (2024-07-24)</small>
+
+* [bitnami/drupal] Release 19.0.2 (#28244) ([909cdca](https://github.com/bitnami/charts/commit/909cdca1a6a39ebfd491a40037562411d67e883d)), closes [#28244](https://github.com/bitnami/charts/issues/28244)
+
+## <small>19.0.1 (2024-07-16)</small>
+
+* [bitnami/drupal] Global StorageClass as default value (#28013) ([2a9b593](https://github.com/bitnami/charts/commit/2a9b593ea30172512e51f2fe2969178a02e8382c)), closes [#28013](https://github.com/bitnami/charts/issues/28013)
+
+## 19.0.0 (2024-07-12)
+
+* [bitnami/drupal] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27927) ([b68f40d](https://github.com/bitnami/charts/commit/b68f40dad01802822b4973bc263e95926af941cc)), closes [#27927](https://github.com/bitnami/charts/issues/27927)
+
+## <small>18.21.13 (2024-07-04)</small>
+
+* [bitnami/drupal] Release 18.21.13 (#27771) ([9026350](https://github.com/bitnami/charts/commit/902635019f3f306d634ba7e90db39eff0bda28e2)), closes [#27771](https://github.com/bitnami/charts/issues/27771)
 
 ## <small>18.21.12 (2024-06-26)</small>
 

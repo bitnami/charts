@@ -1,8 +1,45 @@
 # Changelog
 
-## 11.2.9 (2024-07-03)
+## 11.2.18 (2024-08-26)
 
-* [bitnami/tomcat] Release 11.2.9 ([#27715](https://github.com/bitnami/charts/pull/27715))
+* [bitnami/tomcat] Release 11.2.18 ([#29024](https://github.com/bitnami/charts/pull/29024))
+
+## <small>11.2.17 (2024-08-22)</small>
+
+* [bitnami/tomcat] Release 11.2.17 (#28982) ([73aba0b](https://github.com/bitnami/charts/commit/73aba0b224393ef425ca92aebbe46235904016ba)), closes [#28982](https://github.com/bitnami/charts/issues/28982)
+
+## <small>11.2.16 (2024-08-07)</small>
+
+* [bitnami/tomcat] Release 11.2.16 (#28756) ([0595ee9](https://github.com/bitnami/charts/commit/0595ee9413055543130075a8f71f46e482c63af4)), closes [#28756](https://github.com/bitnami/charts/issues/28756)
+
+## <small>11.2.15 (2024-07-25)</small>
+
+* [bitnami/tomcat] Release 11.2.15 (#28504) ([922f44d](https://github.com/bitnami/charts/commit/922f44de1141c1474ac3b82b0d8876fee0baea3a)), closes [#28504](https://github.com/bitnami/charts/issues/28504)
+
+## <small>11.2.14 (2024-07-25)</small>
+
+* [bitnami/tomcat] Release 11.2.14 (#28397) ([47d9008](https://github.com/bitnami/charts/commit/47d9008376a2c4885785379e6602325d0ce23c9e)), closes [#28397](https://github.com/bitnami/charts/issues/28397)
+
+## <small>11.2.13 (2024-07-24)</small>
+
+* [bitnami/tomcat] Release 11.2.13 (#28389) ([85ba54e](https://github.com/bitnami/charts/commit/85ba54e0b138e49516429a169ffa6df4f44ff9ed)), closes [#28389](https://github.com/bitnami/charts/issues/28389)
+
+## <small>11.2.12 (2024-07-17)</small>
+
+* [bitnami/tomcat] Release 11.2.12 (#28145) ([d6071a1](https://github.com/bitnami/charts/commit/d6071a135a4fe52c3b62fdde46bea74d7cfda795)), closes [#28145](https://github.com/bitnami/charts/issues/28145)
+
+## <small>11.2.11 (2024-07-16)</small>
+
+* [bitnami/tomcat] Global StorageClass as default value (#28104) ([ba7fb29](https://github.com/bitnami/charts/commit/ba7fb298a519dc7077022cbc1559282ab4f000d3)), closes [#28104](https://github.com/bitnami/charts/issues/28104)
+
+## <small>11.2.10 (2024-07-15)</small>
+
+* [bitnami/tomcat] Release 11.2.10 (#27969) ([b369cc9](https://github.com/bitnami/charts/commit/b369cc991ff56800bd0b2bfcdeae192089ebbfe2)), closes [#27969](https://github.com/bitnami/charts/issues/27969)
+
+## <small>11.2.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/tomcat] Release 11.2.9 (#27715) ([9f5296f](https://github.com/bitnami/charts/commit/9f5296f7c87e3cf3e3a9c6c5531f97fe24b60f25)), closes [#27715](https://github.com/bitnami/charts/issues/27715)
 
 ## <small>11.2.8 (2024-06-20)</small>
 

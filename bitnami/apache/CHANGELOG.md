@@ -1,8 +1,40 @@
 # Changelog
 
-## 11.2.8 (2024-07-04)
+## 11.2.16 (2024-08-28)
 
-* [bitnami/apache] Uses `common.compatibility.renderSecurityContext` template to render `containerSecurityContext` values in container specs ([#27748](https://github.com/bitnami/charts/pull/27748))
+* [bitnami/apache] Release 11.2.16 ([#29081](https://github.com/bitnami/charts/pull/29081))
+
+## <small>11.2.15 (2024-08-26)</small>
+
+* [bitnami/apache] Release 11.2.15 (#29023) ([a74db14](https://github.com/bitnami/charts/commit/a74db142e71c2569864bb4de7d6cb5438e3ae288)), closes [#29023](https://github.com/bitnami/charts/issues/29023)
+
+## <small>11.2.14 (2024-08-16)</small>
+
+* [bitnami/apache] fix CrashLoopBackOff when using cloneHtdocsFromGit (#28868) ([b535fa4](https://github.com/bitnami/charts/commit/b535fa4d875858dee6b5f5be35b76be9e3bd897e)), closes [#28868](https://github.com/bitnami/charts/issues/28868)
+
+## <small>11.2.13 (2024-07-25)</small>
+
+* [bitnami/apache] Release 11.2.13 (#28398) ([08be0e2](https://github.com/bitnami/charts/commit/08be0e271998c1046f66d815ac5c411b46e3af29)), closes [#28398](https://github.com/bitnami/charts/issues/28398)
+
+## <small>11.2.12 (2024-07-24)</small>
+
+* [bitnami/apache] Release 11.2.12 (#28269) ([92f1fd0](https://github.com/bitnami/charts/commit/92f1fd048e936f2561d3348befb5a4e7825c6423)), closes [#28269](https://github.com/bitnami/charts/issues/28269)
+
+## <small>11.2.11 (2024-07-23)</small>
+
+* [bitnami/apache] Release 11.2.11 (#28226) ([1bcb4d1](https://github.com/bitnami/charts/commit/1bcb4d1d11f347d263982fc179a776a8ed59310a)), closes [#28226](https://github.com/bitnami/charts/issues/28226)
+
+## <small>11.2.10 (2024-07-18)</small>
+
+* [bitnami/apache] Global StorageClass as default value (#27996) ([0109c64](https://github.com/bitnami/charts/commit/0109c64c17987ade8dd8c178f1080febf2f83a15)), closes [#27996](https://github.com/bitnami/charts/issues/27996)
+
+## <small>11.2.9 (2024-07-17)</small>
+
+* [bitnami/apache] Release 11.2.9 (#28146) ([3c9fb46](https://github.com/bitnami/charts/commit/3c9fb4673ab387b1fa1636259d557da19c82e26c)), closes [#28146](https://github.com/bitnami/charts/issues/28146)
+
+## <small>11.2.8 (2024-07-05)</small>
+
+* [bitnami/apache] Uses `common.compatibility.renderSecurityContext` template to render `containerSecu ([28b8f9f](https://github.com/bitnami/charts/commit/28b8f9f5053ba1ac43c63d0a796dd1acb6e8b34c)), closes [#27748](https://github.com/bitnami/charts/issues/27748) [#27633](https://github.com/bitnami/charts/issues/27633)
 
 ## <small>11.2.7 (2024-07-03)</small>
 

@@ -1,0 +1,24 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if eq .Values.controller.kind "StatefulSet" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "argocd.application-controller" . }}-headless
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
+  {{- if or .Values.commonAnnotations .Values.controller.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  clusterIP: None
+  type: ClusterIP
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
+{{- end }}

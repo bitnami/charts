@@ -1,8 +1,48 @@
 # Changelog
 
-## 11.3.8 (2024-07-05)
+## 11.3.18 (2024-08-27)
 
-* [bitnami/grafana] Release 11.3.8 ([#27804](https://github.com/bitnami/charts/pull/27804))
+* [bitnami/grafana] Release 11.3.18 ([#29052](https://github.com/bitnami/charts/pull/29052))
+
+## <small>11.3.17 (2024-08-27)</small>
+
+* [bitnami/grafana] Release 11.3.17 (#29044) ([1982dcb](https://github.com/bitnami/charts/commit/1982dcbe8627d8b892e41140a8312b367dfb318b)), closes [#29044](https://github.com/bitnami/charts/issues/29044)
+
+## <small>11.3.16 (2024-08-23)</small>
+
+* [bitnami/grafana] Release 11.3.16 (#28998) ([abb3da9](https://github.com/bitnami/charts/commit/abb3da971fca0fd3902c23fc42aa5e277cf19772)), closes [#28998](https://github.com/bitnami/charts/issues/28998)
+
+## <small>11.3.15 (2024-08-14)</small>
+
+* [bitnami/grafana] Release 11.3.15 (#28890) ([95b0177](https://github.com/bitnami/charts/commit/95b0177c500b31a76151800784359b2e8171c463)), closes [#28890](https://github.com/bitnami/charts/issues/28890)
+
+## <small>11.3.14 (2024-08-08)</small>
+
+* [bitnami/grafana] Release 11.3.14 (#28785) ([6f8056b](https://github.com/bitnami/charts/commit/6f8056b1c76f37874d8e666670726b5d3022bfb0)), closes [#28785](https://github.com/bitnami/charts/issues/28785)
+
+## <small>11.3.13 (2024-07-30)</small>
+
+* [bitnami/grafana] Release 11.3.13 (#28588) ([248c78d](https://github.com/bitnami/charts/commit/248c78d78a7fc1303101069ba6d52b4e5d894d75)), closes [#28588](https://github.com/bitnami/charts/issues/28588)
+
+## <small>11.3.12 (2024-07-26)</small>
+
+* [bitnami/grafana] Release 11.3.12 (#28537) ([60cabb0](https://github.com/bitnami/charts/commit/60cabb07dac432a58d79a5ffcb756079a32c70fa)), closes [#28537](https://github.com/bitnami/charts/issues/28537)
+
+## <small>11.3.11 (2024-07-25)</small>
+
+* [bitnami/grafana] Release 11.3.11 (#28514) ([1df1154](https://github.com/bitnami/charts/commit/1df1154bfb16e46b20c3fb7c426e38876dffadc3)), closes [#28514](https://github.com/bitnami/charts/issues/28514)
+
+## <small>11.3.10 (2024-07-24)</small>
+
+* [bitnami/grafana] Release 11.3.10 (#28285) ([d84e200](https://github.com/bitnami/charts/commit/d84e200928515c113edac738fb65996b45e22043)), closes [#28285](https://github.com/bitnami/charts/issues/28285)
+
+## <small>11.3.9 (2024-07-16)</small>
+
+* [bitnami/grafana] Global StorageClass as default value (#28024) ([5dcef0c](https://github.com/bitnami/charts/commit/5dcef0cd7fdccd518c1d9baa24ab501d04b62942)), closes [#28024](https://github.com/bitnami/charts/issues/28024)
+
+## <small>11.3.8 (2024-07-05)</small>
+
+* [bitnami/grafana] Release 11.3.8 (#27804) ([0623ed3](https://github.com/bitnami/charts/commit/0623ed35aae650b653e1c71a836f734ce8333c99)), closes [#27804](https://github.com/bitnami/charts/issues/27804)
 
 ## <small>11.3.7 (2024-07-03)</small>
 
@@ -23,8 +63,11 @@
 
 ## <small>11.3.3 (2024-06-06)</small>
 
-* [bitnami/grafana] Release 11.3.2 (#26730) ([2608388](https://github.com/bitnami/charts/commit/26083883f08c9e459ccbea1cee1b01cc34f759d0)), closes [#26730](https://github.com/bitnami/charts/issues/26730)
 * [bitnami/grafana] Release 11.3.3 (#26961) ([d02e879](https://github.com/bitnami/charts/commit/d02e879d735a8327ffdc4d6fa079d4ed1233a7f6)), closes [#26961](https://github.com/bitnami/charts/issues/26961)
+
+## <small>11.3.2 (2024-06-05)</small>
+
+* [bitnami/grafana] Release 11.3.2 (#26730) ([2608388](https://github.com/bitnami/charts/commit/26083883f08c9e459ccbea1cee1b01cc34f759d0)), closes [#26730](https://github.com/bitnami/charts/issues/26730)
 
 ## <small>11.3.1 (2024-06-04)</small>
 
