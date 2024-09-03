@@ -53,6 +53,13 @@ Return the proper Cilium Operator fullname (with namespace)
 {{- end -}}
 
 {{/*
+Return the proper Hubble UI fullname
+*/}}
+{{- define "cilium.hubble.ui.fullname.namespace" -}}
+{{- printf "%s-hubble-ui" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper Cilium key-value store fullname
 */}}
 {{- define "cilium.kvstore.fullname" -}}

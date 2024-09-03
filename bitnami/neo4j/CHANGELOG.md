@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.7 (2024-07-25)
+## 0.1.8 (2024-08-28)
 
-* [bitnami/neo4j] Release 0.1.7 ([#28457](https://github.com/bitnami/charts/pull/28457))
+* [bitnami/neo4j] Release 0.1.8 ([#29090](https://github.com/bitnami/charts/pull/29090))
+
+## <small>0.1.7 (2024-07-25)</small>
+
+* [bitnami/neo4j] Release 0.1.7 (#28457) ([faf9857](https://github.com/bitnami/charts/commit/faf98576a58b48ac3b3dcb514d01af518c1602c9)), closes [#28457](https://github.com/bitnami/charts/issues/28457)
 
 ## <small>0.1.6 (2024-07-24)</small>
 

@@ -1,0 +1,6 @@
+command:
+  # Cilium requires to be stable before checking endpoints
+  wait-to-be-available:
+    exec: "sleep 300"
+    exit-status: 0
+    timeout: 310000

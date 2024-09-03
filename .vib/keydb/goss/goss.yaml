@@ -3,7 +3,7 @@
 
 {{- $auth := printf "REDISCLI_AUTH='%s'" .Vars.auth.password }}
 {{- $tls := print "--tls --cacert /opt/bitnami/keydb/certs/ca.crt" }}
-{{- $master_endpoint := printf "-h keydb-master -p %d" .Vars.master.service.ports.keydb }}
+{{- $master_endpoint := printf "-h 127.0.0.1 -p %d" .Vars.master.containerPorts.keydb }}
 {{- $replicas_endpoint := printf "-h keydb-replica -p %d" .Vars.replica.service.ports.keydb }}
 {{- $replicas := .Vars.replica.replicaCount }}
 command:

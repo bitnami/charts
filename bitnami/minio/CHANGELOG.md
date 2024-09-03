@@ -1,8 +1,16 @@
 # Changelog
 
-## 14.7.2 (2024-08-26)
+## 14.7.4 (2024-08-30)
 
-* [bitnami/minio] Release 14.7.2 ([#29030](https://github.com/bitnami/charts/pull/29030))
+* [bitnami/minio] Release 14.7.4 ([#29119](https://github.com/bitnami/charts/pull/29119))
+
+## <small>14.7.3 (2024-08-29)</small>
+
+* [bitnami/minio] Fix MinIO Network Policy (#29089) ([49c78ee](https://github.com/bitnami/charts/commit/49c78ee31e173558b510a541e8b0c5e2e0dbe78e)), closes [#29089](https://github.com/bitnami/charts/issues/29089)
+
+## <small>14.7.2 (2024-08-26)</small>
+
+* [bitnami/minio] Release 14.7.2 (#29030) ([45f50fd](https://github.com/bitnami/charts/commit/45f50fdd11b956659d060c1e4fc59904d59043cc)), closes [#29030](https://github.com/bitnami/charts/issues/29030)
 
 ## <small>14.7.1 (2024-08-17)</small>
 

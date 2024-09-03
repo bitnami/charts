@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.0.3 (2024-08-23)
+## 1.0.5 (2024-09-02)
 
-* [bitnami/chainloop] Release 1.0.3 ([#28996](https://github.com/bitnami/charts/pull/28996))
+* [bitnami/chainloop] Release 1.0.5 ([#29160](https://github.com/bitnami/charts/pull/29160))
+
+## <small>1.0.4 (2024-08-28)</small>
+
+* [bitnami/chainloop] Release 1.0.4 (#29093) ([6697fef](https://github.com/bitnami/charts/commit/6697fefe7efe6842ee729f4dfe9aa035f2c4dc4d)), closes [#29093](https://github.com/bitnami/charts/issues/29093)
+
+## <small>1.0.3 (2024-08-23)</small>
+
+* [bitnami/chainloop] Release 1.0.3 (#28996) ([648a0ab](https://github.com/bitnami/charts/commit/648a0ab13c3090b3dff2d816941b33b63a7f1aa9)), closes [#28996](https://github.com/bitnami/charts/issues/28996)
 
 ## <small>1.0.2 (2024-08-21)</small>
 
