@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.6.0 (2024-08-28)
+## 9.6.0 (2024-09-03)
 
 * [bitnami/kube-prometheus] Add extraEnv values for thanos sidecar ([#29022](https://github.com/bitnami/charts/pull/29022))
 
