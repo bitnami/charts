@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.2 (2024-09-03)
+## 2.1.3 (2024-09-03)
 
-* [bitnami/haproxy] Release 2.1.2 ([#29181](https://github.com/bitnami/charts/pull/29181))
+* [bitnami/haproxy] add missing template for tls-secrets ([#29151](https://github.com/bitnami/charts/pull/29151))
+
+## <small>2.1.2 (2024-09-03)</small>
+
+* [bitnami/haproxy] Release 2.1.2 (#29181) ([0c795af](https://github.com/bitnami/charts/commit/0c795af7d4b1f5ae825d137aeb9baf4e256e01ab)), closes [#29181](https://github.com/bitnami/charts/issues/29181)
 
 ## <small>2.1.1 (2024-08-07)</small>
 
