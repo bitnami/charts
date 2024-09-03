@@ -569,7 +569,7 @@ spec:
         {{- if or .Values.initDB .Values.initDBConfigMap }}
         - name: init-db-cm
           configMap:
-            name: {{ ternary (tpl .Values.initDBConfigMap $) (printf "%s-init-scripts" (include "common.names.fullname" .)) .Values.initDBConfigMap }}
+            name: {{ ternary (printf "%s-init-scripts" (include "common.names.fullname" .)) (tpl .Values.initDBConfigMap $) (empty .Values.initDBConfigMap) }}
         {{- end }}
         {{- if .Values.initDBSecret }}
         - name: init-db-secret
