@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.14 (2024-08-28)
+## 11.4.0 (2024-09-03)
 
-* [bitnami/cassandra] Release 11.3.14 ([#29077](https://github.com/bitnami/charts/pull/29077))
+* [bitnami/cassandra] feat: :sparkles: Allow setting initdb scripts in values ([#29172](https://github.com/bitnami/charts/pull/29172))
+
+## <small>11.3.14 (2024-08-28)</small>
+
+* [bitnami/cassandra] Release 11.3.14 (#29077) ([70e610c](https://github.com/bitnami/charts/commit/70e610c83801ad78a7d6370ee830df0ff97c129e)), closes [#29077](https://github.com/bitnami/charts/issues/29077)
 
 ## <small>11.3.13 (2024-08-21)</small>
 
