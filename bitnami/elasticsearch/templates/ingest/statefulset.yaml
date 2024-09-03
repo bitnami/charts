@@ -83,7 +83,7 @@ spec:
       {{- if .Values.ingest.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.ingest.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or (or .Values.initContainers .Values.ingest.initContainers)  .Values.sysctlImage.enabled }}
+      {{- if or (or .Values.initContainers .Values.ingest.initContainers) .Values.security.enabled .Values.sysctlImage.enabled }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
