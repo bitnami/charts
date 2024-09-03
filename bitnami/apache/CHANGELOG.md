@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.16 (2024-08-28)
+## 11.2.17 (2024-09-03)
 
-* [bitnami/apache] Release 11.2.16 ([#29081](https://github.com/bitnami/charts/pull/29081))
+* [bitnami/apache] Release 11.2.17 ([#29183](https://github.com/bitnami/charts/pull/29183))
+
+## <small>11.2.16 (2024-08-28)</small>
+
+* [bitnami/apache] Release 11.2.16 (#29081) ([48ab080](https://github.com/bitnami/charts/commit/48ab080c5caf58fd4f5434967be9af43cd55d336)), closes [#29081](https://github.com/bitnami/charts/issues/29081)
 
 ## <small>11.2.15 (2024-08-26)</small>
 
