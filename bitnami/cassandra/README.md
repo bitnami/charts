@@ -177,6 +177,7 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 | `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`                     |
 | `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                        |
 | `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                        |
+| `initDB`                      | Object with cql scripts. Useful for creating a keyspace and pre-populating data                                        | `{}`                        |
 | `initDBConfigMap`             | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                        |
 | `initDBSecret`                | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                        |
 | `existingConfiguration`       | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                        |
