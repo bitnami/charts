@@ -1,8 +1,8 @@
 # Changelog
 
-## 11.4.0 (2024-09-03)
+## 11.4.1 (2024-09-03)
 
-* [bitnami/cassandra] feat: :sparkles: Allow setting initdb scripts in values ([#29172](https://github.com/bitnami/charts/pull/29172))
+* [bitnami/cassandra] test: :white_check_mark: Improve ginkgo testing reliability ([#29177](https://github.com/bitnami/charts/pull/29177))
 
 ## <small>11.3.14 (2024-08-28)</small>
 
