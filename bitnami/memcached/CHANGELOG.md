@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.12 (2024-08-27)
+## 7.4.13 (2024-09-03)
 
-* Enable publishNotReadyAddresses on memcached service ([#29045](https://github.com/bitnami/charts/pull/29045))
+* [bitnami/memcached] Release 7.4.13 ([#29162](https://github.com/bitnami/charts/pull/29162))
+
+## <small>7.4.12 (2024-08-28)</small>
+
+* Enable publishNotReadyAddresses on memcached service (#29045) ([f6bd12f](https://github.com/bitnami/charts/commit/f6bd12f542c20e330919cbcbdac47504f9186cb7)), closes [#29045](https://github.com/bitnami/charts/issues/29045)
 
 ## <small>7.4.11 (2024-07-25)</small>
 

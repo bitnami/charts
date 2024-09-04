@@ -963,6 +963,12 @@ cronjobs:
     ## @param cronjobs.taskScheduler.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
+    ## @param cronjobs.taskScheduler.serviceAccountName Attach serviceAccountName to the pod of the CronJob
+    ##
+    serviceAccountName: ""
+    ## @param cronjobs.taskScheduler.automountServiceAccountToken Mount Service Account token in pod of the CronJob
+    ##
+    automountServiceAccountToken: true
     ## @param cronjobs.taskScheduler.suspend Whether to create suspended CronJob
     ##
     suspend: false
@@ -1062,6 +1068,12 @@ cronjobs:
     ## @param cronjobs.archive.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
+    ## @param cronjobs.archive.serviceAccountName Attach serviceAccountName to the pod of the CronJob
+    ##
+    serviceAccountName: ""
+    ## @param cronjobs.archive.automountServiceAccountToken Mount Service Account token in pod of the CronJob
+    ##
+    automountServiceAccountToken: true
     ## @param cronjobs.archive.suspend Whether to create suspended CronJob
     ##
     suspend: false

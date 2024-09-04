@@ -168,10 +168,10 @@ You have two alternatives to use LoadBalancer services:
 
 ```console
 externalAccess.enabled=true
-externalAccess.service.broker.type=LoadBalancer
-externalAccess.service.controller.type=LoadBalancer
-externalAccess.service.broker.ports.external=9094
-externalAccess.service.controller.containerPorts.external=9094
+externalAccess.broker.service.type=LoadBalancer
+externalAccess.controller.service.type=LoadBalancer
+externalAccess.broker.service.ports.external=9094
+externalAccess.controller.service.containerPorts.external=9094
 externalAccess.autoDiscovery.enabled=true
 serviceAccount.create=true
 rbac.create=true
@@ -183,14 +183,14 @@ Note: This option requires creating RBAC rules on clusters where RBAC policies a
 
 ```console
 externalAccess.enabled=true
-externalAccess.service.controller.type=LoadBalancer
-externalAccess.service.controller.containerPorts.external=9094
-externalAccess.service.controller.loadBalancerIPs[0]='external-ip-1'
-externalAccess.service.controller.loadBalancerIPs[1]='external-ip-2'
-externalAccess.service.broker.type=LoadBalancer
-externalAccess.service.broker.ports.external=9094
-externalAccess.service.broker.loadBalancerIPs[0]='external-ip-3'
-externalAccess.service.broker.loadBalancerIPs[1]='external-ip-4'
+externalAccess.controller.service.type=LoadBalancer
+externalAccess.controller.service.containerPorts.external=9094
+externalAccess.controller.service.loadBalancerIPs[0]='external-ip-1'
+externalAccess.controller.service.loadBalancerIPs[1]='external-ip-2'
+externalAccess.broker.service.type=LoadBalancer
+externalAccess.broker.service.ports.external=9094
+externalAccess.broker.service.loadBalancerIPs[0]='external-ip-3'
+externalAccess.broker.service.loadBalancerIPs[1]='external-ip-4'
 ```
 
 Note: You need to know in advance the load balancer IPs so each Kafka broker advertised listener is configured with it.
@@ -225,7 +225,7 @@ You have two alternatives to use NodePort services:
 
   Note: You need to know in advance the node ports that will be exposed so each Kafka broker advertised listener is configured with it.
 
-  The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` or `externalAccess.service.useHostIPs` is provided.
+  The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.<controller|broker>.service.domain` or `externalAccess.<controller|broker>.service.useHostIPs` is provided.
 
 - Option C) Manually specify distinct external IPs (using controller+broker nodes)
 

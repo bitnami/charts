@@ -33,6 +33,10 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.archive.podAnnotations "context" $ ) | nindent 12 }}
           {{- end }}
         spec:
+          {{- if .Values.cronjobs.archive.serviceAccountName }}
+          serviceAccountName: {{ .Values.cronjobs.archive.serviceAccountName | quote }}
+          {{- end }}
+          automountServiceAccountToken: {{ .Values.cronjobs.archive.automountServiceAccountToken }}
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
           restartPolicy: OnFailure
           {{- if .Values.cronjobs.archive.affinity }}
@@ -205,6 +209,10 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.taskScheduler.podAnnotations "context" $ ) | nindent 12 }}
           {{- end }}
         spec:
+          {{- if .Values.cronjobs.taskScheduler.serviceAccountName }}
+          serviceAccountName: {{ .Values.cronjobs.taskScheduler.serviceAccountName | quote }}
+          {{- end }}
+          automountServiceAccountToken: {{ .Values.cronjobs.taskScheduler.automountServiceAccountToken }}
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
           {{- if .Values.cronjobs.taskScheduler.affinity }}
           affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.affinity "context" $) | nindent 12 }}

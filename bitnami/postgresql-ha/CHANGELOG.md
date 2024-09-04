@@ -1,8 +1,20 @@
 # Changelog
 
-## 14.2.18 (2024-08-24)
+## 14.2.21 (2024-09-03)
 
-* [bitnami/postgresql-ha] Release 14.2.18 ([#29015](https://github.com/bitnami/charts/pull/29015))
+* [bitnami/postgresql-ha] test: :white_check_mark: Temporary change the ginkgo check command ([#29179](https://github.com/bitnami/charts/pull/29179))
+
+## <small>14.2.20 (2024-09-03)</small>
+
+* [bitnami/postgresql-ha] test: :white_check_mark: Improve ginkgo test reliability (#29166) ([7e4276d](https://github.com/bitnami/charts/commit/7e4276d84ff247c178297763cfb31a4dfeaae00d)), closes [#29166](https://github.com/bitnami/charts/issues/29166)
+
+## <small>14.2.19 (2024-08-30)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.19 (#29123) ([2f2875a](https://github.com/bitnami/charts/commit/2f2875a13ca7fdf326da080d5c733bd2c0b25f67)), closes [#29123](https://github.com/bitnami/charts/issues/29123)
+
+## <small>14.2.18 (2024-08-24)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.18 (#29015) ([d1b3761](https://github.com/bitnami/charts/commit/d1b37614f31bdefc096f70998532c60c5d394d98)), closes [#29015](https://github.com/bitnami/charts/issues/29015)
 
 ## <small>14.2.17 (2024-08-22)</small>
 

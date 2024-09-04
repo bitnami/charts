@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.19 (2024-08-29)
+## 1.4.20 (2024-08-31)
 
-* [bitnami/vault] Release 1.4.19 ([#29115](https://github.com/bitnami/charts/pull/29115))
+* [bitnami/vault] Release 1.4.20 ([#29140](https://github.com/bitnami/charts/pull/29140))
+
+## <small>1.4.19 (2024-08-29)</small>
+
+* [bitnami/vault] Release 1.4.19 (#29115) ([94f3eaf](https://github.com/bitnami/charts/commit/94f3eaf77153071646f392ae5e142eee08ca04c6)), closes [#29115](https://github.com/bitnami/charts/issues/29115)
 
 ## <small>1.4.18 (2024-08-08)</small>
 

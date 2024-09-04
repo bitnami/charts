@@ -83,7 +83,7 @@ spec:
       {{- if .Values.coordinating.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.coordinating.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if or (or .Values.initContainers .Values.coordinating.initContainers) .Values.sysctlImage.enabled }}
+      {{- if or (or .Values.initContainers .Values.coordinating.initContainers) .Values.security.enabled .Values.sysctlImage.enabled }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
