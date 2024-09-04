@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.1.0 (2024-09-05)
+## 20.1.0 (2024-09-04)
 
 * [bitnami/redis] Support extraEnvVars on volume-permissions for dynamic subfolders ([#29195](https://github.com/bitnami/charts/pull/29195))
 
