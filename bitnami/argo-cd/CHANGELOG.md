@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.8 (2024-08-28)
+## 7.0.9 (2024-09-04)
 
-* [bitnami/argo-cd] Release 7.0.8 ([#29074](https://github.com/bitnami/charts/pull/29074))
+* [bitnami/argo-cd] Missing namespace in ArgoCD known-hosts cm ([#28877](https://github.com/bitnami/charts/pull/28877))
+
+## <small>7.0.8 (2024-08-28)</small>
+
+* [bitnami/argo-cd] Release 7.0.8 (#29074) ([cb56c0e](https://github.com/bitnami/charts/commit/cb56c0ed43ffc75df71571dd2e032dadfaa9face)), closes [#29074](https://github.com/bitnami/charts/issues/29074)
 
 ## <small>7.0.7 (2024-08-27)</small>
 
