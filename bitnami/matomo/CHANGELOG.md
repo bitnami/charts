@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.0.11 (2024-09-03)
+## 8.0.11 (2024-09-04)
 
 * [bitnami/matomo] add serviceAccountName parameter to CronJob pods ([#29182](https://github.com/bitnami/charts/pull/29182))
 
