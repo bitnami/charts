@@ -1,10 +1,10 @@
-<!--- app-name: zipkin -->
+<!--- app-name: Zipkin -->
 
-# Bitnami package for zipkin
+# Bitnami package for Zipkin
 
-zipkin is an open-source version control system for data lakes, enabling isolated data experimentation before committing changes.
+ Zipkin is a distributed tracing system that helps collect and analyze timing data to troubleshoot latency issues in service architectures, providing visibility into service call performance.
 
-[Overview of zipkin](https://projectzipkin.org/)
+[Overview of zipkin](https://zipkin.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/zipkin
 ```
 
-Looking to use zipkin in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+Looking to use Zipkin in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -65,7 +65,7 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### zipkin application properties
+### Zipkin application properties
 
 The chart supports setting zipkin [environment variables](https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#configuration) via two parameters:
 
@@ -389,7 +389,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                  | `{}`                     |
 | `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                 | `{}`                     |
 | `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                   | `{}`                     |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (secondary.resources is recommended for production). | `medium`                 |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (secondary.resources is recommended for production). | `small`                  |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                    | `{}`                     |
 | `podSecurityContext.enabled`                        | Enable security context for zipkin pods                                                                                                                                                                              | `true`                   |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                   | `Always`                 |
@@ -492,21 +492,12 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### Other Parameters
 
-| Name                                                   | Description                                                                                                                                                                                                                                           | Value                      |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                                                                                                                                       | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                                                                                                                                                     | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                                                                                                                                                   | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                                                                                                                                                                  | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                                                                                                                                                                 | `[]`                       |
-| `volumePermissions.resourcesPreset`                    | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
-| `volumePermissions.resources`                          | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.enabled`   | Enable volumePermissions container security context                                                                                                                                                                                                   | `true`                     |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                                                                                                                                                       | `0`                        |
-| `serviceAccount.create`                                | Specifies whether a ServiceAccount should be created                                                                                                                                                                                                  | `true`                     |
-| `serviceAccount.name`                                  | The name of the ServiceAccount to use.                                                                                                                                                                                                                | `""`                       |
-| `serviceAccount.annotations`                           | Additional Service Account annotations (evaluated as a template)                                                                                                                                                                                      | `{}`                       |
-| `serviceAccount.automountServiceAccountToken`          | Automount service account token for the server service account                                                                                                                                                                                        | `false`                    |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Default Init Container Parameters
 
@@ -584,7 +575,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `externalDatabase.dbUser.password`           | Password for `dbUser.user`. Randomly generated if empty                 | `""`             |
 | `externalDatabase.existingSecret`            | Name of existing secret containing the database secret                  | `""`             |
 | `externalDatabase.existingSecretPasswordKey` | Name of existing secret key containing the database password secret key | `""`             |
-| `externalDatabase.cluster.datacenter`        | Name for cassandra's zipkin datacenter                                  | `dc1`            |
+| `externalDatabase.cluster.datacenter`        | Name for cassandra's zipkin datacenter                                  | `datacenter1`    |
 | `externalDatabase.keyspace`                  | Name for cassandra's zipkin keyspace                                    | `bitnami_zipkin` |
 
 ### Cassandra storage sub-chart
@@ -592,7 +583,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | Name                              | Description                                                                                                                                                                                                | Value            |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `cassandra.enabled`               | Enables cassandra storage pod                                                                                                                                                                              | `true`           |
-| `cassandra.cluster.datacenter`    | Name for cassandra's zipkin datacenter                                                                                                                                                                     | `dc1`            |
+| `cassandra.cluster.datacenter`    | Name for cassandra's zipkin datacenter                                                                                                                                                                     | `datacenter1`    |
 | `cassandra.keyspace`              | Name for cassandra's zipkin keyspace                                                                                                                                                                       | `bitnami_zipkin` |
 | `cassandra.dbUser.user`           | Cassandra admin user                                                                                                                                                                                       | `bn_zipkin`      |
 | `cassandra.dbUser.password`       | Password for `dbUser.user`. Randomly generated if empty                                                                                                                                                    | `""`             |
@@ -601,6 +592,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `cassandra.resourcesPreset`       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `large`          |
 | `cassandra.resources`             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`             |
 | `cassandra.initDB`                | Init script for initializing the instance                                                                                                                                                                  | `{}`             |
+| `cassandra.extraEnvVars`          | Add extra env variables to the Cassandra installation                                                                                                                                                      | `[]`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

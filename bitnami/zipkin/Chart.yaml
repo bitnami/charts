@@ -21,7 +21,7 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: zipkin is an open-source version control system for data lakes, enabling isolated data experimentation before committing changes.
+description:  Zipkin is a distributed tracing system that helps collect and analyze timing data to troubleshoot latency issues in service architectures, providing visibility into service call performance.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/zipkin/img/zipkin-stack-220x234.png
 keywords:
