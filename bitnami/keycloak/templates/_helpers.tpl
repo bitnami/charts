@@ -177,7 +177,7 @@ Add environment variables to configure database values
 */}}
 {{- define "keycloak.databaseSecretPasswordKey" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- print "password" -}}
+    {{- printf "%s" (.Values.postgresql.auth.secretKeys.userPasswordKey | default "password") -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}

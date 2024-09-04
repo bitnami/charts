@@ -35,6 +35,9 @@ spec:
   {{- if not (empty .Values.service.ipFamilies)}}
   ipFamilies: {{- toYaml .Values.service.ipFamilies | nindent 4 }}
   {{- end }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.service.loadBalancerClass }}
+  {{- end }}
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP | quote }}
   {{- end }}
