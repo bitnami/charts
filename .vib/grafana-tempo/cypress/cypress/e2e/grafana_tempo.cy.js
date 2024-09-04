@@ -26,9 +26,8 @@ it('lists all components in a healthy state', () => {
 
   cy.visit('/memberlist');
 
-  // The lower, the better. Zero --> Healthy
-  cy.contains('Health Score: 0');
-  cy.contains(`Members: ${numMembers}`);
+  cy.contains('it is healthy');
+  cy.contains(`cluster has ${numMembers} members`);
 
   // Check a random member's gossipRing port
   var randomMember = members[Math.floor(Math.random()*members.length)];
