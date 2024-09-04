@@ -289,7 +289,7 @@ spec:
               subPath: {{ .Values.tracking.persistence.subPath }}
               {{- end }}
             {{- if and (include "mlflow.v0.gcs.enabled" .) .Values.externalGCS.useCredentialsInSecret .Values.externalGCS.existingSecret }}
-            - name: google-application-credentials
+            - name: gcs-key
               mountPath: /bitnami/gcs/key.json
               subPath: key.json
             {{- end }}
@@ -336,6 +336,6 @@ spec:
             secretName: {{ .Values.externalGCS.existingSecret }}
             items:
               - key: {{ .Values.externalGCS.existingSecretKey }}
-                path: /bitnami/gcs/key.json
+                path: key.json
         {{- end }}
 {{- end }}
