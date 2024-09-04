@@ -672,15 +672,6 @@ Return whether artifacts should be served from GCS
     {{- end -}}
 {{- end -}}
 
-{{/*
-Return the GCS bucket
-*/}}
-{{- define "mlflow.v0.gcs.bucket" -}}
-    {{- if and (not .Values.minio.enabled) (not .Values.externalS3.host) .Values.externalGCS.bucket -}}
-        {{- print .Values.externalGCS.bucket -}}
-    {{- end -}}
-{{- end -}}
-
 
 {{/*
 Return the proper git image name

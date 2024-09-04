@@ -142,7 +142,7 @@ spec:
             {{- if (include "mlflow.v0.s3.enabled" .) }}
             - --artifacts-destination=s3://{{ include "mlflow.v0.s3.bucket" . }}
             {{- else if (include "mlflow.v0.gcs.enabled" .) }}
-            - --artifacts-destination=gs://{{ include "mlflow.v0.gcs.bucket" . }}
+            - --artifacts-destination=gs://{{ .Values.externalGCS.bucket }}
             {{- else }}
             - --artifacts-destination={{ .Values.tracking.persistence.mountPath }}/mlartifacts
             {{- end }}
@@ -150,7 +150,7 @@ spec:
             - --default-artifact-root=s3://{{ include "mlflow.v0.s3.bucket" . }}
             - --no-serve-artifacts
             {{- else if and (not .Values.externalGCS.serveArtifacts) (include "mlflow.v0.gcs.enabled" .) }}
-            - --default-artifact-root=gs://{{ include "mlflow.v0.gcs.bucket" . }}
+            - --default-artifact-root=gs://{{ .Values.externalGCS.bucket }}
             - --no-serve-artifacts
             {{ else }}
             - --serve-artifacts
