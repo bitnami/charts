@@ -622,6 +622,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `postgresql.auth.password`                   | Password for the custom user to create                                                                            | `""`               |
 | `postgresql.auth.database`                   | Name for a custom database to create                                                                              | `bitnami_keycloak` |
 | `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials                                                         | `""`               |
+| `postgresql.auth.secretKeys.userPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.    | `password`         |
 | `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                                                           | `standalone`       |
 | `externalDatabase.host`                      | Database host                                                                                                     | `""`               |
 | `externalDatabase.port`                      | Database port number                                                                                              | `5432`             |

@@ -1,4 +1,3 @@
-development: true
 controlplane:
   auth:
     oidc:

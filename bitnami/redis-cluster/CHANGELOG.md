@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.2 (2024-08-09)
+## 11.0.3 (2024-08-21)
 
-* Remove template variables from values file ([#28782](https://github.com/bitnami/charts/pull/28782))
+* [bitnami/redis-cluster] Release 11.0.3 ([#28946](https://github.com/bitnami/charts/pull/28946))
+
+## <small>11.0.2 (2024-08-09)</small>
+
+* Remove template variables from values file (#28782) ([6e6fad6](https://github.com/bitnami/charts/commit/6e6fad6c5debb1a894d9d85e4fa8d56abd4e1ba0)), closes [#28782](https://github.com/bitnami/charts/issues/28782)
 
 ## <small>11.0.1 (2024-08-09)</small>
 

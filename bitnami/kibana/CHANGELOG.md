@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.18 (2024-08-16)
+## 11.2.19 (2024-08-19)
 
-* [bitnami/kibana] Release 11.2.18 ([#28898](https://github.com/bitnami/charts/pull/28898))
+* [bitnami/kibana] Increase wait for DOM content in Cypress test ([#28924](https://github.com/bitnami/charts/pull/28924))
+
+## <small>11.2.18 (2024-08-16)</small>
+
+* [bitnami/kibana] Release 11.2.18 (#28898) ([9b955d2](https://github.com/bitnami/charts/commit/9b955d22fac1a09e2848a43d2d1dfe17b7d11808)), closes [#28898](https://github.com/bitnami/charts/issues/28898)
 
 ## <small>11.2.17 (2024-08-14)</small>
 

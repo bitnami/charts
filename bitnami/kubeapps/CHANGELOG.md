@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.0.1 (2024-09-03)
+
+* [bitnami/kubeapps] Release 16.0.1 ([#29165](https://github.com/bitnami/charts/pull/29165))
+
 ## 16.0.0 (2024-08-13)
 
-* [bitnami/kubeapps] Update dependencies ([#28854](https://github.com/bitnami/charts/pull/28854))
+* [bitnami/kubeapps] Update dependencies (#28854) ([27470e1](https://github.com/bitnami/charts/commit/27470e1f8ce75bb0848f09c41c8743afe9e69dfa)), closes [#28854](https://github.com/bitnami/charts/issues/28854)
 
 ## <small>15.3.10 (2024-07-25)</small>
 

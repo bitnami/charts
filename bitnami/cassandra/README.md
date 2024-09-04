@@ -79,7 +79,7 @@ kubectl create secret generic my-exisiting-stores --from-file=./keystore --from-
 kubectl create secret generic my-stores-password --from-literal=keystore-password=KEYSTORE_PASSWORD --from-literal=truststore-password=TRUSTSTORE_PASSWORD
 ```
 
-Keystore and Truststore files can be dinamycally created from the certificates files. In this case a secret with the tls.crt, tls.key and ca.crt in pem format is required. The following example shows how the secret can be created and assumes that all certificate files are in the working directory:
+Keystore and Truststore files can be dynamically created from the certificates files. In this case a secret with the tls.crt, tls.key and ca.crt in pem format is required. The following example shows how the secret can be created and assumes that all certificate files are in the working directory:
 
 ```console
 kubectl create secret tls my-certs --cert ./tls.crt --key ./tls.key
@@ -177,6 +177,7 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 | `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`                     |
 | `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                        |
 | `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                        |
+| `initDB`                      | Object with cql scripts. Useful for creating a keyspace and pre-populating data                                        | `{}`                        |
 | `initDBConfigMap`             | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                        |
 | `initDBSecret`                | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                        |
 | `existingConfiguration`       | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                        |
