@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.0.3 (2024-08-20)
+## 20.0.4 (2024-08-29)
 
-* [bitnami/redis] Release 20.0.3 ([#28941](https://github.com/bitnami/charts/pull/28941))
+* [bitnami/redis] update values.schema.json ([#29106](https://github.com/bitnami/charts/pull/29106))
+
+## <small>20.0.3 (2024-08-20)</small>
+
+* [bitnami/redis] Release 20.0.3 (#28941) ([d2a1abb](https://github.com/bitnami/charts/commit/d2a1abbba3a6125260c2df569ef060e165be88fa)), closes [#28941](https://github.com/bitnami/charts/issues/28941)
 
 ## <small>20.0.2 (2024-08-14)</small>
 
