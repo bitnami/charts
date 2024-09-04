@@ -75,7 +75,7 @@ extraDeploy:
                   else
                     echo "Zipkin ready! Running job"
                     echo "0" > /tmp/ready
-                    curl -X POST http://zipkin:$port/api/v2/spans -H'Content-Type: application/json' -d @/sampledata/yelp.json
+                    curl -k -X POST {{ ternary "https" "http" .Values.tls.enabled }}://zipkin:$port/api/v2/spans -H'Content-Type: application/json' -d @/sampledata/yelp.json
                   fi
               startupProbe:
                 exec:

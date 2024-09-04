@@ -21,7 +21,10 @@ CASSANDRA_LOCAL_DC: {{ include "zipkin.cassandra.datacenter" . | quote }}
 {{/* TLS configuration */}}
 {{- if .Values.tls.enabled }}
 ARMERIA_SSL_KEY_STORE: "/bitnami/zipkin/certs/zipkin.jks"
-ARMERIA_SSL_KEY_STORE_TYPE: "jks"
+ARMERIA_SSL_KEY_STORE_TYPE: "JKS"
+ARMERIA_SSL_ENABLED: "true"
+ARMERIA_PORTS_0_PORT: {{ .Values.containerPorts.http | quote }}
+ARMERIA_PORTS_0_PROTOCOLS_0: "https"
 {{- end }}
 {{- end }}
 

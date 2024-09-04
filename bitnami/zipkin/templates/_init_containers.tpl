@@ -76,7 +76,7 @@ Init container definition for waiting for the database to be ready
     - -ec
     - |
       set -e
-      {{- if .context.Values.usePasswordFile }}
+      {{- if .Values.usePasswordFile }}
       # We need to load all the secret env vars to the system
       for file in $(find /bitnami/zipkin/secrets -type f); do
           env_var_name="$(basename $file)"
@@ -87,13 +87,13 @@ Init container definition for waiting for the database to be ready
       {{- if .Values.tls.usePemCerts }}
       if [[ -f "/certs/tls.key" ]] && [[ -f "/certs/tls.crt" ]]; then
           openssl pkcs12 -export -in "/certs/tls.crt" \
-              -passout pass:"${ZIPKIN_KEYSTORE_PASSWORD}" \
+              -passout pass:"${ARMERIA_SSL_KEY_STORE_PASSWORD}" \
               -inkey "/certs/tls.key" \
               -out "/tmp/keystore.p12"
           keytool -importkeystore -srckeystore "/tmp/keystore.p12" \
               -srcstoretype PKCS12 \
-              -srcstorepass "${ZIPKIN_KEYSTORE_PASSWORD}" \
-              -deststorepass "${ZIPKIN_KEYSTORE_PASSWORD}" \
+              -srcstorepass "${ARMERIA_SSL_KEY_STORE_PASSWORD}" \
+              -deststorepass "${ARMERIA_SSL_KEY_STORE_PASSWORD}" \
               -destkeystore "/opt/bitnami/zipkin/certs/zipkin.jks"
           rm "/tmp/keystore.p12"
       else
