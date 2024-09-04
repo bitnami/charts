@@ -571,8 +571,8 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | -------------------------------------------- | ----------------------------------------------------------------------- | ---------------- |
 | `externalDatabase.host`                      | External database host                                                  | `""`             |
 | `externalDatabase.port`                      | External database port                                                  | `9042`           |
-| `externalDatabase.dbUser.user`               | Cassandra admin user                                                    | `bn_zipkin`      |
-| `externalDatabase.dbUser.password`           | Password for `dbUser.user`. Randomly generated if empty                 | `""`             |
+| `externalDatabase.user`                      | Cassandra admin user                                                    | `bn_zipkin`      |
+| `externalDatabase.password`                  | Password for `dbUser.user`. Randomly generated if empty                 | `""`             |
 | `externalDatabase.existingSecret`            | Name of existing secret containing the database secret                  | `""`             |
 | `externalDatabase.existingSecretPasswordKey` | Name of existing secret key containing the database password secret key | `""`             |
 | `externalDatabase.cluster.datacenter`        | Name for cassandra's zipkin datacenter                                  | `datacenter1`    |
