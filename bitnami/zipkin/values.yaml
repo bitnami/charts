@@ -903,12 +903,11 @@ externalDatabase:
   ## @param externalDatabase.port External database port
   port: 9042
   ## Database credentials
-  ## @param externalDatabase.dbUser.user Cassandra admin user
-  ## @param externalDatabase.dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ## @param externalDatabase.user Cassandra admin user
+  ## @param externalDatabase.password Password for `dbUser.user`. Randomly generated if empty
   ##
-  dbUser:
-    user: bn_zipkin
-    password: ""
+  user: bn_zipkin
+  password: ""
   ## @param externalDatabase.existingSecret Name of existing secret containing the database secret
   ##
   existingSecret: ""
