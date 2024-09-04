@@ -4,6 +4,10 @@
 
 * [bitnami/cassandra] Making TLS existingSecrets more configurable ([#28746](https://github.com/bitnami/charts/pull/28746))
 
+## <small>11.4.2 (2024-09-04)</small>
+
+* [bitnami/cassandra] test: :white_check_mark: Increase ginkgo test timeout ([a6ee96a](https://github.com/bitnami/charts/commit/a6ee96a47c38957ce7150282aa3b02f0fbc7b0d6))
+
 ## <small>11.4.1 (2024-09-03)</small>
 
 * [bitnami/cassandra] feat: :sparkles: Allow setting initdb scripts in values (#29172) ([0aaac20](https://github.com/bitnami/charts/commit/0aaac209548b8c38af586322dbda2e86e8830600)), closes [#29172](https://github.com/bitnami/charts/issues/29172)
