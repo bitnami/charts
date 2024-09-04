@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.9 (2024-08-19)
+## 1.0.10 (2024-09-04)
 
-* [bitnami/seaweedfs] Release 1.0.9 ([#28920](https://github.com/bitnami/charts/pull/28920))
+* bitnami/seaweedfs external mariadb not supported ([#29198](https://github.com/bitnami/charts/pull/29198))
+
+## <small>1.0.9 (2024-08-19)</small>
+
+* [bitnami/seaweedfs] Release 1.0.9 (#28920) ([28916ca](https://github.com/bitnami/charts/commit/28916ca487e16f1626580f21c2ae8acb443a2e39)), closes [#28920](https://github.com/bitnami/charts/issues/28920)
 
 ## <small>1.0.8 (2024-08-07)</small>
 
