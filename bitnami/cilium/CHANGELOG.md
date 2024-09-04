@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.20 (2024-08-29)
+## 1.1.0 (2024-09-04)
 
-* [bitnami/cilium] test: :white_check_mark: Add a wait before goss test ([#29108](https://github.com/bitnami/charts/pull/29108))
+* [bitnami/cilium] Add init-container on Relay to wait for Hubble Peers ([#29191](https://github.com/bitnami/charts/pull/29191))
+
+## <small>1.0.20 (2024-08-29)</small>
+
+* [bitnami/cilium] test: :white_check_mark: Add a wait before goss test (#29108) ([55ce9dd](https://github.com/bitnami/charts/commit/55ce9dd19e222248ff8d5439e501399620b180a9)), closes [#29108](https://github.com/bitnami/charts/issues/29108)
 
 ## <small>1.0.19 (2024-08-29)</small>
 
