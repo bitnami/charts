@@ -28,8 +28,6 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: zipkin
     app.kubernetes.io/component: zipkin
-    {{- /* We need an extra label that applies to both master and non-master coordinators. Taken from upstream zipkin chart */}}
-    app: zipkin
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -49,8 +47,6 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: zipkin
     app.kubernetes.io/part-of: zipkin
-    {{- /* We need an extra label that applies to both master and non-master coordinators. Taken from upstream zipkin chart */}}
-    app: zipkin
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}

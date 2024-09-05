@@ -674,18 +674,18 @@ serviceAccount:
 defaultInitContainers:
   ## Init container that waits for backends to be ready
   ##
-  wait:
-    ## @param defaultInitContainers.wait.enabled Enable init container that waits for backends to be ready
+  waitForCassandra:
+    ## @param defaultInitContainers.waitForCassandra.enabled Enable init container that waits for backends to be ready
     ##
     enabled: true
     ## Cassandra image
     ## ref: https://hub.docker.com/r/bitnami/cassandra/tags/
-    ## @param defaultInitContainers.wait.image.registry [default: REGISTRY_NAME] Cassandra image registry
-    ## @param defaultInitContainers.wait.image.repository [default: REPOSITORY_NAME/cassandra] Cassandra image repository
-    ## @skip defaultInitContainers.wait.image.tag Cassandra image tag (immutable tags are recommended)
-    ## @param defaultInitContainers.wait.image.pullPolicy Cassandra image pull policy
-    ## @param defaultInitContainers.wait.image.pullSecrets Cassandra image pull secrets
-    ## @param defaultInitContainers.wait.image.debug Enable debug output
+    ## @param defaultInitContainers.waitForCassandra.image.registry [default: REGISTRY_NAME] Cassandra image registry
+    ## @param defaultInitContainers.waitForCassandra.image.repository [default: REPOSITORY_NAME/cassandra] Cassandra image repository
+    ## @skip defaultInitContainers.waitForCassandra.image.tag Cassandra image tag (immutable tags are recommended)
+    ## @param defaultInitContainers.waitForCassandra.image.pullPolicy Cassandra image pull policy
+    ## @param defaultInitContainers.waitForCassandra.image.pullSecrets Cassandra image pull secrets
+    ## @param defaultInitContainers.waitForCassandra.image.debug Enable debug output
     ##
     image:
       registry: docker.io
@@ -696,11 +696,11 @@ defaultInitContainers:
       debug: false
     ## Init container's resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param defaultInitContainers.wait.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## @param defaultInitContainers.waitForCassandra.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
-    ## @param defaultInitContainers.wait.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param defaultInitContainers.waitForCassandra.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
     ##   requests:
@@ -713,16 +713,16 @@ defaultInitContainers:
     resources: {}
     ## Init container Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param defaultInitContainers.wait.containerSecurityContext.enabled Enabled Init container' Security Context
-    ## @param defaultInitContainers.wait.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
-    ## @param defaultInitContainers.wait.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
-    ## @param defaultInitContainers.wait.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
-    ## @param defaultInitContainers.wait.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
-    ## @param defaultInitContainers.wait.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
-    ## @param defaultInitContainers.wait.containerSecurityContext.privileged Set privileged in Init container' Security Context
-    ## @param defaultInitContainers.wait.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
-    ## @param defaultInitContainers.wait.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
-    ## @param defaultInitContainers.wait.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.enabled Enabled Init container' Security Context
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.privileged Set privileged in Init container' Security Context
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
+    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
     ##
     containerSecurityContext:
       enabled: true

@@ -80,7 +80,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if and .Values.defaultInitContainers.wait.enabled (eq .Values.storageType "cassandra3") }}
+        {{- if and .Values.defaultInitContainers.waitForCassandra.enabled (eq .Values.storageType "cassandra3") }}
         {{- include "zipkin.init-containers.wait-for-cassandra" . | nindent 8 }}
         {{- end }}
         {{- if and .Values.tls.enabled .Values.defaultInitContainers.initCerts.enabled }}

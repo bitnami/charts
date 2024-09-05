@@ -14,14 +14,14 @@ Return the proper zipkin image name
 Return the proper image name (for the wait init container)
 */}}
 {{- define "zipkin.init-containers.wait.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.defaultInitContainers.wait.image "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.defaultInitContainers.waitForCassandra.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "zipkin.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.defaultInitContainers.wait.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.defaultInitContainers.waitForCassandra.image) "context" $) -}}
 {{- end -}}
 
 {{/*

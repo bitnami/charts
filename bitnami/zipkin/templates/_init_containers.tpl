@@ -1,24 +1,28 @@
 {{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Init container definition for waiting for the database to be ready
 */}}
 {{- define "zipkin.init-containers.wait-for-cassandra" -}}
 - name: wait-for-cassandra
   image: {{ include "zipkin.init-containers.wait.image" . }}
-  imagePullPolicy: {{ .Values.defaultInitContainers.wait.image.pullPolicy }}
-  {{- if .Values.defaultInitContainers.wait.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.wait.containerSecurityContext "context" $) | nindent 4 }}
+  imagePullPolicy: {{ .Values.defaultInitContainers.waitForCassandra.image.pullPolicy }}
+  {{- if .Values.defaultInitContainers.waitForCassandra.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.waitForCassandra.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.defaultInitContainers.wait.resources }}
-  resources: {{- toYaml .Values.defaultInitContainers.wait.resources | nindent 4 }}
-  {{- else if ne .Values.defaultInitContainers.wait.resourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.wait.resourcesPreset) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForCassandra.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.waitForCassandra.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.waitForCassandra.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForCassandra.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
   args:
     - -ec
     - |
-      #!/bin/bash
 
       set -o errexit
       set -o nounset
@@ -32,16 +36,16 @@ Init container definition for waiting for the database to be ready
 
       info "Connecting to the Cassandra instance $CQLSH_HOST:$CQLSH_PORT"
       if ! retry_while "check_cassandra_keyspace_schema" 12 30; then
-        error "Could not connect to the database server"
-        exit 1
+          error "Could not connect to the database server"
+          exit 1
       else
-        info "Connection check success"
+          info "Connection check success"
       fi
   env:
     - name: CQLSH_HOST
       value: {{ include "zipkin.cassandra.host" . }}
     - name: BITNAMI_DEBUG
-      value: {{ ternary "true" "false" .Values.defaultInitContainers.wait.image.debug | quote }}
+      value: {{ ternary "true" "false" .Values.defaultInitContainers.waitForCassandra.image.debug | quote }}
     - name: CQLSH_PORT
       value: {{ include "zipkin.cassandra.port" . | quote }}
     - name: CASSANDRA_USERNAME
