@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.3.11 (2024-09-04)
+## 21.3.12 (2024-09-05)
 
-* [bitnami/elasticsearch:21.3.10] Unable to copy tls certificates when sysctlImage is disabled  ([#29189](https://github.com/bitnami/charts/pull/29189))
+* [bitnami/elasticsearch] Release 21.3.12 ([#29232](https://github.com/bitnami/charts/pull/29232))
+
+## <small>21.3.11 (2024-09-04)</small>
+
+* [bitnami/elasticsearch:21.3.10] Unable to copy tls certificates when sysctlImage is disabled  (#2918 ([f3e72bb](https://github.com/bitnami/charts/commit/f3e72bbe4fd61a2c1507e3a1645dc2445943d5b8)), closes [#29189](https://github.com/bitnami/charts/issues/29189)
 
 ## <small>21.3.10 (2024-08-29)</small>
 
