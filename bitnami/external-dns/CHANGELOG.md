@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.5 (2024-08-13)
+## 8.3.6 (2024-09-05)
 
-* [bitnami/external-dns]  Fix crd.create=true ([#27434](https://github.com/bitnami/charts/pull/27434))
+* [bitnami/external-dns] Release 8.3.6 ([#29211](https://github.com/bitnami/charts/pull/29211))
+
+## <small>8.3.5 (2024-08-13)</small>
+
+* [bitnami/external-dns]  Fix crd.create=true (#27434) ([fc11b48](https://github.com/bitnami/charts/commit/fc11b486d642d36be11822e902912e29c95e71dc)), closes [#27434](https://github.com/bitnami/charts/issues/27434) [#25967](https://github.com/bitnami/charts/issues/25967)
 
 ## <small>8.3.4 (2024-08-07)</small>
 
