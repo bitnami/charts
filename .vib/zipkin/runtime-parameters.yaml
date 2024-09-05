@@ -35,8 +35,6 @@ extraDeploy:
               args:
                 - -ec
                 - |
-                  #!/bin/bash
-
                   set -o errexit
                   set -o nounset
                   set -o pipefail
@@ -46,17 +44,17 @@ extraDeploy:
                   port={{ .Values.service.ports.http }}
 
                   retry_while() {
-                    local -r cmd="${1:?cmd is missing}"
-                    local -r retries="${2:-12}"
-                    local -r sleep_time="${3:-5}"
-                    local return_value=1
+                      local -r cmd="${1:?cmd is missing}"
+                      local -r retries="${2:-12}"
+                      local -r sleep_time="${3:-5}"
+                      local return_value=1
 
-                    read -r -a command <<< "$cmd"
-                    for ((i = 1 ; i <= retries ; i+=1 )); do
-                        "${command[@]}" && return_value=0 && break
-                        sleep "$sleep_time"
-                    done
-                    return $return_value
+                      read -r -a command <<< "$cmd"
+                      for ((i = 1 ; i <= retries ; i+=1 )); do
+                          "${command[@]}" && return_value=0 && break
+                          sleep "$sleep_time"
+                      done
+                      return $return_value
                   }
 
                   zipkin_ready() {
@@ -70,12 +68,12 @@ extraDeploy:
 
                   echo "Waiting for the Zipkin instance"
                   if ! retry_while "zipkin_ready" 300 2; then
-                    echo "Could not connect to the Zipkin instance"
-                    exit 1
+                      echo "Could not connect to the Zipkin instance"
+                      exit 1
                   else
-                    echo "Zipkin ready! Running job"
-                    echo "0" > /tmp/ready
-                    curl -k -X POST {{ ternary "https" "http" .Values.tls.enabled }}://zipkin:$port/api/v2/spans -H'Content-Type: application/json' -d @/sampledata/yelp.json
+                      echo "Zipkin ready! Running job"
+                      echo "0" > /tmp/ready
+                      curl -k -X POST {{ ternary "https" "http" .Values.tls.enabled }}://zipkin:$port/api/v2/spans -H'Content-Type: application/json' -d @/sampledata/yelp.json
                   fi
               startupProbe:
                 exec:

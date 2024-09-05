@@ -32,12 +32,7 @@ command:
     exit-status: 0
     stdout:
       - /AUTOCOMPLETE_TTL.*{{ .Vars.configOverrides.AUTOCOMPLETE_TTL }}/
-      {{- if not .Vars.usePasswordFile }}
-      # The secret configuration should be set via env
-      - /QUERY_NAMES_MAX_AGE.*{{ .Vars.secretConfigOverrides.QUERY_NAMES_MAX_AGE }}/
-      {{- end }}
 
-{{- if .Vars.usePasswordFile }}
 # The secret configuration should be mounted as a file
 file:
   /bitnami/zipkin/secrets/configuration/QUERY_NAMES_MAX_AGE:
@@ -45,4 +40,3 @@ file:
     filetype: symlink
     contents:
       - /{{ .Vars.secretConfigOverrides.QUERY_NAMES_MAX_AGE }}/
-{{- end }}
