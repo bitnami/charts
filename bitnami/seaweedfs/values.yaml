@@ -3356,10 +3356,10 @@ mariadb:
     ##
     resources: {}
 ## External Database Configuration
-## All of these values are only used if `mariadb.enabled=false`
+## All of these values are only used if `mariadb.enabled=false` and `externalDatabase.enabled=true` or a value for `externalDatabase.existingSecret` is provided.
 ##
 externalDatabase:
-  ## @param externalDatabase.enabled Enable secret with external mariadb database credentials
+  ## @param externalDatabase.enabled Enable external database database support
   ##
   enabled: false
   ## @param externalDatabase.host External Database server host

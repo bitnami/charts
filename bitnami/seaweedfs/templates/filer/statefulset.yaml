@@ -85,7 +85,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.filer.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if .Values.mariadb.enabled }}
+        {{- if or .Values.mariadb.enabled .Values.externalDatabase.enabled .Values.externalDatabase.existingSecret }}
         {{- include "seaweedfs.filer.waitForDBInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if .Values.filer.initContainers }}
@@ -137,7 +137,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: WEED_CLUSTER_DEFAULT
               value: {{ .Values.clusterDefault | quote }}
-            {{- if .Values.mariadb.enabled }}
+            {{- if or .Values.mariadb.enabled .Values.externalDatabase.enabled .Values.externalDatabase.existingSecret }}
             - name: WEED_MYSQL_ENABLED
               value: "true"
             - name: WEED_MYSQL_HOSTNAME
