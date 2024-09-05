@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.2.0 (2024-09-05)
+
+* [bitnami/cilium] Add init-container on UI to wait for Hubble Relay ([#29207](https://github.com/bitnami/charts/pull/29207))
+
 ## 1.1.0 (2024-09-04)
 
-* [bitnami/cilium] Add init-container on Relay to wait for Hubble Peers ([#29191](https://github.com/bitnami/charts/pull/29191))
+* [bitnami/cilium] Add init-container on Relay to wait for Hubble Peers (#29191) ([02cdc02](https://github.com/bitnami/charts/commit/02cdc02d2b6e121ecd4caf558aa1bb17791cd90e)), closes [#29191](https://github.com/bitnami/charts/issues/29191)
 
 ## <small>1.0.20 (2024-08-29)</small>
 
