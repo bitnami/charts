@@ -288,7 +288,7 @@ spec:
               {{- if .Values.tracking.persistence.subPath }}
               subPath: {{ .Values.tracking.persistence.subPath }}
               {{- end }}
-            {{- if and (include "mlflow.v0.gcs.enabled" .) .Values.externalGCS.useCredentialsInSecret .Values.externalGCS.existingSecret }}
+            {{- if and (include "mlflow.v0.gcs.enabled" .) .Values.externalGCS.useCredentialsInSecret }}
             - name: gcs-key
               mountPath: /bitnami/gcs/key.json
               subPath: key.json
@@ -330,7 +330,7 @@ spec:
         {{- if .Values.tracking.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- if and (include "mlflow.v0.gcs.enabled" .) .Values.externalGCS.useCredentialsInSecret .Values.externalGCS.existingSecret }}
+        {{- if and (include "mlflow.v0.gcs.enabled" .) .Values.externalGCS.useCredentialsInSecret }}
         - name: gcs-key
           secret:
             secretName: {{ .Values.externalGCS.existingSecret }}

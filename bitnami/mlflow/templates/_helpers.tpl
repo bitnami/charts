@@ -663,15 +663,6 @@ Return whether GCS is enabled
     {{- end -}}
 {{- end -}}
 
-{{/*
-Return whether artifacts should be served from GCS
-*/}}
-{{- define "mlflow.v0.gcs.serveArtifacts" -}}
-    {{- if .Values.externalGCS.serveArtifacts  -}}
-        {{- true }}
-    {{- end -}}
-{{- end -}}
-
 
 {{/*
 Return the proper git image name

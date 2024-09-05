@@ -1428,8 +1428,8 @@ externalS3:
 ## @param externalGCS.bucket GCS bucket name. Activate gcs artifact storage if set
 ## @param externalGCS.googleCloudProject Google Cloud Project to use (optional, needed when using "default application credentials")
 ## @param externalGCS.useCredentialsInSecret Whether to read the GCS application credentials from a secret
-## @param externalGCS.existingSecret Name of an existing secret key containing the application credentials file (used only if useCredentialsInSecret is true)
-## @param externalGCS.existingSecretKey Key in the existing secret containing the application credentials (must be set if existingSecret is set)
+## @param externalGCS.existingSecret Name of an existing secret key containing the application credentials file (required when useCredentialsInSecret is true)
+## @param externalGCS.existingSecretKey Key in the existing secret containing the application credentials (required when useCredentialsInSecret is true)
 ## @param externalGCS.serveArtifacts Whether artifact serving is enabled
 ##
 externalGCS:
