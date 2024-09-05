@@ -2,7 +2,7 @@
 
 ## 1.0.10 (2024-09-05)
 
-* [bitnami/seaweedfs] external mariadb not supported ([#29198](https://github.com/bitnami/charts/pull/29198))
+* bitnami/seaweedfs external postgres database support ([#29216](https://github.com/bitnami/charts/pull/29216))
 
 ## <small>1.0.9 (2024-08-19)</small>
 
