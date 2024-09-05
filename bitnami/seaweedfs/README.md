@@ -65,6 +65,7 @@ You may want to have SeaweedFS Filer Server connect to an external database rath
 
 ```console
 mariadb.enabled=false
+externalDatabase.dbms=mariadb
 externalDatabase.enabled=true
 externalDatabase.host=myexternalhost
 externalDatabase.user=myuser
@@ -1045,6 +1046,7 @@ enabled = false
 | `mariadb.primary.resourcesPreset`          | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`             |
 | `mariadb.primary.resources`                | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                |
 | `externalDatabase.enabled`                 | Enable external database database support                                                                                                                                                                                  | `false`             |
+| `externalDatabase.dbms`                    | Specifies the type of database (mariadb, postgres)                                                                                                                                                                         | `mariadb`           |
 | `externalDatabase.host`                    | External Database server host                                                                                                                                                                                              | `localhost`         |
 | `externalDatabase.port`                    | External Database server port                                                                                                                                                                                              | `3306`              |
 | `externalDatabase.user`                    | External Database username                                                                                                                                                                                                 | `bn_seaweedfs`      |

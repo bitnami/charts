@@ -3362,6 +3362,9 @@ externalDatabase:
   ## @param externalDatabase.enabled Enable external database database support
   ##
   enabled: false
+  ## @param externalDatabase.dbms Database management system product (mariadb, postgresql)
+  ##
+  dbms: mariadb
   ## @param externalDatabase.host External Database server host
   ##
   host: localhost
@@ -3378,7 +3381,7 @@ externalDatabase:
   ##
   database: bitnami_seaweedfs
   ## @param externalDatabase.existingSecret The name of an existing secret with database credentials. Evaluated as a template
-  ## NOTE: Must contain key `mariadb-password`
+  ## NOTE: Must contain key `mariadb-password` (for mariadb) or `postgresql-password` (for postgresql)
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
