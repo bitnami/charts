@@ -56,7 +56,7 @@ Init container definition for waiting for the database to be ready
 {{- end -}}
 
 {{/*
-Init container definition for waiting for the database to be ready
+Init container definition for initializing the TLS certificates
 */}}
 {{- define "zipkin.init-containers.init-certs" -}}
 - name: init-certs
