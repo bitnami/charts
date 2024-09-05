@@ -83,7 +83,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.hubble.relay.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- include "cilium.hubble.relay.waitForHubble" . | nindent 8}}
+        {{- include "cilium.hubble.relay.waitForHubble" . | nindent 8 }}
         {{- if .Values.hubble.relay.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.hubble.relay.initContainers "context" $) | nindent 8 }}
         {{- end }}
