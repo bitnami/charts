@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.23 (2024-08-27)
+## 15.7.24 (2024-09-05)
 
-* [bitnami/thanos] Release 15.7.23 ([#29068](https://github.com/bitnami/charts/pull/29068))
+* [bitnami/thanos] Added apiVersion and kind to volumeClaimTemplates ([#29200](https://github.com/bitnami/charts/pull/29200))
+
+## <small>15.7.23 (2024-08-27)</small>
+
+* [bitnami/thanos] Release 15.7.23 (#29068) ([9ed3b18](https://github.com/bitnami/charts/commit/9ed3b1881f42b9058c89555ec6b52f521a52045b)), closes [#29068](https://github.com/bitnami/charts/issues/29068)
 
 ## <small>15.7.22 (2024-08-27)</small>
 

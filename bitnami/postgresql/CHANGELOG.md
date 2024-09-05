@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.5.28 (2024-09-05)
+## 15.5.29 (2024-09-05)
 
 * [bitnami/postgresql] collect metrics as postgres user ([#29201](https://github.com/bitnami/charts/pull/29201))
 
