@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.11 (2024-08-29)
+## 0.1.12 (2024-09-05)
 
-* [bitnami/dremio] Release 0.1.11 ([#29112](https://github.com/bitnami/charts/pull/29112))
+* [bitnami/dremio] Release 0.1.12 ([#29212](https://github.com/bitnami/charts/pull/29212))
+
+## <small>0.1.11 (2024-08-29)</small>
+
+* [bitnami/dremio] Release 0.1.11 (#29112) ([1473bc8](https://github.com/bitnami/charts/commit/1473bc826abe517fb51d0c18513d3c23dab65422)), closes [#29112](https://github.com/bitnami/charts/issues/29112)
 
 ## <small>0.1.10 (2024-08-29)</small>
 
