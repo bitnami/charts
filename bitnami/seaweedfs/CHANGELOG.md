@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.0.10 (2024-09-04)
+## 1.0.10 (2024-09-05)
 
-* bitnami/seaweedfs external mariadb not supported ([#29198](https://github.com/bitnami/charts/pull/29198))
+* [bitnami/seaweedfs] external mariadb not supported ([#29198](https://github.com/bitnami/charts/pull/29198))
 
 ## <small>1.0.9 (2024-08-19)</small>
 
