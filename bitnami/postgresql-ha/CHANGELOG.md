@@ -1,11 +1,12 @@
 # Changelog
 
-## 14.2.24 (2024-08-30)
+## 14.2.24 (2024-09-05)
 
 * [bitnami/postgresql-ha] bugfix: conditions to set POSTGRES_POSTGRES_PASSWORD ([#29120](https://github.com/bitnami/charts/pull/29120))
-## 14.2.23 (2024-09-04)
 
-* [bitnami/postgresql-ha] Release 14.2.23 ([#29205](https://github.com/bitnami/charts/pull/29205))
+## <small>14.2.23 (2024-09-05)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.23 (#29205) ([38e9b07](https://github.com/bitnami/charts/commit/38e9b078be86d275e59be966e2a0d0bd530866de)), closes [#29205](https://github.com/bitnami/charts/issues/29205)
 
 ## <small>14.2.22 (2024-09-04)</small>
 
@@ -21,7 +22,7 @@
 
 ## <small>14.2.19 (2024-08-30)</small>
 
-* [bitnami/postgresql-ha] Release 14.2.19 (#29123) ([2f2875a](https://github.com/bitnami/charts/commit/2f2875a13ca7fdf326da080d5c733bd2c0b25f67)), closes [#29123](https://github.com/bitnami/charts/issues/29
+* [bitnami/postgresql-ha] Release 14.2.19 (#29123) ([2f2875a](https://github.com/bitnami/charts/commit/2f2875a13ca7fdf326da080d5c733bd2c0b25f67)), closes [#29123](https://github.com/bitnami/charts/issues/29123)
 
 ## <small>14.2.18 (2024-08-24)</small>
 
