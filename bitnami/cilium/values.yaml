@@ -2394,6 +2394,56 @@ hubble:
     ##    command: ['sh', '-c', 'echo "hello world"']
     ##
     initContainers: []
+    ## Default init Containers
+    ##
+    defaultInitContainers:
+      ## Hubble Relay "wait-for-hubble-peers" init container
+      ## Used to waits for kube-proxy to be ready
+      ##
+      waitForHubble:
+        ## Configure "wait-for-hubble-peers" init-container Security Context
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.enabled Enabled Hubble Relay init-containers' Security Context
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Hubble Relay init-containers
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.runAsUser Set runAsUser in Hubble Relay init-containers' Security Context
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.runAsGroup Set runAsUser in Hubble Relay init-containers' Security Context
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Hubble Relay init-containers' Security Context
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Hubble Relay init-containers' Security Context
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.privileged Set privileged in Hubble Relay init-containers' Security Context
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Hubble Relay init-containers' Security Context
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Hubble Relay init-containers
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.containerSecurityContext.seccompProfile.type Set seccomp profile in Hubble Relay init-containers
+        ##
+        containerSecurityContext:
+          enabled: true
+          seLinuxOptions: {}
+          runAsUser: 1001
+          runAsGroup: 1001
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          privileged: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: "RuntimeDefault"
+        ## Hubble Relay "wait-for-hubble-peers" init container resource requests and limits
+        ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.resourcesPreset Set Hubble Relay "wait-for-hubble-peers" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if hubble.relay.resources is set (hubble.relay.defaultInitContainers.waitForHubble.resources is recommended for production).
+        ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+        ##
+        resourcesPreset: "nano"
+        ## @param hubble.relay.defaultInitContainers.waitForHubble.resources Set Hubble Relay "wait-for-hubble-peers" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+        ## Example:
+        ## resources:
+        ##   requests:
+        ##     cpu: 2
+        ##     memory: 512Mi
+        ##   limits:
+        ##     cpu: 3
+        ##     memory: 1024Mi
+        ##
+        resources: {}
     ## Pod Disruption Budget configuration
     ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
     ## @param hubble.relay.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -3097,6 +3147,56 @@ hubble:
     ##    command: ['sh', '-c', 'echo "hello world"']
     ##
     initContainers: []
+    ## Default init Containers
+    ##
+    defaultInitContainers:
+      ## Hubble UI "wait-for-hubble-relay" init container
+      ## Used to waits for kube-proxy to be ready
+      ##
+      waitForHubbleRelay:
+        ## Configure "wait-for-hubble-relay" init-container Security Context
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.enabled Enabled Hubble UI init-containers' Security Context
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Hubble UI init-containers
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.runAsUser Set runAsUser in Hubble UI init-containers' Security Context
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.runAsGroup Set runAsUser in Hubble UI init-containers' Security Context
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Hubble UI init-containers' Security Context
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Hubble UI init-containers' Security Context
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.privileged Set privileged in Hubble UI init-containers' Security Context
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Hubble UI init-containers' Security Context
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Hubble UI init-containers
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.containerSecurityContext.seccompProfile.type Set seccomp profile in Hubble UI init-containers
+        ##
+        containerSecurityContext:
+          enabled: true
+          seLinuxOptions: {}
+          runAsUser: 1001
+          runAsGroup: 1001
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          privileged: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: "RuntimeDefault"
+        ## Hubble UI "wait-for-hubble-relay" init container resource requests and limits
+        ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.resourcesPreset Set Hubble UI "wait-for-hubble-relay" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if hubble.ui.resources is set (hubble.ui.defaultInitContainers.waitForHubbleRelay.resources is recommended for production).
+        ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+        ##
+        resourcesPreset: "nano"
+        ## @param hubble.ui.defaultInitContainers.waitForHubbleRelay.resources Set Hubble UI "wait-for-hubble-relay" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+        ## Example:
+        ## resources:
+        ##   requests:
+        ##     cpu: 2
+        ##     memory: 512Mi
+        ##   limits:
+        ##     cpu: 3
+        ##     memory: 1024Mi
+        ##
+        resources: {}
     ## Pod Disruption Budget configuration
     ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
     ## @param hubble.ui.pdb.create Enable/disable a Pod Disruption Budget creation

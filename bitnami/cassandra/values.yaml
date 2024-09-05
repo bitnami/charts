@@ -130,6 +130,9 @@ dbUser:
   ##     cassandra-password: myCassandraPasswordKey
   ##
   existingSecret: ""
+## @param initDB Object with cql scripts. Useful for creating a keyspace and pre-populating data
+##
+initDB: {}
 ## @param initDBConfigMap ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data
 ##
 initDBConfigMap: ""

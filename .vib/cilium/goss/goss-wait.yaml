@@ -1,10 +1,6 @@
-# Copyright Broadcom, Inc. All Rights Reserved.
-# SPDX-License-Identifier: APACHE-2.0
-
-addr:
-  tcp://cilium-agent-metrics:{{ .Vars.agent.metrics.service.port }}:
-    reachable: true
-    timeout: 60000
-  tcp://cilium-hubble-peers-metrics:{{ .Vars.hubble.peers.metrics.service.port }}:
-    reachable: true
-    timeout: 60000
+command:
+  # Cilium requires to be stable before checking endpoints
+  wait-to-be-available:
+    exec: "sleep 300"
+    exit-status: 0
+    timeout: 310000
