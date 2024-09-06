@@ -85,7 +85,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.filer.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if or .Values.mariadb.enabled (and (eq .Values.externalDatabase.dbms "mariadb") (or .Values.externalDatabase.enabled .Values.externalDatabase.existingSecret) ) }}
+        {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.dbms "mariadb")) }}
         {{- include "seaweedfs.filer.waitForDBInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if .Values.filer.initContainers }}
