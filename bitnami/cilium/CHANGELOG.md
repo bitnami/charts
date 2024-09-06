@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.0.20 (2024-08-29)
+## 1.2.2 (2024-09-06)
 
-* [bitnami/cilium] test: :white_check_mark: Add a wait before goss test ([#29108](https://github.com/bitnami/charts/pull/29108))
+* [bitnami/cilium] Rollout restart Cilium sub-components for better VIB reliability ([#29268](https://github.com/bitnami/charts/pull/29268))
+
+## <small>1.2.1 (2024-09-05)</small>
+
+* [bitnami/cilium] Release 1.2.1 (#29229) ([3f63741](https://github.com/bitnami/charts/commit/3f637418fd624a1fe2810964a4c1449ab74b9498)), closes [#29229](https://github.com/bitnami/charts/issues/29229)
+
+## 1.2.0 (2024-09-05)
+
+* [bitnami/cilium] Add init-container on UI to wait for Hubble Relay (#29207) ([e007f69](https://github.com/bitnami/charts/commit/e007f6948df6da0ab231c6d750643062643adc8e)), closes [#29207](https://github.com/bitnami/charts/issues/29207)
+
+## 1.1.0 (2024-09-04)
+
+* [bitnami/cilium] Add init-container on Relay to wait for Hubble Peers (#29191) ([02cdc02](https://github.com/bitnami/charts/commit/02cdc02d2b6e121ecd4caf558aa1bb17791cd90e)), closes [#29191](https://github.com/bitnami/charts/issues/29191)
+
+## <small>1.0.20 (2024-08-29)</small>
+
+* [bitnami/cilium] test: :white_check_mark: Add a wait before goss test (#29108) ([55ce9dd](https://github.com/bitnami/charts/commit/55ce9dd19e222248ff8d5439e501399620b180a9)), closes [#29108](https://github.com/bitnami/charts/issues/29108)
 
 ## <small>1.0.19 (2024-08-29)</small>
 
