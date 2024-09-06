@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.10 (2024-09-06)
+## 1.1.0 (2024-09-06)
 
 * bitnami/seaweedfs external postgres database support ([#29216](https://github.com/bitnami/charts/pull/29216))
 
