@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.7.9 (2024-09-05)
+## 3.7.9 (2024-09-06)
 
 * [bitnami/grafana-tempo] Release 3.7.9 ([#29238](https://github.com/bitnami/charts/pull/29238))
 
