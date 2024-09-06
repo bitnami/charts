@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.15 (2024-08-30)
+## 2.2.16 (2024-09-06)
 
-* [bitnami/deepspeed] Release 2.2.15 ([#29134](https://github.com/bitnami/charts/pull/29134))
+* [bitnami/deepspeed] Release 2.2.16 ([#29273](https://github.com/bitnami/charts/pull/29273))
+
+## <small>2.2.15 (2024-08-30)</small>
+
+* [bitnami/deepspeed] Release 2.2.15 (#29134) ([a585b56](https://github.com/bitnami/charts/commit/a585b56f047a9b2582d6b88d5834eeb70bef2857)), closes [#29134](https://github.com/bitnami/charts/issues/29134)
 
 ## <small>2.2.14 (2024-07-30)</small>
 
