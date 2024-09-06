@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.10 (2024-08-08)
+## 1.2.11 (2024-09-06)
 
-* [bitnami/opensearch] Release 1.2.10 ([#28777](https://github.com/bitnami/charts/pull/28777))
+* [bitnami/opensearch] Release 1.2.11 ([#29281](https://github.com/bitnami/charts/pull/29281))
+
+## <small>1.2.10 (2024-08-08)</small>
+
+* [bitnami/opensearch] Release 1.2.10 (#28777) ([fd8c5f4](https://github.com/bitnami/charts/commit/fd8c5f42aea6194f35e54da23a57ccc4787c760c)), closes [#28777](https://github.com/bitnami/charts/issues/28777)
 
 ## <small>1.2.9 (2024-07-25)</small>
 
