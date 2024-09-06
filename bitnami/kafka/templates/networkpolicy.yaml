@@ -62,15 +62,15 @@ spec:
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-            {{- if .Values.networkPolicy.addExternalClientAccess }}
-            - podSelector:
-                matchLabels:
-                  {{ template "common.names.fullname" . }}-client: "true"
-            {{- end }}
-            {{- if .Values.networkPolicy.ingressPodMatchLabels }}
-            - podSelector:
-                matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
-            {{- end }}
+        {{- if .Values.networkPolicy.addExternalClientAccess }}
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels: {{- include "common.tplvalues.render" (dict "value" $ingressNSMatchLabels "context" $ ) | nindent 14 }}
