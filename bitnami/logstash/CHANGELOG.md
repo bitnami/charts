@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.2 (2024-08-08)
+## 6.3.3 (2024-09-06)
 
-* [bitnami/logstash] Release 6.3.2 ([#28794](https://github.com/bitnami/charts/pull/28794))
+* [bitnami/logstash] Release 6.3.3 ([#29250](https://github.com/bitnami/charts/pull/29250))
+
+## <small>6.3.2 (2024-08-08)</small>
+
+* [bitnami/logstash] Release 6.3.2 (#28794) ([e90c7bd](https://github.com/bitnami/charts/commit/e90c7bd65bf6db4e6a17ae305ba9b8000954316d)), closes [#28794](https://github.com/bitnami/charts/issues/28794)
 
 ## <small>6.3.1 (2024-08-05)</small>
 
