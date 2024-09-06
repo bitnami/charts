@@ -52,4 +52,67 @@ hubble:
       ports:
         http: 80
       type: LoadBalancer
+extraDeploy:
+- |
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: deployment-restart
+    namespace: "{{ include "common.names.namespace" . }}"
+  rules:
+    - apiGroups: ["apps"]
+      resources: ["deployments"]
+      verbs: ["get", "update", "patch"]
+    - apiGroups: ["apps"]
+      resources: ["daemonsets"]
+      verbs: ["get", "list", "watch"]
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["get", "list"]
+  ---
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: deployment-restart
+    namespace: {{ include "common.names.namespace" . }}
+  subjects:
+  - kind: ServiceAccount
+    name: deployment-restarter
+    namespace: {{ include "common.names.namespace" . }}
+  roleRef:
+    kind: Role
+    name: deployment-restart
+  ---
+  apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: deployment-restarter
+    namespace: {{ include "common.names.namespace" . }}
+  ---
+  apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: deployment-restarter
+    namespace: {{ include "common.names.namespace" . }}
+  spec:
+    template:
+      spec:
+        automountServiceAccountToken: true
+        serviceAccountName: deployment-restarter
+        restartPolicy: OnFailure
+        containers:
+          - name: kubectl
+            image: docker.io/bitnami/kubectl:latest
+            command:
+              - /bin/bash
+            args:
+              - -ec
+              - |
+                set -o errexit
+                set -o nounset
+                set -o pipefail
 
+                kubectl rollout status --namespace {{ include "common.names.namespace" . }} daemonset {{ include "cilium.agent.fullname" . }}
+                echo "Cilium agents are ready"
+                kubectl rollout restart deployment --namespace {{ include "common.names.namespace" . }} {{ include "cilium.hubble.relay.fullname" . }}
+                kubectl rollout restart deployment --namespace {{ include "common.names.namespace" . }} {{ include "cilium.hubble.ui.fullname" . }}
