@@ -137,7 +137,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: WEED_CLUSTER_DEFAULT
               value: {{ .Values.clusterDefault | quote }}
-            {{- if or .Values.mariadb.enabled (and (eq .Values.externalDatabase.store "mariadb") .Values.externalDatabase.enabled ) }}
+            {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
             - name: WEED_MYSQL_ENABLED
               value: "true"
             - name: WEED_MYSQL_HOSTNAME
@@ -162,7 +162,7 @@ spec:
             - name: WEED_MYSQL_INTERPOLATEPARAMS
               value: "true"
             {{- end }}
-            {{- if and (eq .Values.externalDatabase.store "postgres") .Values.externalDatabase.enabled }}
+            {{- if and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgres") }}
             - name: WEED_POSTGRES_ENABLED
               value: "true"
             - name: WEED_POSTGRES_HOSTNAME

@@ -3359,7 +3359,7 @@ mariadb:
 ## All of these values are only used if `mariadb.enabled=false` and `externalDatabase.enabled=true`.
 ##
 externalDatabase:
-  ## @param externalDatabase.enabled Enable external database database support
+  ## @param externalDatabase.enabled Enable external database support
   ##
   enabled: false
   ## @param externalDatabase.store Database store (mariadb, postgresql)
