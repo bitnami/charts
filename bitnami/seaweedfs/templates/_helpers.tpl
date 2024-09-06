@@ -336,7 +336,7 @@ Returns an init-container that waits for the database to be ready
       valueFrom:
         secretKeyRef:
           name: {{ include "seaweedfs.database.secretName" . }}
-          key: mariadb-password
+          key: password
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp

@@ -85,7 +85,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.filer.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.dbms "mariadb")) }}
+        {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb")) }}
         {{- include "seaweedfs.filer.waitForDBInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if .Values.filer.initContainers }}
@@ -137,7 +137,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: WEED_CLUSTER_DEFAULT
               value: {{ .Values.clusterDefault | quote }}
-            {{- if or .Values.mariadb.enabled (and (eq .Values.externalDatabase.dbms "mariadb") (or .Values.externalDatabase.enabled .Values.externalDatabase.existingSecret) ) }}
+            {{- if or .Values.mariadb.enabled (and (eq .Values.externalDatabase.store "mariadb") .Values.externalDatabase.enabled ) }}
             - name: WEED_MYSQL_ENABLED
               value: "true"
             - name: WEED_MYSQL_HOSTNAME
@@ -152,7 +152,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "seaweedfs.database.secretName" . }}
-                  key: mariadb-password
+                  key: password
             - name: WEED_MYSQL_CONNECTION_MAX_IDLE
               value: "5"
             - name: WEED_MYSQL_CONNECTION_MAX_OPEN
@@ -162,7 +162,7 @@ spec:
             - name: WEED_MYSQL_INTERPOLATEPARAMS
               value: "true"
             {{- end }}
-            {{- if (and (eq .Values.externalDatabase.dbms "postgres") (or .Values.externalDatabase.enabled .Values.externalDatabase.existingSecret) ) }}
+            {{- if and (eq .Values.externalDatabase.store "postgres") .Values.externalDatabase.enabled }}
             - name: WEED_POSTGRES_ENABLED
               value: "true"
             - name: WEED_POSTGRES_HOSTNAME
@@ -177,7 +177,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "seaweedfs.database.secretName" . }}
-                  key: postgres-password
+                  key: password
             - name: WEED_POSTGRES_SSLMODE
               value: "disable"
             {{- end }}
