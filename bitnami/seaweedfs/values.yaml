@@ -3381,7 +3381,7 @@ externalDatabase:
   ##
   database: bitnami_seaweedfs
   ## @param externalDatabase.existingSecret The name of an existing secret with database credentials. Evaluated as a template
-  ## NOTE: Must contain key `password`
+  ## NOTE: Must contain key `mariadb-password` for mariadb or 'postgres-password' for postgres
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""

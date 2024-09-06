@@ -289,6 +289,8 @@ Return the database secret key name
 {{- define "seaweedfs.database.keyName" -}}
 {{- if .Values.mariadb.enabled }}
     {{- print "mariadb-password" -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- printf "%s-password" .Values.externalDatabase.scope -}}
 {{- else -}}
     {{- printf "password" -}}
 {{- end -}}
