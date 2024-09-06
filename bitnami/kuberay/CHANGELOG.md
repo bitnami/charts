@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.2.14 (2024-09-05)
+## 1.2.16 (2024-09-06)
 
-* [bitnami/kuberay] Release 1.2.14 ([#29143](https://github.com/bitnami/charts/pull/29143))
+* [bitnami/kuberay] Release 1.2.16 ([#29245](https://github.com/bitnami/charts/pull/29245))
+
+## <small>1.2.15 (2024-09-05)</small>
+
+* [bitnami/kuberay] Release 1.2.15 (#29220) ([5f595ef](https://github.com/bitnami/charts/commit/5f595ef89c1cb323f252d81e6b56e57ffc31b199)), closes [#29220](https://github.com/bitnami/charts/issues/29220)
+
+## <small>1.2.14 (2024-09-05)</small>
+
+* [bitnami/kuberay] Release 1.2.14 (#29143) ([df1a61b](https://github.com/bitnami/charts/commit/df1a61ba9ed6c7e7ceacb67c24ce8ee456668861)), closes [#29143](https://github.com/bitnami/charts/issues/29143)
 
 ## <small>1.2.13 (2024-08-27)</small>
 
