@@ -152,7 +152,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "seaweedfs.database.secretName" . }}
-                  key: password
+                  key: {{ include "seaweedfs.database.keyName" . }}
             - name: WEED_MYSQL_CONNECTION_MAX_IDLE
               value: "5"
             - name: WEED_MYSQL_CONNECTION_MAX_OPEN
@@ -177,7 +177,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "seaweedfs.database.secretName" . }}
-                  key: password
+                  key: {{ include "seaweedfs.database.keyName" . }}
             - name: WEED_POSTGRES_SSLMODE
               value: "disable"
             {{- end }}

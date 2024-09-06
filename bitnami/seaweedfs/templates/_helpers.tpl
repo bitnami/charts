@@ -284,6 +284,17 @@ Return the database secret name
 {{- end -}}
 
 {{/*
+Return the database secret key name
+*/}}
+{{- define "seaweedfs.database.keyName" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- print "mariadb-password" -}}
+{{- else -}}
+    {{- printf "password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns an init-container that waits for the database to be ready
 */}}
 {{- define "seaweedfs.filer.waitForDBInitContainer" -}}
@@ -336,7 +347,7 @@ Returns an init-container that waits for the database to be ready
       valueFrom:
         secretKeyRef:
           name: {{ include "seaweedfs.database.secretName" . }}
-          key: password
+          key: {{ include "seaweedfs.database.keyName" . }}
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp
