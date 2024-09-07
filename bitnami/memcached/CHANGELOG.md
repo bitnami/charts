@@ -2,7 +2,7 @@
 
 ## 7.4.15 (2024-09-07)
 
-* Draft: [bitnami/memcached] Add optional emptyDir medium configuration ([#29295](https://github.com/bitnami/charts/pull/29295))
+* [bitnami/memcached] Add optional emptyDir medium configuration ([#29295](https://github.com/bitnami/charts/pull/29295))
 
 ## <small>7.4.14 (2024-09-06)</small>
 
