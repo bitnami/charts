@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.21 (2024-09-06)
+## 1.3.21 (2024-09-07)
 
 * [bitnami/prometheus] fix: add apiVersion and kind to volumeClaimTemplates ([#29290](https://github.com/bitnami/charts/pull/29290))
 
