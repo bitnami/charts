@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.4.12 (2024-09-06)
+## 13.4.12 (2024-09-07)
 
 * [bitnami/zookeeper] fix: add apiVersion and kind to volumeClaimTemplates ([#29289](https://github.com/bitnami/charts/pull/29289))
 
