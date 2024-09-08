@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.4 (2024-09-07)
+## 0.1.4 (2024-09-08)
 
 * [bitnami/keydb] Adds metrics port to NetworkPolicy ([#29298](https://github.com/bitnami/charts/pull/29298))
 
