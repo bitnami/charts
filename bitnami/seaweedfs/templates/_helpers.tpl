@@ -292,7 +292,7 @@ Return the database secret key name
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s-password" .Values.externalDatabase.scope -}}
 {{- else -}}
-    {{- printf "password" -}}
+    {{- print "password" -}}
 {{- end -}}
 {{- end -}}
 
