@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.15 (2024-09-07)
+## 7.5 (2024-09-09)
 
 * [bitnami/memcached] Add optional emptyDir medium configuration ([#29295](https://github.com/bitnami/charts/pull/29295))
+
+## <small>7.4.15 (2024-09-07)</small>
+
+* [bitnami/memcached] Release 7.4.15 (#29299) ([7feed29](https://github.com/bitnami/charts/commit/7feed294b11d97bfc85d376a7f106d830bdfb339)), closes [#29299](https://github.com/bitnami/charts/issues/29299)
 
 ## <small>7.4.14 (2024-09-06)</small>
 
