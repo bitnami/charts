@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.7.6 (2024-09-06)
+## 14.7.6 (2024-09-09)
 
 * [bitnami/minio]: fix missing `metrics.enabled` docs. ([#29270](https://github.com/bitnami/charts/pull/29270))
 
