@@ -290,7 +290,7 @@ Return the database secret key name
 {{- if .Values.mariadb.enabled }}
     {{- print "mariadb-password" -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
-    {{- printf "%s-password" .Values.externalDatabase.scope -}}
+    {{- printf "%s-password" .Values.externalDatabase.store -}}
 {{- else -}}
     {{- print "password" -}}
 {{- end -}}
