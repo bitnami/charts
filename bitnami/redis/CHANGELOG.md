@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.0.4 (2024-08-29)
+## 20.0.5 (2024-09-05)
 
-* [bitnami/redis] update values.schema.json ([#29106](https://github.com/bitnami/charts/pull/29106))
+* [bitnami/redis] label slave pod using sentinel masterService ([#29121](https://github.com/bitnami/charts/pull/29121))
+
+## <small>20.0.4 (2024-09-04)</small>
+
+* [bitnami/redis] update values.schema.json (#29106) ([8a2fea3](https://github.com/bitnami/charts/commit/8a2fea3d935989fc929092083e3af341d4eb545f)), closes [#29106](https://github.com/bitnami/charts/issues/29106)
 
 ## <small>20.0.3 (2024-08-20)</small>
 
