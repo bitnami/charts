@@ -365,7 +365,11 @@ data:
         {{- end }}
     fi
     {{- if not .Values.listeners.advertisedListeners }}
+    {{- if .Values.listeners.overrideDomain }}
+    replace_placeholder "advertised-address-placeholder" "${MY_POD_NAME}.{{ $clusterDomain }}"
+    {{- else }}
     replace_placeholder "advertised-address-placeholder" "${MY_POD_NAME}.{{ $fullname }}-${POD_ROLE}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}"
+    {{- end }}
     if [[ "${EXTERNAL_ACCESS_ENABLED:-false}" =~ ^(yes|true)$ ]]; then
       configure_external_access
     fi
@@ -390,4 +394,3 @@ data:
       append_file_to_kafka_conf /secret-config/server-secret.properties $KAFKA_CONFIG_FILE
     fi
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraInit "context" $ ) | nindent 4 }}
-

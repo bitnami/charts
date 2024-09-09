@@ -64,6 +64,8 @@ This chart allows you to automatically configure Kafka with 3 listeners:
 - A second one for communications with clients within the K8s cluster.
 - (optional) a third listener for communications with clients outside the K8s cluster. Check [this section](#accessing-kafka-brokers-from-outside-the-cluster) for more information.
 
+When using an external domain, setting `listeners.overrideDomain` to `true` enforces the Kafka cluster to set all listeners in `advertisedListeners` to `podName.clusterDomain:port`.
+
 For more complex configurations, set the `listeners`, `advertisedListeners` and `listenerSecurityProtocolMap` parameters as needed.
 
 ### Enable security for Kafka and Zookeeper
@@ -456,6 +458,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `heapOpts`                            | Kafka Java Heap size                                                                                                                                                                                       | `-Xmx1024m -Xms1024m`   |
 | `brokerRackAssignment`                | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`                                                                                                                                | `""`                    |
 | `interBrokerProtocolVersion`          | Override the setting 'inter.broker.protocol.version' during the ZK migration.                                                                                                                              | `""`                    |
+| `listeners.overrideDomain`            | Replace the advertised listeners addresses with the pod name and cluster domain                                                                                                                            | `false`                 |
 | `listeners.client.name`               | Name for the Kafka client listener                                                                                                                                                                         | `CLIENT`                |
 | `listeners.client.containerPort`      | Port for the Kafka client listener                                                                                                                                                                         | `9092`                  |
 | `listeners.client.protocol`           | Security protocol for the Kafka client listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'                                                                                    | `SASL_PLAINTEXT`        |

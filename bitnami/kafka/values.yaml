@@ -160,6 +160,8 @@ interBrokerProtocolVersion: ""
 ## Kafka listeners configuration
 ##
 listeners:
+  ## @param listeners.overrideDomain Replace the advertised listeners addresses with the pod name and cluster domain
+  overrideDomain: false
   ## @param listeners.client.name Name for the Kafka client listener
   ## @param listeners.client.containerPort Port for the Kafka client listener
   ## @param listeners.client.protocol Security protocol for the Kafka client listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'
