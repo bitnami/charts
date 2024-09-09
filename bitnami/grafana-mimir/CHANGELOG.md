@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.14 (2024-09-05)
+## 1.2.15 (2024-09-06)
 
-* [bitnami/grafana-mimir] Release 1.2.14 ([#29236](https://github.com/bitnami/charts/pull/29236))
+*  [bitnami/grafana-mimir] removing quotes from gw secrets #29214 ([#29267](https://github.com/bitnami/charts/pull/29267))
+
+## <small>1.2.14 (2024-09-05)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.14 (#29236) ([bb0dc36](https://github.com/bitnami/charts/commit/bb0dc36af90dde2443429e8eecf09419b1006e2d)), closes [#29236](https://github.com/bitnami/charts/issues/29236)
 
 ## <small>1.2.13 (2024-08-27)</small>
 

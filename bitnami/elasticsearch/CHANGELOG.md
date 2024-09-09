@@ -1,8 +1,20 @@
 # Changelog
 
-## 21.3.12 (2024-09-05)
+## 21.3.15 (2024-09-09)
 
-* [bitnami/elasticsearch] Release 21.3.12 ([#29232](https://github.com/bitnami/charts/pull/29232))
+* [bitnami/elasticsearch] Release 21.3.15 ([#29303](https://github.com/bitnami/charts/pull/29303))
+
+## <small>21.3.14 (2024-09-09)</small>
+
+* [bitnami/elasticsearch] Use containerSecurityContext on the copy-tls-verificates initContainer (#291 ([cbcd9ae](https://github.com/bitnami/charts/commit/cbcd9ae580b30a6060861bb4f2170d3d0ba55f36)), closes [#29193](https://github.com/bitnami/charts/issues/29193) [#29179](https://github.com/bitnami/charts/issues/29179)
+
+## <small>21.3.13 (2024-09-07)</small>
+
+* [bitnami/elasticsearch] Release 21.3.13 (#29296) ([10d241e](https://github.com/bitnami/charts/commit/10d241e9e914849a78ccc5ab35e802ecce82a05e)), closes [#29296](https://github.com/bitnami/charts/issues/29296)
+
+## <small>21.3.12 (2024-09-05)</small>
+
+* [bitnami/elasticsearch] Release 21.3.12 (#29232) ([a27dd73](https://github.com/bitnami/charts/commit/a27dd73f9f15e476c66f67ec99de740bc73ead7b)), closes [#29232](https://github.com/bitnami/charts/issues/29232)
 
 ## <small>21.3.11 (2024-09-04)</small>
 

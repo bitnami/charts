@@ -155,6 +155,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: certs
+          {{- if .Values.data.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.data.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.copyTlsCerts.resources }}
           resources: {{- toYaml .Values.copyTlsCerts.resources | nindent 12 }}
           {{- else if ne .Values.copyTlsCerts.resourcesPreset "none" }}
