@@ -428,8 +428,10 @@ spec:
         {{- end }}
   {{- if or $.Values.extraVolumeClaimTemplates (and $.Values.persistence.enabled (not $.Values.persistence.existingClaim)) }}
   volumeClaimTemplates:
-    {{- if and $.Values.persistence.enabled (not $.Values.persistence.existingClaim) }}
-    - metadata:
+    {{- if and $.Values.persistence.enabled (not $.Values.persistence.existingClaim) }}    
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if or $.Values.persistence.annotations $.Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.persistence.annotations $.Values.commonLabels ) "context" $ ) }}

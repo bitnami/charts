@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.7.5 (2024-09-06)
+## 14.7.6 (2024-09-09)
 
-* [bitnami/minio] Release 14.7.5 ([#29252](https://github.com/bitnami/charts/pull/29252))
+* [bitnami/minio]: fix missing `metrics.enabled` docs. ([#29270](https://github.com/bitnami/charts/pull/29270))
+
+## <small>14.7.5 (2024-09-06)</small>
+
+* [bitnami/minio] Release 14.7.5 (#29252) ([8e5d760](https://github.com/bitnami/charts/commit/8e5d760c5921a00a143bc0fddea753cd91aa05c4)), closes [#29252](https://github.com/bitnami/charts/issues/29252)
 
 ## <small>14.7.4 (2024-08-30)</small>
 
