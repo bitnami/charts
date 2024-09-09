@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.22 (2024-09-06)
+## 6.2.23 (2024-09-09)
 
-* [bitnami/clickhouse] Release 6.2.22 ([#29285](https://github.com/bitnami/charts/pull/29285))
+* [bitnami/clickhouse] fix: Add missing version, kind to volumeClaimTemplates ([#29197](https://github.com/bitnami/charts/pull/29197))
+
+## <small>6.2.22 (2024-09-06)</small>
+
+* [bitnami/clickhouse] Release 6.2.22 (#29285) ([6a90f23](https://github.com/bitnami/charts/commit/6a90f23e7a5c5dd4db87e18589ace4f4359c66ba)), closes [#29285](https://github.com/bitnami/charts/issues/29285)
 
 ## <small>6.2.21 (2024-09-05)</small>
 
