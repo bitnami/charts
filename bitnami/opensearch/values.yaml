@@ -937,52 +937,15 @@ master:
     ##
     enabled: false
     service:
-      ## @param master.metrics.service.type master-eligible node metrics service type
-      ##
-      type: ClusterIP
       ## @param master.metrics.service.ports.metrics master-eligible node metrics service port
       ##
       ports:
         metrics: 80
-      ## Node ports to expose
-      ## @param master.metrics.service.nodePorts.metrics Node port for the application controller service
-      ## NOTE: choose port between <30000-32767>
-      ##
-      nodePorts:
-        metrics: ""
       ## @param master.metrics.service.clusterIP master-eligible node metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
       ##
       clusterIP: ""
-      ## @param master.metrics.service.loadBalancerIP master-eligible node service Load Balancer IP
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-      ##
-      loadBalancerIP: ""
-      ## @param master.metrics.service.loadBalancerSourceRanges master-eligible node service Load Balancer sources
-      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-      ## e.g:
-      ## loadBalancerSourceRanges:
-      ##   - 10.10.10.0/24
-      ##
-      loadBalancerSourceRanges: []
-      ## @param master.metrics.service.externalTrafficPolicy master-eligible node service external traffic policy
-      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-      ##
-      externalTrafficPolicy: Cluster
-      ## @param master.metrics.service.annotations Additional custom annotations for master-eligible node service
-      ##
-      annotations: {}
-      ## @param master.metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
-      ## If "ClientIP", consecutive client requests will be directed to the same Pod
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
-      ##
-      sessionAffinity: None
-      ## @param master.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
-      ## sessionAffinityConfig:
-      ##   clientIP:
-      ##     timeoutSeconds: 300
-      sessionAffinityConfig: {}
     ## master-eligible node metrics service monitor configuration
     ##
     serviceMonitor:
@@ -1493,52 +1456,15 @@ data:
     ##
     enabled: false
     service:
-      ## @param data.metrics.service.type data node metrics service type
-      ##
-      type: ClusterIP
       ## @param data.metrics.service.ports.metrics data node metrics service port
       ##
       ports:
         metrics: 80
-      ## Node ports to expose
-      ## @param data.metrics.service.nodePorts.metrics Node port for the application controller service
-      ## NOTE: choose port between <30000-32767>
-      ##
-      nodePorts:
-        metrics: ""
       ## @param data.metrics.service.clusterIP data node metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
       ##
       clusterIP: ""
-      ## @param data.metrics.service.loadBalancerIP data node service Load Balancer IP
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-      ##
-      loadBalancerIP: ""
-      ## @param data.metrics.service.loadBalancerSourceRanges data node service Load Balancer sources
-      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-      ## e.g:
-      ## loadBalancerSourceRanges:
-      ##   - 10.10.10.0/24
-      ##
-      loadBalancerSourceRanges: []
-      ## @param data.metrics.service.externalTrafficPolicy data node service external traffic policy
-      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-      ##
-      externalTrafficPolicy: Cluster
-      ## @param data.metrics.service.annotations Additional custom annotations for data node service
-      ##
-      annotations: {}
-      ## @param data.metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
-      ## If "ClientIP", consecutive client requests will be directed to the same Pod
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
-      ##
-      sessionAffinity: None
-      ## @param data.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
-      ## sessionAffinityConfig:
-      ##   clientIP:
-      ##     timeoutSeconds: 300
-      sessionAffinityConfig: {}
     ## data node metrics service monitor configuration
     ##
     serviceMonitor:
@@ -2011,52 +1937,15 @@ coordinating:
     ##
     enabled: false
     service:
-      ## @param coordinating.metrics.service.type coordinating node metrics service type
-      ##
-      type: ClusterIP
       ## @param coordinating.metrics.service.ports.metrics coordinating node metrics service port
       ##
       ports:
         metrics: 80
-      ## Node ports to expose
-      ## @param coordinating.metrics.service.nodePorts.metrics Node port for the application controller service
-      ## NOTE: choose port between <30000-32767>
-      ##
-      nodePorts:
-        metrics: ""
       ## @param coordinating.metrics.service.clusterIP coordinating node metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
       ##
       clusterIP: ""
-      ## @param coordinating.metrics.service.loadBalancerIP coordinating node service Load Balancer IP
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-      ##
-      loadBalancerIP: ""
-      ## @param coordinating.metrics.service.loadBalancerSourceRanges coordinating node service Load Balancer sources
-      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-      ## e.g:
-      ## loadBalancerSourceRanges:
-      ##   - 10.10.10.0/24
-      ##
-      loadBalancerSourceRanges: []
-      ## @param coordinating.metrics.service.externalTrafficPolicy coordinating node service external traffic policy
-      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-      ##
-      externalTrafficPolicy: Cluster
-      ## @param coordinating.metrics.service.annotations Additional custom annotations for coordinating node service
-      ##
-      annotations: {}
-      ## @param coordinating.metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
-      ## If "ClientIP", consecutive client requests will be directed to the same Pod
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
-      ##
-      sessionAffinity: None
-      ## @param coordinating.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
-      ## sessionAffinityConfig:
-      ##   clientIP:
-      ##     timeoutSeconds: 300
-      sessionAffinityConfig: {}
     ## coordinating node metrics service monitor configuration
     ##
     serviceMonitor:
@@ -2697,52 +2586,15 @@ ingest:
     ##
     enabled: false
     service:
-      ## @param ingest.metrics.service.type ingest node metrics service type
-      ##
-      type: ClusterIP
       ## @param ingest.metrics.service.ports.metrics ingest node metrics service port
       ##
       ports:
         metrics: 80
-      ## Node ports to expose
-      ## @param ingest.metrics.service.nodePorts.metrics Node port for the application controller service
-      ## NOTE: choose port between <30000-32767>
-      ##
-      nodePorts:
-        metrics: ""
       ## @param ingest.metrics.service.clusterIP ingest node metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
       ##
       clusterIP: ""
-      ## @param ingest.metrics.service.loadBalancerIP ingest node service Load Balancer IP
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-      ##
-      loadBalancerIP: ""
-      ## @param ingest.metrics.service.loadBalancerSourceRanges ingest node service Load Balancer sources
-      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-      ## e.g:
-      ## loadBalancerSourceRanges:
-      ##   - 10.10.10.0/24
-      ##
-      loadBalancerSourceRanges: []
-      ## @param ingest.metrics.service.externalTrafficPolicy ingest node service external traffic policy
-      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-      ##
-      externalTrafficPolicy: Cluster
-      ## @param ingest.metrics.service.annotations Additional custom annotations for ingest node service
-      ##
-      annotations: {}
-      ## @param ingest.metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
-      ## If "ClientIP", consecutive client requests will be directed to the same Pod
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
-      ##
-      sessionAffinity: None
-      ## @param ingest.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
-      ## sessionAffinityConfig:
-      ##   clientIP:
-      ##     timeoutSeconds: 300
-      sessionAffinityConfig: {}
     ## ingest node metrics service monitor configuration
     ##
     serviceMonitor:
