@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.10 (2024-08-28)
+## 0.1.11 (2024-09-09)
 
-* [bitnami/valkey-cluster] test: :white_check_mark: Improve ginkgo tests reliability ([#29080](https://github.com/bitnami/charts/pull/29080))
+* [bitnami/valkey-cluster] Release 0.1.11 ([#29314](https://github.com/bitnami/charts/pull/29314))
+
+## <small>0.1.10 (2024-08-28)</small>
+
+* [bitnami/valkey-cluster] test: :white_check_mark: Improve ginkgo tests reliability (#29080) ([8d4a3ba](https://github.com/bitnami/charts/commit/8d4a3baa33536661caa577bf32219823e937018b)), closes [#29080](https://github.com/bitnami/charts/issues/29080)
 
 ## <small>0.1.9 (2024-08-19)</small>
 
