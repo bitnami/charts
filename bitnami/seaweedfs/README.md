@@ -77,6 +77,7 @@ externalDatabase.port=3306
 In addition, the tables must be created in the external database before starting seaweedfs.
 
 For mariadb, the following should be performed (substituting mydatabase as necessary):
+
 ```console
 USE mydatabase;
 CREATE TABLE IF NOT EXISTS `filemeta` (
@@ -89,6 +90,7 @@ CREATE TABLE IF NOT EXISTS `filemeta` (
 ```
 
 For postgresql, the following should be performed (substituting mydatabase as necessary):
+
 ```console
 \c mydatabase;
 CREATE TABLE IF NOT EXISTS filemeta (
