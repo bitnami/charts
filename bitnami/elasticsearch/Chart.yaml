@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: elasticsearch
-      image: docker.io/bitnami/elasticsearch:8.15.1-debian-12-r1
+      image: docker.io/bitnami/elasticsearch:8.15.1-debian-12-r2
     - name: elasticsearch-exporter
       image: docker.io/bitnami/elasticsearch-exporter:1.7.0-debian-12-r36
     - name: os-shell
@@ -34,4 +34,4 @@ maintainers:
 name: elasticsearch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
-version: 21.3.14
+version: 21.3.15
