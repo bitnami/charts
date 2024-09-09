@@ -74,6 +74,31 @@ externalDatabase.database=mydatabase
 externalDatabase.port=3306
 ```
 
+In addition, the tables must be created in the external database before starting seaweedfs.
+
+For mariadb, the following should be performed (substituting mydatabase as necessary):
+```console
+USE mydatabase;
+CREATE TABLE IF NOT EXISTS `filemeta` (
+  `dirhash`   BIGINT NOT NULL       COMMENT 'first 64 bits of MD5 hash value of directory field',
+  `name`      VARCHAR(766) NOT NULL COMMENT 'directory or file name',
+  `directory` TEXT NOT NULL         COMMENT 'full path to parent directory',
+  `meta`      LONGBLOB,
+  PRIMARY KEY (`dirhash`, `name`)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+```
+
+For postgresql, the following should be performed (substituting mydatabase as necessary):
+```console
+\c mydatabase;
+CREATE TABLE IF NOT EXISTS filemeta (
+  dirhash     BIGINT,
+  name        VARCHAR(65535),
+  directory   VARCHAR(65535),
+  meta        bytea,
+  PRIMARY KEY (dirhash, name)
+);
+```
 ### Ingress
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
