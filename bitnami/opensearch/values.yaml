@@ -930,6 +930,107 @@ master:
       ## @param master.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Metrics configuration for master-eligible node
+  ##
+  metrics:
+    ## @param master.metrics.enabled Enable master-eligible node metrics
+    ##
+    enabled: false
+    service:
+      ## @param master.metrics.service.ports.metrics master-eligible node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param master.metrics.service.clusterIP master-eligible node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## master-eligible node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param master.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param master.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param master.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param master.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param master.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param master.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param master.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param master.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param master.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param master.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param master.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param master.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param master.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param master.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Data-only nodes parameters
 data:
   ## @param data.replicaCount Number of data-only replicas to deploy
@@ -1348,6 +1449,107 @@ data:
       ## @param data.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Metrics configuration for data node
+  ##
+  metrics:
+    ## @param data.metrics.enabled Enable data node metrics
+    ##
+    enabled: false
+    service:
+      ## @param data.metrics.service.ports.metrics data node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param data.metrics.service.clusterIP data node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## data node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param data.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param data.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param data.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param data.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param data.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param data.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param data.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/data/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param data.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param data.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param data.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param data.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param data.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param data.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param data.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Coordinating-only nodes parameters
 coordinating:
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
@@ -1728,6 +1930,107 @@ coordinating:
       ## @param coordinating.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
+  ## Metrics configuration for coordinating node
+  ##
+  metrics:
+    ## @param coordinating.metrics.enabled Enable coordinating node metrics
+    ##
+    enabled: false
+    service:
+      ## @param coordinating.metrics.service.ports.metrics coordinating node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param coordinating.metrics.service.clusterIP coordinating node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## coordinating node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param coordinating.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param coordinating.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param coordinating.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param coordinating.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param coordinating.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param coordinating.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param coordinating.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/coordinating/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param coordinating.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param coordinating.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param coordinating.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param coordinating.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param coordinating.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param coordinating.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param coordinating.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Ingest-only nodes parameters
 ingest:
   ## @param ingest.enabled Enable ingest nodes
@@ -2276,6 +2579,107 @@ ingest:
     ##             name: http
     ##
     extraRules: []
+  ## Metrics configuration for ingest node
+  ##
+  metrics:
+    ## @param ingest.metrics.enabled Enable ingest node metrics
+    ##
+    enabled: false
+    service:
+      ## @param ingest.metrics.service.ports.metrics ingest node metrics service port
+      ##
+      ports:
+        metrics: 80
+      ## @param ingest.metrics.service.clusterIP ingest node metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+    ## ingest node metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param ingest.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param ingest.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param ingest.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param ingest.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param ingest.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param ingest.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param ingest.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/ingest/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param ingest.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param ingest.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Rules for PrometheusRule object if enabled
+    ##
+    ## E.g.
+    ## @param ingest.metrics.rules.enabled Enable render extra rules for PrometheusRule object
+    ## @param ingest.metrics.rules.spec Rules to render into the PrometheusRule object
+    ## @param ingest.metrics.rules.selector Selector for the PrometheusRule object
+    ## @param ingest.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param ingest.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
+    ##
+    rules:
+      enabled: false
+      ## E.g
+      ## - alert: ArgoAppMissing
+      ##   expr: |
+      ##     absent(argocd_app_info)
+      ##   for: 15m
+      ##   labels:
+      ##     severity: critical
+      ##   annotations:
+      ##     summary: "[ArgoCD] No reported applications"
+      ##     description: >
+      ##       ArgoCD has not reported any applications data for the past 15 minutes which
+      ##       means that it must be down or not functioning properly.  This needs to be
+      ##       resolved for this cloud to continue to maintain state.
+      ## - alert: ArgoAppNotSynced
+      ##   expr: |
+      ##     argocd_app_info{sync_status!="Synced"} == 1
+      ##   for: 12h
+      ##   labels:
+      ##     severity: warning
+      ##   annotations:
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
+      ##     description: >
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
+      ##       12 hours which means that the state of this cloud has drifted away from the
+      ##       state inside Git.
+      ##
+      spec: []
+      ## E.g
+      ## selector:
+      ##   prometheus: kube-prometheus
+      ##
+      selector: {}
+      namespace: monitoring
+      additionalLabels: {}
 ## @section Init Container Parameters
 
 ## 'volumePermissions' init container parameters
