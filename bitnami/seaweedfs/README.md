@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS filemeta (
   PRIMARY KEY (dirhash, name)
 );
 ```
+
 ### Ingress
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
