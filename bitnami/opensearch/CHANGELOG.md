@@ -1,8 +1,5 @@
 # Changelog
 
-## 1.3.0 (2024-09-09)
-
-* [bitnami/opensearch] feat: :sparkles: Add metrics ([#29307](https://github.com/bitnami/charts/pull/29307))
 
 ## <small>1.2.12 (2024-09-09)</small>
 
