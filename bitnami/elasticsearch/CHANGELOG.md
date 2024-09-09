@@ -1,8 +1,8 @@
 # Changelog
 
-## 21.3.14 (2024-09-09)
+## 21.3.15 (2024-09-09)
 
-* [bitnami/elasticsearch] Use containerSecurityContext on the copy-tls-verificates initContainer ([#29193](https://github.com/bitnami/charts/pull/29193))
+* [bitnami/elasticsearch] Release 21.3.15 ([#29303](https://github.com/bitnami/charts/pull/29303))
 
 ## <small>21.3.13 (2024-09-07)</small>
 
