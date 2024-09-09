@@ -92,10 +92,13 @@ var _ = Describe("Postgresql", Ordered, func() {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 
-			By("creating a job to drop the test database")
+			// TODO: We're finding issues with pgpool when restarting the cluster. It is not properly updating
+			// the primary node, causing the test to fail. While we find a solution, we change to perform a
+			// query compatible with both primary and replica nodes
+			By("creating a job to show the test database")
 			deleteDBJobName := fmt.Sprintf("%s-deletedb-%s",
 				releaseName, jobSuffix)
-			err = createJob(ctx, c, deleteDBJobName, pgPoolName, port, image, fmt.Sprintf("DROP DATABASE %s WITH (FORCE);", dbName))
+			err = createJob(ctx, c, deleteDBJobName, pgPoolName, port, image, fmt.Sprintf("\\c %s;", dbName))
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {

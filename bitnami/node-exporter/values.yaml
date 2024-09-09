@@ -121,7 +121,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 1.8.2-debian-12-r5
+  tag: 1.8.2-debian-12-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

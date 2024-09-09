@@ -1,8 +1,20 @@
 # Changelog
 
-## 6.2.19 (2024-08-22)
+## 6.2.22 (2024-09-06)
 
-* [bitnami/clickhouse] Release 6.2.19 ([#28981](https://github.com/bitnami/charts/pull/28981))
+* [bitnami/clickhouse] Release 6.2.22 ([#29285](https://github.com/bitnami/charts/pull/29285))
+
+## <small>6.2.21 (2024-09-05)</small>
+
+* [bitnami/clickhouse] Improve Ginkgo test (#29213) ([8274daa](https://github.com/bitnami/charts/commit/8274daa04fcac1ae2bb394696772a8d52c9851e6)), closes [#29213](https://github.com/bitnami/charts/issues/29213)
+
+## <small>6.2.20 (2024-09-03)</small>
+
+* [bitnami/clickhouse] Release 6.2.20 (#29176) ([cfdd018](https://github.com/bitnami/charts/commit/cfdd018c876f167b586f488d4ad0430460e172a7)), closes [#29176](https://github.com/bitnami/charts/issues/29176)
+
+## <small>6.2.19 (2024-08-22)</small>
+
+* [bitnami/clickhouse] Release 6.2.19 (#28981) ([324cee6](https://github.com/bitnami/charts/commit/324cee67d1a2c1190d7c8ce445aeaaba59fbc467)), closes [#28981](https://github.com/bitnami/charts/issues/28981)
 
 ## <small>6.2.18 (2024-08-21)</small>
 

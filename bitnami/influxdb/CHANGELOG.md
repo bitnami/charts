@@ -1,8 +1,8 @@
 # Changelog
 
-## 6.3.19 (2024-08-27)
+## 6.3.20 (2024-09-06)
 
-* [bitnami/influxdb] Release 6.3.19 ([#29054](https://github.com/bitnami/charts/pull/29054))
+* [bitnami/influxdb] Release 6.3.20 ([#29239](https://github.com/bitnami/charts/pull/29239))
 
 ## <small>6.3.18 (2024-08-16)</small>
 
