@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.7.9 (2024-09-06)
+## 3.7.10 (2024-09-10)
 
-* [bitnami/grafana-tempo] Release 3.7.9 ([#29238](https://github.com/bitnami/charts/pull/29238))
+* [bitnami/grafana-tempo] Allow rendering resources values ([#29344](https://github.com/bitnami/charts/pull/29344))
+
+## <small>3.7.9 (2024-09-06)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.9 (#29238) ([4685bca](https://github.com/bitnami/charts/commit/4685bca5832244969c233e10ea9a350fa7ededb3)), closes [#29238](https://github.com/bitnami/charts/issues/29238)
 
 ## <small>3.7.8 (2024-09-04)</small>
 
