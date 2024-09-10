@@ -288,8 +288,10 @@ Argo CD: You need to provide existingSecretPasswordKey when an existingSecret is
 Validate external Redis config
 */}}
 {{- define "argocd.validateValues.externalRedis" -}}
-{{- if not .Values.redis.enabled -}}
-Argo CD: If the redis dependency is disabled you need to add an external redis port
+{{- if and (not .Values.redis.enabled) (not .Values.externalRedis.host) -}}
+Argo CD: If the redis dependency is disabled, you need to configure an external redis host
+{{- else if and (not .Values.redis.enabled) (not .Values.externalRedis.port) -}}
+Argo CD: If the redis dependency is disabled, you need to configure an external redis port
 {{- end -}}
 {{- end -}}
 
