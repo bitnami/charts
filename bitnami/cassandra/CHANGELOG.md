@@ -1,8 +1,18 @@
 # Changelog
 
-## 11.4.1 (2024-09-03)
+## 12.0.0 (2024-09-10)
 
-* [bitnami/cassandra] test: :white_check_mark: Improve ginkgo testing reliability ([#29177](https://github.com/bitnami/charts/pull/29177))
+* [bitnami/cassandra] Release 12.0.0 ([#29305](https://github.com/bitnami/charts/pull/29305))
+
+## <small>11.4.2 (2024-09-04)</small>
+
+* [bitnami/cassandra] test: :white_check_mark: Increase ginkgo test timeout ([a6ee96a](https://github.com/bitnami/charts/commit/a6ee96a47c38957ce7150282aa3b02f0fbc7b0d6))
+
+## <small>11.4.1 (2024-09-03)</small>
+
+* [bitnami/cassandra] feat: :sparkles: Allow setting initdb scripts in values (#29172) ([0aaac20](https://github.com/bitnami/charts/commit/0aaac209548b8c38af586322dbda2e86e8830600)), closes [#29172](https://github.com/bitnami/charts/issues/29172)
+* [bitnami/cassandra] test: :white_check_mark: Improve ginkgo testing reliability (#29177) ([28cf5f7](https://github.com/bitnami/charts/commit/28cf5f7b8e48370b31d79ed596fd26697ac4a0dc)), closes [#29177](https://github.com/bitnami/charts/issues/29177)
+* Update README.md (#29126) ([0d5e4f8](https://github.com/bitnami/charts/commit/0d5e4f85cd10e48fcf53dc6a9d69b2f4a4c8ae34)), closes [#29126](https://github.com/bitnami/charts/issues/29126)
 
 ## <small>11.3.14 (2024-08-28)</small>
 
