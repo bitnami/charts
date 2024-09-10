@@ -16,7 +16,7 @@ annotations:
     - name: valkey-sentinel
       image: docker.io/bitnami/valkey-sentinel:7.2.6-debian-12-r0
 apiVersion: v2
-appVersion: 7.2.6
+appVersion: 7.2.7
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
