@@ -130,7 +130,7 @@ spec:
             - -n {{ join "," ( concat .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames ) }}
             {{- end }}
           {{- if .Values.tls.resources }}
-          resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.tls.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -277,7 +277,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -402,7 +402,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
