@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.2.11 (2024-08-22)
+## 13.0.0 (2024-09-10)
 
-* [bitnami/kong] Release 12.2.11 ([#28964](https://github.com/bitnami/charts/pull/28964))
+* [bitnami/kong] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) ([#29329](https://github.com/bitnami/charts/pull/29329))
+
+## <small>12.2.11 (2024-08-22)</small>
+
+* [bitnami/kong] Release 12.2.11 (#28964) ([e5c037e](https://github.com/bitnami/charts/commit/e5c037ef631f585d74a6eb99c13aacff10fe07b6)), closes [#28964](https://github.com/bitnami/charts/issues/28964)
 
 ## <small>12.2.10 (2024-07-25)</small>
 
