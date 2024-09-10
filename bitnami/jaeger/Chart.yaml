@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: cassandra
-      image: docker.io/bitnami/cassandra:4.0.13-debian-12-r12
+      image: docker.io/bitnami/cassandra:5.0.0-debian-12-r4
     - name: jaeger
       image: docker.io/bitnami/jaeger:1.60.0-debian-12-r4
 apiVersion: v2
@@ -20,7 +20,7 @@ dependencies:
 - condition: cassandra.enabled
   name: cassandra
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 11.x.x
+  version: 12.x.x
 description: Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
@@ -34,4 +34,4 @@ maintainers:
 name: jaeger
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jaeger
-version: 2.5.12
+version: 3.0.0
