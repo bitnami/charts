@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.2.1 (2024-08-26)
+## 22.2.2 (2024-09-09)
 
-* [bitnami/keycloak] fix: :bug: Add emptyDir at /bitnami to allow init scripts ([#29020](https://github.com/bitnami/charts/pull/29020))
+* [bitnami/keycloak] Specify which keys must the secret have for jks in values.yaml comments ([#29301](https://github.com/bitnami/charts/pull/29301))
+
+## <small>22.2.1 (2024-08-26)</small>
+
+* [bitnami/keycloak] fix: :bug: Add emptyDir at /bitnami to allow init scripts (#29020) ([3d04a65](https://github.com/bitnami/charts/commit/3d04a655e59ce25587d84b1a2a44844dfcf19de3)), closes [#29020](https://github.com/bitnami/charts/issues/29020)
 
 ## 22.2.0 (2024-08-26)
 

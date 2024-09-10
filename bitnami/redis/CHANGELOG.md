@@ -1,8 +1,13 @@
 # Changelog
 
-## 20.0.6 (2024-09-05)
+
+## 20.1.1 (2024-09-05)
 
 * [bitnami/redis] fix: move variable from annotation to label ([#29209](https://github.com/bitnami/charts/pull/29209))
+
+## 20.1.0 (2024-09-05)
+
+* [bitnami/redis] Support extraEnvVars on volume-permissions for dynamic subfolders ([#29195](https://github.com/bitnami/charts/pull/29195))
 
 ## <small>20.0.5 (2024-09-05)</small>
 
