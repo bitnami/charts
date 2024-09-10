@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.2.2 (2024-09-09)
+## 22.2.3 (2024-09-10)
 
-* [bitnami/keycloak] Specify which keys must the secret have for jks in values.yaml comments ([#29301](https://github.com/bitnami/charts/pull/29301))
+* [bitnami/keycloak] Release 22.2.3 ([#29320](https://github.com/bitnami/charts/pull/29320))
+
+## <small>22.2.2 (2024-09-09)</small>
+
+* [bitnami/keycloak] Specify which keys must the secret have for jks in values.yaml comments (#29301) ([5287334](https://github.com/bitnami/charts/commit/5287334f451638971f6bbf59c8d3f57928aa00a3)), closes [#29301](https://github.com/bitnami/charts/issues/29301)
 
 ## <small>22.2.1 (2024-08-26)</small>
 
