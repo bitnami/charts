@@ -432,6 +432,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/cassandra --set dbUs
 
 | Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
 
+### To 12.0.0
+
+Cassandra's version was bumped to `5.0`, [the latest GA version](https://cassandra.apache.org/_/blog/Apache-Cassandra-5.0-Announcement.html). Users can upgrade from version 4 to 5.0 through an online upgrade, minimizing downtime for applications. Nevertheless, a backup creation prior to undergoing the upgrade process is recommended. Please, refer to the [official guide](https://cassandra.apache.org/doc/latest/operating/backups.html#snapshots) for further information.
+
 ### To 10.0.0
 
 This major bump changes the following security defaults:
