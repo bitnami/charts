@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.21 (2024-09-07)
+## 1.3.22 (2024-09-10)
 
-* [bitnami/prometheus] fix: add apiVersion and kind to volumeClaimTemplates ([#29290](https://github.com/bitnami/charts/pull/29290))
+* [bitnami/prometheus] Allow rendering resources values ([#29342](https://github.com/bitnami/charts/pull/29342))
+
+## <small>1.3.21 (2024-09-09)</small>
+
+* [bitnami/prometheus] fix: add apiVersion and kind to volumeClaimTemplates (#29290) ([af223db](https://github.com/bitnami/charts/commit/af223dbfd5a3a0294f1df6730048222390e3b7c7)), closes [#29290](https://github.com/bitnami/charts/issues/29290)
 
 ## <small>1.3.20 (2024-09-06)</small>
 
