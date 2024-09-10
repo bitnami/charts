@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.22 (2024-08-27)
+## 15.6.23 (2024-09-10)
 
-* [bitnami/mongodb] add securityContext via helper to initContainter dns-check ([#29038](https://github.com/bitnami/charts/pull/29038))
+* [bitnami/mongodb] Allow rendering resources values ([#29346](https://github.com/bitnami/charts/pull/29346))
+
+## <small>15.6.22 (2024-08-29)</small>
+
+* [bitnami/mongodb] add securityContext via helper to initContainter dns-check (#29038) ([56299fe](https://github.com/bitnami/charts/commit/56299fe14d54ac685fb55da7d23c6b91c15f8e3e)), closes [#29038](https://github.com/bitnami/charts/issues/29038)
 
 ## <small>15.6.21 (2024-08-26)</small>
 
