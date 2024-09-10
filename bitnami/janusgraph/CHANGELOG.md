@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.19 (2024-08-30)
+## 1.0.0 (2024-09-10)
 
-* [bitnami/janusgraph] Release 0.3.19 ([#29135](https://github.com/bitnami/charts/pull/29135))
+* [bitnami/janusgraph] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) ([#29328](https://github.com/bitnami/charts/pull/29328))
+
+## <small>0.3.19 (2024-08-30)</small>
+
+* [bitnami/janusgraph] Release 0.3.19 (#29135) ([8062bfb](https://github.com/bitnami/charts/commit/8062bfb2dd29374c5c4384cd27aec41f6361fd90)), closes [#29135](https://github.com/bitnami/charts/issues/29135)
 
 ## <small>0.3.18 (2024-07-25)</small>
 
