@@ -227,7 +227,7 @@ containerSecurityContext:
 ## @param containerPorts.https Sets https port inside NGINX container
 ##
 containerPorts:
-  http: 8081
+  http: 8086
   https: ""
 ## @param extraContainerPorts Array of additional container ports for the Nginx container
 ## e.g:
