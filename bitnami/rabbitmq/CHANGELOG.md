@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.9 (2024-08-28)
+## 14.6.10 (2024-09-10)
 
-* [bitnami/rabbitmq] Release 14.6.9 ([#29092](https://github.com/bitnami/charts/pull/29092))
+* [bitnami/rabbitmq] Allow rendering resources values ([#29347](https://github.com/bitnami/charts/pull/29347))
+
+## <small>14.6.9 (2024-08-28)</small>
+
+* [bitnami/rabbitmq] Release 14.6.9 (#29092) ([711e2f7](https://github.com/bitnami/charts/commit/711e2f720d92e936b9a67bbdc269d57c33a9dca6)), closes [#29092](https://github.com/bitnami/charts/issues/29092)
 
 ## <small>14.6.8 (2024-08-28)</small>
 
