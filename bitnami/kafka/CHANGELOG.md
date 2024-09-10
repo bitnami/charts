@@ -1,6 +1,6 @@
 # Changelog
 
-## 30.1.0 (2024-09-09)
+## 30.1.0 (2024-09-10)
 
 * [bitnami/kafka] Allow for domain name override ([#29316](https://github.com/bitnami/charts/pull/29316))
 
