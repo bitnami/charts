@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.7.10 (2024-09-10)
+## 3.7.10 (2024-09-11)
 
 * [bitnami/grafana-tempo] Allow rendering resources values ([#29344](https://github.com/bitnami/charts/pull/29344))
 
