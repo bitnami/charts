@@ -547,10 +547,6 @@ service:
   ## @param service.ports.https Service HTTPS port
   ##
   ports:
-  - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 8086
   - name: https  # Add this for HTTPS
       protocol: TCP
       port: 443
