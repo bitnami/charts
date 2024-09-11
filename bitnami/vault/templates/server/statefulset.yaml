@@ -251,7 +251,9 @@ spec:
         {{- end }}
   {{- if and .Values.server.persistence.enabled (not .Values.server.persistence.existingClaim) }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         annotations:
           {{- if .Values.server.persistence.annotations }}
