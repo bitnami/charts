@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.11 (2024-09-09)
+## 0.1.12 (2024-09-11)
 
-* [bitnami/valkey-cluster] Release 0.1.11 ([#29314](https://github.com/bitnami/charts/pull/29314))
+* [bitnami/valkey-cluster] fix: add apiVersion and kind to volumeClaimTemplates ([#29354](https://github.com/bitnami/charts/pull/29354))
+
+## <small>0.1.11 (2024-09-09)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.11 (#29314) ([237b54e](https://github.com/bitnami/charts/commit/237b54eeb8fe80287e0b7a3749dac88db79b7733)), closes [#29314](https://github.com/bitnami/charts/issues/29314)
 
 ## <small>0.1.10 (2024-08-28)</small>
 
