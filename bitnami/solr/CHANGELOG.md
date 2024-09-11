@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.4.2 (2024-09-10)
+## 9.4.3 (2024-09-11)
 
-* [bitnami/solr] Release 9.4.2 ([#29317](https://github.com/bitnami/charts/pull/29317))
+* [bitnami/solr] fix: add apiVersion and kind to volumeClaimTemplates ([#29356](https://github.com/bitnami/charts/pull/29356))
+
+## <small>9.4.2 (2024-09-10)</small>
+
+* [bitnami/solr] Release 9.4.2 (#29317) ([18066e1](https://github.com/bitnami/charts/commit/18066e1687f1dafd53b1fce35ae0a9351a006f13)), closes [#29317](https://github.com/bitnami/charts/issues/29317)
 
 ## <small>9.4.1 (2024-09-03)</small>
 
