@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.10 (2024-08-20)
+## 3.3.11 (2024-09-03)
 
-* [bitnami/apisix] Release 3.3.10 ([#28942](https://github.com/bitnami/charts/pull/28942))
+* [bitnami/apisix] Added multi-auth plugin to the plugins list ([#29170](https://github.com/bitnami/charts/pull/29170))
+
+## <small>3.3.10 (2024-08-20)</small>
+
+* [bitnami/apisix] Release 3.3.10 (#28942) ([f7bd58e](https://github.com/bitnami/charts/commit/f7bd58e4b2842e0bf1bf2dcd0288beea98dd87a9)), closes [#28942](https://github.com/bitnami/charts/issues/28942)
 
 ## <small>3.3.9 (2024-07-25)</small>
 

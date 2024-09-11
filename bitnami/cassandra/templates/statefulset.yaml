@@ -462,7 +462,7 @@ spec:
             - name: certs-shared
               mountPath: /opt/bitnami/cassandra/certs
             {{- end }}
-            {{- if .Values.initDBConfigMap }}
+            {{- if or .Values.initDBConfigMap .Values.initDB }}
             - name: init-db-cm
               mountPath: /docker-entrypoint-initdb.d/configmap
             {{- end }}
@@ -566,10 +566,10 @@ spec:
         {{- end }}
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.initDBConfigMap }}
+        {{- if or .Values.initDB .Values.initDBConfigMap }}
         - name: init-db-cm
           configMap:
-            name: {{ tpl .Values.initDBConfigMap $ }}
+            name: {{ ternary (printf "%s-init-scripts" (include "common.names.fullname" .)) (tpl .Values.initDBConfigMap $) (empty .Values.initDBConfigMap) }}
         {{- end }}
         {{- if .Values.initDBSecret }}
         - name: init-db-secret
