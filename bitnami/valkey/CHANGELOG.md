@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.15 (2024-08-19)
+## 0.3.16 (2024-09-11)
 
-* [bitnami/valkey] Fix env-vars for metrics container ([#28884](https://github.com/bitnami/charts/pull/28884))
+* Fix 404 ([#29333](https://github.com/bitnami/charts/pull/29333))
+
+## <small>0.3.15 (2024-08-19)</small>
+
+* [bitnami/valkey] Fix env-vars for metrics container (#28884) ([17ffafe](https://github.com/bitnami/charts/commit/17ffafe703df7a81853b3632e03e2af79dfb41f2)), closes [#28884](https://github.com/bitnami/charts/issues/28884)
 
 ## <small>0.3.14 (2024-08-14)</small>
 
