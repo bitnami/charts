@@ -1,8 +1,8 @@
 # Changelog
 
-## 4.2.14 (2024-08-24)
+## 4.2.15 (2024-09-06)
 
-* [bitnami/pytorch] Release 4.2.14 ([#29013](https://github.com/bitnami/charts/pull/29013))
+* [bitnami/pytorch] Release 4.2.15 ([#29271](https://github.com/bitnami/charts/pull/29271))
 
 ## <small>4.2.13 (2024-07-25)</small>
 

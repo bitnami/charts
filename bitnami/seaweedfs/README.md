@@ -65,11 +65,41 @@ You may want to have SeaweedFS Filer Server connect to an external database rath
 
 ```console
 mariadb.enabled=false
+externalDatabase.enabled=true
+externalDatabase.store=mariadb
 externalDatabase.host=myexternalhost
 externalDatabase.user=myuser
 externalDatabase.password=mypassword
 externalDatabase.database=mydatabase
 externalDatabase.port=3306
+```
+
+In addition, the tables must be created in the external database before starting seaweedfs.
+
+For mariadb, the following should be performed (substituting mydatabase as necessary):
+
+```console
+USE mydatabase;
+CREATE TABLE IF NOT EXISTS `filemeta` (
+  `dirhash`   BIGINT NOT NULL       COMMENT 'first 64 bits of MD5 hash value of directory field',
+  `name`      VARCHAR(766) NOT NULL COMMENT 'directory or file name',
+  `directory` TEXT NOT NULL         COMMENT 'full path to parent directory',
+  `meta`      LONGBLOB,
+  PRIMARY KEY (`dirhash`, `name`)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+```
+
+For postgresql, the following should be performed (substituting mydatabase as necessary):
+
+```console
+\c mydatabase;
+CREATE TABLE IF NOT EXISTS filemeta (
+  dirhash     BIGINT,
+  name        VARCHAR(65535),
+  directory   VARCHAR(65535),
+  meta        bytea,
+  PRIMARY KEY (dirhash, name)
+);
 ```
 
 ### Ingress
@@ -1043,7 +1073,8 @@ enabled = false
 | `mariadb.primary.persistence.size`         | Persistent Volume size                                                                                                                                                                                                     | `8Gi`               |
 | `mariadb.primary.resourcesPreset`          | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`             |
 | `mariadb.primary.resources`                | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                |
-| `externalDatabase.enabled`                 | Enable secret with external mariadb database credentials                                                                                                                                                                   | `false`             |
+| `externalDatabase.enabled`                 | Enable external database support                                                                                                                                                                                           | `false`             |
+| `externalDatabase.store`                   | Database store (mariadb, postgresql)                                                                                                                                                                                       | `mariadb`           |
 | `externalDatabase.host`                    | External Database server host                                                                                                                                                                                              | `localhost`         |
 | `externalDatabase.port`                    | External Database server port                                                                                                                                                                                              | `3306`              |
 | `externalDatabase.user`                    | External Database username                                                                                                                                                                                                 | `bn_seaweedfs`      |

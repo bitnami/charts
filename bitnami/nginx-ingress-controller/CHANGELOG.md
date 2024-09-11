@@ -1,8 +1,12 @@
 # Changelog
 
+## 11.4.1 (2024-09-06)
+
+* [bitnami/nginx-ingress-controller] Release 11.4.1 ([#29265](https://github.com/bitnami/charts/pull/29265))
+
 ## 11.4.0 (2024-08-23)
 
-* [bitnami/nginx-ingress-controller] Allow loadBalancerClass to be customized for the nginx-ingress-controller chart ([#28919](https://github.com/bitnami/charts/pull/28919))
+* [bitnami/nginx-ingress-controller] Allow loadBalancerClass to be customized for the nginx-ingress-co ([29e7033](https://github.com/bitnami/charts/commit/29e703372504ea619d099011c42e7de228320e03)), closes [#28919](https://github.com/bitnami/charts/issues/28919)
 
 ## <small>11.3.22 (2024-08-21)</small>
 

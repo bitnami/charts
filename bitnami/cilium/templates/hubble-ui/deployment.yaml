@@ -83,31 +83,8 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.hubble.ui.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        - name: preserve-logs-symlinks
-          image: {{ template "cilium.hubble.ui.frontend.image" . }}
-          imagePullPolicy: {{ .Values.hubble.ui.frontend.image.pullPolicy }}
-          {{- if .Values.hubble.ui.frontend.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hubble.ui.frontend.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.hubble.ui.frontend.resources }}
-          resources: {{- toYaml .Values.hubble.ui.frontend.resources | nindent 12 }}
-          {{- else if ne .Values.hubble.ui.frontend.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.hubble.ui.frontend.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              . /opt/bitnami/scripts/libfs.sh
-
-              # We copy the logs folder because it has symlinks to stdout and stderr
-              if ! is_dir_empty /opt/bitnami/nginx/logs; then
-                cp -r /opt/bitnami/nginx/logs /emptydir/nginx-logs-dir
-              fi
-          volumeMounts:
-            - name: empty-dir
-              mountPath: /emptydir
+        {{- include "cilium.hubble.ui.waitForHubbleRelay" . | nindent 8 }}
+        {{- include "cilium.hubble.ui.preserveLogLinks" . | nindent 8 }}
       {{- if .Values.hubble.ui.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.hubble.ui.initContainers "context" $) | nindent 8 }}
       {{- end }}
