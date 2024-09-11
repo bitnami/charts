@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.6.15 (2024-09-10)
+## 4.6.15 (2024-09-11)
 
 * [bitnami/grafana-loki] Allow rendering resources values ([#29343](https://github.com/bitnami/charts/pull/29343))
 
