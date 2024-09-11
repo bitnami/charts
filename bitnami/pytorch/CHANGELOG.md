@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.2.15 (2024-09-06)
+## 4.2.16 (2024-09-11)
 
-* [bitnami/pytorch] Release 4.2.15 ([#29271](https://github.com/bitnami/charts/pull/29271))
+* [bitnami/pytorch] fix: add apiVersion and kind to volumeClaimTemplates ([#29359](https://github.com/bitnami/charts/pull/29359))
+
+## <small>4.2.15 (2024-09-06)</small>
+
+* [bitnami/pytorch] Release 4.2.14 (#29013) ([e075c08](https://github.com/bitnami/charts/commit/e075c0899c20e0bb4709a318e24f7d02673bd37c)), closes [#29013](https://github.com/bitnami/charts/issues/29013)
+* [bitnami/pytorch] Release 4.2.15 (#29271) ([9749d0c](https://github.com/bitnami/charts/commit/9749d0c7529d79c1e4fb264672c76626ad329e80)), closes [#29271](https://github.com/bitnami/charts/issues/29271)
 
 ## <small>4.2.13 (2024-07-25)</small>
 
