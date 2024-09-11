@@ -243,7 +243,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.arbiter.resources }}
-          resources: {{- toYaml .Values.arbiter.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.arbiter.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.arbiter.resourcesPreset) | nindent 12 }}
           {{- end }}
