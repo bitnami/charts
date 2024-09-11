@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.4.16 (2024-09-10)
+## 7.4.16 (2024-09-11)
 
 * [bitnami/memcached] Allow rendering resources values ([#29345](https://github.com/bitnami/charts/pull/29345))
 
