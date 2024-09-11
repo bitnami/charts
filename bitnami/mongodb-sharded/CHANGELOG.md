@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.6 (2024-08-26)
+## 8.3.7 (2024-09-01)
 
-* [bitnami/mongodb-sharded] Release 8.3.6 ([#29028](https://github.com/bitnami/charts/pull/29028))
+* [bitnami/mongodb-sharded] Changed to use namespaceOverride value when defining primaryhost in configsvr ([#29145](https://github.com/bitnami/charts/pull/29145))
+
+## <small>8.3.6 (2024-08-26)</small>
+
+* [bitnami/mongodb-sharded] Release 8.3.6 (#29028) ([bc3ab9f](https://github.com/bitnami/charts/commit/bc3ab9fbfc042c1c4a17fe069b284bf0616c42dc)), closes [#29028](https://github.com/bitnami/charts/issues/29028)
 
 ## <small>8.3.5 (2024-08-20)</small>
 
