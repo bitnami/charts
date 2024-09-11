@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.18 (2024-08-26)
+## 11.2.19 (2024-09-11)
 
-* [bitnami/tomcat] Release 11.2.18 ([#29024](https://github.com/bitnami/charts/pull/29024))
+* [bitnami/tomcat] Release 11.2.19 ([#29350](https://github.com/bitnami/charts/pull/29350))
+
+## <small>11.2.18 (2024-08-26)</small>
+
+* [bitnami/tomcat] Release 11.2.18 (#29024) ([3076a98](https://github.com/bitnami/charts/commit/3076a98a108652f161e3d11072c0dd56cc8a7f26)), closes [#29024](https://github.com/bitnami/charts/issues/29024)
 
 ## <small>11.2.17 (2024-08-22)</small>
 
