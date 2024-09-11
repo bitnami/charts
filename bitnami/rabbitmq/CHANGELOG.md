@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.6.10 (2024-09-10)
+## 14.6.10 (2024-09-11)
 
 * [bitnami/rabbitmq] Allow rendering resources values ([#29347](https://github.com/bitnami/charts/pull/29347))
 
