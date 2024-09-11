@@ -346,10 +346,20 @@ autoscaling:
   targetMemory: ""
 ## @param extraVolumes Array to add extra volumes
 ##
-extraVolumes: []
+extraVolumes:
+  - name: nginx-certs
+    secret:
+      secretName: nginx-certs
+
+extraVolumeMounts:
+  - name: nginx-certs
+    mountPath: /etc/nginx/certs
+    readOnly: true
+
+#extraVolumes: []
 ## @param extraVolumeMounts Array to add extra mount
 ##
-extraVolumeMounts: []
+#extraVolumeMounts: []
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -497,8 +507,16 @@ cloneStaticSiteFromGit:
 ##
 serverBlock: |-
    server {
-     listen 0.0.0.0:8086;
-     proxy_ssl_verify off;
+     listen 443 ssl;
+     server_name mdp-redirect-fm-nginx.dev.svc.cluster.local;
+
+     # Paths to SSL certificate and key
+     ssl_certificate /etc/nginx/certs/tls.crt;
+     ssl_certificate_key /etc/nginx/certs/tls.key;
+
+     ssl_protocols TLSv1.2 TLSv1.3;
+     ssl_ciphers HIGH:!aNULL:!MD5;
+
      location / {
        proxy_pass https://10.15.10.4:7524;
      }
@@ -529,8 +547,16 @@ service:
   ## @param service.ports.https Service HTTPS port
   ##
   ports:
-    http: 80
-    https: 443
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8086
+    - name: https  # Add this for HTTPS
+      protocol: TCP
+      port: 443
+      targetPort: 443
+  #  http: 80
+  #  https: 443
   ##
   ## @param service.nodePorts [object] Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
