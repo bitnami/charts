@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.15 (2024-09-07)
+## 7.4.16 (2024-09-11)
 
-* [bitnami/memcached] Release 7.4.15 ([#29299](https://github.com/bitnami/charts/pull/29299))
+* [bitnami/memcached] Allow rendering resources values ([#29345](https://github.com/bitnami/charts/pull/29345))
+
+## <small>7.4.15 (2024-09-07)</small>
+
+* [bitnami/memcached] Release 7.4.15 (#29299) ([7feed29](https://github.com/bitnami/charts/commit/7feed294b11d97bfc85d376a7f106d830bdfb339)), closes [#29299](https://github.com/bitnami/charts/issues/29299)
 
 ## <small>7.4.14 (2024-09-06)</small>
 
