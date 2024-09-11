@@ -156,7 +156,7 @@ auth:
   ##
   usePasswordFileFromSecret: true
 ## @param commonConfiguration [string] Common configuration to be added into the ConfigMap
-## ref: https://valkey.io/topics/config
+## ref: https://valkey.io/topics/valkey-conf/
 ##
 commonConfiguration: |-
   # Enable AOF https://valkey.io/docs/topics/persistence.html
