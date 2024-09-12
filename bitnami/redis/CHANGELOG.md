@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.1.1 (2024-09-10)
+## 20.1.1 (2024-09-12)
 
 * [bitnami/redis] fix: move variable from annotation to label ([#29209](https://github.com/bitnami/charts/pull/29209))
 
