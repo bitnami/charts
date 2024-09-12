@@ -146,6 +146,12 @@ To access the RabbitMQ Prometheus metrics, get the RabbitMQ Prometheus URL by ru
 
 Then, open the obtained URL in a browser.
 
+{{- if .Values.metrics.serviceMonitor.enabled }}
+Deprecated: `metrics.serviceMonitor.enabled` is deprecated.
+    Please use `metrics.serviceMonitor.{default/perObject/detailed}` to enable metrics scraping on one of the metrics endpoints.
+    See: https://www.rabbitmq.com/docs/prometheus#default-endpoint
+{{- end }}
+
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
