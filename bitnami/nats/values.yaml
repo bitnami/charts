@@ -235,7 +235,7 @@ configuration: |-
   write_deadline: {{ .Values.writeDeadline | quote }}
   {{- end }}
 
-  {{- if or (gt (int .Values.replicaCount) 1) (not .Values.jetstream.enabled) }}
+  {{- if gt (int .Values.replicaCount) 1 }}
   # Clustering definition
   cluster {
     name: {{ .Values.cluster.name | quote }}
