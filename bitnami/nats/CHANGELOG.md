@@ -1,8 +1,12 @@
 # Changelog
 
+## 8.4.1 (2024-09-12)
+
+* [bitnami/nats] Fix single replica Jetstream ([#29379](https://github.com/bitnami/charts/pull/29379))
+
 ## 8.4.0 (2024-09-12)
 
-* [bitnami/nats] Add `PersistentVolumeRetentionPolicy` ([#29371](https://github.com/bitnami/charts/pull/29371))
+* [bitnami/nats] Add `PersistentVolumeRetentionPolicy` (#29371) ([15d5c40](https://github.com/bitnami/charts/commit/15d5c40828d572501ad98281c3afff73e36a2a71)), closes [#29371](https://github.com/bitnami/charts/issues/29371)
 
 ## <small>8.3.5 (2024-09-06)</small>
 
