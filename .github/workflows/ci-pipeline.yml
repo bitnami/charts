@@ -428,7 +428,7 @@ jobs:
           verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
           runtime-parameters-file: ${{ steps.get-asset-vib-config.outputs.runtime_parameters_file }}
         env:
-          CSP_API_URL: https://console.cloud.vmware.com
+          CSP_API_URL: https://console.tanzu.broadcom.com
           CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
           VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
           # Target-Platform used by default

@@ -85,7 +85,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.filer.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if .Values.mariadb.enabled }}
+        {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
         {{- include "seaweedfs.filer.waitForDBInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if .Values.filer.initContainers }}
@@ -137,7 +137,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: WEED_CLUSTER_DEFAULT
               value: {{ .Values.clusterDefault | quote }}
-            {{- if .Values.mariadb.enabled }}
+            {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
             - name: WEED_MYSQL_ENABLED
               value: "true"
             - name: WEED_MYSQL_HOSTNAME
@@ -152,7 +152,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "seaweedfs.database.secretName" . }}
-                  key: mariadb-password
+                  key: {{ include "seaweedfs.database.keyName" . }}
             - name: WEED_MYSQL_CONNECTION_MAX_IDLE
               value: "5"
             - name: WEED_MYSQL_CONNECTION_MAX_OPEN
@@ -161,6 +161,25 @@ spec:
               value: "600"
             - name: WEED_MYSQL_INTERPOLATEPARAMS
               value: "true"
+            {{- end }}
+            {{- if and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgres") }}
+            - name: WEED_POSTGRES_ENABLED
+              value: "true"
+            - name: WEED_POSTGRES_HOSTNAME
+              value: {{ include "seaweedfs.database.host" . | quote }}
+            - name: WEED_POSTGRES_PORT
+              value: {{ include "seaweedfs.database.port" . | quote }}
+            - name: WEED_POSTGRES_DATABASE
+              value: {{ include "seaweedfs.database.name" . | quote }}
+            - name: WEED_POSTGRES_USERNAME
+              value: {{ include "seaweedfs.database.user" . | quote }}
+            - name: WEED_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "seaweedfs.database.secretName" . }}
+                  key: {{ include "seaweedfs.database.keyName" . }}
+            - name: WEED_POSTGRES_SSLMODE
+              value: "disable"
             {{- end }}
             {{- if .Values.filer.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraEnvVars "context" $) | nindent 12 }}

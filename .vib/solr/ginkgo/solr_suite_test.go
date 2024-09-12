@@ -54,7 +54,8 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 	}
 	command := []string{"solr"}
 	command = append(command, args[:]...)
-	command = append(command, "-p", port)
+	command = append(command, "--solr-url", fmt.Sprintf("http://%s:%s", stsName, port))
+
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
@@ -72,10 +73,6 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 							Image:   image,
 							Command: command,
 							Env: []v1.EnvVar{
-								{
-									Name:  "SOLR_HOST",
-									Value: stsName,
-								},
 								{
 									Name:  "SOLR_AUTHENTICATION_OPTS",
 									Value: fmt.Sprintf("-Dbasicauth=%s:%s", username, password),

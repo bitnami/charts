@@ -1,6 +1,6 @@
 {
   "cluster": {
     "head": "kuberay-cluster-head",
-    "worker": "kuberay-cluster-worker-vib"
+    "worker": "kuberay-cluster-vib-worker"
   }
 }
