@@ -944,7 +944,7 @@ persistence:
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
 ##
 persistentVolumeClaimRetentionPolicy:
-  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for postgresql Statefulset
+  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for NATS statefulset
   ##
   enabled: false
   ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
