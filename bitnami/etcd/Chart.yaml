@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: etcd
-      image: docker.io/bitnami/etcd:3.5.15-debian-12-r8
+      image: docker.io/bitnami/etcd:3.5.15-debian-12-r9
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r29
+      image: docker.io/bitnami/os-shell:12-debian-12-r30
 apiVersion: v2
 appVersion: 3.5.15
 dependencies:
@@ -32,4 +32,4 @@ maintainers:
 name: etcd
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/etcd
-version: 10.2.14
+version: 10.2.15
