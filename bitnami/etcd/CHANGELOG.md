@@ -1,8 +1,16 @@
 # Changelog
 
-## 10.2.13 (2024-08-27)
+## 10.2.15 (2024-09-12)
 
-* [bitnami/etcd] Release 10.2.13 ([#29048](https://github.com/bitnami/charts/pull/29048))
+* [bitnami/etcd] Release 10.2.15 ([#29373](https://github.com/bitnami/charts/pull/29373))
+
+## <small>10.2.14 (2024-09-05)</small>
+
+* [bitnami/etcd] Release 10.2.14 (#29233) ([72a3026](https://github.com/bitnami/charts/commit/72a30265033f92f4b1e2d357948140ffd5ab4751)), closes [#29233](https://github.com/bitnami/charts/issues/29233)
+
+## <small>10.2.13 (2024-08-27)</small>
+
+* [bitnami/etcd] Release 10.2.13 (#29048) ([14a9538](https://github.com/bitnami/charts/commit/14a9538b0d55f496b5ce4387307b1fa5c0bc2378)), closes [#29048](https://github.com/bitnami/charts/issues/29048)
 
 ## <small>10.2.12 (2024-08-07)</small>
 

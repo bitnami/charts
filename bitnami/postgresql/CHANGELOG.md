@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.5.29 (2024-09-05)
+## 15.5.30 (2024-09-12)
 
 * [bitnami/postgresql] collect metrics as postgres user ([#29201](https://github.com/bitnami/charts/pull/29201))
+
+## <small>15.5.29 (2024-09-10)</small>
+
+* [bitnami/postgresql] Release 15.5.29 ([#29330](https://github.com/bitnami/charts/pull/29330))
 
 ## <small>15.5.28 (2024-09-05)</small>
 

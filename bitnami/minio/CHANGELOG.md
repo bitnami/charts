@@ -1,8 +1,24 @@
 # Changelog
 
-## 14.7.4 (2024-08-30)
+## 14.7.8 (2024-09-11)
 
-* [bitnami/minio] Release 14.7.4 ([#29119](https://github.com/bitnami/charts/pull/29119))
+* [bitnami/minio] Bail early if defaultBuckets is used in distributed mode (#29034) ([#29141](https://github.com/bitnami/charts/pull/29141))
+
+## <small>14.7.7 (2024-09-10)</small>
+
+* [bitnami/minio] Release 14.7.7 (#29318) ([f0167a5](https://github.com/bitnami/charts/commit/f0167a553fa38cf82acd0f135217eca0959faeec)), closes [#29318](https://github.com/bitnami/charts/issues/29318)
+
+## <small>14.7.6 (2024-09-09)</small>
+
+* [bitnami/minio]: fix missing `metrics.enabled` docs. (#29270) ([1780940](https://github.com/bitnami/charts/commit/17809407c8b44b14be0cda439b98cad70705bb07)), closes [#29270](https://github.com/bitnami/charts/issues/29270)
+
+## <small>14.7.5 (2024-09-06)</small>
+
+* [bitnami/minio] Release 14.7.5 (#29252) ([8e5d760](https://github.com/bitnami/charts/commit/8e5d760c5921a00a143bc0fddea753cd91aa05c4)), closes [#29252](https://github.com/bitnami/charts/issues/29252)
+
+## <small>14.7.4 (2024-08-30)</small>
+
+* [bitnami/minio] Release 14.7.4 (#29119) ([4bc57b5](https://github.com/bitnami/charts/commit/4bc57b5b222fc0b4d28a19c469b89d65cac6eb68)), closes [#29119](https://github.com/bitnami/charts/issues/29119)
 
 ## <small>14.7.3 (2024-08-29)</small>
 

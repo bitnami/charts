@@ -130,6 +130,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: certs
+          {{- if .Values.master.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.master.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.copyTlsCerts.resources }}
           resources: {{- toYaml .Values.copyTlsCerts.resources | nindent 12 }}
           {{- else if ne .Values.copyTlsCerts.resourcesPreset "none" }}
@@ -428,7 +431,9 @@ spec:
     whenScaled: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: "data"
         {{- if or .Values.master.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
