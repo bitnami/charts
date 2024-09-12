@@ -6,7 +6,7 @@
 
 ## <small>15.5.29 (2024-09-10)</small>
 
-* [bitnami/postgresql] Release 15.5.29 ([#29330](https://github.com/bitnami/charts/pull/29330))
+* [bitnami/postgresql] Release 15.5.29 (#29330) ([3c161f7](https://github.com/bitnami/charts/commit/3c161f7033eff31b2f3d98879bcac07c7070c0d6)), closes [#29330](https://github.com/bitnami/charts/issues/29330)
 
 ## <small>15.5.28 (2024-09-05)</small>
 
