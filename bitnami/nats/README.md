@@ -337,14 +337,17 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Persistence parameters
 
-| Name                       | Description                                                         | Value               |
-| -------------------------- | ------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`      | Enable NATS data persistence using PVC(s)                           | `false`             |
-| `persistence.storageClass` | PVC Storage Class for NATS data volume                              | `""`                |
-| `persistence.accessModes`  | PVC Access modes                                                    | `["ReadWriteOnce"]` |
-| `persistence.size`         | PVC Storage Request for NATS data volume                            | `8Gi`               |
-| `persistence.annotations`  | Annotations for the PVC                                             | `{}`                |
-| `persistence.selector`     | Selector to match an existing Persistent Volume for NATS's data PVC | `{}`                |
+| Name                                               | Description                                                                    | Value               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------- |
+| `persistence.enabled`                              | Enable NATS data persistence using PVC(s)                                      | `false`             |
+| `persistence.storageClass`                         | PVC Storage Class for NATS data volume                                         | `""`                |
+| `persistence.accessModes`                          | PVC Access modes                                                               | `["ReadWriteOnce"]` |
+| `persistence.size`                                 | PVC Storage Request for NATS data volume                                       | `8Gi`               |
+| `persistence.annotations`                          | Annotations for the PVC                                                        | `{}`                |
+| `persistence.selector`                             | Selector to match an existing Persistent Volume for NATS's data PVC            | `{}`                |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for postgresql Statefulset           | `false`             |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced | `Retain`            |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted         | `Retain`            |
 
 ### Other parameters
 
