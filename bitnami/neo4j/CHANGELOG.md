@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.8 (2024-08-28)
+## 0.1.9 (2024-09-11)
 
-* [bitnami/neo4j] Release 0.1.8 ([#29090](https://github.com/bitnami/charts/pull/29090))
+* [bitnami/neo4j] fix: add apiVersion and kind to volumeClaimTemplates ([#29361](https://github.com/bitnami/charts/pull/29361))
+
+## <small>0.1.8 (2024-08-28)</small>
+
+* [bitnami/neo4j] Release 0.1.8 (#29090) ([5dea204](https://github.com/bitnami/charts/commit/5dea2043afc0d635f9d13540b8a28831b1fa72ad)), closes [#29090](https://github.com/bitnami/charts/issues/29090)
 
 ## <small>0.1.7 (2024-07-25)</small>
 
