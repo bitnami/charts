@@ -6,7 +6,8 @@
 
 ## <small>12.0.1 (2024-09-10)</small>
 
-* [bitnami/cassandra] Release 12.0.1 ([#29339](https://github.com/bitnami/charts/pull/29339))
+* [bitnami/cassandra] Release 12.0.0 (#29305) ([a1acd8f](https://github.com/bitnami/charts/commit/a1acd8f74562ec3d85d0ee11e6d22c9d426699df)), closes [#29305](https://github.com/bitnami/charts/issues/29305)
+* [bitnami/cassandra] Release 12.0.1 (#29339) ([0349ba2](https://github.com/bitnami/charts/commit/0349ba298f17cef36647d887f74cc9600be00be5)), closes [#29339](https://github.com/bitnami/charts/issues/29339)
 
 ## <small>11.4.2 (2024-09-04)</small>
 
