@@ -235,6 +235,7 @@ configuration: |-
   write_deadline: {{ .Values.writeDeadline | quote }}
   {{- end }}
 
+  {{- if or (gt (int .Values.replicaCount) 1) (not .Values.jetstream.enabled) }}
   # Clustering definition
   cluster {
     name: {{ .Values.cluster.name | quote }}
@@ -262,6 +263,7 @@ configuration: |-
     connect_retries: {{ .Values.cluster.connectRetries }}
     {{- end }}
   }
+  {{- end }}
 
   {{- if .Values.jetstream.enabled }}
   # JetStream configuration
