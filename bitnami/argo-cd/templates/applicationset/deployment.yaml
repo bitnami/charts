@@ -19,7 +19,6 @@ spec:
   {{- if .Values.applicationSet.updateStrategy }}
   strategy: {{- toYaml .Values.applicationSet.updateStrategy | nindent 4 }}
   {{- end }}
-  selector:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.applicationSet.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
