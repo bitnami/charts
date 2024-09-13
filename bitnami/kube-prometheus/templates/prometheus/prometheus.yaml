@@ -283,14 +283,26 @@ spec:
         {{- if .Values.prometheus.thanos.extraArgs }}
         {{ toYaml .Values.prometheus.thanos.extraArgs | indent 8  | trim }}
         {{- end }}
-      {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
       env:
+        {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
         - name: OBJSTORE_CONFIG
           valueFrom:
             secretKeyRef:
               name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
               key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
-      {{- end }}
+        {{- end }}
+        {{- if .Values.prometheus.thanos.extraEnvVars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
+      envFrom:
+        {{- if .Values.prometheus.thanos.extraEnvVarsCM }}
+        - configMapRef:
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVarsCM "context" $) }}
+        {{- end }}
+        {{- if .Values.prometheus.thanos.extraEnvVarsSecret }}
+        - secretRef:
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVarsSecret "context" $) }}
+        {{- end }}
       {{- if .Values.prometheus.thanos.resources }}
       resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
       {{- else if ne .Values.prometheus.thanos.resourcesPreset "none" }}
