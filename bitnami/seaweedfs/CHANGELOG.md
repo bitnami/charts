@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.1 (2024-09-11)
+## 1.1.2 (2024-09-13)
 
-* [bitnami/seaweedfs] fix: add apiVersion and kind to volumeClaimTemplates ([#29357](https://github.com/bitnami/charts/pull/29357))
+* [bitnami/seaweedfs] Release 1.1.2 ([#29392](https://github.com/bitnami/charts/pull/29392))
+
+## <small>1.1.1 (2024-09-12)</small>
+
+* [bitnami/seaweedfs] fix: add apiVersion and kind to volumeClaimTemplates (#29357) ([ed8879b](https://github.com/bitnami/charts/commit/ed8879b066c604f95bde4c08f13d7eb8dc6f2d3f)), closes [#29357](https://github.com/bitnami/charts/issues/29357)
 
 ## 1.1.0 (2024-09-10)
 
