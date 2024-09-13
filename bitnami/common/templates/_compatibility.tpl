@@ -34,6 +34,7 @@ Usage:
     {{- end -}}
   {{- end -}}
 {{- end -}}
+{{/* Remove empty seLinuxOptions object if global.compatibility.omitEmptySeLinuxOptions is set to true */}}
 {{- if and (((.context.Values.global).compatibility).omitEmptySeLinuxOptions) (not .secContext.seLinuxOptions) -}}
   {{- $adaptedContext = omit $adaptedContext "seLinuxOptions" -}}
 {{- end -}}
