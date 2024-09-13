@@ -34,6 +34,10 @@ Usage:
     {{- end -}}
   {{- end -}}
 {{- end -}}
+{{/* Remove empty seLinuxOptions object if global.compatibility.omitEmptySeLinuxOptions is set to true */}}
+{{- if and (((.context.Values.global).compatibility).omitEmptySeLinuxOptions) (not .secContext.seLinuxOptions) -}}
+  {{- $adaptedContext = omit $adaptedContext "seLinuxOptions" -}}
+{{- end -}}
 {{/* Remove fields that are disregarded when running the container in privileged mode */}}
 {{- if $adaptedContext.privileged -}}
   {{- $adaptedContext = omit $adaptedContext "capabilities" "seLinuxOptions" -}}
