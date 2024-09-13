@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.1.1 (2024-09-12)
+## 20.1.2 (2024-09-13)
 
-* [bitnami/redis] fix: move variable from annotation to label ([#29209](https://github.com/bitnami/charts/pull/29209))
+* [bitnami/redis] Use common password manager to handle password ([#29376](https://github.com/bitnami/charts/pull/29376))
+
+## <small>20.1.1 (2024-09-13)</small>
+
+* [bitnami/redis] fix: move variable from annotation to label (#29209) ([396fa01](https://github.com/bitnami/charts/commit/396fa01503a29a5c4695073ed9e6bde1923b187b)), closes [#29209](https://github.com/bitnami/charts/issues/29209)
 
 ## 20.1.0 (2024-09-09)
 
