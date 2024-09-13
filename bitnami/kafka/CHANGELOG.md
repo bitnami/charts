@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.0.5 (2024-08-20)
+## 30.1.0 (2024-09-06)
 
-* bitnami/kafka Fix pem auth with custom encrypted private key ([#28618](https://github.com/bitnami/charts/pull/28618))
+* [bitnami/kafka] feature: NetworkPolicy review ([#29274](https://github.com/bitnami/charts/pull/29274))
+
+## <small>30.0.5 (2024-08-23)</small>
+
+* bitnami/kafka Fix pem auth with custom encrypted private key (#28618) ([96b751e](https://github.com/bitnami/charts/commit/96b751e3eb0a6acba28e0fcbca907bb2de88fdf5)), closes [#28618](https://github.com/bitnami/charts/issues/28618)
 
 ## <small>30.0.4 (2024-08-14)</small>
 
