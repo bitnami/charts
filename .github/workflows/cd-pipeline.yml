@@ -67,7 +67,7 @@ jobs:
     permissions:
       contents: read
     env:
-      CSP_API_URL: https://console.cloud.vmware.com
+      CSP_API_URL: https://console.tanzu.broadcom.com
       CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
       VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
     steps:

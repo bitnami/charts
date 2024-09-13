@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.1 (2024-09-06)
+## 1.0.0 (2024-09-10)
 
-* [bitnami/zipkin] test: :white_check_mark: Move verification to serial ([#29278](https://github.com/bitnami/charts/pull/29278))
+* [bitnami/zipkin] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) ([#29326](https://github.com/bitnami/charts/pull/29326))
+
+## <small>0.1.1 (2024-09-06)</small>
+
+* [bitnami/zipkin] test: :white_check_mark: Move verification to serial (#29278) ([f8bf6f1](https://github.com/bitnami/charts/commit/f8bf6f1516ea7df4bfb115f9fbcade880124ed56)), closes [#29278](https://github.com/bitnami/charts/issues/29278)
 
 ## 0.1.0 (2024-09-05)
 

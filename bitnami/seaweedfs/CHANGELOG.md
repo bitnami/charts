@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.0.9 (2024-08-19)
+## 1.1.1 (2024-09-11)
 
-* [bitnami/seaweedfs] Release 1.0.9 ([#28920](https://github.com/bitnami/charts/pull/28920))
+* [bitnami/seaweedfs] fix: add apiVersion and kind to volumeClaimTemplates ([#29357](https://github.com/bitnami/charts/pull/29357))
+
+## 1.1.0 (2024-09-10)
+
+* bitnami/seaweedfs external postgres database support (#29216) ([dc9b740](https://github.com/bitnami/charts/commit/dc9b7402d1ea788f806e42b7fc7e5c025e003e2a)), closes [#29216](https://github.com/bitnami/charts/issues/29216)
+
+## <small>1.0.9 (2024-08-19)</small>
+
+* [bitnami/seaweedfs] Release 1.0.9 (#28920) ([28916ca](https://github.com/bitnami/charts/commit/28916ca487e16f1626580f21c2ae8acb443a2e39)), closes [#28920](https://github.com/bitnami/charts/issues/28920)
 
 ## <small>1.0.8 (2024-08-07)</small>
 

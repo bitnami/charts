@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.2.11 (2024-09-06)
+## 1.3.1 (2024-09-11)
 
-* [bitnami/opensearch] Release 1.2.11 ([#29281](https://github.com/bitnami/charts/pull/29281))
+* [bitnami/opensearch] fix: add apiVersion and kind to volumeClaimTemplates ([#29360](https://github.com/bitnami/charts/pull/29360))
+
+## 1.3.0 (2024-09-09)
+
+* [bitnami/opensearch] feat: :sparkles: Add metrics (#29307) ([181f600](https://github.com/bitnami/charts/commit/181f600561b3110251730540731572a4d7be0a1d)), closes [#29307](https://github.com/bitnami/charts/issues/29307)
+
+## <small>1.2.13 (2024-09-09)</small>
+
+* [bitnami/opensearch] Release 1.2.13 (#29309) ([e34315e](https://github.com/bitnami/charts/commit/e34315e5eabba57298187c5dcaaa7a5bba02ea80)), closes [#29309](https://github.com/bitnami/charts/issues/29309)
+
+## <small>1.2.12 (2024-09-09)</small>
+
+* [bitnami/opensearch] Release 1.2.12 (#29308) ([34b5af2](https://github.com/bitnami/charts/commit/34b5af2cc3da11368f51c72f8cf7bbd59e59a899)), closes [#29308](https://github.com/bitnami/charts/issues/29308)
+
+## <small>1.2.11 (2024-09-06)</small>
+
+* [bitnami/opensearch] Release 1.2.11 (#29281) ([7b87518](https://github.com/bitnami/charts/commit/7b87518dcfebb34ef91c6957eb29d5a45f38f624)), closes [#29281](https://github.com/bitnami/charts/issues/29281)
 
 ## <small>1.2.10 (2024-08-08)</small>
 

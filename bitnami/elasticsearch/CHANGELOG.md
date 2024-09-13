@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.3.14 (2024-09-09)
+## 21.3.16 (2024-09-11)
 
-* [bitnami/elasticsearch] Use containerSecurityContext on the copy-tls-verificates initContainer ([#29193](https://github.com/bitnami/charts/pull/29193))
+* [bitnami/elasticsearch] fix: add apiVersion and kind to volumeClaimTemplates ([#29362](https://github.com/bitnami/charts/pull/29362))
+
+## <small>21.3.15 (2024-09-09)</small>
+
+* [bitnami/elasticsearch] Release 21.3.15 (#29303) ([092082a](https://github.com/bitnami/charts/commit/092082a307547a2fcf7acc00c7ae48a1a3b53aa4)), closes [#29303](https://github.com/bitnami/charts/issues/29303)
+
+## <small>21.3.14 (2024-09-09)</small>
+
+* [bitnami/elasticsearch] Use containerSecurityContext on the copy-tls-verificates initContainer (#291 ([cbcd9ae](https://github.com/bitnami/charts/commit/cbcd9ae580b30a6060861bb4f2170d3d0ba55f36)), closes [#29193](https://github.com/bitnami/charts/issues/29193) [#29179](https://github.com/bitnami/charts/issues/29179)
 
 ## <small>21.3.13 (2024-09-07)</small>
 

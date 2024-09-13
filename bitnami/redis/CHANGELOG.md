@@ -1,8 +1,16 @@
 # Changelog
 
-## 20.0.5 (2024-09-05)
+## 20.1.1 (2024-09-12)
 
-* [bitnami/redis] label slave pod using sentinel masterService ([#29121](https://github.com/bitnami/charts/pull/29121))
+* [bitnami/redis] fix: move variable from annotation to label ([#29209](https://github.com/bitnami/charts/pull/29209))
+
+## 20.1.0 (2024-09-09)
+
+* [bitnami/redis] Support extraEnvVars on volume-permissions for dynamic subfolders (#29195) ([b33ff20](https://github.com/bitnami/charts/commit/b33ff200f4710173de48581071bc132d09618594)), closes [#29195](https://github.com/bitnami/charts/issues/29195)
+
+## <small>20.0.5 (2024-09-05)</small>
+
+* [bitnami/redis] label slave pod using sentinel masterService (#29121) ([6ae397f](https://github.com/bitnami/charts/commit/6ae397fb40ff4af6a578c54911f96383e30fed96)), closes [#29121](https://github.com/bitnami/charts/issues/29121)
 
 ## <small>20.0.4 (2024-09-04)</small>
 
