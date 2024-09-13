@@ -79,7 +79,7 @@ spec:
               EOF
             {{- else if eq .Values.externalDatabase.store "postgresql" }}
               . /opt/bitnami/scripts/libpostgresql.sh
-              . /opt/bitnami/scripts/posgresql-env.sh
+              . /opt/bitnami/scripts/postgresql-env.sh
 
               info "Waiting for host $DATABASE_HOST"
               postgresql_is_ready() {

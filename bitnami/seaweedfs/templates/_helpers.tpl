@@ -375,7 +375,7 @@ Returns an init-container that waits for the database to be ready
       fi
   {{- else if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") ) }}
       . /opt/bitnami/scripts/libpostgresql.sh
-      . /opt/bitnami/scripts/posgresql-env.sh
+      . /opt/bitnami/scripts/postgresql-env.sh
 
       info "Waiting for host $DATABASE_HOST"
       postgresql_is_ready() {

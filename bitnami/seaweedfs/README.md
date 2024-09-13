@@ -1159,6 +1159,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/seawe
 
 ## Upgrading
 
+### To 2.0.0
+
+This major version adds support for using PostgreSQL as an alternative for MariaDB to comply with Filer database requirements. No breaking changes are expected when upgrading to this version if MariaDB is used.
+
 ### To 1.0.0
 
 This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
