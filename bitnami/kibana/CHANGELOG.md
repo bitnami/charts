@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.20 (2024-09-06)
+## 11.2.21 (2024-09-13)
 
-* [bitnami/kibana] Release 11.2.20 ([#29249](https://github.com/bitnami/charts/pull/29249))
+* [bitnami/kibana] Release 11.2.21 ([#29401](https://github.com/bitnami/charts/pull/29401))
+
+## <small>11.2.20 (2024-09-06)</small>
+
+* [bitnami/kibana] Release 11.2.20 (#29249) ([7ae0c0c](https://github.com/bitnami/charts/commit/7ae0c0c25e5f3afeca529be48a4ea997513bde1e)), closes [#29249](https://github.com/bitnami/charts/issues/29249)
 
 ## <small>11.2.19 (2024-08-19)</small>
 
