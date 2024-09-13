@@ -147,7 +147,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.gateway.resources }}
-          resources: {{- toYaml .Values.gateway.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.gateway.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.gateway.resourcesPreset) | nindent 12 }}
           {{- end }}
