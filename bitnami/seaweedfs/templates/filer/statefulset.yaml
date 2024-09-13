@@ -85,9 +85,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.filer.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
         {{- include "seaweedfs.filer.waitForDBInitContainer" . | nindent 8 }}
-        {{- end }}
         {{- if .Values.filer.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.filer.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -162,7 +160,7 @@ spec:
             - name: WEED_MYSQL_INTERPOLATEPARAMS
               value: "true"
             {{- end }}
-            {{- if and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgres") }}
+            {{- if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "postgresql") ) }}
             - name: WEED_POSTGRES_ENABLED
               value: "true"
             - name: WEED_POSTGRES_HOSTNAME
