@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.23.0 (2024-08-23)
+## 2.23.0 (2024-09-13)
 
 * [bitnami/common] Add option to remove empty seLinuxOptions from securityContext in non OpenShift environment ([#28945](https://github.com/bitnami/charts/pull/28945))
 
