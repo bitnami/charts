@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.4.1 (2024-09-12)
+## 8.4.1 (2024-09-13)
 
 * [bitnami/nats] Fix single replica Jetstream ([#29379](https://github.com/bitnami/charts/pull/29379))
 
