@@ -1,8 +1,24 @@
 # Changelog
 
-## 8.3.2 (2024-08-27)
+## 8.4.0 (2024-09-12)
 
-* [bitnami/nats] Release 8.3.2 ([#29073](https://github.com/bitnami/charts/pull/29073))
+* [bitnami/nats] Add `PersistentVolumeRetentionPolicy` ([#29371](https://github.com/bitnami/charts/pull/29371))
+
+## <small>8.3.5 (2024-09-06)</small>
+
+* [bitnami/nats] Release 8.3.5 (#29253) ([a1687c9](https://github.com/bitnami/charts/commit/a1687c981454b4ec06fbc05993a6c498e5b29bcd)), closes [#29253](https://github.com/bitnami/charts/issues/29253)
+
+## <small>8.3.4 (2024-08-30)</small>
+
+* [bitnami/nats] Release 8.3.4 (#29132) ([96e3084](https://github.com/bitnami/charts/commit/96e308493174de2b481ad857ac24b4fc1a37672a)), closes [#29132](https://github.com/bitnami/charts/issues/29132)
+
+## <small>8.3.3 (2024-08-29)</small>
+
+* [bitnami/nats] Release 8.3.3 (#29116) ([93f1632](https://github.com/bitnami/charts/commit/93f163201bea82c9321499bb4698fad46b4dc3e7)), closes [#29116](https://github.com/bitnami/charts/issues/29116)
+
+## <small>8.3.2 (2024-08-27)</small>
+
+* [bitnami/nats] Release 8.3.2 (#29073) ([ba84935](https://github.com/bitnami/charts/commit/ba849357e9811de3f34ba30a7f71857d521a46d9)), closes [#29073](https://github.com/bitnami/charts/issues/29073)
 
 ## <small>8.3.1 (2024-08-27)</small>
 

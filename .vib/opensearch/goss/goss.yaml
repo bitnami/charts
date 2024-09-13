@@ -18,6 +18,23 @@ addr:
   tcp://opensearch-dashboards:{{ .Vars.dashboards.service.ports.http }}:
     reachable: true
     timeout: 180000
+http:
+  http://opensearch-master-metrics:{{ .Vars.master.metrics.service.ports.metrics }}/_prometheus/metrics:
+    status: 200
+    body:
+      - /opensearch_jvm.*opensearch-master/
+  http://opensearch-data-metrics:{{ .Vars.data.metrics.service.ports.metrics }}/_prometheus/metrics:
+    status: 200
+    body:
+      - /opensearch_jvm.*opensearch-data/
+  http://opensearch-coordinating-metrics:{{ .Vars.coordinating.metrics.service.ports.metrics }}/_prometheus/metrics:
+    status: 200
+    body:
+      - /opensearch_jvm.*opensearch-coordinating/
+  http://opensearch-ingest-metrics:{{ .Vars.ingest.metrics.service.ports.metrics }}/_prometheus/metrics:
+    status: 200
+    body:
+      - /opensearch_jvm.*opensearch-ingest/
 {{- if .Vars.master.containerSecurityContext.enabled }}
 command:
   check-no-capabilities:

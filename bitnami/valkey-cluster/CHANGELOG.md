@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.1.9 (2024-08-14)
+## 0.1.11 (2024-09-09)
 
-* [bitnami/valkey-cluster] Fix env-vars for metrics container ([#28885](https://github.com/bitnami/charts/pull/28885))
+* [bitnami/valkey-cluster] Release 0.1.11 ([#29314](https://github.com/bitnami/charts/pull/29314))
+
+## <small>0.1.10 (2024-08-28)</small>
+
+* [bitnami/valkey-cluster] test: :white_check_mark: Improve ginkgo tests reliability (#29080) ([8d4a3ba](https://github.com/bitnami/charts/commit/8d4a3baa33536661caa577bf32219823e937018b)), closes [#29080](https://github.com/bitnami/charts/issues/29080)
+
+## <small>0.1.9 (2024-08-19)</small>
+
+* [bitnami/valkey-cluster] Fix env-vars for metrics container (#28885) ([1df2599](https://github.com/bitnami/charts/commit/1df2599056ee021039b91c7e6af3f37f086ebc27)), closes [#28885](https://github.com/bitnami/charts/issues/28885)
 
 ## <small>0.1.8 (2024-07-31)</small>
 

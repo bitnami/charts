@@ -26,7 +26,7 @@ Cypress.Commands.add(
      cy.get('span.MuiSwitch-root').eq(0).find('input').click();
      cy.get('[data-cy="username"]').should('be.enabled').type(username);
      cy.get('[data-cy="password"]').should('be.enabled').type(`${password}{enter}`);
-     cy.contains('Overview');
+     cy.contains('Welcome to Milvus');
    }
 );
 

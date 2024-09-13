@@ -2,7 +2,7 @@
 Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
-
+{{- /* TODO: On major version upgrade, add .Values.metrics.enabled to that check */}}
 {{- if .Values.metrics.serviceMonitor.enabled }}
 {{- $releaseNamespace := default (include "common.names.namespace" .) .Values.metrics.serviceMonitor.namespace }}
 apiVersion: {{ default "monitoring.coreos.com/v1" .Values.metrics.serviceMonitor.apiVersion }}

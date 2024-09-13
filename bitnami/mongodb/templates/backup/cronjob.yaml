@@ -107,7 +107,7 @@ spec:
                 - -n {{ join "," ( concat .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames ) }}
                 {{- end }}
               {{- if .Values.tls.resources }}
-              resources: {{- toYaml .Values.tls.resources | nindent 16 }}
+              resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
               {{- else if ne .Values.tls.resourcesPreset "none" }}
               resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 16 }}
               {{- end }}

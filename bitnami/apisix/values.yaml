@@ -1822,6 +1822,8 @@ dashboard:
       - tencent-cloud-cls
       - ai
       - cas-auth
+      - multi-auth
+      
   ## @param dashboard.extraConfig extra configuration settings for APISIX Dashboard
   ##
   extraConfig: {}

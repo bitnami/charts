@@ -1,8 +1,40 @@
 # Changelog
 
-## 21.3.8 (2024-08-13)
+## 21.3.16 (2024-09-11)
 
-* [bitnami/elasticsearch] Release 21.3.8 ([#28864](https://github.com/bitnami/charts/pull/28864))
+* [bitnami/elasticsearch] fix: add apiVersion and kind to volumeClaimTemplates ([#29362](https://github.com/bitnami/charts/pull/29362))
+
+## <small>21.3.15 (2024-09-09)</small>
+
+* [bitnami/elasticsearch] Release 21.3.15 (#29303) ([092082a](https://github.com/bitnami/charts/commit/092082a307547a2fcf7acc00c7ae48a1a3b53aa4)), closes [#29303](https://github.com/bitnami/charts/issues/29303)
+
+## <small>21.3.14 (2024-09-09)</small>
+
+* [bitnami/elasticsearch] Use containerSecurityContext on the copy-tls-verificates initContainer (#291 ([cbcd9ae](https://github.com/bitnami/charts/commit/cbcd9ae580b30a6060861bb4f2170d3d0ba55f36)), closes [#29193](https://github.com/bitnami/charts/issues/29193) [#29179](https://github.com/bitnami/charts/issues/29179)
+
+## <small>21.3.13 (2024-09-07)</small>
+
+* [bitnami/elasticsearch] Release 21.3.13 (#29296) ([10d241e](https://github.com/bitnami/charts/commit/10d241e9e914849a78ccc5ab35e802ecce82a05e)), closes [#29296](https://github.com/bitnami/charts/issues/29296)
+
+## <small>21.3.12 (2024-09-05)</small>
+
+* [bitnami/elasticsearch] Release 21.3.12 (#29232) ([a27dd73](https://github.com/bitnami/charts/commit/a27dd73f9f15e476c66f67ec99de740bc73ead7b)), closes [#29232](https://github.com/bitnami/charts/issues/29232)
+
+## <small>21.3.11 (2024-09-04)</small>
+
+* [bitnami/elasticsearch:21.3.10] Unable to copy tls certificates when sysctlImage is disabled  (#2918 ([f3e72bb](https://github.com/bitnami/charts/commit/f3e72bbe4fd61a2c1507e3a1645dc2445943d5b8)), closes [#29189](https://github.com/bitnami/charts/issues/29189)
+
+## <small>21.3.10 (2024-08-29)</small>
+
+* [bitnami/elasticsearch]fix: Bump version (#29105) ([094744e](https://github.com/bitnami/charts/commit/094744eba59bb5340d219ee5015b4234f09dbdff)), closes [#29105](https://github.com/bitnami/charts/issues/29105)
+
+## <small>21.3.9 (2024-08-28)</small>
+
+* [bitnami/elasticsearch] fix: Remove hardcoded image for copy-tls-certificates (#29083) ([6814398](https://github.com/bitnami/charts/commit/6814398ed4408b68322d4cd5d292392a3173fbb2)), closes [#29083](https://github.com/bitnami/charts/issues/29083)
+
+## <small>21.3.8 (2024-08-13)</small>
+
+* [bitnami/elasticsearch] Release 21.3.8 (#28864) ([3f417b0](https://github.com/bitnami/charts/commit/3f417b0ef543904d9cb8b02aa6a899c6eb8a7343)), closes [#28864](https://github.com/bitnami/charts/issues/28864)
 
 ## <small>21.3.7 (2024-08-13)</small>
 

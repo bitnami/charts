@@ -1,5 +1,6 @@
 # Changelog
 
+<<<<<<< feature/apisix-ingress-class
 ## 3.4.0 (2024-09-13)
 
 * [bitnami/apisix] Allow IngressClass to be created conditionally ([#29085](https://github.com/bitnami/charts/pull/29085))
@@ -7,6 +8,11 @@
 ## <small>3.3.11 (2024-09-04)</small>
 
 * [bitnami/apisix] Added multi-auth plugin to the plugins list (#29170) ([69939ca](https://github.com/bitnami/charts/commit/69939ca7692fd60533132f03d039f5bd9db1f573)), closes [#29170](https://github.com/bitnami/charts/issues/29170)
+=======
+## 3.3.11 (2024-09-03)
+
+* [bitnami/apisix] Added multi-auth plugin to the plugins list ([#29170](https://github.com/bitnami/charts/pull/29170))
+>>>>>>> main
 
 ## <small>3.3.10 (2024-08-20)</small>
 
