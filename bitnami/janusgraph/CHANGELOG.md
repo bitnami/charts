@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.19 (2024-08-30)
+## 0.3.20 (2024-09-13)
 
-* [bitnami/janusgraph] Release 0.3.19 ([#29135](https://github.com/bitnami/charts/pull/29135))
+* [bitnami/janusgraph] Update version of Cassandra's chart ([#29383](https://github.com/bitnami/charts/pull/29383))
+
+## <small>0.3.19 (2024-08-30)</small>
+
+* [bitnami/janusgraph] Release 0.3.19 (#29135) ([8062bfb](https://github.com/bitnami/charts/commit/8062bfb2dd29374c5c4384cd27aec41f6361fd90)), closes [#29135](https://github.com/bitnami/charts/issues/29135)
 
 ## <small>0.3.18 (2024-07-25)</small>
 
