@@ -119,7 +119,7 @@ spec:
             - containerPort: {{ .Values.loki.containerPorts.grpc }}
               name: grpc
           {{- if .Values.queryScheduler.resources }}
-          resources: {{- toYaml .Values.queryScheduler.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.queryScheduler.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.queryScheduler.resourcesPreset) | nindent 12 }}
           {{- end }}
