@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.1.2 (2024-09-13)
+## 20.1.3 (2024-09-14)
 
-* [bitnami/redis] Use common password manager to handle password ([#29376](https://github.com/bitnami/charts/pull/29376))
+* [bitnami/redis] Release 20.1.3 ([#29411](https://github.com/bitnami/charts/pull/29411))
+
+## <small>20.1.2 (2024-09-13)</small>
+
+* [bitnami/redis] Use common password manager to handle password (#29376) ([6ec3657](https://github.com/bitnami/charts/commit/6ec365736a61521aeb8f44d475420bf529f7f1fd)), closes [#29376](https://github.com/bitnami/charts/issues/29376)
 
 ## <small>20.1.1 (2024-09-13)</small>
 
