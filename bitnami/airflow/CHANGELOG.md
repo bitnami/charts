@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.5 (2024-09-06)
+## 19.0.6 (2024-09-14)
 
-* [bitnami/airflow] Release 19.0.5 ([#29291](https://github.com/bitnami/charts/pull/29291))
+* [bitnami/airflow] Release 19.0.6 ([#29408](https://github.com/bitnami/charts/pull/29408))
+
+## <small>19.0.5 (2024-09-06)</small>
+
+* [bitnami/airflow] Release 19.0.5 (#29291) ([06c98e8](https://github.com/bitnami/charts/commit/06c98e8b9a604f8ed998089751e2b56e363fd866)), closes [#29291](https://github.com/bitnami/charts/issues/29291)
 
 ## <small>19.0.4 (2024-09-02)</small>
 
