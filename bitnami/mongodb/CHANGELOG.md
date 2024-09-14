@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.23 (2024-09-11)
+## 15.6.24 (2024-09-14)
 
-* [bitnami/mongodb] Allow rendering resources values ([#29346](https://github.com/bitnami/charts/pull/29346))
+* [bitnami/mongodb] Release 15.6.24 ([#29414](https://github.com/bitnami/charts/pull/29414))
+
+## <small>15.6.23 (2024-09-11)</small>
+
+* [bitnami/mongodb] Allow rendering resources values (#29346) ([2fbc081](https://github.com/bitnami/charts/commit/2fbc081c5441b904df0b142e5ae42f77f9357385)), closes [#29346](https://github.com/bitnami/charts/issues/29346)
 
 ## <small>15.6.22 (2024-08-29)</small>
 
