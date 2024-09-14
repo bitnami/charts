@@ -1,0 +1,40 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.useCertManager }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name:
+    {{ printf "%s-selfsigned" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ printf "%s-ca" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+spec:
+  secretName: {{ printf "%s-ca-crt" (include "common.names.fullname" .) }}
+  commonName: {{ printf "%s-root-ca" (include "common.names.fullname" .) }}
+  duration: 87600h # 10 years
+  isCA: true
+  issuerRef:
+    name:
+      {{ printf "%s-selfsigned" (include "common.names.fullname" .) }}
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+spec:
+  ca:
+    secretName:
+      {{ printf "%s-ca-crt" (include "common.names.fullname" .) }}
+{{- end }}
