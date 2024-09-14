@@ -84,7 +84,7 @@ prometheus.additionalScrapeConfigs.external.name=kube-prometheus-prometheus-scra
 prometheus.additionalScrapeConfigs.external.key=additional-scrape-configs.yaml
 ```
 
-It is also possible to define scrape configuratios to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
+It is also possible to define scrape configurations to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
 
 ```text
 prometheus.additionalScrapeConfigs.enabled=true
