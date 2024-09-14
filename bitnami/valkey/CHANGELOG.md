@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.16 (2024-09-11)
+## 0.3.17 (2024-09-14)
 
-* Fix 404 ([#29333](https://github.com/bitnami/charts/pull/29333))
+* [bitnami/valkey] Release 0.3.17 ([#29413](https://github.com/bitnami/charts/pull/29413))
+
+## <small>0.3.16 (2024-09-11)</small>
+
+* [bitnami/valkey] Fix 404 in docs link (#29333) ([55b1d3d](https://github.com/bitnami/charts/commit/55b1d3deff6fb701459a532f5a40b59716f61fcf)), closes [#29333](https://github.com/bitnami/charts/issues/29333)
 
 ## <small>0.3.15 (2024-08-19)</small>
 
