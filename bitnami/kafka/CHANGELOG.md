@@ -1,8 +1,13 @@
 # Changelog
 
-## 30.1.0 (2024-09-06)
+## 30.1.1 (2024-09-14)
 
-* [bitnami/kafka] feature: NetworkPolicy review ([#29274](https://github.com/bitnami/charts/pull/29274))
+* [bitnami/kafka] Release 30.1.1 ([#29417](https://github.com/bitnami/charts/pull/29417))
+
+## 30.1.0 (2024-09-13)
+
+* [bitnami/kafka] feature: NetworkPolicy review (#29274) ([e406f1f](https://github.com/bitnami/charts/commit/e406f1f45a60c4d12eab0266a30077856ea05c7a)), closes [#29274](https://github.com/bitnami/charts/issues/29274)
+* [bitnami/kafka] update readme with new architecture for externalAccess services (#29098) ([5e5609c](https://github.com/bitnami/charts/commit/5e5609c33e245478290c4f4a6e73380042c237ac)), closes [#29098](https://github.com/bitnami/charts/issues/29098)
 
 ## <small>30.0.5 (2024-08-23)</small>
 
