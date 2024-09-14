@@ -29,6 +29,7 @@ spec:
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.externalDatabase.initDatabaseJob.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       automountServiceAccountToken: {{ .Values.externalDatabase.initDatabaseJob.automountServiceAccountToken }}
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}
       {{- if .Values.externalDatabase.initDatabaseJob.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.externalDatabase.initDatabaseJob.hostAliases "context" $) | nindent 8 }}
       {{- end }}
