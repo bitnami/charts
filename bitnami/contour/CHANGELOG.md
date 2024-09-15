@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.1.0 (2024-09-14)
+## 19.1.0 (2024-09-15)
 
 * [bitnami/contour] Allow replacing certgen with cert-manager ([#29416](https://github.com/bitnami/charts/pull/29416))
 
