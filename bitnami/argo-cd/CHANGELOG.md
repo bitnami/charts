@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.11 (2024-09-13)
+## 7.0.12 (2024-09-15)
 
-* [bitnami/argo-cd] Fix duplicate `selector:` in applicationset deployment ([#29386](https://github.com/bitnami/charts/pull/29386))
+* [bitnami/argo-cd] Release 7.0.12 ([#29429](https://github.com/bitnami/charts/pull/29429))
+
+## <small>7.0.11 (2024-09-13)</small>
+
+* [bitnami/argo-cd] Fix duplicate `selector:` in applicationset deployment (#29386) ([dc6905f](https://github.com/bitnami/charts/commit/dc6905f9ca3d7ffaa59c0ac7d689ab91ade53a27)), closes [#29386](https://github.com/bitnami/charts/issues/29386)
 
 ## <small>7.0.10 (2024-09-05)</small>
 
