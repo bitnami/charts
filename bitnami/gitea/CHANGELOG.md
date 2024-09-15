@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.20 (2024-09-11)
+## 2.3.21 (2024-09-15)
 
-* [bitnami/gitea] Update externaldb-secret logic ([#27596](https://github.com/bitnami/charts/pull/27596))
+* [bitnami/gitea] Release 2.3.21 ([#29427](https://github.com/bitnami/charts/pull/29427))
+
+## <small>2.3.20 (2024-09-11)</small>
+
+* [bitnami/gitea] Update externaldb-secret logic (#27596) ([c247305](https://github.com/bitnami/charts/commit/c2473057525a51f5177c3da0fc9ae03c0e4577dc)), closes [#27596](https://github.com/bitnami/charts/issues/27596)
 
 ## <small>2.3.19 (2024-09-06)</small>
 
