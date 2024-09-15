@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.4.3 (2024-09-11)
+## 9.4.4 (2024-09-15)
 
-* [bitnami/solr] fix: add apiVersion and kind to volumeClaimTemplates ([#29356](https://github.com/bitnami/charts/pull/29356))
+* [bitnami/solr] Use common password manager to handle password ([#29430](https://github.com/bitnami/charts/pull/29430))
+
+## <small>9.4.3 (2024-09-11)</small>
+
+* [bitnami/solr] fix: add apiVersion and kind to volumeClaimTemplates (#29356) ([1e10d96](https://github.com/bitnami/charts/commit/1e10d964f28584ac5f9d4de6dc9118ca504e49ba)), closes [#29356](https://github.com/bitnami/charts/issues/29356)
 
 ## <small>9.4.2 (2024-09-10)</small>
 
