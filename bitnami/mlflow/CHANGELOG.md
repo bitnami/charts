@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.5.2 (2024-09-16)
+## 1.5.3 (2024-09-16)
 
-* [bitnami/mlflow] Release 1.5.2 ([#29435](https://github.com/bitnami/charts/pull/29435))
+* [bitnami/mlflow] Release 1.5.3 ([#29454](https://github.com/bitnami/charts/pull/29454))
+
+## <small>1.5.2 (2024-09-16)</small>
+
+* [bitnami/mlflow] Release 1.5.2 (#29435) ([b9f4a56](https://github.com/bitnami/charts/commit/b9f4a563c176f1482d230efaef67f2930e6f0c68)), closes [#29435](https://github.com/bitnami/charts/issues/29435)
 
 ## <small>1.5.1 (2024-09-15)</small>
 
