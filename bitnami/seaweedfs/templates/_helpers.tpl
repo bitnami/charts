@@ -358,6 +358,7 @@ Returns an init-container that waits for the database to be ready
       set -o pipefail
 
       . /opt/bitnami/scripts/liblog.sh
+      [[ -f $DATABASE_PASSWORD_FILE ]] && export DATABASE_PASSWORD="$(< "${DATABASE_PASSWORD_FILE}")"
   {{- if or .Values.mariadb.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.store "mariadb") ) }}
       . /opt/bitnami/scripts/libmariadb.sh
       . /opt/bitnami/scripts/mariadb-env.sh
@@ -399,15 +400,14 @@ Returns an init-container that waits for the database to be ready
       value: {{ include "seaweedfs.database.name" . | quote }}
     - name: DATABASE_USER
       value: {{ include "seaweedfs.database.user" . | quote }}
-    - name: DATABASE_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: {{ include "seaweedfs.database.secretName" . }}
-          key: {{ include "seaweedfs.database.keyName" . }}
+    - name: DATABASE_PASSWORD_FILE
+      value: "/secrets/password"
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
+    - name: db-credentials
+      mountPath: /secrets
 {{- end -}}
 
 {{/*

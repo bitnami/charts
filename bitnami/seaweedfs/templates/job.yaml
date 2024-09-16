@@ -54,6 +54,7 @@ spec:
               set -o pipefail
 
               . /opt/bitnami/scripts/liblog.sh
+              [[ -f $DATABASE_PASSWORD_FILE ]] && export DATABASE_PASSWORD="$(< "${DATABASE_PASSWORD_FILE}")"
             {{- if eq .Values.externalDatabase.store "mariadb" }}
               . /opt/bitnami/scripts/libmariadb.sh
               . /opt/bitnami/scripts/mariadb-env.sh
@@ -113,11 +114,8 @@ spec:
               value: {{ include "seaweedfs.database.name" . | quote }}
             - name: DATABASE_USER
               value: {{ include "seaweedfs.database.user" . | quote }}
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "seaweedfs.database.secretName" . }}
-                  key: {{ include "seaweedfs.database.keyName" . }}
+            - name: DATABASE_PASSWORD_FILE
+              value: "/secrets/password"
           {{- if .Values.externalDatabase.initDatabaseJob.resources }}
           resources: {{- toYaml .Values.externalDatabase.initDatabaseJob.resources | nindent 12 }}
           {{- else if ne .Values.externalDatabase.initDatabaseJob.resourcesPreset "none" }}
@@ -127,7 +125,15 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: db-credentials
+              mountPath: /secrets
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: db-credentials
+          secret:
+            secretName: {{ include "seaweedfs.database.secretName" . }}
+            items:
+            - key: {{ include "seaweedfs.database.keyName" . }}
+              path: password
 {{- end }}

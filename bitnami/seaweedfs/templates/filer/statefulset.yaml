@@ -280,6 +280,12 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: db-credentials
+          secret:
+            secretName: {{ include "seaweedfs.database.secretName" . }}
+            items:
+            - key: {{ include "seaweedfs.database.keyName" . }}
+              path: password
         {{- if or .Values.filer.config .Values.filer.existingConfigmap }}
         - name: config
           configMap:
