@@ -38,7 +38,7 @@ securityContext: {{- include "common.compatibility.renderSecurityContext" (dict 
 topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 2 }}
 {{- end }}
 initContainers:
-{{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+  {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
   - name: volume-permissions
     image: {{ template "tomcat.volumePermissions.image" . }}
     imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -57,10 +57,10 @@ initContainers:
     volumeMounts:
       - name: data
         mountPath: /bitnami/tomcat
-{{- end }}
-{{- if .Values.initContainers }}
-{{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 2 }}
-{{- end }}
+  {{- end }}
+  {{- if .Values.initContainers }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 2 }}
+  {{- end }}
 containers:
   - name: tomcat
     image: {{ template "tomcat.image" . }}
