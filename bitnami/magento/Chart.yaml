@@ -33,7 +33,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
+deprecated: true
+description: DEPRECATED Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/magento/img/magento-stack-220x234.png
 keywords:
@@ -42,10 +43,8 @@ keywords:
 - http
 - web
 - php
-maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+maintainers: []
 name: magento
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/magento
-version: 28.0.4
+version: 28.0.5
