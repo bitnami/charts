@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.2 (2024-09-13)
+## 2.0.0 (2024-09-16)
 
-* [bitnami/seaweedfs] Release 1.1.2 ([#29392](https://github.com/bitnami/charts/pull/29392))
+* [bitnami/seaweedfs] Add support for PostgreSQL as alternative db ([#29400](https://github.com/bitnami/charts/pull/29400))
+
+## <small>1.1.2 (2024-09-13)</small>
+
+* [bitnami/seaweedfs] Release 1.1.2 (#29392) ([7df7650](https://github.com/bitnami/charts/commit/7df7650db97c60e5f447e5f18efc06764629d351)), closes [#29392](https://github.com/bitnami/charts/issues/29392)
 
 ## <small>1.1.1 (2024-09-12)</small>
 
