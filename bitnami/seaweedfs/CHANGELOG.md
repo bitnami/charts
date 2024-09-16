@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 (2024-09-14)
+## 2.0.0 (2024-09-16)
 
 * [bitnami/seaweedfs] Add support for PostgreSQL as alternative db ([#29400](https://github.com/bitnami/charts/pull/29400))
 
