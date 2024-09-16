@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.2.4 (2024-09-13)
+## 22.2.5 (2024-09-16)
 
-* [bitnami/keycloak] Fix app-volume-dir mount path ([#29397](https://github.com/bitnami/charts/pull/29397))
+* [bitnami/keycloak] Release 22.2.5 ([#29449](https://github.com/bitnami/charts/pull/29449))
+
+## <small>22.2.4 (2024-09-13)</small>
+
+* [bitnami/keycloak] Fix app-volume-dir mount path (#29397) ([665ea7c](https://github.com/bitnami/charts/commit/665ea7c362ca091d028320a62ae40891c319e223)), closes [#29397](https://github.com/bitnami/charts/issues/29397)
 
 ## <small>22.2.3 (2024-09-10)</small>
 
