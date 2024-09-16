@@ -277,7 +277,7 @@ Return the database name
 {{- if .Values.mariadb.enabled }}
     {{- print .Values.mariadb.auth.database -}}
 {{- else if .Values.postgresql.enabled -}}
-    {{- print .Values.postgresql.auth.database -}}
+    {{- coalesce (((.Values.global.postgresql).auth).database) .Values.postgresql.auth.database -}}
 {{- else -}}
     {{- print .Values.externalDatabase.database -}}
 {{- end -}}
@@ -290,7 +290,7 @@ Return the database user
 {{- if .Values.mariadb.enabled }}
     {{- print .Values.mariadb.auth.username -}}
 {{- else if .Values.postgresql.enabled -}}
-    {{- print .Values.postgresql.auth.username -}}
+    {{- coalesce (((.Values.global.postgresql).auth).username) .Values.postgresql.auth.username -}}
 {{- else -}}
     {{- print .Values.externalDatabase.user -}}
 {{- end -}}
@@ -307,8 +307,9 @@ Return the database secret name
         {{- print (include "seaweedfs.mariadb.fullname" .) -}}
     {{- end -}}
 {{- else if .Values.postgresql.enabled -}}
-    {{- if .Values.postgresql.auth.existingSecret -}}
-        {{- print (tpl .Values.postgresql.auth.existingSecret .) -}}
+    {{- $existingSecret := coalesce (((.Values.global.postgresql).auth).existingSecret) .Values.postgresql.auth.existingSecret -}}
+    {{- if $existingSecret -}}
+        {{- print (tpl $existingSecret .) -}}
     {{- else -}}
         {{- print (include "seaweedfs.postgresql.fullname" .) -}}
     {{- end -}}
