@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.7.8 (2024-09-11)
+## 14.7.9 (2024-09-16)
 
-* [bitnami/minio] Bail early if defaultBuckets is used in distributed mode (#29034) ([#29141](https://github.com/bitnami/charts/pull/29141))
+* [bitnami/minio] Release 14.7.9 ([#29455](https://github.com/bitnami/charts/pull/29455))
+
+## <small>14.7.8 (2024-09-11)</small>
+
+* [bitnami/minio] Bail early if defaultBuckets is used in distributed mode (#29034) (#29141) ([8c14114](https://github.com/bitnami/charts/commit/8c14114d729e7df5f77404859551f16fb5e939e0)), closes [#29034](https://github.com/bitnami/charts/issues/29034) [#29141](https://github.com/bitnami/charts/issues/29141) [#29034](https://github.com/bitnami/charts/issues/29034) [#29034](https://github.com/bitnami/charts/issues/29034)
 
 ## <small>14.7.7 (2024-09-10)</small>
 
