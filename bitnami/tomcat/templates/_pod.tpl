@@ -59,7 +59,7 @@ initContainers:
         mountPath: /bitnami/tomcat
 {{- end }}
 {{- if .Values.initContainers }}
-{{ include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) }}
+{{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 2 }}
 {{- end }}
 containers:
   - name: tomcat
