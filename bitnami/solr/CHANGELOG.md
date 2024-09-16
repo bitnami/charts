@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.4.4 (2024-09-15)
+## 9.4.4 (2024-09-16)
 
 * [bitnami/solr] Use common password manager to handle password ([#29430](https://github.com/bitnami/charts/pull/29430))
 
