@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.7 (2024-09-05)
+## 8.3.8 (2024-09-12)
 
-* [bitnami/external-dns] Release 8.3.7 ([#29231](https://github.com/bitnami/charts/pull/29231))
+* [bitnami/external-dns] Fixed oci workload identity secret creation ([#29374](https://github.com/bitnami/charts/pull/29374))
+
+## <small>8.3.7 (2024-09-05)</small>
+
+* [bitnami/external-dns] Release 8.3.7 (#29231) ([e6c6578](https://github.com/bitnami/charts/commit/e6c65782c9e73b79537c59c33e945d72dcf29b26)), closes [#29231](https://github.com/bitnami/charts/issues/29231)
 
 ## <small>8.3.6 (2024-09-05)</small>
 
