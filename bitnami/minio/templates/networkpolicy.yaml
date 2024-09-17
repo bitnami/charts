@@ -77,7 +77,4 @@ spec:
         {{- toYaml $extraIngress | nindent 6 }}
         {{- end }}
       {{- end }}
-    {{- if .Values.networkPolicy.extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
-    {{- end }}
 {{- end }}
