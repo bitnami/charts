@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.7.10 (2024-09-17)
+## 14.7.11 (2024-09-17)
 
-* [bitnami/minio] fix: :bug: Add sleep to avoid race condition in provisioning ([#29478](https://github.com/bitnami/charts/pull/29478))
+* [bitnami/minio] Fix #29337: MinIO invalid ingress in network policy ([#29480](https://github.com/bitnami/charts/pull/29480))
+
+## <small>14.7.10 (2024-09-17)</small>
+
+* [bitnami/minio] fix: :bug: Add sleep to avoid race condition in provisioning (#29478) ([c522a3c](https://github.com/bitnami/charts/commit/c522a3c203b3d2fc381698384c58e63ab2bba5c0)), closes [#29478](https://github.com/bitnami/charts/issues/29478)
 
 ## <small>14.7.9 (2024-09-16)</small>
 
