@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.7.9 (2024-09-16)
+## 14.7.10 (2024-09-17)
 
-* [bitnami/minio] Release 14.7.9 ([#29455](https://github.com/bitnami/charts/pull/29455))
+* [bitnami/minio] fix: :bug: Add sleep to avoid race condition in provisioning ([#29478](https://github.com/bitnami/charts/pull/29478))
+
+## <small>14.7.9 (2024-09-16)</small>
+
+* [bitnami/minio] Release 14.7.9 (#29455) ([f0e7a10](https://github.com/bitnami/charts/commit/f0e7a10b383dac974d6704604e7cebbb355cccef)), closes [#29455](https://github.com/bitnami/charts/issues/29455)
 
 ## <small>14.7.8 (2024-09-11)</small>
 
@@ -38,8 +42,11 @@
 
 ## 14.7.0 (2024-08-12)
 
-* [bitnami/minio] Release 14.6.33 (#28731) ([558c1f8](https://github.com/bitnami/charts/commit/558c1f8056152e5d16fdf35db29c4028a31453fe)), closes [#28731](https://github.com/bitnami/charts/issues/28731)
 * [bitnami/minio]: Option to use a secret. (#27837) ([5c21623](https://github.com/bitnami/charts/commit/5c2162370dd5d99d4df91f36b1fcc778ac604673)), closes [#27837](https://github.com/bitnami/charts/issues/27837)
+
+## <small>14.6.33 (2024-08-07)</small>
+
+* [bitnami/minio] Release 14.6.33 (#28731) ([558c1f8](https://github.com/bitnami/charts/commit/558c1f8056152e5d16fdf35db29c4028a31453fe)), closes [#28731](https://github.com/bitnami/charts/issues/28731)
 
 ## <small>14.6.32 (2024-08-03)</small>
 
