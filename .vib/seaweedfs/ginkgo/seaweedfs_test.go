@@ -97,7 +97,7 @@ var _ = Describe("SeaweedFS", Ordered, func() {
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, masterStsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(masterOrigReplicas)))
 
 			_, err = utils.StsRolloutRestart(ctx, c, volumeSts)
 			Expect(err).NotTo(HaveOccurred())
@@ -110,7 +110,7 @@ var _ = Describe("SeaweedFS", Ordered, func() {
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, volumeStsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(volumeOrigReplicas)))
 
 			By("creating a job to download the file")
 			downloadJobName := fmt.Sprintf("weed-download-%s", jobSuffix)
