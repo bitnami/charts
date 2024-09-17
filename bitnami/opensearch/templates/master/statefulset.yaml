@@ -364,7 +364,9 @@ spec:
             claimName: {{ .Values.master.persistence.existingClaim }}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: "data"
         {{- if or .Values.master.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.annotations .Values.commonAnnotations ) "context" . ) }}

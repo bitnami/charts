@@ -1,8 +1,20 @@
 # Changelog
 
-## 20.1.0 (2024-09-05)
+## 20.1.3 (2024-09-14)
 
-* [bitnami/redis] Support extraEnvVars on volume-permissions for dynamic subfolders ([#29195](https://github.com/bitnami/charts/pull/29195))
+* [bitnami/redis] Release 20.1.3 ([#29411](https://github.com/bitnami/charts/pull/29411))
+
+## <small>20.1.2 (2024-09-13)</small>
+
+* [bitnami/redis] Use common password manager to handle password (#29376) ([6ec3657](https://github.com/bitnami/charts/commit/6ec365736a61521aeb8f44d475420bf529f7f1fd)), closes [#29376](https://github.com/bitnami/charts/issues/29376)
+
+## <small>20.1.1 (2024-09-13)</small>
+
+* [bitnami/redis] fix: move variable from annotation to label (#29209) ([396fa01](https://github.com/bitnami/charts/commit/396fa01503a29a5c4695073ed9e6bde1923b187b)), closes [#29209](https://github.com/bitnami/charts/issues/29209)
+
+## 20.1.0 (2024-09-09)
+
+* [bitnami/redis] Support extraEnvVars on volume-permissions for dynamic subfolders (#29195) ([b33ff20](https://github.com/bitnami/charts/commit/b33ff200f4710173de48581071bc132d09618594)), closes [#29195](https://github.com/bitnami/charts/issues/29195)
 
 ## <small>20.0.5 (2024-09-05)</small>
 

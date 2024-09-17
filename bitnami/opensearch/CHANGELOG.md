@@ -1,8 +1,16 @@
 # Changelog
 
+## 1.3.2 (2024-09-17)
+
+* [bitnami/opensearch] test: :white_check_mark: Improve reliability of ginkgo tests ([#29471](https://github.com/bitnami/charts/pull/29471))
+
+## <small>1.3.1 (2024-09-11)</small>
+
+* [bitnami/opensearch] fix: add apiVersion and kind to volumeClaimTemplates (#29360) ([dce854e](https://github.com/bitnami/charts/commit/dce854e5318e0b3a339481e4a8f04a27c2c835f5)), closes [#29360](https://github.com/bitnami/charts/issues/29360)
+
 ## 1.3.0 (2024-09-09)
 
-* [bitnami/opensearch] feat: :sparkles: Add metrics ([#29307](https://github.com/bitnami/charts/pull/29307))
+* [bitnami/opensearch] feat: :sparkles: Add metrics (#29307) ([181f600](https://github.com/bitnami/charts/commit/181f600561b3110251730540731572a4d7be0a1d)), closes [#29307](https://github.com/bitnami/charts/issues/29307)
 
 ## <small>1.2.13 (2024-09-09)</small>
 

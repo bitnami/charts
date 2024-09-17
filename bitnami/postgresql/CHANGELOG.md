@@ -1,8 +1,20 @@
 # Changelog
 
-## 15.5.29 (2024-09-10)
+## 15.5.32 (2024-09-17)
 
-* [bitnami/postgresql] Release 15.5.29 ([#29330](https://github.com/bitnami/charts/pull/29330))
+* [bitnami/postgresql] test: :white_check_mark: Improve reliability of ginkgo tests ([#29472](https://github.com/bitnami/charts/pull/29472))
+
+## <small>15.5.31 (2024-09-13)</small>
+
+* [bitnami/postgresql] Release 15.5.31 (#29404) ([baf9a0f](https://github.com/bitnami/charts/commit/baf9a0facb2d1a659bf53d13c4088929bbf86400)), closes [#29404](https://github.com/bitnami/charts/issues/29404)
+
+## <small>15.5.30 (2024-09-13)</small>
+
+* [bitnami/postgresql] collect metrics as postgres user (#29201) ([7240870](https://github.com/bitnami/charts/commit/72408702b553e51a2848ce061bf917934737c42e)), closes [#29201](https://github.com/bitnami/charts/issues/29201)
+
+## <small>15.5.29 (2024-09-10)</small>
+
+* [bitnami/postgresql] Release 15.5.29 (#29330) ([3c161f7](https://github.com/bitnami/charts/commit/3c161f7033eff31b2f3d98879bcac07c7070c0d6)), closes [#29330](https://github.com/bitnami/charts/issues/29330)
 
 ## <small>15.5.28 (2024-09-05)</small>
 

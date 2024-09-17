@@ -10,13 +10,13 @@ annotations:
     - name: blackbox-exporter
       image: docker.io/bitnami/blackbox-exporter:0.25.0-debian-12-r16
     - name: prometheus
-      image: docker.io/bitnami/prometheus:2.54.1-debian-12-r3
+      image: docker.io/bitnami/prometheus:2.54.1-debian-12-r4
     - name: prometheus-operator
-      image: docker.io/bitnami/prometheus-operator:0.76.1-debian-12-r2
+      image: docker.io/bitnami/prometheus-operator:0.76.2-debian-12-r0
     - name: thanos
       image: docker.io/bitnami/thanos:0.36.1-debian-12-r2
 apiVersion: v2
-appVersion: 0.76.1
+appVersion: 0.76.2
 dependencies:
 - condition: exporters.enabled,exporters.node-exporter.enabled
   name: node-exporter
@@ -46,4 +46,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 9.5.14
+version: 9.6.0
