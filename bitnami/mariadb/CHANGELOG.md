@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.5 (2024-08-26)
+## 19.0.6 (2024-09-17)
 
-* [bitnami/mariadb] Fix deprecation warnings in checks ([#29021](https://github.com/bitnami/charts/pull/29021))
+* [bitnami/mariadb] test: :white_check_mark: Improve reliability of ginkgo tests ([#29467](https://github.com/bitnami/charts/pull/29467))
+
+## <small>19.0.5 (2024-08-27)</small>
+
+* [bitnami/mariadb] Fix deprecation warnings in checks (#29021) ([213786f](https://github.com/bitnami/charts/commit/213786f3f87836b41e2e70fcedd007f08a4a012f)), closes [#29021](https://github.com/bitnami/charts/issues/29021)
 
 ## <small>19.0.4 (2024-08-14)</small>
 
