@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.1 (2024-09-11)
+## 1.3.2 (2024-09-17)
 
-* [bitnami/opensearch] fix: add apiVersion and kind to volumeClaimTemplates ([#29360](https://github.com/bitnami/charts/pull/29360))
+* [bitnami/opensearch] test: :white_check_mark: Improve reliability of ginkgo tests ([#29471](https://github.com/bitnami/charts/pull/29471))
+
+## <small>1.3.1 (2024-09-11)</small>
+
+* [bitnami/opensearch] fix: add apiVersion and kind to volumeClaimTemplates (#29360) ([dce854e](https://github.com/bitnami/charts/commit/dce854e5318e0b3a339481e4a8f04a27c2c835f5)), closes [#29360](https://github.com/bitnami/charts/issues/29360)
 
 ## 1.3.0 (2024-09-09)
 
