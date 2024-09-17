@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.18 (2024-09-17)
+## 1.0.0 (2024-09-17)
 
-* [bitnami/valkey] test: :white_check_mark: Improve reliability of ginkgo tests ([#29474](https://github.com/bitnami/charts/pull/29474))
+* [bitnami/valkey] Release 1.0.0 ([#29482](https://github.com/bitnami/charts/pull/29482))
+
+## <small>0.3.18 (2024-09-17)</small>
+
+* [bitnami/valkey] test: :white_check_mark: Improve reliability of ginkgo tests (#29474) ([4bccd45](https://github.com/bitnami/charts/commit/4bccd45d29911575dd7c8c7bb060f4abf036f822)), closes [#29474](https://github.com/bitnami/charts/issues/29474)
 
 ## <small>0.3.17 (2024-09-14)</small>
 
