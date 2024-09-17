@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.12 (2024-09-07)
+## 13.4.13 (2024-09-17)
 
-* [bitnami/zookeeper] fix: add apiVersion and kind to volumeClaimTemplates ([#29289](https://github.com/bitnami/charts/pull/29289))
+* [bitnami/zookeeper] test: :white_check_mark: Improve reliability of ginkgo tests ([#29475](https://github.com/bitnami/charts/pull/29475))
+
+## <small>13.4.12 (2024-09-09)</small>
+
+* [bitnami/zookeeper] fix: add apiVersion and kind to volumeClaimTemplates (#29289) ([f393472](https://github.com/bitnami/charts/commit/f393472ab8514b93c8e0f0de9f6b022d43d16142)), closes [#29289](https://github.com/bitnami/charts/issues/29289)
 
 ## <small>13.4.11 (2024-08-30)</small>
 
