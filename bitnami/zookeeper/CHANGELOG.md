@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.4.13 (2024-09-16)
+## 13.4.13 (2024-09-17)
 
 * [bitnami/zookeeper] Drop unused `getValueFromSecret` local helper ([#29440](https://github.com/bitnami/charts/pull/29440))
 
