@@ -1,12 +1,12 @@
 # Changelog
 
-## 21.1.34 (2024-09-16)
+## 21.1.34 (2024-09-17)
 
 * [bitnami/ghost] Remove duplicated empty password check `common.validations.values.mysql.passwords` ([#29442](https://github.com/bitnami/charts/pull/29442))
 
-## 21.1.33 (2024-09-16)
+## <small>21.1.33 (2024-09-16)</small>
 
-* [bitnami/ghost] Release 21.1.33 ([#29456](https://github.com/bitnami/charts/pull/29456))
+* [bitnami/ghost] Release 21.1.33 (#29456) ([4d18bb3](https://github.com/bitnami/charts/commit/4d18bb3d392562d43f476657bfaab1432a3063d3)), closes [#29456](https://github.com/bitnami/charts/issues/29456)
 
 ## <small>21.1.32 (2024-09-06)</small>
 
