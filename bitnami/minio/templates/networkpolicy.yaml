@@ -74,7 +74,7 @@ spec:
         {{- end }}
         {{- $extraIngress := coalesce .Values.networkPolicy.extraIngress .Values.networkPolicy.extraFromClauses }}
         {{- if $extraIngress }}
-        {{- toYaml $extraIngress | nindent 8 }}
+        {{- toYaml $extraIngress | nindent 6 }}
         {{- end }}
       {{- end }}
     {{- if .Values.networkPolicy.extraIngress }}
