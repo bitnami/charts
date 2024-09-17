@@ -21,18 +21,6 @@ spec:
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.autoscaling.targetCPU }}
-    - type: Resource
-      resource:
-        name: cpu
-        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.autoscaling.targetCPU }}
-        {{- else }}
-        target:
-          type: Utilization
-          averageUtilization: {{ .Values.autoscaling.targetCPU }}
-        {{- end }}
-    {{- end }}
     {{- if .Values.autoscaling.targetMemory }}
     - type: Resource
       resource:
@@ -43,6 +31,18 @@ spec:
         target:
           type: Utilization
           averageUtilization: {{ .Values.autoscaling.targetMemory }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.autoscaling.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetCPU }}
         {{- end }}
     {{- end }}
 {{- end }}
