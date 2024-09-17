@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.4.4 (2024-09-16)
+## 9.4.5 (2024-09-17)
 
-* [bitnami/solr] Use common password manager to handle password ([#29430](https://github.com/bitnami/charts/pull/29430))
+* [bitnami/solr] test: :white_check_mark: Improve reliability of ginkgo tests ([#29463](https://github.com/bitnami/charts/pull/29463))
+
+## <small>9.4.4 (2024-09-16)</small>
+
+* [bitnami/solr] Use common password manager to handle password (#29430) ([3ecd8bd](https://github.com/bitnami/charts/commit/3ecd8bd03ceb15b03d06744989dc6aafab51c34d)), closes [#29430](https://github.com/bitnami/charts/issues/29430)
 
 ## <small>9.4.3 (2024-09-11)</small>
 
