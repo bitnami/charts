@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.24.0 (2024-09-17)
+
+* [bitnami/common] Add the ability to specify namespaces for affinity ([#29479](https://github.com/bitnami/charts/pull/29479))
+
 ## 2.23.0 (2024-09-13)
 
-* [bitnami/common] Add option to remove empty seLinuxOptions from securityContext in non OpenShift environment ([#28945](https://github.com/bitnami/charts/pull/28945))
+* [bitnami/common] Add option to remove empty seLinuxOptions from securityContext in non OpenShift env ([7e44e64](https://github.com/bitnami/charts/commit/7e44e64626f5b1fc6d56889cdfdeadc1f62c7cf1)), closes [#28945](https://github.com/bitnami/charts/issues/28945)
 
 ## 2.22.0 (2024-08-08)
 
