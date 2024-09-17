@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.24.0 (2024-09-16)
+## 2.24.0 (2024-09-17)
 
 * [bitnami/common] Drop unused custom empty password validators ([#29432](https://github.com/bitnami/charts/pull/29432))
 
