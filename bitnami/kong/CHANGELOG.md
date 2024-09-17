@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.0.1 (2024-09-16)
+## 13.0.1 (2024-09-17)
 
 * [bitnami/kong] Remove duplicated empty password check `common.validations.values.cassandra.passwords` ([#29441](https://github.com/bitnami/charts/pull/29441))
 
