@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.24.0 (2024-09-17)
+## 2.24.0 (2024-09-18)
 
 * [bitnami/common] Add the ability to specify namespaces for affinity ([#29479](https://github.com/bitnami/charts/pull/29479))
 
