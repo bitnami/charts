@@ -614,7 +614,7 @@ streamServerBlock: ""
 ## NOTE: This will override serverBlock
 ##
 existingServerBlockConfigmap: ""
-## @param existingStreamServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
+## @param existingStreamServerBlockConfigmap ConfigMap with custom stream server block to be added to NGINX configuration
 ## NOTE: This will override streamServerBlock
 ##
 existingStreamServerBlockConfigmap: ""
