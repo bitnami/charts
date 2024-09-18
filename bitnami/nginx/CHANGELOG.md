@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.1.14 (2024-09-15)
+## 18.1.15 (2024-09-18)
 
-* [bitnami/nginx] Release 18.1.14 ([#29420](https://github.com/bitnami/charts/pull/29420))
+* [bitnami/nginx] stream server blocks ([#29491](https://github.com/bitnami/charts/pull/29491))
+
+## <small>18.1.14 (2024-09-15)</small>
+
+* [bitnami/nginx] Release 18.1.14 (#29420) ([5c3aa0e](https://github.com/bitnami/charts/commit/5c3aa0e3cf41aed5bcbb1e5aed73a32847f3f05f)), closes [#29420](https://github.com/bitnami/charts/issues/29420)
 
 ## <small>18.1.13 (2024-09-13)</small>
 
