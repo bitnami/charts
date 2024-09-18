@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.18 (2024-09-15)
+## 11.2.19 (2024-09-18)
 
-* [bitnami/apache] Release 11.2.18 ([#29418](https://github.com/bitnami/charts/pull/29418))
+* [bitnami/apache] Update templates to have conditionals for HPA ([#29489](https://github.com/bitnami/charts/pull/29489))
+
+## <small>11.2.18 (2024-09-15)</small>
+
+* [bitnami/apache] Release 11.2.18 (#29418) ([665ff2b](https://github.com/bitnami/charts/commit/665ff2be8f372b4cf2a75c4d4c7e7c8bcd647310)), closes [#29418](https://github.com/bitnami/charts/issues/29418)
 
 ## <small>11.2.17 (2024-09-03)</small>
 
