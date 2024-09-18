@@ -159,7 +159,6 @@ The [Bitnami jaeger](https://github.com/bitnami/containers/tree/main/bitnami/jae
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -587,6 +586,10 @@ The [Bitnami jaeger](https://github.com/bitnami/containers/tree/main/bitnami/jae
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major updates the Cassandra subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/pull/29305) you can find more information about the changes introduced in that version.
 
 ### To 2.0.0
 

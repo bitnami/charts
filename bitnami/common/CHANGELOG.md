@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.22.0 (2024-08-07)
+## 2.23.0 (2024-09-13)
 
-* [bitnami/common] Fallback to chart appVersion in common.images.image ([#28764](https://github.com/bitnami/charts/pull/28764))
+* [bitnami/common] Add option to remove empty seLinuxOptions from securityContext in non OpenShift environment ([#28945](https://github.com/bitnami/charts/pull/28945))
+
+## 2.22.0 (2024-08-08)
+
+* [bitnami/common] Fallback to chart appVersion in common.images.image (#28764) ([b4aa0a6](https://github.com/bitnami/charts/commit/b4aa0a685a21c50ca10e41e3eb2023bbd4282cf7)), closes [#28764](https://github.com/bitnami/charts/issues/28764)
 
 ## 2.21.0 (2024-08-05)
 

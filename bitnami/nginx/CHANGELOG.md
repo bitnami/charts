@@ -1,8 +1,20 @@
 # Changelog
 
-## 18.1.11 (2024-08-23)
+## 18.1.14 (2024-09-15)
 
-* [bitnami/nginx] Release 18.1.11 ([#28993](https://github.com/bitnami/charts/pull/28993))
+* [bitnami/nginx] Release 18.1.14 ([#29420](https://github.com/bitnami/charts/pull/29420))
+
+## <small>18.1.13 (2024-09-13)</small>
+
+* [bitnami/nginx] Release 18.1.13 (#29390) ([1167027](https://github.com/bitnami/charts/commit/1167027bfaf67c827815f9795db425ebe233a600)), closes [#29390](https://github.com/bitnami/charts/issues/29390)
+
+## <small>18.1.12 (2024-09-11)</small>
+
+* [bitnami/nginx] Release 18.1.12 - bugfix prometheusrules label collision (#29276) ([c44ac28](https://github.com/bitnami/charts/commit/c44ac289f80916c4267b976ff703c6c6159b444b)), closes [#29276](https://github.com/bitnami/charts/issues/29276)
+
+## <small>18.1.11 (2024-08-23)</small>
+
+* [bitnami/nginx] Release 18.1.11 (#28993) ([34e0c37](https://github.com/bitnami/charts/commit/34e0c3727b2b67d946bda7b7250be6bc88dfc4e3)), closes [#28993](https://github.com/bitnami/charts/issues/28993)
 
 ## <small>18.1.10 (2024-08-21)</small>
 

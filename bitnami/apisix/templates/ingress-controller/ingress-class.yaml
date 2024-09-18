@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.ingressController.enabled }}
+{{- if and .Values.ingressController.enabled .Values.ingressController.ingressClass.create }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: IngressClass
 metadata:

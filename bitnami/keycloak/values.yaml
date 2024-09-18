@@ -103,7 +103,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 25.0.4-debian-12-r1
+  tag: 25.0.5-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1113,7 +1113,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 6.1.6-debian-12-r0
+    tag: 6.1.6-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

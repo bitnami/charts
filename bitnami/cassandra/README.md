@@ -145,7 +145,6 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -165,40 +164,39 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 ### Cassandra parameters
 
-| Name                          | Description                                                                                                            | Value                       |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `image.registry`              | Cassandra image registry                                                                                               | `REGISTRY_NAME`             |
-| `image.repository`            | Cassandra image repository                                                                                             | `REPOSITORY_NAME/cassandra` |
-| `image.digest`                | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
-| `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`              |
-| `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                        |
-| `image.debug`                 | Enable image debug mode                                                                                                | `false`                     |
-| `dbUser.user`                 | Cassandra admin user                                                                                                   | `cassandra`                 |
-| `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`                     |
-| `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                        |
-| `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                        |
-| `initDB`                      | Object with cql scripts. Useful for creating a keyspace and pre-populating data                                        | `{}`                        |
-| `initDBConfigMap`             | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                        |
-| `initDBSecret`                | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                        |
-| `existingConfiguration`       | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                        |
-| `cluster.name`                | Cassandra cluster name                                                                                                 | `cassandra`                 |
-| `cluster.seedCount`           | Number of seed nodes                                                                                                   | `1`                         |
-| `cluster.numTokens`           | Number of tokens for each node                                                                                         | `256`                       |
-| `cluster.datacenter`          | Datacenter name                                                                                                        | `dc1`                       |
-| `cluster.rack`                | Rack name                                                                                                              | `rack1`                     |
-| `cluster.endpointSnitch`      | Endpoint Snitch                                                                                                        | `SimpleSnitch`              |
-| `cluster.internodeEncryption` | DEPRECATED: use tls.internode and tls.client instead. Encryption values.                                               | `none`                      |
-| `cluster.clientEncryption`    | Client Encryption                                                                                                      | `false`                     |
-| `cluster.extraSeeds`          | For an external/second cassandra ring.                                                                                 | `[]`                        |
-| `cluster.enableUDF`           | Enable User defined functions                                                                                          | `false`                     |
-| `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options                                                                   | `""`                        |
-| `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                        |
-| `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                        |
-| `command`                     | Command for running the container (set to default if not set). Use array form                                          | `[]`                        |
-| `args`                        | Args for running the container (set to default if not set). Use array form                                             | `[]`                        |
-| `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                        |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                        |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                        |
+| Name                       | Description                                                                                                            | Value                       |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `image.registry`           | Cassandra image registry                                                                                               | `REGISTRY_NAME`             |
+| `image.repository`         | Cassandra image repository                                                                                             | `REPOSITORY_NAME/cassandra` |
+| `image.digest`             | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
+| `image.pullPolicy`         | image pull policy                                                                                                      | `IfNotPresent`              |
+| `image.pullSecrets`        | Cassandra image pull secrets                                                                                           | `[]`                        |
+| `image.debug`              | Enable image debug mode                                                                                                | `false`                     |
+| `dbUser.user`              | Cassandra admin user                                                                                                   | `cassandra`                 |
+| `dbUser.forcePassword`     | Force the user to provide a non                                                                                        | `false`                     |
+| `dbUser.password`          | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                        |
+| `dbUser.existingSecret`    | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                        |
+| `initDB`                   | Object with cql scripts. Useful for creating a keyspace and pre-populating data                                        | `{}`                        |
+| `initDBConfigMap`          | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                        |
+| `initDBSecret`             | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                        |
+| `existingConfiguration`    | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                        |
+| `cluster.name`             | Cassandra cluster name                                                                                                 | `cassandra`                 |
+| `cluster.seedCount`        | Number of seed nodes                                                                                                   | `1`                         |
+| `cluster.numTokens`        | Number of tokens for each node                                                                                         | `256`                       |
+| `cluster.datacenter`       | Datacenter name                                                                                                        | `dc1`                       |
+| `cluster.rack`             | Rack name                                                                                                              | `rack1`                     |
+| `cluster.endpointSnitch`   | Endpoint Snitch                                                                                                        | `SimpleSnitch`              |
+| `cluster.clientEncryption` | Client Encryption                                                                                                      | `false`                     |
+| `cluster.extraSeeds`       | For an external/second cassandra ring.                                                                                 | `[]`                        |
+| `cluster.enableUDF`        | Enable User defined functions                                                                                          | `false`                     |
+| `jvm.extraOpts`            | Set the value for Java Virtual Machine extra options                                                                   | `""`                        |
+| `jvm.maxHeapSize`          | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                        |
+| `jvm.newHeapSize`          | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                        |
+| `command`                  | Command for running the container (set to default if not set). Use array form                                          | `[]`                        |
+| `args`                     | Args for running the container (set to default if not set). Use array form                                             | `[]`                        |
+| `extraEnvVars`             | Extra environment variables to be set on cassandra container                                                           | `[]`                        |
+| `extraEnvVarsCM`           | Name of existing ConfigMap containing extra env vars                                                                   | `""`                        |
+| `extraEnvVarsSecret`       | Name of existing Secret containing extra env vars                                                                      | `""`                        |
 
 ### Statefulset parameters
 
@@ -431,6 +429,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/cassandra --set dbUs
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
+
+### To 12.0.0
+
+Cassandra's version was bumped to `5.0`, [the latest GA version](https://cassandra.apache.org/_/blog/Apache-Cassandra-5.0-Announcement.html). Users can upgrade from version 4 to 5.0 through an online upgrade, minimizing downtime for applications. Nevertheless, a backup creation prior to undergoing the upgrade process is recommended. Please, refer to the [official guide](https://cassandra.apache.org/doc/latest/operating/backups.html#snapshots) for further information.
 
 ### To 10.0.0
 

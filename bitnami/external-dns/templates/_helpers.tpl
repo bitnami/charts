@@ -112,7 +112,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "oci") .Values.oci.privateKeyFingerprint (not .Values.oci.secretName) -}}
+{{- else if and (eq .Values.provider "oci") (or .Values.oci.privateKeyFingerprint .Values.oci.useWorkloadIdentity) (not .Values.oci.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") (or .Values.rfc2136.tsigSecret (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword)) (not .Values.rfc2136.secretName) -}}
     {{- true -}}

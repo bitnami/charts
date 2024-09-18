@@ -1,8 +1,24 @@
 # Changelog
 
-## 9.4.1 (2024-09-03)
+## 9.4.5 (2024-09-17)
 
-* [bitnami/solr] Release 9.4.1 ([#29171](https://github.com/bitnami/charts/pull/29171))
+* [bitnami/solr] test: :white_check_mark: Improve reliability of ginkgo tests ([#29463](https://github.com/bitnami/charts/pull/29463))
+
+## <small>9.4.4 (2024-09-16)</small>
+
+* [bitnami/solr] Use common password manager to handle password (#29430) ([3ecd8bd](https://github.com/bitnami/charts/commit/3ecd8bd03ceb15b03d06744989dc6aafab51c34d)), closes [#29430](https://github.com/bitnami/charts/issues/29430)
+
+## <small>9.4.3 (2024-09-11)</small>
+
+* [bitnami/solr] fix: add apiVersion and kind to volumeClaimTemplates (#29356) ([1e10d96](https://github.com/bitnami/charts/commit/1e10d964f28584ac5f9d4de6dc9118ca504e49ba)), closes [#29356](https://github.com/bitnami/charts/issues/29356)
+
+## <small>9.4.2 (2024-09-10)</small>
+
+* [bitnami/solr] Release 9.4.2 (#29317) ([18066e1](https://github.com/bitnami/charts/commit/18066e1687f1dafd53b1fce35ae0a9351a006f13)), closes [#29317](https://github.com/bitnami/charts/issues/29317)
+
+## <small>9.4.1 (2024-09-03)</small>
+
+* [bitnami/solr] Release 9.4.1 (#29171) ([e16f252](https://github.com/bitnami/charts/commit/e16f2527ebe36c8773f9c9a87c37a3e2a9d517cf)), closes [#29171](https://github.com/bitnami/charts/issues/29171)
 
 ## 9.4.0 (2024-08-08)
 
