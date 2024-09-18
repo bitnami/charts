@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.7.11 (2024-09-17)
+## 14.7.11 (2024-09-18)
 
 * [bitnami/minio] Fix #29337: MinIO invalid ingress in network policy ([#29480](https://github.com/bitnami/charts/pull/29480))
 
