@@ -413,7 +413,7 @@ Return the opensearch TLS credentials secret items for typed nodes.
 {{- $items := list }}
 {{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretCertKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "tls.crt") }}
 {{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretKeyKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "tls.key") }}
-{{- if not $.Values.security.tls.caConfigMap }}
+{{- if not .context.Values.security.tls.caConfigMap }}
 {{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretCAKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "ca.crt") }}
 {{- end -}}
 {{ $items | toYaml }}
