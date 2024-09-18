@@ -251,6 +251,9 @@ security:
     ## Ref: https://www.open.co/guide/en/opensearch/reference/current/security-settings.html
     ##
     verificationMode: "full"
+    ## @param security.tls.caConfigMap ConfigMap containing the CA crt separately from the cert and key for SSL communications.
+    ##
+    caConfigMap: ""
     ## TLS configuration for master nodes
     ##
     master:

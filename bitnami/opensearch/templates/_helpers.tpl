@@ -399,12 +399,31 @@ Return the opensearch TLS credentials secret for typed nodes.
 {{- end -}}
 
 {{/*
+Return the opensearch TLS configMap for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsCaName" -}}
+{{- $secretName := .Values.security.tls.caConfigMap -}}
+    {{- printf "%s" (tpl $secretName .context) -}}
+{{- end -}}
+
+{{/*
 Return the opensearch TLS credentials secret items for typed nodes.
 */}}
 {{- define "opensearch.node.tlsSecretItems" -}}
 {{- $items := list }}
 {{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretCertKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "tls.crt") }}
 {{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretKeyKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "tls.key") }}
+{{- if not .Values.security.tls.caConfigMap }}
+{{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretCAKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "ca.crt") }}
+{{- end -}}
+{{ $items | toYaml }}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS CA items for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsCaItems" -}}
+{{- $items := list }}
 {{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretCAKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "ca.crt") }}
 {{ $items | toYaml }}
 {{- end -}}
