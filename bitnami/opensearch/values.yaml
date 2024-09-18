@@ -1031,6 +1031,16 @@ master:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+  serviceHeadless:
+    ## @param master.serviceHeadless.annotations Additional annotations for the Master Service Headless resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
 ## @section Data-only nodes parameters
 data:
   ## @param data.replicaCount Number of data-only replicas to deploy
@@ -1550,6 +1560,16 @@ data:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+  serviceHeadless:
+    ## @param data.serviceHeadless.annotations Additional annotations for the Data Service Headless resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
 ## @section Coordinating-only nodes parameters
 coordinating:
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
@@ -2031,6 +2051,16 @@ coordinating:
       selector: {}
       namespace: monitoring
       additionalLabels: {}
+  serviceHeadless:
+    ## @param coordinating.serviceHeadless.annotations Additional annotations for the Coordinating Service Headless resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
 ## @section Ingest-only nodes parameters
 ingest:
   ## @param ingest.enabled Enable ingest nodes
@@ -2475,6 +2505,16 @@ ingest:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  serviceHeadless:
+    ## @param ingest.serviceHeadless.annotations Additional annotations for the Ingest Service Headless resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
   ## OpenSearch Ingest-only ingress parameters
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
