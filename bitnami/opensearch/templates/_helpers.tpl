@@ -402,7 +402,7 @@ Return the opensearch TLS credentials secret for typed nodes.
 Return the opensearch TLS configMap for typed nodes.
 */}}
 {{- define "opensearch.node.tlsCaName" -}}
-{{- $secretName := $.Values.security.tls.caConfigMap -}}
+{{- $secretName := .context.Values.security.tls.caConfigMap -}}
     {{- printf "%s" (tpl $secretName .context) -}}
 {{- end -}}
 
