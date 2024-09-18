@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.2 (2024-09-17)
+## 1.4.0 (2024-09-18)
 
-* [bitnami/opensearch] test: :white_check_mark: Improve reliability of ginkgo tests ([#29471](https://github.com/bitnami/charts/pull/29471))
+* [bitnami/opensearch] Add specific annotations to the svcHeadless and specific ConfigMap for ca.crt ([#29495](https://github.com/bitnami/charts/pull/29495))
+
+## <small>1.3.2 (2024-09-17)</small>
+
+* [bitnami/opensearch] test: :white_check_mark: Improve reliability of ginkgo tests (#29471) ([63b5131](https://github.com/bitnami/charts/commit/63b5131ab378847b16be6c621df2b609bcfb83fa)), closes [#29471](https://github.com/bitnami/charts/issues/29471)
 
 ## <small>1.3.1 (2024-09-11)</small>
 
