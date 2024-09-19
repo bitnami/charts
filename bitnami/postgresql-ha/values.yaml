@@ -626,7 +626,7 @@ postgresql:
   ## NOTE: This will override postgresql.repmgrConfiguration, postgresql.configuration and postgresql.pgHbaConfiguration
   ##
   configurationCM: ""
-  ## @param postgresql.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
+  ## @param postgresql.extendedConf Extended PostgreSQL configuration (requires `volumePermissions.enabled` to be `true`)
   ## Similar to postgresql.configuration, but _appended_ to the main configuration
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ## Example:
@@ -636,8 +636,8 @@ postgresql:
   ##   ...
   ##
   extendedConf: ""
-  ## @param postgresql.extendedConfCM ConfigMap with PostgreSQL extended configuration
-  ## NOTE: This will override postgresql.extendedConf and implies `volumePermissions.enabled`
+  ## @param postgresql.extendedConfCM ConfigMap with PostgreSQL extended configuration (requires `volumePermissions.enabled` to be `true`)
+  ## NOTE: This will override postgresql.extendedConf
   ##
   extendedConfCM: ""
   ## @param postgresql.initdbScripts Dictionary of initdb scripts
@@ -1079,7 +1079,7 @@ witness:
   ## NOTE: This will override witness.repmgrConfiguration, witness.configuration and witness.pgHbaConfiguration
   ##
   configurationCM: ""
-  ## @param witness.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
+  ## @param witness.extendedConf Extended PostgreSQL configuration (requires `volumePermissions.enabled` to be `true`)
   ## Similar to witness.configuration, but _appended_ to the main configuration
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ## Example:
@@ -1089,8 +1089,8 @@ witness:
   ##   ...
   ##
   extendedConf: ""
-  ## @param witness.extendedConfCM ConfigMap with PostgreSQL extended configuration
-  ## NOTE: This will override witness.extendedConf and implies `volumePermissions.enabled`
+  ## @param witness.extendedConfCM ConfigMap with PostgreSQL extended configuration (requires `volumePermissions.enabled` to be `true`)
+  ## NOTE: This will override witness.extendedConf
   ##
   extendedConfCM: ""
   ## @param witness.initdbScripts Dictionary of initdb scripts

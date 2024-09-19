@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.28 (2024-09-12)
+## 0.1.29 (2024-09-19)
 
-* [bitnami/nessie] Release 0.1.28 ([#29387](https://github.com/bitnami/charts/pull/29387))
+* [bitnami/nessie] Release 0.1.29 ([#29527](https://github.com/bitnami/charts/pull/29527))
+
+## <small>0.1.28 (2024-09-12)</small>
+
+* [bitnami/nessie] Release 0.1.28 (#29387) ([5e6e11b](https://github.com/bitnami/charts/commit/5e6e11bb4df9bc2c6904567a5c35e1e5bb1c055c)), closes [#29387](https://github.com/bitnami/charts/issues/29387)
 
 ## <small>0.1.27 (2024-09-12)</small>
 

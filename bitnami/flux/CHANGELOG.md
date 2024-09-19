@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.3.15 (2024-09-05)
+## 2.3.17 (2024-09-19)
 
-* [bitnami/flux] Release 2.3.15 ([#29230](https://github.com/bitnami/charts/pull/29230))
+* [bitnami/flux] Release 2.3.17 ([#29513](https://github.com/bitnami/charts/pull/29513))
+
+## <small>2.3.16 (2024-09-16)</small>
+
+* [bitnami/flux] Release 2.3.16 (#29447) ([9acdd0f](https://github.com/bitnami/charts/commit/9acdd0fa523280c667733d7d5ec3fcec6aad12ad)), closes [#29447](https://github.com/bitnami/charts/issues/29447)
+
+## <small>2.3.15 (2024-09-05)</small>
+
+* [bitnami/flux] Release 2.3.15 (#29230) ([2b0fab8](https://github.com/bitnami/charts/commit/2b0fab8b91de19475f8626acb5b770a080246a64)), closes [#29230](https://github.com/bitnami/charts/issues/29230)
 
 ## <small>2.3.14 (2024-08-07)</small>
 
