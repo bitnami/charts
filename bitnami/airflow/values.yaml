@@ -195,7 +195,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.10.1-debian-12-r1
+    tag: 2.10.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -875,7 +875,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.10.1-debian-12-r1
+    tag: 2.10.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1236,7 +1236,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.46.0-debian-12-r4
+    tag: 2.46.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
