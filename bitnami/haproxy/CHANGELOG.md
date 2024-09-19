@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.4 (2024-09-06)
+## 2.1.5 (2024-09-19)
 
-* [bitnami/haproxy] add missing template for tls-secrets ([#29151](https://github.com/bitnami/charts/pull/29151))
+* [bitnami/haproxy] Release 2.1.5 ([#29539](https://github.com/bitnami/charts/pull/29539))
+
+## <small>2.1.4 (2024-09-06)</small>
+
+* [bitnami/haproxy] add missing template for tls-secrets (#29151) ([432a93b](https://github.com/bitnami/charts/commit/432a93b59bca161620e8980a3ba7f882f26258fa)), closes [#29151](https://github.com/bitnami/charts/issues/29151)
 
 ## <small>2.1.3 (2024-09-06)</small>
 
