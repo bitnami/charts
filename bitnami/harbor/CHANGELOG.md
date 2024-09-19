@@ -1,6 +1,6 @@
 # Changelog
 
-## 23.0.4 (2024-09-18)
+## 23.0.4 (2024-09-19)
 
 * [bitnami/harbor] Fix REGISTRY_HTTP_SECRET encoding when declared on an existing secret ([#29494](https://github.com/bitnami/charts/pull/29494))
 
