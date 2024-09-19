@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.1.2 (2024-09-17)
+## 30.1.3 (2024-09-19)
 
-* [bitnami/kafka] test: :white_check_mark: Improve reliability of ginkgo tests ([#29466](https://github.com/bitnami/charts/pull/29466))
+* [bitnami/kafka] Release 30.1.3 ([#29518](https://github.com/bitnami/charts/pull/29518))
+
+## <small>30.1.2 (2024-09-17)</small>
+
+* [bitnami/kafka] test: :white_check_mark: Improve reliability of ginkgo tests (#29466) ([a67fc13](https://github.com/bitnami/charts/commit/a67fc1332a7f545e512f7cfabe8d0f5e1b318669)), closes [#29466](https://github.com/bitnami/charts/issues/29466)
 
 ## <small>30.1.1 (2024-09-14)</small>
 
