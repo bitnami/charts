@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.11 (2024-09-06)
+## 6.3.12 (2024-09-19)
 
-* [bitnami/metallb] Release 6.3.11 ([#29251](https://github.com/bitnami/charts/pull/29251))
+* [bitnami/metallb] Release 6.3.12 ([#29514](https://github.com/bitnami/charts/pull/29514))
+
+## <small>6.3.11 (2024-09-06)</small>
+
+* [bitnami/metallb] Release 6.3.11 (#29251) ([6836c94](https://github.com/bitnami/charts/commit/6836c9487f831eea731e33cabda76db8092b31da)), closes [#29251](https://github.com/bitnami/charts/issues/29251)
 
 ## <small>6.3.10 (2024-08-08)</small>
 
