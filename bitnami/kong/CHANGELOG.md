@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.0.2 (2024-09-19)
+## 13.0.3 (2024-09-19)
 
-* [bitnami/kong] Release 13.0.2 ([#29509](https://github.com/bitnami/charts/pull/29509))
+* [bitnami/kong] Remove duplicated empty password check `common.validations.values.cassandra.passwords` ([#29441](https://github.com/bitnami/charts/pull/29441))
+
+## <small>13.0.2 (2024-09-19)</small>
+
+* [bitnami/kong] Release 13.0.2 (#29509) ([accb05e](https://github.com/bitnami/charts/commit/accb05efca0ba859d82ed0dd42e16be990f20eda)), closes [#29509](https://github.com/bitnami/charts/issues/29509)
 
 ## <small>13.0.1 (2024-09-18)</small>
 
