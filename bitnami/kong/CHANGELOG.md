@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.0.1 (2024-09-18)
+## 13.0.2 (2024-09-19)
 
-* [bitnami/kong] Release 13.0.1 ([#29492](https://github.com/bitnami/charts/pull/29492))
+* [bitnami/kong] Release 13.0.2 ([#29509](https://github.com/bitnami/charts/pull/29509))
+
+## <small>13.0.1 (2024-09-18)</small>
+
+* [bitnami/kong] Release 13.0.1 (#29492) ([b9009aa](https://github.com/bitnami/charts/commit/b9009aa6c246efe8a6ad2c36a0a1874d197db340)), closes [#29492](https://github.com/bitnami/charts/issues/29492)
 
 ## 13.0.0 (2024-09-10)
 
