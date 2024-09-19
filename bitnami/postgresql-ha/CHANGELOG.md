@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.28 (2024-09-13)
+## 14.2.29 (2024-09-19)
 
-* [bitnami/postgresql-ha] Release 14.2.28 ([#29405](https://github.com/bitnami/charts/pull/29405))
+* [bitnami/postgresql-ha] Update extendedConf related documentation ([#29497](https://github.com/bitnami/charts/pull/29497))
+
+## <small>14.2.28 (2024-09-13)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.28 (#29405) ([f6fd3fc](https://github.com/bitnami/charts/commit/f6fd3fc9cc4ba12843e4364d04575f97b7db180a)), closes [#29405](https://github.com/bitnami/charts/issues/29405)
 
 ## <small>14.2.27 (2024-09-10)</small>
 
