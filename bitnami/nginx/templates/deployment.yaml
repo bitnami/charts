@@ -245,12 +245,12 @@ spec:
             - name: NGINX_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
             {{- end }}
-            {{- if .Values.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
             {{- if or .Values.streamServerBlock .Values.existingStreamServerBlockConfigmap }}
             - name: NGINX_ENABLE_STREAM
               value: "true"
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
