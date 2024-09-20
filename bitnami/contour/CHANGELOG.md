@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.3 (2024-09-05)
+## 19.0.4 (2024-09-20)
 
-* [bitnami/contour] Release 19.0.3 ([#29234](https://github.com/bitnami/charts/pull/29234))
+*  [bitnami/contour] fixed wrong envoy-service-name in contour when multiAz is enabled ([#29556](https://github.com/bitnami/charts/pull/29556))
+
+## <small>19.0.3 (2024-09-05)</small>
+
+* [bitnami/contour] Release 19.0.3 (#29234) ([dbf9bec](https://github.com/bitnami/charts/commit/dbf9bec468d2a7f356bbc1d762559f060f34790d)), closes [#29234](https://github.com/bitnami/charts/issues/29234)
 
 ## <small>19.0.2 (2024-08-07)</small>
 
