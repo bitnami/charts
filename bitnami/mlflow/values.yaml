@@ -256,7 +256,7 @@ tracking:
   ## @param tracking.auth.username Admin username
   ## @param tracking.auth.password Admin password
   ## @param tracking.auth.existingSecret Name of a secret containing the admin password
-  ## @param tracking.auth.existingSecretUserKey Key inside the secret containing the admin password
+  ## @param tracking.auth.existingSecretUserKey Key inside the secret containing the admin username
   ## @param tracking.auth.existingSecretPasswordKey Key inside the secret containing the admin password
   ## @param tracking.auth.extraOverrides Add extra settings to the basic_auth.ini file
   ## @param tracking.auth.overridesConfigMap Name of a ConfigMap containing overrides to the basic_auth.ini file
