@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.4.1 (2024-09-13)
+## 8.4.2 (2024-09-17)
 
-* [bitnami/nats] Fix single replica Jetstream ([#29379](https://github.com/bitnami/charts/pull/29379))
+* [bitnami/nats] Improve Ginkgo tests ([#29462](https://github.com/bitnami/charts/pull/29462))
+
+## <small>8.4.1 (2024-09-16)</small>
+
+* [bitnami/nats] Fix single replica Jetstream (#29379) ([4959500](https://github.com/bitnami/charts/commit/4959500b4987deb760d38e06d181022bacc3308d)), closes [#29379](https://github.com/bitnami/charts/issues/29379)
 
 ## 8.4.0 (2024-09-12)
 

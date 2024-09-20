@@ -1,8 +1,8 @@
 # Changelog
 
-## 11.2.21 (2024-09-16)
+## 11.2.21 (2024-09-17)
 
-* [bitnami/tomcat] Fix initContainers indent ([#29448](https://github.com/bitnami/charts/pull/29448))
+* [bitnami/tomcat] Release 11.2.21 ([#29485](https://github.com/bitnami/charts/pull/29485))
 
 ## <small>11.2.20 (2024-09-11)</small>
 
