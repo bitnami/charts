@@ -1,6 +1,6 @@
 # Changelog
 
-## 18.1.16 (2024-09-20)
+## 18.2.0 (2024-09-20)
 
 * [bitnami/nginx] stream server blocks ([#29491](https://github.com/bitnami/charts/pull/29491))
 
