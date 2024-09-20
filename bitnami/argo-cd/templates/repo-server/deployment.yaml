@@ -147,7 +147,7 @@ spec:
             - /opt/bitnami/argo-cd/bin/argocd
             - /additional-binaries/argocd-cmp-server
           {{- if .Values.repoServer.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.repoServer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.repoServer.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /additional-binaries
@@ -155,11 +155,11 @@ spec:
         {{- with .Values.repoServer.configManagementPlugins.additionalBinaries }}
         {{- if .binaries }}
         - name: download-additional-binaries
-          image: {{ include "common.images.image" (dict "imageRoot" .image "global" $.Values.global) }}
+          image: {{ include "argocd.repo-server.config-management-plugins.additional-binaries.image" $ }}
           imagePullPolicy: {{ .image.pullPolicy }}
           command:
             - sh
-            - -c
+            - -ec
           args:
             - |-
               {{- range $additionalBinary := .binaries }}
@@ -354,7 +354,7 @@ spec:
             {{- end }}
           {{- if $plugin.sidecar.resources }}
           resources: {{- toYaml $plugin.sidecar.resources | nindent 12 }}
-          {{- else if and $plugin.sidecar.resourcePreset (ne $plugin.sidecar.resourcesPreset "none") }}
+          {{- else if and $plugin.sidecar.resourcesPreset (ne $plugin.sidecar.resourcesPreset "none") }}
           resources: {{- include "common.resources.preset" (dict "type" $plugin.sidecar.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if $plugin.sidecar.startupProbe }}

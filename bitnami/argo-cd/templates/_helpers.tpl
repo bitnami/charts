@@ -31,11 +31,18 @@ Return the proper Redis image name
 {{- include "common.images.image" ( dict "imageRoot" .Values.redis.image "global" .Values.global ) -}}
 {{- end -}}
 
+{{
+/* Return the proper CMP binary downloader image name */
+}}
+{{- define "argocd.repo-server.config-management-plugins.additional-binaries.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.repoServer.configManagementPlugins.additionalBinaries.image "global" .Values.global ) -}}
+{{- end -}}
+
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "argocd.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image .Values.redis.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image .Values.redis.image .Values.repoServer.configManagementPlugins.additionalBinaries.image) "context" $) -}}
 {{- end -}}
 
 {{/*
