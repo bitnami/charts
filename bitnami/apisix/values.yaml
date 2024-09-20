@@ -2816,7 +2816,7 @@ ingressController:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param ingressController.service.externalIPs APISIX service External IPs
+    ## @param ingressController.service.externalIPs APISIX Ingress Controller service External IPs
     ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
     ## e.g.
     ## externalIPs:
