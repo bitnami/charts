@@ -1,8 +1,8 @@
 # Changelog
 
-## 19.0.4 (2024-09-20)
+## 19.0.4 (2024-09-21)
 
-*  [bitnami/contour] fixed wrong envoy-service-name in contour when multiAz is enabled ([#29556](https://github.com/bitnami/charts/pull/29556))
+*  [bitnami/contour] fixed wrong envoy-service-name arg value in contour when envoy service name is changed ([#29556](https://github.com/bitnami/charts/pull/29556))
 
 ## <small>19.0.3 (2024-09-05)</small>
 
