@@ -232,7 +232,7 @@ Get the initialization scripts ConfigMap name.
 Get initial primary host to configure MongoDB cluster.
 */}}
 {{- define "mongodb.initialPrimaryHost" -}}
-{{ ternary ( printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
+{{ ternary ( printf "%s-0.%s.$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) (include "mongodb.service.nameOverride" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
 {{- end -}}
 
 {{/*
