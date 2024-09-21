@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.7.0 (2024-09-20)
+## 4.7.0 (2024-09-21)
 
 * [bitnami/grafana-operator] Enable env in grafana ([#29553](https://github.com/bitnami/charts/pull/29553))
 
