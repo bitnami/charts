@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.0 (2024-09-18)
+## 1.4.0 (2024-09-21)
 
 * [bitnami/opensearch] Add specific annotations to the svcHeadless and specific ConfigMap for ca.crt ([#29495](https://github.com/bitnami/charts/pull/29495))
 
