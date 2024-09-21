@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.1.3 (2024-09-19)
+## 30.1.4 (2024-09-21)
 
-* [bitnami/kafka] Release 30.1.3 ([#29518](https://github.com/bitnami/charts/pull/29518))
+* Update values.yaml ([#29557](https://github.com/bitnami/charts/pull/29557))
+
+## <small>30.1.3 (2024-09-19)</small>
+
+* [bitnami/kafka] Release 30.1.3 (#29518) ([f88b375](https://github.com/bitnami/charts/commit/f88b37547aafb3e788603e4432f87dd421b91a9c)), closes [#29518](https://github.com/bitnami/charts/issues/29518)
 
 ## <small>30.1.2 (2024-09-17)</small>
 
