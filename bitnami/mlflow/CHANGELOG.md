@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.5.7 (2024-09-19)
+## 1.5.8 (2024-09-22)
 
-* [bitnami/mlflow] Release 1.5.7 ([#29534](https://github.com/bitnami/charts/pull/29534))
+* [bitnami/mlflow] Fix: tracking.auth.existingSecretUserKey param docs ([#29552](https://github.com/bitnami/charts/pull/29552))
+
+## <small>1.5.7 (2024-09-19)</small>
+
+* [bitnami/mlflow] Release 1.5.7 (#29534) ([706e4b6](https://github.com/bitnami/charts/commit/706e4b6cb60bdd595e209507f798868de6fd8777)), closes [#29534](https://github.com/bitnami/charts/issues/29534)
 
 ## <small>1.5.6 (2024-09-19)</small>
 
