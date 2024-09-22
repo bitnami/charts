@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.25 (2024-09-19)
+## 15.6.26 (2024-09-22)
 
-* [bitnami/mongodb] Release 15.6.25 ([#29529](https://github.com/bitnami/charts/pull/29529))
+* [bitnami/mongodb] Fixed arbiter anti affinity rules to prevent it from running on the same node of a primary/secondary replica ([#29565](https://github.com/bitnami/charts/pull/29565))
+
+## <small>15.6.25 (2024-09-19)</small>
+
+* [bitnami/mongodb] Release 15.6.25 (#29529) ([8091ced](https://github.com/bitnami/charts/commit/8091ced2fc72072724265e78a09ad490e4711c6a)), closes [#29529](https://github.com/bitnami/charts/issues/29529)
 
 ## <small>15.6.24 (2024-09-14)</small>
 
