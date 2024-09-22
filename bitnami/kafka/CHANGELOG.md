@@ -1,6 +1,6 @@
 # Changelog
 
-## 30.1.4 (2024-09-21)
+## 30.1.4 (2024-09-22)
 
 * Update values.yaml ([#29557](https://github.com/bitnami/charts/pull/29557))
 
