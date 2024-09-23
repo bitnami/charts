@@ -666,6 +666,13 @@ grafana:
     create: false
     minAvailable: ""
     maxUnavailable: ""
+  ## @param grafana.extraEnvVars Array containing extra env vars to configure Grafana
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV
+  ##    value: my-env-value
+  ##
+  extraEnvVars: []
   ## @param grafana.envFrom Extra environment variable to pass to the running container
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## e.g:
