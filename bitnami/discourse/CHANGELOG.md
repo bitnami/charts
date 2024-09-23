@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.1.6 (2024-09-19)
+## 14.2.0 (2024-09-23)
 
-* [bitnami/discourse] Release 14.1.6 ([#29502](https://github.com/bitnami/charts/pull/29502))
+* [bitnami/discourse] Move plugins installation to init-container ([#29568](https://github.com/bitnami/charts/pull/29568))
+
+## <small>14.1.6 (2024-09-19)</small>
+
+* [bitnami/discourse] Release 14.1.6 (#29502) ([69c82cf](https://github.com/bitnami/charts/commit/69c82cfc867a79a1120a57d114382680661e6360)), closes [#29502](https://github.com/bitnami/charts/issues/29502)
 
 ## <small>14.1.5 (2024-09-15)</small>
 
