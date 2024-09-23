@@ -132,8 +132,8 @@ spec:
             - name: grafana
               image: {{ include "common.images.image" (dict "imageRoot" .Values.grafana.image "global" .Values.global) }}
               imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
-              {{- if .Values.grafana.env }}
-              env: {{- toYaml .Values.grafana.env | nindent 16 }}
+              {{- if .Values.grafana.extraEnvVars }}
+              env: {{- toYaml .Values.grafana.extraEnvVars | nindent 16 }}
               {{- end }}
               {{- if .Values.grafana.envFrom }}
               envFrom: {{- toYaml .Values.grafana.envFrom | nindent 16 }}
