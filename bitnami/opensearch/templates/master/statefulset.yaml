@@ -332,6 +332,11 @@ spec:
               - secret:
                   name: {{ include "opensearch.admin.tlsSecretName" (dict "context" $) }}
                   items: {{- include "opensearch.admin.tlsSecretItems" (dict "context" $) | nindent 20 }}
+	{{- if .Values.security.tls.caConfigMap }}
+              - configMap:
+                  name: {{ include "opensearch.node.tlsCaName" (dict "nodeRole" "master" "context" $) }}
+                  items: {{- include "opensearch.node.tlsCaItems" (dict "nodeRole" "master" "context" $) | nindent 20 }}
+        {{- end }}
         {{- end }}
         {{- if .Values.initScripts }}
         - name: custom-init-scripts
