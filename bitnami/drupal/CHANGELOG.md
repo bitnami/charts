@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.0.8 (2024-09-22)
+## 20.0.8 (2024-09-23)
 
 * [bitnami/drupal] templates/ingress.yaml: fix wrong www.www tls name ([#29564](https://github.com/bitnami/charts/pull/29564))
 
