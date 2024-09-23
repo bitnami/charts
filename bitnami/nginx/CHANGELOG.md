@@ -1,6 +1,6 @@
 # Changelog
 
-## 18.2.1 (2024-09-22)
+## 18.2.1 (2024-09-23)
 
 * [bitnami/nginx] templates/ingress.yaml: fix wrong www.www tls name ([#29563](https://github.com/bitnami/charts/pull/29563))
 
