@@ -1,6 +1,6 @@
 # Changelog
 
-## 23.1.17 (2024-09-22)
+## 23.1.17 (2024-09-23)
 
 * [bitnami/wordpress] templates/ingress.yaml: fix wrong www.www tls name ([#29562](https://github.com/bitnami/charts/pull/29562))
 
