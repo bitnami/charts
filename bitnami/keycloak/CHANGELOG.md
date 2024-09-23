@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.2.6 (2024-09-19)
+## 22.2.7 (2024-09-23)
 
-* [bitnami/keycloak] Release 22.2.6 ([#29542](https://github.com/bitnami/charts/pull/29542))
+* [bitnami/keycloak] Fix underlying env var for `.Values.proxyHeaders` ([#29573](https://github.com/bitnami/charts/pull/29573))
+
+## <small>22.2.6 (2024-09-19)</small>
+
+* [bitnami/keycloak] Release 22.2.6 (#29542) ([754f9e2](https://github.com/bitnami/charts/commit/754f9e2365ab6d0786a997e4d582e2b6ce92c237)), closes [#29542](https://github.com/bitnami/charts/issues/29542)
 
 ## <small>22.2.5 (2024-09-16)</small>
 
