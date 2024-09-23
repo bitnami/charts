@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.5.0 (2024-09-21)
+## 3.5.0 (2024-09-23)
 
 * [bitnami/apisix] Allow setting externalIPs for services ([#29550](https://github.com/bitnami/charts/pull/29550))
 
