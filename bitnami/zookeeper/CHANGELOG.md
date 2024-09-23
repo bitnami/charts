@@ -2,7 +2,7 @@
 
 ## 13.4.13 (2024-09-17)
 
-* [bitnami/zookeeper] Drop unused `getValueFromSecret` local helper ([#29440](https://github.com/bitnami/charts/pull/29440))
+* [bitnami/zookeeper] test: :white_check_mark: Improve reliability of ginkgo tests ([#29475](https://github.com/bitnami/charts/pull/29475))
 
 ## <small>13.4.12 (2024-09-09)</small>
 

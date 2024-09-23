@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.20 (2024-09-11)
+## 11.2.21 (2024-09-17)
 
-* [bitnami/tomcat] fix: add apiVersion and kind to volumeClaimTemplates ([#29355](https://github.com/bitnami/charts/pull/29355))
+* [bitnami/tomcat] Release 11.2.21 ([#29485](https://github.com/bitnami/charts/pull/29485))
+
+## <small>11.2.20 (2024-09-11)</small>
+
+* [bitnami/tomcat] fix: add apiVersion and kind to volumeClaimTemplates (#29355) ([88102b4](https://github.com/bitnami/charts/commit/88102b45f29a947812c1befa17d47568dddb31a0)), closes [#29355](https://github.com/bitnami/charts/issues/29355)
 
 ## <small>11.2.19 (2024-09-11)</small>
 
