@@ -71,18 +71,25 @@ Return the copy plugins init container definition
   args:
     - -ec
     - |
-        #!/bin/bash
-
+        . /opt/bitnami/scripts/liblog.sh
         . /opt/bitnami/scripts/libfs.sh
         . /opt/bitnami/scripts/opensearch-env.sh
 
+        info "Copying directories to empty dir"
+        # In order to not break plugins installation we need to make the plugins and
+        # conf directory writable, so we need to copy it to an empty dir volume
+        cp -r --preserve=mode /opt/bitnami/opensearch/config /emptydir/app-conf-dir
+        cp -r --preserve=mode /opt/bitnami/opensearch/plugins /emptydir/app-plugins-dir
+
         if ! is_dir_empty "$DB_DEFAULT_PLUGINS_DIR"; then
-            cp -nr "$DB_DEFAULT_PLUGINS_DIR"/* /plugins
+            info "Copying default plugins"
+            cp -nr "$DB_DEFAULT_PLUGINS_DIR"/* /emptydir/app-plugins-dir
         fi
+
+        info "Copy operation completed"
   volumeMounts:
     - name: empty-dir
-      mountPath: /plugins
-      subPath: app-plugins-dir
+      mountPath: /emptydir
 {{- end -}}
 
 {{/*
