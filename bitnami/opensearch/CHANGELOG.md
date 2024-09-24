@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.3 (2024-09-23)
+## 1.3.3 (2024-09-24)
 
 * [bitnami/opensearch] Release 1.3.3 ([#29582](https://github.com/bitnami/charts/pull/29582))
 
