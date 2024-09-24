@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.2.7 (2024-09-23)
+## 22.2.7 (2024-09-24)
 
 * [bitnami/keycloak] Fix underlying env var for `.Values.proxyHeaders` ([#29573](https://github.com/bitnami/charts/pull/29573))
 
