@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.2.0 (2024-09-23)
+## 14.2.0 (2024-09-24)
 
 * [bitnami/discourse] Move plugins installation to init-container ([#29568](https://github.com/bitnami/charts/pull/29568))
 
