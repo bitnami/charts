@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.2 (2024-09-17)
+## 1.3.3 (2024-09-24)
 
-* [bitnami/opensearch] test: :white_check_mark: Improve reliability of ginkgo tests ([#29471](https://github.com/bitnami/charts/pull/29471))
+* [bitnami/opensearch] Fix plugins installation ([#29586](https://github.com/bitnami/charts/pull/29586))
+
+## <small>1.3.2 (2024-09-17)</small>
+
+* [bitnami/opensearch] test: :white_check_mark: Improve reliability of ginkgo tests (#29471) ([63b5131](https://github.com/bitnami/charts/commit/63b5131ab378847b16be6c621df2b609bcfb83fa)), closes [#29471](https://github.com/bitnami/charts/issues/29471)
 
 ## <small>1.3.1 (2024-09-11)</small>
 
