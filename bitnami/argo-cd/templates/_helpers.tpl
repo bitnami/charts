@@ -31,11 +31,18 @@ Return the proper Redis image name
 {{- include "common.images.image" ( dict "imageRoot" .Values.redis.image "global" .Values.global ) -}}
 {{- end -}}
 
+{{
+/* Return the proper CMP binary downloader image name */
+}}
+{{- define "argocd.repo-server.config-management-plugins.additional-binaries.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.repoServer.configManagementPlugins.additionalBinaries.image "global" .Values.global ) -}}
+{{- end -}}
+
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "argocd.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image .Values.redis.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image .Values.redis.image .Values.repoServer.configManagementPlugins.additionalBinaries.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -189,6 +196,24 @@ Create the name of the service account to use for Dex
 {{- else -}}
     {{ default "default" .Values.dex.serviceAccount.name }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Merge a list of values that contains template after rendering them.
+Later values taking higher precedence. So merging two dicts with values `true` and `false` for the same key will result
+in the value of the latter on that key. When using the default merge functionality this will always result in `true`.
+Usage:
+{{ include "argocd.tplvalues.merge-with-precedence" ( dict "values" (list .Values.path.to.the.Value1 .Values.path.to.the.Value2) "context" $ ) }}
+*/}}
+{{- define "argocd.tplvalues.merge-with-precedence" -}}
+{{- $dst := dict -}}
+{{- range .values -}}
+{{- $val := include "common.tplvalues.render" (dict "value" . "context" $.context "scope" $.scope) | fromYaml }}
+{{- range $key := keys $val }}
+{{- $_ := set $dst $key (get $val $key) }}
+{{- end }}
+{{- end -}}
+{{ $dst | toYaml }}
 {{- end -}}
 
 {{/*
