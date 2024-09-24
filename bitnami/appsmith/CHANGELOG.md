@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.0.6 (2024-09-05)
+## 4.0.8 (2024-09-19)
 
-* [bitnami/appsmith] Release 4.0.6 ([#29223](https://github.com/bitnami/charts/pull/29223))
+* [bitnami/appsmith] Release 4.0.8 ([#29500](https://github.com/bitnami/charts/pull/29500))
+
+## <small>4.0.7 (2024-09-13)</small>
+
+* [bitnami/appsmith] Release 4.0.7 (#29398) ([73abd18](https://github.com/bitnami/charts/commit/73abd189761588d6fd3452d0c579ed8f02d43625)), closes [#29398](https://github.com/bitnami/charts/issues/29398)
+
+## <small>4.0.6 (2024-09-05)</small>
+
+* [bitnami/appsmith] Release 4.0.6 (#29223) ([a32ba7d](https://github.com/bitnami/charts/commit/a32ba7db578f719b818f3f6e7a8a27bb60840a06)), closes [#29223](https://github.com/bitnami/charts/issues/29223)
 
 ## <small>4.0.5 (2024-09-02)</small>
 

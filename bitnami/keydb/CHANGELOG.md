@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.3 (2024-08-29)
+## 0.1.4 (2024-09-08)
 
-* [bitnami/keydb] Release 0.1.3 ([#29103](https://github.com/bitnami/charts/pull/29103))
+* [bitnami/keydb] Adds metrics port to NetworkPolicy ([#29298](https://github.com/bitnami/charts/pull/29298))
+
+## <small>0.1.3 (2024-08-29)</small>
+
+* [bitnami/keydb] Release 0.1.3 (#29103) ([4dd8808](https://github.com/bitnami/charts/commit/4dd8808ba0bea3f82ea3602825117b5eefa53b5a)), closes [#29103](https://github.com/bitnami/charts/issues/29103)
 
 ## <small>0.1.2 (2024-08-28)</small>
 

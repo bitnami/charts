@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.3.11 (2024-09-03)
+## 3.5.0 (2024-09-23)
 
-* [bitnami/apisix] Added multi-auth plugin to the plugins list ([#29170](https://github.com/bitnami/charts/pull/29170))
+* [bitnami/apisix] Allow setting externalIPs for services ([#29550](https://github.com/bitnami/charts/pull/29550))
+
+## 3.4.0 (2024-09-13)
+
+* [bitnami/apisix] Allow IngressClass to be created conditionally (#29085) ([32f63b4](https://github.com/bitnami/charts/commit/32f63b4d1574d344e568db396accdeef0d795d6e)), closes [#29085](https://github.com/bitnami/charts/issues/29085)
+
+## <small>3.3.11 (2024-09-04)</small>
+
+* [bitnami/apisix] Added multi-auth plugin to the plugins list (#29170) ([69939ca](https://github.com/bitnami/charts/commit/69939ca7692fd60533132f03d039f5bd9db1f573)), closes [#29170](https://github.com/bitnami/charts/issues/29170)
 
 ## <small>3.3.10 (2024-08-20)</small>
 

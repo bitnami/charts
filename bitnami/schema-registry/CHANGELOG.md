@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.0.1 (2024-09-12)
+
+* [bitnami/schema-registry] Release 21.0.1 ([#29370](https://github.com/bitnami/charts/pull/29370))
+
 ## 21.0.0 (2024-08-05)
 
-* [bitnami/schema-registry] Update chart dependency (kafka) ([#28672](https://github.com/bitnami/charts/pull/28672))
+* [bitnami/schema-registry] Update chart dependency (kafka) (#28672) ([ff628f6](https://github.com/bitnami/charts/commit/ff628f683cd67d664d6bcea2d4c8c90daf353087)), closes [#28672](https://github.com/bitnami/charts/issues/28672)
 
 ## 20.0.0 (2024-08-02)
 

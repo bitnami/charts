@@ -1,8 +1,28 @@
 # Changelog
 
-## 23.1.11 (2024-09-05)
+## 23.1.16 (2024-09-20)
 
-* [bitnami/wordpress] Release 23.1.11 ([#29219](https://github.com/bitnami/charts/pull/29219))
+* [bitnami/wordpress] Release 23.1.16 ([#29544](https://github.com/bitnami/charts/pull/29544))
+
+## <small>23.1.15 (2024-09-19)</small>
+
+* [bitnami/wordpress] Release 23.1.15 (#29531) ([195a040](https://github.com/bitnami/charts/commit/195a0406213e8df3ed76e6c81faf90f04ec2137d)), closes [#29531](https://github.com/bitnami/charts/issues/29531)
+
+## <small>23.1.14 (2024-09-16)</small>
+
+* [bitnami/wordpress] Release 23.1.14 (#29453) ([2d235fc](https://github.com/bitnami/charts/commit/2d235fc79a375722505db5a2aba5913fff452147)), closes [#29453](https://github.com/bitnami/charts/issues/29453)
+
+## <small>23.1.13 (2024-09-13)</small>
+
+* [bitnami/wordpress] Release 23.1.13 (#29364) ([7c58a14](https://github.com/bitnami/charts/commit/7c58a14b23667b5322b6ca6410b7e1ea6bf16126)), closes [#29364](https://github.com/bitnami/charts/issues/29364)
+
+## <small>23.1.12 (2024-09-06)</small>
+
+* [bitnami/wordpress] Release 23.1.12 (#29275) ([b4dd573](https://github.com/bitnami/charts/commit/b4dd573fb5c00290db0552b8b1c034584a89d827)), closes [#29275](https://github.com/bitnami/charts/issues/29275)
+
+## <small>23.1.11 (2024-09-05)</small>
+
+* [bitnami/wordpress] Release 23.1.11 (#29219) ([fb5cd2d](https://github.com/bitnami/charts/commit/fb5cd2dec5d32cc1ae25fa9333b011bd6114b584)), closes [#29219](https://github.com/bitnami/charts/issues/29219)
 
 ## <small>23.1.10 (2024-08-30)</small>
 

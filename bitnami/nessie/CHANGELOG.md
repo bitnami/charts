@@ -1,8 +1,24 @@
 # Changelog
 
-## 0.1.26 (2024-08-08)
+## 0.1.30 (2024-09-19)
 
-* [bitnami/nessie] Release 0.1.26 ([#28774](https://github.com/bitnami/charts/pull/28774))
+* [bitnami/nessie] Release 0.1.30 ([#29536](https://github.com/bitnami/charts/pull/29536))
+
+## <small>0.1.29 (2024-09-19)</small>
+
+* [bitnami/nessie] Release 0.1.29 (#29527) ([330c8cc](https://github.com/bitnami/charts/commit/330c8cc1ba8535a12ab55d97d7c6b9f41a95814d)), closes [#29527](https://github.com/bitnami/charts/issues/29527)
+
+## <small>0.1.28 (2024-09-12)</small>
+
+* [bitnami/nessie] Release 0.1.28 (#29387) ([5e6e11b](https://github.com/bitnami/charts/commit/5e6e11bb4df9bc2c6904567a5c35e1e5bb1c055c)), closes [#29387](https://github.com/bitnami/charts/issues/29387)
+
+## <small>0.1.27 (2024-09-12)</small>
+
+* [bitnami/nessie] Release 0.1.27 (#29385) ([601b15a](https://github.com/bitnami/charts/commit/601b15a8f2762d2a6c6a2fa843d7870f8f895cd6)), closes [#29385](https://github.com/bitnami/charts/issues/29385)
+
+## <small>0.1.26 (2024-08-08)</small>
+
+* [bitnami/nessie] Release 0.1.26 (#28774) ([bf01cfd](https://github.com/bitnami/charts/commit/bf01cfdddde6185b5541b676afbc82ed27a00187)), closes [#28774](https://github.com/bitnami/charts/issues/28774)
 
 ## <small>0.1.25 (2024-08-01)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.5.12 (2024-09-06)
+## 3.0.1 (2024-09-19)
 
-* [bitnami/jaeger] Release 2.5.12 ([#29243](https://github.com/bitnami/charts/pull/29243))
+* [bitnami/jaeger] Release 3.0.1 ([#29535](https://github.com/bitnami/charts/pull/29535))
+
+## 3.0.0 (2024-09-10)
+
+* [bitnami/jaeger] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) (#29324) ([40b54b0](https://github.com/bitnami/charts/commit/40b54b00a232074ba2b497823ce417c69ed78473)), closes [#29324](https://github.com/bitnami/charts/issues/29324)
+
+## <small>2.5.12 (2024-09-06)</small>
+
+* [bitnami/jaeger] Release 2.5.12 (#29243) ([4251f05](https://github.com/bitnami/charts/commit/4251f057d49681e6d9acc7f7b8fa6a0b07fa0277)), closes [#29243](https://github.com/bitnami/charts/issues/29243)
 
 ## <small>2.5.11 (2024-08-27)</small>
 

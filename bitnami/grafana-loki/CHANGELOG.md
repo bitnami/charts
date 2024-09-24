@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.6.13 (2024-08-27)
+## 4.6.16 (2024-09-15)
 
-* [bitnami/grafana-loki] Release 4.6.13 ([#29049](https://github.com/bitnami/charts/pull/29049))
+* [bitnami/grafana-loki] bugfix: loki component not include `.Values.metrics.serviceMonitor.labels` ([#29434](https://github.com/bitnami/charts/pull/29434))
+
+## <small>4.6.15 (2024-09-13)</small>
+
+* [bitnami/grafana-loki] Allow rendering resources values (#29343) ([b1a390b](https://github.com/bitnami/charts/commit/b1a390ba566cc74fa8b8a35138c79cc7c181a540)), closes [#29343](https://github.com/bitnami/charts/issues/29343)
+
+## <small>4.6.14 (2024-09-09)</small>
+
+* [bitnami/grafana-loki] Release 4.6.14 (#29235) ([2cc3811](https://github.com/bitnami/charts/commit/2cc3811f15b304febf7fd98eeebfd0a6573157fb)), closes [#29235](https://github.com/bitnami/charts/issues/29235)
+
+## <small>4.6.13 (2024-08-27)</small>
+
+* [bitnami/grafana-loki] Release 4.6.13 (#29049) ([86d763f](https://github.com/bitnami/charts/commit/86d763f751e71238fdd6c46e705396cdc6f9369f)), closes [#29049](https://github.com/bitnami/charts/issues/29049)
 
 ## <small>4.6.12 (2024-08-23)</small>
 

@@ -1,8 +1,28 @@
 # Changelog
 
-## 21.3.12 (2024-09-05)
+## 21.3.17 (2024-09-17)
 
-* [bitnami/elasticsearch] Release 21.3.12 ([#29232](https://github.com/bitnami/charts/pull/29232))
+* [bitnami/elasticsearch] test: :white_check_mark: Improve reliability of ginkgo tests ([#29465](https://github.com/bitnami/charts/pull/29465))
+
+## <small>21.3.16 (2024-09-12)</small>
+
+* [bitnami/elasticsearch] fix: add apiVersion and kind to volumeClaimTemplates (#29362) ([cf547d6](https://github.com/bitnami/charts/commit/cf547d6743e7db4e771ff1d7d6393c5f70a63799)), closes [#29362](https://github.com/bitnami/charts/issues/29362)
+
+## <small>21.3.15 (2024-09-09)</small>
+
+* [bitnami/elasticsearch] Release 21.3.15 (#29303) ([092082a](https://github.com/bitnami/charts/commit/092082a307547a2fcf7acc00c7ae48a1a3b53aa4)), closes [#29303](https://github.com/bitnami/charts/issues/29303)
+
+## <small>21.3.14 (2024-09-09)</small>
+
+* [bitnami/elasticsearch] Use containerSecurityContext on the copy-tls-verificates initContainer (#291 ([cbcd9ae](https://github.com/bitnami/charts/commit/cbcd9ae580b30a6060861bb4f2170d3d0ba55f36)), closes [#29193](https://github.com/bitnami/charts/issues/29193) [#29179](https://github.com/bitnami/charts/issues/29179)
+
+## <small>21.3.13 (2024-09-07)</small>
+
+* [bitnami/elasticsearch] Release 21.3.13 (#29296) ([10d241e](https://github.com/bitnami/charts/commit/10d241e9e914849a78ccc5ab35e802ecce82a05e)), closes [#29296](https://github.com/bitnami/charts/issues/29296)
+
+## <small>21.3.12 (2024-09-05)</small>
+
+* [bitnami/elasticsearch] Release 21.3.12 (#29232) ([a27dd73](https://github.com/bitnami/charts/commit/a27dd73f9f15e476c66f67ec99de740bc73ead7b)), closes [#29232](https://github.com/bitnami/charts/issues/29232)
 
 ## <small>21.3.11 (2024-09-04)</small>
 

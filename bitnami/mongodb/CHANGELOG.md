@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.6.22 (2024-08-27)
+## 15.6.26 (2024-09-23)
 
-* [bitnami/mongodb] add securityContext via helper to initContainter dns-check ([#29038](https://github.com/bitnami/charts/pull/29038))
+* [bitnami/mongodb] Fixed arbiter anti affinity rules to prevent it from running on the same node of a primary/secondary replica ([#29565](https://github.com/bitnami/charts/pull/29565))
+
+## <small>15.6.25 (2024-09-19)</small>
+
+* [bitnami/mongodb] Release 15.6.25 (#29529) ([8091ced](https://github.com/bitnami/charts/commit/8091ced2fc72072724265e78a09ad490e4711c6a)), closes [#29529](https://github.com/bitnami/charts/issues/29529)
+
+## <small>15.6.24 (2024-09-14)</small>
+
+* [bitnami/mongodb] Release 15.6.24 (#29414) ([dd49bc9](https://github.com/bitnami/charts/commit/dd49bc9b8e14aef99705e0c9eba76ac01de93d5f)), closes [#29414](https://github.com/bitnami/charts/issues/29414)
+
+## <small>15.6.23 (2024-09-11)</small>
+
+* [bitnami/mongodb] Allow rendering resources values (#29346) ([2fbc081](https://github.com/bitnami/charts/commit/2fbc081c5441b904df0b142e5ae42f77f9357385)), closes [#29346](https://github.com/bitnami/charts/issues/29346)
+
+## <small>15.6.22 (2024-08-29)</small>
+
+* [bitnami/mongodb] add securityContext via helper to initContainter dns-check (#29038) ([56299fe](https://github.com/bitnami/charts/commit/56299fe14d54ac685fb55da7d23c6b91c15f8e3e)), closes [#29038](https://github.com/bitnami/charts/issues/29038)
 
 ## <small>15.6.21 (2024-08-26)</small>
 

@@ -1,8 +1,28 @@
 # Changelog
 
-## 18.1.11 (2024-08-23)
+## 18.2.0 (2024-09-20)
 
-* [bitnami/nginx] Release 18.1.11 ([#28993](https://github.com/bitnami/charts/pull/28993))
+* [bitnami/nginx] stream server blocks ([#29491](https://github.com/bitnami/charts/pull/29491))
+
+## <small>18.1.15 (2024-09-19)</small>
+
+* [bitnami/nginx] Release 18.1.15 (#29510) ([3c8f5ec](https://github.com/bitnami/charts/commit/3c8f5ec0da4daef80d6781c11e019f0dddb49668)), closes [#29510](https://github.com/bitnami/charts/issues/29510)
+
+## <small>18.1.14 (2024-09-15)</small>
+
+* [bitnami/nginx] Release 18.1.14 (#29420) ([5c3aa0e](https://github.com/bitnami/charts/commit/5c3aa0e3cf41aed5bcbb1e5aed73a32847f3f05f)), closes [#29420](https://github.com/bitnami/charts/issues/29420)
+
+## <small>18.1.13 (2024-09-13)</small>
+
+* [bitnami/nginx] Release 18.1.13 (#29390) ([1167027](https://github.com/bitnami/charts/commit/1167027bfaf67c827815f9795db425ebe233a600)), closes [#29390](https://github.com/bitnami/charts/issues/29390)
+
+## <small>18.1.12 (2024-09-11)</small>
+
+* [bitnami/nginx] Release 18.1.12 - bugfix prometheusrules label collision (#29276) ([c44ac28](https://github.com/bitnami/charts/commit/c44ac289f80916c4267b976ff703c6c6159b444b)), closes [#29276](https://github.com/bitnami/charts/issues/29276)
+
+## <small>18.1.11 (2024-08-23)</small>
+
+* [bitnami/nginx] Release 18.1.11 (#28993) ([34e0c37](https://github.com/bitnami/charts/commit/34e0c3727b2b67d946bda7b7250be6bc88dfc4e3)), closes [#28993](https://github.com/bitnami/charts/issues/28993)
 
 ## <small>18.1.10 (2024-08-21)</small>
 
