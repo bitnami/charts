@@ -58,9 +58,8 @@ Return the copy plugins init container definition
 - name: copy-default-plugins
   image: {{ include "opensearch.image" .context }}
   imagePullPolicy: {{ .context.Values.image.pullPolicy | quote }}
-  {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 12 }}
-  {{- end }}
+  securityContext:
+    runAsUser: 0
   {{- if $block.resources }}
   resources: {{- toYaml $block.resources | nindent 12 }}
   {{- else if ne $block.resourcesPreset "none" }}
@@ -71,18 +70,27 @@ Return the copy plugins init container definition
   args:
     - -ec
     - |
-        #!/bin/bash
-
+        . /opt/bitnami/scripts/liblog.sh
         . /opt/bitnami/scripts/libfs.sh
         . /opt/bitnami/scripts/opensearch-env.sh
 
+        mkdir -p /emptydir/app-conf-dir /emptydir/app-plugins-dir
+        info "Copying directories to empty dir"
+        # In order to not break plugins installation we need to make the conf directory
+        # writable, so we need to copy it to an empty dir volume
+        cp -r --preserve=mode /opt/bitnami/opensearch/config /emptydir/app-conf-dir
+
         if ! is_dir_empty "$DB_DEFAULT_PLUGINS_DIR"; then
-            cp -nr "$DB_DEFAULT_PLUGINS_DIR"/* /plugins
+            info "Copying default plugins"
+            cp -nr "$DB_DEFAULT_PLUGINS_DIR"/* /emptydir/app-plugins-dir
         fi
+
+        chown -R {{ $block.containerSecurityContext.runAsUser }}:{{ $block.podSecurityContext.fsGroup }} /emptydir/app-conf-dir /emptydir/app-plugins-dir
+
+        info "Copy operation completed"
   volumeMounts:
     - name: empty-dir
-      mountPath: /plugins
-      subPath: app-plugins-dir
+      mountPath: /emptydir
 {{- end -}}
 
 {{/*
