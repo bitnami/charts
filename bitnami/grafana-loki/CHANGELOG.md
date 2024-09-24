@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.6.17 (2024-09-19)
+## 4.6.17 (2024-09-24)
 
 * [bitnami/grafana-loki] Release 4.6.17 ([#29541](https://github.com/bitnami/charts/pull/29541))
 
