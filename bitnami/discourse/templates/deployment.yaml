@@ -135,7 +135,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.discourse.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.command "context" $) | nindent 12 }}
-          {{- else if .Values.discourse.persistPlugins }}
+          {{- else if and .Values.discourse.plugins .Values.discourse.persistPlugins }}
           command:
             - /bin/bash
           {{- end }}
@@ -143,7 +143,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.discourse.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.args "context" $) | nindent 12 }}
-          {{- else if  .Values.discourse.persistPlugins }}
+          {{- else if and .Values.discourse.plugins .Values.discourse.persistPlugins }}
           args:
             - -ec
             - |
