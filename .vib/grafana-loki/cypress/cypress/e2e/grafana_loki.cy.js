@@ -11,7 +11,7 @@ it('checks Loki range endpoint', () => {
   cy.request({
     method: 'GET',
     url: 'loki/api/v1/query',
-    body: { query: 'query=sum(rate({job="varlogs"}[10m])) by (level)' },
+    body: { query: 'sum(rate({job="varlogs"}[10m])) by (level)' },
     form: true,
   }).then((response) => {
     expect(response.status).to.eq(200);
