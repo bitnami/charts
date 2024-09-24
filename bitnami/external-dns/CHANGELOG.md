@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.3.9 (2024-09-24)
+
+* [bitnami/external-dns] chore: :wrench: :construction_worker: Re-enable CRD automation ([#29266](https://github.com/bitnami/charts/pull/29266))
+
+## <small>8.3.8 (2024-09-16)</small>
+
+* [bitnami/external-dns] Fixed oci workload identity secret creation (#29374) ([a248647](https://github.com/bitnami/charts/commit/a248647ee9b6ff0b90e25856ab292557287df10a)), closes [#29374](https://github.com/bitnami/charts/issues/29374)
+
 ## <small>8.3.7 (2024-09-05)</small>
 
 * [bitnami/external-dns] Release 8.3.7 (#29231) ([e6c6578](https://github.com/bitnami/charts/commit/e6c65782c9e73b79537c59c33e945d72dcf29b26)), closes [#29231](https://github.com/bitnami/charts/issues/29231)
