@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.3.23 (2024-09-23)
+## 4.3.23 (2024-09-24)
 
 * [bitnami/rabbitmq-cluster-operator] Add PodDistruptionBidget (PBDs) ([#29578](https://github.com/bitnami/charts/pull/29578))
 
