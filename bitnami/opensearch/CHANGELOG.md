@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.3.3 (2024-09-24)
+## 1.3.4 (2024-09-24)
 
-* [bitnami/opensearch] Release 1.3.3 ([#29582](https://github.com/bitnami/charts/pull/29582))
+* [bitnami/opensearch] Fix plugins installation ([#29586](https://github.com/bitnami/charts/pull/29586))
+
+## <small>1.3.3 (2024-09-24)</small>
+
+* [bitnami/opensearch] Release 1.3.3 (#29582) ([8e60928](https://github.com/bitnami/charts/commit/8e60928332d201716283187687dc129034816e41)), closes [#29582](https://github.com/bitnami/charts/issues/29582)
+* [bitnami/opensearch] Replace links to open.co with opensearch.org (#29548) ([1f2ebcc](https://github.com/bitnami/charts/commit/1f2ebcc40481d284e2dc6b99c0716a34ca29dc8f)), closes [#29548](https://github.com/bitnami/charts/issues/29548)
 
 ## <small>1.3.2 (2024-09-17)</small>
 
