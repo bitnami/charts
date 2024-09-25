@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.1.4 (2024-09-19)
+## 20.1.5 (2024-09-25)
 
-* [bitnami/redis] Release 20.1.4 ([#29530](https://github.com/bitnami/charts/pull/29530))
+* [bitnami/redis] - fix additionalEndpoints in servicemonitor ([#29595](https://github.com/bitnami/charts/pull/29595))
+
+## <small>20.1.4 (2024-09-19)</small>
+
+* [bitnami/redis] Release 20.1.4 (#29530) ([8053b1a](https://github.com/bitnami/charts/commit/8053b1a13272f5485ca5c6ec0ace6741cf202262)), closes [#29530](https://github.com/bitnami/charts/issues/29530)
 
 ## <small>20.1.3 (2024-09-14)</small>
 
