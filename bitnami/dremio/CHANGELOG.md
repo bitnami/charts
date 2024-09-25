@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.12 (2024-09-05)
+## 0.1.12 (2024-09-25)
 
 * [bitnami/dremio] Release 0.1.12 ([#29212](https://github.com/bitnami/charts/pull/29212))
 
