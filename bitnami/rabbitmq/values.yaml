@@ -438,7 +438,7 @@ configuration: |-
   ssl_options.certfile = /opt/bitnami/rabbitmq/certs/server_certificate.pem
   ssl_options.keyfile = /opt/bitnami/rabbitmq/certs/server_key.pem
   {{- if .Values.auth.tls.sslOptionsPassword.enabled }}
-  ssl_options.password = {{ template "rabbitmq.tlsSslOptionsPassword" . }}
+  ssl_options.password = {{ include "common.secrets.passwords.manage" (dict "secret" .Values.auth.tls.sslOptionsPassword.existingSecret "key" .Values.auth.tls.sslOptionsPassword.key "providedValues" (list "auth.tls.sslOptionsPassword.password") "skipB64enc" true "failOnNew" false "context" $) }}
   {{- end }}
   {{- end }}
   {{- if .Values.ldap.enabled }}
