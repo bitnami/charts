@@ -1928,7 +1928,7 @@ metrics:
     # add metricRelabelings with label like app=redis to main redis pod-monitor port
     # - interval: "30s"
     #   path: "/scrape"
-    #   port: "metrics"
+    #   port: "http-metrics"
     #   params:
     #     target: ["localhost:26379"]
     #   metricRelabelings:
