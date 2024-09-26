@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.10 (2024-08-23)
+## 9.2.11 (2024-09-25)
 
-* [bitnami/spark] Release 9.2.10 ([#29011](https://github.com/bitnami/charts/pull/29011))
+* [bitnami/spark] Release 9.2.11 ([#29593](https://github.com/bitnami/charts/pull/29593))
+
+## <small>9.2.10 (2024-08-24)</small>
+
+* [bitnami/spark] Release 9.2.10 (#29011) ([2c919dc](https://github.com/bitnami/charts/commit/2c919dc748aba27b595f4aaf0a4c7f4270ff0ba7)), closes [#29011](https://github.com/bitnami/charts/issues/29011)
 
 ## <small>9.2.9 (2024-08-12)</small>
 

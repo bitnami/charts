@@ -62,10 +62,9 @@ To modify the OpenSearch version used in this chart you can specify a [valid ima
 
 ### Default kernel settings
 
-Currently, OpenSearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the OS containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+Currently, OpenSearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the OS containers fail to boot with ERROR messages. More information about these requirements can be found here:
 
-- [File Descriptor requirements](https://www.open.co/guide/en/opensearch/reference/current/file-descriptors.html)
-- [Virtual memory requirements](https://www.open.co/guide/en/opensearch/reference/current/vm-max-map-count.html)
+- <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/index/#important-settings>
 
 This chart uses a **privileged** initContainer to change those settings in the Kernel by running: `sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536`.
 You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
@@ -93,7 +92,7 @@ initScriptsSecret=special-scripts-sensitive
 
 ### Snapshot and restore operations
 
-As it's described in the [official documentation](https://www.open.co/guide/en/opensearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
+As it's described in the [official documentation](https://opensearch.org/docs/latest/tuning-your-cluster/availability-and-recovery/snapshots/snapshot-restore/#register-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
 
 This chart allows you to configure OpenSearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every OpenSearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Persistent Volume:
 

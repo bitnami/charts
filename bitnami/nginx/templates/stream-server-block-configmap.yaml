@@ -3,18 +3,17 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if (include "minio.createSecret" .) }}
+{{- if and .Values.streamServerBlock (not .Values.existingStreamServerBlockConfigmap) }}
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ template "common.names.fullname" . }}-stream-server-block
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-type: Opaque
 data:
-  root-user: {{ include "minio.secret.userValue" . }}
-  root-password: {{ include "minio.secret.passwordValue" . }}
+  stream-server-block.conf: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.streamServerBlock "context" $ ) | nindent 4 }}
 {{- end }}

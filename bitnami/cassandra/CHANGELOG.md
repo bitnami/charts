@@ -1,8 +1,16 @@
 # Changelog
 
-## 12.0.1 (2024-09-10)
+## 12.0.2 (2024-09-26)
 
-* [bitnami/cassandra] Release 12.0.1 ([#29339](https://github.com/bitnami/charts/pull/29339))
+* [bitnami/cassandra] Use common password manager to handle passwords ([#29560](https://github.com/bitnami/charts/pull/29560))
+
+## <small>12.0.1 (2024-09-10)</small>
+
+* [bitnami/cassandra] Release 12.0.1 (#29339) ([0349ba2](https://github.com/bitnami/charts/commit/0349ba298f17cef36647d887f74cc9600be00be5)), closes [#29339](https://github.com/bitnami/charts/issues/29339)
+
+## 12.0.0 (2024-09-10)
+
+* [bitnami/cassandra] Release 12.0.0 (#29305) ([a1acd8f](https://github.com/bitnami/charts/commit/a1acd8f74562ec3d85d0ee11e6d22c9d426699df)), closes [#29305](https://github.com/bitnami/charts/issues/29305)
 
 ## <small>11.4.2 (2024-09-04)</small>
 
@@ -10,8 +18,11 @@
 
 ## <small>11.4.1 (2024-09-03)</small>
 
-* [bitnami/cassandra] feat: :sparkles: Allow setting initdb scripts in values (#29172) ([0aaac20](https://github.com/bitnami/charts/commit/0aaac209548b8c38af586322dbda2e86e8830600)), closes [#29172](https://github.com/bitnami/charts/issues/29172)
 * [bitnami/cassandra] test: :white_check_mark: Improve ginkgo testing reliability (#29177) ([28cf5f7](https://github.com/bitnami/charts/commit/28cf5f7b8e48370b31d79ed596fd26697ac4a0dc)), closes [#29177](https://github.com/bitnami/charts/issues/29177)
+
+## 11.4.0 (2024-09-03)
+
+* [bitnami/cassandra] feat: :sparkles: Allow setting initdb scripts in values (#29172) ([0aaac20](https://github.com/bitnami/charts/commit/0aaac209548b8c38af586322dbda2e86e8830600)), closes [#29172](https://github.com/bitnami/charts/issues/29172)
 * Update README.md (#29126) ([0d5e4f8](https://github.com/bitnami/charts/commit/0d5e4f85cd10e48fcf53dc6a9d69b2f4a4c8ae34)), closes [#29126](https://github.com/bitnami/charts/issues/29126)
 
 ## <small>11.3.14 (2024-08-28)</small>
