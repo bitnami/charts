@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.4.2 (2024-09-17)
+## 8.4.3 (2024-09-26)
 
-* [bitnami/nats] Improve Ginkgo tests ([#29462](https://github.com/bitnami/charts/pull/29462))
+* [bitnami/nats] Release 8.4.3 ([#29629](https://github.com/bitnami/charts/pull/29629))
+
+## <small>8.4.2 (2024-09-17)</small>
+
+* [bitnami/nats] Improve Ginkgo tests (#29462) ([3ec3cfb](https://github.com/bitnami/charts/commit/3ec3cfb0596ab1a5360ecc530842646bcd2a581a)), closes [#29462](https://github.com/bitnami/charts/issues/29462)
 
 ## <small>8.4.1 (2024-09-16)</small>
 
