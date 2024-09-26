@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.1 (2024-09-25)
+## 1.0.1 (2024-09-26)
 
 * [bitnami/valkey-cluster] the redis_url for redis_exporter should use rediss/redis scheme, not valkeys/valkey. ([#29589](https://github.com/bitnami/charts/pull/29589))
 
