@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.7.12 (2024-09-26)
+## 14.7.13 (2024-09-26)
 
-* [bitnami/minio] Release 14.7.12 ([#29612](https://github.com/bitnami/charts/pull/29612))
+* [bitnami/minio] Use common password manager to handle credentials ([#29559](https://github.com/bitnami/charts/pull/29559))
+
+## <small>14.7.12 (2024-09-26)</small>
+
+* [bitnami/minio] Release 14.7.12 (#29612) ([d787fbf](https://github.com/bitnami/charts/commit/d787fbfd4f409ecd2004052c8610676484ad101d)), closes [#29612](https://github.com/bitnami/charts/issues/29612)
 
 ## <small>14.7.11 (2024-09-24)</small>
 
