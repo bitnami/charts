@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: opensearch
-      image: docker.io/bitnami/opensearch:2.17.0-debian-12-r1
+      image: docker.io/bitnami/opensearch:2.17.0-debian-12-r2
     - name: opensearch-dashboards
       image: docker.io/bitnami/opensearch-dashboards:2.17.0-debian-12-r0
     - name: os-shell
@@ -30,4 +30,4 @@ maintainers:
 name: opensearch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/opensearch
-version: 1.3.6
+version: 1.3.7

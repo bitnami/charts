@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.6 (2024-09-26)
+## 1.3.7 (2024-09-26)
 
-* [bitnami/opensearch] Plugin installation as non-root user ([#29624](https://github.com/bitnami/charts/pull/29624))
+* [bitnami/opensearch] Release 1.3.7 ([#29639](https://github.com/bitnami/charts/pull/29639))
+
+## <small>1.3.6 (2024-09-26)</small>
+
+* [bitnami/opensearch] Plugin installation as non-root user (#29624) ([bc87c42](https://github.com/bitnami/charts/commit/bc87c424bd5584e4735e7b4539a542f9e59aa0dc)), closes [#29624](https://github.com/bitnami/charts/issues/29624)
 
 ## <small>1.3.5 (2024-09-26)</small>
 
