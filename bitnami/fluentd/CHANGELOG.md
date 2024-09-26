@@ -1,8 +1,17 @@
 # Changelog
 
-## 6.5.11 (2024-07-25)
+## 6.5.13 (2024-09-26)
 
-* [bitnami/fluentd] Release 6.5.11 ([#28407](https://github.com/bitnami/charts/pull/28407))
+* [bitnami/fluentd] Release 6.5.13 ([#29609](https://github.com/bitnami/charts/pull/29609))
+
+## <small>6.5.12 (2024-08-19)</small>
+
+* [bitnami/fluentd] Release 6.5.12 (#28921) ([2387691](https://github.com/bitnami/charts/commit/2387691e2b09ebc2e19967123544255e9060ed6a)), closes [#28921](https://github.com/bitnami/charts/issues/28921)
+* docs: update README.md (#28797) ([82058a3](https://github.com/bitnami/charts/commit/82058a3792fb3ba078ebcaeb83b48b54a688489b)), closes [#28797](https://github.com/bitnami/charts/issues/28797)
+
+## <small>6.5.11 (2024-07-25)</small>
+
+* [bitnami/fluentd] Release 6.5.11 (#28407) ([faf110e](https://github.com/bitnami/charts/commit/faf110e259814f8c488df7dfea23dfad3371dfbc)), closes [#28407](https://github.com/bitnami/charts/issues/28407)
 
 ## <small>6.5.10 (2024-07-24)</small>
 

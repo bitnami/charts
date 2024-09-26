@@ -1,8 +1,40 @@
 # Changelog
 
-## 8.0.5 (2024-07-25)
+## 8.0.13 (2024-09-25)
 
-* [bitnami/matomo] Release 8.0.5 ([#28484](https://github.com/bitnami/charts/pull/28484))
+* [bitnami/matomo] Release 8.0.13 ([#29605](https://github.com/bitnami/charts/pull/29605))
+
+## <small>8.0.12 (2024-09-19)</small>
+
+* [bitnami/matomo] Release 8.0.12 (#29522) ([2f7ff7c](https://github.com/bitnami/charts/commit/2f7ff7c36bf21598bd1d8b6b7843213a21d4df47)), closes [#29522](https://github.com/bitnami/charts/issues/29522)
+
+## <small>8.0.11 (2024-09-04)</small>
+
+* [bitnami/matomo] add serviceAccountName parameter to CronJob pods (#29182) ([dafec18](https://github.com/bitnami/charts/commit/dafec184dcd1c57e48f617306d5f345d61a40fd2)), closes [#29182](https://github.com/bitnami/charts/issues/29182)
+
+## <small>8.0.10 (2024-08-22)</small>
+
+* [bitnami/matomo] Release 8.0.10 (#28972) ([890f055](https://github.com/bitnami/charts/commit/890f055a0c00ef6889c34e25108ecab0ab2c86e3)), closes [#28972](https://github.com/bitnami/charts/issues/28972)
+
+## <small>8.0.9 (2024-08-15)</small>
+
+* [bitnami/matomo] Release 8.0.9 (#28892) ([9ecfcbd](https://github.com/bitnami/charts/commit/9ecfcbd7219a77ddd6583aa8eb35b01b43ede5b8)), closes [#28892](https://github.com/bitnami/charts/issues/28892)
+
+## <small>8.0.8 (2024-08-13)</small>
+
+* [bitnami/matomo] Release 8.0.8 (#28860) ([a341719](https://github.com/bitnami/charts/commit/a341719d9454aa8cfd6f59303aa01bc581a0f3a2)), closes [#28860](https://github.com/bitnami/charts/issues/28860)
+
+## <small>8.0.7 (2024-08-13)</small>
+
+* [bitnami/matomo] Increase readiness probes' initial delay for VIB tests (#28847) ([fc93db0](https://github.com/bitnami/charts/commit/fc93db0404297d794a010c76e80d3ae7e0459128)), closes [#28847](https://github.com/bitnami/charts/issues/28847)
+
+## <small>8.0.6 (2024-08-05)</small>
+
+* [bitnami/matomo] Remove dokuwiki reference (#28661) ([e786767](https://github.com/bitnami/charts/commit/e786767a8aaabefd3dc8d834a5176ca5bde3bbc9)), closes [#28661](https://github.com/bitnami/charts/issues/28661)
+
+## <small>8.0.5 (2024-07-25)</small>
+
+* [bitnami/matomo] Release 8.0.5 (#28484) ([d08a865](https://github.com/bitnami/charts/commit/d08a86525aa160ba1c9595123d2f4913ecb33540)), closes [#28484](https://github.com/bitnami/charts/issues/28484)
 
 ## <small>8.0.4 (2024-07-24)</small>
 

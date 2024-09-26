@@ -1,8 +1,36 @@
 # Changelog
 
-## 0.1.6 (2024-07-25)
+## 1.0.1 (2024-09-26)
 
-* [bitnami/valkey-cluster] Release 0.1.6 ([#28492](https://github.com/bitnami/charts/pull/28492))
+* [bitnami/valkey-cluster] the redis_url for redis_exporter should use rediss/redis scheme, not valkeys/valkey. ([#29589](https://github.com/bitnami/charts/pull/29589))
+
+## 1.0.0 (2024-09-16)
+
+* [bitnami/valkey-cluster] Release 1.0.0 (#29450) ([a6c84c2](https://github.com/bitnami/charts/commit/a6c84c2362b2577ce78ead825292e6037e1a2c13)), closes [#29450](https://github.com/bitnami/charts/issues/29450)
+
+## <small>0.1.11 (2024-09-09)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.11 (#29314) ([237b54e](https://github.com/bitnami/charts/commit/237b54eeb8fe80287e0b7a3749dac88db79b7733)), closes [#29314](https://github.com/bitnami/charts/issues/29314)
+
+## <small>0.1.10 (2024-08-28)</small>
+
+* [bitnami/valkey-cluster] test: :white_check_mark: Improve ginkgo tests reliability (#29080) ([8d4a3ba](https://github.com/bitnami/charts/commit/8d4a3baa33536661caa577bf32219823e937018b)), closes [#29080](https://github.com/bitnami/charts/issues/29080)
+
+## <small>0.1.9 (2024-08-19)</small>
+
+* [bitnami/valkey-cluster] Fix env-vars for metrics container (#28885) ([1df2599](https://github.com/bitnami/charts/commit/1df2599056ee021039b91c7e6af3f37f086ebc27)), closes [#28885](https://github.com/bitnami/charts/issues/28885)
+
+## <small>0.1.8 (2024-07-31)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.8 (#28609) ([449f0fc](https://github.com/bitnami/charts/commit/449f0fcc372bd0a5e0eff5fb36acf34956143fd9)), closes [#28609](https://github.com/bitnami/charts/issues/28609)
+
+## <small>0.1.7 (2024-07-29)</small>
+
+* [bitnami/valkey-cluster] update metrics-svc template name format (#27993) ([b350773](https://github.com/bitnami/charts/commit/b350773e5bbae8ed23560b5b8529630d9c5fddcc)), closes [#27993](https://github.com/bitnami/charts/issues/27993)
+
+## <small>0.1.6 (2024-07-25)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.6 (#28492) ([979a50b](https://github.com/bitnami/charts/commit/979a50b707efbfee186c31b84fc91c839b116768)), closes [#28492](https://github.com/bitnami/charts/issues/28492)
 
 ## <small>0.1.5 (2024-07-24)</small>
 

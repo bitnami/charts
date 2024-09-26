@@ -1,8 +1,25 @@
 # Changelog
 
-## 19.2.5 (2024-07-25)
+## 21.0.2 (2024-09-25)
 
-* [bitnami/schema-registry] Release 19.2.5 ([#28488](https://github.com/bitnami/charts/pull/28488))
+* [bitnami/schema-registry] Release 21.0.2 ([#29596](https://github.com/bitnami/charts/pull/29596))
+
+## <small>21.0.1 (2024-09-12)</small>
+
+* [bitnami/schema-registry] Release 21.0.1 (#29370) ([6d9c981](https://github.com/bitnami/charts/commit/6d9c981f179c3c383d699b7291b616ee1fb0cb92)), closes [#29370](https://github.com/bitnami/charts/issues/29370)
+* [schema-registry] Fix typo in README: envVars -> extraEnvVars (#27564) ([46cae1c](https://github.com/bitnami/charts/commit/46cae1c851d1df12dcc98662c6304699663d2908)), closes [#27564](https://github.com/bitnami/charts/issues/27564)
+
+## 21.0.0 (2024-08-05)
+
+* [bitnami/schema-registry] Update chart dependency (kafka) (#28672) ([ff628f6](https://github.com/bitnami/charts/commit/ff628f683cd67d664d6bcea2d4c8c90daf353087)), closes [#28672](https://github.com/bitnami/charts/issues/28672)
+
+## 20.0.0 (2024-08-02)
+
+* [bitnami/schema-registry] Release 20.0.0 (#28641) ([b6f2246](https://github.com/bitnami/charts/commit/b6f22465529a3990027ff4de3f72e589c394ed20)), closes [#28641](https://github.com/bitnami/charts/issues/28641)
+
+## <small>19.2.5 (2024-07-25)</small>
+
+* [bitnami/schema-registry] Release 19.2.5 (#28488) ([faf51a1](https://github.com/bitnami/charts/commit/faf51a11ab03c961a30f0379ebd9551a047035aa)), closes [#28488](https://github.com/bitnami/charts/issues/28488)
 
 ## <small>19.2.4 (2024-07-24)</small>
 

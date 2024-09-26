@@ -1,8 +1,40 @@
 # Changelog
 
-## 0.3.12 (2024-07-25)
+## 1.0.1 (2024-09-19)
 
-* [bitnami/valkey] Release 0.3.12 ([#28493](https://github.com/bitnami/charts/pull/28493))
+* [bitnami/valkey] Release 1.0.1 ([#29532](https://github.com/bitnami/charts/pull/29532))
+
+## 1.0.0 (2024-09-17)
+
+* [bitnami/valkey] Release 1.0.0 (#29482) ([ee769e6](https://github.com/bitnami/charts/commit/ee769e6a4f7383876fe64aaf625bad99923fb6e3)), closes [#29482](https://github.com/bitnami/charts/issues/29482)
+
+## <small>0.3.18 (2024-09-17)</small>
+
+* [bitnami/valkey] test: :white_check_mark: Improve reliability of ginkgo tests (#29474) ([4bccd45](https://github.com/bitnami/charts/commit/4bccd45d29911575dd7c8c7bb060f4abf036f822)), closes [#29474](https://github.com/bitnami/charts/issues/29474)
+
+## <small>0.3.17 (2024-09-14)</small>
+
+* [bitnami/valkey] Release 0.3.17 (#29413) ([0dd6ee7](https://github.com/bitnami/charts/commit/0dd6ee77dbc152583d6412260f801bfcefd3114d)), closes [#29413](https://github.com/bitnami/charts/issues/29413)
+
+## <small>0.3.16 (2024-09-11)</small>
+
+* [bitnami/valkey] Fix 404 in docs link (#29333) ([55b1d3d](https://github.com/bitnami/charts/commit/55b1d3deff6fb701459a532f5a40b59716f61fcf)), closes [#29333](https://github.com/bitnami/charts/issues/29333)
+
+## <small>0.3.15 (2024-08-19)</small>
+
+* [bitnami/valkey] Fix env-vars for metrics container (#28884) ([17ffafe](https://github.com/bitnami/charts/commit/17ffafe703df7a81853b3632e03e2af79dfb41f2)), closes [#28884](https://github.com/bitnami/charts/issues/28884)
+
+## <small>0.3.14 (2024-08-14)</small>
+
+* [bitnami/valkey] Release 0.3.14 (#28887) ([87846b8](https://github.com/bitnami/charts/commit/87846b85ad80bf586ea9d8966c597f5492f0bb03)), closes [#28887](https://github.com/bitnami/charts/issues/28887)
+
+## <small>0.3.13 (2024-07-31)</small>
+
+* [bitnami/valkey] Release 0.3.13 (#28610) ([adfc0d1](https://github.com/bitnami/charts/commit/adfc0d1faa58f735880f3cb4c37cbc7f7d70fefc)), closes [#28610](https://github.com/bitnami/charts/issues/28610)
+
+## <small>0.3.12 (2024-07-25)</small>
+
+* [bitnami/valkey] Release 0.3.12 (#28493) ([f001e7a](https://github.com/bitnami/charts/commit/f001e7a2033e1a3ee35c3b3ff7d952d9296326d0)), closes [#28493](https://github.com/bitnami/charts/issues/28493)
 
 ## <small>0.3.11 (2024-07-24)</small>
 

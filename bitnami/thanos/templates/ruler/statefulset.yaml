@@ -127,7 +127,11 @@ spec:
             - --log.format={{ .Values.ruler.logFormat }}
             - --grpc-address=0.0.0.0:{{ .Values.ruler.containerPorts.grpc }}
             - --http-address=0.0.0.0:{{ .Values.ruler.containerPorts.http }}
+            {{- if .Values.ruler.dataPath }}
+            - --data-dir={{ .Values.ruler.dataPath }}
+            {{- else }}
             - --data-dir=/data
+            {{- end }}
             - --eval-interval={{ .Values.ruler.evalInterval }}
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
@@ -296,7 +300,9 @@ spec:
   {{- end }}
   {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.ruler.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.ruler.persistence.annotations "context" $) | nindent 10 }}

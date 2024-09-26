@@ -1,8 +1,40 @@
 # Changelog
 
-## 8.3.7 (2024-07-25)
+## 9.0.6 (2024-09-25)
 
-* [bitnami/milvus] fix: :bug: Set cache directory fully writable in attu ([#28521](https://github.com/bitnami/charts/pull/28521))
+* [bitnami/milvus] Release 9.0.6 ([#29604](https://github.com/bitnami/charts/pull/29604))
+
+## <small>9.0.5 (2024-09-10)</small>
+
+* [bitnami/milvus] Release 9.0.5 (#29294) ([b467df8](https://github.com/bitnami/charts/commit/b467df892da24bb52f29256a0090488c40d452f7)), closes [#29294](https://github.com/bitnami/charts/issues/29294)
+
+## <small>9.0.4 (2024-09-02)</small>
+
+* [bitnami/milvus] Release 9.0.4 (#29113) ([4ec696e](https://github.com/bitnami/charts/commit/4ec696e3455eebf116b2e97b3a18f5d5f6f2cc60)), closes [#29113](https://github.com/bitnami/charts/issues/29113)
+
+## <small>9.0.3 (2024-08-16)</small>
+
+* [bitnami/milvus] Release 9.0.3 (#28903) ([b556a6e](https://github.com/bitnami/charts/commit/b556a6e3e2a0eabf61baa240c142cef635bff4c5)), closes [#28903](https://github.com/bitnami/charts/issues/28903)
+
+## <small>9.0.2 (2024-08-13)</small>
+
+* [bitnami/milvus] Release 9.0.2 (#28858) ([6263394](https://github.com/bitnami/charts/commit/62633945f53d2d0b76e19bf8558acf2c864a8977)), closes [#28858](https://github.com/bitnami/charts/issues/28858)
+
+## <small>9.0.1 (2024-08-07)</small>
+
+* [bitnami/milvus] Release 9.0.1 (#28729) ([acd9fce](https://github.com/bitnami/charts/commit/acd9fce938b8b11f8855b6eb5e72ed1703f52c2f)), closes [#28729](https://github.com/bitnami/charts/issues/28729)
+
+## 9.0.0 (2024-08-05)
+
+* [bitnami/milvus] Update chart dependency (kafka) (#28674) ([97bfd61](https://github.com/bitnami/charts/commit/97bfd615761d546da012fc0aaf093f2ee0fdcbc0)), closes [#28674](https://github.com/bitnami/charts/issues/28674)
+
+## <small>8.3.8 (2024-08-02)</small>
+
+* [bitnami/milvus] Release 8.3.8 (#28642) ([c0e7077](https://github.com/bitnami/charts/commit/c0e7077b6d65a0442334ae1da0eacdaf3505e5f4)), closes [#28642](https://github.com/bitnami/charts/issues/28642)
+
+## <small>8.3.7 (2024-07-25)</small>
+
+* [bitnami/milvus] fix: :bug: Set cache directory fully writable in attu (#28521) ([901c5f3](https://github.com/bitnami/charts/commit/901c5f3577a895211a53205c47e3093169d00d81)), closes [#28521](https://github.com/bitnami/charts/issues/28521)
 
 ## <small>8.3.6 (2024-07-25)</small>
 

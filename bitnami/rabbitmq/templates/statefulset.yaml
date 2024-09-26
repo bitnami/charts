@@ -38,6 +38,9 @@ spec:
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
+        {{- if .Values.initScripts }}
+        checksum/initScripts: {{ include (print $.Template.BasePath "/init-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -113,7 +116,7 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -131,7 +134,7 @@ spec:
           image: {{ template "rabbitmq.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -341,7 +344,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}

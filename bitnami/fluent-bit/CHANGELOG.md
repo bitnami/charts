@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.3.15 (2024-07-25)
+## 2.3.19 (2024-09-16)
 
-* [bitnami/fluent-bit] Release 2.3.15 ([#28449](https://github.com/bitnami/charts/pull/28449))
+* [bitnami/fluent-bit] Release 2.3.19 ([#29460](https://github.com/bitnami/charts/pull/29460))
+
+## <small>2.3.18 (2024-09-02)</small>
+
+* [bitnami/fluent-bit] Release 2.3.18 (#29147) ([39609d1](https://github.com/bitnami/charts/commit/39609d1d483127e836fcad9dc4c35103762f1fea)), closes [#29147](https://github.com/bitnami/charts/issues/29147)
+
+## <small>2.3.17 (2024-08-14)</small>
+
+* [bitnami/fluent-bit] Release 2.3.17 (#28888) ([ddf160a](https://github.com/bitnami/charts/commit/ddf160a6c4b23599b3e023b9703c08f7e582a7d7)), closes [#28888](https://github.com/bitnami/charts/issues/28888)
+
+## <small>2.3.16 (2024-08-10)</small>
+
+* [bitnami/fluent-bit] Release 2.3.16 (#28818) ([b11e97f](https://github.com/bitnami/charts/commit/b11e97f9b3a4c12a86db9c22762062be62428382)), closes [#28818](https://github.com/bitnami/charts/issues/28818)
+
+## <small>2.3.15 (2024-07-25)</small>
+
+* [bitnami/fluent-bit] Release 2.3.15 (#28449) ([3dfaa01](https://github.com/bitnami/charts/commit/3dfaa01043acdfcec57677058d26048653a04226)), closes [#28449](https://github.com/bitnami/charts/issues/28449)
 
 ## <small>2.3.14 (2024-07-25)</small>
 

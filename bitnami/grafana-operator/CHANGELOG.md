@@ -1,8 +1,49 @@
 # Changelog
 
-## 4.4.12 (2024-07-25)
+## 4.7.0 (2024-09-23)
 
-* [bitnami/grafana-operator] Release 4.4.12 ([#28436](https://github.com/bitnami/charts/pull/28436))
+* [bitnami/grafana-operator] Enable env in grafana ([#29553](https://github.com/bitnami/charts/pull/29553))
+
+## <small>4.6.4 (2024-09-19)</small>
+
+* [bitnami/grafana-operator] Release 4.6.4 (#29508) ([a0e1c75](https://github.com/bitnami/charts/commit/a0e1c75e5caf51c3ed5b85dde87d26884ad815cf)), closes [#29508](https://github.com/bitnami/charts/issues/29508)
+* [bitnami/grafana-operator] Remove duplicated text in README.md (#29410) ([242cdb0](https://github.com/bitnami/charts/commit/242cdb07c5bbc3cae671349a67a6a1c00bf01a2c)), closes [#29410](https://github.com/bitnami/charts/issues/29410)
+
+## <small>4.6.3 (2024-09-12)</small>
+
+* [bitnami/grafana-operator] Release 4.6.3 (#29375) ([9df77c6](https://github.com/bitnami/charts/commit/9df77c618b88bc35ff2196009ccf44bc0ca54ff8)), closes [#29375](https://github.com/bitnami/charts/issues/29375)
+
+## <small>4.6.2 (2024-09-05)</small>
+
+* [bitnami/grafana-operator] Release 4.6.2 (#29237) ([09e68da](https://github.com/bitnami/charts/commit/09e68dad98191bc7e5c983f10acd41935195e293)), closes [#29237](https://github.com/bitnami/charts/issues/29237)
+
+## <small>4.6.1 (2024-08-23)</small>
+
+* [bitnami/grafana-operator] Release 4.6.1 (#29002) ([168f48a](https://github.com/bitnami/charts/commit/168f48a166e62bb0d4f5c480948570a9433e63fe)), closes [#29002](https://github.com/bitnami/charts/issues/29002)
+
+## 4.6.0 (2024-08-20)
+
+* [bitnami/grafana-operator] Add some pod scheduling directives (#28861) ([6cf09be](https://github.com/bitnami/charts/commit/6cf09bebecb993ed045ab7f4147254ea2bebe72f)), closes [#28861](https://github.com/bitnami/charts/issues/28861)
+
+## 4.5.0 (2024-08-12)
+
+* [bitnami/grafana-operator] Add missing CRD + RBAC (#28780) ([d9075fa](https://github.com/bitnami/charts/commit/d9075fa4000414377ae8b2be67cc8a5616894fff)), closes [#28780](https://github.com/bitnami/charts/issues/28780)
+
+## <small>4.4.15 (2024-08-08)</small>
+
+* [bitnami/grafana-operator] Release 4.4.15 (#28772) ([294d425](https://github.com/bitnami/charts/commit/294d42520609ea39b9465f5c0df7ea9d1738363d)), closes [#28772](https://github.com/bitnami/charts/issues/28772)
+
+## <small>4.4.14 (2024-08-07)</small>
+
+* [bitnami/grafana-operator] Release 4.4.14 (#28716) ([ad75521](https://github.com/bitnami/charts/commit/ad75521471f6384959b392ee6603b6a55d6e0dee)), closes [#28716](https://github.com/bitnami/charts/issues/28716)
+
+## <small>4.4.13 (2024-07-30)</small>
+
+* [bitnami/grafana-operator] Release 4.4.13 (#28587) ([30d4037](https://github.com/bitnami/charts/commit/30d4037cbcb3f58485e77acc03b4abf162ffe442)), closes [#28587](https://github.com/bitnami/charts/issues/28587)
+
+## <small>4.4.12 (2024-07-25)</small>
+
+* [bitnami/grafana-operator] Release 4.4.12 (#28436) ([80964ad](https://github.com/bitnami/charts/commit/80964adf492e70f9a6fbf5f6107f0ebdd3682bd4)), closes [#28436](https://github.com/bitnami/charts/issues/28436)
 
 ## <small>4.4.11 (2024-07-24)</small>
 

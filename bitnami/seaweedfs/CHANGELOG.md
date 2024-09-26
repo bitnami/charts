@@ -1,8 +1,48 @@
 # Changelog
 
-## 1.0.5 (2024-07-25)
+## 2.0.2 (2024-09-19)
 
-* [bitnami/seaweedfs] Release 1.0.5 ([#28483](https://github.com/bitnami/charts/pull/28483))
+* [bitnami/seaweedfs] Release 2.0.2 ([#29537](https://github.com/bitnami/charts/pull/29537))
+
+## <small>2.0.1 (2024-09-17)</small>
+
+* [bitnami/seaweedfs] test: :white_check_mark: Improve reliability of ginkgo tests (#29473) ([ef52e0d](https://github.com/bitnami/charts/commit/ef52e0d1992e16bed6d9726028b81b917c52bc41)), closes [#29473](https://github.com/bitnami/charts/issues/29473)
+
+## 2.0.0 (2024-09-16)
+
+* [bitnami/seaweedfs] Add support for PostgreSQL as alternative db (#29400) ([c43d3ba](https://github.com/bitnami/charts/commit/c43d3bac08541808d8b0d4f0e86f7870ed7a5411)), closes [#29400](https://github.com/bitnami/charts/issues/29400)
+
+## <small>1.1.2 (2024-09-13)</small>
+
+* [bitnami/seaweedfs] Release 1.1.2 (#29392) ([7df7650](https://github.com/bitnami/charts/commit/7df7650db97c60e5f447e5f18efc06764629d351)), closes [#29392](https://github.com/bitnami/charts/issues/29392)
+
+## <small>1.1.1 (2024-09-12)</small>
+
+* [bitnami/seaweedfs] fix: add apiVersion and kind to volumeClaimTemplates (#29357) ([ed8879b](https://github.com/bitnami/charts/commit/ed8879b066c604f95bde4c08f13d7eb8dc6f2d3f)), closes [#29357](https://github.com/bitnami/charts/issues/29357)
+
+## 1.1.0 (2024-09-10)
+
+* bitnami/seaweedfs external postgres database support (#29216) ([dc9b740](https://github.com/bitnami/charts/commit/dc9b7402d1ea788f806e42b7fc7e5c025e003e2a)), closes [#29216](https://github.com/bitnami/charts/issues/29216)
+
+## <small>1.0.9 (2024-08-19)</small>
+
+* [bitnami/seaweedfs] Release 1.0.9 (#28920) ([28916ca](https://github.com/bitnami/charts/commit/28916ca487e16f1626580f21c2ae8acb443a2e39)), closes [#28920](https://github.com/bitnami/charts/issues/28920)
+
+## <small>1.0.8 (2024-08-07)</small>
+
+* [bitnami/seaweedfs] Release 1.0.8 (#28750) ([c4ee2ee](https://github.com/bitnami/charts/commit/c4ee2ee425e92559b05a554fdae3fd0191614fb0)), closes [#28750](https://github.com/bitnami/charts/issues/28750)
+
+## <small>1.0.7 (2024-07-31)</small>
+
+* [bitnami/seaweedfs] Fix mounting the S3 auth config.json from secret (#28583) ([40d557a](https://github.com/bitnami/charts/commit/40d557addf28bc8c253fb99f3060220e43499632)), closes [#28583](https://github.com/bitnami/charts/issues/28583)
+
+## <small>1.0.6 (2024-07-30)</small>
+
+* [bitnami/seaweedfs] Fix tests (#28572) ([ef36337](https://github.com/bitnami/charts/commit/ef36337c5ffeedf577bb6fcadabbb3a92cf5d8e6)), closes [#28572](https://github.com/bitnami/charts/issues/28572)
+
+## <small>1.0.5 (2024-07-25)</small>
+
+* [bitnami/seaweedfs] Release 1.0.5 (#28483) ([f8b7481](https://github.com/bitnami/charts/commit/f8b7481b1c4b5cb35adf6c82e78f132592fe3335)), closes [#28483](https://github.com/bitnami/charts/issues/28483)
 
 ## <small>1.0.4 (2024-07-24)</small>
 

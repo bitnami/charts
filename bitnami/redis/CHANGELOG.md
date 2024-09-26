@@ -1,8 +1,57 @@
 # Changelog
 
-## 19.6.4 (2024-07-25)
+## 20.1.5 (2024-09-25)
 
-* [bitnami/redis] Release 19.6.4 ([#28499](https://github.com/bitnami/charts/pull/28499))
+* [bitnami/redis] - fix additionalEndpoints in servicemonitor ([#29595](https://github.com/bitnami/charts/pull/29595))
+
+## <small>20.1.4 (2024-09-19)</small>
+
+* [bitnami/redis] Release 20.1.4 (#29530) ([8053b1a](https://github.com/bitnami/charts/commit/8053b1a13272f5485ca5c6ec0ace6741cf202262)), closes [#29530](https://github.com/bitnami/charts/issues/29530)
+
+## <small>20.1.3 (2024-09-14)</small>
+
+* [bitnami/redis] Release 20.1.3 (#29411) ([b0b5c88](https://github.com/bitnami/charts/commit/b0b5c88f48cbb67d367121d92cf44afd5ddb424f)), closes [#29411](https://github.com/bitnami/charts/issues/29411)
+
+## <small>20.1.2 (2024-09-13)</small>
+
+* [bitnami/redis] Use common password manager to handle password (#29376) ([6ec3657](https://github.com/bitnami/charts/commit/6ec365736a61521aeb8f44d475420bf529f7f1fd)), closes [#29376](https://github.com/bitnami/charts/issues/29376)
+
+## <small>20.1.1 (2024-09-13)</small>
+
+* [bitnami/redis] fix: move variable from annotation to label (#29209) ([396fa01](https://github.com/bitnami/charts/commit/396fa01503a29a5c4695073ed9e6bde1923b187b)), closes [#29209](https://github.com/bitnami/charts/issues/29209)
+
+## 20.1.0 (2024-09-09)
+
+* [bitnami/redis] Support extraEnvVars on volume-permissions for dynamic subfolders (#29195) ([b33ff20](https://github.com/bitnami/charts/commit/b33ff200f4710173de48581071bc132d09618594)), closes [#29195](https://github.com/bitnami/charts/issues/29195)
+
+## <small>20.0.5 (2024-09-05)</small>
+
+* [bitnami/redis] label slave pod using sentinel masterService (#29121) ([6ae397f](https://github.com/bitnami/charts/commit/6ae397fb40ff4af6a578c54911f96383e30fed96)), closes [#29121](https://github.com/bitnami/charts/issues/29121)
+
+## <small>20.0.4 (2024-09-04)</small>
+
+* [bitnami/redis] update values.schema.json (#29106) ([8a2fea3](https://github.com/bitnami/charts/commit/8a2fea3d935989fc929092083e3af341d4eb545f)), closes [#29106](https://github.com/bitnami/charts/issues/29106)
+
+## <small>20.0.3 (2024-08-20)</small>
+
+* [bitnami/redis] Release 20.0.3 (#28941) ([d2a1abb](https://github.com/bitnami/charts/commit/d2a1abbba3a6125260c2df569ef060e165be88fa)), closes [#28941](https://github.com/bitnami/charts/issues/28941)
+
+## <small>20.0.2 (2024-08-14)</small>
+
+* [bitnami/redis] Release 20.0.2 (#28881) ([582b058](https://github.com/bitnami/charts/commit/582b058c032a83ad74eed87c9e9665ca4252f0ce)), closes [#28881](https://github.com/bitnami/charts/issues/28881)
+* [bitnami/redis] Update README after major update (#28848) ([a96205b](https://github.com/bitnami/charts/commit/a96205be4d1d1b4af34bf000cae49ae63b237a2a)), closes [#28848](https://github.com/bitnami/charts/issues/28848)
+
+## <small>20.0.1 (2024-08-09)</small>
+
+* [bitnami/redis] fix: Use rollout restart in ginkgo tests (#28813) ([1d8cb54](https://github.com/bitnami/charts/commit/1d8cb543a33d12b519a4b0e28fa99d3e20421a28)), closes [#28813](https://github.com/bitnami/charts/issues/28813)
+
+## 20.0.0 (2024-08-09)
+
+* [bitnami/redis] Release 20.0.0 (#28810) ([9e08d34](https://github.com/bitnami/charts/commit/9e08d34b938aebbe3ed955f4224b8e525313821d)), closes [#28810](https://github.com/bitnami/charts/issues/28810)
+
+## <small>19.6.4 (2024-07-25)</small>
+
+* [bitnami/redis] Release 19.6.4 (#28499) ([aaa7a7c](https://github.com/bitnami/charts/commit/aaa7a7cd11bfd8821d0464ef312ef0f66a3afce5)), closes [#28499](https://github.com/bitnami/charts/issues/28499)
 
 ## <small>19.6.3 (2024-07-24)</small>
 

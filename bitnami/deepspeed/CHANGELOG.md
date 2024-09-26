@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.2.13 (2024-07-25)
+## 2.2.19 (2024-09-19)
 
-* [bitnami/deepspeed] Release 2.2.13 ([#28505](https://github.com/bitnami/charts/pull/28505))
+* [bitnami/deepspeed] Release 2.2.19 ([#29503](https://github.com/bitnami/charts/pull/29503))
+
+## <small>2.2.18 (2024-09-15)</small>
+
+* [bitnami/deepspeed] Release 2.2.18 (#29428) ([43e47ee](https://github.com/bitnami/charts/commit/43e47eed8c2db76c0a6d3d1a0dac4cd2a3aa227a)), closes [#29428](https://github.com/bitnami/charts/issues/29428)
+
+## <small>2.2.17 (2024-09-15)</small>
+
+* [bitnami/deepspeed] Release 2.2.17 (#29425) ([18349a7](https://github.com/bitnami/charts/commit/18349a7c31d251088a269c42054b5583c0ab1548)), closes [#29425](https://github.com/bitnami/charts/issues/29425)
+
+## <small>2.2.16 (2024-09-06)</small>
+
+* [bitnami/deepspeed] Release 2.2.16 (#29273) ([33c95dd](https://github.com/bitnami/charts/commit/33c95dd52a50e6755931a0a5c89e909d020c3b7b)), closes [#29273](https://github.com/bitnami/charts/issues/29273)
+
+## <small>2.2.15 (2024-08-30)</small>
+
+* [bitnami/deepspeed] Release 2.2.15 (#29134) ([a585b56](https://github.com/bitnami/charts/commit/a585b56f047a9b2582d6b88d5834eeb70bef2857)), closes [#29134](https://github.com/bitnami/charts/issues/29134)
+
+## <small>2.2.14 (2024-07-30)</small>
+
+* [bitnami/deepspeed] Release 2.2.14 (#28574) ([0d2bc9d](https://github.com/bitnami/charts/commit/0d2bc9da715c1f0aa7df8662dde4b01ba5ce8a8d)), closes [#28574](https://github.com/bitnami/charts/issues/28574)
+
+## <small>2.2.13 (2024-07-25)</small>
+
+* [bitnami/deepspeed] Release 2.2.13 (#28505) ([f5d95c2](https://github.com/bitnami/charts/commit/f5d95c22e7b6b99748a938ef3f92ee82647a72b8)), closes [#28505](https://github.com/bitnami/charts/issues/28505)
 
 ## <small>2.2.12 (2024-07-24)</small>
 

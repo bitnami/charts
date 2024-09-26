@@ -1,8 +1,52 @@
 # Changelog
 
-## 21.1.24 (2024-07-25)
+## 21.1.35 (2024-09-23)
 
-* [bitnami/ghost] Release 21.1.24 ([#28443](https://github.com/bitnami/charts/pull/28443))
+* [bitnami/ghost] Release 21.1.35 ([#29577](https://github.com/bitnami/charts/pull/29577))
+
+## <small>21.1.34 (2024-09-19)</small>
+
+* [bitnami/ghost] Remove duplicated empty password check `common.validations.values.mysql.passwords` ( ([d060976](https://github.com/bitnami/charts/commit/d0609765be25beaf65b9b49797ac976d2cd3de9e)), closes [#29442](https://github.com/bitnami/charts/issues/29442)
+
+## <small>21.1.33 (2024-09-16)</small>
+
+* [bitnami/ghost] Release 21.1.33 (#29456) ([4d18bb3](https://github.com/bitnami/charts/commit/4d18bb3d392562d43f476657bfaab1432a3063d3)), closes [#29456](https://github.com/bitnami/charts/issues/29456)
+
+## <small>21.1.32 (2024-09-06)</small>
+
+* [bitnami/ghost] Release 21.1.32 (#29284) ([1cfd315](https://github.com/bitnami/charts/commit/1cfd31547ae290407bc056cd6fd80eddb9948564)), closes [#29284](https://github.com/bitnami/charts/issues/29284)
+
+## <small>21.1.31 (2024-09-04)</small>
+
+* [bitnami/ghost] Release 21.1.31 (#29186) ([72b8c26](https://github.com/bitnami/charts/commit/72b8c26fe17feb124f648cc6a8aacf0cd3ce2a7f)), closes [#29186](https://github.com/bitnami/charts/issues/29186)
+
+## <small>21.1.30 (2024-08-30)</small>
+
+* [bitnami/ghost] Release 21.1.30 (#29138) ([1bd6cef](https://github.com/bitnami/charts/commit/1bd6cef162213017869f6b7ebeec54f7d3394347)), closes [#29138](https://github.com/bitnami/charts/issues/29138)
+
+## <small>21.1.29 (2024-08-29)</small>
+
+* [bitnami/ghost] Release 21.1.29 (#29114) ([bfc7634](https://github.com/bitnami/charts/commit/bfc76342645e0b70ffa3b272c098d5fb2dc79770)), closes [#29114](https://github.com/bitnami/charts/issues/29114)
+
+## <small>21.1.28 (2024-08-29)</small>
+
+* [bitnami/ghost] Release 21.1.28 (#29078) ([f26b47c](https://github.com/bitnami/charts/commit/f26b47cdbc88592f3c8a06ff96d4dfb1c6d5798e)), closes [#29078](https://github.com/bitnami/charts/issues/29078)
+
+## <small>21.1.27 (2024-08-02)</small>
+
+* [bitnami/ghost] Release 21.1.27 (#28643) ([699e4f6](https://github.com/bitnami/charts/commit/699e4f6d9e51569003936f218af2b56a49e1739f)), closes [#28643](https://github.com/bitnami/charts/issues/28643)
+
+## <small>21.1.26 (2024-07-31)</small>
+
+* [bitnami/ghost] Release 21.1.26 (#28602) ([77d52b1](https://github.com/bitnami/charts/commit/77d52b10293fdcb8fcba0af259b965bebdf903c5)), closes [#28602](https://github.com/bitnami/charts/issues/28602)
+
+## <small>21.1.25 (2024-07-26)</small>
+
+* [bitnami/ghost] Release 21.1.25 (#28541) ([3587672](https://github.com/bitnami/charts/commit/3587672cfa89d84f2baad16e8bd29823d352a683)), closes [#28541](https://github.com/bitnami/charts/issues/28541)
+
+## <small>21.1.24 (2024-07-25)</small>
+
+* [bitnami/ghost] Release 21.1.24 (#28443) ([f4123c7](https://github.com/bitnami/charts/commit/f4123c76de8eb61df13412c5624f5851dd9caa23)), closes [#28443](https://github.com/bitnami/charts/issues/28443)
 
 ## <small>21.1.23 (2024-07-24)</small>
 

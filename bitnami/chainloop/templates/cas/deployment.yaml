@@ -1,0 +1,179 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "chainloop.cas.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "chainloop.cas.labels" . | nindent 4 }}
+  {{- if or .Values.cas.deploymentAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.cas.deploymentAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.cas.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.cas.replicaCount }}
+  {{- end }}
+  {{- if .Values.cas.updateStrategy }}
+  strategy: {{- toYaml .Values.cas.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{ include "chainloop.cas.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/cas" "/configmap.yaml") . | sha256sum }}
+        checksum/config-secret: {{ include (print $.Template.BasePath "/cas" "/secret-config.yaml") . | sha256sum }}
+        checksum/public-key-secret: {{ include (print $.Template.BasePath "/cas" "/secret-jwt-public-key.yaml") . | sha256sum }}
+      labels: {{ include "chainloop.cas.labels" . | nindent 8 }}
+    spec:
+      {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.cas.image) "context" $) | nindent 6 }}
+      serviceAccountName: {{ include "chainloop.cas.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.cas.automountServiceAccountToken }}
+      {{- if .Values.cas.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.cas.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cas.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.cas.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.cas.podLabels .Values.commonLabels) "context" .) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cas.podAffinityPreset "component" "cas" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cas.podAntiAffinityPreset "component" "cas" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.cas.nodeAffinityPreset.type "key" .Values.cas.nodeAffinityPreset.key "values" .Values.cas.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.cas.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.cas.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cas.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cas.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cas.priorityClassName }}
+      priorityClassName: {{ .Values.cas.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.cas.schedulerName }}
+      schedulerName: {{ .Values.cas.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.cas.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.cas.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cas.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cas.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cas.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.cas.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.cas.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.cas.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: cas
+          {{- if .Values.cas.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cas.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          image: {{ include "chainloop.cas.image" . }}
+          imagePullPolicy: {{ .Values.cas.image.pullPolicy }}
+          command: [ "./artifact-cas" ]
+          args: [ "--conf", "/data/conf" ]
+          ports:
+            - name: http
+              containerPort: {{ .Values.cas.containerPorts.http }}
+            - name: metrics
+              containerPort: {{ .Values.cas.containerPorts.metrics }}
+            - name: grpc
+              containerPort: {{ .Values.cas.containerPorts.grpc }}
+          startupProbe:
+            httpGet:
+              path: /statusz
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /statusz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /statusz?readiness=1
+              port: http
+          {{- if .Values.cas.resources }}
+          resources: {{- toYaml .Values.cas.resources | nindent 12 }}
+          {{- else if ne .Values.cas.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cas.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cas.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.cas.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.cas.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cas.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.cas.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.cas.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.cas.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.cas.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: "/data/conf"
+            - name: jwt-public-key
+              mountPath: "/tmp"
+            {{- if eq "gcpSecretManager" .Values.secretsBackend.backend  }}
+            - name: gcp-secretmanager-serviceaccountkey
+              mountPath: /gcp-secrets
+            {{- end }}
+            {{- if .Values.cas.tls.existingSecret  }}
+            - name: server-certs
+              mountPath: /data/server-certs
+            {{- end }}
+            {{- if (not (empty .Values.cas.customCAs)) }}
+            - name: custom-cas
+              # NOTE: /etc/ssl/certs already contains the system CA certs
+              # Let's use another known path https://go.dev/src/crypto/x509/root_linux.go
+              mountPath: /etc/pki/tls/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.cas.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cas.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.cas.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.cas.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: config
+          projected:
+            sources:
+            - configMap:
+               name: {{ include "chainloop.cas.fullname" . }}
+            - secret:
+               name: {{ include "chainloop.cas.fullname" . }}
+        - name: jwt-public-key
+          secret:
+            secretName: {{ include "chainloop.cas.fullname" . }}-jwt-public-key
+        {{- if .Values.cas.tls.existingSecret  }}
+        - name: server-certs
+          secret:
+            secretName: {{ .Values.cas.tls.existingSecret  }}
+        {{- end }}
+        {{- if eq "gcpSecretManager" .Values.secretsBackend.backend  }}
+        - name: gcp-secretmanager-serviceaccountkey
+          secret:
+            secretName: {{ include "chainloop.cas.fullname" . }}-gcp-secretmanager-serviceaccountkey
+        {{- end }}
+        {{- if (not (empty .Values.cas.customCAs)) }}
+        - name: custom-cas
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "chainloop.cas.fullname" . }}-custom-cas
+        {{- end }}
+        {{- if .Values.cas.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.cas.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

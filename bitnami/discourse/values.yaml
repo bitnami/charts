@@ -81,7 +81,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 3.2.4-debian-12-r3
+  tag: 3.3.1-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -381,7 +381,7 @@ discourse:
   ## @param discourse.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if discourse.resources is set (discourse.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "xlarge"
+  resourcesPreset: "2xlarge"
   ## @param discourse.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -764,7 +764,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r26
+    tag: 12-debian-12-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -25,9 +25,6 @@ containerPorts:
   - name: http
     containerPort: 8081
     protocol: TCP
-  - name: monitoring
-    containerPort: 9600
-    protocol: TCP
 replicaCount: 1
 podSecurityContext:
   enabled: true
@@ -41,6 +38,7 @@ service:
       port: 8081
       targetPort: http
       protocol: TCP
+  extraPorts:
     - name: monitoring
       port: 80
       targetPort: monitoring

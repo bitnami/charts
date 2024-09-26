@@ -320,37 +320,37 @@ spec:
             - -c
             - |
               {{- if .Values.usePasswordFile }}
-              export VALKEY_PASSWORD="$(< "${VALKEY_PASSWORD_FILE}")"
+              export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
               {{- end }}
-              valkey_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+              redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            - name: VALKEY_ALIAS
+            - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
-            - name: VALKEY_ADDR
-              value: {{ printf "%s://127.0.0.1:%g" (ternary "valkeys" "valkey" .Values.tls.enabled) .Values.valkey.containerPorts.valkey | quote }}
+            - name: REDIS_ADDR
+              value: {{ printf "%s://127.0.0.1:%g" (ternary "rediss" "redis" .Values.tls.enabled) .Values.valkey.containerPorts.valkey | quote }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
-            - name: VALKEY_PASSWORD
+            - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "valkey-cluster.secretName" . }}
                   key: {{ template "valkey-cluster.secretPasswordKey" . }}
             {{- end }}
             {{- if .Values.usePasswordFile }}
-            - name: VALKEY_PASSWORD_FILE
+            - name: REDIS_PASSWORD_FILE
               value: "/opt/bitnami/valkey/secrets/valkey-password"
             {{- end }}
             {{- if .Values.tls.enabled }}
-            - name: VALKEY_EXPORTER_TLS_CLIENT_KEY_FILE
+            - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "valkey-cluster.tlsCertKey" . }}
-            - name: VALKEY_EXPORTER_TLS_CLIENT_CERT_FILE
+            - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "valkey-cluster.tlsCert" . }}
-            - name: VALKEY_EXPORTER_TLS_CA_CERT_FILE
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "valkey-cluster.tlsCACert" . }}
             {{- end }}
-            - name: VALKEY_EXPORTER_WEB_LISTEN_ADDRESS
+            - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
               value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}

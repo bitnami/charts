@@ -1,8 +1,60 @@
 # Changelog
 
-## 19.0.4 (2024-07-25)
+## 20.0.7 (2024-09-19)
 
-* [bitnami/drupal] Release 19.0.4 ([#28463](https://github.com/bitnami/charts/pull/28463))
+* [bitnami/drupal] Release 20.0.7 ([#29515](https://github.com/bitnami/charts/pull/29515))
+
+## <small>20.0.6 (2024-09-17)</small>
+
+* [bitnami/drupal] Release 20.0.6 (#29486) ([20f086c](https://github.com/bitnami/charts/commit/20f086c05eb4887baaec9173be5ea0d89bfcb3e4)), closes [#29486](https://github.com/bitnami/charts/issues/29486)
+
+## <small>20.0.5 (2024-09-12)</small>
+
+* [bitnami/drupal] Release 20.0.5 (#29384) ([6621c14](https://github.com/bitnami/charts/commit/6621c14db7381b042a98fb024ec3fd9613431f92)), closes [#29384](https://github.com/bitnami/charts/issues/29384)
+
+## <small>20.0.4 (2024-09-06)</small>
+
+* [bitnami/drupal] Release 20.0.4 (#29286) ([cc775b8](https://github.com/bitnami/charts/commit/cc775b8b4889f3a393e7d39ed20feecc4221b9b2)), closes [#29286](https://github.com/bitnami/charts/issues/29286)
+
+## <small>20.0.3 (2024-09-06)</small>
+
+* [bitnami/drupal] Release 20.0.3 (#29283) ([bd9d1b2](https://github.com/bitnami/charts/commit/bd9d1b2d6f05498ae7e61e28e7cc1f45076a29e9)), closes [#29283](https://github.com/bitnami/charts/issues/29283)
+
+## <small>20.0.2 (2024-09-05)</small>
+
+* [bitnami/drupal] Release 20.0.2 (#29222) ([c9daacb](https://github.com/bitnami/charts/commit/c9daacbab47a8d7bf8185c8bc0cca237accd9d9a)), closes [#29222](https://github.com/bitnami/charts/issues/29222)
+
+## <small>20.0.1 (2024-08-22)</small>
+
+* [bitnami/drupal] Release 20.0.1 (#28965) ([0490b9c](https://github.com/bitnami/charts/commit/0490b9c70cfc28df4bc9993eaae36cd58ba11337)), closes [#28965](https://github.com/bitnami/charts/issues/28965)
+
+## 20.0.0 (2024-08-13)
+
+* [bitnami/drupal] Release 20.0.0 (#28846) ([4136b1d](https://github.com/bitnami/charts/commit/4136b1d1c8b8cbbe95c140f5fb89c334421baa59)), closes [#28846](https://github.com/bitnami/charts/issues/28846)
+
+## <small>19.0.9 (2024-08-08)</small>
+
+* [bitnami/drupal] Release 19.0.9 (#28783) ([5664e79](https://github.com/bitnami/charts/commit/5664e7995b849387dd4049a105ad83443808dce5)), closes [#28783](https://github.com/bitnami/charts/issues/28783)
+
+## <small>19.0.8 (2024-08-02)</small>
+
+* [bitnami/drupal] Release 19.0.8 (#28644) ([20e3a5c](https://github.com/bitnami/charts/commit/20e3a5cf50685e0d69144a0d287991592a15d21b)), closes [#28644](https://github.com/bitnami/charts/issues/28644)
+
+## <small>19.0.7 (2024-08-02)</small>
+
+* [bitnami/drupal] Release 19.0.7 (#28637) ([c6ad0ab](https://github.com/bitnami/charts/commit/c6ad0abd1e5c2eb64bbc3507c32108a7e6e2cc02)), closes [#28637](https://github.com/bitnami/charts/issues/28637)
+
+## <small>19.0.6 (2024-07-30)</small>
+
+* [bitnami/drupal] Release 19.0.6 (#28592) ([4296854](https://github.com/bitnami/charts/commit/4296854e4b338d83d607a322042dcc280cf36bfa)), closes [#28592](https://github.com/bitnami/charts/issues/28592)
+
+## <small>19.0.5 (2024-07-30)</small>
+
+* [bitnami/drupal] Release 19.0.5 (#28589) ([0447bf9](https://github.com/bitnami/charts/commit/0447bf9e56cae535e4d726d3e2705116808d2a4e)), closes [#28589](https://github.com/bitnami/charts/issues/28589)
+
+## <small>19.0.4 (2024-07-25)</small>
+
+* [bitnami/drupal] Release 19.0.4 (#28463) ([8f7e675](https://github.com/bitnami/charts/commit/8f7e675f2a12e23d641e00282bfb4cdd804dfc50)), closes [#28463](https://github.com/bitnami/charts/issues/28463)
 
 ## <small>19.0.3 (2024-07-24)</small>
 

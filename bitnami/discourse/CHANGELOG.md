@@ -1,8 +1,44 @@
 # Changelog
 
-## 13.2.14 (2024-07-25)
+## 14.1.6 (2024-09-19)
 
-* [bitnami/discourse] Release 13.2.14 ([#28448](https://github.com/bitnami/charts/pull/28448))
+* [bitnami/discourse] Release 14.1.6 ([#29502](https://github.com/bitnami/charts/pull/29502))
+
+## <small>14.1.5 (2024-09-15)</small>
+
+* [bitnami/discourse] Release 14.1.5 (#29424) ([c5e5c6a](https://github.com/bitnami/charts/commit/c5e5c6ae5d4d05263f46c5b4848c8384fe826861)), closes [#29424](https://github.com/bitnami/charts/issues/29424)
+
+## <small>14.1.4 (2024-09-10)</small>
+
+* [bitnami/discourse] Release 14.1.4 (#29338) ([3d8b5c9](https://github.com/bitnami/charts/commit/3d8b5c97a8562b27877833726b542c985ccb7359)), closes [#29338](https://github.com/bitnami/charts/issues/29338)
+
+## <small>14.1.3 (2024-08-27)</small>
+
+* [bitnami/discourse] Release 14.1.3 (#29064) ([aecbb98](https://github.com/bitnami/charts/commit/aecbb98766dbc46824a635c6a741aa05cb2c96e0)), closes [#29064](https://github.com/bitnami/charts/issues/29064)
+
+## <small>14.1.2 (2024-08-27)</small>
+
+* [bitnami/discourse] Release 14.1.2 (#29047) ([8dca3b5](https://github.com/bitnami/charts/commit/8dca3b533b4683bf854f391cc2fb2727327e6b26)), closes [#29047](https://github.com/bitnami/charts/issues/29047)
+
+## <small>14.1.1 (2024-08-22)</small>
+
+* [bitnami/discourse] Release 14.1.1 (#28966) ([f4e8e0b](https://github.com/bitnami/charts/commit/f4e8e0bb0af6097e0fbdca1aa41463b0a960b484)), closes [#28966](https://github.com/bitnami/charts/issues/28966)
+
+## 14.1.0 (2024-08-20)
+
+* [bitnami/discourse] Bump discourse to 3.3.0 (#28786) ([439b8c7](https://github.com/bitnami/charts/commit/439b8c7b48980952615ca0290defa6180a2164ed)), closes [#28786](https://github.com/bitnami/charts/issues/28786)
+
+## 14.0.0 (2024-08-13)
+
+* [bitnami/discourse] Update dependencies (#28852) ([279c2bd](https://github.com/bitnami/charts/commit/279c2bd4db105ad48a25419958e318f3e522338b)), closes [#28852](https://github.com/bitnami/charts/issues/28852)
+
+## <small>13.2.15 (2024-07-30)</small>
+
+* [bitnami/discourse] Release 13.2.15 (#28578) ([1e0e9c7](https://github.com/bitnami/charts/commit/1e0e9c79d42cbd3dbe4b3ad89201e229bb39215c)), closes [#28578](https://github.com/bitnami/charts/issues/28578)
+
+## <small>13.2.14 (2024-07-25)</small>
+
+* [bitnami/discourse] Release 13.2.14 (#28448) ([a1c04d9](https://github.com/bitnami/charts/commit/a1c04d937c775cbd265b5b7174217f013af208a5)), closes [#28448](https://github.com/bitnami/charts/issues/28448)
 
 ## <small>13.2.13 (2024-07-24)</small>
 

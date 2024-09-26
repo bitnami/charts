@@ -84,7 +84,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.9.1-debian-12-r8
+  tag: 3.10.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -544,6 +544,14 @@ dataPlane:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param dataPlane.service.externalIPs APISIX service External IPs
+    ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ## e.g.
+    ## externalIPs:
+    ##   - 10.10.10.1
+    ##   - 201.22.30.1
+    ##
+    externalIPs: []
     ## @param dataPlane.service.externalTrafficPolicy APISIX service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
@@ -1326,6 +1334,14 @@ controlPlane:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param controlPlane.service.externalIPs APISIX service External IPs
+    ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ## e.g.
+    ## externalIPs:
+    ##   - 10.10.10.1
+    ##   - 201.22.30.1
+    ##
+    externalIPs: []
     ## @param controlPlane.service.externalTrafficPolicy APISIX service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
@@ -1669,7 +1685,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-12-r40
+    tag: 3.0.1-debian-12-r42
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1822,6 +1838,8 @@ dashboard:
       - tencent-cloud-cls
       - ai
       - cas-auth
+      - multi-auth
+      
   ## @param dashboard.extraConfig extra configuration settings for APISIX Dashboard
   ##
   extraConfig: {}
@@ -2146,6 +2164,14 @@ dashboard:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param dashboard.service.externalIPs APISIX Dashboard service External IPs
+    ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ## e.g.
+    ## externalIPs:
+    ##   - 10.10.10.1
+    ##   - 201.22.30.1
+    ##
+    externalIPs: []
     ## @param dashboard.service.externalTrafficPolicy APISIX Dashboard service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
@@ -2406,7 +2432,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.8.2-debian-12-r11
+    tag: 1.8.2-debian-12-r13
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2678,10 +2704,12 @@ ingressController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ingressController.ingressClass.create Specifies whether a IngressClass should be created
   ## @param ingressController.ingressClass.name IngressClass that will be be used to implement the APISIX Ingress
   ## @param ingressController.ingressClass.annotations Additional annotations for the APISIX IngressClass
   ##
   ingressClass:
+    create: true
     name: "apisix"
     annotations: {}
   ## @param ingressController.defaultConfig [string] APISIX Dashboard configuration (evaluated as a template)
@@ -2788,6 +2816,14 @@ ingressController:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param ingressController.service.externalIPs APISIX Ingress Controller service External IPs
+    ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ## e.g.
+    ## externalIPs:
+    ##   - 10.10.10.1
+    ##   - 201.22.30.1
+    ##
+    externalIPs: []
     ## @param ingressController.service.externalTrafficPolicy APISIX Ingress Controller service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
@@ -3116,7 +3152,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r26
+    tag: 12-debian-12-r27
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

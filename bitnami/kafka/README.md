@@ -168,10 +168,10 @@ You have two alternatives to use LoadBalancer services:
 
 ```console
 externalAccess.enabled=true
-externalAccess.service.broker.type=LoadBalancer
-externalAccess.service.controller.type=LoadBalancer
-externalAccess.service.broker.ports.external=9094
-externalAccess.service.controller.containerPorts.external=9094
+externalAccess.broker.service.type=LoadBalancer
+externalAccess.controller.service.type=LoadBalancer
+externalAccess.broker.service.ports.external=9094
+externalAccess.controller.service.containerPorts.external=9094
 externalAccess.autoDiscovery.enabled=true
 serviceAccount.create=true
 rbac.create=true
@@ -183,14 +183,14 @@ Note: This option requires creating RBAC rules on clusters where RBAC policies a
 
 ```console
 externalAccess.enabled=true
-externalAccess.service.controller.type=LoadBalancer
-externalAccess.service.controller.containerPorts.external=9094
-externalAccess.service.controller.loadBalancerIPs[0]='external-ip-1'
-externalAccess.service.controller.loadBalancerIPs[1]='external-ip-2'
-externalAccess.service.broker.type=LoadBalancer
-externalAccess.service.broker.ports.external=9094
-externalAccess.service.broker.loadBalancerIPs[0]='external-ip-3'
-externalAccess.service.broker.loadBalancerIPs[1]='external-ip-4'
+externalAccess.controller.service.type=LoadBalancer
+externalAccess.controller.service.containerPorts.external=9094
+externalAccess.controller.service.loadBalancerIPs[0]='external-ip-1'
+externalAccess.controller.service.loadBalancerIPs[1]='external-ip-2'
+externalAccess.broker.service.type=LoadBalancer
+externalAccess.broker.service.ports.external=9094
+externalAccess.broker.service.loadBalancerIPs[0]='external-ip-3'
+externalAccess.broker.service.loadBalancerIPs[1]='external-ip-4'
 ```
 
 Note: You need to know in advance the load balancer IPs so each Kafka broker advertised listener is configured with it.
@@ -225,7 +225,7 @@ You have two alternatives to use NodePort services:
 
   Note: You need to know in advance the node ports that will be exposed so each Kafka broker advertised listener is configured with it.
 
-  The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` or `externalAccess.service.useHostIPs` is provided.
+  The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.<controller|broker>.service.domain` or `externalAccess.<controller|broker>.service.useHostIPs` is provided.
 
 - Option C) Manually specify distinct external IPs (using controller+broker nodes)
 
@@ -649,7 +649,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `controller.autoscaling.hpa.targetCPU`               | Target CPU utilization percentage                                                                                                                                      | `""`                      |
 | `controller.autoscaling.hpa.targetMemory`            | Target Memory utilization percentage                                                                                                                                   | `""`                      |
 | `controller.pdb.create`                              | Deploy a pdb object for the Kafka pod                                                                                                                                  | `true`                    |
-| `controller.pdb.minAvailable`                        | Maximum number/percentage of unavailable Kafka replicas                                                                                                                | `""`                      |
+| `controller.pdb.minAvailable`                        | Minimum number/percentage of available Kafka replicas                                                                                                                  | `""`                      |
 | `controller.pdb.maxUnavailable`                      | Maximum number/percentage of unavailable Kafka replicas                                                                                                                | `""`                      |
 | `controller.persistence.enabled`                     | Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected                                                                                 | `true`                    |
 | `controller.persistence.existingClaim`               | A manually managed Persistent Volume and Claim                                                                                                                         | `""`                      |
@@ -874,10 +874,12 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `networkPolicy.enabled`                                                          | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                                                         | `true`                    |
 | `networkPolicy.allowExternal`                                                    | Don't require client label for connections                                                                                                                                                                                                                                  | `true`                    |
 | `networkPolicy.allowExternalEgress`                                              | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                                             | `true`                    |
+| `networkPolicy.addExternalClientAccess`                                          | Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.                                                                                                                                                                   | `true`                    |
 | `networkPolicy.extraIngress`                                                     | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                                                | `[]`                      |
 | `networkPolicy.extraEgress`                                                      | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                                                | `[]`                      |
-| `networkPolicy.ingressNSMatchLabels`                                             | Labels to match to allow traffic from other namespaces                                                                                                                                                                                                                      | `{}`                      |
-| `networkPolicy.ingressNSPodMatchLabels`                                          | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                                                  | `{}`                      |
+| `networkPolicy.ingressPodMatchLabels`                                            | Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.                                                                                                                                                                         | `{}`                      |
+| `networkPolicy.ingressNSMatchLabels`                                             | Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                                                                                                                                                                   | `{}`                      |
+| `networkPolicy.ingressNSPodMatchLabels`                                          | Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                                                                                                                                                               | `{}`                      |
 
 ### Volume Permissions parameters
 
@@ -1065,6 +1067,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kafka
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 30.0.0
+
+This major release bumps the Kafka version to 3.8. Find notable changes in [kafka upgrade notes](https://kafka.apache.org/38/documentation.html#upgrade).
 
 ### To 29.0.0
 

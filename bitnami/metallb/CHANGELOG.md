@@ -1,8 +1,20 @@
 # Changelog
 
-## 6.3.9 (2024-07-24)
+## 6.3.12 (2024-09-19)
 
-* [bitnami/metallb] Remove duplicate keys ([#28203](https://github.com/bitnami/charts/pull/28203))
+* [bitnami/metallb] Release 6.3.12 ([#29514](https://github.com/bitnami/charts/pull/29514))
+
+## <small>6.3.11 (2024-09-06)</small>
+
+* [bitnami/metallb] Release 6.3.11 (#29251) ([6836c94](https://github.com/bitnami/charts/commit/6836c9487f831eea731e33cabda76db8092b31da)), closes [#29251](https://github.com/bitnami/charts/issues/29251)
+
+## <small>6.3.10 (2024-08-08)</small>
+
+* [bitnami/metallb] Release 6.3.10 (#28760) ([9ca98f2](https://github.com/bitnami/charts/commit/9ca98f2617777533328f679c8252ceeaf5ece509)), closes [#28760](https://github.com/bitnami/charts/issues/28760)
+
+## <small>6.3.9 (2024-07-24)</small>
+
+* [bitnami/metallb] Remove duplicate keys (#28203) ([1552ffc](https://github.com/bitnami/charts/commit/1552ffc0cba7b4173c1d3647e34236ebbfb4fef2)), closes [#28203](https://github.com/bitnami/charts/issues/28203)
 
 ## <small>6.3.8 (2024-07-16)</small>
 

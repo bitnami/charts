@@ -4,13 +4,12 @@
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets, defaultStorageClass and compatibility
 ##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -84,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 3.7.1-debian-12-r6
+  tag: 3.8.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -665,7 +663,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 3.2.3-debian-12-r1
+    tag: 3.3.1-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -907,7 +905,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 14.12.0-debian-12-r22
+    tag: 14.13.0-debian-12-r10
     digest: ""
   auth:
     username: kong

@@ -1,8 +1,44 @@
 # Changelog
 
-## 13.4.13 (2024-07-25)
+## 13.4.22 (2024-09-19)
 
-* [bitnami/jenkins] Release 13.4.13 ([#28420](https://github.com/bitnami/charts/pull/28420))
+* [bitnami/jenkins] Release 13.4.22 ([#29519](https://github.com/bitnami/charts/pull/29519))
+
+## <small>13.4.21 (2024-09-16)</small>
+
+* [bitnami/jenkins] Release 13.4.21 (#29444) ([e6c0616](https://github.com/bitnami/charts/commit/e6c0616abed63a5ead68b8e574defe63047c8ba9)), closes [#29444](https://github.com/bitnami/charts/issues/29444)
+
+## <small>13.4.20 (2024-09-05)</small>
+
+* [bitnami/jenkins] Release 13.4.20 (#29210) ([94f75ed](https://github.com/bitnami/charts/commit/94f75ede28062f47af4eaaf0ed47e94a9d34cc3b)), closes [#29210](https://github.com/bitnami/charts/issues/29210)
+
+## <small>13.4.19 (2024-08-07)</small>
+
+* [bitnami/jenkins] Release 13.4.19 (#28754) ([741205a](https://github.com/bitnami/charts/commit/741205a7ad682778cec6fdac5b15f0d28d6c7caf)), closes [#28754](https://github.com/bitnami/charts/issues/28754)
+
+## <small>13.4.18 (2024-08-06)</small>
+
+* [bitnami/jenkins] Release 13.4.18 (#28700) ([f342e6b](https://github.com/bitnami/charts/commit/f342e6b01421346152e1c393c8b68fe52435a05a)), closes [#28700](https://github.com/bitnami/charts/issues/28700)
+
+## <small>13.4.17 (2024-07-29)</small>
+
+* [bitnami/jenkins] Release 13.4.17 (#28567) ([21ca8fc](https://github.com/bitnami/charts/commit/21ca8fcbb9449f46c62553a2358e4d8c0f6c9a16)), closes [#28567](https://github.com/bitnami/charts/issues/28567)
+
+## <small>13.4.16 (2024-07-29)</small>
+
+* [bitnami/jenkins] Release 13.4.16 (#28566) ([e634906](https://github.com/bitnami/charts/commit/e63490682ad99d1fc9ced07c4d2bd4b068d1e3f8)), closes [#28566](https://github.com/bitnami/charts/issues/28566)
+
+## <small>13.4.15 (2024-07-29)</small>
+
+* [bitnami/jenkins] Release 13.4.15 (#28556) ([2bbe48e](https://github.com/bitnami/charts/commit/2bbe48e177ccecf51f6e1adf6aefc7150aa39eb8)), closes [#28556](https://github.com/bitnami/charts/issues/28556)
+
+## <small>13.4.14 (2024-07-29)</small>
+
+* [bitnami/jenkins] Release 13.4.14 (#28555) ([f69cf4e](https://github.com/bitnami/charts/commit/f69cf4e7b60ab911a5542185e9a5377cac7d155b)), closes [#28555](https://github.com/bitnami/charts/issues/28555)
+
+## <small>13.4.13 (2024-07-25)</small>
+
+* [bitnami/jenkins] Release 13.4.13 (#28420) ([25bcfb3](https://github.com/bitnami/charts/commit/25bcfb31edae71286ad4020a3acce25f0e81a041)), closes [#28420](https://github.com/bitnami/charts/issues/28420)
 
 ## <small>13.4.12 (2024-07-24)</small>
 

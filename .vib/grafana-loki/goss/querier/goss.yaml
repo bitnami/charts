@@ -35,7 +35,7 @@ addr:
     reachable: true
 command:
   check-logcli:
-    exec: logcli instant-query --addr=http://grafana-loki-querier:{{ .Vars.querier.service.ports.http }} '{app="grafana-loki"}'
+    exec: logcli query --addr=http://grafana-loki-querier:{{ .Vars.querier.service.ports.http }} '{app="grafana-loki"}'
     exit-status: 0
   {{- $uid := .Vars.querier.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.querier.podSecurityContext.fsGroup }}

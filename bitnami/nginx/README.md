@@ -81,7 +81,7 @@ cloneStaticSiteFromGit.branch=master
 
 This helm chart supports using custom custom server block for NGINX to use.
 
-You can use the `serverBlock` value to provide a custom server block for NGINX to use. To do this, create a values files with your server block and install the chart using it:
+You can use the `serverBlock` or `streamServerBlock` value to provide a custom server block for NGINX to use. To do this, create a values files with your server block and install the chart using it:
 
 ```yaml
 serverBlock: |-
@@ -296,7 +296,9 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `cloneStaticSiteFromGit.extraEnvVarsSecret`      | Secret with extra environment variables                                                                                                                                                                                                                                         | `""`                  |
 | `cloneStaticSiteFromGit.extraVolumeMounts`       | Add extra volume mounts for the Git containers                                                                                                                                                                                                                                  | `[]`                  |
 | `serverBlock`                                    | Custom server block to be added to NGINX configuration                                                                                                                                                                                                                          | `""`                  |
+| `streamServerBlock`                              | Custom stream server block to be added to NGINX configuration                                                                                                                                                                                                                   | `""`                  |
 | `existingServerBlockConfigmap`                   | ConfigMap with custom server block to be added to NGINX configuration                                                                                                                                                                                                           | `""`                  |
+| `existingStreamServerBlockConfigmap`             | ConfigMap with custom stream server block to be added to NGINX configuration                                                                                                                                                                                                    | `""`                  |
 | `staticSiteConfigmap`                            | Name of existing ConfigMap with the server static site content                                                                                                                                                                                                                  | `""`                  |
 | `staticSitePVC`                                  | Name of existing PVC with the server static site content                                                                                                                                                                                                                        | `""`                  |
 

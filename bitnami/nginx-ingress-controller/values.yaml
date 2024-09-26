@@ -65,7 +65,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.11.1-debian-12-r4
+  tag: 1.11.2-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -529,7 +529,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.27.0-debian-12-r4
+    tag: 1.27.1-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -926,6 +926,10 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services
   ##
   ipFamilies: []
+  ## @param service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+  ##
+  loadBalancerClass: ""
   ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##

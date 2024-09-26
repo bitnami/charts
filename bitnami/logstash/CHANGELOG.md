@@ -1,8 +1,28 @@
 # Changelog
 
-## 6.2.14 (2024-07-25)
+## 6.3.4 (2024-09-06)
 
-* [bitnami/logstash] Release 6.2.14 ([#28445](https://github.com/bitnami/charts/pull/28445))
+* [bitnami/logstash] fix #29129 missing protocol in networkPolicy ([#29277](https://github.com/bitnami/charts/pull/29277))
+
+## <small>6.3.3 (2024-09-06)</small>
+
+* [bitnami/logstash] Release 6.3.3 (#29250) ([8a7a49b](https://github.com/bitnami/charts/commit/8a7a49b1f3070436c4bb0cf7074c827b16116852)), closes [#29250](https://github.com/bitnami/charts/issues/29250)
+
+## <small>6.3.2 (2024-08-08)</small>
+
+* [bitnami/logstash] Release 6.3.2 (#28794) ([e90c7bd](https://github.com/bitnami/charts/commit/e90c7bd65bf6db4e6a17ae305ba9b8000954316d)), closes [#28794](https://github.com/bitnami/charts/issues/28794)
+
+## <small>6.3.1 (2024-08-05)</small>
+
+* [bitnami/logstash] fix: :bug: Add missing ports in networkpolicy (#28670) ([29b2f86](https://github.com/bitnami/charts/commit/29b2f86b0ad53ec63603f2b9913f4e763094b706)), closes [#28670](https://github.com/bitnami/charts/issues/28670)
+
+## 6.3.0 (2024-08-01)
+
+* [bitnami/logstash] Add extra inputs and ports to pod and svc (#27763) ([e4cc138](https://github.com/bitnami/charts/commit/e4cc1380c87dd6aa7ba3bdc568c0228cace42603)), closes [#27763](https://github.com/bitnami/charts/issues/27763)
+
+## <small>6.2.14 (2024-07-25)</small>
+
+* [bitnami/logstash] Release 6.2.14 (#28445) ([75944e6](https://github.com/bitnami/charts/commit/75944e6df9e9672dec0c0f462ec5b3bb73fc9e39)), closes [#28445](https://github.com/bitnami/charts/issues/28445)
 
 ## <small>6.2.13 (2024-07-24)</small>
 

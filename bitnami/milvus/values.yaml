@@ -10,7 +10,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -89,7 +87,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.4.6-debian-12-r2
+    tag: 2.4.12-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -270,7 +268,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.4.4-debian-12-r3
+    tag: 2.4.7-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4603,7 +4601,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.4.3-debian-12-r1
+    tag: 2.4.8-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -5162,7 +5160,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r26
+    tag: 12-debian-12-r30
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

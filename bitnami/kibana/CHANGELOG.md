@@ -1,8 +1,36 @@
 # Changelog
 
-## 11.2.15 (2024-07-25)
+## 11.2.22 (2024-09-19)
 
-* [bitnami/kibana] Release 11.2.15 ([#28471](https://github.com/bitnami/charts/pull/28471))
+* [bitnami/kibana] Release 11.2.22 ([#29520](https://github.com/bitnami/charts/pull/29520))
+
+## <small>11.2.21 (2024-09-13)</small>
+
+* [bitnami/kibana] Release 11.2.21 (#29401) ([76ddd43](https://github.com/bitnami/charts/commit/76ddd43ea5f0b80ac548e08bfb917432678a4d7f)), closes [#29401](https://github.com/bitnami/charts/issues/29401)
+
+## <small>11.2.20 (2024-09-06)</small>
+
+* [bitnami/kibana] Release 11.2.20 (#29249) ([7ae0c0c](https://github.com/bitnami/charts/commit/7ae0c0c25e5f3afeca529be48a4ea997513bde1e)), closes [#29249](https://github.com/bitnami/charts/issues/29249)
+
+## <small>11.2.19 (2024-08-19)</small>
+
+* [bitnami/kibana] Increase wait for DOM content in Cypress test (#28924) ([e3c9da3](https://github.com/bitnami/charts/commit/e3c9da3769190000fa4423e8d0082e5cbea1a405)), closes [#28924](https://github.com/bitnami/charts/issues/28924)
+
+## <small>11.2.18 (2024-08-16)</small>
+
+* [bitnami/kibana] Release 11.2.18 (#28898) ([9b955d2](https://github.com/bitnami/charts/commit/9b955d22fac1a09e2848a43d2d1dfe17b7d11808)), closes [#28898](https://github.com/bitnami/charts/issues/28898)
+
+## <small>11.2.17 (2024-08-14)</small>
+
+* [bitnami/kibana] Release 11.2.17 (#28796) ([9ac77d0](https://github.com/bitnami/charts/commit/9ac77d00a367100840256c722cb0acd2585e41b0)), closes [#28796](https://github.com/bitnami/charts/issues/28796)
+
+## <small>11.2.16 (2024-07-30)</small>
+
+* [bitnami/kibana] add publicBaseUrl param (#28543) ([edad571](https://github.com/bitnami/charts/commit/edad571366b89d72d52b30bbdc850535c87f96d6)), closes [#28543](https://github.com/bitnami/charts/issues/28543)
+
+## <small>11.2.15 (2024-07-25)</small>
+
+* [bitnami/kibana] Release 11.2.15 (#28471) ([bf1bafa](https://github.com/bitnami/charts/commit/bf1bafaf00358d46360f229ff3a362eb6a642eff)), closes [#28471](https://github.com/bitnami/charts/issues/28471)
 
 ## <small>11.2.14 (2024-07-24)</small>
 

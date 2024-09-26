@@ -1,8 +1,36 @@
 # Changelog
 
-## 10.2.11 (2024-07-25)
+## 10.2.18 (2024-09-23)
 
-* [bitnami/etcd] Release 10.2.11 ([#28404](https://github.com/bitnami/charts/pull/28404))
+* [bitnami/etcd] Release 10.2.18 ([#29567](https://github.com/bitnami/charts/pull/29567))
+
+## <small>10.2.17 (2024-09-17)</small>
+
+* [bitnami/etcd] test: :white_check_mark: Improve reliability of ginkgo tests (#29476) ([03fc421](https://github.com/bitnami/charts/commit/03fc4212a65b2af824cc32e7d4b19dd48686b947)), closes [#29476](https://github.com/bitnami/charts/issues/29476)
+
+## <small>10.2.16 (2024-09-12)</small>
+
+* [bitnami/etcd] Release 10.2.16 (#29380) ([250df75](https://github.com/bitnami/charts/commit/250df756b74ba578a9e4521c2a958e3860ec1166)), closes [#29380](https://github.com/bitnami/charts/issues/29380)
+
+## <small>10.2.15 (2024-09-12)</small>
+
+* [bitnami/etcd] Release 10.2.15 (#29373) ([be542d6](https://github.com/bitnami/charts/commit/be542d607f92d6efbc7e32331199354d21d46384)), closes [#29373](https://github.com/bitnami/charts/issues/29373)
+
+## <small>10.2.14 (2024-09-05)</small>
+
+* [bitnami/etcd] Release 10.2.14 (#29233) ([72a3026](https://github.com/bitnami/charts/commit/72a30265033f92f4b1e2d357948140ffd5ab4751)), closes [#29233](https://github.com/bitnami/charts/issues/29233)
+
+## <small>10.2.13 (2024-08-27)</small>
+
+* [bitnami/etcd] Release 10.2.13 (#29048) ([14a9538](https://github.com/bitnami/charts/commit/14a9538b0d55f496b5ce4387307b1fa5c0bc2378)), closes [#29048](https://github.com/bitnami/charts/issues/29048)
+
+## <small>10.2.12 (2024-08-07)</small>
+
+* [bitnami/etcd] Release 10.2.12 (#28712) ([4a5fc9e](https://github.com/bitnami/charts/commit/4a5fc9ee1b8d34ea953c3c5f9135297611801859)), closes [#28712](https://github.com/bitnami/charts/issues/28712)
+
+## <small>10.2.11 (2024-07-25)</small>
+
+* [bitnami/etcd] Release 10.2.11 (#28404) ([993529a](https://github.com/bitnami/charts/commit/993529a5f95e8d5126108f40fc1cb0b07cc04526)), closes [#28404](https://github.com/bitnami/charts/issues/28404)
 
 ## <small>10.2.10 (2024-07-24)</small>
 

@@ -47,8 +47,6 @@ The Bitnami catalog offers both the `bitnami/grafana` and `bitnami/grafana-opera
 
 ```
 
-Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
-
 - The `bitnami/grafana-operator` chart deploys a Grafana Operator installation using a Kubernetes Deployment. The operator will extend the Kubernetes API with the following objects: `Grafana`, `GrafanaDashboard` and `GrafanaDataSource`. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboard and GrafanaDataSource objects.
 
 ```text
@@ -65,7 +63,7 @@ Its lifecycle is managed using Helm and, at the Grafana container level, the fol
             +-----------------+
 ```
 
-The Operator will extend the Kubernetes API with the following objects: _Grafana_, _GrafanaDashboard_ and _GrafanaDataSource_. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboard and GrafanaDataSource objects. The following figure shows the deployed objects after deploying a Grafana object using _kubectl_:
+The following figure shows the deployed objects after deploying a Grafana object using _kubectl_:
 
 ```text
 +--------------------+
@@ -131,7 +129,7 @@ These commands deploy grafana-operator on the Kubernetes cluster in the default 
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
@@ -363,6 +361,10 @@ extraDeploy:
 | `grafana.affinity`                                          | Affinity for controller pod assignment                                                                                                                                                                                            | `{}`                      |
 | `grafana.nodeSelector`                                      | Node labels for controller pod assignment                                                                                                                                                                                         | `{}`                      |
 | `grafana.tolerations`                                       | Tolerations for controller pod assignment                                                                                                                                                                                         | `[]`                      |
+| `grafana.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `false`                   |
+| `grafana.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`                      |
+| `grafana.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `grafana.pdb.minAvailable` and `grafana.pdb.maxUnavailable` are empty.                                                                    | `""`                      |
+| `grafana.extraEnvVars`                                      | Array containing extra env vars to configure Grafana                                                                                                                                                                              | `[]`                      |
 | `grafana.envFrom`                                           | Extra environment variable to pass to the running container                                                                                                                                                                       | `[]`                      |
 | `grafana.client.timeout`                                    | The timeout in seconds for the Grafana Rest API on that instance                                                                                                                                                                  | `5`                       |
 | `grafana.labels`                                            | Add additional labels to the grafana deployment, service and ingress resources                                                                                                                                                    | `{}`                      |

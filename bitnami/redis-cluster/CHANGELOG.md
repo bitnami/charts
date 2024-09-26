@@ -1,8 +1,32 @@
 # Changelog
 
-## 10.2.9 (2024-07-25)
+## 11.0.4 (2024-09-11)
 
-* [bitnami/redis-cluster] Release 10.2.9 ([#28475](https://github.com/bitnami/charts/pull/28475))
+* [bitnami/redis-cluster] fix: add apiVersion and kind to volumeClaimTemplates ([#29358](https://github.com/bitnami/charts/pull/29358))
+
+## <small>11.0.3 (2024-08-21)</small>
+
+* [bitnami/redis-cluster] Release 11.0.3 (#28946) ([c55e12a](https://github.com/bitnami/charts/commit/c55e12acccfdc87bc6998c568e3c499c009538c5)), closes [#28946](https://github.com/bitnami/charts/issues/28946)
+
+## <small>11.0.2 (2024-08-09)</small>
+
+* Remove template variables from values file (#28782) ([6e6fad6](https://github.com/bitnami/charts/commit/6e6fad6c5debb1a894d9d85e4fa8d56abd4e1ba0)), closes [#28782](https://github.com/bitnami/charts/issues/28782)
+
+## <small>11.0.1 (2024-08-09)</small>
+
+* [bitnami/redis-cluster] fix: Use rollout restart in ginkgo tests (#28814) ([8eea194](https://github.com/bitnami/charts/commit/8eea19412153441d7d40c4cc45a5c3454f7a12f5)), closes [#28814](https://github.com/bitnami/charts/issues/28814)
+
+## 11.0.0 (2024-08-09)
+
+* [bitnami/redis-cluster] Release 11.0.0 (#28806) ([6dcde75](https://github.com/bitnami/charts/commit/6dcde759edb811d3b59211b7d18fe1cd8010bb6f)), closes [#28806](https://github.com/bitnami/charts/issues/28806)
+
+## 10.3.0 (2024-08-01)
+
+* [bitnami/redis-cluster] Add configurable appProtocol for metrics service port (#28380) ([879530f](https://github.com/bitnami/charts/commit/879530fe23bd410471024c57f15dae27266913fb)), closes [#28380](https://github.com/bitnami/charts/issues/28380)
+
+## <small>10.2.9 (2024-07-25)</small>
+
+* [bitnami/redis-cluster] Release 10.2.9 (#28475) ([465b7b2](https://github.com/bitnami/charts/commit/465b7b290d014884801e307dc6281a8af83513b1)), closes [#28475](https://github.com/bitnami/charts/issues/28475)
 
 ## <small>10.2.8 (2024-07-24)</small>
 

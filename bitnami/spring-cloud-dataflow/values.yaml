@@ -9,7 +9,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -19,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -70,7 +68,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.11.4-debian-12-r2
+    tag: 2.11.5-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -105,7 +103,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.11.4-debian-12-r2
+      tag: 2.11.5-debian-12-r0
       digest: ""
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -130,9 +128,6 @@ server:
     ##     authorization-type: dockeroauth2
     ##
     containerRegistries: {}
-    ## @param server.configuration.grafanaInfo Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)
-    ##
-    grafanaInfo: ""
     ## @param server.configuration.metricsDashboard Endpoint to the metricsDashboard instance
     ##
     metricsDashboard: ""
@@ -499,10 +494,6 @@ server:
     ## @param server.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param server.ingress.hostname Default host for the ingress resource
     ##
     hostname: dataflow.local
@@ -715,7 +706,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.11.4-debian-12-r2
+    tag: 2.11.5-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1281,7 +1272,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.5.3-debian-12-r26
+    tag: 1.5.3-debian-12-r29
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1751,7 +1742,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.30.3-debian-12-r4
+    tag: 1.31.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1833,7 +1824,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.11.8-debian-12-r6
+    tag: 10.11.9-debian-12-r1
     digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
@@ -1922,15 +1913,6 @@ externalDatabase:
   ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
   hibernateDialect: ""
-  ## @param externalDatabase.password External database password (DEPRECATED: use dataflow.password and skipper.password instead)
-  ##
-  password: ""
-  ## @param externalDatabase.existingPasswordSecret Existing secret with database password (DEPRECATED: use dataflow.existingSecret and skipper.existingSecret instead)
-  ##
-  existingPasswordSecret: ""
-  ## @param externalDatabase.existingPasswordKey Key of the existing secret with database password (DEPRECATED: use dataflow.existingSecretPasswordKey and skipper.existingSecretPasswordKey instead)
-  ##
-  existingPasswordKey: ""
   ## Data Flow user and database
   ##
   dataflow:
@@ -2040,9 +2022,6 @@ externalRabbitmq:
   ## vhost: /
   ##
   vhost: ""
-  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password (DEPRECATED: use externalRabbitmq.existingSecret instead)
-  ##
-  existingPasswordSecret: ""
   ## @param externalRabbitmq.existingSecret Name of the existing secret containing RabbitMQ credentials
   ##
   existingSecret: ""

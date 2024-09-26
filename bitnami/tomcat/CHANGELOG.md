@@ -1,8 +1,32 @@
 # Changelog
 
-## 11.2.15 (2024-07-25)
+## 11.2.21 (2024-09-17)
 
-* [bitnami/tomcat] Release 11.2.15 ([#28504](https://github.com/bitnami/charts/pull/28504))
+* [bitnami/tomcat] Release 11.2.21 ([#29485](https://github.com/bitnami/charts/pull/29485))
+
+## <small>11.2.20 (2024-09-11)</small>
+
+* [bitnami/tomcat] fix: add apiVersion and kind to volumeClaimTemplates (#29355) ([88102b4](https://github.com/bitnami/charts/commit/88102b45f29a947812c1befa17d47568dddb31a0)), closes [#29355](https://github.com/bitnami/charts/issues/29355)
+
+## <small>11.2.19 (2024-09-11)</small>
+
+* [bitnami/tomcat] Release 11.2.19 (#29350) ([1001ff7](https://github.com/bitnami/charts/commit/1001ff70482ef27aa9184c15b3cac9c42871cecc)), closes [#29350](https://github.com/bitnami/charts/issues/29350)
+
+## <small>11.2.18 (2024-08-26)</small>
+
+* [bitnami/tomcat] Release 11.2.18 (#29024) ([3076a98](https://github.com/bitnami/charts/commit/3076a98a108652f161e3d11072c0dd56cc8a7f26)), closes [#29024](https://github.com/bitnami/charts/issues/29024)
+
+## <small>11.2.17 (2024-08-22)</small>
+
+* [bitnami/tomcat] Release 11.2.17 (#28982) ([73aba0b](https://github.com/bitnami/charts/commit/73aba0b224393ef425ca92aebbe46235904016ba)), closes [#28982](https://github.com/bitnami/charts/issues/28982)
+
+## <small>11.2.16 (2024-08-07)</small>
+
+* [bitnami/tomcat] Release 11.2.16 (#28756) ([0595ee9](https://github.com/bitnami/charts/commit/0595ee9413055543130075a8f71f46e482c63af4)), closes [#28756](https://github.com/bitnami/charts/issues/28756)
+
+## <small>11.2.15 (2024-07-25)</small>
+
+* [bitnami/tomcat] Release 11.2.15 (#28504) ([922f44d](https://github.com/bitnami/charts/commit/922f44de1141c1474ac3b82b0d8876fee0baea3a)), closes [#28504](https://github.com/bitnami/charts/issues/28504)
 
 ## <small>11.2.14 (2024-07-25)</small>
 

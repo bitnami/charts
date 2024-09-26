@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.5.8 (2024-07-25)
+## 3.0.1 (2024-09-19)
 
-* [bitnami/jaeger] Release 2.5.8 ([#28419](https://github.com/bitnami/charts/pull/28419))
+* [bitnami/jaeger] Release 3.0.1 ([#29535](https://github.com/bitnami/charts/pull/29535))
+
+## 3.0.0 (2024-09-10)
+
+* [bitnami/jaeger] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) (#29324) ([40b54b0](https://github.com/bitnami/charts/commit/40b54b00a232074ba2b497823ce417c69ed78473)), closes [#29324](https://github.com/bitnami/charts/issues/29324)
+
+## <small>2.5.12 (2024-09-06)</small>
+
+* [bitnami/jaeger] Release 2.5.12 (#29243) ([4251f05](https://github.com/bitnami/charts/commit/4251f057d49681e6d9acc7f7b8fa6a0b07fa0277)), closes [#29243](https://github.com/bitnami/charts/issues/29243)
+
+## <small>2.5.11 (2024-08-27)</small>
+
+* [bitnami/jaeger] Release 2.5.11 (#29053) ([bd6238e](https://github.com/bitnami/charts/commit/bd6238edc4bcf484c54d75d8ac293ac920bc4248)), closes [#29053](https://github.com/bitnami/charts/issues/29053)
+
+## <small>2.5.10 (2024-08-07)</small>
+
+* [bitnami/jaeger] Release 2.5.10 (#28724) ([af0ed90](https://github.com/bitnami/charts/commit/af0ed90ed8da2fc475ef96dfc75082200743ca92)), closes [#28724](https://github.com/bitnami/charts/issues/28724)
+
+## <small>2.5.9 (2024-08-06)</small>
+
+* [bitnami/jaeger] Release 2.5.9 (#28703) ([d7487c1](https://github.com/bitnami/charts/commit/d7487c1a3c7cb06d07a9106e983986b2c175c45e)), closes [#28703](https://github.com/bitnami/charts/issues/28703)
+
+## <small>2.5.8 (2024-07-25)</small>
+
+* [bitnami/jaeger] Release 2.5.8 (#28419) ([edc1cd4](https://github.com/bitnami/charts/commit/edc1cd498f3cc860779116b1100f416642ff9742)), closes [#28419](https://github.com/bitnami/charts/issues/28419)
 
 ## <small>2.5.7 (2024-07-24)</small>
 

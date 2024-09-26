@@ -1,8 +1,80 @@
 # Changelog
 
-## 6.6.9 (2024-07-26)
+## 7.0.14 (2024-09-26)
 
-* [bitnami/argo-cd] Bugfix cluster-config.yaml nil pointer evaluating interface {}.XXX ([#28522](https://github.com/bitnami/charts/pull/28522))
+* [bitnami/argo-cd] Release 7.0.14 ([#29618](https://github.com/bitnami/charts/pull/29618))
+
+## <small>7.0.13 (2024-09-19)</small>
+
+* [bitnami/argo-cd] Release 7.0.13 (#29507) ([f590500](https://github.com/bitnami/charts/commit/f590500e460485aab7ac50f5e51fefb0d3ade9bd)), closes [#29507](https://github.com/bitnami/charts/issues/29507)
+
+## <small>7.0.12 (2024-09-15)</small>
+
+* [bitnami/argo-cd] Release 7.0.12 (#29429) ([0e6235b](https://github.com/bitnami/charts/commit/0e6235be7f2d0c76bc99785ae39eb9ac44fa0dd5)), closes [#29429](https://github.com/bitnami/charts/issues/29429)
+
+## <small>7.0.11 (2024-09-13)</small>
+
+* [bitnami/argo-cd] Fix duplicate `selector:` in applicationset deployment (#29386) ([dc6905f](https://github.com/bitnami/charts/commit/dc6905f9ca3d7ffaa59c0ac7d689ab91ade53a27)), closes [#29386](https://github.com/bitnami/charts/issues/29386)
+
+## <small>7.0.10 (2024-09-05)</small>
+
+* [bitnami/argo-cd] Release 7.0.10 (#29224) ([92a32cb](https://github.com/bitnami/charts/commit/92a32cbbf02f492afaa562a98303cd7921348827)), closes [#29224](https://github.com/bitnami/charts/issues/29224)
+
+## <small>7.0.9 (2024-09-04)</small>
+
+* [bitnami/argo-cd] Missing namespace in ArgoCD known-hosts cm (#28877) ([4780e8f](https://github.com/bitnami/charts/commit/4780e8fe5b70651fd1fc2c3c614583c42eacf150)), closes [#28877](https://github.com/bitnami/charts/issues/28877)
+
+## <small>7.0.8 (2024-08-28)</small>
+
+* [bitnami/argo-cd] Release 7.0.8 (#29074) ([cb56c0e](https://github.com/bitnami/charts/commit/cb56c0ed43ffc75df71571dd2e032dadfaa9face)), closes [#29074](https://github.com/bitnami/charts/issues/29074)
+
+## <small>7.0.7 (2024-08-27)</small>
+
+* [bitnami/argo-cd] Release 7.0.7 (#29042) ([b4c9c5f](https://github.com/bitnami/charts/commit/b4c9c5fb6b48a20b04ed0cfe7cc56e559773e151)), closes [#29042](https://github.com/bitnami/charts/issues/29042)
+
+## <small>7.0.6 (2024-08-23)</small>
+
+* [bitnami/argo-cd] Release 7.0.6 (#28994) ([1ec7b5c](https://github.com/bitnami/charts/commit/1ec7b5c14a818bdc4f26fcf3ad53e78c102d10b2)), closes [#28994](https://github.com/bitnami/charts/issues/28994)
+
+## <small>7.0.5 (2024-08-23)</small>
+
+* [bitnami/argo-cd] fix: Add namespace to service account's bindings (#28737) ([b75dcd7](https://github.com/bitnami/charts/commit/b75dcd716410ec623eb832104ffe6f25df0e5a13)), closes [#28737](https://github.com/bitnami/charts/issues/28737)
+
+## <small>7.0.4 (2024-08-23)</small>
+
+* [bitnami/argo-cd] Release 7.0.4 (#28987) ([dd40e6e](https://github.com/bitnami/charts/commit/dd40e6e3dc01ef62a9e631540e660416bc6cadf6)), closes [#28987](https://github.com/bitnami/charts/issues/28987)
+
+## <small>7.0.3 (2024-08-20)</small>
+
+* [bitnami/argo-cd] test: :white_check_mark: Improve resilience of cypress test (#28936) ([b290de1](https://github.com/bitnami/charts/commit/b290de196fdd3e0aa5bc55c5257fe5384dde39d1)), closes [#28936](https://github.com/bitnami/charts/issues/28936)
+
+## <small>7.0.2 (2024-08-19)</small>
+
+* [bitnami/argo-cd] Add missing verbs to ApplicationSet role (#28914) ([69e8d7b](https://github.com/bitnami/charts/commit/69e8d7bfa54ff1892f0405d31d29aa988bd79440)), closes [#28914](https://github.com/bitnami/charts/issues/28914)
+
+## <small>7.0.1 (2024-08-16)</small>
+
+* [bitnami/argo-cd] Release 7.0.1 (#28911) ([179665c](https://github.com/bitnami/charts/commit/179665c13f0dc2baaf3432655ed62ca1b81cbf4d)), closes [#28911](https://github.com/bitnami/charts/issues/28911)
+
+## 7.0.0 (2024-08-13)
+
+* [bitnami/argo-cd] Update dependencies (#28851) ([7789c76](https://github.com/bitnami/charts/commit/7789c76851b38db4a34ab0a079fbe636923efbec)), closes [#28851](https://github.com/bitnami/charts/issues/28851)
+
+## <small>6.6.12 (2024-08-12)</small>
+
+* [bitnami/argo-cd] Release 6.6.12 (#28828) ([e3c8931](https://github.com/bitnami/charts/commit/e3c893177b27a510e933db97d4f57f1d80d1bfc7)), closes [#28828](https://github.com/bitnami/charts/issues/28828)
+
+## <small>6.6.11 (2024-08-09)</small>
+
+* [bitnami/argo-cd] Release 6.6.11 (#28762) ([6c7ef92](https://github.com/bitnami/charts/commit/6c7ef92618d321e18fd1a7e20ba8faf90f3661a2)), closes [#28762](https://github.com/bitnami/charts/issues/28762)
+
+## <small>6.6.10 (2024-08-05)</small>
+
+* [bitnami/argo-cd] Remove usage of health check that does not exist (#26547) (#28348) ([9e03640](https://github.com/bitnami/charts/commit/9e0364083d0fdf0c7126b90b54fbe184bff71741)), closes [#26547](https://github.com/bitnami/charts/issues/26547) [#28348](https://github.com/bitnami/charts/issues/28348)
+
+## <small>6.6.9 (2024-07-26)</small>
+
+* [bitnami/argo-cd] Bugfix cluster-config.yaml nil pointer evaluating interface {}.XXX (#28522) ([1e2a00d](https://github.com/bitnami/charts/commit/1e2a00dda16d30472078b762aa399cf353ba840a)), closes [#28522](https://github.com/bitnami/charts/issues/28522)
 
 ## <small>6.6.8 (2024-07-25)</small>
 

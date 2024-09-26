@@ -1,8 +1,24 @@
 # Changelog
 
-## 17.0.3 (2024-07-25)
+## 17.0.7 (2024-09-19)
 
-* [bitnami/phpmyadmin] Release 17.0.3 ([#28460](https://github.com/bitnami/charts/pull/28460))
+* [bitnami/phpmyadmin] Release 17.0.7 ([#29523](https://github.com/bitnami/charts/pull/29523))
+
+## <small>17.0.6 (2024-08-25)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.6 (#29017) ([3cf1fc6](https://github.com/bitnami/charts/commit/3cf1fc67b905a3ffd7466e84895d06c8138da6da)), closes [#29017](https://github.com/bitnami/charts/issues/29017)
+
+## <small>17.0.5 (2024-08-09)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.5 (#28803) ([903ad90](https://github.com/bitnami/charts/commit/903ad90e09a4efeea4ffe954a57c6ef71b2ca16a)), closes [#28803](https://github.com/bitnami/charts/issues/28803)
+
+## <small>17.0.4 (2024-08-01)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.4 (#28631) ([129edbe](https://github.com/bitnami/charts/commit/129edbed24efdf6af9a779c348aeb3285fa14e26)), closes [#28631](https://github.com/bitnami/charts/issues/28631)
+
+## <small>17.0.3 (2024-07-25)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.3 (#28460) ([5ce1599](https://github.com/bitnami/charts/commit/5ce1599aef1e96116dac08cec7940765226a279c)), closes [#28460](https://github.com/bitnami/charts/issues/28460)
 
 ## <small>17.0.2 (2024-07-24)</small>
 

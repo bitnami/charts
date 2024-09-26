@@ -24,6 +24,11 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
+IMPORTANT: Cilium can only take ownership of CNI on a node after starting. Therefore, pods starting before Cilium runs on a given node may get IPs from the pre-configured CNI.
+It is recommended to rollout restart pre-existing pods in your cluster. Read more about this topic in the upstream docs below:
+
+  https://docs.cilium.io/en/latest/installation/taints
+
 Watch the Cilium Agent daemonset status using the command:
 
     kubectl get daemonset -w --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=agent

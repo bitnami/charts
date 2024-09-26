@@ -1,21 +1,21 @@
 dependencies:
 - name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.6.27
+  version: 14.7.10
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.4.10
+  version: 7.4.16
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.4.10
+  version: 7.4.16
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.4.10
+  version: 7.4.16
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.4.10
+  version: 7.4.16
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.20.5
-digest: sha256:4edbfc8ec5fbb94b48e28e91dae2dd045c1d0471d07bf279e565cc2bdfd1e8b6
-generated: "2024-07-25T04:19:52.045362827Z"
+  version: 2.23.0
+digest: sha256:48283f2406acd364ba1f4c96c3ca814f9ea109564a5ede114a8c3ef94233e441
+generated: "2024-09-17T16:40:23.438659469Z"

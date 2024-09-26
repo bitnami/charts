@@ -83,7 +83,7 @@ spec:
       {{- if .Values.master.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or (or .Values.initContainers .Values.master.initContainers) .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.master.persistence.enabled) }}
+      {{- if or (or .Values.initContainers .Values.master.initContainers) .Values.security.enabled .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.master.persistence.enabled) }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
@@ -107,8 +107,8 @@ spec:
         {{- end }}
         {{- if .Values.security.enabled }}
         - name: copy-tls-certificates
-          image: bitnami/os-shell:12-debian-12-r22
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          image: {{ include "elasticsearch.copyTlsCerts.image" . }}
+          imagePullPolicy: {{ .Values.copyTlsCerts.image.pullPolicy | quote }}
           command:
             - /bin/sh
             - -c
@@ -130,6 +130,14 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: certs
+          {{- if .Values.master.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.master.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.copyTlsCerts.resources }}
+          resources: {{- toYaml .Values.copyTlsCerts.resources | nindent 12 }}
+          {{- else if ne .Values.copyTlsCerts.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.copyTlsCerts.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.master.persistence.enabled }}
         - name: volume-permissions
@@ -423,7 +431,9 @@ spec:
     whenScaled: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: "data"
         {{- if or .Values.master.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.annotations .Values.commonAnnotations ) "context" . ) }}

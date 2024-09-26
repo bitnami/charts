@@ -1,8 +1,36 @@
 # Changelog
 
-## 11.2.13 (2024-07-25)
+## 11.2.20 (2024-09-19)
 
-* [bitnami/apache] Release 11.2.13 ([#28398](https://github.com/bitnami/charts/pull/28398))
+* [bitnami/apache] Release 11.2.20 ([#29501](https://github.com/bitnami/charts/pull/29501))
+
+## <small>11.2.19 (2024-09-18)</small>
+
+* [bitnami/apache] Update templates to have conditionals for HPA (#29489) ([6882c22](https://github.com/bitnami/charts/commit/6882c22cc7e2831fd9a0c2adb412ecb5ade160bb)), closes [#29489](https://github.com/bitnami/charts/issues/29489)
+
+## <small>11.2.18 (2024-09-15)</small>
+
+* [bitnami/apache] Release 11.2.18 (#29418) ([665ff2b](https://github.com/bitnami/charts/commit/665ff2be8f372b4cf2a75c4d4c7e7c8bcd647310)), closes [#29418](https://github.com/bitnami/charts/issues/29418)
+
+## <small>11.2.17 (2024-09-03)</small>
+
+* [bitnami/apache] Release 11.2.17 (#29183) ([aa557a2](https://github.com/bitnami/charts/commit/aa557a2263807f74e02390739adaf1316771f6c2)), closes [#29183](https://github.com/bitnami/charts/issues/29183)
+
+## <small>11.2.16 (2024-08-28)</small>
+
+* [bitnami/apache] Release 11.2.16 (#29081) ([48ab080](https://github.com/bitnami/charts/commit/48ab080c5caf58fd4f5434967be9af43cd55d336)), closes [#29081](https://github.com/bitnami/charts/issues/29081)
+
+## <small>11.2.15 (2024-08-26)</small>
+
+* [bitnami/apache] Release 11.2.15 (#29023) ([a74db14](https://github.com/bitnami/charts/commit/a74db142e71c2569864bb4de7d6cb5438e3ae288)), closes [#29023](https://github.com/bitnami/charts/issues/29023)
+
+## <small>11.2.14 (2024-08-16)</small>
+
+* [bitnami/apache] fix CrashLoopBackOff when using cloneHtdocsFromGit (#28868) ([b535fa4](https://github.com/bitnami/charts/commit/b535fa4d875858dee6b5f5be35b76be9e3bd897e)), closes [#28868](https://github.com/bitnami/charts/issues/28868)
+
+## <small>11.2.13 (2024-07-25)</small>
+
+* [bitnami/apache] Release 11.2.13 (#28398) ([08be0e2](https://github.com/bitnami/charts/commit/08be0e271998c1046f66d815ac5c411b46e3af29)), closes [#28398](https://github.com/bitnami/charts/issues/28398)
 
 ## <small>11.2.12 (2024-07-24)</small>
 

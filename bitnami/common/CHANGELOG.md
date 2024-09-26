@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.20.5 (2024-07-16)
+## 2.23.0 (2024-09-13)
 
-* [bitnami/common] [bitnami/wordpress] Use global.storageClass for fallback, not override ([#24863](https://github.com/bitnami/charts/pull/24863))
+* [bitnami/common] Add option to remove empty seLinuxOptions from securityContext in non OpenShift environment ([#28945](https://github.com/bitnami/charts/pull/28945))
+
+## 2.22.0 (2024-08-08)
+
+* [bitnami/common] Fallback to chart appVersion in common.images.image (#28764) ([b4aa0a6](https://github.com/bitnami/charts/commit/b4aa0a685a21c50ca10e41e3eb2023bbd4282cf7)), closes [#28764](https://github.com/bitnami/charts/issues/28764)
+
+## 2.21.0 (2024-08-05)
+
+* [bitnami/common] Allow handling of new secrets after initial installation (#28581) ([07062ee](https://github.com/bitnami/charts/commit/07062ee01382e24b8204b27083ff3e8102110c2f)), closes [#28581](https://github.com/bitnami/charts/issues/28581)
+
+## <small>2.20.5 (2024-07-16)</small>
+
+* [bitnami/common] [bitnami/wordpress] Use global.storageClass for fallback, not override (#24863) ([2b78e13](https://github.com/bitnami/charts/commit/2b78e137ac278cdf9d54523e8d37833a4ff0cd5b)), closes [#24863](https://github.com/bitnami/charts/issues/24863)
 
 ## <small>2.20.4 (2024-07-11)</small>
 

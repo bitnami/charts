@@ -1,8 +1,52 @@
 # Changelog
 
-## 3.3.19 (2024-07-25)
+## 4.0.8 (2024-09-19)
 
-* [bitnami/appsmith] Release 3.3.19 ([#28423](https://github.com/bitnami/charts/pull/28423))
+* [bitnami/appsmith] Release 4.0.8 ([#29500](https://github.com/bitnami/charts/pull/29500))
+
+## <small>4.0.7 (2024-09-13)</small>
+
+* [bitnami/appsmith] Release 4.0.7 (#29398) ([73abd18](https://github.com/bitnami/charts/commit/73abd189761588d6fd3452d0c579ed8f02d43625)), closes [#29398](https://github.com/bitnami/charts/issues/29398)
+
+## <small>4.0.6 (2024-09-05)</small>
+
+* [bitnami/appsmith] Release 4.0.6 (#29223) ([a32ba7d](https://github.com/bitnami/charts/commit/a32ba7db578f719b818f3f6e7a8a27bb60840a06)), closes [#29223](https://github.com/bitnami/charts/issues/29223)
+
+## <small>4.0.5 (2024-09-02)</small>
+
+* [bitnami/appsmith] Release 4.0.5 (#29161) ([aab4507](https://github.com/bitnami/charts/commit/aab450772b151c12a5a1da5b324623c1ef3e7f67)), closes [#29161](https://github.com/bitnami/charts/issues/29161)
+
+## <small>4.0.4 (2024-08-30)</small>
+
+* [bitnami/appsmith] Release 4.0.4 (#29124) ([682e6ad](https://github.com/bitnami/charts/commit/682e6ad271dea3bd4aea468c15e5b58b4f384690)), closes [#29124](https://github.com/bitnami/charts/issues/29124)
+
+## <small>4.0.3 (2024-08-26)</small>
+
+* [bitnami/appsmith] Release 4.0.3 (#29033) ([3ef2c5b](https://github.com/bitnami/charts/commit/3ef2c5b1d2389a60a8ebd837e6aadc6d4979db08)), closes [#29033](https://github.com/bitnami/charts/issues/29033)
+
+## <small>4.0.2 (2024-08-21)</small>
+
+* [bitnami/appsmith] Release 4.0.2 (#28954) ([bb05f9f](https://github.com/bitnami/charts/commit/bb05f9f24ef535ec72ac760529b15f2b7bd67254)), closes [#28954](https://github.com/bitnami/charts/issues/28954)
+
+## <small>4.0.1 (2024-08-20)</small>
+
+* [bitnami/appsmith] Release 4.0.1 (#28939) ([cb76a1c](https://github.com/bitnami/charts/commit/cb76a1c4e348b23ab146ce931a1bd8001211c344)), closes [#28939](https://github.com/bitnami/charts/issues/28939)
+
+## 4.0.0 (2024-08-13)
+
+* [bitnami/appsmith] Update dependencies (#28850) ([6dfe57a](https://github.com/bitnami/charts/commit/6dfe57a4795d25c1e2761d247213a08170a0d2dc)), closes [#28850](https://github.com/bitnami/charts/issues/28850)
+
+## <small>3.3.21 (2024-08-02)</small>
+
+* [bitnami/appsmith] Release 3.3.21 (#28646) ([b0e9f61](https://github.com/bitnami/charts/commit/b0e9f61e36f14247dc0e1f3068d81a33da5ae73b)), closes [#28646](https://github.com/bitnami/charts/issues/28646)
+
+## <small>3.3.20 (2024-07-29)</small>
+
+* [bitnami/appsmith] Release 3.3.20 (#28561) ([69fd9cc](https://github.com/bitnami/charts/commit/69fd9ccbb5f63e829c45fee1f0a5c142a0496057)), closes [#28561](https://github.com/bitnami/charts/issues/28561)
+
+## <small>3.3.19 (2024-07-25)</small>
+
+* [bitnami/appsmith] Release 3.3.19 (#28423) ([300496e](https://github.com/bitnami/charts/commit/300496e0365c241bc493712e7a31fe684b00f21c)), closes [#28423](https://github.com/bitnami/charts/issues/28423)
 
 ## <small>3.3.18 (2024-07-24)</small>
 

@@ -988,6 +988,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                                                              |
 | `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `{}`                                                              |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                                                                                                                                                       | `0`                                                               |
+| `volumePermissions.extraEnvVars`                            | Array with extra environment variables to add to volume permissions init container.                                                                                                                                                                   | `[]`                                                              |
 | `kubectl.image.registry`                                    | Kubectl image registry                                                                                                                                                                                                                                | `REGISTRY_NAME`                                                   |
 | `kubectl.image.repository`                                  | Kubectl image repository                                                                                                                                                                                                                              | `REPOSITORY_NAME/kubectl`                                         |
 | `kubectl.image.digest`                                      | Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                               | `""`                                                              |
@@ -1067,6 +1068,10 @@ This issue can be mitigated by splitting the upgrade into two stages: one for al
 `helm upgrade oci://REGISTRY_NAME/REPOSITORY_NAME/redis --set master.updateStrategy.rollingUpdate.partition=99`
 - Stage 2 (anything else that is not up to date, in this case only master):
 `helm upgrade oci://REGISTRY_NAME/REPOSITORY_NAME/redis`
+
+### To 20.0.0
+
+This major version updates the Redis&reg; docker image version used from `7.2` to `7.4`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.4 release notes](https://raw.githubusercontent.com/redis/redis/7.4/00-RELEASENOTES) before upgrading.
 
 ### To 19.0.0
 

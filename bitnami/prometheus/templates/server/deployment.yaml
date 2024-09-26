@@ -83,7 +83,7 @@ spec:
               find {{ .Values.server.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.server.containerSecurityContext.runAsUser }}:{{ .Values.server.podSecurityContext.fsGroup }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -157,7 +157,7 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if .Values.server.resources }}
-          resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.server.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.server.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.server.resourcesPreset) | nindent 12 }}
           {{- end }}

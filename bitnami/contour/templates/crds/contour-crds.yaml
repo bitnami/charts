@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/projectcontour/contour/v{version}/examples/contour/01-crds.yaml
-# Version: 1.29.1
+# Version: 1.30.0
 # Conditional: .Values.contour.manageCRDs
 {{- if .Values.contour.manageCRDs }}
 ---
@@ -122,6 +122,12 @@ spec:
                             description: The maximum number of parallel retries a
                               single Envoy instance allows to the Kubernetes Service;
                               defaults to 3.
+                            format: int32
+                            type: integer
+                          perHostMaxConnections:
+                            description: |-
+                              PerHostMaxConnections is the maximum number of connections
+                              that Envoy will allow to each individual host in a cluster.
                             format: int32
                             type: integer
                         type: object
@@ -1147,6 +1153,8 @@ spec:
                       Defines the XDSServer to use for `contour serve`.
                       Values: `envoy` (default), `contour (deprecated)`.
                       Other values will produce an error.
+                      Deprecated: this field will be removed in a future release when
+                      the `contour` xDS server implementation is removed.
                     type: string
                 type: object
             type: object
@@ -3898,6 +3906,12 @@ spec:
                                   Service; defaults to 3.
                                 format: int32
                                 type: integer
+                              perHostMaxConnections:
+                                description: |-
+                                  PerHostMaxConnections is the maximum number of connections
+                                  that Envoy will allow to each individual host in a cluster.
+                                format: int32
+                                type: integer
                             type: object
                           dnsLookupFamily:
                             description: |-
@@ -4923,6 +4937,8 @@ spec:
                           Defines the XDSServer to use for `contour serve`.
                           Values: `envoy` (default), `contour (deprecated)`.
                           Other values will produce an error.
+                          Deprecated: this field will be removed in a future release when
+                          the `contour` xDS server implementation is removed.
                         type: string
                     type: object
                 type: object
@@ -5061,6 +5077,39 @@ spec:
             description: ExtensionServiceSpec defines the desired state of an ExtensionService
               resource.
             properties:
+              circuitBreakerPolicy:
+                description: |-
+                  CircuitBreakerPolicy specifies the circuit breaker budget across the extension service.
+                  If defined this overrides the global circuit breaker budget.
+                properties:
+                  maxConnections:
+                    description: The maximum number of connections that a single Envoy
+                      instance allows to the Kubernetes Service; defaults to 1024.
+                    format: int32
+                    type: integer
+                  maxPendingRequests:
+                    description: The maximum number of pending requests that a single
+                      Envoy instance allows to the Kubernetes Service; defaults to
+                      1024.
+                    format: int32
+                    type: integer
+                  maxRequests:
+                    description: The maximum parallel requests a single Envoy instance
+                      allows to the Kubernetes Service; defaults to 1024
+                    format: int32
+                    type: integer
+                  maxRetries:
+                    description: The maximum number of parallel retries a single Envoy
+                      instance allows to the Kubernetes Service; defaults to 3.
+                    format: int32
+                    type: integer
+                  perHostMaxConnections:
+                    description: |-
+                      PerHostMaxConnections is the maximum number of connections
+                      that Envoy will allow to each individual host in a cluster.
+                    format: int32
+                    type: integer
+                type: object
               loadBalancerPolicy:
                 description: |-
                   The policy for load balancing GRPC service requests. Note that the

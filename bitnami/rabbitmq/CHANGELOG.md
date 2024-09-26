@@ -1,8 +1,40 @@
 # Changelog
 
-## 14.6.5 (2024-07-25)
+## 15.0.1 (2024-09-25)
 
-* [bitnami/rabbitmq] Release 14.6.5 ([#28473](https://github.com/bitnami/charts/pull/28473))
+* [bitnami/rabbitmq] Release 15.0.1 ([#29600](https://github.com/bitnami/charts/pull/29600))
+
+## 15.0.0 (2024-09-20)
+
+* [bitnami/rabbitmq] Release 15.0.0 (#29555) ([595df29](https://github.com/bitnami/charts/commit/595df29e55c616de44a5f0794738bf7520e6eb58)), closes [#29555](https://github.com/bitnami/charts/issues/29555)
+
+## 14.7.0 (2024-09-12)
+
+* [bitnami/rabbitmq] Breaking out RabbitMQ metrics endpoints to configure separately (#28891) ([3b9cfe9](https://github.com/bitnami/charts/commit/3b9cfe99e23c485ea95bbeb128dc44961374d434)), closes [#28891](https://github.com/bitnami/charts/issues/28891)
+
+## <small>14.6.10 (2024-09-11)</small>
+
+* [bitnami/rabbitmq] Allow rendering resources values (#29347) ([7479317](https://github.com/bitnami/charts/commit/747931744d2242abe11ff29ea8f499ed292e731a)), closes [#29347](https://github.com/bitnami/charts/issues/29347)
+
+## <small>14.6.9 (2024-08-28)</small>
+
+* [bitnami/rabbitmq] Release 14.6.9 (#29092) ([711e2f7](https://github.com/bitnami/charts/commit/711e2f720d92e936b9a67bbdc269d57c33a9dca6)), closes [#29092](https://github.com/bitnami/charts/issues/29092)
+
+## <small>14.6.8 (2024-08-28)</small>
+
+* [bitnami/rabbitmq] Improve Ginkgo test (#29082) ([778a269](https://github.com/bitnami/charts/commit/778a269c23fd9e6534c3c15e85f016c38f498e81)), closes [#29082](https://github.com/bitnami/charts/issues/29082)
+
+## <small>14.6.7 (2024-08-26)</small>
+
+* [bitnami/rabbitmq] Release 14.6.7 (#29018) ([8eb9085](https://github.com/bitnami/charts/commit/8eb9085b47699e839bae9f0238a775c1d0b0dfa5)), closes [#29018](https://github.com/bitnami/charts/issues/29018)
+
+## <small>14.6.6 (2024-08-08)</small>
+
+* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts (#27900) ([95148a9](https://github.com/bitnami/charts/commit/95148a9ae1363f9da6415b64085aadfd8add1413)), closes [#27900](https://github.com/bitnami/charts/issues/27900)
+
+## <small>14.6.5 (2024-07-25)</small>
+
+* [bitnami/rabbitmq] Release 14.6.5 (#28473) ([40abb28](https://github.com/bitnami/charts/commit/40abb284adcd42c0c27190899e9e3a115dbf46e8)), closes [#28473](https://github.com/bitnami/charts/issues/28473)
 
 ## <small>14.6.4 (2024-07-24)</small>
 
