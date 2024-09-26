@@ -658,11 +658,20 @@ Return the S3 secret access key inside the secret
 Return whether GCS is enabled
 */}}
 {{- define "mlflow.v0.gcs.enabled" -}}
-    {{- if and (not .Values.minio.enabled) (not .Values.externalS3.host) .Values.externalGCS.bucket -}}
+    {{- if and (not .Values.minio.enabled) (not .Values.externalS3.host) (not .Values.externalAzureBlob.storageAccount) .Values.externalGCS.bucket -}}
         {{- true }}
     {{- end -}}
 {{- end -}}
 
+
+{{/*
+Return whether Azure Blob is enabled
+*/}}
+{{- define "mlflow.v0.azureBlob.enabled" -}}
+    {{- if and (not .Values.minio.enabled) (not .Values.externalS3.host) (not .Values.externalGCS.bucket) .Values.externalAzureBlob.storageAccount -}}
+        {{- true }}
+    {{- end -}}
+{{- end -}}
 
 {{/*
 Return the proper git image name
