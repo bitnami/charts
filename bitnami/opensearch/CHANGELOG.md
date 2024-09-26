@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.4 (2024-09-24)
+## 1.3.5 (2024-09-26)
 
-* [bitnami/opensearch] Fix plugins installation ([#29586](https://github.com/bitnami/charts/pull/29586))
+* [bitnami/opensearch] Release 1.3.5 ([#29613](https://github.com/bitnami/charts/pull/29613))
+
+## <small>1.3.4 (2024-09-24)</small>
+
+* [bitnami/opensearch] Fix plugins installation (#29586) ([464c683](https://github.com/bitnami/charts/commit/464c683d543a7c39640f91fa49d6bd2902b2d331)), closes [#29586](https://github.com/bitnami/charts/issues/29586)
 
 ## <small>1.3.3 (2024-09-24)</small>
 

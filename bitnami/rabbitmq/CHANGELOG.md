@@ -1,8 +1,12 @@
 # Changelog
 
+## 15.0.1 (2024-09-25)
+
+* [bitnami/rabbitmq] Release 15.0.1 ([#29600](https://github.com/bitnami/charts/pull/29600))
+
 ## 15.0.0 (2024-09-20)
 
-* [bitnami/rabbitmq] Release 15.0.0 ([#29555](https://github.com/bitnami/charts/pull/29555))
+* [bitnami/rabbitmq] Release 15.0.0 (#29555) ([595df29](https://github.com/bitnami/charts/commit/595df29e55c616de44a5f0794738bf7520e6eb58)), closes [#29555](https://github.com/bitnami/charts/issues/29555)
 
 ## 14.7.0 (2024-09-12)
 

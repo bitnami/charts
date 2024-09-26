@@ -116,7 +116,7 @@ javaOpts: ""
 image:
   registry: docker.io
   repository: bitnami/nessie
-  tag: 0.97.1-debian-12-r0
+  tag: 0.98.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -800,7 +800,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 16.4.0-debian-12-r9
+    tag: 16.4.0-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
