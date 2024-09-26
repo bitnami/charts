@@ -25,21 +25,11 @@ metadata:
   {{- end }}
 rules:
   - apiGroups:
-      - ""
+      - argoproj.io
     resources:
-      - pods
-      - configmaps
+      - workflowtaskresults
     verbs:
-      - list
-      - get
-      - watch
+      - create
       - patch
-  - apiGroups:
-      - ""
-    resources:
-      - pods/log
-    verbs:
-      - get
-      - watch
   {{- end }}
 {{- end }}
