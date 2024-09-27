@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.1.16 (2024-09-23)
+## 9.1.17 (2024-09-26)
 
-* [bitnami/argo-workflows] Release 9.1.16 ([#29576](https://github.com/bitnami/charts/pull/29576))
+* [bitnami/argo-workflows] Update Workflow RBAC to Use Recommended `workflowtaskresults` CRD ([#29620](https://github.com/bitnami/charts/pull/29620))
+
+## <small>9.1.16 (2024-09-23)</small>
+
+* [bitnami/argo-workflows] Release 9.1.16 (#29576) ([c07a61e](https://github.com/bitnami/charts/commit/c07a61e36623a0bf4816790a65f376452a4bdc6d)), closes [#29576](https://github.com/bitnami/charts/issues/29576)
 
 ## <small>9.1.15 (2024-09-05)</small>
 
