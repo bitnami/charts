@@ -1,8 +1,8 @@
 # Changelog
 
-## 6.2.24 (2024-09-26)
+## 6.2.25 (2024-09-30)
 
-* [bitnami/clickhouse] Release 6.2.24 ([#29641](https://github.com/bitnami/charts/pull/29641))
+* [bitnami/clickhouse] Release 6.2.25 ([#29669](https://github.com/bitnami/charts/pull/29669))
 
 ## <small>6.2.23 (2024-09-09)</small>
 
