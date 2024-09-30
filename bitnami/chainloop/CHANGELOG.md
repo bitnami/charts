@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.12 (2024-09-23)
+## 1.0.13 (2024-09-30)
 
-* [bitnami/chainloop] Release 1.0.12 ([#29575](https://github.com/bitnami/charts/pull/29575))
+* [bitnami/chainloop] Release 1.0.13 ([#29663](https://github.com/bitnami/charts/pull/29663))
+
+## <small>1.0.12 (2024-09-23)</small>
+
+* [bitnami/chainloop] Release 1.0.12 (#29575) ([bd2cb3c](https://github.com/bitnami/charts/commit/bd2cb3c6703554b7535e2ca062a7843c2fabb319)), closes [#29575](https://github.com/bitnami/charts/issues/29575)
 
 ## <small>1.0.11 (2024-09-19)</small>
 
