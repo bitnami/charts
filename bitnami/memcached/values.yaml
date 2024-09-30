@@ -347,6 +347,10 @@ terminationGracePeriodSeconds: ""
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
+## @param emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+## Possible values: "Memory", ""
+emptyDir:
+  medium: ""
 ## @param extraVolumes Optionally specify extra list of additional volumes for the Memcached pod(s)
 ## Example Use Case: mount certificates to enable TLS
 ## e.g:
