@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.13 (2024-08-30)
+## 5.2.14 (2024-09-30)
 
-* [bitnami/sonarqube] Release 5.2.13 ([#29136](https://github.com/bitnami/charts/pull/29136))
+* [bitnami/sonarqube] Release 5.2.14 ([#29658](https://github.com/bitnami/charts/pull/29658))
+
+## <small>5.2.13 (2024-08-30)</small>
+
+* [bitnami/sonarqube] Release 5.2.13 (#29136) ([a79c6b8](https://github.com/bitnami/charts/commit/a79c6b891f909c2c53d4a8c9dfeee5a14b3ce3ce)), closes [#29136](https://github.com/bitnami/charts/issues/29136)
 
 ## <small>5.2.12 (2024-07-25)</small>
 
