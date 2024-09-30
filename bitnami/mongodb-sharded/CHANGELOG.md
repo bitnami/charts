@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.3.8 (2024-09-26)
+## 8.3.8 (2024-09-30)
 
 * [bitnami/mongodb-sharded] Fix uncapacity to disable persistence ([#29599](https://github.com/bitnami/charts/pull/29599))
 
