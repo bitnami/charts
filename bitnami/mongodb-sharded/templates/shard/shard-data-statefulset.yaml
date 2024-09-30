@@ -428,7 +428,7 @@ spec:
         {{- if $.Values.shardsvr.dataNode.extraVolumes }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{if not $.Values.shardsvr.persistence.enabled}}      
+  {{- if not $.Values.shardsvr.persistence.enabled }}
         - name: datadir
           emptyDir: {}
   {{- else }}
