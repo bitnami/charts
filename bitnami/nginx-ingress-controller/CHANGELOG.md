@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.4.1 (2024-09-06)
+## 11.4.2 (2024-09-26)
 
-* [bitnami/nginx-ingress-controller] Release 11.4.1 ([#29265](https://github.com/bitnami/charts/pull/29265))
+* [bitnami/nginx-ingress-controller] Specify resources for nginx ingress controller deployment init container ([#29621](https://github.com/bitnami/charts/pull/29621))
+
+## <small>11.4.1 (2024-09-06)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.4.1 (#29265) ([60bb42d](https://github.com/bitnami/charts/commit/60bb42da0b5a962161fe1b127a2fa5c141060d34)), closes [#29265](https://github.com/bitnami/charts/issues/29265)
 
 ## 11.4.0 (2024-08-23)
 
