@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.24.0 (2024-09-30)
+## 2.24.0 (2024-10-01)
 
 * [bitnami/common] Add common.tplvalues.merge-overwrite helper ([#29668](https://github.com/bitnami/charts/pull/29668))
 
