@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.24 (2024-09-30)
+## 1.4.24 (2024-10-01)
 
 * [bitnami/vault] Fix documentation in README.md ([#29665](https://github.com/bitnami/charts/pull/29665))
 
