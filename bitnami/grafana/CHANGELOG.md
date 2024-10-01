@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.20 (2024-09-19)
+## 11.3.21 (2024-09-26)
 
-* [bitnami/grafana] Release 11.3.20 ([#29511](https://github.com/bitnami/charts/pull/29511))
+* [bitnami/grafana] Release 11.3.21 ([#29630](https://github.com/bitnami/charts/pull/29630))
+
+## <small>11.3.20 (2024-09-19)</small>
+
+* [bitnami/grafana] Release 11.3.20 (#29511) ([23a6119](https://github.com/bitnami/charts/commit/23a6119b02e4d690e2b4328bedad9ef994dfa6fe)), closes [#29511](https://github.com/bitnami/charts/issues/29511)
 
 ## <small>11.3.19 (2024-09-06)</small>
 

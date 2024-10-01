@@ -421,7 +421,10 @@ spec:
         {{- if .Values.configsvr.extraVolumes }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if .Values.configsvr.persistence.enabled }}
+  {{- if not .Values.configsvr.persistence.enabled }}
+        - name: datadir
+          emptyDir: {}
+  {{- else }}
   {{- if .Values.configsvr.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{ .Values.configsvr.persistentVolumeClaimRetentionPolicy.whenDeleted }}
@@ -452,8 +455,5 @@ spec:
           requests:
             storage: {{ .Values.configsvr.persistence.size | quote }}
         {{- include "common.storage.class" (dict "persistence" .Values.configsvr.persistence "global" .Values.global) | nindent 8 }}
-  {{- else }}
-    - name: datadir
-      emptyDir: {}
   {{- end }}
 {{- end }}
