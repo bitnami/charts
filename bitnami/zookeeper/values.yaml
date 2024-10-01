@@ -826,6 +826,9 @@ metrics:
     ## @param metrics.service.port ZooKeeper Prometheus Exporter service port
     ##
     port: 9141
+    ## @param metrics.service.appProtocol Optionally specify the ZooKeeper Prometheus Exporter service appProtocol
+    ##
+    appProtocol: ""
     ## @param metrics.service.annotations [object] Annotations for Prometheus to auto-discover the metrics endpoint
     ##
     annotations:
