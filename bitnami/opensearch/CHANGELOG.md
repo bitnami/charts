@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 (2024-09-30)
+## 2.0.0 (2024-10-01)
 
 * [bitnami/opensearch] Fix typo in dashboards.fullname helper ([#29645](https://github.com/bitnami/charts/pull/29645))
 
