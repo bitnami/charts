@@ -45,6 +45,12 @@ spec:
       {{- if .Values.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
+      {{- if .Values.metrics.serviceMonitor.scheme }}
+      scheme: {{ .Values.metrics.serviceMonitor.scheme }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.tlsConfig }}
+      tlsConfig: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.tlsConfig "context" $ ) | nindent 8 }}
+      {{- end }}
   namespaceSelector:
     matchNames:
       - {{ template "zookeeper.namespace" . }}

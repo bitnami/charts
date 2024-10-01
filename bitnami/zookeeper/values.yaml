@@ -871,6 +871,18 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
+    ## @param metrics.serviceMonitor.scheme The explicit scheme for metrics scraping.
+    ##
+    scheme: ""
+    ## @param metrics.serviceMonitor.tlsConfig [object] TLS configuration used for scrape endpoints used by Prometheus
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#tlsconfig
+    ## e.g:
+    ## tlsConfig:
+    ##   ca:
+    ##     secret:
+    ##       name: existingSecretName
+    ##
+    tlsConfig: {}
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
