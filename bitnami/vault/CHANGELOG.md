@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.24 (2024-10-01)
+## 1.4.25 (2024-10-02)
 
-* [bitnami/vault] Fix documentation in README.md ([#29665](https://github.com/bitnami/charts/pull/29665))
+* [bitnami/vault] Release 1.4.25 ([#29721](https://github.com/bitnami/charts/pull/29721))
+
+## <small>1.4.24 (2024-10-02)</small>
+
+* [bitnami/vault] Fix documentation in README.md (#29665) ([3cf178a](https://github.com/bitnami/charts/commit/3cf178a2d8ba3d6002ed076044b221f548b5e868)), closes [#29665](https://github.com/bitnami/charts/issues/29665)
 
 ## <small>1.4.23 (2024-09-26)</small>
 
