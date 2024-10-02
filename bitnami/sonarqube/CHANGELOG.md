@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.15 (2024-10-02)
+## 6.0.0 (2024-10-02)
 
-* [bitnami/sonarqube] Release 5.2.15 ([#29674](https://github.com/bitnami/charts/pull/29674))
+* [bitnami/sonarqube] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29745](https://github.com/bitnami/charts/pull/29745))
+
+## <small>5.2.15 (2024-10-02)</small>
+
+* [bitnami/sonarqube] Release 5.2.15 (#29674) ([f10a047](https://github.com/bitnami/charts/commit/f10a047eb8c3ad9d5cd63aeeda31116258c3015b)), closes [#29674](https://github.com/bitnami/charts/issues/29674)
 
 ## <small>5.2.14 (2024-09-30)</small>
 
