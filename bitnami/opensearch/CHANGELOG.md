@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.7 (2024-09-26)
+## 1.3.8 (2024-10-02)
 
-* [bitnami/opensearch] Release 1.3.7 ([#29639](https://github.com/bitnami/charts/pull/29639))
+* [bitnami/opensearch] Release 1.3.8 ([#29726](https://github.com/bitnami/charts/pull/29726))
+
+## <small>1.3.7 (2024-09-26)</small>
+
+* [bitnami/opensearch] Release 1.3.7 (#29639) ([b5c5a6a](https://github.com/bitnami/charts/commit/b5c5a6a55cbcfe9b359883f991d92ddf6698f1bb)), closes [#29639](https://github.com/bitnami/charts/issues/29639)
 
 ## <small>1.3.6 (2024-09-26)</small>
 
