@@ -608,7 +608,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `master.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                 | `true`                   |
 | `master.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `{}`                     |
 | `master.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.                                                                    | `{}`                     |
-| `master.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; master pod(s)                                                                                                                                                                | `{}`                  |
+| `master.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; master pod(s)                                                                                                                                                               | `{}`                     |
 
 ### Redis&reg; replicas configuration parameters
 
@@ -737,7 +737,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `replica.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`                   |
 | `replica.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `{}`                     |
 | `replica.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `replica.pdb.minAvailable` and `replica.pdb.maxUnavailable` are empty.                                                                    | `{}`                     |
-| `replica.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; replica pod(s)                                                                                                                                                                | `{}`                  |
+| `replica.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; replicas pod(s)                                                                                                                                                               | `{}`                     |
 
 ### Redis&reg; Sentinel configuration parameters
 
@@ -849,7 +849,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `sentinel.masterService.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                                | `None`                           |
 | `sentinel.masterService.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                                                                                                         | `{}`                             |
 | `sentinel.terminationGracePeriodSeconds`                     | Integer setting the termination grace period for the redis-node pods                                                                                                                                                                | `30`                             |
-| `sentinel.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; sentinel pod(s)                                                                                                                                                                | `{}`                  |
+| `sentinel.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; Sentinel pod(s)                                                                                                                                                                 | `{}`                             |
 
 ### Other Parameters
 
