@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.12 (2024-10-02)
+## 0.1.13 (2024-10-02)
 
-* [bitnami/neo4j] Release 0.1.12 ([#29754](https://github.com/bitnami/charts/pull/29754))
+* [bitnami/neo4j] Release 0.1.13 ([#29757](https://github.com/bitnami/charts/pull/29757))
+
+## <small>0.1.12 (2024-10-02)</small>
+
+* [bitnami/neo4j] Release 0.1.12 (#29754) ([33502ac](https://github.com/bitnami/charts/commit/33502ac29cb4505d4f3f67fe91c06067a4d36873)), closes [#29754](https://github.com/bitnami/charts/issues/29754)
 
 ## <small>0.1.11 (2024-09-30)</small>
 
