@@ -1,8 +1,16 @@
 # Changelog
 
-## 7.1.0 (2024-09-20)
+## 7.1.0 (2024-10-02)
 
 * [bitnami/argo-cd] Add native support for ConfigManagementPlugins ([#27628](https://github.com/bitnami/charts/pull/27628))
+
+## <small>7.0.15 (2024-10-01)</small>
+
+* [bitnami/argo-cd] Release 7.0.15 (#29682) ([6b89f04](https://github.com/bitnami/charts/commit/6b89f04f14ccd7aa78811dea9642754899c102da)), closes [#29682](https://github.com/bitnami/charts/issues/29682)
+
+## <small>7.0.14 (2024-09-26)</small>
+
+* [bitnami/argo-cd] Release 7.0.14 (#29618) ([6f1e155](https://github.com/bitnami/charts/commit/6f1e1550bad7dcb0d5cf63e8280baa2d9d7787da)), closes [#29618](https://github.com/bitnami/charts/issues/29618)
 
 ## <small>7.0.13 (2024-09-19)</small>
 
