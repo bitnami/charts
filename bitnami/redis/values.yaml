@@ -633,6 +633,9 @@ master:
     create: true
     minAvailable: ""
     maxUnavailable: ""
+  ## @param master.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; master pod(s)
+  ##
+  extraPodSpec: {}
 ## @section Redis&reg; replicas configuration parameters
 ##
 replica:
@@ -1118,6 +1121,9 @@ replica:
     create: true
     minAvailable: ""
     maxUnavailable: ""
+  ## @param replica.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; replicas pod(s)
+  ##
+  extraPodSpec: {}
 ## @section Redis&reg; Sentinel configuration parameters
 ##
 
@@ -1520,6 +1526,9 @@ sentinel:
   ## @param sentinel.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-node pods
   ##
   terminationGracePeriodSeconds: 30
+  ## @param sentinel.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; Sentinel pod(s)
+  ##
+  extraPodSpec: {}
 ## @section Other Parameters
 ##
 
