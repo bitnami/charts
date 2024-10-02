@@ -257,9 +257,9 @@ influxdb:
   ##
   updateStrategy:
     ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
+    ## Can be set to RollingUpdate, Recreate or OnDelete
     ##
-    type: RollingUpdate
+    type: Recreate
   ## @param influxdb.priorityClassName InfluxDB&trade; pods' priorityClassName
   ##
   priorityClassName: ""
