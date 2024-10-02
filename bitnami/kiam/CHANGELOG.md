@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.14 (2024-09-06)
+## 2.2.15 (2024-10-02)
 
-* [bitnami/kiam] Release 2.2.14 ([#29246](https://github.com/bitnami/charts/pull/29246))
+* [bitnami/kiam] Release 2.2.15 ([#29701](https://github.com/bitnami/charts/pull/29701))
+
+## <small>2.2.14 (2024-09-06)</small>
+
+* [bitnami/kiam] Release 2.2.14 (#29246) ([48b7c0c](https://github.com/bitnami/charts/commit/48b7c0c546be24f2ff760d16de6543a8853f78eb)), closes [#29246](https://github.com/bitnami/charts/issues/29246)
 
 ## <small>2.2.13 (2024-08-27)</small>
 
