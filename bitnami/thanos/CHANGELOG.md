@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.26 (2024-10-01)
+## 15.7.27 (2024-10-02)
 
-* [bitnami/thanos] Fix serviceNames based on additionalHeadless ([#29673](https://github.com/bitnami/charts/pull/29673))
+* [bitnami/thanos] Release 15.7.27 ([#29720](https://github.com/bitnami/charts/pull/29720))
+
+## <small>15.7.26 (2024-10-02)</small>
+
+* [bitnami/thanos] Fix serviceNames based on additionalHeadless (#29673) ([418a890](https://github.com/bitnami/charts/commit/418a890c3210947ff9e1aa9d75ba0fb611681b45)), closes [#29673](https://github.com/bitnami/charts/issues/29673)
 
 ## <small>15.7.25 (2024-09-06)</small>
 
