@@ -11,6 +11,8 @@ it('allows adding a project and a quality gate', () => {
   cy.visit('/projects');
   // Step 1: Create a project
   cy.fixture('projects').then((projects) => {
+    // Wait for DOM content to load
+    cy.wait(5000);
     cy.get('body').then(($body) => {
       if ($body.find('#project-creation-menu-trigger').is(':visible')) {
         cy.get('#project-creation-menu-trigger').click();
@@ -30,7 +32,6 @@ it('allows adding a project and a quality gate', () => {
       cy.get('[type="submit"]').contains('Create').click();
       cy.contains('Unlock editing').click();
       cy.contains('Add Condition').click({force: true});
-      cy.contains('Select').click({force: true});
       cy.contains('Lines to Cover').click({force: true});
       cy.get('#condition-threshold').type(qualityGates.newQualityGate.threshold);
       cy.get('[type="submit"]').click();
