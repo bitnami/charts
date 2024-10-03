@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.4 (2024-10-02)
+## 3.0.0 (2024-10-02)
 
-* [bitnami/seaweedfs] Release 2.0.4 ([#29719](https://github.com/bitnami/charts/pull/29719))
+* [bitnami/seaweedfs] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29744](https://github.com/bitnami/charts/pull/29744))
+
+## <small>2.0.4 (2024-10-02)</small>
+
+* [bitnami/seaweedfs] Release 2.0.4 (#29719) ([36de636](https://github.com/bitnami/charts/commit/36de636d89b745738f1426126f67bfc7f5cca0e9)), closes [#29719](https://github.com/bitnami/charts/issues/29719)
 
 ## <small>2.0.3 (2024-09-30)</small>
 
