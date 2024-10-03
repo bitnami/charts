@@ -4,9 +4,9 @@
 
 * [bitnami/argo-workflows] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29728](https://github.com/bitnami/charts/pull/29728))
 
-## 9.1.18 (2024-10-02)
+## <small>9.1.18 (2024-10-02)</small>
 
-* [bitnami/argo-workflows] Release 9.1.18 ([#29753](https://github.com/bitnami/charts/pull/29753))
+* [bitnami/argo-workflows] Release 9.1.18 (#29753) ([fad625d](https://github.com/bitnami/charts/commit/fad625d3fd348d62dd6abf2d20f5ac9f4deb23a3)), closes [#29753](https://github.com/bitnami/charts/issues/29753)
 
 ## <small>9.1.17 (2024-09-27)</small>
 
