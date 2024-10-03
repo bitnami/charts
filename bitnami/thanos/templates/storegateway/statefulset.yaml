@@ -20,9 +20,7 @@ spec:
   {{- end }}
   revisionHistoryLimit: {{ .Values.storegateway.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.storegateway.podManagementPolicy }}
-  {{- if .Values.storegateway.service.additionalHeadless }}
   serviceName: {{ include "thanos.storegateway.fullname" . }}-headless
-  {{- end }}
   {{- if .Values.storegateway.updateStrategy }}
   updateStrategy: {{- toYaml .Values.storegateway.updateStrategy | nindent 4 }}
   {{- end }}
