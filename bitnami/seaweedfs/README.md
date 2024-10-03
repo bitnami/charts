@@ -1159,6 +1159,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/seawe
 
 ## Upgrading
 
+### To 3.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x.  Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
+
 ### To 2.0.0
 
 This major version adds support for using PostgreSQL as an alternative for MariaDB to comply with Filer database requirements. No breaking changes are expected when upgrading to this version if MariaDB is used.
