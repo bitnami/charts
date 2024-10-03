@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.9 (2024-09-24)
+## 8.3.10 (2024-10-03)
 
 * [bitnami/external-dns] chore: :wrench: :construction_worker: Re-enable CRD automation ([#29266](https://github.com/bitnami/charts/pull/29266))
+
+## <small>8.3.9 (2024-10-02)</small>
+
+* [bitnami/external-dns] Release 8.3.9 (#29690) ([c30d45e](https://github.com/bitnami/charts/commit/c30d45e45592f7d8647c19c484f455e85359ff7e)), closes [#29690](https://github.com/bitnami/charts/issues/29690)
 
 ## <small>8.3.8 (2024-09-16)</small>
 
