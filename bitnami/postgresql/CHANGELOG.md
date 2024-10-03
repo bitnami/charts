@@ -1,8 +1,36 @@
 # Changelog
 
-## 15.5.32 (2024-09-17)
+## 16.0.0 (2024-10-02)
 
-* [bitnami/postgresql] test: :white_check_mark: Improve reliability of ginkgo tests ([#29472](https://github.com/bitnami/charts/pull/29472))
+* [bitnami/postgresql] Release 16.0.0 ([#29723](https://github.com/bitnami/charts/pull/29723))
+
+## <small>15.5.38 (2024-10-01)</small>
+
+* [bitnami/postgresql] Release 15.5.38 (#29681) ([105fcbb](https://github.com/bitnami/charts/commit/105fcbb5c090c6f0b10858cdcc33dfc255c0c7e4)), closes [#29681](https://github.com/bitnami/charts/issues/29681)
+
+## <small>15.5.37 (2024-09-30)</small>
+
+* [bitnami/postgresql] Release 15.5.37 (#29660) ([45cada1](https://github.com/bitnami/charts/commit/45cada10883f6ac5ad4ecaadf3c0d6aa1d9912bb)), closes [#29660](https://github.com/bitnami/charts/issues/29660)
+
+## <small>15.5.36 (2024-09-26)</small>
+
+* [bitnami/postgresql] Release 15.5.36 (#29640) ([074e377](https://github.com/bitnami/charts/commit/074e377c582055f6b7039c63d7d37db5f97b770d)), closes [#29640](https://github.com/bitnami/charts/issues/29640)
+
+## <small>15.5.35 (2024-09-26)</small>
+
+* [bitnami/postgresql] Release 15.5.35 (#29610) ([1f3717a](https://github.com/bitnami/charts/commit/1f3717afe128dea9ff69598952245930b1e7ced6)), closes [#29610](https://github.com/bitnami/charts/issues/29610)
+
+## <small>15.5.34 (2024-09-23)</small>
+
+* [bitnami/postgresql] Release 15.5.34 (#29580) ([1450838](https://github.com/bitnami/charts/commit/1450838c829ccf48edb386b459244bf59f9080fa)), closes [#29580](https://github.com/bitnami/charts/issues/29580)
+
+## <small>15.5.33 (2024-09-23)</small>
+
+* [bitnami/postgresql] Release 15.5.33 (#29579) ([e081955](https://github.com/bitnami/charts/commit/e0819554cf864099182049333aa47f7fd3ba341b)), closes [#29579](https://github.com/bitnami/charts/issues/29579)
+
+## <small>15.5.32 (2024-09-17)</small>
+
+* [bitnami/postgresql] test: :white_check_mark: Improve reliability of ginkgo tests (#29472) ([c43177e](https://github.com/bitnami/charts/commit/c43177e1b362f27319a215c7394bcb612bed4924)), closes [#29472](https://github.com/bitnami/charts/issues/29472)
 
 ## <small>15.5.31 (2024-09-13)</small>
 

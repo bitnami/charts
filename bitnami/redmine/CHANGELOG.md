@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.0.5 (2024-09-16)
+## 29.0.6 (2024-09-19)
 
-* [bitnami/redmine] Release 29.0.5 ([#29436](https://github.com/bitnami/charts/pull/29436))
+* [bitnami/redmine] Release 29.0.6 ([#29526](https://github.com/bitnami/charts/pull/29526))
+
+## <small>29.0.5 (2024-09-16)</small>
+
+* [bitnami/redmine] Release 29.0.5 (#29436) ([462c294](https://github.com/bitnami/charts/commit/462c294bef1d2bc1047627532ebe80b9ea849cf2)), closes [#29436](https://github.com/bitnami/charts/issues/29436)
 
 ## <small>29.0.4 (2024-08-22)</small>
 

@@ -1,8 +1,32 @@
 # Changelog
 
-## 1.0.8 (2024-09-13)
+## 1.0.14 (2024-10-01)
 
-* [bitnami/chainloop] Release 1.0.8 ([#29402](https://github.com/bitnami/charts/pull/29402))
+* [bitnami/chainloop] Release 1.0.14 ([#29685](https://github.com/bitnami/charts/pull/29685))
+
+## <small>1.0.13 (2024-09-30)</small>
+
+* [bitnami/chainloop] Release 1.0.13 (#29663) ([8aceafc](https://github.com/bitnami/charts/commit/8aceafcd54e0973de53cc77b138f3a8714473be2)), closes [#29663](https://github.com/bitnami/charts/issues/29663)
+
+## <small>1.0.12 (2024-09-23)</small>
+
+* [bitnami/chainloop] Release 1.0.12 (#29575) ([bd2cb3c](https://github.com/bitnami/charts/commit/bd2cb3c6703554b7535e2ca062a7843c2fabb319)), closes [#29575](https://github.com/bitnami/charts/issues/29575)
+
+## <small>1.0.11 (2024-09-19)</small>
+
+* [bitnami/chainloop] Release 1.0.11 (#29540) ([c9af6c6](https://github.com/bitnami/charts/commit/c9af6c64d4f54e2f4bae59a0b4d95203e666cc4e)), closes [#29540](https://github.com/bitnami/charts/issues/29540)
+
+## <small>1.0.10 (2024-09-19)</small>
+
+* [bitnami/chainloop] Release 1.0.10 (#29538) ([fb64b3a](https://github.com/bitnami/charts/commit/fb64b3a038bd6cf15aa6ff53733611d0b46db918)), closes [#29538](https://github.com/bitnami/charts/issues/29538)
+
+## <small>1.0.9 (2024-09-19)</small>
+
+* [bitnami/chainloop] Release 1.0.9 (#29506) ([ea6a6a9](https://github.com/bitnami/charts/commit/ea6a6a963f9c8a01fc9425301263560b69b79c6d)), closes [#29506](https://github.com/bitnami/charts/issues/29506)
+
+## <small>1.0.8 (2024-09-13)</small>
+
+* [bitnami/chainloop] Release 1.0.8 (#29402) ([39ef9f2](https://github.com/bitnami/charts/commit/39ef9f2a38dc67dd9b926bc778292c083814e328)), closes [#29402](https://github.com/bitnami/charts/issues/29402)
 
 ## <small>1.0.7 (2024-09-10)</small>
 

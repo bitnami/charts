@@ -1,8 +1,16 @@
 # Changelog
 
-## 8.0.11 (2024-09-04)
+## 8.0.13 (2024-09-25)
 
-* [bitnami/matomo] add serviceAccountName parameter to CronJob pods ([#29182](https://github.com/bitnami/charts/pull/29182))
+* [bitnami/matomo] Release 8.0.13 ([#29605](https://github.com/bitnami/charts/pull/29605))
+
+## <small>8.0.12 (2024-09-19)</small>
+
+* [bitnami/matomo] Release 8.0.12 (#29522) ([2f7ff7c](https://github.com/bitnami/charts/commit/2f7ff7c36bf21598bd1d8b6b7843213a21d4df47)), closes [#29522](https://github.com/bitnami/charts/issues/29522)
+
+## <small>8.0.11 (2024-09-04)</small>
+
+* [bitnami/matomo] add serviceAccountName parameter to CronJob pods (#29182) ([dafec18](https://github.com/bitnami/charts/commit/dafec184dcd1c57e48f617306d5f345d61a40fd2)), closes [#29182](https://github.com/bitnami/charts/issues/29182)
 
 ## <small>8.0.10 (2024-08-22)</small>
 

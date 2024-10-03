@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.3.21 (2024-09-15)
+## 2.3.23 (2024-10-02)
 
-* [bitnami/gitea] Release 2.3.21 ([#29427](https://github.com/bitnami/charts/pull/29427))
+* [bitnami/gitea] Release 2.3.23 ([#29692](https://github.com/bitnami/charts/pull/29692))
+
+## <small>2.3.22 (2024-09-19)</small>
+
+* [bitnami/gitea] Release 2.3.22 (#29512) ([5b8e97d](https://github.com/bitnami/charts/commit/5b8e97dae372b47f3ff2df5f9826373f3cc778e0)), closes [#29512](https://github.com/bitnami/charts/issues/29512)
+
+## <small>2.3.21 (2024-09-15)</small>
+
+* [bitnami/gitea] Release 2.3.21 (#29427) ([fc69df6](https://github.com/bitnami/charts/commit/fc69df6f756458aa4f2b769460fd43f2249654d8)), closes [#29427](https://github.com/bitnami/charts/issues/29427)
 
 ## <small>2.3.20 (2024-09-11)</small>
 

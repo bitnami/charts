@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.0.1 (2024-09-17)
+## 2.0.4 (2024-10-02)
 
-* [bitnami/seaweedfs] test: :white_check_mark: Improve reliability of ginkgo tests ([#29473](https://github.com/bitnami/charts/pull/29473))
+* [bitnami/seaweedfs] Release 2.0.4 ([#29719](https://github.com/bitnami/charts/pull/29719))
+
+## <small>2.0.3 (2024-09-30)</small>
+
+* [bitnami/seaweedfs] Release 2.0.3 (#29675) ([c077c83](https://github.com/bitnami/charts/commit/c077c839da01b34acd5ffb7b370f542b50fecf20)), closes [#29675](https://github.com/bitnami/charts/issues/29675)
+
+## <small>2.0.2 (2024-09-19)</small>
+
+* [bitnami/seaweedfs] Release 2.0.2 (#29537) ([2c05061](https://github.com/bitnami/charts/commit/2c050617c8d43da601117f7c8fd1945e00962da0)), closes [#29537](https://github.com/bitnami/charts/issues/29537)
+
+## <small>2.0.1 (2024-09-17)</small>
+
+* [bitnami/seaweedfs] test: :white_check_mark: Improve reliability of ginkgo tests (#29473) ([ef52e0d](https://github.com/bitnami/charts/commit/ef52e0d1992e16bed6d9726028b81b917c52bc41)), closes [#29473](https://github.com/bitnami/charts/issues/29473)
 
 ## 2.0.0 (2024-09-16)
 

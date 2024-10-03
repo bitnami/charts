@@ -1,8 +1,16 @@
 # Changelog
 
-## 13.4.21 (2024-09-16)
+## 13.4.23 (2024-10-02)
 
-* [bitnami/jenkins] Release 13.4.21 ([#29444](https://github.com/bitnami/charts/pull/29444))
+* [bitnami/jenkins] Release 13.4.23 ([#29748](https://github.com/bitnami/charts/pull/29748))
+
+## <small>13.4.22 (2024-09-19)</small>
+
+* [bitnami/jenkins] Release 13.4.22 (#29519) ([8b4e9c2](https://github.com/bitnami/charts/commit/8b4e9c2bc7d2751e049c5a7e3df74e1a5355d5d8)), closes [#29519](https://github.com/bitnami/charts/issues/29519)
+
+## <small>13.4.21 (2024-09-16)</small>
+
+* [bitnami/jenkins] Release 13.4.21 (#29444) ([e6c0616](https://github.com/bitnami/charts/commit/e6c0616abed63a5ead68b8e574defe63047c8ba9)), closes [#29444](https://github.com/bitnami/charts/issues/29444)
 
 ## <small>13.4.20 (2024-09-05)</small>
 
