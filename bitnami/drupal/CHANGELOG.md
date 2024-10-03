@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.0.8 (2024-09-29)
+## 20.0.9 (2024-10-03)
 
-* [bitnami/drupal] templates/ingress.yaml: fix wrong www.www tls name ([#29564](https://github.com/bitnami/charts/pull/29564))
+* [bitnami/drupal] Release 20.0.9 ([#29760](https://github.com/bitnami/charts/pull/29760))
+
+## <small>20.0.8 (2024-10-01)</small>
+
+* [bitnami/drupal] templates/ingress.yaml: fix wrong www.www tls name (#29564) ([1eca3e6](https://github.com/bitnami/charts/commit/1eca3e6fd6543df2775265a19cccab9e549b202d)), closes [#29564](https://github.com/bitnami/charts/issues/29564)
 
 ## <small>20.0.7 (2024-09-19)</small>
 
