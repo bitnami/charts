@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.7.1 (2024-10-02)
+
+* [bitnami/grafana-operator] Release 4.7.1 ([#29694](https://github.com/bitnami/charts/pull/29694))
+
 ## 4.7.0 (2024-09-23)
 
-* [bitnami/grafana-operator] Enable env in grafana ([#29553](https://github.com/bitnami/charts/pull/29553))
+* [bitnami/grafana-operator] Enable env in grafana (#29553) ([b88eacd](https://github.com/bitnami/charts/commit/b88eacdd4457665855c5f9981cdbb3ec7b14a493)), closes [#29553](https://github.com/bitnami/charts/issues/29553)
 
 ## <small>4.6.4 (2024-09-19)</small>
 
