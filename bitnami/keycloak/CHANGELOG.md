@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.2.6 (2024-09-19)
+## 23.0.0 (2024-10-02)
 
-* [bitnami/keycloak] Release 22.2.6 ([#29542](https://github.com/bitnami/charts/pull/29542))
+* [bitnami/keycloak] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29735](https://github.com/bitnami/charts/pull/29735))
+
+## <small>22.2.6 (2024-09-19)</small>
+
+* [bitnami/keycloak] Release 22.2.6 (#29542) ([754f9e2](https://github.com/bitnami/charts/commit/754f9e2365ab6d0786a997e4d582e2b6ce92c237)), closes [#29542](https://github.com/bitnami/charts/issues/29542)
 
 ## <small>22.2.5 (2024-09-16)</small>
 

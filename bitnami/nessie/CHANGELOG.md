@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.34 (2024-10-01)
+## 1.0.0 (2024-10-02)
 
-* [bitnami/nessie] Release 0.1.34 ([#29679](https://github.com/bitnami/charts/pull/29679))
+* [bitnami/nessie] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29741](https://github.com/bitnami/charts/pull/29741))
+
+## <small>0.1.34 (2024-10-01)</small>
+
+* [bitnami/nessie] Release 0.1.34 (#29679) ([3792cc1](https://github.com/bitnami/charts/commit/3792cc13fac27350bf3068105caabe86caa11ac5)), closes [#29679](https://github.com/bitnami/charts/issues/29679)
 
 ## <small>0.1.33 (2024-10-01)</small>
 
