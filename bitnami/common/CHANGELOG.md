@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.24.0 (2024-09-18)
+## 2.23.1 (2024-10-03)
 
 * [bitnami/common] Add the ability to specify namespaces for affinity ([#29479](https://github.com/bitnami/charts/pull/29479))
+
+## 2.24.0 (2024-10-03)
+
+* [bitnami/common] Add common.tplvalues.merge-overwrite helper (#29668) ([611b2a5](https://github.com/bitnami/charts/commit/611b2a59e06feaac878b3b218fd848a687216158)), closes [#29668](https://github.com/bitnami/charts/issues/29668)
 
 ## 2.23.0 (2024-09-13)
 
