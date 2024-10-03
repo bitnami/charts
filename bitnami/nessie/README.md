@@ -596,6 +596,12 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nessi
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+## Upgrading
+
+### To 1.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x.  Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
+
 ## License
 
 Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
