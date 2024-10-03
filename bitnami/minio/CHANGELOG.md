@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.7.14 (2024-10-02)
+## 14.7.15 (2024-10-02)
 
-* [bitnami/minio] Release 14.7.14 ([#29708](https://github.com/bitnami/charts/pull/29708))
+* [bitnami/minio] Release 14.7.15 ([#29759](https://github.com/bitnami/charts/pull/29759))
+
+## <small>14.7.14 (2024-10-02)</small>
+
+* [bitnami/minio] Release 14.7.14 (#29708) ([f6ae185](https://github.com/bitnami/charts/commit/f6ae1859c75baed3eaa1c459bbf7e0e0605fa560)), closes [#29708](https://github.com/bitnami/charts/issues/29708)
 
 ## <small>14.7.13 (2024-09-26)</small>
 

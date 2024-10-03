@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.10 (2024-09-23)
+## 20.0.0 (2024-10-02)
 
-* [bitnami/airflow] Release 19.0.10 ([#29581](https://github.com/bitnami/charts/pull/29581))
+* [bitnami/airflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29727](https://github.com/bitnami/charts/pull/29727))
+
+## <small>19.0.10 (2024-09-23)</small>
+
+* [bitnami/airflow] Release 19.0.10 (#29581) ([c429dd7](https://github.com/bitnami/charts/commit/c429dd7864d0087bbc0d071ff7c9c4f6066f87b9)), closes [#29581](https://github.com/bitnami/charts/issues/29581)
 
 ## <small>19.0.9 (2024-09-19)</small>
 
