@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.10 (2024-10-03)
+## 1.3.11 (2024-10-03)
 
-* [bitnami/opensearch] Fix typo in dashboards.fullname helper ([#29645](https://github.com/bitnami/charts/pull/29645))
+* [bitnami/opensearch] Release 1.3.11 ([#29768](https://github.com/bitnami/charts/pull/29768))
+
+## <small>1.3.10 (2024-10-03)</small>
+
+* [bitnami/opensearch] Fix typo in dashboards.fullname helper (#29645) ([5660c8c](https://github.com/bitnami/charts/commit/5660c8cee2e75a37d3b9496e69700bb1e22b8607)), closes [#29645](https://github.com/bitnami/charts/issues/29645)
 
 ## <small>1.3.9 (2024-10-02)</small>
 
