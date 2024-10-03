@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.4.0 (2024-10-02)
+## 6.4.0 (2024-10-03)
 
 * [bitnami/influxdb] Set default updateStrategy to Recreate ([#29746](https://github.com/bitnami/charts/pull/29746))
 
