@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.3.19 (2024-10-03)
+## 21.3.20 (2024-10-03)
 
-* [bitnami/elasticsearch] Release 21.3.19 ([#29764](https://github.com/bitnami/charts/pull/29764))
+* [bitnami/elasticsearch] Release 21.3.20 ([#29765](https://github.com/bitnami/charts/pull/29765))
+
+## <small>21.3.19 (2024-10-03)</small>
+
+* [bitnami/elasticsearch] Release 21.3.19 (#29764) ([8af879a](https://github.com/bitnami/charts/commit/8af879a0b69f5ed056fbfe63ed1f26eb4aff5d0d)), closes [#29764](https://github.com/bitnami/charts/issues/29764)
 
 ## <small>21.3.18 (2024-09-26)</small>
 
