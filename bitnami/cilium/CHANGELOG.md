@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.2.2 (2024-09-06)
+## 1.2.4 (2024-10-01)
 
-* [bitnami/cilium] Rollout restart Cilium sub-components for better VIB reliability ([#29268](https://github.com/bitnami/charts/pull/29268))
+* [bitnami/cilium] Release 1.2.4 ([#29686](https://github.com/bitnami/charts/pull/29686))
+
+## <small>1.2.3 (2024-09-26)</small>
+
+* [bitnami/cilium] Release 1.2.3 (#29622) ([2622531](https://github.com/bitnami/charts/commit/26225310f448708843d71ab9abe12c5e3d57a697)), closes [#29622](https://github.com/bitnami/charts/issues/29622)
+
+## <small>1.2.2 (2024-09-06)</small>
+
+* [bitnami/cilium] Rollout restart Cilium sub-components for better VIB reliability (#29268) ([a8eb883](https://github.com/bitnami/charts/commit/a8eb883b0e032302e69343c1e7135e6558aab634)), closes [#29268](https://github.com/bitnami/charts/issues/29268)
 
 ## <small>1.2.1 (2024-09-05)</small>
 

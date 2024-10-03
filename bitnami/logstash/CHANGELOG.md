@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.4 (2024-09-06)
+## 6.3.5 (2024-09-26)
 
-* [bitnami/logstash] fix #29129 missing protocol in networkPolicy ([#29277](https://github.com/bitnami/charts/pull/29277))
+* [bitnami/logstash] Release 6.3.5 ([#29633](https://github.com/bitnami/charts/pull/29633))
+
+## <small>6.3.4 (2024-09-11)</small>
+
+* [bitnami/logstash] fix #29129 missing protocol in networkPolicy (#29277) ([3501538](https://github.com/bitnami/charts/commit/35015385d5abc694ceafb77f232303cffcb6f2e3)), closes [#29129](https://github.com/bitnami/charts/issues/29129) [#29277](https://github.com/bitnami/charts/issues/29277) [#29129](https://github.com/bitnami/charts/issues/29129)
 
 ## <small>6.3.3 (2024-09-06)</small>
 
