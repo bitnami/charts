@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.6 (2024-09-30)
+## 8.0.0 (2024-10-02)
 
-* [bitnami/mastodon] Release 7.0.6 ([#29672](https://github.com/bitnami/charts/pull/29672))
+* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29739](https://github.com/bitnami/charts/pull/29739))
+
+## <small>7.0.6 (2024-09-30)</small>
+
+* [bitnami/mastodon] Release 7.0.6 (#29672) ([dddf994](https://github.com/bitnami/charts/commit/dddf994e3793539769ffe28ec9c7f961a8711a19)), closes [#29672](https://github.com/bitnami/charts/issues/29672)
 
 ## <small>7.0.5 (2024-09-19)</small>
 
