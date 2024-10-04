@@ -982,6 +982,21 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `dashboards.persistence.selector`                              | Selector to match an existing Persistent Volume for OpenSearch data PVC                                                                                                                                                                 | `{}`                                    |
 | `dashboards.persistence.dataSource`                            | Custom PVC data source                                                                                                                                                                                                                  | `{}`                                    |
 
+### OpenSearch Snapshots Parameters
+
+| Name                                  | Description                                                                                             | Value               |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
+| `snapshots.nameOverride`              | String to partially override common.names.fullname                                                      | `""`                |
+| `snapshots.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                       | `false`             |
+| `snapshots.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
+| `snapshots.persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                |
+| `snapshots.persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                |
+| `snapshots.persistence.accessModes`   | Persistent Volume Access Modes                                                                          | `["ReadWriteMany"]` |
+| `snapshots.persistence.size`          | Size of data volume                                                                                     | `8Gi`               |
+| `snapshots.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
+| `snapshots.persistence.selector`      | Selector to match an existing Persistent Volume for OpenSearch data PVC                                 | `{}`                |
+| `snapshots.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console

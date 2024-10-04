@@ -1,0 +1,36 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.snapshots.persistence.enabled (not .Values.snapshots.persistence.existingClaim) -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "opensearch.snapshots.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels .Values.snapshots.persistence.labels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: snapshots
+  annotations:
+    helm.sh/resource-policy: keep
+  {{- if or .Values.snapshots.persistence.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.snapshots.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+  {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.snapshots.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.snapshots.persistence.size | quote }}
+  {{- if .Values.snapshots.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.snapshots.persistence.selector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.snapshots.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.snapshots.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.snapshots.persistence "global" .Values.global) | nindent 2 }}
+{{- end -}}

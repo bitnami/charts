@@ -822,3 +822,12 @@ Return true if a TLS credentials secret object should be created
     {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create a default fully qualified snapshots name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "opensearch.snapshots.fullname" -}}
+{{- $name := default "snapshots" .Values.snapshots.nameOverride -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
