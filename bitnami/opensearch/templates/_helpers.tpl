@@ -829,7 +829,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "opensearch.snapshots.fullname" -}}
 {{- $name := default "snapshots" .Values.snapshots.nameOverride -}}
+{{- if .Values.snapshots.fullnameOverride -}}
+{{- .Values.snapshots.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -837,4 +841,25 @@ Create a global mount path for snapshots volume based on repo path
 */}}
 {{- define "opensearch.snapshots.mountPath" -}}
 {{- required "Value snapshotRepoPath must be set!" $.Values.snapshotRepoPath -}}
+{{- end -}}
+
+{{/*
+Create name for snapshot API repo data ConfigMap
+*/}}
+{{- define "opensearch.snapshots.repoDataConfigMap" -}}
+{{- printf "%s-repo-data" (include "opensearch.snapshots.fullname" $) -}}
+{{- end -}}
+
+{{/*
+Create name for snapshot API policy data ConfigMap
+*/}}
+{{- define "opensearch.snapshots.policyDataConfigMap" -}}
+{{- printf "%s-policy-data" (include "opensearch.snapshots.fullname" $) -}}
+{{- end -}}
+
+{{/*
+Return the proper Opensearch Snapshots image name
+*/}}
+{{- define "opensearch.snapshots.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.snapshots.image "global" .Values.global) }}
 {{- end -}}
