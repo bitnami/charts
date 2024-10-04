@@ -94,17 +94,13 @@ initScriptsSecret=special-scripts-sensitive
 
 As it's described in the [official documentation](https://opensearch.org/docs/latest/tuning-your-cluster/availability-and-recovery/snapshots/snapshot-restore/#register-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
 
-This chart allows you to configure OpenSearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every OpenSearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Persistent Volume:
+This chart allows you to configure OpenSearch to use a shared file system to store snapshots.
+To do so, enable persistence and set the parameter `snapshotRepoPath` with the path where the volume should be mounted:
 
 ```yaml
-extraVolumes:
-  - name: snapshot-repository
-    nfs:
-      server: nfs.example.com # Please change this to your NFS server
-      path: /share1
-extraVolumeMounts:
-  - name: snapshot-repository
-    mountPath: /snapshots
+snapshots:
+  persistence:
+    enabled: true
 snapshotRepoPath: "/snapshots"
 ```
 
