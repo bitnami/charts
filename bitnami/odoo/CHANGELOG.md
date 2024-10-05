@@ -1,8 +1,12 @@
 # Changelog
 
-## 27.0.0 (2024-10-02)
+## 27.0.1 (2024-10-05)
 
-* [bitnami/odoo] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29742](https://github.com/bitnami/charts/pull/29742))
+* [bitnami/odoo] Release 27.0.1 ([#29781](https://github.com/bitnami/charts/pull/29781))
+
+## 27.0.0 (2024-10-03)
+
+* [bitnami/odoo] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29742) ([a33fef2](https://github.com/bitnami/charts/commit/a33fef227991a5e93259a4ec024b2b020084c718)), closes [#29742](https://github.com/bitnami/charts/issues/29742)
 
 ## <small>26.2.18 (2024-09-19)</small>
 
