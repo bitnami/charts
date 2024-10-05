@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.0.2 (2024-10-04)
+## 15.0.2 (2024-10-05)
 
 * [Bitnami/rabbitmq] - Fix duplicate key issue with Helm/FluxCD integration ([#29780](https://github.com/bitnami/charts/pull/29780))
 
