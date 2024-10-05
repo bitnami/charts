@@ -678,9 +678,9 @@ grafana:
   ## e.g:
   ## envFrom:
   ## - configMapRef:
-  ##   name: grafana-configmap
+  ##     name: grafana-configmap
   ## - secretRef:
-  ##   name: grafana-secrets
+  ##     name: grafana-secrets
   ##
   envFrom: []
   ## The grafana-operator client-configuration for this grafana instance
