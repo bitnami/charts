@@ -1,5 +1,9 @@
 # Changelog
 
+## <small>30.1.5 (2024-10-05)</small>
+
+* [bitnami/kafka] Update default value of `heapOpts` to fit generated value of `Containers.kafka.Limits.memory` while utilize its increase ([#29670](https://github.com/bitnami/charts/issues/29670))
+
 ## 30.1.4 (2024-09-22)
 
 * Update values.yaml ([#29557](https://github.com/bitnami/charts/pull/29557))
