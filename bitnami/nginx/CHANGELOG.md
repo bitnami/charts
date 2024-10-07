@@ -1,8 +1,12 @@
 # Changelog
 
+## 18.2.1 (2024-09-29)
+
+* [bitnami/nginx] templates/ingress.yaml: fix wrong www.www tls name ([#29563](https://github.com/bitnami/charts/pull/29563))
+
 ## 18.2.0 (2024-09-20)
 
-* [bitnami/nginx] stream server blocks ([#29491](https://github.com/bitnami/charts/pull/29491))
+* [bitnami/nginx] stream server blocks (#29491) ([89e5604](https://github.com/bitnami/charts/commit/89e5604be18dff45ac2da9ff48383b97cb20a23d)), closes [#29491](https://github.com/bitnami/charts/issues/29491)
 
 ## <small>18.1.15 (2024-09-19)</small>
 

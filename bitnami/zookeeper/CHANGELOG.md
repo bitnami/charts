@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.14 (2024-09-23)
+## 13.4.15 (2024-10-02)
 
-* [bitnami/zookeeper] Drop unused `getValueFromSecret` local helper ([#29440](https://github.com/bitnami/charts/pull/29440))
+* [bitnami/zookeeper] Expose appProtocol, scheme, and tlsConfig for Istio compatibility ([#29683](https://github.com/bitnami/charts/pull/29683))
+
+## <small>13.4.14 (2024-09-23)</small>
+
+* [bitnami/zookeeper] Drop unused `getValueFromSecret` local helper (#29440) ([630e4cb](https://github.com/bitnami/charts/commit/630e4cb5e4af4fda0bc633cd9ffe3930a93f13b3)), closes [#29440](https://github.com/bitnami/charts/issues/29440)
 
 ## <small>13.4.13 (2024-09-17)</small>
 
