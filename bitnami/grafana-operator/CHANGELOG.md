@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.7.2 (2024-10-05)
+## 4.7.2 (2024-10-07)
 
 * [bitnami/grafana-operator] Fixed envFrom examples ([#29783](https://github.com/bitnami/charts/pull/29783))
 
