@@ -194,7 +194,8 @@ contour:
   ## @param contour.envoyServiceNamespace Namespace of the envoy service to inspect for Ingress status details.
   ##
   envoyServiceNamespace: ""
-  ## @param contour.envoyServiceName Name of the envoy service to inspect for Ingress status details.
+  ## Name of the envoy service to inspect for Ingress status details.
+  ## @param contour.envoyServiceName DEPRECATED: use envoy.service.name
   ##
   envoyServiceName: ""
   ## @param contour.leaderElectionResourceName Name of the contour (Lease) leader election will lease.
