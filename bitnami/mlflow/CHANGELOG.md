@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.0 (2024-10-02)
+## 2.0.1 (2024-10-07)
 
-* [bitnami/mlflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29740](https://github.com/bitnami/charts/pull/29740))
+* bitnami/mlflow: fix mlflow external s3 host example ([#29794](https://github.com/bitnami/charts/pull/29794))
+
+## 2.0.0 (2024-10-03)
+
+* [bitnami/mlflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29740) ([366ae2b](https://github.com/bitnami/charts/commit/366ae2be83024c1fdbf09db44c6e99057e67c150)), closes [#29740](https://github.com/bitnami/charts/issues/29740)
 
 ## <small>1.5.7 (2024-09-19)</small>
 
