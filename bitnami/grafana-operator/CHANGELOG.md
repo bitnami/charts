@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.7.1 (2024-10-02)
+## 4.7.2 (2024-10-07)
 
-* [bitnami/grafana-operator] Release 4.7.1 ([#29694](https://github.com/bitnami/charts/pull/29694))
+* [bitnami/grafana-operator] Fixed envFrom examples ([#29783](https://github.com/bitnami/charts/pull/29783))
+
+## <small>4.7.1 (2024-10-02)</small>
+
+* [bitnami/grafana-operator] Release 4.7.1 (#29694) ([0a1e9b7](https://github.com/bitnami/charts/commit/0a1e9b7a0d44c76d7a7edef1d72e6e6ba968e885)), closes [#29694](https://github.com/bitnami/charts/issues/29694)
 
 ## 4.7.0 (2024-09-23)
 
