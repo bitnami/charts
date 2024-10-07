@@ -1,6 +1,6 @@
 # Changelog
 
-## 30.1.5 (2024-10-05)
+## 30.1.5 (2024-10-07)
 
 * [bitnami/kafka] Update default value of `heapOpts` to fit Kafka pod RAM limit while utilize its increase (#29670) ([#29782](https://github.com/bitnami/charts/pull/29782))
 
