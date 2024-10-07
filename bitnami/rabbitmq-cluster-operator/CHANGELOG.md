@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.23 (2024-09-24)
+## 4.3.24 (2024-10-02)
 
-* [bitnami/rabbitmq-cluster-operator] Add PodDistruptionBidget (PBDs) ([#29578](https://github.com/bitnami/charts/pull/29578))
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.24 ([#29717](https://github.com/bitnami/charts/pull/29717))
+
+## <small>4.3.23 (2024-09-24)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Add PodDistruptionBidget (PBDs) (#29578) ([1913960](https://github.com/bitnami/charts/commit/19139606635567e911b28b91ce2f11301a23a829)), closes [#29578](https://github.com/bitnami/charts/issues/29578)
 
 ## <small>4.3.22 (2024-09-06)</small>
 

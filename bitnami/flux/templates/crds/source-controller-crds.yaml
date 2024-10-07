@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/source-controller/releases/download/v{version}/source-controller.crds.yaml
-# Version: 1.4.0
+# Version: 1.4.1
 # VersionOf: fluxcd-source-controller
 # Conditional: .Values.sourceController.installCRDs
 {{- if .Values.sourceController.installCRDs }}
@@ -1092,7 +1092,6 @@ spec:
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
                 type: string
               provider:
-                default: generic
                 description: |-
                   Provider used for authentication, can be 'azure', 'generic'.
                   When not specified, defaults to 'generic'.
