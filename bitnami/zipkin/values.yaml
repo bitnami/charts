@@ -112,7 +112,7 @@ javaOpts: ""
 image:
   registry: docker.io
   repository: bitnami/zipkin
-  tag: 3.4.1-debian-12-r0
+  tag: 3.4.1-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -690,7 +690,7 @@ defaultInitContainers:
     image:
       registry: docker.io
       repository: bitnami/cassandra
-      tag: 4.1.6-debian-12-r3
+      tag: 5.0.1-debian-12-r0
       pullPolicy: IfNotPresent
       pullSecrets: []
       debug: false

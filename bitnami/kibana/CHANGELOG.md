@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.22 (2024-09-19)
+## 11.2.23 (2024-09-26)
 
-* [bitnami/kibana] Release 11.2.22 ([#29520](https://github.com/bitnami/charts/pull/29520))
+* [bitnami/kibana] Release 11.2.23 ([#29632](https://github.com/bitnami/charts/pull/29632))
+
+## <small>11.2.22 (2024-09-19)</small>
+
+* [bitnami/kibana] Release 11.2.22 (#29520) ([4f52c71](https://github.com/bitnami/charts/commit/4f52c710630ad665108878950047635ce75ad35e)), closes [#29520](https://github.com/bitnami/charts/issues/29520)
 
 ## <small>11.2.21 (2024-09-13)</small>
 

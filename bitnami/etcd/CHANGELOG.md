@@ -1,8 +1,16 @@
 # Changelog
 
-## 10.2.17 (2024-09-17)
+## 10.2.19 (2024-10-02)
 
-* [bitnami/etcd] test: :white_check_mark: Improve reliability of ginkgo tests ([#29476](https://github.com/bitnami/charts/pull/29476))
+* [bitnami/etcd] Release 10.2.19 ([#29689](https://github.com/bitnami/charts/pull/29689))
+
+## <small>10.2.18 (2024-09-23)</small>
+
+* [bitnami/etcd] Release 10.2.18 (#29567) ([4c79d16](https://github.com/bitnami/charts/commit/4c79d16b6a975868603490473c50dc709ca51b9e)), closes [#29567](https://github.com/bitnami/charts/issues/29567)
+
+## <small>10.2.17 (2024-09-17)</small>
+
+* [bitnami/etcd] test: :white_check_mark: Improve reliability of ginkgo tests (#29476) ([03fc421](https://github.com/bitnami/charts/commit/03fc4212a65b2af824cc32e7d4b19dd48686b947)), closes [#29476](https://github.com/bitnami/charts/issues/29476)
 
 ## <small>10.2.16 (2024-09-12)</small>
 

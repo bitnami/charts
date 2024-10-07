@@ -53,8 +53,8 @@ spec:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: master
-    {{- if .Values.master.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.master.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- if .Values.worker.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.worker.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:

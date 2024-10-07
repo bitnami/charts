@@ -857,7 +857,7 @@ controller:
   ## Kafka Pod Disruption Budget
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
   ## @param controller.pdb.create Deploy a pdb object for the Kafka pod
-  ## @param controller.pdb.minAvailable Maximum number/percentage of unavailable Kafka replicas
+  ## @param controller.pdb.minAvailable Minimum number/percentage of available Kafka replicas
   ## @param controller.pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
   ##
   pdb:

@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.0.4 (2024-09-11)
+## 11.0.6 (2024-10-02)
 
-* [bitnami/redis-cluster] fix: add apiVersion and kind to volumeClaimTemplates ([#29358](https://github.com/bitnami/charts/pull/29358))
+* [bitnami/redis-cluster] Release 11.0.6 ([#29755](https://github.com/bitnami/charts/pull/29755))
+
+## <small>11.0.5 (2024-09-30)</small>
+
+* [bitnami/redis-cluster] Release 11.0.5 (#29657) ([d8e686d](https://github.com/bitnami/charts/commit/d8e686d691541b3f570ae8a01d0f5128ea99a50a)), closes [#29657](https://github.com/bitnami/charts/issues/29657)
+
+## <small>11.0.4 (2024-09-12)</small>
+
+* [bitnami/redis-cluster] fix: add apiVersion and kind to volumeClaimTemplates (#29358) ([c96e854](https://github.com/bitnami/charts/commit/c96e854ff082fff8007306511664a3fc21745225)), closes [#29358](https://github.com/bitnami/charts/issues/29358)
 
 ## <small>11.0.3 (2024-08-21)</small>
 

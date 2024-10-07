@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.12 (2024-09-06)
+## 3.2.13 (2024-10-02)
 
-* [bitnami/kubernetes-event-exporter] Release 3.2.12 ([#29247](https://github.com/bitnami/charts/pull/29247))
+* [bitnami/kubernetes-event-exporter] Release 3.2.13 ([#29704](https://github.com/bitnami/charts/pull/29704))
+
+## <small>3.2.12 (2024-09-06)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.12 (#29247) ([58f2aa9](https://github.com/bitnami/charts/commit/58f2aa96397d7ca84d7652a26b984ce765a87a36)), closes [#29247](https://github.com/bitnami/charts/issues/29247)
 
 ## <small>3.2.11 (2024-08-27)</small>
 

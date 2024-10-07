@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.1 (2024-09-19)
+## 3.0.2 (2024-10-02)
 
-* [bitnami/jaeger] Release 3.0.1 ([#29535](https://github.com/bitnami/charts/pull/29535))
+* [bitnami/jaeger] Release 3.0.2 ([#29700](https://github.com/bitnami/charts/pull/29700))
+
+## <small>3.0.1 (2024-09-19)</small>
+
+* [bitnami/jaeger] Release 3.0.1 (#29535) ([4163372](https://github.com/bitnami/charts/commit/4163372fd1cb5cd3dc86353dacea5d0ab705171a)), closes [#29535](https://github.com/bitnami/charts/issues/29535)
 
 ## 3.0.0 (2024-09-10)
 

@@ -428,7 +428,10 @@ spec:
         {{- if $.Values.shardsvr.dataNode.extraVolumes }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if $.Values.shardsvr.persistence.enabled }}
+  {{- if not $.Values.shardsvr.persistence.enabled }}
+        - name: datadir
+          emptyDir: {}
+  {{- else }}
   {{- if $.Values.shardsvr.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{ $.Values.shardsvr.persistentVolumeClaimRetentionPolicy.whenDeleted }}
@@ -459,9 +462,6 @@ spec:
           requests:
             storage: {{ $.Values.shardsvr.persistence.size | quote }}
         {{- include "common.storage.class" (dict "persistence" $.Values.shardsvr.persistence "global" $.Values.global) | nindent 8 }}
-  {{- else }}
-    - name: datadir
-      emptyDir: {}
   {{- end }}
 {{- if lt $i (sub $replicas 1) }}
 ---

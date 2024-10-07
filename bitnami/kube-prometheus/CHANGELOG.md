@@ -1,8 +1,17 @@
 # Changelog
 
-## 9.6.1 (2024-09-20)
+## 9.6.3 (2024-10-02)
 
-* [bitnami/kube-prometheus] Release 9.6.1 ([#29549](https://github.com/bitnami/charts/pull/29549))
+* [bitnami/kube-prometheus] Release 9.6.3 ([#29715](https://github.com/bitnami/charts/pull/29715))
+
+## <small>9.6.2 (2024-09-25)</small>
+
+* [bitnami/kube-prometheus] Release 9.6.2 (#29598) ([d34d13a](https://github.com/bitnami/charts/commit/d34d13a2845a29dd31127ac9618f70f201b46576)), closes [#29598](https://github.com/bitnami/charts/issues/29598)
+
+## <small>9.6.1 (2024-09-20)</small>
+
+* [bitnami/kube-prometheus] Fix typo in README.md (#29409) ([3a33ce9](https://github.com/bitnami/charts/commit/3a33ce959867dcb092247913d44859e1c6a54306)), closes [#29409](https://github.com/bitnami/charts/issues/29409)
+* [bitnami/kube-prometheus] Release 9.6.1 (#29549) ([60473da](https://github.com/bitnami/charts/commit/60473dae2a7bfcd6f702482f488f080913e36172)), closes [#29549](https://github.com/bitnami/charts/issues/29549)
 
 ## 9.6.0 (2024-09-13)
 

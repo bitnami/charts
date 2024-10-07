@@ -23,7 +23,9 @@ spec:
   {{- end }}
   revisionHistoryLimit: {{ .Values.receive.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
+  {{- if .Values.receive.service.additionalHeadless }}
   serviceName: {{ include "thanos.receive.fullname" . }}-headless
+  {{- end }}
   {{- if .Values.receive.updateStrategy }}
   updateStrategy: {{- toYaml .Values.receive.updateStrategy | nindent 4 }}
   {{- end }}

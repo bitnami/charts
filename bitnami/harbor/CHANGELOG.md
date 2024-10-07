@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.4 (2024-09-19)
+## 24.0.0 (2024-10-02)
 
-* [bitnami/harbor] Fix REGISTRY_HTTP_SECRET encoding when declared on an existing secret ([#29494](https://github.com/bitnami/charts/pull/29494))
+* [bitnami/harbor] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29733](https://github.com/bitnami/charts/pull/29733))
+
+## <small>23.0.4 (2024-09-19)</small>
+
+* [bitnami/harbor] Fix REGISTRY_HTTP_SECRET encoding when declared on an existing secret (#29494) ([1691323](https://github.com/bitnami/charts/commit/169132300077d028414938924d25000cb21e4ffc)), closes [#29494](https://github.com/bitnami/charts/issues/29494)
 
 ## <small>23.0.3 (2024-09-11)</small>
 

@@ -330,7 +330,7 @@ spec:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
             - name: REDIS_ADDR
-              value: {{ printf "%s://127.0.0.1:%g" (ternary "valkeys" "valkey" .Values.tls.enabled) .Values.valkey.containerPorts.valkey | quote }}
+              value: {{ printf "%s://127.0.0.1:%g" (ternary "rediss" "redis" .Values.tls.enabled) .Values.valkey.containerPorts.valkey | quote }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:

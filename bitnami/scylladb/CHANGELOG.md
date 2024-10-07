@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.3 (2024-09-09)
+## 2.0.4 (2024-10-01)
 
-* [bitnami/scylladb] Release 2.0.3 ([#29315](https://github.com/bitnami/charts/pull/29315))
+* [bitnami/scylladb] Release 2.0.4 ([#29592](https://github.com/bitnami/charts/pull/29592))
+
+## <small>2.0.3 (2024-09-09)</small>
+
+* [bitnami/scylladb] Release 2.0.3 (#29315) ([bb6c8e3](https://github.com/bitnami/charts/commit/bb6c8e3e8a7bbf630506ea477681a890bb8d3fa6)), closes [#29315](https://github.com/bitnami/charts/issues/29315)
 
 ## <small>2.0.2 (2024-08-29)</small>
 

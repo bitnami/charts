@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.13 (2024-09-17)
+## 13.4.14 (2024-09-23)
 
-* [bitnami/zookeeper] test: :white_check_mark: Improve reliability of ginkgo tests ([#29475](https://github.com/bitnami/charts/pull/29475))
+* [bitnami/zookeeper] Drop unused `getValueFromSecret` local helper ([#29440](https://github.com/bitnami/charts/pull/29440))
+
+## <small>13.4.13 (2024-09-17)</small>
+
+* [bitnami/zookeeper] test: :white_check_mark: Improve reliability of ginkgo tests (#29475) ([2c66097](https://github.com/bitnami/charts/commit/2c6609778ffdea57b4d0b4aaba193e451e2186bc)), closes [#29475](https://github.com/bitnami/charts/issues/29475)
 
 ## <small>13.4.12 (2024-09-09)</small>
 

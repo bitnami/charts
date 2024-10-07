@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.22 (2024-09-11)
+## 1.3.23 (2024-10-02)
 
-* [bitnami/prometheus] Allow rendering resources values ([#29342](https://github.com/bitnami/charts/pull/29342))
+* [bitnami/prometheus] Release 1.3.23 ([#29716](https://github.com/bitnami/charts/pull/29716))
+
+## <small>1.3.22 (2024-09-11)</small>
+
+* [bitnami/prometheus] Allow rendering resources values (#29342) ([c1d1852](https://github.com/bitnami/charts/commit/c1d185295aeaf8880d2b16c654026e78fefb4cf7)), closes [#29342](https://github.com/bitnami/charts/issues/29342)
 
 ## <small>1.3.21 (2024-09-09)</small>
 

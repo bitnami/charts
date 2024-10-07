@@ -1,8 +1,20 @@
 # Changelog
 
-## 21.3.17 (2024-09-17)
+## 21.3.20 (2024-10-03)
 
-* [bitnami/elasticsearch] test: :white_check_mark: Improve reliability of ginkgo tests ([#29465](https://github.com/bitnami/charts/pull/29465))
+* [bitnami/elasticsearch] Release 21.3.20 ([#29765](https://github.com/bitnami/charts/pull/29765))
+
+## <small>21.3.19 (2024-10-03)</small>
+
+* [bitnami/elasticsearch] Release 21.3.19 (#29764) ([8af879a](https://github.com/bitnami/charts/commit/8af879a0b69f5ed056fbfe63ed1f26eb4aff5d0d)), closes [#29764](https://github.com/bitnami/charts/issues/29764)
+
+## <small>21.3.18 (2024-09-26)</small>
+
+* [bitnami/elasticsearch] Release 21.3.18 (#29634) ([3ae31b7](https://github.com/bitnami/charts/commit/3ae31b7ab6059661bc799f50ea9cdcc0e2acc0db)), closes [#29634](https://github.com/bitnami/charts/issues/29634)
+
+## <small>21.3.17 (2024-09-17)</small>
+
+* [bitnami/elasticsearch] test: :white_check_mark: Improve reliability of ginkgo tests (#29465) ([958ed7f](https://github.com/bitnami/charts/commit/958ed7f0d11d5d91f63948aa050f813f32903f76)), closes [#29465](https://github.com/bitnami/charts/issues/29465)
 
 ## <small>21.3.16 (2024-09-12)</small>
 

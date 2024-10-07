@@ -81,7 +81,7 @@ var _ = Describe("Scylladb", Ordered, func() {
 			_, err = utils.StsRolloutRestart(ctx, c, ss)
 			Expect(err).NotTo(HaveOccurred())
 
-			for i := 0; i < int(origReplicas); i++ {
+			for i := int(origReplicas) - 1; i >= 0; i-- {
 				Eventually(func() (*v1.Pod, error) {
 					return c.CoreV1().Pods(namespace).Get(ctx, fmt.Sprintf("%s-%d", stsName, i), getOpts)
 				}, timeout, PollingInterval).Should(WithTransform(getRestartedAtAnnotation, Not(BeEmpty())))

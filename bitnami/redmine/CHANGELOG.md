@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.0.6 (2024-09-19)
+## 30.0.0 (2024-10-02)
 
-* [bitnami/redmine] Release 29.0.6 ([#29526](https://github.com/bitnami/charts/pull/29526))
+* [bitnami/redmine] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29743](https://github.com/bitnami/charts/pull/29743))
+
+## <small>29.0.6 (2024-09-19)</small>
+
+* [bitnami/redmine] Release 29.0.6 (#29526) ([6af9c32](https://github.com/bitnami/charts/commit/6af9c3276a58da6f825461e32f21cfd54c459f85)), closes [#29526](https://github.com/bitnami/charts/issues/29526)
 
 ## <small>29.0.5 (2024-09-16)</small>
 

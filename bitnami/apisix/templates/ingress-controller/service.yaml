@@ -44,6 +44,9 @@ spec:
   {{- if and (eq .Values.ingressController.service.type "LoadBalancer") (not (empty .Values.ingressController.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.ingressController.service.loadBalancerIP }}
   {{- end }}
+  {{- if .Values.ingressController.service.externalIPs }}
+  externalIPs: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.service.externalIPs "context" $) | nindent 4 }}
+  {{- end }}
   ports:
     - name: http
       port: {{ .Values.ingressController.service.ports.http }}

@@ -71,7 +71,7 @@ spec:
       initContainers:
         {{- include "opensearch.dashboards.copy-default-plugins.initContainer" . | nindent 8 }} 
         {{- if .Values.dashboards.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.initContainers "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: {{ include "opensearch.dashboards.fullname" . }}
