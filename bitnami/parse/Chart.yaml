@@ -16,7 +16,7 @@ appVersion: 7.3.0
 dependencies:
 - name: mongodb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -38,4 +38,4 @@ maintainers:
 name: parse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/parse
-version: 23.2.15
+version: 24.0.0
