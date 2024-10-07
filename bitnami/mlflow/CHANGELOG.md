@@ -2,7 +2,7 @@
 
 ## 2.0.1 (2024-10-07)
 
-* bitnami/mlflow: fix mlflow external s3 host example ([#29794](https://github.com/bitnami/charts/pull/29794))
+* [bitnami/mlflow] fix mlflow external s3 host example ([#29794](https://github.com/bitnami/charts/pull/29794))
 
 ## 2.0.0 (2024-10-03)
 
