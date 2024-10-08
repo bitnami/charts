@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.16 (2024-10-02)
+## 2.1.17 (2024-10-08)
 
-* [bitnami/multus-cni] Release 2.1.16 ([#29709](https://github.com/bitnami/charts/pull/29709))
+* [bitnami/multus-cni] Release 2.1.17 ([#29810](https://github.com/bitnami/charts/pull/29810))
+
+## <small>2.1.16 (2024-10-02)</small>
+
+* [bitnami/multus-cni] Release 2.1.16 (#29709) ([5aa9aa4](https://github.com/bitnami/charts/commit/5aa9aa4bc1cb7aebb8cf2ddfa72fc221da5ebf6f)), closes [#29709](https://github.com/bitnami/charts/issues/29709)
 
 ## <small>2.1.15 (2024-09-16)</small>
 
