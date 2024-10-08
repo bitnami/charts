@@ -37,6 +37,14 @@ spec:
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
+  {{- with .Values.metrics.serviceMonitor.podTargetLabels }}
+  podTargetLabels:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.metrics.serviceMonitor.targetLabels }}
+  targetLabels:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
