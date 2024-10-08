@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.0 (2024-10-02)
+## 2.0.1 (2024-10-08)
 
-* [bitnami/chainloop] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29729](https://github.com/bitnami/charts/pull/29729))
+* [bitnami/chainloop] Release 2.0.1 ([#29823](https://github.com/bitnami/charts/pull/29823))
+
+## 2.0.0 (2024-10-03)
+
+* [bitnami/chainloop] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29729) ([3f44baf](https://github.com/bitnami/charts/commit/3f44baf823f78b5b63c4ab3495733e473d070c0c)), closes [#29729](https://github.com/bitnami/charts/issues/29729)
 
 ## <small>1.0.14 (2024-10-01)</small>
 
