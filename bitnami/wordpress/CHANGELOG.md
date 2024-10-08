@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.1.19 (2024-10-01)
+## 23.1.20 (2024-10-08)
 
-* [bitnami/wordpress] templates/ingress.yaml: fix wrong www.www tls name ([#29562](https://github.com/bitnami/charts/pull/29562))
+* [bitnami/wordpress] Release 23.1.20 ([#29831](https://github.com/bitnami/charts/pull/29831))
+
+## <small>23.1.19 (2024-10-01)</small>
+
+* [bitnami/wordpress] templates/ingress.yaml: fix wrong www.www tls name (#29562) ([6590b93](https://github.com/bitnami/charts/commit/6590b9313eab453bcec62d90e4c11ff5f9873618)), closes [#29562](https://github.com/bitnami/charts/issues/29562)
 
 ## <small>23.1.18 (2024-10-01)</small>
 
