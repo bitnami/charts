@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.27 (2024-10-02)
+## 15.7.28 (2024-10-03)
 
-* [bitnami/thanos] Release 15.7.27 ([#29720](https://github.com/bitnami/charts/pull/29720))
+* [bitnami/thanos] Revert #29673 ([#29763](https://github.com/bitnami/charts/pull/29763))
+
+## <small>15.7.27 (2024-10-02)</small>
+
+* [bitnami/thanos] Release 15.7.27 (#29720) ([cd99907](https://github.com/bitnami/charts/commit/cd999075fe633956019ac142dd7965deba5aea09)), closes [#29720](https://github.com/bitnami/charts/issues/29720)
 
 ## <small>15.7.26 (2024-10-02)</small>
 
