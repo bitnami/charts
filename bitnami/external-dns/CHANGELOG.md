@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.4.0 (2024-10-28)
+
+* [bitnami/external-dns] Add targetLabels option to ServiceMonitor ([#29828](https://github.com/bitnami/charts/pull/29828))
+
 ## 8.3.10 (2024-10-03)
 
 * [bitnami/external-dns] chore: :wrench: :construction_worker: Re-enable CRD automation ([#29266](https://github.com/bitnami/charts/pull/29266))
