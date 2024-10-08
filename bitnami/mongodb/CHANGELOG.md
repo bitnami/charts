@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.0.1 (2024-10-08)
+
+* [bitnami/mongodb] Release 16.0.1 ([#29830](https://github.com/bitnami/charts/pull/29830))
+
 ## 16.0.0 (2024-10-07)
 
-* [bitnami/mongodb] Release 16.0.0 ([#29801](https://github.com/bitnami/charts/pull/29801))
+* [bitnami/mongodb] Release 16.0.0 (#29801) ([5973e5c](https://github.com/bitnami/charts/commit/5973e5c8e6aa766997000d6a49b9be7936298c30)), closes [#29801](https://github.com/bitnami/charts/issues/29801)
 
 ## <small>15.6.26 (2024-09-23)</small>
 
