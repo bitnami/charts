@@ -21,7 +21,7 @@ dependencies:
 - condition: mongodb.enabled
   name: mongodb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -39,4 +39,4 @@ maintainers:
 name: appsmith
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/appsmith
-version: 4.0.10
+version: 5.0.0
