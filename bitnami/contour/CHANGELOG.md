@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.5 (2024-10-08)
+## 19.1.0 (2024-10-10)
 
-* [bitnami/contour]: Fix invalid extraVolumeMounts ([#29817](https://github.com/bitnami/charts/pull/29817))
+* [bitnami/contour] Expose NodePort for the metrics port in the Envoy service ([#29818](https://github.com/bitnami/charts/pull/29818))
+
+## <small>19.0.5 (2024-10-09)</small>
+
+* [bitnami/contour]: Fix invalid extraVolumeMounts (#29817) ([b445bd3](https://github.com/bitnami/charts/commit/b445bd37a6c255363ba790ea37cc380a55f6c49b)), closes [#29817](https://github.com/bitnami/charts/issues/29817)
 
 ## <small>19.0.4 (2024-10-04)</small>
 
