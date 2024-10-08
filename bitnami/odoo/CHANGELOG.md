@@ -1,8 +1,12 @@
 # Changelog
 
-## 27.0.1 (2024-10-05)
+## 28.0.0 (2024-10-08)
 
-* [bitnami/odoo] Release 27.0.1 ([#29781](https://github.com/bitnami/charts/pull/29781))
+* [bitnami/odoo] Release 28.0.0 ([#29820](https://github.com/bitnami/charts/pull/29820))
+
+## <small>27.0.1 (2024-10-05)</small>
+
+* [bitnami/odoo] Release 27.0.1 (#29781) ([5983725](https://github.com/bitnami/charts/commit/59837258ad474817d39f0dd747bac57556fce055)), closes [#29781](https://github.com/bitnami/charts/issues/29781)
 
 ## 27.0.0 (2024-10-03)
 
