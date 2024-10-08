@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.0.10 (2024-10-02)
+## 5.0.0 (2024-10-08)
 
-* [bitnami/appsmith] Release 4.0.10 ([#29752](https://github.com/bitnami/charts/pull/29752))
+* [bitnami/appsmith] Update MongoDB chart to 16.0.0 ([#29805](https://github.com/bitnami/charts/pull/29805))
+
+## <small>4.0.10 (2024-10-02)</small>
+
+* [bitnami/appsmith] Release 4.0.10 (#29752) ([71ea73f](https://github.com/bitnami/charts/commit/71ea73f5897fdacccdc2d7f612b63ceba5fcc770)), closes [#29752](https://github.com/bitnami/charts/issues/29752)
 
 ## <small>4.0.9 (2024-09-26)</small>
 
