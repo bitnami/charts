@@ -1153,10 +1153,12 @@ envoy:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## @param envoy.service.nodePorts.http HTTP Port. If `envoy.service.type` is NodePort and this is non-empty
     ## @param envoy.service.nodePorts.https HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty
+    ## @param envoy.service.nodePorts.metrics Metrics Port. If `envoy.service.type` is NodePort and this is non-empty
     ##
     nodePorts:
       http: ""
       https: ""
+      metrics: ""
     ## @param envoy.service.extraPorts [array] Extra ports to expose (normally used with the `sidecar` value)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
     ##
