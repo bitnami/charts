@@ -21,9 +21,6 @@ spec:
     - name: http-metrics
       port: {{ .Values.metrics.service.port }}
       targetPort: metrics
-      {{- if .Values.metrics.service.appProtocol }}
-      appProtocol: {{ .Values.metrics.service.appProtocol }}
-      {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: zookeeper
