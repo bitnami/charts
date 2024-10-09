@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.0.4 (2024-10-04)
+## 19.0.5 (2024-10-08)
 
-* [bitnami/contour] Release 19.0.4 ([#29688](https://github.com/bitnami/charts/pull/29688))
+* [bitnami/contour]: Fix invalid extraVolumeMounts ([#29817](https://github.com/bitnami/charts/pull/29817))
+
+## <small>19.0.4 (2024-10-04)</small>
+
+* [bitnami/contour] Release 19.0.4 (#29688) ([ad308c2](https://github.com/bitnami/charts/commit/ad308c2fcc162182933038eeff9a8880c0923991)), closes [#29688](https://github.com/bitnami/charts/issues/29688)
 
 ## <small>19.0.3 (2024-09-05)</small>
 
