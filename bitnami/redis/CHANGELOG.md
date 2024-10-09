@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.1.7 (2024-10-02)
+## 20.2.0 (2024-10-04)
 
-* [bitnami/redis] Release 20.1.7 ([#29756](https://github.com/bitnami/charts/pull/29756))
+* [bitnami/redis] add extraPodSpec ([#29725](https://github.com/bitnami/charts/pull/29725))
+
+## <small>20.1.7 (2024-10-02)</small>
+
+* [bitnami/redis] Release 20.1.7 (#29756) ([bc01e03](https://github.com/bitnami/charts/commit/bc01e03cea20cd93fdd43a4fece348aabb3f1ea4)), closes [#29756](https://github.com/bitnami/charts/issues/29756)
 
 ## <small>20.1.6 (2024-10-02)</small>
 
