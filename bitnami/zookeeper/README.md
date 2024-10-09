@@ -366,7 +366,6 @@ As an alternative, you can use any of the preset configurations for pod affinity
 | `metrics.enabled`                          | Enable Prometheus to access ZooKeeper metrics endpoint                                | `false`     |
 | `metrics.service.type`                     | ZooKeeper Prometheus Exporter service type                                            | `ClusterIP` |
 | `metrics.service.port`                     | ZooKeeper Prometheus Exporter service port                                            | `9141`      |
-| `metrics.service.appProtocol`              | Optionally specify the ZooKeeper Prometheus Exporter service appProtocol              | `""`        |
 | `metrics.service.annotations`              | Annotations for Prometheus to auto-discover the metrics endpoint                      | `{}`        |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator         | `false`     |
 | `metrics.serviceMonitor.namespace`         | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)         | `""`        |
