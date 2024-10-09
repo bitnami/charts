@@ -17,7 +17,7 @@ dependencies:
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -38,4 +38,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nessie
 - https://github.com/bitnami/containers/tree/main/bitnami/nessie
 - https://github.com/nessie/nessie
-version: 0.1.34
+version: 1.0.0

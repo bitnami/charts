@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.5 (2024-09-30)
+## 11.0.6 (2024-10-02)
 
-* [bitnami/redis-cluster] Release 11.0.5 ([#29657](https://github.com/bitnami/charts/pull/29657))
+* [bitnami/redis-cluster] Release 11.0.6 ([#29755](https://github.com/bitnami/charts/pull/29755))
+
+## <small>11.0.5 (2024-09-30)</small>
+
+* [bitnami/redis-cluster] Release 11.0.5 (#29657) ([d8e686d](https://github.com/bitnami/charts/commit/d8e686d691541b3f570ae8a01d0f5128ea99a50a)), closes [#29657](https://github.com/bitnami/charts/issues/29657)
 
 ## <small>11.0.4 (2024-09-12)</small>
 

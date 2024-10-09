@@ -126,7 +126,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/cilium
-    tag: 1.16.2-debian-12-r0
+    tag: 1.16.2-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1004,7 +1004,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/cilium-operator
-    tag: 1.16.2-debian-12-r0
+    tag: 1.16.2-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1508,7 +1508,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/cilium-proxy
-    tag: 1.29.9-debian-12-r0
+    tag: 1.29.9-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

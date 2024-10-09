@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.6.26 (2024-09-23)
+## 16.0.1 (2024-10-08)
 
-* [bitnami/mongodb] Fixed arbiter anti affinity rules to prevent it from running on the same node of a primary/secondary replica ([#29565](https://github.com/bitnami/charts/pull/29565))
+* [bitnami/mongodb] Release 16.0.1 ([#29830](https://github.com/bitnami/charts/pull/29830))
+
+## 16.0.0 (2024-10-07)
+
+* [bitnami/mongodb] Release 16.0.0 (#29801) ([5973e5c](https://github.com/bitnami/charts/commit/5973e5c8e6aa766997000d6a49b9be7936298c30)), closes [#29801](https://github.com/bitnami/charts/issues/29801)
+
+## <small>15.6.26 (2024-09-23)</small>
+
+* [bitnami/mongodb] Fixed arbiter anti affinity rules to prevent it from running on the same node of a ([ded7e1f](https://github.com/bitnami/charts/commit/ded7e1f62ddcaba8fdeaf29a485aaf199295ccfc)), closes [#29565](https://github.com/bitnami/charts/issues/29565)
 
 ## <small>15.6.25 (2024-09-19)</small>
 

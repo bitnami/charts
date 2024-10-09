@@ -756,8 +756,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "opensearch.dashboards.fullname" -}}
 {{- $name := default "dashboards" .Values.dashboards.nameOverride -}}
-{{- if .Values.data.fullnameOverride -}}
-{{- .Values.data.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.dashboards.fullnameOverride -}}
+{{- .Values.dashboards.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
