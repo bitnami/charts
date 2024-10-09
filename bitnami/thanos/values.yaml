@@ -721,6 +721,8 @@ query:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
+  customAutoScaling:
+    enabled: false
   ## Thanos Query Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param query.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Query
