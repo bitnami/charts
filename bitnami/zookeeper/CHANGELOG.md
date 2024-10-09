@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.5.0 (2024-10-07)
+## 13.5.0 (2024-10-09)
 
 * [bitnami/zookeeper] Expose appProtocol, scheme, and tlsConfig for Istio compatibility ([#29683](https://github.com/bitnami/charts/pull/29683))
 
