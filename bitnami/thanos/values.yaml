@@ -1975,6 +1975,9 @@ compactor:
   ## @param compactor.logFormat Thanos Compactor log format
   ##
   logFormat: logfmt
+  ## @param compactor.dataDir Thanos Compactor data directory
+  ##
+  dataDir: /data
   ## Resolution and Retention flags
   ## @param compactor.retentionResolutionRaw Resolution and Retention flag
   ## @param compactor.retentionResolution5m Resolution and Retention flag
