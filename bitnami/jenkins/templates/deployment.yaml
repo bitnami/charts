@@ -540,7 +540,7 @@ spec:
               {{- end }}
               {{- if .Values.initScriptsSecret }}
               - secret:
-                  secretName: {{ .Values.initScriptsSecret }}
+                  secretName: {{ print (tpl .Values.initScriptsSecret .) }}
                   defaultMode: 0755
               {{- end }}
         {{- end }}
@@ -554,7 +554,7 @@ spec:
               {{- end }}
               {{- if .Values.initHookScriptsSecret }}
               - secret:
-                  secretName: {{ .Values.initHookScriptsSecret }}
+                  secretName: {{ print (tpl .Values.initHookScriptsSecret .) }}
                   defaultMode: 0755
               {{- end }}
         {{- end }}
