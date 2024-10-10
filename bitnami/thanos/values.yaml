@@ -721,6 +721,9 @@ query:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
+  ## Thanos Query Custom Autoscaling configuration
+  ## @param query.customAutoScaling.enabled Enable custom Autoscaling for Thanos Query
+  ##
   customAutoScaling:
     enabled: false
   ## Thanos Query Pod Disruption Budget configuration
