@@ -137,6 +137,9 @@ tracking:
   ## @param tracking.replicaCount Number of mlflow replicas to deploy
   ##
   replicaCount: 1
+  ## @param tracking.host mlflow tracking host
+  ## 
+  host: "0.0.0.0"
   ## @param tracking.containerPorts.http mlflow HTTP container port
   ##
   containerPorts:
