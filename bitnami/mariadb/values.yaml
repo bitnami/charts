@@ -223,6 +223,7 @@ primary:
     collation-server=utf8_general_ci
     slow_query_log=0
     long_query_time=10.0
+    binlog_expire_logs_seconds=2592000
 
     [client]
     port=3306
@@ -643,6 +644,7 @@ secondary:
     collation-server=utf8_general_ci
     slow_query_log=0
     long_query_time=10.0
+    binlog_expire_logs_seconds=2592000
 
     [client]
     port=3306
