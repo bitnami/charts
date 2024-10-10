@@ -60,7 +60,7 @@ Return a topologyKey definition
 
 {{/*
 Return a soft podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pods.soft" (dict "component" "FOO" "customLabels" .Values.podLabels "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "extraPodAffinityTerms" .Values.extraPodAffinityTerms "namespaces" list "context" $) -}}
+{{ include "common.affinities.pods.soft" (dict "component" "FOO" "customLabels" .Values.podLabels "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "extraPodAffinityTerms" .Values.extraPodAffinityTerms "namespaces" (list "namespace1" "namespace2") "context" $) -}}
 */}}
 {{- define "common.affinities.pods.soft" -}}
 {{- $component := default "" .component -}}
