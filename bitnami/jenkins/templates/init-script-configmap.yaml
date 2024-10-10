@@ -14,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{- range $filename, $content := .Values.initHookScripts }}
+  {{- range $filename, $content := .Values.initScripts }}
   {{ $filename }}: |
     {{- include "common.tplvalues.render" (dict "value" $content "context" $) | nindent 4 }}
   {{- end }}
