@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.2 (2024-10-09)
+## 16.0.3 (2024-10-10)
 
-* [bitnami/mongodb] Release 16.0.2 ([#29855](https://github.com/bitnami/charts/pull/29855))
+* [bitnami/mongodb] Fixed awk script to extract  in order to be more st… ([#29824](https://github.com/bitnami/charts/pull/29824))
+
+## <small>16.0.2 (2024-10-09)</small>
+
+* [bitnami/mongodb] Release 16.0.2 (#29855) ([7fec11a](https://github.com/bitnami/charts/commit/7fec11aa57b1c66cea587219b86081fde3ac0b97)), closes [#29855](https://github.com/bitnami/charts/issues/29855)
 
 ## <small>16.0.1 (2024-10-08)</small>
 
