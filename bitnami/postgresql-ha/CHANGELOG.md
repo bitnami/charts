@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.2.34 (2024-10-09)
+## 14.2.34 (2024-10-10)
 
 * [bitnami/postgresql-ha] Fix pgpool deployment init container security context ([#29857](https://github.com/bitnami/charts/pull/29857))
 
