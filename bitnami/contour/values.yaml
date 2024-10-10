@@ -1174,6 +1174,8 @@ envoy:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param envoy.service.exposeMetrics Setting to expose the metrics port in the service
+    exposeMetrics: false
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
