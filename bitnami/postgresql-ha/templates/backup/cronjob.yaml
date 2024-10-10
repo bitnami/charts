@@ -54,7 +54,7 @@ spec:
             imagePullPolicy: {{ .Values.postgresql.image.pullPolicy | quote }}
             env:
               - name: PGUSER
-                value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
+                value: "postgres"
               {{- if .Values.postgresql.usePasswordFile }}
               - name: PGPASSFILE
                 value: "/opt/bitnami/postgresql/secrets/postgres-password"
@@ -66,7 +66,7 @@ spec:
                     {{- if (include "postgresql-ha.postgresqlCreateSecret" .) }}
                     key: password
                     {{- else }}
-                    {{- if ( index ( lookup "v1" "Secret" (include "common.names.namespace" .) (include "postgresql-ha.postgresqlSecretName" .) ) ".data.postgres-password" ) }}
+                    {{- if ( index ( lookup "v1" "Secret" (include "common.names.namespace" .) (include "postgresql-ha.postgresqlSecretName" .) ) "data.postgres-password" ) }}
                     key: postgres-password
                     {{- else }}
                     key: password
