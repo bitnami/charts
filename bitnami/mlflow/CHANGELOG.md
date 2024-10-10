@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 (2024-10-10)
+* [bitnami/mlflow] Fix: make mlflow tracking host part of values.  ([#29862](https://github.com/bitnami/charts/pull/29862))
+
+
 ## 2.0.0 (2024-10-02)
 
 * [bitnami/mlflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29740](https://github.com/bitnami/charts/pull/29740))
