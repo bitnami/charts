@@ -2,7 +2,7 @@
 
 ## 15.7.29 (2024-10-10)
 
-* Add customAutoScaling flag ([#29849](https://github.com/bitnami/charts/pull/29849))
+*  ([#29849](https://github.com/bitnami/charts/pull/29849))
 
 ## <small>15.7.28 (2024-10-08)</small>
 
