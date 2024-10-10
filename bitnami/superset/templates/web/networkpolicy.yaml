@@ -1,0 +1,87 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.web.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-web" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: superset-web
+    app.kubernetes.io/part-of: superset
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: superset-web
+      app.kubernetes.io/part-of: superset
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    {{- if .Values.web.networkPolicy.allowExternalEgress }}
+    - {}
+    {{- else }}
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        - ports:
+        - port: {{ include "superset.redis.port" . }}
+          {{- if .Values.redis.enabled }}
+          to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: redis
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+          {{- end }}
+    - ports:
+        - port: {{ include "superset.postgresql.port" . }}
+          {{- if .Values.postgresql.enabled }}
+          to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: postgresql
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+          {{- end }}
+    {{- if .Values.web.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.web.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.web.containerPorts.http }}
+      {{- if not .Values.web.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ printf "%s-web" include "common.names.fullname" . }}-client: "true"
+        {{- if .Values.web.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.web.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.web.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.web.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.web.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.web.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}
