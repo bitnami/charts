@@ -142,9 +142,9 @@ Get the initialization scripts ConfigMap name.
 Get the initialization hook scripts ConfigMap name.
 */}}
 {{- define "jenkins.initHookScriptsName" -}}
-{{- if .Values.initScriptsCM -}}
+{{- if .Values.initHookScriptsCM -}}
   {{- printf "%s" (tpl .Values.initHookScriptsCM $) -}}
 {{- else -}}
-  {{- printf "%s-init-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+  {{- printf "%s-init-hook-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
