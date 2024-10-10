@@ -2215,6 +2215,24 @@ backup:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
+    ## @param backup.cronjob.extraEnvVars Array containing extra environment variables
+    ## For example:
+    ##  - name: BEARER_AUTH
+    ##    value: true
+    ##
+    extraEnvVars: []
+    ## @param backup.cronjob.extraEnvVarsCM ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM: ""
+    ## @param backup.cronjob.extraEnvVarsSecret Secret with extra environment variables
+    ##
+    extraEnvVarsSecret: ""
+    ## @param backup.cronjob.extraVolumes Extra volumes to add to the deployment
+    ##
+    extraVolumes: []
+    ## @param backup.cronjob.extraVolumeMounts Extra volume mounts to add to the container. Normally used with `extraVolumes`
+    ##
+    extraVolumeMounts: []
     storage:
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
       ## If defined, PVC must be created manually before volume will be bound
