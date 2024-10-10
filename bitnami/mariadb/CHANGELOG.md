@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.0.8 (2024-10-09)
+## 19.1.0 (2024-10-10)
 
 * [bitnami/mariadb] add default binlog expiry configuration of 30 days ([#29841](https://github.com/bitnami/charts/pull/29841))
 
