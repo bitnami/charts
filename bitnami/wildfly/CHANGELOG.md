@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.0.6 (2024-10-08)
+## 21.0.6 (2024-10-10)
 
 * [bitnami/wildfly] fix annotations merging for management ingress ([#29819](https://github.com/bitnami/charts/pull/29819))
 
