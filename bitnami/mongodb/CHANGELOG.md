@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.3 (2024-10-09)
+## 16.0.3 (2024-10-10)
 
 * [bitnami/mongodb] Fixed awk script to extract  in order to be more st… ([#29824](https://github.com/bitnami/charts/pull/29824))
 
