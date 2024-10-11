@@ -126,3 +126,25 @@ Check if there are rolling tags in the images
 {{- define "jenkins.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- end -}}
+
+{{/*
+Get the initialization scripts ConfigMap name.
+*/}}
+{{- define "jenkins.initScriptsName" -}}
+{{- if .Values.initScriptsCM -}}
+  {{- printf "%s" (tpl .Values.initScriptsCM $) -}}
+{{- else -}}
+  {{- printf "%s-init-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the initialization hook scripts ConfigMap name.
+*/}}
+{{- define "jenkins.initHookScriptsName" -}}
+{{- if .Values.initHookScriptsCM -}}
+  {{- printf "%s" (tpl .Values.initHookScriptsCM $) -}}
+{{- else -}}
+  {{- printf "%s-init-hook-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}

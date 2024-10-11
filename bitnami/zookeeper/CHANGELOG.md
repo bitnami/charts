@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.15 (2024-10-09)
+## 13.5.0 (2024-10-09)
 
-* [bitnami/zookeeper] Release 13.4.15 ([#29850](https://github.com/bitnami/charts/pull/29850))
+* [bitnami/zookeeper] Rename metrics port and expose scheme, and tlsConfig for Istio compatibility ([#29683](https://github.com/bitnami/charts/pull/29683))
+
+## <small>13.4.15 (2024-10-09)</small>
+
+* [bitnami/zookeeper] Release 13.4.15 (#29850) ([f3af6eb](https://github.com/bitnami/charts/commit/f3af6ebad051648b856f45e54e6c86858265b766)), closes [#29850](https://github.com/bitnami/charts/issues/29850)
 
 ## <small>13.4.14 (2024-09-23)</small>
 
