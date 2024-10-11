@@ -1,8 +1,12 @@
 # Changelog
 
+## 5.0.1 (2024-10-11)
+
+* [bitnami/appsmith] Enable redis flush commands when using redis subchart ([#29867](https://github.com/bitnami/charts/pull/29867))
+
 ## 5.0.0 (2024-10-08)
 
-* [bitnami/appsmith] Update MongoDB chart to 16.0.0 ([#29805](https://github.com/bitnami/charts/pull/29805))
+* [bitnami/appsmith] Update MongoDB chart to 16.0.0 (#29805) ([9ce2496](https://github.com/bitnami/charts/commit/9ce24968c5f5d959dc99bce67099e78e54dcfe9e)), closes [#29805](https://github.com/bitnami/charts/issues/29805)
 
 ## <small>4.0.10 (2024-10-02)</small>
 
