@@ -1680,6 +1680,10 @@ redis:
     ##     memory: 1024Mi
     ##
     resources: {}
+    ## @param redis.master.disableCommands Array with Redis commands to disable on master nodes
+    ## Commands will be completely disabled by renaming each to an empty string.
+    ## ref: https://redis.io/topics/security#disabling-of-specific-commands
+    ##
     ## Enable Flush commands (FLUSHDB, FLUSHALL)
     ## Appsmith needs flush when booting
     disableCommands: []
@@ -1692,6 +1696,10 @@ redis:
     password: ""
     existingSecret: ""
   replica:
+    ## @param redis.replica.disableCommands Array with Redis commands to disable on replicas nodes
+    ## Commands will be completely disabled by renaming each to an empty string.
+    ## ref: https://redis.io/topics/security#disabling-of-specific-commands
+    ##
     ## Enable Flush commands (FLUSHDB, FLUSHALL)
     ## Appsmith needs flush when booting
     disableCommands: []

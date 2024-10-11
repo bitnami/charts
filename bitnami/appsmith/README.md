@@ -689,9 +689,11 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `redis.master.service.ports.redis` | Redis port                                                                                                                                                                                                               | `6379`       |
 | `redis.master.resourcesPreset`     | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production). | `nano`       |
 | `redis.master.resources`           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`         |
+| `redis.master.disableCommands`     | Array with Redis commands to disable on master nodes                                                                                                                                                                     | `[]`         |
 | `redis.auth.enabled`               | Enable Redis auth                                                                                                                                                                                                        | `true`       |
 | `redis.auth.password`              | Redis password                                                                                                                                                                                                           | `""`         |
 | `redis.auth.existingSecret`        | Name of a secret containing the Redis password                                                                                                                                                                           | `""`         |
+| `redis.replica.disableCommands`    | Array with Redis commands to disable on master nodes                                                                                                                                                                     | `[]`         |
 
 ### MongoDB sub-chart parameters
 
