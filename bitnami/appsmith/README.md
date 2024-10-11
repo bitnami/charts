@@ -693,7 +693,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `redis.auth.enabled`               | Enable Redis auth                                                                                                                                                                                                        | `true`       |
 | `redis.auth.password`              | Redis password                                                                                                                                                                                                           | `""`         |
 | `redis.auth.existingSecret`        | Name of a secret containing the Redis password                                                                                                                                                                           | `""`         |
-| `redis.replica.disableCommands`    | Array with Redis commands to disable on master nodes                                                                                                                                                                     | `[]`         |
+| `redis.replica.disableCommands`    | Array with Redis commands to disable on replicas nodes                                                                                                                                                                   | `[]`         |
 
 ### MongoDB sub-chart parameters
 
