@@ -1679,6 +1679,9 @@ redis:
     ##     memory: 1024Mi
     ##
     resources: {}
+    ## Enable Flush commands (FLUSHDB, FLUSHALL)
+    ## Appsmith needs flush when booting
+    disableCommands: []
   ## @param redis.auth.enabled Enable Redis auth
   ## @param redis.auth.password Redis password
   ## @param redis.auth.existingSecret Name of a secret containing the Redis password
@@ -1687,6 +1690,10 @@ redis:
     enabled: true
     password: ""
     existingSecret: ""
+  replica:
+    ## Enable Flush commands (FLUSHDB, FLUSHALL)
+    ## Appsmith needs flush when booting
+    disableCommands: []
 ## @section MongoDB sub-chart parameters
 ##
 mongodb:
