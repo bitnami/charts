@@ -1275,12 +1275,12 @@ metrics:
     ## e.g:
     ## - app.kubernetes.io/name
     ##
-    targetLabels: {}
+    targetLabels: []
     ## @param metrics.serviceMonitor.podTargetLabels Used to keep given pod's labels in target
     ## e.g:
     ## - app.kubernetes.io/name
     ##
-    podTargetLabels: {}
+    podTargetLabels: []
     ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
     ##
     annotations: {}
