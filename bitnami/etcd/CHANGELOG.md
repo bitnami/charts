@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.3.0 (2024-10-11)
+## 10.3.0 (2024-10-13)
 
 * [bitnami/etcd]: Allow overriding of snapshot command ([#29873](https://github.com/bitnami/charts/pull/29873))
 
