@@ -121,7 +121,7 @@ data:
       {{- if .Values.externalAccess.externalMaster.enabled }}
         current_primary={{ printf "%s:%d" (.Values.externalAccess.externalMaster.host) ( int .Values.externalAccess.externalMaster.port) }}
       {{- else }}
-        current_primary=$(mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u $MONGODB_ROOT_USER -p $MONGODB_ROOT_PASSWORD{{- end }}{{- if .Values.tls.enabled}} --tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert{{- end }} --eval 'db.runCommand("ismaster")' | awk -F\' '/primary/ {print $2}')
+        current_primary=$(mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u $MONGODB_ROOT_USER -p $MONGODB_ROOT_PASSWORD{{- end }}{{- if .Values.tls.enabled}} --tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert{{- end }} --eval 'db.runCommand("ismaster")' | awk -F\' '/primary:/ {print $2}')
       {{- end }}
       if ! is_empty_value "$current_primary"; then
         info "Detected existing primary: ${current_primary}"

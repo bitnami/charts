@@ -1031,6 +1031,10 @@ helm upgrade $RELEASE_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/kubeapps
 
 If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
 
+### To 17.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x.  Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
+
 ### To 16.0.0
 
 This major updates the Redis&reg; subchart to its newest major, 20.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-2000) you can find more information about the changes introduced in that version.

@@ -1,8 +1,16 @@
 # Changelog
 
+## 1.0.2 (2024-10-03)
+
+* [bitnami/valkey-cluster] Release 1.0.2 ([#29769](https://github.com/bitnami/charts/pull/29769))
+
+## <small>1.0.1 (2024-09-26)</small>
+
+* [bitnami/valkey-cluster] the redis_url for redis_exporter should use rediss/redis scheme, not valkey ([ab5bc91](https://github.com/bitnami/charts/commit/ab5bc9156d158b0808ead47d7d67cf5704ed37ec)), closes [#29589](https://github.com/bitnami/charts/issues/29589)
+
 ## 1.0.0 (2024-09-16)
 
-* [bitnami/valkey-cluster] Release 1.0.0 ([#29450](https://github.com/bitnami/charts/pull/29450))
+* [bitnami/valkey-cluster] Release 1.0.0 (#29450) ([a6c84c2](https://github.com/bitnami/charts/commit/a6c84c2362b2577ce78ead825292e6037e1a2c13)), closes [#29450](https://github.com/bitnami/charts/issues/29450)
 
 ## <small>0.1.11 (2024-09-09)</small>
 

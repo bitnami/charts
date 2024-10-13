@@ -1,8 +1,25 @@
 # Changelog
 
-## 16.0.4 (2024-10-13)
+## <small>16.0.4 (2024-10-13)</small>
 
 * [bitnami/mongodb] fix: initial primary host variable for arbiter and hidden replicas ([#29584](https://github.com/bitnami/charts/pull/29584))
+
+## <small>16.0.3 (2024-10-10)</small>
+
+* [bitnami/mongodb] Fixed awk script to extract  in order to be more st… ([#29824](https://github.com/bitnami/charts/pull/29824))
+
+## <small>16.0.2 (2024-10-09)</small>
+
+* [bitnami/mongodb] Release 16.0.2 (#29855) ([7fec11a](https://github.com/bitnami/charts/commit/7fec11aa57b1c66cea587219b86081fde3ac0b97)), closes [#29855](https://github.com/bitnami/charts/issues/29855)
+
+## <small>16.0.1 (2024-10-08)</small>
+
+* [bitnami/mongodb] Release 16.0.1 (#29830) ([6360c47](https://github.com/bitnami/charts/commit/6360c478136e8c0d58b7bb50e7f507308afc25f6)), closes [#29830](https://github.com/bitnami/charts/issues/29830)
+* [bitnami/mongodb] Update README (#29812) ([6f8a1bf](https://github.com/bitnami/charts/commit/6f8a1bf241a0032a3e44a2ea47f9574f6786d436)), closes [#29812](https://github.com/bitnami/charts/issues/29812)
+
+## 16.0.0 (2024-10-07)
+
+* [bitnami/mongodb] Release 16.0.0 (#29801) ([5973e5c](https://github.com/bitnami/charts/commit/5973e5c8e6aa766997000d6a49b9be7936298c30)), closes [#29801](https://github.com/bitnami/charts/issues/29801)
 
 ## <small>15.6.26 (2024-09-23)</small>
 

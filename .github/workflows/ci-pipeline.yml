@@ -89,6 +89,52 @@ jobs:
             } else {
               core.warning(message);
             }
+  check-images:
+    runs-on: ubuntu-latest
+    needs: [get-chart]
+    name: Look for hardcoded images
+    if: needs.get-chart.outputs.result == 'ok'
+    outputs:
+      result: ${{ steps.check-images.outputs.result }}
+      error: ${{ steps.check-images.outputs.error }}
+    steps:
+      - name: Checkout bitnami/charts
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+          path: charts
+      - id: check-images
+        name: Look for hardcoded images
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          hardcoded_images=()
+          while read -r image; do
+            if [[ -n "$image" && $image != {{*}} ]]; then
+              hardcoded_images+=("${image}")
+            fi
+          done <<< "$(grep -REoh "\s*image:\s+[\"']*.+[\"']*\s*$" "charts/bitnami/${CHART}/templates" | sed "s/image: [\"']*//" | sed "s/[\"']*$//")"
+
+          echo "${hardcoded_images[@]}"
+          if [[ ${#hardcoded_images[@]} -gt 0 ]] ; then
+            echo "error=Found hardcoded images in the chart templates: ${hardcoded_images[@]}" >> $GITHUB_OUTPUT
+            echo "result=fail" >> $GITHUB_OUTPUT
+          else
+            echo "result=ok" >> $GITHUB_OUTPUT
+          fi
+      - id: show-error
+        name: Show error
+        if: ${{ steps.check-images.outputs.result != 'ok' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            let message='${{ steps.check-images.outputs.error }}';
+            if ('${{ steps.check-images.outputs.result }}' === 'fail' ) {
+              core.setFailed(message);
+            } else {
+              core.warning(message);
+            }
   update-pr:
     runs-on: ubuntu-latest
     needs: [get-chart]
@@ -100,14 +146,14 @@ jobs:
     if: needs.get-chart.outputs.result == 'ok'
     steps:
       - name: Checkout bitnami/charts
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           path: charts
       - name: Clone upstream bitnami/charts repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
         with:
           path: upstream-charts
       - name: Setup git configuration
@@ -313,7 +359,7 @@ jobs:
       threshold: ${{ steps.set-output.outputs.threshold }}
     if: needs.get-chart.outputs.result == 'ok'
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
         name: Checkout 'main' branch
         with:
           path: charts-main
@@ -389,7 +435,7 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}

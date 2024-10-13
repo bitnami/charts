@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.5 (2024-09-17)
+## 21.0.6 (2024-10-10)
 
-* [bitnami/wildfly] Release 21.0.5 ([#29487](https://github.com/bitnami/charts/pull/29487))
+* [bitnami/wildfly] fix annotations merging for management ingress ([#29819](https://github.com/bitnami/charts/pull/29819))
+
+## <small>21.0.5 (2024-09-17)</small>
+
+* [bitnami/wildfly] Release 21.0.5 (#29487) ([894aca0](https://github.com/bitnami/charts/commit/894aca0338ff3aa8f19f3ac5d9450d1973c70eb2)), closes [#29487](https://github.com/bitnami/charts/issues/29487)
 
 ## <small>21.0.4 (2024-08-23)</small>
 
