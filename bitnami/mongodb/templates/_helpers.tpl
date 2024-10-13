@@ -47,6 +47,17 @@ Create a default mongo arbiter service name which can be overridden.
 {{- end }}
 
 {{/*
+Create a default mongo hidden service name which can be overridden.
+*/}}
+{{- define "mongodb.hidden.service.nameOverride" -}}
+    {{- if and .Values.hidden.service .Values.hidden.service.nameOverride -}}
+        {{- print .Values.hidden.service.nameOverride -}}
+    {{- else -}}
+        {{- printf "%s-hidden-headless" (include "mongodb.fullname" .) -}}
+    {{- end }}
+{{- end }}
+
+{{/*
 Return the proper MongoDB&reg; image name
 */}}
 {{- define "mongodb.image" -}}
