@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.7.29 (2024-10-13)
+## 15.8.0 (2024-10-14)
 
 * [bitnami/thanos] Add compactor dataDir setting ([#29856](https://github.com/bitnami/charts/pull/29856))
 
