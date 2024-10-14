@@ -73,6 +73,8 @@ spec:
               {{- if .Values.diagnosticMode.enabled }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
               args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else if .Values.disasterRecovery.cronjob.command }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.disasterRecovery.cronjob.command "context" $) | nindent 16 }}
               {{- else }}
               command:
                 - /opt/bitnami/scripts/etcd/snapshot.sh

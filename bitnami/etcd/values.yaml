@@ -914,6 +914,10 @@ disasterRecovery:
     ## @param disasterRecovery.cronjob.serviceAccountName Specifies the service account to use for disaster recovery cronjob
     ##
     serviceAccountName: ""
+    ## @param disasterRecovery.cronjob.command Override default snapshot container command (useful when you want to customize the snapshot logic)
+    ##
+    command: []
+    ##
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim
     ## If defined, PVC must be created manually before volume will be bound

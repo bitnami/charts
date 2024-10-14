@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.19 (2024-10-02)
+## 10.3.0 (2024-10-13)
 
-* [bitnami/etcd] Release 10.2.19 ([#29689](https://github.com/bitnami/charts/pull/29689))
+* [bitnami/etcd]: Allow overriding of snapshot command ([#29873](https://github.com/bitnami/charts/pull/29873))
+
+## <small>10.2.19 (2024-10-02)</small>
+
+* [bitnami/etcd] Release 10.2.19 (#29689) ([624fa30](https://github.com/bitnami/charts/commit/624fa30d7eaaf67557a9dd6ba3393ced2419256b)), closes [#29689](https://github.com/bitnami/charts/issues/29689)
 
 ## <small>10.2.18 (2024-09-23)</small>
 
