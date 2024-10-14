@@ -714,7 +714,13 @@ query:
   ## @param query.autoscaling.maxReplicas Maximum number of Thanos Query replicas
   ## @param query.autoscaling.targetCPU Target CPU utilization percentage
   ## @param query.autoscaling.targetMemory Target Memory utilization percentage
-  ## @param query.autoscaling.targetPodMetrics Target Pod metric name and AverageValue
+  ## @param query.autoscaling.targetPodMetrics [array] List of custom pod metrics name and averageValue to evaluate for scaling
+  ## e.g.
+  ## targetPodMetrics:
+  ## - name: thanos_query_range_query_duration
+  ##   averageValue: 2
+  ## - name: thanos_query_promql_duration_metric
+  ##   averageValue: 0.5
   ##
   autoscaling:
     enabled: false
