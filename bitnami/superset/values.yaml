@@ -1,0 +1,2137 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## e.g:
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
+
+## @section Superset Parameters
+
+## Bitnami Superset image
+## ref: https://hub.docker.com/r/bitnami/superset/tags/
+## @param image.registry [default: REGISTRY_NAME] Superset image registry
+## @param image.repository [default: REPOSITORY_NAME/superset] Superset image repository
+## @skip image.tag Superset image tag (immutable tags are recommended)
+## @param image.digest Superset image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param image.pullPolicy Superset image pull policy
+## @param image.pullSecrets Superset image pull secrets
+## @param image.debug Enable Superset image debug mode
+##
+image:
+  registry: docker.io
+  repository: miruiz145/superset
+  tag: development
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  debug: false
+##
+
+## @param config The name of an existing ConfigMap with your custom configuration for Superset
+##
+config: ""
+## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Superset
+##
+existingConfigmap: ""
+
+## Authentication parameters
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/superset#environment-variables
+##
+auth:
+  ## @param auth.username Username to access web UI
+  ##
+  username: ""
+  ## @param auth.email Username email
+  ##
+  email: ""
+  ## @param auth.password Password to access web UI
+  ##
+  password: ""
+  ## @param auth.secretKey Secret key to run your flask app
+  ## ref: https://superset.apache.org/docs/configuration/configuring-superset/#specifying-a-secret_key
+  ##
+  secretKey: ""
+  ## @param auth.existingSecret Name of an existing secret to use for Superset credentials
+  ## `auth.password` and `auth.secretKey` will be ignored and picked up from this secret
+  ## The secret must contain the keys `superset-password` and `superset-secret-key'
+  ## The value is evaluated as a template
+  ##
+  existingSecret: ""
+
+## Superset Webserver
+##
+web:
+  ## @param web.replicaCount Number of Superset webserver replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param web.containerPorts.http Superset webserver HTTP container port
+  ## @param web.containerPorts.https Superset webserver HTTPS container port
+  ##
+  containerPorts:
+    http: 80
+  ## Configure extra options for Superset webserver containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param web.livenessProbe.enabled Enable livenessProbe on Superset webserver containers
+  ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param web.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param web.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param web.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param web.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 15
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param web.readinessProbe.enabled Enable readinessProbe on Superset webserver containers
+  ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param web.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param web.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 15
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param web.startupProbe.enabled Enable startupProbe on Superset webserver containers
+  ## @param web.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param web.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param web.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param web.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param web.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 60
+    successThreshold: 1
+  ## @param web.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param web.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param web.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Superset webserver resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param web.resourcesPreset Set Superset webserver container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if web.resources is set (web.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param web.resources Set Superset webserver container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param web.podSecurityContext.enabled Enable Superset webserver pods' Security Context
+  ## @param web.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Superset webserver pods
+  ## @param web.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Superset webserver pods
+  ## @param web.podSecurityContext.supplementalGroups Set filesystem extra groups for Superset webserver pods
+  ## @param web.podSecurityContext.fsGroup Set fsGroup in Superset webserver pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param web.containerSecurityContext.enabled Enabled Superset webserver container' Security Context
+  ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset webserver container
+  ## @param web.containerSecurityContext.runAsUser Set runAsUser in Superset webserver container' Security Context
+  ## @param web.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset webserver container' Security Context
+  ## @param web.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset webserver container' Security Context
+  ## @param web.containerSecurityContext.privileged Set privileged in Superset webserver container' Security Context
+  ## @param web.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Superset webserver container' Security Context
+  ## @param web.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Superset webserver container
+  ## @param web.containerSecurityContext.seccompProfile.type Set seccomp profile in Superset webserver container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param web.command Override default Superset webserver container command (useful when using custom images)
+  ##
+  command: []
+  ## @param web.args Override default Superset webserver container args (useful when using custom images)
+  ##
+  args: []
+  ## @param web.automountServiceAccountToken Mount Service Account token in Superset webserver pods
+  ##
+  automountServiceAccountToken: false
+  ## @param web.hostAliases Superset webserver pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param web.deploymentAnnotations Annotations for Superset webserver deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+  ## @param web.podLabels Extra labels for Superset webserver pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param web.podAnnotations Annotations for Superset webserver pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param web.podAffinityPreset Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param web.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node web.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param web.nodeAffinityPreset.type Node affinity preset type. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param web.nodeAffinityPreset.key Node label key to match. Ignored if `web.affinity` is set
+    ##
+    key: ""
+    ## @param web.nodeAffinityPreset.values Node label values to match. Ignored if `web.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param web.affinity Affinity for Superset webserver pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `web.podAffinityPreset`, `web.podAntiAffinityPreset`, and `web.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param web.nodeSelector Node labels for Superset webserver pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param web.tolerations Tolerations for Superset webserver pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param web.updateStrategy.type Superset webserver deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    ##
+    type: RollingUpdate
+  ## @param web.priorityClassName Superset webserver pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param web.topologySpreadConstraints Topology Spread Constraints for Superset webserver pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param web.schedulerName Name of the k8s scheduler (other than default) for Superset webserver pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param web.terminationGracePeriodSeconds Seconds Superset webserver pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param web.lifecycleHooks for Superset webserver containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param web.extraEnvVars Array with extra environment variables to add to Superset webserver containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param web.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Superset webserver containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param web.extraEnvVarsSecret Name of existing Secret containing extra env vars for Superset webserver containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param web.extraVolumes Optionally specify extra list of additional volumes for the Superset webserver pods
+  ##
+  extraVolumes: []
+  ## @param web.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Superset webserver containers
+  ##
+  extraVolumeMounts: []
+  ## @param web.sidecars Add additional sidecar containers to the Superset webserver pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param web.initContainers Add additional init containers to the Superset webserver pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param web.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param web.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param web.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  autoscaling:
+    vpa:
+      ## @param web.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param web.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: {}
+      ## @param web.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: []
+      ## @param web.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: {}
+      ## @param web.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: {}
+      ## @section VPA update policy
+      ##
+      updatePolicy:
+        ## @param web.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param web.autoscaling.hpa.enabled Enable HPA
+      ##
+      enabled: false
+      ## @param web.autoscaling.hpa.minReplicas Minimum number of replicas
+      ##
+      minReplicas: ""
+      ## @param web.autoscaling.hpa.maxReplicas Maximum number of replicas
+      ##
+      maxReplicas: ""
+      ## @param web.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param web.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
+
+  ## Superset webserver service parameters
+  ##
+  service:
+    ## @param web.service.type Superset webserver service type
+    ##
+    type: LoadBalancer
+    ## @param web.service.ports.http Superset webserver service HTTP port
+    ##
+    ports:
+      http: 80
+    ## Node ports to expose
+    ## @param web.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param web.service.clusterIP Superset webserver service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param web.service.loadBalancerIP Superset webserver service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param web.service.loadBalancerSourceRanges Superset webserver service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param web.service.externalTrafficPolicy Superset webserver service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param web.service.annotations Additional custom annotations for Superset webserver service
+    ##
+    annotations: {}
+    ## @param web.service.extraPorts Extra ports to expose in Superset webserver service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param web.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param web.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param web.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param web.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param web.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param web.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param web.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param web.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param web.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+## Superset Celery worker
+##
+worker:
+  ## @param worker.replicaCount Number of Superset Celery worker replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Superset Celery worker containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param worker.livenessProbe.enabled Enable livenessProbe on Superset Celery worker containers
+  ## @param worker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param worker.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param worker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param worker.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param worker.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 15
+    timeoutSeconds: 30
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param worker.readinessProbe.enabled Enable readinessProbe on Superset Celery worker containers
+  ## @param worker.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param worker.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param worker.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param worker.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param worker.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 15
+    timeoutSeconds: 30
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param worker.startupProbe.enabled Enable startupProbe on Superset Celery worker containers
+  ## @param worker.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param worker.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param worker.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param worker.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param worker.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 5
+    timeoutSeconds: 30
+    failureThreshold: 60
+    successThreshold: 1
+  ## @param worker.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param worker.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param worker.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Superset Celery worker resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param worker.resourcesPreset Set Superset Celery worker container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param worker.resources Set Superset Celery worker container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param worker.podSecurityContext.enabled Enable Superset Celery worker pods' Security Context
+  ## @param worker.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Superset Celery worker pods
+  ## @param worker.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Superset Celery worker pods
+  ## @param worker.podSecurityContext.supplementalGroups Set filesystem extra groups for Superset Celery worker pods
+  ## @param worker.podSecurityContext.fsGroup Set fsGroup in Superset Celery worker pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param worker.containerSecurityContext.enabled Enabled Superset Celery worker container' Security Context
+  ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset Celery worker container
+  ## @param worker.containerSecurityContext.runAsUser Set runAsUser in Superset Celery worker container' Security Context
+  ## @param worker.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset Celery worker container' Security Context
+  ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset Celery worker container' Security Context
+  ## @param worker.containerSecurityContext.privileged Set privileged in Superset Celery worker container' Security Context
+  ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Superset Celery worker container' Security Context
+  ## @param worker.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Superset Celery worker container
+  ## @param worker.containerSecurityContext.seccompProfile.type Set seccomp profile in Superset Celery worker container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  ## @param worker.command Override default Superset Celery worker container command (useful when using custom images)
+  ##
+  command: []
+  ## @param worker.args Override default Superset Celery worker container args (useful when using custom images)
+  ##
+  args: []
+  ## @param worker.automountServiceAccountToken Mount Service Account token in Superset Celery worker pods
+  ##
+  automountServiceAccountToken: false
+  ## @param worker.hostAliases Superset Celery worker pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param worker.deploymentAnnotations Annotations for Superset Celery worker deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+  ## @param worker.podLabels Extra labels for Superset Celery worker pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param worker.podAnnotations Annotations for Superset Celery worker pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param worker.podAffinityPreset Pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param worker.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node worker.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param worker.nodeAffinityPreset.type Node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param worker.nodeAffinityPreset.key Node label key to match. Ignored if `worker.affinity` is set
+    ##
+    key: ""
+    ## @param worker.nodeAffinityPreset.values Node label values to match. Ignored if `worker.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param worker.affinity Affinity for Superset Celery worker pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `worker.podAffinityPreset`, `worker.podAntiAffinityPreset`, and `worker.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param worker.nodeSelector Node labels for Superset Celery worker pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param worker.tolerations Tolerations for Superset Celery worker pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param worker.updateStrategy.type Superset celery worker deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    ##
+    type: RollingUpdate
+  ## @param worker.priorityClassName Superset Celery worker pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param worker.topologySpreadConstraints Topology Spread Constraints for Superset Celery worker pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param worker.schedulerName Name of the k8s scheduler (other than default) for Superset Celery worker pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param worker.terminationGracePeriodSeconds Seconds Superset Celery worker pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param worker.lifecycleHooks for Superset Celery worker containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param worker.extraEnvVars Array with extra environment variables to add to Superset Celery worker containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param worker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Superset Celery worker containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param worker.extraEnvVarsSecret Name of existing Secret containing extra env vars for Superset Celery worker containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param worker.extraVolumes Optionally specify extra list of additional volumes for the Superset Celery worker pods
+  ##
+  extraVolumes: []
+  ## @param worker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Superset Celery worker containers
+  ##
+  extraVolumeMounts: []
+  ## @param worker.sidecars Add additional sidecar containers to the Superset Celery worker pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param worker.initContainers Add additional init containers to the Superset Celery worker pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param worker.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param worker.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param worker.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  autoscaling:
+    vpa:
+      ## @param worker.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param worker.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: {}
+      ## @param worker.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: []
+      ## @param worker.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: {}
+      ## @param worker.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: {}
+      ## @section VPA update policy
+      ##
+      updatePolicy:
+        ## @param worker.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param worker.autoscaling.hpa.enabled Enable HPA
+      ##
+      enabled: false
+      ## @param worker.autoscaling.hpa.minReplicas Minimum number of replicas
+      ##
+      minReplicas: ""
+      ## @param worker.autoscaling.hpa.maxReplicas Maximum number of replicas
+      ##
+      maxReplicas: ""
+      ## @param worker.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param worker.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
+
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param worker.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param worker.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param worker.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param worker.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param worker.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+
+## Superset Init Job
+##
+init:
+  ## @param beat.enabled Enables the Superset init job, which is in charge of initialising the database, admin user credentials, DB upgrade, etc.
+  ##
+  enabled: true
+  ## @param init.extraEnvVars Array with extra environment variables to add to Superset init-job containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param init.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Superset init-job containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param init.extraEnvVarsSecret Name of existing Secret containing extra env vars for Superset init-job containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param init.extraVolumes Optionally specify extra list of additional volumes for the Superset init-job pods
+  ##
+  extraVolumes: []
+  ## @param init.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Superset init-job containers
+  ##
+  extraVolumeMounts: []
+  ## @param init.sidecars Add additional sidecar containers to the Superset init-job pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param init.initContainers Add additional init containers to the Superset init-job pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @param init.command Override default Superset init-job container command (useful when using custom images)
+  ##
+  command: []
+  ## @param init.args Override default Superset init-job container args (useful when using custom images)
+  ##
+  args: []
+  ## Superset init-job resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param init.resourcesPreset Set Superset init-job container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if init.resources is set (init.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param init.resources Set Superset init-job container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param init.podSecurityContext.enabled Enable Superset init-job pods' Security Context
+  ## @param init.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Superset init-job pods
+  ## @param init.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Superset init-job pods
+  ## @param init.podSecurityContext.supplementalGroups Set filesystem extra groups for Superset init-job pods
+  ## @param init.podSecurityContext.fsGroup Set fsGroup in Superset init-job pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param init.containerSecurityContext.enabled Enabled Superset init-job container' Security Context
+  ## @param init.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset init-job container
+  ## @param init.containerSecurityContext.runAsUser Set runAsUser in Superset init-job container' Security Context
+  ## @param init.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset init-job container' Security Context
+  ## @param init.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset init-job container' Security Context
+  ## @param init.containerSecurityContext.privileged Set privileged in Superset init-job container' Security Context
+  ## @param init.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Superset init-job container' Security Context
+  ## @param init.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Superset init-job container
+  ## @param init.containerSecurityContext.seccompProfile.type Set seccomp profile in Superset init-job container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param init.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param init.automountServiceAccountToken Mount Service Account token in Superset init-job pods
+  ##
+  automountServiceAccountToken: false
+  ## @param init.hostAliases Superset init-job pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param init.jobAnnotations Annotations for Superset init-job job
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  jobAnnotations: {}
+  ## @param init.podLabels Extra labels for Superset init-job pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param init.podAnnotations Annotations for Superset init-job pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param init.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param init.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param init.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param init.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param init.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+## Superset Celery beat
+##
+beat:
+  ## @param beat.enabled Set to true to enable Superset celery beat. Required if you intend to use alerts and reports
+  ##
+  enabled: false
+  ## Configure extra options for Superset celery beat containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param beat.livenessProbe.enabled Enable livenessProbe on Superset celery beat containers
+  ## @param beat.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param beat.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param beat.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param beat.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param beat.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 15
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param beat.readinessProbe.enabled Enable readinessProbe on Superset celery beat containers
+  ## @param beat.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param beat.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param beat.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param beat.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param beat.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 15
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param beat.startupProbe.enabled Enable startupProbe on Superset celery beat containers
+  ## @param beat.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param beat.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param beat.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param beat.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param beat.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 60
+    successThreshold: 1
+  ## @param beat.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param beat.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param beat.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Superset celery beat resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param beat.resourcesPreset Set Superset celery beat container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if beat.resources is set (beat.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param beat.resources Set Superset celery beat container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param beat.podSecurityContext.enabled Enable Superset celery beat pods' Security Context
+  ## @param beat.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Superset celery beat pods
+  ## @param beat.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Superset celery beat pods
+  ## @param beat.podSecurityContext.supplementalGroups Set filesystem extra groups for Superset celery beat pods
+  ## @param beat.podSecurityContext.fsGroup Set fsGroup in Superset celery beat pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param beat.containerSecurityContext.enabled Enabled Superset celery beat container' Security Context
+  ## @param beat.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset celery beat container
+  ## @param beat.containerSecurityContext.runAsUser Set runAsUser in Superset celery beat container' Security Context
+  ## @param beat.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset celery beat container' Security Context
+  ## @param beat.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset celery beat container' Security Context
+  ## @param beat.containerSecurityContext.privileged Set privileged in Superset celery beat container' Security Context
+  ## @param beat.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Superset celery beat container' Security Context
+  ## @param beat.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Superset celery beat container
+  ## @param beat.containerSecurityContext.seccompProfile.type Set seccomp profile in Superset celery beat container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  ## @param beat.command Override default Superset celery beat container command (useful when using custom images)
+  ##
+  command: []
+  ## @param beat.args Override default Superset celery beat container args (useful when using custom images)
+  ##
+  args: []
+  ## @param beat.automountServiceAccountToken Mount Service Account token in Superset celery beat pods
+  ##
+  automountServiceAccountToken: false
+  ## @param beat.hostAliases Superset celery beat pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param beat.deploymentAnnotations Annotations for Superset celery beat deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+  ## @param beat.podLabels Extra labels for Superset celery beat pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param beat.podAnnotations Annotations for Superset celery beat pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param beat.podAffinityPreset Pod affinity preset. Ignored if `beat.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param beat.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `beat.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node beat.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param beat.nodeAffinityPreset.type Node affinity preset type. Ignored if `beat.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param beat.nodeAffinityPreset.key Node label key to match. Ignored if `beat.affinity` is set
+    ##
+    key: ""
+    ## @param beat.nodeAffinityPreset.values Node label values to match. Ignored if `beat.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param beat.affinity Affinity for Superset celery beat pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `beat.podAffinityPreset`, `beat.podAntiAffinityPreset`, and `beat.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param beat.nodeSelector Node labels for Superset celery beat pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param beat.tolerations Tolerations for Superset celery beat pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param beat.updateStrategy.type Superset celery beat deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    ##
+    type: RollingUpdate
+  ## @param beat.priorityClassName Superset celery beat pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param beat.topologySpreadConstraints Topology Spread Constraints for Superset celery beat pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param beat.schedulerName Name of the k8s scheduler (other than default) for Superset celery beat pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param beat.terminationGracePeriodSeconds Seconds Superset celery beat pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param beat.lifecycleHooks for Superset celery beat containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param beat.extraEnvVars Array with extra environment variables to add to Superset celery beat containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param beat.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Superset celery beat containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param beat.extraEnvVarsSecret Name of existing Secret containing extra env vars for Superset celery beat containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param beat.extraVolumes Optionally specify extra list of additional volumes for the Superset celery beat pods
+  ##
+  extraVolumes: []
+  ## @param beat.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Superset celery beat containers
+  ##
+  extraVolumeMounts: []
+  ## @param beat.sidecars Add additional sidecar containers to the Superset celery beat pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param beat.initContainers Add additional init containers to the Superset celery beat pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param beat.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param beat.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param beat.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param beat.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param beat.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param beat.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param beat.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param beat.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+
+## Superset Celery flower
+##
+flower:
+  ## @param flower.enabled Set to true to enable Superset celery flower. Required if you intend to use alerts and reports
+  ##
+  ##
+  enabled: false
+  ## @param flower.replicaCount Number of Superset Celery flower replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param flower.containerPorts.flower Superset celery flower container port
+  ##
+  containerPorts:
+    flower: 5555
+  ## Configure extra options for Superset celery flower containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param flower.livenessProbe.enabled Enable livenessProbe on Superset celery flower containers
+  ## @param flower.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param flower.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param flower.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param flower.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param flower.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 15
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param flower.readinessProbe.enabled Enable readinessProbe on Superset celery flower containers
+  ## @param flower.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param flower.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param flower.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param flower.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param flower.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 15
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param flower.startupProbe.enabled Enable startupProbe on Superset celery flower containers
+  ## @param flower.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param flower.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param flower.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param flower.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param flower.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 60
+    successThreshold: 1
+  ## @param flower.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param flower.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param flower.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Superset celery flower resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param flower.resourcesPreset Set Superset celery flower container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if flower.resources is set (flower.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param flower.resources Set Superset celery flower container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param flower.podSecurityContext.enabled Enable Superset celery flower pods' Security Context
+  ## @param flower.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Superset celery flower pods
+  ## @param flower.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Superset celery flower pods
+  ## @param flower.podSecurityContext.supplementalGroups Set filesystem extra groups for Superset celery flower pods
+  ## @param flower.podSecurityContext.fsGroup Set fsGroup in Superset celery flower pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param flower.containerSecurityContext.enabled Enabled Superset celery flower container' Security Context
+  ## @param flower.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Superset celery flower container
+  ## @param flower.containerSecurityContext.runAsUser Set runAsUser in Superset celery flower container' Security Context
+  ## @param flower.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Superset celery flower container' Security Context
+  ## @param flower.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Superset celery flower container' Security Context
+  ## @param flower.containerSecurityContext.privileged Set privileged in Superset celery flower container' Security Context
+  ## @param flower.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Superset celery flower container' Security Context
+  ## @param flower.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Superset celery flower container
+  ## @param flower.containerSecurityContext.seccompProfile.type Set seccomp profile in Superset celery flower container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  ## @param flower.command Override default Superset celery flower container command (useful when using custom images)
+  ##
+  command: []
+  ## @param flower.args Override default Superset celery flower container args (useful when using custom images)
+  ##
+  args: []
+  ## @param flower.automountServiceAccountToken Mount Service Account token in Superset celery flower pods
+  ##
+  automountServiceAccountToken: false
+  ## @param flower.hostAliases Superset celery flower pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param flower.deploymentAnnotations Annotations for Superset celery flower deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+  ## @param flower.podLabels Extra labels for Superset celery flower pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param flower.podAnnotations Annotations for Superset celery flower pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param flower.podAffinityPreset Pod affinity preset. Ignored if `flower.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param flower.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `flower.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node flower.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param flower.nodeAffinityPreset.type Node affinity preset type. Ignored if `flower.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param flower.nodeAffinityPreset.key Node label key to match. Ignored if `flower.affinity` is set
+    ##
+    key: ""
+    ## @param flower.nodeAffinityPreset.values Node label values to match. Ignored if `flower.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param flower.affinity Affinity for Superset celery flower pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `flower.podAffinityPreset`, `flower.podAntiAffinityPreset`, and `flower.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param flower.nodeSelector Node labels for Superset celery flower pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param flower.tolerations Tolerations for Superset celery flower pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param flower.updateStrategy.type Superset celery flower deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    ##
+    type: RollingUpdate
+  ## @param flower.priorityClassName Superset celery flower pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param flower.topologySpreadConstraints Topology Spread Constraints for Superset celery flower pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param flower.schedulerName Name of the k8s scheduler (other than default) for Superset celery flower pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param flower.terminationGracePeriodSeconds Seconds Superset celery flower pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param flower.lifecycleHooks for Superset celery flower containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param flower.extraEnvVars Array with extra environment variables to add to Superset celery flower containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param flower.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Superset celery flower containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param flower.extraEnvVarsSecret Name of existing Secret containing extra env vars for Superset celery flower containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param flower.extraVolumes Optionally specify extra list of additional volumes for the Superset celery flower pods
+  ##
+  extraVolumes: []
+  ## @param flower.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Superset celery flower containers
+  ##
+  extraVolumeMounts: []
+  ## @param flower.sidecars Add additional sidecar containers to the Superset celery flower pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param flower.initContainers Add additional init containers to the Superset celery flower pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param flower.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param flower.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param flower.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  autoscaling:
+    vpa:
+      ## @param flower.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param flower.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: {}
+      ## @param flower.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: []
+      ## @param flower.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: {}
+      ## @param flower.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: {}
+      ## @section VPA update policy
+      ##
+      updatePolicy:
+        ## @param flower.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param flower.autoscaling.hpa.enabled Enable HPA
+      ##
+      enabled: false
+      ## @param flower.autoscaling.hpa.minReplicas Minimum number of replicas
+      ##
+      minReplicas: ""
+      ## @param flower.autoscaling.hpa.maxReplicas Maximum number of replicas
+      ##
+      maxReplicas: ""
+      ## @param flower.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param flower.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
+
+  ## Superset celery flower service parameters
+  ##
+  service:
+    ## @param flower.service.type Superset celery flower service type
+    ##
+    type: LoadBalancer
+    ## @param flower.service.ports.http Superset celery flower service HTTP port
+    ## @param flower.service.ports.https Superset celery flower service HTTPS port
+    ##
+    ports:
+      flower: 5555
+    ## Node ports to expose
+    ## @param flower.service.nodePorts.http Node port for HTTP
+    ## @param flower.service.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      flower: ""
+    ## @param flower.service.clusterIP Superset celery flower service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param flower.service.loadBalancerIP Superset celery flower service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param flower.service.loadBalancerSourceRanges Superset celery flower service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param flower.service.externalTrafficPolicy Superset celery flower service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param flower.service.annotations Additional custom annotations for Superset celery flower service
+    ##
+    annotations: {}
+    ## @param flower.service.extraPorts Extra ports to expose in Superset celery flower service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param flower.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param flower.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param flower.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param flower.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param flower.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param flower.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param flower.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param flower.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param flower.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+## Superset ingress parameters
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Superset
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: superset.local
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: superset.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - superset.local
+  ##   secretName: superset.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: superset.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Init Container Parameters
+##
+
+## 'wait-for-db' init container parameters
+##
+waitForDB:
+  ## @param waitForDB.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: true
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param waitForDB.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForDB.resources is set (waitForDB.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param waitForDB.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## InitContainer Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param waitForDB.containerSecurityContext.enabled Enabled wait-for-db initcontainer's Security Context
+  ## @param waitForDB.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-db initcontainer
+  ## @param waitForDB.containerSecurityContext.runAsUser Set runAsUser in wait-for-db initcontainer's Security Context
+  ## @param waitForDB.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-db initcontainer's Security Context
+  ## @param waitForDB.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-db initcontainer's Security Context
+  ## @param waitForDB.containerSecurityContext.privileged Set privileged in wait-for-db initcontainer's Security Context
+  ## @param waitForDB.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in wait-for-db initcontainer's Security Context
+  ## @param waitForDB.containerSecurityContext.capabilities.drop List of capabilities to be dropped in wait-for-db initcontainer
+  ## @param waitForDB.containerSecurityContext.seccompProfile.type Set seccomp profile in wait-for-db initcontainer
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
+## 'wait-for-redis' init container parameters
+##
+waitForRedis:
+  ## @param waitForRedis.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: true
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param waitForRedis.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForRedis.resources is set (waitForRedis.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param waitForRedis.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## InitContainer Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param waitForRedis.containerSecurityContext.enabled Enabled wait-for-redis initcontainer's Security Context
+  ## @param waitForRedis.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in wait-for-redis initcontainer
+  ## @param waitForRedis.containerSecurityContext.runAsUser Set runAsUser in wait-for-redis initcontainer's Security Context
+  ## @param waitForRedis.containerSecurityContext.runAsNonRoot Set runAsNonRoot in wait-for-redis initcontainer's Security Context
+  ## @param waitForRedis.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in wait-for-redis initcontainer's Security Context
+  ## @param waitForRedis.containerSecurityContext.privileged Set privileged in wait-for-redis initcontainer's Security Context
+  ## @param waitForRedis.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in wait-for-redis initcontainer's Security Context
+  ## @param waitForRedis.containerSecurityContext.capabilities.drop List of capabilities to be dropped in wait-for-redis initcontainer
+  ## @param waitForRedis.containerSecurityContext.seccompProfile.type Set seccomp profile in wait-for-redis initcontainer
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
+## @section Other Parameters
+##
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## @section Superset database parameters
+
+## PostgreSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
+## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
+## @param postgresql.auth.username Name for a custom user to create
+## @param postgresql.auth.password Password for the custom user to create
+## @param postgresql.auth.database Name for a custom database to create
+## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+##
+postgresql:
+  enabled: true
+  auth:
+    enablePostgresUser: true
+    username: bn_superset
+    password: ""
+    database: bitnami_superset
+    existingSecret: ""
+  architecture: standalone
+  primary:
+    ## PostgreSQL Primary resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param postgresql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+## External PostgreSQL configuration
+## All of these values are only used when postgresql.enabled is set to false
+## @param externalDatabase.host Database host
+## @param externalDatabase.port Database port number
+## @param externalDatabase.user Non-root username for Superset
+## @param externalDatabase.password Password for the non-root username for Superset
+## @param externalDatabase.database Superset database name
+## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+##
+externalDatabase:
+  host: localhost
+  port: 5432
+  user: bn_superset
+  database: bitnami_superset
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "pas"
+## Redis&reg; chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
+## @param redis.enabled Switch to enable or disable the Redis&reg; helm
+## @param redis.auth.enabled Enable password authentication
+## @param redis.auth.password Redis&reg; password
+## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
+## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
+##
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    ## Redis&reg; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## The password value is ignored if existingSecret is set
+    password: ""
+    existingSecret: ""
+  architecture: standalone
+  master:
+    ## Redis&reg; master resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param redis.master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+
+## External Redis&reg; configuration
+## All of these values are only used when redis.enabled is set to false
+## @param externalRedis.host Redis&reg; host
+## @param externalRedis.port Redis&reg; port number
+## @param externalRedis.username Redis&reg; username
+## @param externalRedis.password Redis&reg; password
+## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis&trade credentials
+## @param externalRedis.existingSecretPasswordKey Name of an existing secret key containing the Redis&trade credentials
+##
+externalRedis:
+  host: localhost
+  port: 6379
+  ## Most Redis&reg; implementations do not require a username
+  ## to authenticate and it should be enough with the password
+  username: "default"
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "redis-password"
