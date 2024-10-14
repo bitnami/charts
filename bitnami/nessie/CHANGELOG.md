@@ -1,8 +1,36 @@
 # Changelog
 
-## 0.1.28 (2024-09-12)
+## 1.0.0 (2024-10-02)
 
-* [bitnami/nessie] Release 0.1.28 ([#29387](https://github.com/bitnami/charts/pull/29387))
+* [bitnami/nessie] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29741](https://github.com/bitnami/charts/pull/29741))
+
+## <small>0.1.34 (2024-10-01)</small>
+
+* [bitnami/nessie] Release 0.1.34 (#29679) ([3792cc1](https://github.com/bitnami/charts/commit/3792cc13fac27350bf3068105caabe86caa11ac5)), closes [#29679](https://github.com/bitnami/charts/issues/29679)
+
+## <small>0.1.33 (2024-10-01)</small>
+
+* [bitnami/nessie] Release 0.1.33 (#29677) ([3a06a36](https://github.com/bitnami/charts/commit/3a06a3620919767cfc377213527946587968da4e)), closes [#29677](https://github.com/bitnami/charts/issues/29677)
+
+## <small>0.1.32 (2024-09-26)</small>
+
+* [bitnami/nessie] Release 0.1.32 (#29636) ([98e1a81](https://github.com/bitnami/charts/commit/98e1a811d041ad1b58cd1ce27f7c838eda789e51)), closes [#29636](https://github.com/bitnami/charts/issues/29636)
+
+## <small>0.1.31 (2024-09-25)</small>
+
+* [bitnami/nessie] Release 0.1.31 (#29597) ([39004e7](https://github.com/bitnami/charts/commit/39004e718e6ba040f212d42f6413f1bee73a4ca9)), closes [#29597](https://github.com/bitnami/charts/issues/29597)
+
+## <small>0.1.30 (2024-09-19)</small>
+
+* [bitnami/nessie] Release 0.1.30 (#29536) ([552dda4](https://github.com/bitnami/charts/commit/552dda49d18d61247fac6347e7e570a9deae3642)), closes [#29536](https://github.com/bitnami/charts/issues/29536)
+
+## <small>0.1.29 (2024-09-19)</small>
+
+* [bitnami/nessie] Release 0.1.29 (#29527) ([330c8cc](https://github.com/bitnami/charts/commit/330c8cc1ba8535a12ab55d97d7c6b9f41a95814d)), closes [#29527](https://github.com/bitnami/charts/issues/29527)
+
+## <small>0.1.28 (2024-09-12)</small>
+
+* [bitnami/nessie] Release 0.1.28 (#29387) ([5e6e11b](https://github.com/bitnami/charts/commit/5e6e11bb4df9bc2c6904567a5c35e1e5bb1c055c)), closes [#29387](https://github.com/bitnami/charts/issues/29387)
 
 ## <small>0.1.27 (2024-09-12)</small>
 

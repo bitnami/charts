@@ -1,8 +1,36 @@
 # Changelog
 
-## 14.7.8 (2024-09-11)
+## 14.7.15 (2024-10-02)
 
-* [bitnami/minio] Bail early if defaultBuckets is used in distributed mode (#29034) ([#29141](https://github.com/bitnami/charts/pull/29141))
+* [bitnami/minio] Release 14.7.15 ([#29759](https://github.com/bitnami/charts/pull/29759))
+
+## <small>14.7.14 (2024-10-02)</small>
+
+* [bitnami/minio] Release 14.7.14 (#29708) ([f6ae185](https://github.com/bitnami/charts/commit/f6ae1859c75baed3eaa1c459bbf7e0e0605fa560)), closes [#29708](https://github.com/bitnami/charts/issues/29708)
+
+## <small>14.7.13 (2024-09-26)</small>
+
+* [bitnami/minio] Use common password manager to handle credentials (#29559) ([2a1a714](https://github.com/bitnami/charts/commit/2a1a71427ae68d9ef8d19364b344f893c4af44cb)), closes [#29559](https://github.com/bitnami/charts/issues/29559)
+
+## <small>14.7.12 (2024-09-26)</small>
+
+* [bitnami/minio] Release 14.7.12 (#29612) ([d787fbf](https://github.com/bitnami/charts/commit/d787fbfd4f409ecd2004052c8610676484ad101d)), closes [#29612](https://github.com/bitnami/charts/issues/29612)
+
+## <small>14.7.11 (2024-09-24)</small>
+
+* [bitnami/minio] Release 14.7.11 (#29588) ([4d4155e](https://github.com/bitnami/charts/commit/4d4155e2d11ad4294f2f2c130311a631239aa906)), closes [#29588](https://github.com/bitnami/charts/issues/29588)
+
+## <small>14.7.10 (2024-09-17)</small>
+
+* [bitnami/minio] fix: :bug: Add sleep to avoid race condition in provisioning (#29478) ([c522a3c](https://github.com/bitnami/charts/commit/c522a3c203b3d2fc381698384c58e63ab2bba5c0)), closes [#29478](https://github.com/bitnami/charts/issues/29478)
+
+## <small>14.7.9 (2024-09-16)</small>
+
+* [bitnami/minio] Release 14.7.9 (#29455) ([f0e7a10](https://github.com/bitnami/charts/commit/f0e7a10b383dac974d6704604e7cebbb355cccef)), closes [#29455](https://github.com/bitnami/charts/issues/29455)
+
+## <small>14.7.8 (2024-09-11)</small>
+
+* [bitnami/minio] Bail early if defaultBuckets is used in distributed mode (#29034) (#29141) ([8c14114](https://github.com/bitnami/charts/commit/8c14114d729e7df5f77404859551f16fb5e939e0)), closes [#29034](https://github.com/bitnami/charts/issues/29034) [#29141](https://github.com/bitnami/charts/issues/29141) [#29034](https://github.com/bitnami/charts/issues/29034) [#29034](https://github.com/bitnami/charts/issues/29034)
 
 ## <small>14.7.7 (2024-09-10)</small>
 
@@ -34,8 +62,11 @@
 
 ## 14.7.0 (2024-08-12)
 
-* [bitnami/minio] Release 14.6.33 (#28731) ([558c1f8](https://github.com/bitnami/charts/commit/558c1f8056152e5d16fdf35db29c4028a31453fe)), closes [#28731](https://github.com/bitnami/charts/issues/28731)
 * [bitnami/minio]: Option to use a secret. (#27837) ([5c21623](https://github.com/bitnami/charts/commit/5c2162370dd5d99d4df91f36b1fcc778ac604673)), closes [#27837](https://github.com/bitnami/charts/issues/27837)
+
+## <small>14.6.33 (2024-08-07)</small>
+
+* [bitnami/minio] Release 14.6.33 (#28731) ([558c1f8](https://github.com/bitnami/charts/commit/558c1f8056152e5d16fdf35db29c4028a31453fe)), closes [#28731](https://github.com/bitnami/charts/issues/28731)
 
 ## <small>14.6.32 (2024-08-03)</small>
 

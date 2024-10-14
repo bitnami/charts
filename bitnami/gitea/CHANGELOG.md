@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.3.21 (2024-09-15)
+## 3.0.1 (2024-10-09)
 
-* [bitnami/gitea] Release 2.3.21 ([#29427](https://github.com/bitnami/charts/pull/29427))
+* [bitnami/gitea] Release 3.0.1 ([#29853](https://github.com/bitnami/charts/pull/29853))
+
+## 3.0.0 (2024-10-03)
+
+* [bitnami/gitea] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29732) ([d7f95fe](https://github.com/bitnami/charts/commit/d7f95fe48347c4cdb0a63f19752db52b5d7f9612)), closes [#29732](https://github.com/bitnami/charts/issues/29732)
+
+## <small>2.3.23 (2024-10-02)</small>
+
+* [bitnami/gitea] Release 2.3.23 (#29692) ([b9087cc](https://github.com/bitnami/charts/commit/b9087cc758df039fd5a47f74271d608f577e8697)), closes [#29692](https://github.com/bitnami/charts/issues/29692)
+
+## <small>2.3.22 (2024-09-19)</small>
+
+* [bitnami/gitea] Release 2.3.22 (#29512) ([5b8e97d](https://github.com/bitnami/charts/commit/5b8e97dae372b47f3ff2df5f9826373f3cc778e0)), closes [#29512](https://github.com/bitnami/charts/issues/29512)
+
+## <small>2.3.21 (2024-09-15)</small>
+
+* [bitnami/gitea] Release 2.3.21 (#29427) ([fc69df6](https://github.com/bitnami/charts/commit/fc69df6f756458aa4f2b769460fd43f2249654d8)), closes [#29427](https://github.com/bitnami/charts/issues/29427)
 
 ## <small>2.3.20 (2024-09-11)</small>
 

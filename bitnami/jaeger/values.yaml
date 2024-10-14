@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 1.60.0-debian-12-r4
+  tag: 1.62.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1517,7 +1517,7 @@ migration:
 cqlshImage:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.13-debian-12-r12
+  tag: 5.0.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

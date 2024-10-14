@@ -1,8 +1,20 @@
 # Changelog
 
-## 31.0.2 (2024-09-14)
+## 32.0.0 (2024-09-23)
 
-* [bitnami/spring-cloud-dataflow] Release 31.0.2 ([#29412](https://github.com/bitnami/charts/pull/29412))
+* [bitnami/spring-cloud-dataflow] feat!: :arrow_up: :boom: Bump RabbitMQ to 4.x.x ([#29572](https://github.com/bitnami/charts/pull/29572))
+
+## <small>31.0.4 (2024-09-19)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 31.0.4 (#29525) ([75c3ba7](https://github.com/bitnami/charts/commit/75c3ba741ecaa5baf0bd3535af0001e0a2fc8309)), closes [#29525](https://github.com/bitnami/charts/issues/29525)
+
+## <small>31.0.3 (2024-09-16)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 31.0.3 (#29457) ([aa038e9](https://github.com/bitnami/charts/commit/aa038e9953df2ba74d481cb7ba1cccb3dc32c5fc)), closes [#29457](https://github.com/bitnami/charts/issues/29457)
+
+## <small>31.0.2 (2024-09-14)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 31.0.2 (#29412) ([814380b](https://github.com/bitnami/charts/commit/814380bb5a90622b16afa10722bdb63d2e50e448)), closes [#29412](https://github.com/bitnami/charts/issues/29412)
 
 ## <small>31.0.1 (2024-08-14)</small>
 

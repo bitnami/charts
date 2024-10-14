@@ -1,8 +1,29 @@
 # Changelog
 
-## 4.6.3 (2024-09-12)
+## 4.7.3 (2024-10-07)
 
-* [bitnami/grafana-operator] Release 4.6.3 ([#29375](https://github.com/bitnami/charts/pull/29375))
+* [bitnami/grafana-operator] Release 4.7.3 ([#29807](https://github.com/bitnami/charts/pull/29807))
+
+## <small>4.7.2 (2024-10-07)</small>
+
+* [bitnami/grafana-operator] Fixed envFrom examples (#29783) ([0d00a0e](https://github.com/bitnami/charts/commit/0d00a0ee70e96aab7b1796d8a14914da265b9a9c)), closes [#29783](https://github.com/bitnami/charts/issues/29783)
+
+## <small>4.7.1 (2024-10-02)</small>
+
+* [bitnami/grafana-operator] Release 4.7.1 (#29694) ([0a1e9b7](https://github.com/bitnami/charts/commit/0a1e9b7a0d44c76d7a7edef1d72e6e6ba968e885)), closes [#29694](https://github.com/bitnami/charts/issues/29694)
+
+## 4.7.0 (2024-09-23)
+
+* [bitnami/grafana-operator] Enable env in grafana (#29553) ([b88eacd](https://github.com/bitnami/charts/commit/b88eacdd4457665855c5f9981cdbb3ec7b14a493)), closes [#29553](https://github.com/bitnami/charts/issues/29553)
+
+## <small>4.6.4 (2024-09-19)</small>
+
+* [bitnami/grafana-operator] Release 4.6.4 (#29508) ([a0e1c75](https://github.com/bitnami/charts/commit/a0e1c75e5caf51c3ed5b85dde87d26884ad815cf)), closes [#29508](https://github.com/bitnami/charts/issues/29508)
+* [bitnami/grafana-operator] Remove duplicated text in README.md (#29410) ([242cdb0](https://github.com/bitnami/charts/commit/242cdb07c5bbc3cae671349a67a6a1c00bf01a2c)), closes [#29410](https://github.com/bitnami/charts/issues/29410)
+
+## <small>4.6.3 (2024-09-12)</small>
+
+* [bitnami/grafana-operator] Release 4.6.3 (#29375) ([9df77c6](https://github.com/bitnami/charts/commit/9df77c618b88bc35ff2196009ccf44bc0ca54ff8)), closes [#29375](https://github.com/bitnami/charts/issues/29375)
 
 ## <small>4.6.2 (2024-09-05)</small>
 

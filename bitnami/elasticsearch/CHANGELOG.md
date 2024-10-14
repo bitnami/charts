@@ -1,8 +1,28 @@
 # Changelog
 
-## 21.3.16 (2024-09-11)
+## 21.3.21 (2024-10-08)
 
-* [bitnami/elasticsearch] fix: add apiVersion and kind to volumeClaimTemplates ([#29362](https://github.com/bitnami/charts/pull/29362))
+* [bitnami/elasticsearch] Release 21.3.21 ([#29832](https://github.com/bitnami/charts/pull/29832))
+
+## <small>21.3.20 (2024-10-03)</small>
+
+* [bitnami/elasticsearch] Release 21.3.20 (#29765) ([a4ae3dc](https://github.com/bitnami/charts/commit/a4ae3dc6a83bce166b670e2bb3732cfa03c07b70)), closes [#29765](https://github.com/bitnami/charts/issues/29765)
+
+## <small>21.3.19 (2024-10-03)</small>
+
+* [bitnami/elasticsearch] Release 21.3.19 (#29764) ([8af879a](https://github.com/bitnami/charts/commit/8af879a0b69f5ed056fbfe63ed1f26eb4aff5d0d)), closes [#29764](https://github.com/bitnami/charts/issues/29764)
+
+## <small>21.3.18 (2024-09-26)</small>
+
+* [bitnami/elasticsearch] Release 21.3.18 (#29634) ([3ae31b7](https://github.com/bitnami/charts/commit/3ae31b7ab6059661bc799f50ea9cdcc0e2acc0db)), closes [#29634](https://github.com/bitnami/charts/issues/29634)
+
+## <small>21.3.17 (2024-09-17)</small>
+
+* [bitnami/elasticsearch] test: :white_check_mark: Improve reliability of ginkgo tests (#29465) ([958ed7f](https://github.com/bitnami/charts/commit/958ed7f0d11d5d91f63948aa050f813f32903f76)), closes [#29465](https://github.com/bitnami/charts/issues/29465)
+
+## <small>21.3.16 (2024-09-12)</small>
+
+* [bitnami/elasticsearch] fix: add apiVersion and kind to volumeClaimTemplates (#29362) ([cf547d6](https://github.com/bitnami/charts/commit/cf547d6743e7db4e771ff1d7d6393c5f70a63799)), closes [#29362](https://github.com/bitnami/charts/issues/29362)
 
 ## <small>21.3.15 (2024-09-09)</small>
 

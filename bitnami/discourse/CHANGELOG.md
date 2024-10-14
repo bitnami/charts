@@ -1,8 +1,24 @@
 # Changelog
 
-## 14.1.5 (2024-09-15)
+## 15.0.1 (2024-10-08)
 
-* [bitnami/discourse] Release 14.1.5 ([#29424](https://github.com/bitnami/charts/pull/29424))
+* [bitnami/discourse] Release 15.0.1 ([#29827](https://github.com/bitnami/charts/pull/29827))
+
+## 15.0.0 (2024-10-03)
+
+* [bitnami/discourse] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29731) ([f9c4cd6](https://github.com/bitnami/charts/commit/f9c4cd65e4d5638b55da1c8a2c08d42c084032d2)), closes [#29731](https://github.com/bitnami/charts/issues/29731)
+
+## 14.2.0 (2024-09-26)
+
+* [bitnami/discourse] Move plugins installation to init-container (#29568) ([024b741](https://github.com/bitnami/charts/commit/024b741934c5d7df88e88b193b9a33dc8ac04237)), closes [#29568](https://github.com/bitnami/charts/issues/29568)
+
+## <small>14.1.6 (2024-09-19)</small>
+
+* [bitnami/discourse] Release 14.1.6 (#29502) ([69c82cf](https://github.com/bitnami/charts/commit/69c82cfc867a79a1120a57d114382680661e6360)), closes [#29502](https://github.com/bitnami/charts/issues/29502)
+
+## <small>14.1.5 (2024-09-15)</small>
+
+* [bitnami/discourse] Release 14.1.5 (#29424) ([c5e5c6a](https://github.com/bitnami/charts/commit/c5e5c6ae5d4d05263f46c5b4848c8384fe826861)), closes [#29424](https://github.com/bitnami/charts/issues/29424)
 
 ## <small>14.1.4 (2024-09-10)</small>
 
@@ -23,6 +39,9 @@
 ## 14.1.0 (2024-08-20)
 
 * [bitnami/discourse] Bump discourse to 3.3.0 (#28786) ([439b8c7](https://github.com/bitnami/charts/commit/439b8c7b48980952615ca0290defa6180a2164ed)), closes [#28786](https://github.com/bitnami/charts/issues/28786)
+
+## 14.0.0 (2024-08-13)
+
 * [bitnami/discourse] Update dependencies (#28852) ([279c2bd](https://github.com/bitnami/charts/commit/279c2bd4db105ad48a25419958e318f3e522338b)), closes [#28852](https://github.com/bitnami/charts/issues/28852)
 
 ## <small>13.2.15 (2024-07-30)</small>

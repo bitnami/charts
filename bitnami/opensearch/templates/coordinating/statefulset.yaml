@@ -83,19 +83,17 @@ spec:
       {{- if .Values.coordinating.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.coordinating.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if or .Values.coordinating.initContainers .Values.sysctlImage.enabled }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
           {{- include "opensearch.sysctl.initContainer" . | nindent 8}}
         {{- end }}
         {{- include "opensearch.copy-default-plugins.initContainer" (dict "component" "coordinating" "context" $) | nindent 8 }} 
         {{- if .Values.coordinating.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.initContainers "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.initContainers "context" $) | nindent 8 }}
         {{- end }}
         {{- if .Values.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
       containers:
         - name: opensearch
           image: {{ include "opensearch.image" . }}

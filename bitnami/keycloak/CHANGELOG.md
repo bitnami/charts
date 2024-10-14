@@ -1,8 +1,24 @@
 # Changelog
 
-## 22.2.4 (2024-09-13)
+## 24.0.0 (2024-10-08)
 
-* [bitnami/keycloak] Fix app-volume-dir mount path ([#29397](https://github.com/bitnami/charts/pull/29397))
+* [bitnami/keycloak] Release 24.0.0 ([#29815](https://github.com/bitnami/charts/pull/29815))
+
+## 23.0.0 (2024-10-03)
+
+* [bitnami/keycloak] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29735) ([8ce695d](https://github.com/bitnami/charts/commit/8ce695d44b25e3e2023c07961c66ae5b7b22ce4b)), closes [#29735](https://github.com/bitnami/charts/issues/29735)
+
+## <small>22.2.6 (2024-09-19)</small>
+
+* [bitnami/keycloak] Release 22.2.6 (#29542) ([754f9e2](https://github.com/bitnami/charts/commit/754f9e2365ab6d0786a997e4d582e2b6ce92c237)), closes [#29542](https://github.com/bitnami/charts/issues/29542)
+
+## <small>22.2.5 (2024-09-16)</small>
+
+* [bitnami/keycloak] Release 22.2.5 (#29449) ([704c76c](https://github.com/bitnami/charts/commit/704c76cb715c58a196407ad471b150e9a0148cf3)), closes [#29449](https://github.com/bitnami/charts/issues/29449)
+
+## <small>22.2.4 (2024-09-13)</small>
+
+* [bitnami/keycloak] Fix app-volume-dir mount path (#29397) ([665ea7c](https://github.com/bitnami/charts/commit/665ea7c362ca091d028320a62ae40891c319e223)), closes [#29397](https://github.com/bitnami/charts/issues/29397)
 
 ## <small>22.2.3 (2024-09-10)</small>
 

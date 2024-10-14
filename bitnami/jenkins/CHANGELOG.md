@@ -1,8 +1,28 @@
 # Changelog
 
-## 13.4.20 (2024-09-05)
+## 13.4.25 (2024-10-10)
 
-* [bitnami/jenkins] Release 13.4.20 ([#29210](https://github.com/bitnami/charts/pull/29210))
+* [bitnami/jenkins] Fix: InitScripts, InitHookScripts ([#29811](https://github.com/bitnami/charts/pull/29811))
+
+## <small>13.4.24 (2024-10-09)</small>
+
+* [bitnami/jenkins] Release 13.4.24 (#29852) ([c34cd5f](https://github.com/bitnami/charts/commit/c34cd5f0cfae31289812ef78c9d3569ce41a4ac7)), closes [#29852](https://github.com/bitnami/charts/issues/29852)
+
+## <small>13.4.23 (2024-10-02)</small>
+
+* [bitnami/jenkins] Release 13.4.23 (#29748) ([c0981f7](https://github.com/bitnami/charts/commit/c0981f7cb714661bbca8ebf81b54e3ef5b383829)), closes [#29748](https://github.com/bitnami/charts/issues/29748)
+
+## <small>13.4.22 (2024-09-19)</small>
+
+* [bitnami/jenkins] Release 13.4.22 (#29519) ([8b4e9c2](https://github.com/bitnami/charts/commit/8b4e9c2bc7d2751e049c5a7e3df74e1a5355d5d8)), closes [#29519](https://github.com/bitnami/charts/issues/29519)
+
+## <small>13.4.21 (2024-09-16)</small>
+
+* [bitnami/jenkins] Release 13.4.21 (#29444) ([e6c0616](https://github.com/bitnami/charts/commit/e6c0616abed63a5ead68b8e574defe63047c8ba9)), closes [#29444](https://github.com/bitnami/charts/issues/29444)
+
+## <small>13.4.20 (2024-09-05)</small>
+
+* [bitnami/jenkins] Release 13.4.20 (#29210) ([94f75ed](https://github.com/bitnami/charts/commit/94f75ede28062f47af4eaaf0ed47e94a9d34cc3b)), closes [#29210](https://github.com/bitnami/charts/issues/29210)
 
 ## <small>13.4.19 (2024-08-07)</small>
 

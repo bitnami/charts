@@ -3,24 +3,27 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and (include "magento.host" .) (or .Values.mariadb.enabled .Values.externalDatabase.host) .Values.pdb.create }}
+{{- if .Values.clusterOperator.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ template "rmqco.clusterOperator.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq-operator
+    app.kubernetes.io/part-of: rabbitmq
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.pdb.minAvailable }}
-  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- if .Values.clusterOperator.pdb.minAvailable }}
+  minAvailable: {{ .Values.clusterOperator.pdb.minAvailable }}
   {{- end  }}
-  {{- if or .Values.pdb.maxUnavailable ( not .Values.pdb.minAvailable ) }}
-  maxUnavailable: {{ .Values.pdb.maxUnavailable | default 1 }}
+  {{- if or .Values.clusterOperator.pdb.maxUnavailable (not .Values.clusterOperator.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.clusterOperator.pdb.maxUnavailable | default 1 }}
   {{- end  }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: rabbitmq-operator
 {{- end }}

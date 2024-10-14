@@ -289,7 +289,12 @@ Validate external Redis config
 */}}
 {{- define "argocd.validateValues.externalRedis" -}}
 {{- if not .Values.redis.enabled -}}
+    {{- if not .Values.externalRedis.port -}}
 Argo CD: If the redis dependency is disabled you need to add an external redis port
+    {{- end -}}
+    {{- if not .Values.externalRedis.host -}}
+Argo CD: If the redis dependency is disabled you need to add an external redis host
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 

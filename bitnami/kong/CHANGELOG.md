@@ -1,8 +1,24 @@
 # Changelog
 
+## 14.0.0 (2024-10-02)
+
+* [bitnami/kong] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29736](https://github.com/bitnami/charts/pull/29736))
+
+## <small>13.0.3 (2024-09-19)</small>
+
+* [bitnami/kong] Remove duplicated empty password check `common.validations.values.cassandra.passwords ([139f5a5](https://github.com/bitnami/charts/commit/139f5a54c71ba4da1a0401300b84f8b31d8ff2e9)), closes [#29441](https://github.com/bitnami/charts/issues/29441)
+
+## <small>13.0.2 (2024-09-19)</small>
+
+* [bitnami/kong] Release 13.0.2 (#29509) ([accb05e](https://github.com/bitnami/charts/commit/accb05efca0ba859d82ed0dd42e16be990f20eda)), closes [#29509](https://github.com/bitnami/charts/issues/29509)
+
+## <small>13.0.1 (2024-09-18)</small>
+
+* [bitnami/kong] Release 13.0.1 (#29492) ([b9009aa](https://github.com/bitnami/charts/commit/b9009aa6c246efe8a6ad2c36a0a1874d197db340)), closes [#29492](https://github.com/bitnami/charts/issues/29492)
+
 ## 13.0.0 (2024-09-10)
 
-* [bitnami/kong] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) ([#29329](https://github.com/bitnami/charts/pull/29329))
+* [bitnami/kong] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) (#29329) ([eb13e52](https://github.com/bitnami/charts/commit/eb13e5212410771560fd9e064f6ce0fb057e67c5)), closes [#29329](https://github.com/bitnami/charts/issues/29329)
 
 ## <small>12.2.11 (2024-08-22)</small>
 
