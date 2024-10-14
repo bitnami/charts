@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.0.3 (2024-10-13)
+## 15.0.3 (2024-10-14)
 
 * [bitnami/rabbitmq] Use common password/secrets manager to handle credentials ([#29879](https://github.com/bitnami/charts/pull/29879))
 
