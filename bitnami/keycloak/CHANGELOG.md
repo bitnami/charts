@@ -1,8 +1,12 @@
 # Changelog
 
+## 24.0.1 (2024-10-14)
+
+* [bitnami/keycloak] adds port 9000 to the default ingress policy ([#29889](https://github.com/bitnami/charts/pull/29889))
+
 ## 24.0.0 (2024-10-08)
 
-* [bitnami/keycloak] Release 24.0.0 ([#29815](https://github.com/bitnami/charts/pull/29815))
+* [bitnami/keycloak] Release 24.0.0 (#29815) ([02bf8f8](https://github.com/bitnami/charts/commit/02bf8f8821a875ca3605705f9c092a077ef29772)), closes [#29815](https://github.com/bitnami/charts/issues/29815)
 
 ## 23.0.0 (2024-10-03)
 
