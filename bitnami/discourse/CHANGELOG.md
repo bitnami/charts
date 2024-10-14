@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.0.2 (2024-10-11)
+## 15.0.2 (2024-10-14)
 
 * [bitnami/discourse]: (bugfix) fix mount path on install-plugins init-container ([#29874](https://github.com/bitnami/charts/pull/29874))
 
