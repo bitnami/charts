@@ -714,6 +714,7 @@ query:
   ## @param query.autoscaling.maxReplicas Maximum number of Thanos Query replicas
   ## @param query.autoscaling.targetCPU Target CPU utilization percentage
   ## @param query.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param query.autoscaling.targetPodMetrics Target Pod metric name and AverageValue
   ##
   autoscaling:
     enabled: false
@@ -721,11 +722,7 @@ query:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
-  ## Thanos Query Custom Autoscaling configuration
-  ## @param query.customAutoScaling.enabled Enable custom Autoscaling for Thanos Query
-  ##
-  customAutoScaling:
-    enabled: false
+    targetPodMetrics: []
   ## Thanos Query Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param query.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Query
