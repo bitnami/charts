@@ -298,6 +298,7 @@ revisionHistoryLimitCount: 10
 containerPorts:
   http: 8080
   https: 8443
+  metrics: 9000
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
 extraContainerPorts: []
