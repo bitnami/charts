@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.2 (2024-10-05)
+## 15.0.3 (2024-10-14)
 
-* [Bitnami/rabbitmq] - Fix duplicate key issue with Helm/FluxCD integration ([#29780](https://github.com/bitnami/charts/pull/29780))
+* [bitnami/rabbitmq] Use common password/secrets manager to handle credentials ([#29879](https://github.com/bitnami/charts/pull/29879))
+
+## <small>15.0.2 (2024-10-07)</small>
+
+* [Bitnami/rabbitmq] - Fix duplicate key issue with Helm/FluxCD integration (#29780) ([cea9e6c](https://github.com/bitnami/charts/commit/cea9e6c9ea4b97b5ec48c5156d8d6c9fcd1ded13)), closes [#29780](https://github.com/bitnami/charts/issues/29780)
 
 ## <small>15.0.1 (2024-09-25)</small>
 
