@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.1.0 (2024-10-11)
+## 2.1.0 (2024-10-14)
 
 * [bitnami/mlflow] Make mlflow host part of values ([#29862](https://github.com/bitnami/charts/pull/29862))
 
