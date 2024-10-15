@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.0.0 (2024-10-02)
+## 8.1.0 (2024-10-15)
 
-* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29739](https://github.com/bitnami/charts/pull/29739))
+* [bitnami/mastodon] feat: :sparkles: Add active record keys ([#29900](https://github.com/bitnami/charts/pull/29900))
+
+## 8.0.0 (2024-10-03)
+
+* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29739) ([2be9de6](https://github.com/bitnami/charts/commit/2be9de659f83dc24dcbbffe1d4dd67fd4a4320bb)), closes [#29739](https://github.com/bitnami/charts/issues/29739)
 
 ## <small>7.0.6 (2024-09-30)</small>
 
