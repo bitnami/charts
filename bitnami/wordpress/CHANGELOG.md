@@ -6,7 +6,7 @@
 
 ## <small>23.1.21 (2024-10-08)</small>
 
-* [bitnami/wordpress] Release 23.1.21 ([#29833](https://github.com/bitnami/charts/pull/29833))
+* [bitnami/wordpress] Release 23.1.21 (#29833) ([99b3f1b](https://github.com/bitnami/charts/commit/99b3f1bed2f16b63487ed6c959c70245efcdf00f)), closes [#29833](https://github.com/bitnami/charts/issues/29833)
 
 ## <small>23.1.20 (2024-10-08)</small>
 
