@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.0.1 (2024-10-08)
+## 9.0.2 (2024-10-09)
 
-* [bitnami/mongodb-sharded] Release 9.0.1 ([#29829](https://github.com/bitnami/charts/pull/29829))
+* [bitnami/mongodb-sharded] Release 9.0.2 ([#29854](https://github.com/bitnami/charts/pull/29854))
+
+## <small>9.0.1 (2024-10-08)</small>
+
+* [bitnami/mongodb-sharded] Release 9.0.1 (#29829) ([98bbc94](https://github.com/bitnami/charts/commit/98bbc94cbf695b84dacd75bcf6110fefd00244a6)), closes [#29829](https://github.com/bitnami/charts/issues/29829)
+* [bitnami/mongodb] Update README (#29812) ([6f8a1bf](https://github.com/bitnami/charts/commit/6f8a1bf241a0032a3e44a2ea47f9574f6786d436)), closes [#29812](https://github.com/bitnami/charts/issues/29812)
 
 ## 9.0.0 (2024-10-07)
 
