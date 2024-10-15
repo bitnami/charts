@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.3.0 (2024-10-13)
+## 10.4.0 (2024-10-15)
 
-* [bitnami/etcd]: Allow overriding of snapshot command ([#29873](https://github.com/bitnami/charts/pull/29873))
+* [bitnami/etcd]: Automatic etcd defragmentation ([#29906](https://github.com/bitnami/charts/pull/29906))
+
+## 10.3.0 (2024-10-14)
+
+* [bitnami/etcd]: Allow overriding of snapshot command (#29873) ([5b8af4f](https://github.com/bitnami/charts/commit/5b8af4f5b340ef784955b1714741ec0f33051129)), closes [#29873](https://github.com/bitnami/charts/issues/29873)
 
 ## <small>10.2.19 (2024-10-02)</small>
 
