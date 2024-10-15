@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.34 (2024-10-10)
+## 14.2.35 (2024-10-11)
 
-* [bitnami/postgresql-ha] Release 14.2.34 ([#29858](https://github.com/bitnami/charts/pull/29858))
+* [bitnami/postgresql-ha] Fix pgpool deployment init container security context ([#29857](https://github.com/bitnami/charts/pull/29857))
+
+## <small>14.2.34 (2024-10-10)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.34 (#29858) ([605e68f](https://github.com/bitnami/charts/commit/605e68f43db220bb43800682631ddaf9c42fdf97)), closes [#29858](https://github.com/bitnami/charts/issues/29858)
 
 ## <small>14.2.33 (2024-10-04)</small>
 
