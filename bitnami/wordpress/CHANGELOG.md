@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.1.21 (2024-10-08)
+## 23.2.0 (2024-10-15)
 
-* [bitnami/wordpress] Release 23.1.21 ([#29833](https://github.com/bitnami/charts/pull/29833))
+* [bitnami/wordpress] Add externalDatabase.ssl to add client flag --ssl-mode=REQUIRED ([#29554](https://github.com/bitnami/charts/pull/29554))
+
+## <small>23.1.21 (2024-10-08)</small>
+
+* [bitnami/wordpress] Release 23.1.21 (#29833) ([99b3f1b](https://github.com/bitnami/charts/commit/99b3f1bed2f16b63487ed6c959c70245efcdf00f)), closes [#29833](https://github.com/bitnami/charts/issues/29833)
 
 ## <small>23.1.20 (2024-10-08)</small>
 

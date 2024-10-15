@@ -203,6 +203,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "wordpress.databaseSecretName" . }}
                   key: mariadb-password
+            {{- if .Values.externalDatabase.ssl }}
+            - name: "MYSQL_CLIENT_ENABLE_SSL"
+              value: true
+            {{- end }}
             - name: WORDPRESS_USERNAME
               value: {{ .Values.wordpressUsername | quote }}
             - name: WORDPRESS_PASSWORD
@@ -282,6 +286,7 @@ spec:
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
+
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
