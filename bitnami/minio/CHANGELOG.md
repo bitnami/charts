@@ -1,8 +1,28 @@
 # Changelog
 
-## 14.7.10 (2024-09-17)
+## 14.7.15 (2024-10-02)
 
-* [bitnami/minio] fix: :bug: Add sleep to avoid race condition in provisioning ([#29478](https://github.com/bitnami/charts/pull/29478))
+* [bitnami/minio] Release 14.7.15 ([#29759](https://github.com/bitnami/charts/pull/29759))
+
+## <small>14.7.14 (2024-10-02)</small>
+
+* [bitnami/minio] Release 14.7.14 (#29708) ([f6ae185](https://github.com/bitnami/charts/commit/f6ae1859c75baed3eaa1c459bbf7e0e0605fa560)), closes [#29708](https://github.com/bitnami/charts/issues/29708)
+
+## <small>14.7.13 (2024-09-26)</small>
+
+* [bitnami/minio] Use common password manager to handle credentials (#29559) ([2a1a714](https://github.com/bitnami/charts/commit/2a1a71427ae68d9ef8d19364b344f893c4af44cb)), closes [#29559](https://github.com/bitnami/charts/issues/29559)
+
+## <small>14.7.12 (2024-09-26)</small>
+
+* [bitnami/minio] Release 14.7.12 (#29612) ([d787fbf](https://github.com/bitnami/charts/commit/d787fbfd4f409ecd2004052c8610676484ad101d)), closes [#29612](https://github.com/bitnami/charts/issues/29612)
+
+## <small>14.7.11 (2024-09-24)</small>
+
+* [bitnami/minio] Release 14.7.11 (#29588) ([4d4155e](https://github.com/bitnami/charts/commit/4d4155e2d11ad4294f2f2c130311a631239aa906)), closes [#29588](https://github.com/bitnami/charts/issues/29588)
+
+## <small>14.7.10 (2024-09-17)</small>
+
+* [bitnami/minio] fix: :bug: Add sleep to avoid race condition in provisioning (#29478) ([c522a3c](https://github.com/bitnami/charts/commit/c522a3c203b3d2fc381698384c58e63ab2bba5c0)), closes [#29478](https://github.com/bitnami/charts/issues/29478)
 
 ## <small>14.7.9 (2024-09-16)</small>
 

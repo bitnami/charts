@@ -1,8 +1,29 @@
 # Changelog
 
-## 15.6.25 (2024-09-19)
+## 16.0.3 (2024-10-10)
 
-* [bitnami/mongodb] Release 15.6.25 ([#29529](https://github.com/bitnami/charts/pull/29529))
+* [bitnami/mongodb] Fixed awk script to extract  in order to be more st… ([#29824](https://github.com/bitnami/charts/pull/29824))
+
+## <small>16.0.2 (2024-10-09)</small>
+
+* [bitnami/mongodb] Release 16.0.2 (#29855) ([7fec11a](https://github.com/bitnami/charts/commit/7fec11aa57b1c66cea587219b86081fde3ac0b97)), closes [#29855](https://github.com/bitnami/charts/issues/29855)
+
+## <small>16.0.1 (2024-10-08)</small>
+
+* [bitnami/mongodb] Release 16.0.1 (#29830) ([6360c47](https://github.com/bitnami/charts/commit/6360c478136e8c0d58b7bb50e7f507308afc25f6)), closes [#29830](https://github.com/bitnami/charts/issues/29830)
+* [bitnami/mongodb] Update README (#29812) ([6f8a1bf](https://github.com/bitnami/charts/commit/6f8a1bf241a0032a3e44a2ea47f9574f6786d436)), closes [#29812](https://github.com/bitnami/charts/issues/29812)
+
+## 16.0.0 (2024-10-07)
+
+* [bitnami/mongodb] Release 16.0.0 (#29801) ([5973e5c](https://github.com/bitnami/charts/commit/5973e5c8e6aa766997000d6a49b9be7936298c30)), closes [#29801](https://github.com/bitnami/charts/issues/29801)
+
+## <small>15.6.26 (2024-09-23)</small>
+
+* [bitnami/mongodb] Fixed arbiter anti affinity rules to prevent it from running on the same node of a ([ded7e1f](https://github.com/bitnami/charts/commit/ded7e1f62ddcaba8fdeaf29a485aaf199295ccfc)), closes [#29565](https://github.com/bitnami/charts/issues/29565)
+
+## <small>15.6.25 (2024-09-19)</small>
+
+* [bitnami/mongodb] Release 15.6.25 (#29529) ([8091ced](https://github.com/bitnami/charts/commit/8091ced2fc72072724265e78a09ad490e4711c6a)), closes [#29529](https://github.com/bitnami/charts/issues/29529)
 
 ## <small>15.6.24 (2024-09-14)</small>
 

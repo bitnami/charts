@@ -1,8 +1,28 @@
 # Changelog
 
-## 23.2.0 (2024-09-20)
+## 23.2.0 (2024-10-15)
 
 * [bitnami/wordpress] Add externalDatabase.ssl to add client flag --ssl-mode=REQUIRED ([#29554](https://github.com/bitnami/charts/pull/29554))
+
+## <small>23.1.21 (2024-10-08)</small>
+
+* [bitnami/wordpress] Release 23.1.21 ([#29833](https://github.com/bitnami/charts/pull/29833))
+
+## <small>23.1.20 (2024-10-08)</small>
+
+* [bitnami/wordpress] Release 23.1.20 (#29831) ([44c128f](https://github.com/bitnami/charts/commit/44c128f31abbef672d91a622d96f698c28005879)), closes [#29831](https://github.com/bitnami/charts/issues/29831)
+
+## <small>23.1.19 (2024-10-01)</small>
+
+* [bitnami/wordpress] templates/ingress.yaml: fix wrong www.www tls name (#29562) ([6590b93](https://github.com/bitnami/charts/commit/6590b9313eab453bcec62d90e4c11ff5f9873618)), closes [#29562](https://github.com/bitnami/charts/issues/29562)
+
+## <small>23.1.18 (2024-10-01)</small>
+
+* [bitnami/wordpress] Release 23.1.18 (#29676) ([0c5c05a](https://github.com/bitnami/charts/commit/0c5c05a10729dde5f561362d4ad53445b3ee7d66)), closes [#29676](https://github.com/bitnami/charts/issues/29676)
+
+## <small>23.1.17 (2024-09-25)</small>
+
+* [bitnami/wordpress] Release 23.1.17 (#29594) ([15df4f2](https://github.com/bitnami/charts/commit/15df4f2ef9e3aa29ce57722847e54fb2cbdfc371)), closes [#29594](https://github.com/bitnami/charts/issues/29594)
 
 ## <small>23.1.16 (2024-09-20)</small>
 

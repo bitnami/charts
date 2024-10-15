@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.0.1 (2024-09-12)
+## 21.0.2 (2024-09-25)
 
-* [bitnami/schema-registry] Release 21.0.1 ([#29370](https://github.com/bitnami/charts/pull/29370))
+* [bitnami/schema-registry] Release 21.0.2 ([#29596](https://github.com/bitnami/charts/pull/29596))
+
+## <small>21.0.1 (2024-09-12)</small>
+
+* [bitnami/schema-registry] Release 21.0.1 (#29370) ([6d9c981](https://github.com/bitnami/charts/commit/6d9c981f179c3c383d699b7291b616ee1fb0cb92)), closes [#29370](https://github.com/bitnami/charts/issues/29370)
+* [schema-registry] Fix typo in README: envVars -> extraEnvVars (#27564) ([46cae1c](https://github.com/bitnami/charts/commit/46cae1c851d1df12dcc98662c6304699663d2908)), closes [#27564](https://github.com/bitnami/charts/issues/27564)
 
 ## 21.0.0 (2024-08-05)
 

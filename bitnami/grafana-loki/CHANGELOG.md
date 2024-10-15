@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.6.16 (2024-09-15)
+## 4.6.19 (2024-10-13)
 
-* [bitnami/grafana-loki] bugfix: loki component not include `.Values.metrics.serviceMonitor.labels` ([#29434](https://github.com/bitnami/charts/pull/29434))
+* [grafana-loki] Fix loki config results_cache type embedded-cache ([#29878](https://github.com/bitnami/charts/pull/29878))
+
+## <small>4.6.18 (2024-10-02)</small>
+
+* [bitnami/grafana-loki] Release 4.6.18 (#29695) ([cbbfbba](https://github.com/bitnami/charts/commit/cbbfbba37e3dd37337bfbcc0bfd8c45ad31f6d57)), closes [#29695](https://github.com/bitnami/charts/issues/29695)
+
+## <small>4.6.17 (2024-09-24)</small>
+
+* [bitnami/grafana-loki] Release 4.6.17 (#29541) ([d92e7e9](https://github.com/bitnami/charts/commit/d92e7e98c17ae02afba6e98b8559880b40bc53eb)), closes [#29541](https://github.com/bitnami/charts/issues/29541)
+
+## <small>4.6.16 (2024-09-16)</small>
+
+* [bitnami/grafana-loki] bugfix: loki component not include `.Values.metrics.serviceMonitor.labels` (# ([9dc17d8](https://github.com/bitnami/charts/commit/9dc17d8ec99ea4451bbe01256496029e346e17c3)), closes [#29434](https://github.com/bitnami/charts/issues/29434)
 
 ## <small>4.6.15 (2024-09-13)</small>
 

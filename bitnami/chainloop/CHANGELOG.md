@@ -1,8 +1,28 @@
 # Changelog
 
-## 1.0.11 (2024-09-19)
+## 2.0.1 (2024-10-08)
 
-* [bitnami/chainloop] Release 1.0.11 ([#29540](https://github.com/bitnami/charts/pull/29540))
+* [bitnami/chainloop] Release 2.0.1 ([#29823](https://github.com/bitnami/charts/pull/29823))
+
+## 2.0.0 (2024-10-03)
+
+* [bitnami/chainloop] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29729) ([3f44baf](https://github.com/bitnami/charts/commit/3f44baf823f78b5b63c4ab3495733e473d070c0c)), closes [#29729](https://github.com/bitnami/charts/issues/29729)
+
+## <small>1.0.14 (2024-10-01)</small>
+
+* [bitnami/chainloop] Release 1.0.14 (#29685) ([ef41798](https://github.com/bitnami/charts/commit/ef417987465fdc0749079b165627174eba90c981)), closes [#29685](https://github.com/bitnami/charts/issues/29685)
+
+## <small>1.0.13 (2024-09-30)</small>
+
+* [bitnami/chainloop] Release 1.0.13 (#29663) ([8aceafc](https://github.com/bitnami/charts/commit/8aceafcd54e0973de53cc77b138f3a8714473be2)), closes [#29663](https://github.com/bitnami/charts/issues/29663)
+
+## <small>1.0.12 (2024-09-23)</small>
+
+* [bitnami/chainloop] Release 1.0.12 (#29575) ([bd2cb3c](https://github.com/bitnami/charts/commit/bd2cb3c6703554b7535e2ca062a7843c2fabb319)), closes [#29575](https://github.com/bitnami/charts/issues/29575)
+
+## <small>1.0.11 (2024-09-19)</small>
+
+* [bitnami/chainloop] Release 1.0.11 (#29540) ([c9af6c6](https://github.com/bitnami/charts/commit/c9af6c64d4f54e2f4bae59a0b4d95203e666cc4e)), closes [#29540](https://github.com/bitnami/charts/issues/29540)
 
 ## <small>1.0.10 (2024-09-19)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.0.1 (2024-09-03)
+## 17.0.1 (2024-10-14)
 
-* [bitnami/kubeapps] Release 16.0.1 ([#29165](https://github.com/bitnami/charts/pull/29165))
+* [bitnami/kubeapps] Release 17.0.1 ([#29886](https://github.com/bitnami/charts/pull/29886))
+
+## 17.0.0 (2024-10-03)
+
+* [bitnami/kubeapps] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29738) ([5982481](https://github.com/bitnami/charts/commit/59824815c7e4575f70cfea81ad61d158c2a85c0e)), closes [#29738](https://github.com/bitnami/charts/issues/29738)
+
+## <small>16.0.1 (2024-09-03)</small>
+
+* [bitnami/kubeapps] Release 16.0.1 (#29165) ([f2fdc57](https://github.com/bitnami/charts/commit/f2fdc5769e04a670d66bc1227bd030b360723264)), closes [#29165](https://github.com/bitnami/charts/issues/29165)
 
 ## 16.0.0 (2024-08-13)
 

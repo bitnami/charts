@@ -1,8 +1,16 @@
 # Changelog
 
-## 30.1.3 (2024-09-19)
+## 30.1.5 (2024-10-07)
 
-* [bitnami/kafka] Release 30.1.3 ([#29518](https://github.com/bitnami/charts/pull/29518))
+* [bitnami/kafka] Update default value of `heapOpts` to fit Kafka pod RAM limit while utilize its increase (#29670) ([#29782](https://github.com/bitnami/charts/pull/29782))
+
+## <small>30.1.4 (2024-09-22)</small>
+
+* Update values.yaml (#29557) ([40a12b6](https://github.com/bitnami/charts/commit/40a12b6f509a7f6894212eac200215c4ed7bc088)), closes [#29557](https://github.com/bitnami/charts/issues/29557)
+
+## <small>30.1.3 (2024-09-19)</small>
+
+* [bitnami/kafka] Release 30.1.3 (#29518) ([f88b375](https://github.com/bitnami/charts/commit/f88b37547aafb3e788603e4432f87dd421b91a9c)), closes [#29518](https://github.com/bitnami/charts/issues/29518)
 
 ## <small>30.1.2 (2024-09-17)</small>
 

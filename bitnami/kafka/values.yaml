@@ -146,9 +146,9 @@ log4j: ""
 ## NOTE: this will override `log4j`
 ##
 existingLog4jConfigMap: ""
-## @param heapOpts Kafka Java Heap size
+## @param heapOpts Kafka Java Heap configuration
 ##
-heapOpts: -Xmx1024m -Xms1024m
+heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75
 ## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`
 ## ref: https://cwiki.apache.org/confluence/display/KAFKA/KIP-392%3A+Allow+consumers+to+fetch+from+closest+replica
 ##
@@ -857,7 +857,7 @@ controller:
   ## Kafka Pod Disruption Budget
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
   ## @param controller.pdb.create Deploy a pdb object for the Kafka pod
-  ## @param controller.pdb.minAvailable Maximum number/percentage of unavailable Kafka replicas
+  ## @param controller.pdb.minAvailable Minimum number/percentage of available Kafka replicas
   ## @param controller.pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
   ##
   pdb:
