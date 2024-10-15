@@ -236,10 +236,10 @@ loki:
             timeout: 500ms
             update_interval: 1m
           {{- else }}
-          embedded-cache:
+          embedded_cache:
             enabled: true
-            max_size_items: 1024
-            validity: 24h
+            max_size_mb: 4096
+            ttl: 24h
           {{- end }}
     {{- if not .Values.queryScheduler.enabled }}
     frontend_worker:
