@@ -255,48 +255,51 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 
 ### Mastodon common parameters
 
-| Name                             | Description                                                                                                                    | Value                                |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
-| `environment`                    | Mastodon Rails and Node environment. Should be one of 'production',                                                            | `production`                         |
-| `adminUser`                      | Mastodon admin username                                                                                                        | `""`                                 |
-| `adminEmail`                     | Mastodon admin email                                                                                                           | `""`                                 |
-| `adminPassword`                  | Mastodon admin password                                                                                                        | `""`                                 |
-| `otpSecret`                      | Mastodon one time password secret. Generate with rake secret. Changing it will break two-factor authentication.                | `""`                                 |
-| `secretKeyBase`                  | Mastodon secret key base. Generate with rake secret. Changing it will break all active browser sessions.                       | `""`                                 |
-| `vapidPrivateKey`                | Mastodon vapid private key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications. | `""`                                 |
-| `vapidPublicKey`                 | Mastodon vapid public key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.  | `""`                                 |
-| `extraConfig`                    | Extra configuration for Mastodon in the form of environment variables                                                          | `{}`                                 |
-| `extraSecretConfig`              | Extra secret configuration for Mastodon in the form of environment variables                                                   | `{}`                                 |
-| `existingConfigmap`              | The name of an existing ConfigMap with your default configuration for Mastodon                                                 | `""`                                 |
-| `existingSecret`                 | The name of an existing Secret with your default configuration for Mastodon                                                    | `""`                                 |
-| `extraConfigExistingConfigmap`   | The name of an existing ConfigMap with your extra configuration for Mastodon                                                   | `""`                                 |
-| `extraConfigExistingSecret`      | The name of an existing Secret with your extra configuration for Mastodon                                                      | `""`                                 |
-| `enableSearches`                 | Enable the search engine (uses Elasticsearch under the hood)                                                                   | `true`                               |
-| `enableS3`                       | Enable the S3 storage engine                                                                                                   | `true`                               |
-| `forceHttpsS3Protocol`           | Force Mastodon's S3_PROTOCOL to be https (Useful when TLS is terminated using cert-manager/Ingress)                            | `false`                              |
-| `useSecureWebSocket`             | Set Mastodon's STREAMING_API_BASE_URL to use secure websocket (wss:// instead of ws://)                                        | `false`                              |
-| `local_https`                    | Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true.   | `true`                               |
-| `localDomain`                    | The domain name used by accounts on this instance. Unless you're using                                                         | `""`                                 |
-| `webDomain`                      | Optional alternate domain used when you want to host Mastodon at a                                                             | `""`                                 |
-| `defaultLocale`                  | Set the default locale for this instance                                                                                       | `en`                                 |
-| `s3AliasHost`                    | S3 alias host for Mastodon (will use 'http://webDomain/bucket' if not set)                                                     | `""`                                 |
-| `smtp.server`                    | SMTP server                                                                                                                    | `""`                                 |
-| `smtp.port`                      | SMTP port                                                                                                                      | `587`                                |
-| `smtp.from_address`              | From address for sent emails                                                                                                   | `""`                                 |
-| `smtp.domain`                    | SMTP domain                                                                                                                    | `""`                                 |
-| `smtp.reply_to`                  | Reply-To value for sent emails                                                                                                 | `""`                                 |
-| `smtp.delivery_method`           | SMTP delivery method                                                                                                           | `smtp`                               |
-| `smtp.ca_file`                   | SMTP CA file location                                                                                                          | `/etc/ssl/certs/ca-certificates.crt` |
-| `smtp.openssl_verify_mode`       | OpenSSL verify mode                                                                                                            | `none`                               |
-| `smtp.enable_starttls_auto`      | Automatically enable StartTLS                                                                                                  | `true`                               |
-| `smtp.tls`                       | SMTP TLS                                                                                                                       | `false`                              |
-| `smtp.auth_method`               | SMTP auth method (set to "none" to disable SMTP auth)                                                                          | `plain`                              |
-| `smtp.login`                     | SMTP auth username                                                                                                             | `""`                                 |
-| `smtp.password`                  | SMTP auth password                                                                                                             | `""`                                 |
-| `smtp.existingSecret`            | Name of an existing secret resource containing the SMTP                                                                        | `""`                                 |
-| `smtp.existingSecretLoginKey`    | Name of the key for the SMTP login credential                                                                                  | `""`                                 |
-| `smtp.existingSecretPasswordKey` | Name of the key for the SMTP password credential                                                                               | `""`                                 |
-| `smtp.existingSecretServerKey`   | Name of the key for the SMTP hostname                                                                                          | `""`                                 |
+| Name                                      | Description                                                                                                                    | Value                                |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
+| `environment`                             | Mastodon Rails and Node environment. Should be one of 'production',                                                            | `production`                         |
+| `adminUser`                               | Mastodon admin username                                                                                                        | `""`                                 |
+| `adminEmail`                              | Mastodon admin email                                                                                                           | `""`                                 |
+| `adminPassword`                           | Mastodon admin password                                                                                                        | `""`                                 |
+| `otpSecret`                               | Mastodon one time password secret. Generate with rake secret. Changing it will break two-factor authentication.                | `""`                                 |
+| `secretKeyBase`                           | Mastodon secret key base. Generate with rake secret. Changing it will break all active browser sessions.                       | `""`                                 |
+| `vapidPrivateKey`                         | Mastodon vapid private key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications. | `""`                                 |
+| `vapidPublicKey`                          | Mastodon vapid public key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.  | `""`                                 |
+| `activeRecordEncryptionDeterministicKey`  | Active record encryption deterministic key. Generate with rake db:encryption:init                                              | `""`                                 |
+| `activeRecordEncryptionKeyDerivationSalt` | Active record key derivation salt. Generate with rake db:encryption:init                                                       | `""`                                 |
+| `activeRecordEncryptionPrimaryKey`        | Active record encryption primary key. Generate with rake db:encryption:init                                                    | `""`                                 |
+| `extraConfig`                             | Extra configuration for Mastodon in the form of environment variables                                                          | `{}`                                 |
+| `extraSecretConfig`                       | Extra secret configuration for Mastodon in the form of environment variables                                                   | `{}`                                 |
+| `existingConfigmap`                       | The name of an existing ConfigMap with your default configuration for Mastodon                                                 | `""`                                 |
+| `existingSecret`                          | The name of an existing Secret with your default configuration for Mastodon                                                    | `""`                                 |
+| `extraConfigExistingConfigmap`            | The name of an existing ConfigMap with your extra configuration for Mastodon                                                   | `""`                                 |
+| `extraConfigExistingSecret`               | The name of an existing Secret with your extra configuration for Mastodon                                                      | `""`                                 |
+| `enableSearches`                          | Enable the search engine (uses Elasticsearch under the hood)                                                                   | `true`                               |
+| `enableS3`                                | Enable the S3 storage engine                                                                                                   | `true`                               |
+| `forceHttpsS3Protocol`                    | Force Mastodon's S3_PROTOCOL to be https (Useful when TLS is terminated using cert-manager/Ingress)                            | `false`                              |
+| `useSecureWebSocket`                      | Set Mastodon's STREAMING_API_BASE_URL to use secure websocket (wss:// instead of ws://)                                        | `false`                              |
+| `local_https`                             | Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true.   | `true`                               |
+| `localDomain`                             | The domain name used by accounts on this instance. Unless you're using                                                         | `""`                                 |
+| `webDomain`                               | Optional alternate domain used when you want to host Mastodon at a                                                             | `""`                                 |
+| `defaultLocale`                           | Set the default locale for this instance                                                                                       | `en`                                 |
+| `s3AliasHost`                             | S3 alias host for Mastodon (will use 'http://webDomain/bucket' if not set)                                                     | `""`                                 |
+| `smtp.server`                             | SMTP server                                                                                                                    | `""`                                 |
+| `smtp.port`                               | SMTP port                                                                                                                      | `587`                                |
+| `smtp.from_address`                       | From address for sent emails                                                                                                   | `""`                                 |
+| `smtp.domain`                             | SMTP domain                                                                                                                    | `""`                                 |
+| `smtp.reply_to`                           | Reply-To value for sent emails                                                                                                 | `""`                                 |
+| `smtp.delivery_method`                    | SMTP delivery method                                                                                                           | `smtp`                               |
+| `smtp.ca_file`                            | SMTP CA file location                                                                                                          | `/etc/ssl/certs/ca-certificates.crt` |
+| `smtp.openssl_verify_mode`                | OpenSSL verify mode                                                                                                            | `none`                               |
+| `smtp.enable_starttls_auto`               | Automatically enable StartTLS                                                                                                  | `true`                               |
+| `smtp.tls`                                | SMTP TLS                                                                                                                       | `false`                              |
+| `smtp.auth_method`                        | SMTP auth method (set to "none" to disable SMTP auth)                                                                          | `plain`                              |
+| `smtp.login`                              | SMTP auth username                                                                                                             | `""`                                 |
+| `smtp.password`                           | SMTP auth password                                                                                                             | `""`                                 |
+| `smtp.existingSecret`                     | Name of an existing secret resource containing the SMTP                                                                        | `""`                                 |
+| `smtp.existingSecretLoginKey`             | Name of the key for the SMTP login credential                                                                                  | `""`                                 |
+| `smtp.existingSecretPasswordKey`          | Name of the key for the SMTP password credential                                                                               | `""`                                 |
+| `smtp.existingSecretServerKey`            | Name of the key for the SMTP hostname                                                                                          | `""`                                 |
 
 ### Mastodon Web Parameters
 
