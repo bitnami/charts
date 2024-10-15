@@ -4,7 +4,6 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.backup.enabled }}
-{{- $pgUser := include "postgresql-ha.postgresqlUsername" . }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -63,14 +62,10 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-                    {{- if (include "postgresql-ha.postgresqlCreateSecret" .) }}
-                    key: password
-                    {{- else }}
-                    {{- if ( index ( lookup "v1" "Secret" (include "common.names.namespace" .) (include "postgresql-ha.postgresqlSecretName" .) ) "data.postgres-password" ) }}
+                    {{- if (include "postgresql-ha.postgresqlSeparatePostgresPassword" .) }}
                     key: postgres-password
                     {{- else }}
                     key: password
-                    {{- end }}
                     {{- end }}
               {{- end }}
               - name: PGHOST
