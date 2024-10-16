@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.8.0 (2024-10-15)
+## 14.8.0 (2024-10-16)
 
 * [bitnami/minio] Support selector for `volumeClaimTemplates` ([#29897](https://github.com/bitnami/charts/pull/29897))
 
