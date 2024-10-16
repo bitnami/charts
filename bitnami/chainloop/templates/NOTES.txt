@@ -67,4 +67,4 @@ https://docs.chainloop.dev/getting-started/installation#configure-cli-optional
 {{- include "common.warnings.rollingTag" .Values.controlplane.image }}
 {{- include "common.warnings.rollingTag" .Values.cas.image }}
 {{- include "common.warnings.rollingTag" .Values.controlplane.migration.image }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.controlplane.image .Values.cas.image .Values.controlplane.migration.image) "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.controlplane.image .Values.cas.image .Values.controlplane.migration.image .Values.dex.image) "context" $) }}
