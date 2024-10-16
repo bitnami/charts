@@ -1,8 +1,44 @@
 # Changelog
 
-## 10.2.12 (2024-08-07)
+## 10.3.1 (2024-10-16)
 
-* [bitnami/etcd] Release 10.2.12 ([#28712](https://github.com/bitnami/charts/pull/28712))
+* fix etcd cronjob volume ([#29895](https://github.com/bitnami/charts/pull/29895))
+
+## 10.3.0 (2024-10-14)
+
+* [bitnami/etcd]: Allow overriding of snapshot command (#29873) ([5b8af4f](https://github.com/bitnami/charts/commit/5b8af4f5b340ef784955b1714741ec0f33051129)), closes [#29873](https://github.com/bitnami/charts/issues/29873)
+
+## <small>10.2.19 (2024-10-02)</small>
+
+* [bitnami/etcd] Release 10.2.19 (#29689) ([624fa30](https://github.com/bitnami/charts/commit/624fa30d7eaaf67557a9dd6ba3393ced2419256b)), closes [#29689](https://github.com/bitnami/charts/issues/29689)
+
+## <small>10.2.18 (2024-09-23)</small>
+
+* [bitnami/etcd] Release 10.2.18 (#29567) ([4c79d16](https://github.com/bitnami/charts/commit/4c79d16b6a975868603490473c50dc709ca51b9e)), closes [#29567](https://github.com/bitnami/charts/issues/29567)
+
+## <small>10.2.17 (2024-09-17)</small>
+
+* [bitnami/etcd] test: :white_check_mark: Improve reliability of ginkgo tests (#29476) ([03fc421](https://github.com/bitnami/charts/commit/03fc4212a65b2af824cc32e7d4b19dd48686b947)), closes [#29476](https://github.com/bitnami/charts/issues/29476)
+
+## <small>10.2.16 (2024-09-12)</small>
+
+* [bitnami/etcd] Release 10.2.16 (#29380) ([250df75](https://github.com/bitnami/charts/commit/250df756b74ba578a9e4521c2a958e3860ec1166)), closes [#29380](https://github.com/bitnami/charts/issues/29380)
+
+## <small>10.2.15 (2024-09-12)</small>
+
+* [bitnami/etcd] Release 10.2.15 (#29373) ([be542d6](https://github.com/bitnami/charts/commit/be542d607f92d6efbc7e32331199354d21d46384)), closes [#29373](https://github.com/bitnami/charts/issues/29373)
+
+## <small>10.2.14 (2024-09-05)</small>
+
+* [bitnami/etcd] Release 10.2.14 (#29233) ([72a3026](https://github.com/bitnami/charts/commit/72a30265033f92f4b1e2d357948140ffd5ab4751)), closes [#29233](https://github.com/bitnami/charts/issues/29233)
+
+## <small>10.2.13 (2024-08-27)</small>
+
+* [bitnami/etcd] Release 10.2.13 (#29048) ([14a9538](https://github.com/bitnami/charts/commit/14a9538b0d55f496b5ce4387307b1fa5c0bc2378)), closes [#29048](https://github.com/bitnami/charts/issues/29048)
+
+## <small>10.2.12 (2024-08-07)</small>
+
+* [bitnami/etcd] Release 10.2.12 (#28712) ([4a5fc9e](https://github.com/bitnami/charts/commit/4a5fc9ee1b8d34ea953c3c5f9135297611801859)), closes [#28712](https://github.com/bitnami/charts/issues/28712)
 
 ## <small>10.2.11 (2024-07-25)</small>
 
