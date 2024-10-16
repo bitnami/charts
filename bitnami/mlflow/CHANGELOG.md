@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.1 (2024-10-16)
+## 2.0.2 (2024-10-16)
 
-* [bitnami/mlflow] Release 2.0.1 ([#29927](https://github.com/bitnami/charts/pull/29927))
+* [bitnami/mlflow] Release 2.0.2 ([#29945](https://github.com/bitnami/charts/pull/29945))
+
+## <small>2.0.1 (2024-10-16)</small>
+
+* [bitnami/mlflow] Release 2.0.1 (#29927) ([d0b88fc](https://github.com/bitnami/charts/commit/d0b88fc101c00906458403db9246731258f6cbe3)), closes [#29927](https://github.com/bitnami/charts/issues/29927)
 
 ## 2.0.0 (2024-10-03)
 
