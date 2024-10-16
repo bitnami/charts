@@ -1662,6 +1662,7 @@ redis:
     service:
       ports:
         redis: 6379
+
     ## Redis&reg; master resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
@@ -1679,6 +1680,13 @@ redis:
     ##     memory: 1024Mi
     ##
     resources: {}
+    ## @param redis.master.disableCommands Array with Redis commands to disable on master nodes
+    ## Commands will be completely disabled by renaming each to an empty string.
+    ## ref: https://redis.io/topics/security#disabling-of-specific-commands
+    ##
+    ## Enable Flush commands (FLUSHDB, FLUSHALL)
+    ## Appsmith needs flush when booting
+    disableCommands: []
   ## @param redis.auth.enabled Enable Redis auth
   ## @param redis.auth.password Redis password
   ## @param redis.auth.existingSecret Name of a secret containing the Redis password
@@ -1687,6 +1695,14 @@ redis:
     enabled: true
     password: ""
     existingSecret: ""
+  replica:
+    ## @param redis.replica.disableCommands Array with Redis commands to disable on replicas nodes
+    ## Commands will be completely disabled by renaming each to an empty string.
+    ## ref: https://redis.io/topics/security#disabling-of-specific-commands
+    ##
+    ## Enable Flush commands (FLUSHDB, FLUSHALL)
+    ## Appsmith needs flush when booting
+    disableCommands: []
 ## @section MongoDB sub-chart parameters
 ##
 mongodb:
