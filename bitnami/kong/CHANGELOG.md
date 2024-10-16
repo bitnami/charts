@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.0.1 (2024-10-16)
+## 14.0.2 (2024-10-16)
 
-* [bitnami/kong] Release 14.0.1 ([#29922](https://github.com/bitnami/charts/pull/29922))
+* [bitnami/kong] Release 14.0.2 ([#29926](https://github.com/bitnami/charts/pull/29926))
+
+## <small>14.0.1 (2024-10-16)</small>
+
+* [bitnami/kong] Release 14.0.1 (#29922) ([db33704](https://github.com/bitnami/charts/commit/db33704cd47f8afa9fc0c7822061212668674f42)), closes [#29922](https://github.com/bitnami/charts/issues/29922)
 
 ## 14.0.0 (2024-10-03)
 
