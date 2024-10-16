@@ -24,7 +24,7 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-  {{- if .Values.dataNode.allowExternalEgress }}
+  {{- if .Values.dataNode.networkPolicy.allowExternalEgress }}
   egress:
     - {}
   {{- else }}
