@@ -7,6 +7,6 @@ dependencies:
   version: 16.0.1
 - name: vault
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 1.4.25
-digest: sha256:9d5c1ee42df874fe43960249bfd3787127d91a29810ae9f8c753416617fcf9bb
-generated: "2024-10-08T17:08:45.962701849Z"
+  version: 1.4.26
+digest: sha256:2ed6da05a8d0605b23a53ef64417c11d1b0c083072212a99fa89dbb79d58b712
+generated: "2024-10-16T07:49:12.021335656Z"
