@@ -60,7 +60,7 @@ spec:
               volumeMounts:
                 - name: snapshot-volume
                   mountPath: /snapshots
-                - name: tmp-dir
+                - name: empty-dir
                   mountPath: /tmp
           {{- end }}
           containers:
