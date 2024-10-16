@@ -4,9 +4,9 @@
 
 * [bitnami/minio] Support selector for `volumeClaimTemplates` ([#29897](https://github.com/bitnami/charts/pull/29897))
 
-## 14.7.16 (2024-10-16)
+## <small>14.7.16 (2024-10-16)</small>
 
-* [bitnami/minio] Release 14.7.16 ([#29919](https://github.com/bitnami/charts/pull/29919))
+* [bitnami/minio] Release 14.7.16 (#29919) ([2621f66](https://github.com/bitnami/charts/commit/2621f666738fa4ef74b8dbaa0fc314971a22f987)), closes [#29919](https://github.com/bitnami/charts/issues/29919)
 
 ## <small>14.7.15 (2024-10-02)</small>
 
