@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.0 (2024-10-04)
+## 20.2.1 (2024-10-15)
 
-* [bitnami/redis] add extraPodSpec ([#29725](https://github.com/bitnami/charts/pull/29725))
+* [bitnami/redis] Fix preExecCmds parameter ([#29898](https://github.com/bitnami/charts/pull/29898))
+
+## 20.2.0 (2024-10-09)
+
+* [bitnami/redis] add extraPodSpec (#29725) ([0d2b826](https://github.com/bitnami/charts/commit/0d2b8269e0e5c1a287fcd8e44c623afa6311e761)), closes [#29725](https://github.com/bitnami/charts/issues/29725)
 
 ## <small>20.1.7 (2024-10-02)</small>
 
