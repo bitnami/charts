@@ -44,7 +44,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.13.6-debian-12-r1
+  tag: 4.0.2-debian-12-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -252,9 +252,9 @@ memoryHighWatermark:
 plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 
 ## @param queue_master_locator Changes the queue_master_locator setting in the rabbitmq config file
-## 
-queue_master_locator: min-masters  
-  
+##
+queue_master_locator: min-masters
+
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
 ##
@@ -438,7 +438,7 @@ configuration: |-
   ssl_options.certfile = /opt/bitnami/rabbitmq/certs/server_certificate.pem
   ssl_options.keyfile = /opt/bitnami/rabbitmq/certs/server_key.pem
   {{- if .Values.auth.tls.sslOptionsPassword.enabled }}
-  ssl_options.password = {{ template "rabbitmq.tlsSslOptionsPassword" . }}
+  ssl_options.password = {{ include "common.secrets.passwords.manage" (dict "secret" .Values.auth.tls.sslOptionsPassword.existingSecret "key" .Values.auth.tls.sslOptionsPassword.key "providedValues" (list "auth.tls.sslOptionsPassword.password") "skipB64enc" true "failOnNew" false "context" $) }}
   {{- end }}
   {{- end }}
   {{- if .Values.ldap.enabled }}
@@ -1331,32 +1331,12 @@ metrics:
   ## ref: https://github.com/coreos/prometheus-operator
   ##
   serviceMonitor:
-    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
-    ##
-    enabled: false
     ## @param metrics.serviceMonitor.namespace Specify the namespace in which the serviceMonitor resource will be created
     ##
     namespace: ""
-    ## @param metrics.serviceMonitor.interval Specify the interval at which metrics should be scraped
-    ##
-    interval: 30s
-    ## @param metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
-    ## e.g:
-    ## scrapeTimeout: 30s
-    ##
-    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
-    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping.
-    ##
-    relabelings: []
-    ## @param metrics.serviceMonitor.metricRelabelings MetricsRelabelConfigs to apply to samples before ingestion.
-    ##
-    metricRelabelings: []
-    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
-    ##
-    honorLabels: false
     ## @param metrics.serviceMonitor.targetLabels Used to keep given service's labels in target
     ## e.g:
     ## - app.kubernetes.io/name
@@ -1367,13 +1347,6 @@ metrics:
     ## - app.kubernetes.io/name
     ##
     podTargetLabels: {}
-    ## @param metrics.serviceMonitor.path Define the path used by ServiceMonitor to scrap metrics
-    ## Could be /metrics for aggregated metrics or /metrics/per-object for more details
-    ##
-    path: ""
-    ## @param metrics.serviceMonitor.params Define the HTTP URL parameters used by ServiceMonitor
-    ##
-    params: {}
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
@@ -1387,6 +1360,112 @@ metrics:
     ## @param metrics.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## Scrape metrics from the `/metrics` endpoint
+    ## ref: https://www.rabbitmq.com/docs/prometheus#default-endpoint
+    ##
+    default:
+      ## @param metrics.serviceMonitor.default.enabled Enable default metrics endpoint (`GET /metrics`) to be scraped by the ServiceMonitor
+      ##
+      enabled: false
+      ## @param metrics.serviceMonitor.default.interval Specify the interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param metrics.serviceMonitor.default.scrapeTimeout Specify the timeout after which the scrape is ended
+      ## e.g:
+      ## scrapeTimeout: 30s
+      ##
+      scrapeTimeout: ""
+      ## @param metrics.serviceMonitor.default.relabelings RelabelConfigs to apply to samples before scraping.
+      ##
+      relabelings: [ ]
+      ## @param metrics.serviceMonitor.default.metricRelabelings MetricsRelabelConfigs to apply to samples before ingestion.
+      ##
+      metricRelabelings: [ ]
+      ## @param metrics.serviceMonitor.default.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Scrape metrics from the `/metrics/per-object` endpoint
+    ## ref: https://www.rabbitmq.com/docs/prometheus#per-object-endpoint
+    ##
+    perObject:
+      ## @param metrics.serviceMonitor.perObject.enabled Enable per-object metrics endpoint (`GET /metrics/per-object`) to be scraped by the ServiceMonitor
+      ##
+      enabled: false
+      ## @param metrics.serviceMonitor.perObject.interval Specify the interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param metrics.serviceMonitor.perObject.scrapeTimeout Specify the timeout after which the scrape is ended
+      ## e.g:
+      ## scrapeTimeout: 30s
+      ##
+      scrapeTimeout: ""
+      ## @param metrics.serviceMonitor.perObject.relabelings RelabelConfigs to apply to samples before scraping.
+      ##
+      relabelings: [ ]
+      ## @param metrics.serviceMonitor.perObject.metricRelabelings MetricsRelabelConfigs to apply to samples before ingestion.
+      ##
+      metricRelabelings: [ ]
+      ## @param metrics.serviceMonitor.perObject.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+    ## Scrape metrics from the `/metrics/detailed` endpoint
+    ## ref: https://www.rabbitmq.com/docs/prometheus#detailed-endpoint
+    ##
+    detailed:
+      ## @param metrics.serviceMonitor.detailed.enabled Enable detailed metrics endpoint (`GET /metrics/detailed`) to be scraped by the ServiceMonitor
+      ##
+      enabled: false
+      ## @param metrics.serviceMonitor.detailed.family List of metric families to get
+      ## e.g.
+      ## family: ["queue_coarse_metrics", "queue_consumer_count"]
+      ##
+      family: []
+      ## @param metrics.serviceMonitor.detailed.vhost Filter metrics to only show for the specified vhosts
+      ##
+      vhost: []
+      ## @param metrics.serviceMonitor.detailed.interval Specify the interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param metrics.serviceMonitor.detailed.scrapeTimeout Specify the timeout after which the scrape is ended
+      ## e.g:
+      ## scrapeTimeout: 30s
+      ##
+      scrapeTimeout: ""
+      ## @param metrics.serviceMonitor.detailed.relabelings RelabelConfigs to apply to samples before scraping.
+      ##
+      relabelings: [ ]
+      ## @param metrics.serviceMonitor.detailed.metricRelabelings MetricsRelabelConfigs to apply to samples before ingestion.
+      ##
+      metricRelabelings: [ ]
+      ## @param metrics.serviceMonitor.detailed.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+
+    ## @param metrics.serviceMonitor.enabled Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.interval Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.
+    ##
+    interval: 30s
+    ## @param metrics.serviceMonitor.scrapeTimeout Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabelings Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.
+    ##
+    relabelings: [ ]
+    ## @param metrics.serviceMonitor.metricRelabelings Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.
+    ##
+    metricRelabelings: [ ]
+    ## @param metrics.serviceMonitor.honorLabels Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.path Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.
+    ##
+    path: ""
+    ## @param metrics.serviceMonitor.params Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.
+    ##
+    params: { }
+
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
@@ -1481,7 +1560,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r26
+    tag: 12-debian-12-r30
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

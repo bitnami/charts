@@ -1,8 +1,24 @@
 # Changelog
 
-## 8.3.5 (2024-08-13)
+## 8.3.9 (2024-10-02)
 
-* [bitnami/external-dns]  Fix crd.create=true ([#27434](https://github.com/bitnami/charts/pull/27434))
+* [bitnami/external-dns] Release 8.3.9 ([#29690](https://github.com/bitnami/charts/pull/29690))
+
+## <small>8.3.8 (2024-09-16)</small>
+
+* [bitnami/external-dns] Fixed oci workload identity secret creation (#29374) ([a248647](https://github.com/bitnami/charts/commit/a248647ee9b6ff0b90e25856ab292557287df10a)), closes [#29374](https://github.com/bitnami/charts/issues/29374)
+
+## <small>8.3.7 (2024-09-05)</small>
+
+* [bitnami/external-dns] Release 8.3.7 (#29231) ([e6c6578](https://github.com/bitnami/charts/commit/e6c65782c9e73b79537c59c33e945d72dcf29b26)), closes [#29231](https://github.com/bitnami/charts/issues/29231)
+
+## <small>8.3.6 (2024-09-05)</small>
+
+* [bitnami/external-dns] Release 8.3.6 (#29211) ([bcab075](https://github.com/bitnami/charts/commit/bcab0754df8f1941cf474c71a895a52ac36a6094)), closes [#29211](https://github.com/bitnami/charts/issues/29211)
+
+## <small>8.3.5 (2024-08-13)</small>
+
+* [bitnami/external-dns]  Fix crd.create=true (#27434) ([fc11b48](https://github.com/bitnami/charts/commit/fc11b486d642d36be11822e902912e29c95e71dc)), closes [#27434](https://github.com/bitnami/charts/issues/27434) [#25967](https://github.com/bitnami/charts/issues/25967)
 
 ## <small>8.3.4 (2024-08-07)</small>
 

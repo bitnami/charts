@@ -27,7 +27,7 @@ it('allows to create a collection', () => {
     });
     // Create collection index and load
     cy.get(`[href$="${c.collection.name}${random}/overview"]`).click({force: true});
-    cy.get('span').contains('Create Index').click({force: true});
+    cy.get('button').contains('Create Index').click({force: true});
     cy.get('[data-cy="index_name"]').type(`${c.collection.idName}{enter}`);
     // Reload and wait for DOM content load
     cy.visit('#/databases');
@@ -37,11 +37,12 @@ it('allows to create a collection', () => {
     cy.contains('loaded');
     // Add sample data
     cy.get(`[href$="${c.collection.name}${random}/overview"]`).click({force: true});
-    cy.get('span[class=MuiTab-wrapper]').contains('Data').click({force: true});
+    cy.get('button[class*=MuiTab-root]').contains('Data').click({force: true});
     cy.get('span').contains('Insert Sample Data').click({force: true});
+    cy.wait(2000);
     cy.get('button[type="submit"]').contains('Import').click({force: true});
     // Check sample data table contains at least 1 entry
-    cy.get('span').contains('Query').click({force: true});
+    cy.get('button').contains('Query').click({force: true});
     cy.get('td [type="checkbox"]');
   });
 });

@@ -1,8 +1,16 @@
 # Changelog
 
+## 2.3.2 (2024-10-02)
+
+* [bitnami/pinniped] Release 2.3.2 ([#29714](https://github.com/bitnami/charts/pull/29714))
+
+## <small>2.3.1 (2024-09-06)</small>
+
+* [bitnami/pinniped] Release 2.3.1 (#29257) ([cc3ce8e](https://github.com/bitnami/charts/commit/cc3ce8ead7d47a2b84b7e135e6016e9e0cd4e3a8)), closes [#29257](https://github.com/bitnami/charts/issues/29257)
+
 ## 2.3.0 (2024-08-14)
 
-* [bitnami/pinniped] chore: :arrow_up: Bump common subchart ([#28869](https://github.com/bitnami/charts/pull/28869))
+* [bitnami/pinniped] chore: :arrow_up: Bump common subchart (#28869) ([bdd9234](https://github.com/bitnami/charts/commit/bdd9234fed458a0a4fd14ee481fb33bf1c598806)), closes [#28869](https://github.com/bitnami/charts/issues/28869)
 
 ## <small>2.2.15 (2024-08-12)</small>
 

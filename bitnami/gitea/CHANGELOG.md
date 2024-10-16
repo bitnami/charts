@@ -1,8 +1,36 @@
 # Changelog
 
-## 2.3.18 (2024-08-07)
+## 3.0.1 (2024-10-09)
 
-* [bitnami/gitea] Release 2.3.18 ([#28713](https://github.com/bitnami/charts/pull/28713))
+* [bitnami/gitea] Release 3.0.1 ([#29853](https://github.com/bitnami/charts/pull/29853))
+
+## 3.0.0 (2024-10-03)
+
+* [bitnami/gitea] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29732) ([d7f95fe](https://github.com/bitnami/charts/commit/d7f95fe48347c4cdb0a63f19752db52b5d7f9612)), closes [#29732](https://github.com/bitnami/charts/issues/29732)
+
+## <small>2.3.23 (2024-10-02)</small>
+
+* [bitnami/gitea] Release 2.3.23 (#29692) ([b9087cc](https://github.com/bitnami/charts/commit/b9087cc758df039fd5a47f74271d608f577e8697)), closes [#29692](https://github.com/bitnami/charts/issues/29692)
+
+## <small>2.3.22 (2024-09-19)</small>
+
+* [bitnami/gitea] Release 2.3.22 (#29512) ([5b8e97d](https://github.com/bitnami/charts/commit/5b8e97dae372b47f3ff2df5f9826373f3cc778e0)), closes [#29512](https://github.com/bitnami/charts/issues/29512)
+
+## <small>2.3.21 (2024-09-15)</small>
+
+* [bitnami/gitea] Release 2.3.21 (#29427) ([fc69df6](https://github.com/bitnami/charts/commit/fc69df6f756458aa4f2b769460fd43f2249654d8)), closes [#29427](https://github.com/bitnami/charts/issues/29427)
+
+## <small>2.3.20 (2024-09-11)</small>
+
+* [bitnami/gitea] Update externaldb-secret logic (#27596) ([c247305](https://github.com/bitnami/charts/commit/c2473057525a51f5177c3da0fc9ae03c0e4577dc)), closes [#27596](https://github.com/bitnami/charts/issues/27596)
+
+## <small>2.3.19 (2024-09-06)</small>
+
+* [bitnami/gitea] Release 2.3.19 (#29244) ([c08607d](https://github.com/bitnami/charts/commit/c08607d3a426e0a41881160baa650147b3b36451)), closes [#29244](https://github.com/bitnami/charts/issues/29244)
+
+## <small>2.3.18 (2024-08-07)</small>
+
+* [bitnami/gitea] Release 2.3.18 (#28713) ([1c3acc8](https://github.com/bitnami/charts/commit/1c3acc86db823eccafcd80454dfd0596128ed655)), closes [#28713](https://github.com/bitnami/charts/issues/28713)
 
 ## <small>2.3.17 (2024-07-25)</small>
 

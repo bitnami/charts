@@ -1,8 +1,48 @@
 # Changelog
 
-## 4.0.1 (2024-08-20)
+## 5.0.0 (2024-10-08)
 
-* [bitnami/appsmith] Release 4.0.1 ([#28939](https://github.com/bitnami/charts/pull/28939))
+* [bitnami/appsmith] Update MongoDB chart to 16.0.0 ([#29805](https://github.com/bitnami/charts/pull/29805))
+
+## <small>4.0.10 (2024-10-02)</small>
+
+* [bitnami/appsmith] Release 4.0.10 (#29752) ([71ea73f](https://github.com/bitnami/charts/commit/71ea73f5897fdacccdc2d7f612b63ceba5fcc770)), closes [#29752](https://github.com/bitnami/charts/issues/29752)
+
+## <small>4.0.9 (2024-09-26)</small>
+
+* [bitnami/appsmith] Release 4.0.9 (#29625) ([8045594](https://github.com/bitnami/charts/commit/80455948bbd56aa0ca2054eededf2b1947533e80)), closes [#29625](https://github.com/bitnami/charts/issues/29625)
+
+## <small>4.0.8 (2024-09-19)</small>
+
+* [bitnami/appsmith] Release 4.0.8 (#29500) ([c9a1bae](https://github.com/bitnami/charts/commit/c9a1bae3f7e3c412225a8e1df827214d9c2dde0b)), closes [#29500](https://github.com/bitnami/charts/issues/29500)
+
+## <small>4.0.7 (2024-09-13)</small>
+
+* [bitnami/appsmith] Release 4.0.7 (#29398) ([73abd18](https://github.com/bitnami/charts/commit/73abd189761588d6fd3452d0c579ed8f02d43625)), closes [#29398](https://github.com/bitnami/charts/issues/29398)
+
+## <small>4.0.6 (2024-09-05)</small>
+
+* [bitnami/appsmith] Release 4.0.6 (#29223) ([a32ba7d](https://github.com/bitnami/charts/commit/a32ba7db578f719b818f3f6e7a8a27bb60840a06)), closes [#29223](https://github.com/bitnami/charts/issues/29223)
+
+## <small>4.0.5 (2024-09-02)</small>
+
+* [bitnami/appsmith] Release 4.0.5 (#29161) ([aab4507](https://github.com/bitnami/charts/commit/aab450772b151c12a5a1da5b324623c1ef3e7f67)), closes [#29161](https://github.com/bitnami/charts/issues/29161)
+
+## <small>4.0.4 (2024-08-30)</small>
+
+* [bitnami/appsmith] Release 4.0.4 (#29124) ([682e6ad](https://github.com/bitnami/charts/commit/682e6ad271dea3bd4aea468c15e5b58b4f384690)), closes [#29124](https://github.com/bitnami/charts/issues/29124)
+
+## <small>4.0.3 (2024-08-26)</small>
+
+* [bitnami/appsmith] Release 4.0.3 (#29033) ([3ef2c5b](https://github.com/bitnami/charts/commit/3ef2c5b1d2389a60a8ebd837e6aadc6d4979db08)), closes [#29033](https://github.com/bitnami/charts/issues/29033)
+
+## <small>4.0.2 (2024-08-21)</small>
+
+* [bitnami/appsmith] Release 4.0.2 (#28954) ([bb05f9f](https://github.com/bitnami/charts/commit/bb05f9f24ef535ec72ac760529b15f2b7bd67254)), closes [#28954](https://github.com/bitnami/charts/issues/28954)
+
+## <small>4.0.1 (2024-08-20)</small>
+
+* [bitnami/appsmith] Release 4.0.1 (#28939) ([cb76a1c](https://github.com/bitnami/charts/commit/cb76a1c4e348b23ab146ce931a1bd8001211c344)), closes [#28939](https://github.com/bitnami/charts/issues/28939)
 
 ## 4.0.0 (2024-08-13)
 

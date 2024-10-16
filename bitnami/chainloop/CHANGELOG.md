@@ -1,8 +1,72 @@
 # Changelog
 
-## 1.0.1 (2024-08-20)
+## 2.0.2 (2024-10-16)
 
-* [bitnami/chainloop] Release 1.0.1 ([#28940](https://github.com/bitnami/charts/pull/28940))
+* [bitnami/chainloop] Release 2.0.2 ([#29917](https://github.com/bitnami/charts/pull/29917))
+
+## <small>2.0.1 (2024-10-08)</small>
+
+* [bitnami/chainloop] Release 2.0.1 (#29823) ([2ca35d5](https://github.com/bitnami/charts/commit/2ca35d58a310f81a9a5e22c7bfc5f51fcac7ba4b)), closes [#29823](https://github.com/bitnami/charts/issues/29823)
+
+## 2.0.0 (2024-10-03)
+
+* [bitnami/chainloop] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29729) ([3f44baf](https://github.com/bitnami/charts/commit/3f44baf823f78b5b63c4ab3495733e473d070c0c)), closes [#29729](https://github.com/bitnami/charts/issues/29729)
+
+## <small>1.0.14 (2024-10-01)</small>
+
+* [bitnami/chainloop] Release 1.0.14 (#29685) ([ef41798](https://github.com/bitnami/charts/commit/ef417987465fdc0749079b165627174eba90c981)), closes [#29685](https://github.com/bitnami/charts/issues/29685)
+
+## <small>1.0.13 (2024-09-30)</small>
+
+* [bitnami/chainloop] Release 1.0.13 (#29663) ([8aceafc](https://github.com/bitnami/charts/commit/8aceafcd54e0973de53cc77b138f3a8714473be2)), closes [#29663](https://github.com/bitnami/charts/issues/29663)
+
+## <small>1.0.12 (2024-09-23)</small>
+
+* [bitnami/chainloop] Release 1.0.12 (#29575) ([bd2cb3c](https://github.com/bitnami/charts/commit/bd2cb3c6703554b7535e2ca062a7843c2fabb319)), closes [#29575](https://github.com/bitnami/charts/issues/29575)
+
+## <small>1.0.11 (2024-09-19)</small>
+
+* [bitnami/chainloop] Release 1.0.11 (#29540) ([c9af6c6](https://github.com/bitnami/charts/commit/c9af6c64d4f54e2f4bae59a0b4d95203e666cc4e)), closes [#29540](https://github.com/bitnami/charts/issues/29540)
+
+## <small>1.0.10 (2024-09-19)</small>
+
+* [bitnami/chainloop] Release 1.0.10 (#29538) ([fb64b3a](https://github.com/bitnami/charts/commit/fb64b3a038bd6cf15aa6ff53733611d0b46db918)), closes [#29538](https://github.com/bitnami/charts/issues/29538)
+
+## <small>1.0.9 (2024-09-19)</small>
+
+* [bitnami/chainloop] Release 1.0.9 (#29506) ([ea6a6a9](https://github.com/bitnami/charts/commit/ea6a6a963f9c8a01fc9425301263560b69b79c6d)), closes [#29506](https://github.com/bitnami/charts/issues/29506)
+
+## <small>1.0.8 (2024-09-13)</small>
+
+* [bitnami/chainloop] Release 1.0.8 (#29402) ([39ef9f2](https://github.com/bitnami/charts/commit/39ef9f2a38dc67dd9b926bc778292c083814e328)), closes [#29402](https://github.com/bitnami/charts/issues/29402)
+
+## <small>1.0.7 (2024-09-10)</small>
+
+* [bitnami/chainloop] Release 1.0.7 (#29321) ([13d9c8b](https://github.com/bitnami/charts/commit/13d9c8bb9ba3cc3bf5d332ac2eac2e57e0f61f29)), closes [#29321](https://github.com/bitnami/charts/issues/29321)
+
+## <small>1.0.6 (2024-09-05)</small>
+
+* [bitnami/chainloop] Release 1.0.6 (#29227) ([81a3a3a](https://github.com/bitnami/charts/commit/81a3a3a030f695f223d8d81f15838747e9f7a8a8)), closes [#29227](https://github.com/bitnami/charts/issues/29227)
+
+## <small>1.0.5 (2024-09-02)</small>
+
+* [bitnami/chainloop] Release 1.0.5 (#29160) ([f7c95a6](https://github.com/bitnami/charts/commit/f7c95a6917a1891c332dd3f118c36a5be73a262f)), closes [#29160](https://github.com/bitnami/charts/issues/29160)
+
+## <small>1.0.4 (2024-08-28)</small>
+
+* [bitnami/chainloop] Release 1.0.4 (#29093) ([6697fef](https://github.com/bitnami/charts/commit/6697fefe7efe6842ee729f4dfe9aa035f2c4dc4d)), closes [#29093](https://github.com/bitnami/charts/issues/29093)
+
+## <small>1.0.3 (2024-08-23)</small>
+
+* [bitnami/chainloop] Release 1.0.3 (#28996) ([648a0ab](https://github.com/bitnami/charts/commit/648a0ab13c3090b3dff2d816941b33b63a7f1aa9)), closes [#28996](https://github.com/bitnami/charts/issues/28996)
+
+## <small>1.0.2 (2024-08-21)</small>
+
+* [bitnami/chainloop] Release 1.0.2 (#28951) ([4fec93b](https://github.com/bitnami/charts/commit/4fec93be07c368a2e1cefd25f94ed8e06f688e76)), closes [#28951](https://github.com/bitnami/charts/issues/28951)
+
+## <small>1.0.1 (2024-08-20)</small>
+
+* [bitnami/chainloop] Release 1.0.1 (#28940) ([4a2f985](https://github.com/bitnami/charts/commit/4a2f98536264cbca2e971ea65b79683aa95783e2)), closes [#28940](https://github.com/bitnami/charts/issues/28940)
 
 ## 1.0.0 (2024-08-19)
 

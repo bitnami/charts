@@ -1,8 +1,36 @@
 # Changelog
 
-## 11.3.20 (2024-08-16)
+## 11.4.4 (2024-10-09)
 
-* [bitnami/nginx-ingress-controller] Release 11.3.20 ([#28899](https://github.com/bitnami/charts/pull/28899))
+* [bitnami/nginx-ingress-controller] Release 11.4.4 ([#29844](https://github.com/bitnami/charts/pull/29844))
+
+## <small>11.4.3 (2024-10-02)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.4.3 (#29711) ([b933d9b](https://github.com/bitnami/charts/commit/b933d9bf5bbb71dfadffea23e38cb91222b81592)), closes [#29711](https://github.com/bitnami/charts/issues/29711)
+
+## <small>11.4.2 (2024-10-01)</small>
+
+* [bitnami/nginx-ingress-controller] Specify resources for nginx ingress controller deployment init co ([c50cfde](https://github.com/bitnami/charts/commit/c50cfdea2973632c3ec37b27c5890d7fe315a61d)), closes [#29621](https://github.com/bitnami/charts/issues/29621)
+
+## <small>11.4.1 (2024-09-06)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.4.1 (#29265) ([60bb42d](https://github.com/bitnami/charts/commit/60bb42da0b5a962161fe1b127a2fa5c141060d34)), closes [#29265](https://github.com/bitnami/charts/issues/29265)
+
+## 11.4.0 (2024-08-23)
+
+* [bitnami/nginx-ingress-controller] Allow loadBalancerClass to be customized for the nginx-ingress-co ([29e7033](https://github.com/bitnami/charts/commit/29e703372504ea619d099011c42e7de228320e03)), closes [#28919](https://github.com/bitnami/charts/issues/28919)
+
+## <small>11.3.22 (2024-08-21)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.3.22 (#28962) ([3376076](https://github.com/bitnami/charts/commit/3376076deecc99442a77de6abd5b77cd9049ccab)), closes [#28962](https://github.com/bitnami/charts/issues/28962)
+
+## <small>11.3.21 (2024-08-21)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.3.21 (#28961) ([33627b8](https://github.com/bitnami/charts/commit/33627b8324cc91f1e76df1bf0253d89a2b4a3e1f)), closes [#28961](https://github.com/bitnami/charts/issues/28961)
+
+## <small>11.3.20 (2024-08-16)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.3.20 (#28899) ([2db9c4a](https://github.com/bitnami/charts/commit/2db9c4aa82da7ecef9995237ca4a0d24f0d1a95e)), closes [#28899](https://github.com/bitnami/charts/issues/28899)
 
 ## <small>11.3.19 (2024-08-07)</small>
 

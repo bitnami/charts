@@ -4,7 +4,7 @@
 
 * fix etcd cronjob volume ([#29895](https://github.com/bitnami/charts/pull/29895))
 
-## 10.3.0 (2024-10-14)
+## <small>10.3.0 (2024-10-14)</small>
 
 * [bitnami/etcd]: Allow overriding of snapshot command (#29873) ([5b8af4f](https://github.com/bitnami/charts/commit/5b8af4f5b340ef784955b1714741ec0f33051129)), closes [#29873](https://github.com/bitnami/charts/issues/29873)
 

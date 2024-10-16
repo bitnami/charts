@@ -1,8 +1,48 @@
 # Changelog
 
-## 18.1.9 (2024-08-14)
+## 18.2.3 (2024-10-11)
 
-* [bitnami/nginx] Release 18.1.9 ([#28886](https://github.com/bitnami/charts/pull/28886))
+* [bitnami/nginx] Remove duplicated (and wrong) image in verification ([#29871](https://github.com/bitnami/charts/pull/29871))
+
+## <small>18.2.2 (2024-10-02)</small>
+
+* [bitnami/nginx] Release 18.2.2 (#29751) ([4d4d930](https://github.com/bitnami/charts/commit/4d4d9301a856bd77ef908530ca99a3f5828906c0)), closes [#29751](https://github.com/bitnami/charts/issues/29751)
+
+## <small>18.2.1 (2024-10-01)</small>
+
+* [bitnami/nginx] templates/ingress.yaml: fix wrong www.www tls name (#29563) ([045d9d0](https://github.com/bitnami/charts/commit/045d9d0af47d34f293b64e8072345d3c793d0ca1)), closes [#29563](https://github.com/bitnami/charts/issues/29563)
+
+## 18.2.0 (2024-09-20)
+
+* [bitnami/nginx] stream server blocks (#29491) ([89e5604](https://github.com/bitnami/charts/commit/89e5604be18dff45ac2da9ff48383b97cb20a23d)), closes [#29491](https://github.com/bitnami/charts/issues/29491)
+
+## <small>18.1.15 (2024-09-19)</small>
+
+* [bitnami/nginx] Release 18.1.15 (#29510) ([3c8f5ec](https://github.com/bitnami/charts/commit/3c8f5ec0da4daef80d6781c11e019f0dddb49668)), closes [#29510](https://github.com/bitnami/charts/issues/29510)
+
+## <small>18.1.14 (2024-09-15)</small>
+
+* [bitnami/nginx] Release 18.1.14 (#29420) ([5c3aa0e](https://github.com/bitnami/charts/commit/5c3aa0e3cf41aed5bcbb1e5aed73a32847f3f05f)), closes [#29420](https://github.com/bitnami/charts/issues/29420)
+
+## <small>18.1.13 (2024-09-13)</small>
+
+* [bitnami/nginx] Release 18.1.13 (#29390) ([1167027](https://github.com/bitnami/charts/commit/1167027bfaf67c827815f9795db425ebe233a600)), closes [#29390](https://github.com/bitnami/charts/issues/29390)
+
+## <small>18.1.12 (2024-09-11)</small>
+
+* [bitnami/nginx] Release 18.1.12 - bugfix prometheusrules label collision (#29276) ([c44ac28](https://github.com/bitnami/charts/commit/c44ac289f80916c4267b976ff703c6c6159b444b)), closes [#29276](https://github.com/bitnami/charts/issues/29276)
+
+## <small>18.1.11 (2024-08-23)</small>
+
+* [bitnami/nginx] Release 18.1.11 (#28993) ([34e0c37](https://github.com/bitnami/charts/commit/34e0c3727b2b67d946bda7b7250be6bc88dfc4e3)), closes [#28993](https://github.com/bitnami/charts/issues/28993)
+
+## <small>18.1.10 (2024-08-21)</small>
+
+* [bitnami/nginx] Release 18.1.10 (#28959) ([83e2fa5](https://github.com/bitnami/charts/commit/83e2fa51d26df8b7f73b9e205cd91b4deabd49b7)), closes [#28959](https://github.com/bitnami/charts/issues/28959)
+
+## <small>18.1.9 (2024-08-14)</small>
+
+* [bitnami/nginx] Release 18.1.9 (#28886) ([1dccc11](https://github.com/bitnami/charts/commit/1dccc11c8e8cfa80aad6fc6628d1edc02c49b4a4)), closes [#28886](https://github.com/bitnami/charts/issues/28886)
 
 ## <small>18.1.8 (2024-08-13)</small>
 

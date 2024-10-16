@@ -83,7 +83,7 @@ spec:
       {{- if .Values.ingest.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.ingest.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or (or .Values.initContainers .Values.ingest.initContainers)  .Values.sysctlImage.enabled }}
+      {{- if or (or .Values.initContainers .Values.ingest.initContainers) .Values.security.enabled .Values.sysctlImage.enabled }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
@@ -107,8 +107,8 @@ spec:
         {{- end }}
         {{- if .Values.security.enabled }}
         - name: copy-tls-certificates
-          image: bitnami/os-shell:12-debian-12-r22
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          image: {{ include "elasticsearch.copyTlsCerts.image" . }}
+          imagePullPolicy: {{ .Values.copyTlsCerts.image.pullPolicy | quote }}
           command:
             - /bin/sh
             - -c
@@ -130,6 +130,14 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: certs
+          {{- if .Values.ingest.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingest.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.copyTlsCerts.resources }}
+          resources: {{- toYaml .Values.copyTlsCerts.resources | nindent 12 }}
+          {{- else if ne .Values.copyTlsCerts.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.copyTlsCerts.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         - name: copy-default-plugins
           image: {{ include "elasticsearch.image" . }}

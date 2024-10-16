@@ -1,8 +1,24 @@
 # Changelog
 
-## 7.2.11 (2024-08-07)
+## 7.2.15 (2024-10-02)
 
-* [bitnami/metrics-server] Release 7.2.11 ([#28728](https://github.com/bitnami/charts/pull/28728))
+* [bitnami/metrics-server] Release 7.2.15 ([#29705](https://github.com/bitnami/charts/pull/29705))
+
+## <small>7.2.14 (2024-09-06)</small>
+
+* [bitnami/metrics-server] Release 7.2.14 (#29254) ([da64b51](https://github.com/bitnami/charts/commit/da64b5159c558e5b73585b968f4562931b66d8a3)), closes [#29254](https://github.com/bitnami/charts/issues/29254)
+
+## <small>7.2.13 (2024-08-27)</small>
+
+* [bitnami/metrics-server] Release 7.2.13 (#29069) ([5e12672](https://github.com/bitnami/charts/commit/5e126723733e0997e80ca14577b06ef3f2438c47)), closes [#29069](https://github.com/bitnami/charts/issues/29069)
+
+## <small>7.2.12 (2024-08-27)</small>
+
+* [bitnami/metrics-server] Release 7.2.12 (#29063) ([ca11843](https://github.com/bitnami/charts/commit/ca118432040ecfd12bb71a62c8a435c85562797b)), closes [#29063](https://github.com/bitnami/charts/issues/29063)
+
+## <small>7.2.11 (2024-08-07)</small>
+
+* [bitnami/metrics-server] Release 7.2.11 (#28728) ([ae8eb5a](https://github.com/bitnami/charts/commit/ae8eb5a0e53adc3d98bd84148a4e0d612fc68bc1)), closes [#28728](https://github.com/bitnami/charts/issues/28728)
 
 ## <small>7.2.10 (2024-07-25)</small>
 

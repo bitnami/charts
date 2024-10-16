@@ -1,8 +1,32 @@
 # Changelog
 
-## 7.4.11 (2024-07-25)
+## 7.5.0 (2024-09-24)
 
-* [bitnami/memcached] Release 7.4.11 ([#28434](https://github.com/bitnami/charts/pull/28434))
+* [bitnami/memcached] Add optional emptyDir medium configuration ([#29570](https://github.com/bitnami/charts/pull/29570))
+
+## <small>7.4.16 (2024-09-11)</small>
+
+* [bitnami/memcached] Allow rendering resources values (#29345) ([69b2b1d](https://github.com/bitnami/charts/commit/69b2b1d49fffa5dddf0df18315e2fc8ba1daf14c)), closes [#29345](https://github.com/bitnami/charts/issues/29345)
+
+## <small>7.4.15 (2024-09-07)</small>
+
+* [bitnami/memcached] Release 7.4.15 (#29299) ([7feed29](https://github.com/bitnami/charts/commit/7feed294b11d97bfc85d376a7f106d830bdfb339)), closes [#29299](https://github.com/bitnami/charts/issues/29299)
+
+## <small>7.4.14 (2024-09-06)</small>
+
+* [bitnami/memcached] Release 7.4.14 (#29248) ([aff3554](https://github.com/bitnami/charts/commit/aff3554b6b16eee1d49977aaefba40c5d26d2a2d)), closes [#29248](https://github.com/bitnami/charts/issues/29248)
+
+## <small>7.4.13 (2024-09-03)</small>
+
+* [bitnami/memcached] Release 7.4.13 (#29162) ([b978860](https://github.com/bitnami/charts/commit/b9788608b4c18644ab58cb2132ca3435584ea131)), closes [#29162](https://github.com/bitnami/charts/issues/29162)
+
+## <small>7.4.12 (2024-08-28)</small>
+
+* Enable publishNotReadyAddresses on memcached service (#29045) ([f6bd12f](https://github.com/bitnami/charts/commit/f6bd12f542c20e330919cbcbdac47504f9186cb7)), closes [#29045](https://github.com/bitnami/charts/issues/29045)
+
+## <small>7.4.11 (2024-07-25)</small>
+
+* [bitnami/memcached] Release 7.4.11 (#28434) ([3ed3327](https://github.com/bitnami/charts/commit/3ed33274e68fef3404eac7e3ad4732de10ab9ac3)), closes [#28434](https://github.com/bitnami/charts/issues/28434)
 
 ## <small>7.4.10 (2024-07-24)</small>
 

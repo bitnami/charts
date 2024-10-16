@@ -1,8 +1,32 @@
 # Changelog
 
-## 13.4.10 (2024-07-25)
+## 13.5.0 (2024-10-09)
 
-* [bitnami/zookeeper] Release 13.4.10 ([#28507](https://github.com/bitnami/charts/pull/28507))
+* [bitnami/zookeeper] Rename metrics port and expose scheme, and tlsConfig for Istio compatibility ([#29683](https://github.com/bitnami/charts/pull/29683))
+
+## <small>13.4.15 (2024-10-09)</small>
+
+* [bitnami/zookeeper] Release 13.4.15 (#29850) ([f3af6eb](https://github.com/bitnami/charts/commit/f3af6ebad051648b856f45e54e6c86858265b766)), closes [#29850](https://github.com/bitnami/charts/issues/29850)
+
+## <small>13.4.14 (2024-09-23)</small>
+
+* [bitnami/zookeeper] Drop unused `getValueFromSecret` local helper (#29440) ([630e4cb](https://github.com/bitnami/charts/commit/630e4cb5e4af4fda0bc633cd9ffe3930a93f13b3)), closes [#29440](https://github.com/bitnami/charts/issues/29440)
+
+## <small>13.4.13 (2024-09-17)</small>
+
+* [bitnami/zookeeper] test: :white_check_mark: Improve reliability of ginkgo tests (#29475) ([2c66097](https://github.com/bitnami/charts/commit/2c6609778ffdea57b4d0b4aaba193e451e2186bc)), closes [#29475](https://github.com/bitnami/charts/issues/29475)
+
+## <small>13.4.12 (2024-09-09)</small>
+
+* [bitnami/zookeeper] fix: add apiVersion and kind to volumeClaimTemplates (#29289) ([f393472](https://github.com/bitnami/charts/commit/f393472ab8514b93c8e0f0de9f6b022d43d16142)), closes [#29289](https://github.com/bitnami/charts/issues/29289)
+
+## <small>13.4.11 (2024-08-30)</small>
+
+* [bitnami/zookeeper] Release 13.4.11 (#29137) ([85b3d7a](https://github.com/bitnami/charts/commit/85b3d7af73a7c81cdbe12891ebec00cc4e2a5802)), closes [#29137](https://github.com/bitnami/charts/issues/29137)
+
+## <small>13.4.10 (2024-07-25)</small>
+
+* [bitnami/zookeeper] Release 13.4.10 (#28507) ([ed70bd7](https://github.com/bitnami/charts/commit/ed70bd7c9acfcfc96f7dc9fbedf9f5f9b4368cb4)), closes [#28507](https://github.com/bitnami/charts/issues/28507)
 
 ## <small>13.4.9 (2024-07-24)</small>
 

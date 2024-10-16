@@ -1,8 +1,28 @@
 # Changelog
 
+## 6.0.5 (2024-10-08)
+
+* [bitnami/oauth2-proxy] Release 6.0.5 ([#29826](https://github.com/bitnami/charts/pull/29826))
+
+## <small>6.0.4 (2024-10-02)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.4 (#29737) ([cfc1c86](https://github.com/bitnami/charts/commit/cfc1c8696d90e6b7b4f43b2e5ca9e167ae16e913)), closes [#29737](https://github.com/bitnami/charts/issues/29737)
+
+## <small>6.0.3 (2024-10-02)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.3 (#29713) ([7378dcc](https://github.com/bitnami/charts/commit/7378dcc902c2e6223f60754cdca78b752ce15b73)), closes [#29713](https://github.com/bitnami/charts/issues/29713)
+
+## <small>6.0.2 (2024-09-06)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.2 (#29259) ([c0e0c19](https://github.com/bitnami/charts/commit/c0e0c194514327f2777d586a9affadb57c4dcd44)), closes [#29259](https://github.com/bitnami/charts/issues/29259)
+
+## <small>6.0.1 (2024-08-27)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.1 (#29065) ([63ac0ba](https://github.com/bitnami/charts/commit/63ac0bab25da3c6ab4cacadd543fa34501471acc)), closes [#29065](https://github.com/bitnami/charts/issues/29065)
+
 ## 6.0.0 (2024-08-13)
 
-* [bitnami/oauth2-proxy] Update dependencies ([#28856](https://github.com/bitnami/charts/pull/28856))
+* [bitnami/oauth2-proxy] Update dependencies (#28856) ([a6cecdf](https://github.com/bitnami/charts/commit/a6cecdf534b24a0d8d5d196bdf7b6b6f67ecab70)), closes [#28856](https://github.com/bitnami/charts/issues/28856)
 
 ## <small>5.3.12 (2024-08-07)</small>
 

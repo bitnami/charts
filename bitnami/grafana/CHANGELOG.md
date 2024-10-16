@@ -1,8 +1,36 @@
 # Changelog
 
-## 11.3.15 (2024-08-14)
+## 11.3.22 (2024-10-02)
 
-* [bitnami/grafana] Release 11.3.15 ([#28890](https://github.com/bitnami/charts/pull/28890))
+* [bitnami/grafana] Release 11.3.22 ([#29697](https://github.com/bitnami/charts/pull/29697))
+
+## <small>11.3.21 (2024-09-26)</small>
+
+* [bitnami/grafana] Release 11.3.21 (#29630) ([40c1640](https://github.com/bitnami/charts/commit/40c1640d351dcf2f46d532415bfb67d5053af401)), closes [#29630](https://github.com/bitnami/charts/issues/29630)
+
+## <small>11.3.20 (2024-09-19)</small>
+
+* [bitnami/grafana] Release 11.3.20 (#29511) ([23a6119](https://github.com/bitnami/charts/commit/23a6119b02e4d690e2b4328bedad9ef994dfa6fe)), closes [#29511](https://github.com/bitnami/charts/issues/29511)
+
+## <small>11.3.19 (2024-09-06)</small>
+
+* [bitnami/grafana] Release 11.3.19 (#29240) ([8167809](https://github.com/bitnami/charts/commit/816780993da883b52b573bb1f7a71f29b693cd3e)), closes [#29240](https://github.com/bitnami/charts/issues/29240)
+
+## <small>11.3.18 (2024-08-27)</small>
+
+* [bitnami/grafana] Release 11.3.18 (#29052) ([eb08091](https://github.com/bitnami/charts/commit/eb08091f13d9af5d82b3f22c092936f577ce5ed5)), closes [#29052](https://github.com/bitnami/charts/issues/29052)
+
+## <small>11.3.17 (2024-08-27)</small>
+
+* [bitnami/grafana] Release 11.3.17 (#29044) ([1982dcb](https://github.com/bitnami/charts/commit/1982dcbe8627d8b892e41140a8312b367dfb318b)), closes [#29044](https://github.com/bitnami/charts/issues/29044)
+
+## <small>11.3.16 (2024-08-23)</small>
+
+* [bitnami/grafana] Release 11.3.16 (#28998) ([abb3da9](https://github.com/bitnami/charts/commit/abb3da971fca0fd3902c23fc42aa5e277cf19772)), closes [#28998](https://github.com/bitnami/charts/issues/28998)
+
+## <small>11.3.15 (2024-08-14)</small>
+
+* [bitnami/grafana] Release 11.3.15 (#28890) ([95b0177](https://github.com/bitnami/charts/commit/95b0177c500b31a76151800784359b2e8171c463)), closes [#28890](https://github.com/bitnami/charts/issues/28890)
 
 ## <small>11.3.14 (2024-08-08)</small>
 

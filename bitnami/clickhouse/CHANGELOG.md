@@ -1,8 +1,45 @@
 # Changelog
 
-## 6.2.17 (2024-08-08)
+## 6.2.27 (2024-10-03)
 
-* [bitnami/clickhouse] Release 6.2.17 ([#28790](https://github.com/bitnami/charts/pull/28790))
+* [bitnami/clickhouse] Release 6.2.27 ([#29762](https://github.com/bitnami/charts/pull/29762))
+
+## <small>6.2.26 (2024-10-03)</small>
+
+* [bitnami/clickhouse] Release 6.2.26 (#29761) ([69792e2](https://github.com/bitnami/charts/commit/69792e28d9668d72fd894e7742cae7b99cc408ec)), closes [#29761](https://github.com/bitnami/charts/issues/29761)
+
+## <small>6.2.25 (2024-09-30)</small>
+
+* [bitnami/clickhouse] Release 6.2.24 (#29641) ([8cd072e](https://github.com/bitnami/charts/commit/8cd072e15339db8f12ea6d762fb789f196bcccd8)), closes [#29641](https://github.com/bitnami/charts/issues/29641)
+* [bitnami/clickhouse] Release 6.2.25 (#29669) ([4f43196](https://github.com/bitnami/charts/commit/4f431961e951bc9916b9ced0d9fcf12a55a8467d)), closes [#29669](https://github.com/bitnami/charts/issues/29669)
+
+## <small>6.2.23 (2024-09-09)</small>
+
+* [bitnami/clickhouse] fix: Add missing version, kind to volumeClaimTemplates (#29304) ([707e8ac](https://github.com/bitnami/charts/commit/707e8ac1ca3049c1c5d51684f4d771e13d501f68)), closes [#29304](https://github.com/bitnami/charts/issues/29304)
+
+## <small>6.2.22 (2024-09-06)</small>
+
+* [bitnami/clickhouse] Release 6.2.22 (#29285) ([6a90f23](https://github.com/bitnami/charts/commit/6a90f23e7a5c5dd4db87e18589ace4f4359c66ba)), closes [#29285](https://github.com/bitnami/charts/issues/29285)
+
+## <small>6.2.21 (2024-09-05)</small>
+
+* [bitnami/clickhouse] Improve Ginkgo test (#29213) ([8274daa](https://github.com/bitnami/charts/commit/8274daa04fcac1ae2bb394696772a8d52c9851e6)), closes [#29213](https://github.com/bitnami/charts/issues/29213)
+
+## <small>6.2.20 (2024-09-03)</small>
+
+* [bitnami/clickhouse] Release 6.2.20 (#29176) ([cfdd018](https://github.com/bitnami/charts/commit/cfdd018c876f167b586f488d4ad0430460e172a7)), closes [#29176](https://github.com/bitnami/charts/issues/29176)
+
+## <small>6.2.19 (2024-08-22)</small>
+
+* [bitnami/clickhouse] Release 6.2.19 (#28981) ([324cee6](https://github.com/bitnami/charts/commit/324cee67d1a2c1190d7c8ce445aeaaba59fbc467)), closes [#28981](https://github.com/bitnami/charts/issues/28981)
+
+## <small>6.2.18 (2024-08-21)</small>
+
+* [bitnami/clickhouse] Release 6.2.18 (#28956) ([a2fa206](https://github.com/bitnami/charts/commit/a2fa20611929cdfba3b4afc64f1f89fb8977e1a9)), closes [#28956](https://github.com/bitnami/charts/issues/28956)
+
+## <small>6.2.17 (2024-08-08)</small>
+
+* [bitnami/clickhouse] Release 6.2.17 (#28790) ([1075ad7](https://github.com/bitnami/charts/commit/1075ad779b227fed2399b07f47323f4e8a325abb)), closes [#28790](https://github.com/bitnami/charts/issues/28790)
 
 ## <small>6.2.16 (2024-08-01)</small>
 

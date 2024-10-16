@@ -1,8 +1,25 @@
 # Changelog
 
-## 19.0.4 (2024-08-14)
+## 19.1.0 (2024-10-10)
 
-* [bitnami/mariadb] Release 19.0.4 ([#28874](https://github.com/bitnami/charts/pull/28874))
+* [bitnami/mariadb] add default binlog expiry configuration of 30 days ([#29841](https://github.com/bitnami/charts/pull/29841))
+
+## <small>19.0.7 (2024-09-23)</small>
+
+* [bitnami/mariadb] Release 19.0.7 (#29571) ([a64fadf](https://github.com/bitnami/charts/commit/a64fadf42cc82f7468245ff87c61aa50356fbb47)), closes [#29571](https://github.com/bitnami/charts/issues/29571)
+
+## <small>19.0.6 (2024-09-17)</small>
+
+* [bitnami/mariadb] test: :white_check_mark: Improve reliability of ginkgo tests (#29467) ([c6cae80](https://github.com/bitnami/charts/commit/c6cae80e8a0cf7f3b0faad5782d13e75765daaf2)), closes [#29467](https://github.com/bitnami/charts/issues/29467)
+* Update README.md (typo fix) (#29334) ([2b03ac4](https://github.com/bitnami/charts/commit/2b03ac4952c06ae7001e89dcacca0cfdf81bc684)), closes [#29334](https://github.com/bitnami/charts/issues/29334)
+
+## <small>19.0.5 (2024-08-27)</small>
+
+* [bitnami/mariadb] Fix deprecation warnings in checks (#29021) ([213786f](https://github.com/bitnami/charts/commit/213786f3f87836b41e2e70fcedd007f08a4a012f)), closes [#29021](https://github.com/bitnami/charts/issues/29021)
+
+## <small>19.0.4 (2024-08-14)</small>
+
+* [bitnami/mariadb] Release 19.0.4 (#28874) ([0f767f1](https://github.com/bitnami/charts/commit/0f767f1e215d103c10fa8e1661f023f807382036)), closes [#28874](https://github.com/bitnami/charts/issues/28874)
 
 ## <small>19.0.3 (2024-07-25)</small>
 

@@ -1,8 +1,36 @@
 # Changelog
 
-## 12.2.10 (2024-07-25)
+## 14.0.1 (2024-10-16)
 
-* [bitnami/kong] Release 12.2.10 ([#28509](https://github.com/bitnami/charts/pull/28509))
+* [bitnami/kong] Release 14.0.1 ([#29922](https://github.com/bitnami/charts/pull/29922))
+
+## 14.0.0 (2024-10-03)
+
+* [bitnami/kong] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29736) ([2f9809b](https://github.com/bitnami/charts/commit/2f9809b8abe8a576cdb4f14be16749a4d1a9792a)), closes [#29736](https://github.com/bitnami/charts/issues/29736)
+
+## <small>13.0.3 (2024-09-19)</small>
+
+* [bitnami/kong] Remove duplicated empty password check `common.validations.values.cassandra.passwords ([139f5a5](https://github.com/bitnami/charts/commit/139f5a54c71ba4da1a0401300b84f8b31d8ff2e9)), closes [#29441](https://github.com/bitnami/charts/issues/29441)
+
+## <small>13.0.2 (2024-09-19)</small>
+
+* [bitnami/kong] Release 13.0.2 (#29509) ([accb05e](https://github.com/bitnami/charts/commit/accb05efca0ba859d82ed0dd42e16be990f20eda)), closes [#29509](https://github.com/bitnami/charts/issues/29509)
+
+## <small>13.0.1 (2024-09-18)</small>
+
+* [bitnami/kong] Release 13.0.1 (#29492) ([b9009aa](https://github.com/bitnami/charts/commit/b9009aa6c246efe8a6ad2c36a0a1874d197db340)), closes [#29492](https://github.com/bitnami/charts/issues/29492)
+
+## 13.0.0 (2024-09-10)
+
+* [bitnami/kong] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) (#29329) ([eb13e52](https://github.com/bitnami/charts/commit/eb13e5212410771560fd9e064f6ce0fb057e67c5)), closes [#29329](https://github.com/bitnami/charts/issues/29329)
+
+## <small>12.2.11 (2024-08-22)</small>
+
+* [bitnami/kong] Release 12.2.11 (#28964) ([e5c037e](https://github.com/bitnami/charts/commit/e5c037ef631f585d74a6eb99c13aacff10fe07b6)), closes [#28964](https://github.com/bitnami/charts/issues/28964)
+
+## <small>12.2.10 (2024-07-25)</small>
+
+* [bitnami/kong] Release 12.2.10 (#28509) ([1d7aa1c](https://github.com/bitnami/charts/commit/1d7aa1c3f7ef36a7a159b0a51c4aba1bde9b692e)), closes [#28509](https://github.com/bitnami/charts/issues/28509)
 
 ## <small>12.2.9 (2024-07-24)</small>
 

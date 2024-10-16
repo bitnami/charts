@@ -1,8 +1,48 @@
 # Changelog
 
-## 22.1.2 (2024-08-19)
+## 24.0.0 (2024-10-08)
 
-* [bitnami/keycloak] Release 22.1.2 ([#28929](https://github.com/bitnami/charts/pull/28929))
+* [bitnami/keycloak] Release 24.0.0 ([#29815](https://github.com/bitnami/charts/pull/29815))
+
+## 23.0.0 (2024-10-03)
+
+* [bitnami/keycloak] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29735) ([8ce695d](https://github.com/bitnami/charts/commit/8ce695d44b25e3e2023c07961c66ae5b7b22ce4b)), closes [#29735](https://github.com/bitnami/charts/issues/29735)
+
+## <small>22.2.6 (2024-09-19)</small>
+
+* [bitnami/keycloak] Release 22.2.6 (#29542) ([754f9e2](https://github.com/bitnami/charts/commit/754f9e2365ab6d0786a997e4d582e2b6ce92c237)), closes [#29542](https://github.com/bitnami/charts/issues/29542)
+
+## <small>22.2.5 (2024-09-16)</small>
+
+* [bitnami/keycloak] Release 22.2.5 (#29449) ([704c76c](https://github.com/bitnami/charts/commit/704c76cb715c58a196407ad471b150e9a0148cf3)), closes [#29449](https://github.com/bitnami/charts/issues/29449)
+
+## <small>22.2.4 (2024-09-13)</small>
+
+* [bitnami/keycloak] Fix app-volume-dir mount path (#29397) ([665ea7c](https://github.com/bitnami/charts/commit/665ea7c362ca091d028320a62ae40891c319e223)), closes [#29397](https://github.com/bitnami/charts/issues/29397)
+
+## <small>22.2.3 (2024-09-10)</small>
+
+* [bitnami/keycloak] Release 22.2.3 (#29320) ([d392ad9](https://github.com/bitnami/charts/commit/d392ad9a93c9213a27b4d74575efac80dd1d7ee8)), closes [#29320](https://github.com/bitnami/charts/issues/29320)
+
+## <small>22.2.2 (2024-09-09)</small>
+
+* [bitnami/keycloak] Specify which keys must the secret have for jks in values.yaml comments (#29301) ([5287334](https://github.com/bitnami/charts/commit/5287334f451638971f6bbf59c8d3f57928aa00a3)), closes [#29301](https://github.com/bitnami/charts/issues/29301)
+
+## <small>22.2.1 (2024-08-26)</small>
+
+* [bitnami/keycloak] fix: :bug: Add emptyDir at /bitnami to allow init scripts (#29020) ([3d04a65](https://github.com/bitnami/charts/commit/3d04a655e59ce25587d84b1a2a44844dfcf19de3)), closes [#29020](https://github.com/bitnami/charts/issues/29020)
+
+## 22.2.0 (2024-08-26)
+
+* [bitnami/keycloak] Use database user secret key from PostgreSQL chart (#29008) ([bf7ea4a](https://github.com/bitnami/charts/commit/bf7ea4a17dbe47ea0171dfae8415c4d035e7c8ad)), closes [#29008](https://github.com/bitnami/charts/issues/29008)
+
+## <small>22.1.3 (2024-08-22)</small>
+
+* [bitnami/keycloak] Release 22.1.3 (#28984) ([bb21c84](https://github.com/bitnami/charts/commit/bb21c84c422bdef42fad01db0252798d33e3499d)), closes [#28984](https://github.com/bitnami/charts/issues/28984)
+
+## <small>22.1.2 (2024-08-19)</small>
+
+* [bitnami/keycloak] Release 22.1.2 (#28929) ([0ab3f3a](https://github.com/bitnami/charts/commit/0ab3f3a85f1ecbcf558977de0c5f584de495b1e4)), closes [#28929](https://github.com/bitnami/charts/issues/28929)
 
 ## <small>22.1.1 (2024-08-13)</small>
 

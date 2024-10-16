@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.2.11 (2024-07-25)
+## 5.0.1 (2024-10-09)
 
-* [bitnami/concourse] Release 4.2.11 ([#28503](https://github.com/bitnami/charts/pull/28503))
+* [bitnami/concourse] Release 5.0.1 ([#29848](https://github.com/bitnami/charts/pull/29848))
+
+## 5.0.0 (2024-10-03)
+
+* [bitnami/concourse] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29730) ([3d11c36](https://github.com/bitnami/charts/commit/3d11c365c9bd8b197a58d306a8c52dfb5fbb5d2d)), closes [#29730](https://github.com/bitnami/charts/issues/29730)
+
+## <small>4.2.12 (2024-08-30)</small>
+
+* [bitnami/concourse] Release 4.2.12 (#29133) ([2482a2a](https://github.com/bitnami/charts/commit/2482a2ae001a54721f167d57979ee88ea9fed749)), closes [#29133](https://github.com/bitnami/charts/issues/29133)
+
+## <small>4.2.11 (2024-07-25)</small>
+
+* [bitnami/concourse] Release 4.2.11 (#28503) ([eaab8b0](https://github.com/bitnami/charts/commit/eaab8b0a3ad6bc1d0a1e0354b7a66bd79ea38efa)), closes [#28503](https://github.com/bitnami/charts/issues/28503)
 
 ## <small>4.2.10 (2024-07-24)</small>
 

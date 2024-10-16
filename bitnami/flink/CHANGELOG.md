@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.3.12 (2024-08-01)
+## 1.3.15 (2024-10-07)
 
-* [bitnami/flink] Release 1.3.12 ([#28625](https://github.com/bitnami/charts/pull/28625))
+* [bitnami/flink] Release 1.3.15 ([#29803](https://github.com/bitnami/charts/pull/29803))
+
+## <small>1.3.14 (2024-09-02)</small>
+
+* [bitnami/flink] Release 1.3.14 (#29155) ([33446f2](https://github.com/bitnami/charts/commit/33446f233c518c6df94cdf1ed63164c1a3dba2ff)), closes [#29155](https://github.com/bitnami/charts/issues/29155)
+
+## <small>1.3.13 (2024-09-02)</small>
+
+* [bitnami/flink] Release 1.3.13 (#29152) ([2424812](https://github.com/bitnami/charts/commit/242481260cb5f7467a46ee2f4ed44b65446ed76b)), closes [#29152](https://github.com/bitnami/charts/issues/29152)
+
+## <small>1.3.12 (2024-08-01)</small>
+
+* [bitnami/flink] Release 1.3.12 (#28625) ([18810c2](https://github.com/bitnami/charts/commit/18810c2e600761d58950c97e509191b7630a19bc)), closes [#28625](https://github.com/bitnami/charts/issues/28625)
 
 ## <small>1.3.11 (2024-07-25)</small>
 

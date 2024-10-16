@@ -81,7 +81,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.15-debian-12-r6
+  tag: 3.5.16-debian-12-r2
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -673,7 +673,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r27
+    tag: 12-debian-12-r30
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -914,6 +914,10 @@ disasterRecovery:
     ## @param disasterRecovery.cronjob.serviceAccountName Specifies the service account to use for disaster recovery cronjob
     ##
     serviceAccountName: ""
+    ## @param disasterRecovery.cronjob.command Override default snapshot container command (useful when you want to customize the snapshot logic)
+    ##
+    command: []
+    ##
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim
     ## If defined, PVC must be created manually before volume will be bound

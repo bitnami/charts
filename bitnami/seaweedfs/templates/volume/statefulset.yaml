@@ -330,7 +330,9 @@ spec:
   volumeClaimTemplates:
   {{- range .Values.volume.dataVolumes }}
   {{- if and .persistence.enabled (not .persistence.existingClaim) }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: {{ .name }}
         {{- if or .persistence.annotations $.Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .persistence.annotations $.Values.commonAnnotations "context" $) | fromYaml }}

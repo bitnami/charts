@@ -1,8 +1,28 @@
 # Changelog
 
+## 24.0.0 (2024-10-02)
+
+* [bitnami/harbor] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29733](https://github.com/bitnami/charts/pull/29733))
+
+## <small>23.0.4 (2024-09-19)</small>
+
+* [bitnami/harbor] Fix REGISTRY_HTTP_SECRET encoding when declared on an existing secret (#29494) ([1691323](https://github.com/bitnami/charts/commit/169132300077d028414938924d25000cb21e4ffc)), closes [#29494](https://github.com/bitnami/charts/issues/29494)
+
+## <small>23.0.3 (2024-09-11)</small>
+
+* [bitnami/harbor] Release 23.0.3 (#29349) ([1f523e4](https://github.com/bitnami/charts/commit/1f523e4fcd930b31748457de8ee95289e72064da)), closes [#29349](https://github.com/bitnami/charts/issues/29349)
+
+## <small>23.0.2 (2024-09-03)</small>
+
+* [bitnami/harbor] fix: secret envvars and their documentation (#28989) ([84fae4b](https://github.com/bitnami/charts/commit/84fae4bdd3985037f1ccfe60156b0c3dbf760a3e)), closes [#28989](https://github.com/bitnami/charts/issues/28989)
+
+## <small>23.0.1 (2024-08-24)</small>
+
+* [bitnami/harbor] Release 23.0.1 (#29012) ([e8508d7](https://github.com/bitnami/charts/commit/e8508d7e47f9d7f88ae3081067451df61320792c)), closes [#29012](https://github.com/bitnami/charts/issues/29012)
+
 ## 23.0.0 (2024-08-13)
 
-* [bitnami/harbor] Update dependencies ([#28853](https://github.com/bitnami/charts/pull/28853))
+* [bitnami/harbor] Update dependencies (#28853) ([52607e4](https://github.com/bitnami/charts/commit/52607e4c3580532b172089da96302513014af1f4)), closes [#28853](https://github.com/bitnami/charts/issues/28853)
 
 ## <small>22.0.12 (2024-08-08)</small>
 

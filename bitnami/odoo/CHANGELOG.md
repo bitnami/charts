@@ -1,8 +1,32 @@
 # Changelog
 
-## 26.2.15 (2024-08-05)
+## 28.0.0 (2024-10-08)
 
-* [bitnami/odoo] Release 26.2.15 ([#28653](https://github.com/bitnami/charts/pull/28653))
+* [bitnami/odoo] Release 28.0.0 ([#29820](https://github.com/bitnami/charts/pull/29820))
+
+## <small>27.0.1 (2024-10-05)</small>
+
+* [bitnami/odoo] Release 27.0.1 (#29781) ([5983725](https://github.com/bitnami/charts/commit/59837258ad474817d39f0dd747bac57556fce055)), closes [#29781](https://github.com/bitnami/charts/issues/29781)
+
+## 27.0.0 (2024-10-03)
+
+* [bitnami/odoo] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29742) ([a33fef2](https://github.com/bitnami/charts/commit/a33fef227991a5e93259a4ec024b2b020084c718)), closes [#29742](https://github.com/bitnami/charts/issues/29742)
+
+## <small>26.2.18 (2024-09-19)</small>
+
+* [bitnami/odoo] Release 26.2.18 (#29528) ([90521a3](https://github.com/bitnami/charts/commit/90521a3000c988d5e6baa470d4b6bb7819cdf878)), closes [#29528](https://github.com/bitnami/charts/issues/29528)
+
+## <small>26.2.17 (2024-09-05)</small>
+
+* [bitnami/odoo] Release 26.2.17 (#29208) ([3971e30](https://github.com/bitnami/charts/commit/3971e306284daef1eb302b1ef42e82ed6a5d05fe)), closes [#29208](https://github.com/bitnami/charts/issues/29208)
+
+## <small>26.2.16 (2024-08-26)</small>
+
+* [bitnami/odoo] Release 26.2.16 (#29004) ([9811aeb](https://github.com/bitnami/charts/commit/9811aebf921b9c73704d3715f6e96daf72b970c9)), closes [#29004](https://github.com/bitnami/charts/issues/29004)
+
+## <small>26.2.15 (2024-08-05)</small>
+
+* [bitnami/odoo] Release 26.2.15 (#28653) ([40d3045](https://github.com/bitnami/charts/commit/40d30457f714873969ac744c5e87be42402ca7b5)), closes [#28653](https://github.com/bitnami/charts/issues/28653)
 
 ## <small>26.2.14 (2024-07-30)</small>
 

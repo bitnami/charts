@@ -172,6 +172,9 @@ spec:
                 - action: keep
                   source_labels: ["shard"]
                   regex: {{ $index }}
+            {{- if $.Values.storegateway.sharded.hashPartitioning.extraRelabelingConfigs }}
+            {{- $.Values.storegateway.sharded.hashPartitioning.extraRelabelingConfigs | toYaml | nindent 16 }}
+            {{- end }}
             {{- end }}
             {{- if $timePartitioning }}
             {{- $partion := (slice $.Values.storegateway.sharded.timePartitioning  $index) | first }}
@@ -338,7 +341,9 @@ spec:
   {{- end }}
   {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if $.Values.storegateway.persistence.labels }}
         labels: {{- include "common.tplvalues.render" ( dict "value" $.Values.storegateway.persistence.labels "context" $) | nindent 10 }}

@@ -1,8 +1,37 @@
 # Changelog
 
-## 9.5.12 (2024-08-14)
+## 9.6.3 (2024-10-02)
 
-* [bitnami/kube-prometheus] Release 9.5.12 ([#28879](https://github.com/bitnami/charts/pull/28879))
+* [bitnami/kube-prometheus] Release 9.6.3 ([#29715](https://github.com/bitnami/charts/pull/29715))
+
+## <small>9.6.2 (2024-09-25)</small>
+
+* [bitnami/kube-prometheus] Release 9.6.2 (#29598) ([d34d13a](https://github.com/bitnami/charts/commit/d34d13a2845a29dd31127ac9618f70f201b46576)), closes [#29598](https://github.com/bitnami/charts/issues/29598)
+
+## <small>9.6.1 (2024-09-20)</small>
+
+* [bitnami/kube-prometheus] Fix typo in README.md (#29409) ([3a33ce9](https://github.com/bitnami/charts/commit/3a33ce959867dcb092247913d44859e1c6a54306)), closes [#29409](https://github.com/bitnami/charts/issues/29409)
+* [bitnami/kube-prometheus] Release 9.6.1 (#29549) ([60473da](https://github.com/bitnami/charts/commit/60473dae2a7bfcd6f702482f488f080913e36172)), closes [#29549](https://github.com/bitnami/charts/issues/29549)
+
+## 9.6.0 (2024-09-13)
+
+* [bitnami/kube-prometheus] Add extraEnv values for thanos sidecar (#29022) ([95d4ef1](https://github.com/bitnami/charts/commit/95d4ef12100cd8c57d4dece91eed5c621aae9824)), closes [#29022](https://github.com/bitnami/charts/issues/29022)
+
+## <small>9.5.15 (2024-09-12)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.15 (#29377) ([230423b](https://github.com/bitnami/charts/commit/230423b0193aa6448dd67acff3eee6a6320e8444)), closes [#29377](https://github.com/bitnami/charts/issues/29377)
+
+## <small>9.5.14 (2024-09-06)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.14 (#29258) ([989b2f1](https://github.com/bitnami/charts/commit/989b2f1682f6d9c2f1ab3da8d6b737b76acd16d7)), closes [#29258](https://github.com/bitnami/charts/issues/29258)
+
+## <small>9.5.13 (2024-09-03)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.13 (#29174) ([4c05231](https://github.com/bitnami/charts/commit/4c05231bd7d0f9bd690221f389dfdc5a617882ae)), closes [#29174](https://github.com/bitnami/charts/issues/29174)
+
+## <small>9.5.12 (2024-08-14)</small>
+
+* [bitnami/kube-prometheus] Release 9.5.12 (#28879) ([573e119](https://github.com/bitnami/charts/commit/573e1195d9356138460d6ae1fefee1fd6184a778)), closes [#28879](https://github.com/bitnami/charts/issues/28879)
 
 ## <small>9.5.11 (2024-08-07)</small>
 
