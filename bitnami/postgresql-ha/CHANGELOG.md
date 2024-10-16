@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.3.0 (2024-10-15)
+## 14.3.1 (2024-10-16)
 
-* [bitnami/postgresql-ha] Fix authentication and add configuration options to backup cronjob ([#29865](https://github.com/bitnami/charts/pull/29865))
+* [bitnami/postgresql-ha] Release 14.3.1 ([#29934](https://github.com/bitnami/charts/pull/29934))
+
+## 14.3.0 (2024-10-16)
+
+* [bitnami/postgresql-ha] Fix authentication and add configuration options to backup cronjob (#29865) ([e3f4210](https://github.com/bitnami/charts/commit/e3f42102a2be2e3cf5724ed1f4f3c5a264c96b3a)), closes [#29865](https://github.com/bitnami/charts/issues/29865)
 
 ## <small>14.2.34 (2024-10-10)</small>
 
