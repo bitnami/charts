@@ -1398,7 +1398,7 @@ minio:
 
 ## @section External S3 parameters
 ## All of these values are only used when minio.enabled is set to false
-## @param externalS3.host External S3 host. When using AWS S3, include appropriate [regional code](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region), e.g. "eu-central-1.amazonaws.com
+## @param externalS3.host External S3 host. When using AWS S3, include appropriate [regional code](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region), e.g. "eu-central-1.s3.amazonaws.com
 ## @param externalS3.port External S3 port number
 ## @param externalS3.useCredentialsInSecret Whether to use a secret to store the S3 credentials
 ## @param externalS3.accessKeyID External S3 access key ID
