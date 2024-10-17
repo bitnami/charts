@@ -1,8 +1,13 @@
 # Changelog
 
-## 23.1.22 (2024-10-16)
+## 23.1.23 (2024-10-17)
 
-* [bitnami/wordpress] Release 23.1.22 ([#29946](https://github.com/bitnami/charts/pull/29946))
+* [bitnami/wordpress] Release 23.1.23 ([#29970](https://github.com/bitnami/charts/pull/29970))
+
+## <small>23.1.22 (2024-10-16)</small>
+
+* [bitnami/wordpress] Release 23.1.22 (#29946) ([b96295c](https://github.com/bitnami/charts/commit/b96295c21f6f2cb7fe0631fe14b7c9da2bcde9b6)), closes [#29946](https://github.com/bitnami/charts/issues/29946)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>23.1.21 (2024-10-08)</small>
 
