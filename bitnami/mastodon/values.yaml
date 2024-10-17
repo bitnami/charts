@@ -1525,7 +1525,7 @@ initJob:
   ## @param initJob.annotations [object] Add annotations to the job
   ##
   annotations:
-    helm.sh/hook: post-install, pre-upgrade
+    helm.sh/hook: post-install, post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
     # This should be executed after the minio provisioning job
     helm.sh/hook-weight: "10"
