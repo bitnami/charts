@@ -1,0 +1,92 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.defrag.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ printf "%s-defrag" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.defrag.cronjob.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  {{- if or .Values.defrag.cronjob.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.defrag.cronjob.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.defrag.cronjob.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ .Values.defrag.cronjob.startingDeadlineSeconds }}
+  {{- end }}
+  concurrencyPolicy: {{ .Values.defrag.cronjob.concurrencyPolicy }}
+  schedule: {{ .Values.defrag.cronjob.schedule | quote }}
+  suspend: {{ .Values.defrag.cronjob.suspend }}
+  successfulJobsHistoryLimit: {{ .Values.defrag.cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.defrag.cronjob.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          {{- $mergedLabels := mergeOverwrite (dict) .Values.commonLabels .Values.defrag.cronjob.podLabels -}}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $mergedLabels "context" $ ) | nindent 10 }}
+          {{- if .Values.defrag.cronjob.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.defrag.cronjob.podAnnotations "context" $) | nindent 12 }}
+          {{- end }}
+        spec:
+          {{- if .Values.defrag.cronjob.activeDeadlineSeconds }}
+          activeDeadlineSeconds: {{ .Values.defrag.cronjob.activeDeadlineSeconds }}
+          {{- end }}
+          restartPolicy: {{ .Values.defrag.cronjob.restartPolicy }}
+          {{- if .Values.podSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: etcd-defrag
+              image: {{ include "etcd.image" . }}
+              imagePullPolicy: "IfNotPresent"
+              {{- if .Values.containerSecurityContext.enabled }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 16 }}
+              {{- end }}
+              env:
+                - name: BITNAMI_DEBUG
+                  value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+                - name: ETCDCTL_API
+                  value: "3"
+                - name: ETCD_ON_K8S
+                  value: "yes"
+                - name: MY_STS_NAME
+                  value: {{ include "common.names.fullname" . | quote }}
+                {{- $releaseNamespace := .Release.Namespace }}
+                {{- $etcdFullname := include "common.names.fullname" . }}
+                {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
+                {{- $clusterDomain := .Values.clusterDomain }}
+                - name: ETCD_CLUSTER_DOMAIN
+                  value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
+              {{- if .Values.defrag.cronjob.command }}
+              command: {{ .Values.defrag.cronjob.command | toYaml | nindent 16 }}
+              {{- else }}
+              command:
+                - etcdctl
+                - defrag
+                - --cluster
+                {{- $port := int .Values.service.ports.client }}
+                {{- $namespace := .Release.Namespace }}
+                {{- $endpointStr := "--endpoints=[" }}
+                {{- $replicaCount := (int .Values.replicaCount) }}
+                {{- range $iEndpoint, $e := until $replicaCount }}
+                {{- $endpoint := printf "http://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
+                {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
+                {{- if ne $iEndpoint (sub $replicaCount 1) }}
+                {{- $endpointStr = printf "%s," $endpointStr }}
+                {{- end }}
+                {{- end }}
+                {{- $endpointStr = printf "%s]" $endpointStr }}
+                - {{ $endpointStr }}
+              {{- end }}
+              {{- if .Values.defrag.cronjob.resources }}
+              resources: {{- toYaml .Values.defrag.cronjob.resources | nindent 16 }}
+              {{- else if ne .Values.defrag.cronjob.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.defrag.cronjob.resourcesPreset) | nindent 16 }}
+              {{- end }}
+{{- end }}
