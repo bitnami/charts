@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.17 (2024-09-17)
+## 11.1.19 (2024-10-16)
 
-* [bitnami/mysql] test: :white_check_mark: Improve reliability of ginkgo tests ([#29470](https://github.com/bitnami/charts/pull/29470))
+* [bitnami/mysql] Release 11.1.19 ([#29929](https://github.com/bitnami/charts/pull/29929))
+
+## <small>11.1.17 (2024-09-17)</small>
+
+* [bitnami/mysql] test: :white_check_mark: Improve reliability of ginkgo tests (#29470) ([a233966](https://github.com/bitnami/charts/commit/a233966beb176cddf29dfe71f19228873bd99bac)), closes [#29470](https://github.com/bitnami/charts/issues/29470)
 
 ## <small>11.1.16 (2024-09-03)</small>
 
