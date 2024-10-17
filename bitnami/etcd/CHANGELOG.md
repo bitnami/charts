@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.4.0 (2024-10-16)
+## 10.4.1 (2024-10-17)
 
 * [bitnami/etcd]: Automatic etcd defragmentation ([#29906](https://github.com/bitnami/charts/pull/29906))
 
