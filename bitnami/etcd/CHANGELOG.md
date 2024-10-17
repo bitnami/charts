@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.3.1 (2024-10-16)
+## 10.4.0 (2024-10-17)
 
-* fix etcd cronjob volume ([#29895](https://github.com/bitnami/charts/pull/29895))
+* [bitnami/etcd]: Automatic etcd defragmentation ([#29967](https://github.com/bitnami/charts/pull/29967))
+
+## <small>10.3.1 (2024-10-16)</small>
+
+* [bitnami/etcd] fix etcd cronjob volume (#29895) ([64aad9b](https://github.com/bitnami/charts/commit/64aad9b12ec2e7f48636944a4cc9d180b5c761a4)), closes [#29895](https://github.com/bitnami/charts/issues/29895)
 
 ## 10.3.0 (2024-10-14)
 
