@@ -84,7 +84,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mastodon
-  tag: 4.2.13-debian-12-r0
+  tag: 4.3.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1363,33 +1363,33 @@ tootctlMediaManagement:
 ## @section Mastodon Migration job Parameters
 ##
 initJob:
-  ## @param initJob.precompileAssets Execute rake assets:precompile as part of the job
+  ## @param initJob.precompileAssets.enabled Execute rake assets:precompile as part of the job
   ##
   precompileAssets:
     enabled: true
-    ## @param initJob.extraEnvVars Array containing extra env vars to configure the Mastodon init job
+    ## @param initJob.precompileAssets.extraEnvVars Array containing extra env vars to configure the Mastodon init job
     ## For example:
     ## extraEnvVars:
     ##  - name: GF_DEFAULT_INSTANCE_NAME
     ##    value: my-instance
     ##
     extraEnvVars: []
-    ## @param initJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the Mastodon init job
+    ## @param initJob.precompileAssets.extraEnvVarsCM ConfigMap containing extra env vars to configure the Mastodon init job
     ##
     extraEnvVarsCM: ""
-    ## @param initJob.extraEnvVarsSecret Secret containing extra env vars to configure the Mastodon init job (in case of sensitive data)
+    ## @param initJob.precompileAssets.extraEnvVarsSecret Secret containing extra env vars to configure the Mastodon init job (in case of sensitive data)
     ##
     extraEnvVarsSecret: ""
-    ## @param initJob.extraVolumeMounts Array of extra volume mounts to be added to the Mastodon Container (evaluated as template). Normally used with `extraVolumes`.
+    ## @param initJob.precompileAssets.extraVolumeMounts Array of extra volume mounts to be added to the Mastodon Container (evaluated as template). Normally used with `extraVolumes`.
     ##
     extraVolumeMounts: []
     ## Container resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param initJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).
+    ## @param initJob.precompileAssets.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "large"
-    ## @param initJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param initJob.precompileAssets.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
     ##   requests:
@@ -1402,16 +1402,16 @@ initJob:
     resources: {}
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param initJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-    ## @param initJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-    ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-    ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
-    ## @param initJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-    ## @param initJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-    ## @param initJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-    ## @param initJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ## @param initJob.precompileAssets.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param initJob.precompileAssets.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param initJob.precompileAssets.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param initJob.precompileAssets.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param initJob.precompileAssets.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param initJob.precompileAssets.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param initJob.precompileAssets.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param initJob.precompileAssets.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param initJob.precompileAssets.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param initJob.precompileAssets.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
@@ -1426,38 +1426,39 @@ initJob:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
+  ## @param initJob.migrateAndCreateAdmin.enabled Execute job that migrates database, elasticsearch and creates admin
   ## @param initJob.migrateAndCreateAdmin.migrateDB Execute rake db:migrate as part of the job
   ## @param initJob.migrateAndCreateAdmin.migrateElasticsearch Execute rake chewy:upgrade as part of the job
-  ## @param initJob.migrateAndCreateAdmin Create admin user as part of the job
+  ## @param initJob.migrateAndCreateAdmin.createAdmin Create admin user as part of the job
   ##
   migrateAndCreateAdmin:
     enabled: true
     migrateDB: true
     migrateElasticsearch: true
     createAdmin: true
-    ## @param initJob.extraEnvVars Array containing extra env vars to configure the Mastodon init job
+    ## @param initJob.migrateAndCreateAdmin.extraEnvVars Array containing extra env vars to configure the Mastodon init job
     ## For example:
     ## extraEnvVars:
     ##  - name: GF_DEFAULT_INSTANCE_NAME
     ##    value: my-instance
     ##
     extraEnvVars: []
-    ## @param initJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the Mastodon init job
+    ## @param initJob.migrateAndCreateAdmin.extraEnvVarsCM ConfigMap containing extra env vars to configure the Mastodon init job
     ##
     extraEnvVarsCM: ""
-    ## @param initJob.extraEnvVarsSecret Secret containing extra env vars to configure the Mastodon init job (in case of sensitive data)
+    ## @param initJob.migrateAndCreateAdmin.extraEnvVarsSecret Secret containing extra env vars to configure the Mastodon init job (in case of sensitive data)
     ##
     extraEnvVarsSecret: ""
-    ## @param initJob.extraVolumeMounts Array of extra volume mounts to be added to the Mastodon Container (evaluated as template). Normally used with `extraVolumes`.
+    ## @param initJob.migrateAndCreateAdmin.extraVolumeMounts Array of extra volume mounts to be added to the Mastodon Container (evaluated as template). Normally used with `extraVolumes`.
     ##
     extraVolumeMounts: []
     ## Container resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param initJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).
+    ## @param initJob.migrateAndCreateAdmin.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "small"
-    ## @param initJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param initJob.migrateAndCreateAdmin.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
     ##   requests:
@@ -1470,16 +1471,16 @@ initJob:
     resources: {}
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param initJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-    ## @param initJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-    ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-    ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
-    ## @param initJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-    ## @param initJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-    ## @param initJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-    ## @param initJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param initJob.migrateAndCreateAdmin.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
@@ -1644,16 +1645,16 @@ defaultInitContainers:
   ## Init container that waits for backends to be ready
   ##
   waitForBackends:
-    ## @param defaultInitContainers.waitForCassandra.enabled Enable init container that waits for backends to be ready
+    ## @param defaultInitContainers.waitForBackends.enabled Enable init container that waits for backends to be ready
     ##
     enabled: true
     ## Init container's resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param defaultInitContainers.waitForCassandra.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## @param defaultInitContainers.waitForBackends.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
-    ## @param defaultInitContainers.waitForCassandra.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param defaultInitContainers.waitForBackends.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
     ##   requests:
@@ -1666,16 +1667,16 @@ defaultInitContainers:
     resources: {}
     ## Init container Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.enabled Enabled Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.privileged Set privileged in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.enabled Enabled Init container' Security Context
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.privileged Set privileged in Init container' Security Context
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
+    ## @param defaultInitContainers.waitForBackends.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
     ##
     containerSecurityContext:
       enabled: true
@@ -1693,16 +1694,16 @@ defaultInitContainers:
   ## Init container that waits for backends to be ready
   ##
   prepareDirs:
-    ## @param defaultInitContainers.waitForCassandra.enabled Enable init container that waits for backends to be ready
+    ## @param defaultInitContainers.prepareDirs.enabled Enable init container that prepares data directories
     ##
     enabled: true
     ## Init container's resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param defaultInitContainers.waitForCassandra.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## @param defaultInitContainers.prepareDirs.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
-    ## @param defaultInitContainers.waitForCassandra.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param defaultInitContainers.prepareDirs.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
     ##   requests:
@@ -1715,16 +1716,16 @@ defaultInitContainers:
     resources: {}
     ## Init container Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.enabled Enabled Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.privileged Set privileged in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
-    ## @param defaultInitContainers.waitForCassandra.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.enabled Enabled Init container' Security Context
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Init container
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.runAsUser Set runAsUser in Init container' Security Context
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.runAsGroup Set runAsGroup in Init container' Security Context
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Init container' Security Context
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Init container' Security Context
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.privileged Set privileged in Init container' Security Context
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Init container' Security Context
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Init container
+    ## @param defaultInitContainers.prepareDirs.containerSecurityContext.seccompProfile.type Set seccomp profile in Init container
     ##
     containerSecurityContext:
       enabled: true
@@ -1744,16 +1745,16 @@ defaultInitContainers:
   ##   based on the *podSecurityContext/*containerSecurityContext parameters
   ##
   volumePermissions:
-    ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+    ## @param defaultInitContainers.volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
     ##
     enabled: false
     ## OS Shell + Utility image
     ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-    ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
-    ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
-    ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
-    ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
-    ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
+    ## @param defaultInitContainers.volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+    ## @param defaultInitContainers.volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+    ## @skip defaultInitContainers.volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+    ## @param defaultInitContainers.volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+    ## @param defaultInitContainers.volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
     ##
     image:
       registry: docker.io
@@ -1770,11 +1771,11 @@ defaultInitContainers:
       pullSecrets: []
     ## Init container's resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## @param defaultInitContainers.volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
-    ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param defaultInitContainers.volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
     ##   requests:
@@ -1787,8 +1788,8 @@ defaultInitContainers:
     resources: {}
     ## Init container Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param defaultInitContainers.volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
     ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
     ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
     ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
