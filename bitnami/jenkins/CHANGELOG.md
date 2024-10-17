@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.25 (2024-10-10)
+## 13.4.26 (2024-10-17)
 
-* [bitnami/jenkins] Fix: InitScripts, InitHookScripts ([#29811](https://github.com/bitnami/charts/pull/29811))
+* [bitnami/jenkins] Release 13.4.26 ([#29973](https://github.com/bitnami/charts/pull/29973))
+
+## <small>13.4.25 (2024-10-10)</small>
+
+* [bitnami/jenkins] Fix: InitScripts, InitHookScripts (#29811) ([757f0f0](https://github.com/bitnami/charts/commit/757f0f0f70577481cfd097a00a1994124dc47010)), closes [#29811](https://github.com/bitnami/charts/issues/29811)
 
 ## <small>13.4.24 (2024-10-09)</small>
 
