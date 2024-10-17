@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.1.5 (2024-10-07)
+## 30.1.6 (2024-10-10)
 
-* [bitnami/kafka] Update default value of `heapOpts` to fit Kafka pod RAM limit while utilize its increase (#29670) ([#29782](https://github.com/bitnami/charts/pull/29782))
+* [bitnami/kafka] broker-list option is deprecated, change to bootstrap-server ([#29864](https://github.com/bitnami/charts/pull/29864))
+
+## <small>30.1.5 (2024-10-07)</small>
+
+* [bitnami/kafka] Update default value of `heapOpts` to fit Kafka pod RAM limit while utilize its incr ([51a574e](https://github.com/bitnami/charts/commit/51a574e7a0f97ec479349080d5c137bdaa4bf033)), closes [#29670](https://github.com/bitnami/charts/issues/29670) [#29782](https://github.com/bitnami/charts/issues/29782) [#29670](https://github.com/bitnami/charts/issues/29670)
 
 ## <small>30.1.4 (2024-09-22)</small>
 
