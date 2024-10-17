@@ -2,7 +2,7 @@
 
 ## 9.0.0 (2024-10-17)
 
-* [bitnami/mastodon] feat!: :sparkles: :boom: :recycle: Add keys for version 4.3 and refactor init containers ([#29900](https://github.com/bitnami/charts/pull/29900))
+* [bitnami/mastodon] feat!: :sparkles: :boom: :recycle: Bump appVersion to 4.3 and refactor init containers ([#29900](https://github.com/bitnami/charts/pull/29900))
 
 ## 8.0.0 (2024-10-03)
 
