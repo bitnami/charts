@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.6.19 (2024-10-13)
+## 4.6.20 (2024-10-17)
 
-* [grafana-loki] Fix loki config results_cache type embedded-cache ([#29878](https://github.com/bitnami/charts/pull/29878))
+* [bitnami/grafana-loki] Release 4.6.20 ([#29978](https://github.com/bitnami/charts/pull/29978))
+
+## <small>4.6.19 (2024-10-15)</small>
+
+* [grafana-loki] Fix loki config results_cache type embedded-cache (#29878) ([00cecc4](https://github.com/bitnami/charts/commit/00cecc46568fc4d65a0e88d4e8a0033107f2573e)), closes [#29878](https://github.com/bitnami/charts/issues/29878)
 
 ## <small>4.6.18 (2024-10-02)</small>
 
