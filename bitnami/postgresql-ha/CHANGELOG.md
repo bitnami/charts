@@ -1,8 +1,13 @@
 # Changelog
 
-## 14.3.1 (2024-10-16)
+## 14.3.2 (2024-10-17)
 
-* [bitnami/postgresql-ha] Release 14.3.1 ([#29934](https://github.com/bitnami/charts/pull/29934))
+* [bitnami/postgresql-ha] Cloning huge data from primary node fails due to livenessProbe ([#29948](https://github.com/bitnami/charts/pull/29948))
+
+## <small>14.3.1 (2024-10-16)</small>
+
+* [bitnami/postgresql-ha] Release 14.3.1 (#29934) ([ae61e7a](https://github.com/bitnami/charts/commit/ae61e7a627a0d6c1864e43bfe773ffb27c557ca0)), closes [#29934](https://github.com/bitnami/charts/issues/29934)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 14.3.0 (2024-10-16)
 
