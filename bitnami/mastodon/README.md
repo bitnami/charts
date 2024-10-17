@@ -682,9 +682,6 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `persistence.selector`      | Selector to match an existing Persistent Volume for Mastodon data PVC                                   | `{}`                |
 | `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
 
-### Init Container Parameters
-
-
 ### Default Init Container Parameters
 
 | Name                                                                                      | Description                                                                                                                                                                                                                                           | Value                      |

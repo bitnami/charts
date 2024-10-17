@@ -1637,8 +1637,6 @@ persistence:
   ## @param persistence.dataSource Custom PVC data source
   ##
   dataSource: {}
-## @section Init Container Parameters
-##
 ## @section Default Init Container Parameters
 ##
 defaultInitContainers:
