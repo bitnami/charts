@@ -611,9 +611,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | Name                                                        | Description                                                                                                                                                                                                                       | Value            |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `initJob.precompileAssets`                                  | Execute rake assets:precompile as part of the job                                                                                                                                                                                 | `true`           |
-| `initJob.migrateDB`                                         | Execute rake db:migrate as part of the job                                                                                                                                                                                        | `true`           |
-| `initJob.migrateElasticsearch`                              | Execute rake chewy:upgrade as part of the job                                                                                                                                                                                     | `true`           |
-| `initJob.createAdmin`                                       | Create admin user as part of the job                                                                                                                                                                                              | `true`           |
+| `initJob.migrateAndCreateAdmin.migrateDB`                                         | Execute rake db:migrate as part of the job                                                                                                                                                                                        | `true`           |
+| `initJob.migrateAndCreateAdmin.migrateElasticsearch`                              | Execute rake chewy:upgrade as part of the job                                                                                                                                                                                     | `true`           |
+| `initJob.migrateAndCreateAdmin`                                       | Create admin user as part of the job                                                                                                                                                                                              | `true`           |
 | `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                                                                                                      | `10`             |
 | `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Mastodon init job                                                                                                                                                     | `[]`             |
 | `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                              | `true`           |
@@ -830,6 +830,12 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/masto
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+This major updates Mastodon to version 3.4. This version requires setting new secret env vars like `ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY`, `ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY` and `ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT`. These values are set automatically during the upgrade when not using the `existingSecret` value. When using an external secret make sure that these three values above are set.
+
+Additionally, this major refactors the chart init containers under the `defaultInitContainers` section, being able to define individual values such as `resources` or `containerSecurityContext`. If using the `volumePermissions` section, this is now under the `defaultInitContainers.volumePermissions` section.
 
 ### To 8.0.0
 
