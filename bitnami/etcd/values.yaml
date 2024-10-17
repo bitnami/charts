@@ -962,7 +962,7 @@ serviceAccount:
 ## See https://etcd.io/docs/latest/op-guide/maintenance/
 ##
 defrag:
-  ## @param defrag.enabled Enable automatic defragmentation
+  ## @param defrag.enabled Enable automatic defragmentation. This is most effective when paired with auto compaction: consider setting "autoCompactionRetention > 0".
   ##
   enabled: false
   cronjob:

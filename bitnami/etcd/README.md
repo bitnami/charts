@@ -584,24 +584,24 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### Defragmentation parameters
 
-| Name                                        | Description                                                                                                                 | Value       |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `defrag.enabled`                            | Enable automatic defragmentation                                                                                            | `false`     |
-| `defrag.cronjob.startingDeadlineSeconds`    | Number of seconds representing the deadline for starting the job if it misses scheduled time for any reason                 | `""`        |
-| `defrag.cronjob.schedule`                   | Schedule in Cron format to defrag (daily at midnight by default)                                                            | `0 0 * * *` |
-| `defrag.cronjob.concurrencyPolicy`          | Set the cronjob parameter concurrencyPolicy                                                                                 | `Forbid`    |
-| `defrag.cronjob.suspend`                    | Boolean that indicates if the controller must suspend subsequent executions (not applied to already started executions)     | `false`     |
-| `defrag.cronjob.successfulJobsHistoryLimit` | Number of successful finished jobs to retain                                                                                | `1`         |
-| `defrag.cronjob.failedJobsHistoryLimit`     | Number of failed finished jobs to retain                                                                                    | `1`         |
-| `defrag.cronjob.labels`                     | Additional labels to be added to the Defrag cronjob                                                                         | `{}`        |
-| `defrag.cronjob.annotations`                | Annotations to be added to the Defrag cronjob                                                                               | `{}`        |
-| `defrag.cronjob.activeDeadlineSeconds`      | Number of seconds relative to the startTime that the job may be continuously active before the system tries to terminate it | `""`        |
-| `defrag.cronjob.restartPolicy`              | Set the cronjob parameter restartPolicy                                                                                     | `OnFailure` |
-| `defrag.cronjob.podLabels`                  | Labels that will be added to pods created by cronjob                                                                        | `{}`        |
-| `defrag.cronjob.podAnnotations`             | Pod annotations for cronjob pods                                                                                            | `{}`        |
-| `defrag.cronjob.command`                    | indicates a custom command to run                                                                                           | `[]`        |
-| `defrag.cronjob.resourcesPreset`            | Set container resources according to one common preset                                                                      | `nano`      |
-| `defrag.cronjob.resources`                  | Set container requests and limits for different resources like CPU or                                                       | `{}`        |
+| Name                                        | Description                                                                                                                                | Value       |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `defrag.enabled`                            | Enable automatic defragmentation. This is most effective when paired with auto compaction: consider setting "autoCompactionRetention > 0". | `false`     |
+| `defrag.cronjob.startingDeadlineSeconds`    | Number of seconds representing the deadline for starting the job if it misses scheduled time for any reason                                | `""`        |
+| `defrag.cronjob.schedule`                   | Schedule in Cron format to defrag (daily at midnight by default)                                                                           | `0 0 * * *` |
+| `defrag.cronjob.concurrencyPolicy`          | Set the cronjob parameter concurrencyPolicy                                                                                                | `Forbid`    |
+| `defrag.cronjob.suspend`                    | Boolean that indicates if the controller must suspend subsequent executions (not applied to already started executions)                    | `false`     |
+| `defrag.cronjob.successfulJobsHistoryLimit` | Number of successful finished jobs to retain                                                                                               | `1`         |
+| `defrag.cronjob.failedJobsHistoryLimit`     | Number of failed finished jobs to retain                                                                                                   | `1`         |
+| `defrag.cronjob.labels`                     | Additional labels to be added to the Defrag cronjob                                                                                        | `{}`        |
+| `defrag.cronjob.annotations`                | Annotations to be added to the Defrag cronjob                                                                                              | `{}`        |
+| `defrag.cronjob.activeDeadlineSeconds`      | Number of seconds relative to the startTime that the job may be continuously active before the system tries to terminate it                | `""`        |
+| `defrag.cronjob.restartPolicy`              | Set the cronjob parameter restartPolicy                                                                                                    | `OnFailure` |
+| `defrag.cronjob.podLabels`                  | Labels that will be added to pods created by cronjob                                                                                       | `{}`        |
+| `defrag.cronjob.podAnnotations`             | Pod annotations for cronjob pods                                                                                                           | `{}`        |
+| `defrag.cronjob.command`                    | indicates a custom command to run                                                                                                          | `[]`        |
+| `defrag.cronjob.resourcesPreset`            | Set container resources according to one common preset                                                                                     | `nano`      |
+| `defrag.cronjob.resources`                  | Set container requests and limits for different resources like CPU or                                                                      | `{}`        |
 
 ### Other parameters
 
