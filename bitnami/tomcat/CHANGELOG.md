@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.2.22 (2024-10-16)
+## 11.2.23 (2024-10-17)
 
-* [bitnami/tomcat] Release 11.2.22 ([#29937](https://github.com/bitnami/charts/pull/29937))
+* [bitnami/tomcat] Release 11.2.23 ([#29960](https://github.com/bitnami/charts/pull/29960))
+
+## <small>11.2.22 (2024-10-16)</small>
+
+* [bitnami/tomcat] Release 11.2.22 (#29937) ([5559a58](https://github.com/bitnami/charts/commit/5559a58ac027d23ac1100f807dc9616fa6853ea4)), closes [#29937](https://github.com/bitnami/charts/issues/29937)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>11.2.21 (2024-09-17)</small>
 
