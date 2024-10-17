@@ -1089,6 +1089,12 @@ persistence:
   ## @param persistence.existingClaim Name of an existing PVC to use (only in `standalone` mode)
   ##
   existingClaim: ""
+  ## @param persistence.selector Configure custom selector for existing Persistent Volume. (only in `distributed` mode)
+  ## selector:
+  ##   matchLabels:
+  ##     volume:
+  ##
+  selector: {}
 ## @section Volume Permissions parameters
 
 ## Init containers parameters:
