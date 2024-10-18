@@ -6,7 +6,7 @@
 
 ## <small>2.0.7 (2024-10-18)</small>
 
-* [bitnami/chainloop] Release 2.0.7 ([#29987](https://github.com/bitnami/charts/pull/29987))
+* [bitnami/chainloop] Release 2.0.7 (#29987) ([66dbd97](https://github.com/bitnami/charts/commit/66dbd9756199c4e3d1cf57aa031782abbd6d652b)), closes [#29987](https://github.com/bitnami/charts/issues/29987)
 
 ## <small>2.0.6 (2024-10-16)</small>
 
