@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.20 (2024-09-19)
+## 11.2.21 (2024-10-16)
 
-* [bitnami/apache] Release 11.2.20 ([#29501](https://github.com/bitnami/charts/pull/29501))
+* [bitnami/apache] Remove wrong entries from image verification ([#29911](https://github.com/bitnami/charts/pull/29911))
+
+## <small>11.2.20 (2024-09-19)</small>
+
+* [bitnami/apache] Release 11.2.20 (#29501) ([efd2c8f](https://github.com/bitnami/charts/commit/efd2c8f6e18240f7cde27a915627d5cf4f77189c)), closes [#29501](https://github.com/bitnami/charts/issues/29501)
 
 ## <small>11.2.19 (2024-09-18)</small>
 

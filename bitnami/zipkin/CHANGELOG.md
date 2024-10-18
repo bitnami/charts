@@ -1,8 +1,16 @@
 # Changelog
 
+## 1.0.2 (2024-10-08)
+
+* [bitnami/zipkin] Release 1.0.2 ([#29822](https://github.com/bitnami/charts/pull/29822))
+
+## <small>1.0.1 (2024-10-01)</small>
+
+* [bitnami/zipkin] Release 1.0.1 (#29680) ([d21e6fb](https://github.com/bitnami/charts/commit/d21e6fb694112566d2f46e7682cb704859285c74)), closes [#29680](https://github.com/bitnami/charts/issues/29680)
+
 ## 1.0.0 (2024-09-10)
 
-* [bitnami/zipkin] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) ([#29326](https://github.com/bitnami/charts/pull/29326))
+* [bitnami/zipkin] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) (#29326) ([7eb1be9](https://github.com/bitnami/charts/commit/7eb1be9de9fabc705f788702cf8f0cc1acfc7e2b)), closes [#29326](https://github.com/bitnami/charts/issues/29326)
 
 ## <small>0.1.1 (2024-09-06)</small>
 

@@ -1,8 +1,20 @@
 # Changelog
 
-## 13.0.3 (2024-09-19)
+## 14.0.2 (2024-10-16)
 
-* [bitnami/kong] Remove duplicated empty password check `common.validations.values.cassandra.passwords` ([#29441](https://github.com/bitnami/charts/pull/29441))
+* [bitnami/kong] Release 14.0.2 ([#29926](https://github.com/bitnami/charts/pull/29926))
+
+## <small>14.0.1 (2024-10-16)</small>
+
+* [bitnami/kong] Release 14.0.1 (#29922) ([db33704](https://github.com/bitnami/charts/commit/db33704cd47f8afa9fc0c7822061212668674f42)), closes [#29922](https://github.com/bitnami/charts/issues/29922)
+
+## 14.0.0 (2024-10-03)
+
+* [bitnami/kong] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29736) ([2f9809b](https://github.com/bitnami/charts/commit/2f9809b8abe8a576cdb4f14be16749a4d1a9792a)), closes [#29736](https://github.com/bitnami/charts/issues/29736)
+
+## <small>13.0.3 (2024-09-19)</small>
+
+* [bitnami/kong] Remove duplicated empty password check `common.validations.values.cassandra.passwords ([139f5a5](https://github.com/bitnami/charts/commit/139f5a54c71ba4da1a0401300b84f8b31d8ff2e9)), closes [#29441](https://github.com/bitnami/charts/issues/29441)
 
 ## <small>13.0.2 (2024-09-19)</small>
 

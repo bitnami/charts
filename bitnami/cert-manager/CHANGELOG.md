@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.3.18 (2024-09-05)
+## 1.3.21 (2024-10-09)
 
-* [bitnami/cert-manager] Release 1.3.18 ([#29226](https://github.com/bitnami/charts/pull/29226))
+* [bitnami/cert-manager] Release 1.3.21 ([#29846](https://github.com/bitnami/charts/pull/29846))
+
+## <small>1.3.20 (2024-10-03)</small>
+
+* [bitnami/cert-manager] Release 1.3.20 (#29766) ([af95117](https://github.com/bitnami/charts/commit/af951172a56c854135e1e6bddb89324b14e41fa7)), closes [#29766](https://github.com/bitnami/charts/issues/29766)
+
+## <small>1.3.19 (2024-10-01)</small>
+
+* [bitnami/cert-manager] Release 1.3.19 (#29684) ([b813a20](https://github.com/bitnami/charts/commit/b813a20baf8e1eaeda1f8b7419fc4e21b7c4cc5a)), closes [#29684](https://github.com/bitnami/charts/issues/29684)
+
+## <small>1.3.18 (2024-09-05)</small>
+
+* [bitnami/cert-manager] Release 1.3.18 (#29226) ([f6b20d0](https://github.com/bitnami/charts/commit/f6b20d0411d099e9d27b27fcf0f76b6da79121bf)), closes [#29226](https://github.com/bitnami/charts/issues/29226)
 
 ## <small>1.3.17 (2024-08-16)</small>
 

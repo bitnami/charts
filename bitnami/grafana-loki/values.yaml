@@ -83,7 +83,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 3.2.0-debian-12-r0
+    tag: 3.2.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -236,10 +236,10 @@ loki:
             timeout: 500ms
             update_interval: 1m
           {{- else }}
-          embedded-cache:
+          embedded_cache:
             enabled: true
-            max_size_items: 1024
-            validity: 24h
+            max_size_mb: 4096
+            ttl: 24h
           {{- end }}
     {{- if not .Values.queryScheduler.enabled }}
     frontend_worker:
@@ -740,7 +740,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.27.1-debian-12-r5
+    tag: 1.27.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4469,7 +4469,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 3.1.1-debian-12-r4
+    tag: 3.2.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4990,7 +4990,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r31
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -87,7 +87,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 24.8.4-debian-12-r0
+  tag: 24.9.2-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -105,6 +105,9 @@ image:
   ## Enable debug mode
   ##
   debug: false
+## @param clusterName ClickHouse cluster name
+##
+clusterName: default
 ## @param shards Number of ClickHouse shards to deploy
 ##
 shards: 2
@@ -286,7 +289,7 @@ defaultConfigurationOverrides: |
     {{- if or (ne (int .Values.shards) 1) (ne (int .Values.replicaCount) 1)}}
     <!-- Cluster configuration - Any update of the shards and replicas requires helm upgrade -->
     <remote_servers>
-      <default>
+      <{{ .Values.clusterName }}>
         {{- $shards := $.Values.shards | int }}
         {{- range $shard, $e := until $shards }}
         <shard>
@@ -301,7 +304,7 @@ defaultConfigurationOverrides: |
             {{- end }}
         </shard>
         {{- end }}
-      </default>
+      </{{ .Values.clusterName }}>
     </remote_servers>
     {{- end }}
     {{- if .Values.keeper.enabled }}
@@ -990,7 +993,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r31
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1149,7 +1152,7 @@ zookeeper:
   image:
     registry: docker.io
     repository: bitnami/zookeeper
-    tag: 3.8.4-debian-12-r13
+    tag: 3.8.4-debian-12-r14
     pullPolicy: IfNotPresent
   replicaCount: 3
   service:

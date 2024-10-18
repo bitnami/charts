@@ -1,8 +1,16 @@
 # Changelog
 
-## 7.4.16 (2024-09-11)
+## 7.5.1 (2024-10-17)
 
-* [bitnami/memcached] Allow rendering resources values ([#29345](https://github.com/bitnami/charts/pull/29345))
+* [bitnami/memcached] Release 7.5.1 ([#29974](https://github.com/bitnami/charts/pull/29974))
+
+## 7.5.0 (2024-09-30)
+
+* [bitnami/memcached] Add optional emptyDir medium configuration (#29570) ([86d010b](https://github.com/bitnami/charts/commit/86d010b1e9ad189e2b30bb14fd4fce0fc457d082)), closes [#29570](https://github.com/bitnami/charts/issues/29570)
+
+## <small>7.4.16 (2024-09-11)</small>
+
+* [bitnami/memcached] Allow rendering resources values (#29345) ([69b2b1d](https://github.com/bitnami/charts/commit/69b2b1d49fffa5dddf0df18315e2fc8ba1daf14c)), closes [#29345](https://github.com/bitnami/charts/issues/29345)
 
 ## <small>7.4.15 (2024-09-07)</small>
 

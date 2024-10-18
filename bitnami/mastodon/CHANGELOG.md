@@ -1,8 +1,20 @@
 # Changelog
 
-## 7.0.5 (2024-09-19)
+## 9.0.0 (2024-10-17)
 
-* [bitnami/mastodon] Release 7.0.5 ([#29524](https://github.com/bitnami/charts/pull/29524))
+* [bitnami/mastodon] feat!: :sparkles: :boom: :recycle: Bump appVersion to 4.3 and refactor init containers ([#29900](https://github.com/bitnami/charts/pull/29900))
+
+## 8.0.0 (2024-10-03)
+
+* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29739) ([2be9de6](https://github.com/bitnami/charts/commit/2be9de659f83dc24dcbbffe1d4dd67fd4a4320bb)), closes [#29739](https://github.com/bitnami/charts/issues/29739)
+
+## <small>7.0.6 (2024-09-30)</small>
+
+* [bitnami/mastodon] Release 7.0.6 (#29672) ([dddf994](https://github.com/bitnami/charts/commit/dddf994e3793539769ffe28ec9c7f961a8711a19)), closes [#29672](https://github.com/bitnami/charts/issues/29672)
+
+## <small>7.0.5 (2024-09-19)</small>
+
+* [bitnami/mastodon] Release 7.0.5 (#29524) ([87ff268](https://github.com/bitnami/charts/commit/87ff26881dc0fe0741dd88bb6513834a56c4ad65)), closes [#29524](https://github.com/bitnami/charts/issues/29524)
 
 ## <small>7.0.4 (2024-08-23)</small>
 

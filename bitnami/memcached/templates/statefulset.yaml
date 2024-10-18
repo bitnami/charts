@@ -214,7 +214,7 @@ spec:
               subPath: app-conf-dir
             - name: empty-dir
               mountPath: /tmp
-              subPath: tmp-dir              
+              subPath: tmp-dir
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -263,7 +263,12 @@ spec:
         {{- end }}
       volumes:
         - name: empty-dir
+        {{- if eq .Values.emptyDir.medium "Memory" }}
+          emptyDir:
+            medium: "Memory"
+        {{- else }}
           emptyDir: {}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

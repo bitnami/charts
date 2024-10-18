@@ -1,8 +1,20 @@
 # Changelog
 
-## 22.2.6 (2024-09-19)
+## 24.0.1 (2024-10-17)
 
-* [bitnami/keycloak] Release 22.2.6 ([#29542](https://github.com/bitnami/charts/pull/29542))
+* [bitnami/keycloak] Release 24.0.1 ([#29968](https://github.com/bitnami/charts/pull/29968))
+
+## 24.0.0 (2024-10-08)
+
+* [bitnami/keycloak] Release 24.0.0 (#29815) ([02bf8f8](https://github.com/bitnami/charts/commit/02bf8f8821a875ca3605705f9c092a077ef29772)), closes [#29815](https://github.com/bitnami/charts/issues/29815)
+
+## 23.0.0 (2024-10-03)
+
+* [bitnami/keycloak] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29735) ([8ce695d](https://github.com/bitnami/charts/commit/8ce695d44b25e3e2023c07961c66ae5b7b22ce4b)), closes [#29735](https://github.com/bitnami/charts/issues/29735)
+
+## <small>22.2.6 (2024-09-19)</small>
+
+* [bitnami/keycloak] Release 22.2.6 (#29542) ([754f9e2](https://github.com/bitnami/charts/commit/754f9e2365ab6d0786a997e4d582e2b6ce92c237)), closes [#29542](https://github.com/bitnami/charts/issues/29542)
 
 ## <small>22.2.5 (2024-09-16)</small>
 

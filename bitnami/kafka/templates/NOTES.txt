@@ -149,7 +149,7 @@ To create a pod that you can use as a Kafka client run the following commands:
             {{- if or $clientSaslEnabled $clientSslEnabled }}
             --producer.config /tmp/client.properties \
             {{- end }}
-            --broker-list {{ join "," $brokerList }} \
+            --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.client }} \
             --topic test
 
     CONSUMER:

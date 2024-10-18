@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.4.23 (2024-09-26)
+## 1.4.26 (2024-10-09)
 
-* [bitnami/vault] Release 1.4.23 ([#29608](https://github.com/bitnami/charts/pull/29608))
+* [bitnami/vault] Release 1.4.26 ([#29839](https://github.com/bitnami/charts/pull/29839))
+
+## <small>1.4.25 (2024-10-02)</small>
+
+* [bitnami/vault] Release 1.4.25 (#29721) ([692d7a2](https://github.com/bitnami/charts/commit/692d7a2287c4fe16692384f80064e368e8c5e44a)), closes [#29721](https://github.com/bitnami/charts/issues/29721)
+
+## <small>1.4.24 (2024-10-02)</small>
+
+* [bitnami/vault] Fix documentation in README.md (#29665) ([3cf178a](https://github.com/bitnami/charts/commit/3cf178a2d8ba3d6002ed076044b221f548b5e868)), closes [#29665](https://github.com/bitnami/charts/issues/29665)
+
+## <small>1.4.23 (2024-09-26)</small>
+
+* [bitnami/vault] Release 1.4.23 (#29608) ([155118f](https://github.com/bitnami/charts/commit/155118f32248d78de3dbee0412c0350bccf849c2)), closes [#29608](https://github.com/bitnami/charts/issues/29608)
 
 ## <small>1.4.22 (2024-09-11)</small>
 

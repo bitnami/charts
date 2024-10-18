@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.5.7 (2024-09-19)
+## 2.0.2 (2024-10-16)
 
-* [bitnami/mlflow] Release 1.5.7 ([#29534](https://github.com/bitnami/charts/pull/29534))
+* [bitnami/mlflow] Release 2.0.2 ([#29945](https://github.com/bitnami/charts/pull/29945))
+
+## <small>2.0.1 (2024-10-16)</small>
+
+* [bitnami/mlflow] Release 2.0.1 (#29927) ([d0b88fc](https://github.com/bitnami/charts/commit/d0b88fc101c00906458403db9246731258f6cbe3)), closes [#29927](https://github.com/bitnami/charts/issues/29927)
+
+## 2.0.0 (2024-10-03)
+
+* [bitnami/mlflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29740) ([366ae2b](https://github.com/bitnami/charts/commit/366ae2be83024c1fdbf09db44c6e99057e67c150)), closes [#29740](https://github.com/bitnami/charts/issues/29740)
+
+## <small>1.5.7 (2024-09-19)</small>
+
+* [bitnami/mlflow] Release 1.5.7 (#29534) ([706e4b6](https://github.com/bitnami/charts/commit/706e4b6cb60bdd595e209507f798868de6fd8777)), closes [#29534](https://github.com/bitnami/charts/issues/29534)
 
 ## <small>1.5.6 (2024-09-19)</small>
 

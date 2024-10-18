@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.0.2 (2024-09-19)
+## 3.0.3 (2024-10-16)
 
-* [bitnami/seaweedfs] Release 2.0.2 ([#29537](https://github.com/bitnami/charts/pull/29537))
+* [bitnami/seaweedfs] Release 3.0.3 ([#29944](https://github.com/bitnami/charts/pull/29944))
+
+## <small>3.0.2 (2024-10-07)</small>
+
+* [bitnami/seaweedfs] Release 3.0.2 (#29792) ([fb96676](https://github.com/bitnami/charts/commit/fb9667635ba7b4dea74d1f9df7ba2b30c1c0ee83)), closes [#29792](https://github.com/bitnami/charts/issues/29792)
+
+## <small>3.0.1 (2024-10-03)</small>
+
+* [bitnami/seaweedfs] Release 3.0.1 (#29767) ([47ffa78](https://github.com/bitnami/charts/commit/47ffa783266d4633b4a8f749fc7291e84b9d176b)), closes [#29767](https://github.com/bitnami/charts/issues/29767)
+
+## 3.0.0 (2024-10-03)
+
+* [bitnami/seaweedfs] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29744) ([024f9e6](https://github.com/bitnami/charts/commit/024f9e6d9faad1a6616ea0145b9bf64a10232c40)), closes [#29744](https://github.com/bitnami/charts/issues/29744)
+
+## <small>2.0.4 (2024-10-02)</small>
+
+* [bitnami/seaweedfs] Release 2.0.4 (#29719) ([36de636](https://github.com/bitnami/charts/commit/36de636d89b745738f1426126f67bfc7f5cca0e9)), closes [#29719](https://github.com/bitnami/charts/issues/29719)
+
+## <small>2.0.3 (2024-09-30)</small>
+
+* [bitnami/seaweedfs] Release 2.0.3 (#29675) ([c077c83](https://github.com/bitnami/charts/commit/c077c839da01b34acd5ffb7b370f542b50fecf20)), closes [#29675](https://github.com/bitnami/charts/issues/29675)
+
+## <small>2.0.2 (2024-09-19)</small>
+
+* [bitnami/seaweedfs] Release 2.0.2 (#29537) ([2c05061](https://github.com/bitnami/charts/commit/2c050617c8d43da601117f7c8fd1945e00962da0)), closes [#29537](https://github.com/bitnami/charts/issues/29537)
 
 ## <small>2.0.1 (2024-09-17)</small>
 
