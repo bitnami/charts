@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.2.28 (2024-10-17)
+## 6.2.29 (2024-10-18)
 
-* [bitnami/clickhouse] Release 6.2.28 ([#29966](https://github.com/bitnami/charts/pull/29966))
+* [bitnami/clickhouse] Release 6.2.29 ([#29983](https://github.com/bitnami/charts/pull/29983))
+
+## <small>6.2.28 (2024-10-17)</small>
+
+* [bitnami/clickhouse] Release 6.2.28 (#29966) ([9559903](https://github.com/bitnami/charts/commit/9559903a9fe5f9900cbe575f43cd600468d7bc0e)), closes [#29966](https://github.com/bitnami/charts/issues/29966)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>6.2.27 (2024-10-03)</small>
 
