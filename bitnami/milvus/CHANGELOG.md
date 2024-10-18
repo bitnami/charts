@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.0.8 (2024-10-18)
+## 9.0.9 (2024-10-18)
 
 * [bitnami/milvus] Fixed bug/typo in datanode networkpolicy.yaml to allow all egress raffic ([#29956](https://github.com/bitnami/charts/pull/29956))
 
