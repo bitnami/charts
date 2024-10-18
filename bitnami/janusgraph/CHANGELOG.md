@@ -2,7 +2,7 @@
 
 ## 0.3.22 (2024-10-16)
 
-* [bitnami/janusgraph] Remove wrong entries from image verification ([#29914](https://github.com/bitnami/charts/pull/29914))
+* [bitnami/janusgraph] Release 0.3.22 ([#29951](https://github.com/bitnami/charts/pull/29951))
 
 ## <small>0.3.21 (2024-09-13)</small>
 
