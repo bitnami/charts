@@ -1,0 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  licenses: Apache-2.0
+apiVersion: v2
+appVersion: 4.0.0
+dependencies:
+  - condition: redis.enabled
+    name: redis
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 19.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Apache Superset is a Data Visualization and Data Exploration Platform
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/superset/img/superset-stack-220x234.png
+keywords:
+  - superset
+  - analytics
+maintainers:
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
+name: superset
+sources:
+  - https://github.com/bitnami/containers/tree/main/bitnami/superset
+  - https://github.com/apache/superset
+version: 0.1.0
