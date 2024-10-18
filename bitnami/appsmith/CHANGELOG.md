@@ -1,8 +1,17 @@
 # Changelog
 
+## 5.0.2 (2024-10-17)
+
+* [bitnami/appsmith] Release 5.0.2 ([#29961](https://github.com/bitnami/charts/pull/29961))
+
+## <small>5.0.1 (2024-10-16)</small>
+
+* [bitnami/appsmith] Release 5.0.1 (#29941) ([41bd33d](https://github.com/bitnami/charts/commit/41bd33dedd3d1d969358112e5cefcaf8bcc28fa4)), closes [#29941](https://github.com/bitnami/charts/issues/29941)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
 ## 5.0.0 (2024-10-08)
 
-* [bitnami/appsmith] Update MongoDB chart to 16.0.0 ([#29805](https://github.com/bitnami/charts/pull/29805))
+* [bitnami/appsmith] Update MongoDB chart to 16.0.0 (#29805) ([9ce2496](https://github.com/bitnami/charts/commit/9ce24968c5f5d959dc99bce67099e78e54dcfe9e)), closes [#29805](https://github.com/bitnami/charts/issues/29805)
 
 ## <small>4.0.10 (2024-10-02)</small>
 
