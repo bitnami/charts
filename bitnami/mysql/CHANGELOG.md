@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.1.20 (2024-10-17)
+## 11.1.20 (2024-10-18)
 
 * [bitnami/mysql] Drop unused `getValueFromSecret` local helper ([#29962](https://github.com/bitnami/charts/pull/29962))
 
