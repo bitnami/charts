@@ -2,7 +2,7 @@
 
 ## 0.1.14 (2024-10-16)
 
-* [bitnami/neo4j] Remove wrong entries from image verification ([#29915](https://github.com/bitnami/charts/pull/29915))
+* [bitnami/neo4j] Release 0.1.14 ([#29930](https://github.com/bitnami/charts/pull/29930))
 
 ## <small>0.1.13 (2024-10-02)</small>
 

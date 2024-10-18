@@ -304,6 +304,22 @@ Return the database to use for repmgr
 {{- end -}}
 
 {{/*
+Return true if the PostgreSQL credential secret has a separate entry for the postgres user
+*/}}
+{{- define "postgresql-ha.postgresqlSeparatePostgresPassword" -}}
+{{- if (include "postgresql-ha.postgresqlCreateSecret" .) -}}
+    {{- if and (include "postgresql-ha.postgresqlPostgresPassword" .) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) -}}
+        {{- true -}}
+    {{- end -}}
+{{- else -}}
+    {{- $pgSecret := index (lookup "v1" "Secret" (include "common.names.namespace" .) (include "postgresql-ha.postgresqlSecretName" .)) "data" -}}
+    {{- if and $pgSecret (index $pgSecret "postgres-password") -}}
+        {{- true -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a secret object should be created for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresqlCreateSecret" -}}

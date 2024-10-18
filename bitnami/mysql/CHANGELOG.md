@@ -1,8 +1,8 @@
 # Changelog
 
-## 11.1.18 (2024-10-14)
+## 11.1.19 (2024-10-16)
 
-* [bitnami/mysql] Release 11.1.18 ([#29887](https://github.com/bitnami/charts/pull/29887))
+* [bitnami/mysql] Release 11.1.19 ([#29929](https://github.com/bitnami/charts/pull/29929))
 
 ## <small>11.1.17 (2024-09-17)</small>
 

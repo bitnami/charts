@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.19 (2024-09-19)
+## 2.2.20 (2024-10-17)
 
-* [bitnami/deepspeed] Release 2.2.19 ([#29503](https://github.com/bitnami/charts/pull/29503))
+* [bitnami/deepspeed] Release 2.2.20 ([#29964](https://github.com/bitnami/charts/pull/29964))
+
+## <small>2.2.19 (2024-09-19)</small>
+
+* [bitnami/deepspeed] Release 2.2.19 (#29503) ([b49ff53](https://github.com/bitnami/charts/commit/b49ff53d20fe26cf730839ea0ee98bd770230844)), closes [#29503](https://github.com/bitnami/charts/issues/29503)
 
 ## <small>2.2.18 (2024-09-15)</small>
 
