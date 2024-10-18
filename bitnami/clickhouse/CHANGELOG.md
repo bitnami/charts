@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.29 (2024-10-18)
+## 6.3.0 (2024-10-18)
 
-* [bitnami/clickhouse] Release 6.2.29 ([#29983](https://github.com/bitnami/charts/pull/29983))
+* [bitnami/clickhouse] Allow change ClickHouse cluster name ([#29939](https://github.com/bitnami/charts/pull/29939))
+
+## <small>6.2.29 (2024-10-18)</small>
+
+* [bitnami/clickhouse] Release 6.2.29 (#29983) ([18b931a](https://github.com/bitnami/charts/commit/18b931a3de20a84725be0fa01d282e8bb2344bc1)), closes [#29983](https://github.com/bitnami/charts/issues/29983)
 
 ## <small>6.2.28 (2024-10-17)</small>
 
