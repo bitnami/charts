@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.1.39 (2024-10-16)
+## 21.1.40 (2024-10-18)
 
-* [bitnami/ghost] Release 21.1.39 ([#29940](https://github.com/bitnami/charts/pull/29940))
+* [bitnami/ghost] Release 21.1.40 ([#29996](https://github.com/bitnami/charts/pull/29996))
+
+## <small>21.1.39 (2024-10-16)</small>
+
+* [bitnami/ghost] Release 21.1.39 (#29940) ([a422eda](https://github.com/bitnami/charts/commit/a422eda820576250c68b45c8789d0ef6917c56f8)), closes [#29940](https://github.com/bitnami/charts/issues/29940)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>21.1.38 (2024-10-16)</small>
 
