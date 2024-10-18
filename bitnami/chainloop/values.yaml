@@ -164,7 +164,7 @@ controlplane:
   image:
     registry: docker.io
     repository: bitnami/chainloop-control-plane
-    tag: 0.96.13-debian-12-r1
+    tag: 0.96.22-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -242,7 +242,7 @@ controlplane:
     image:
       registry: docker.io
       repository: bitnami/chainloop-control-plane-migrations
-      tag: 0.96.13-debian-12-r0
+      tag: 0.96.22-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -990,7 +990,7 @@ cas:
   image:
     registry: docker.io
     repository: bitnami/chainloop-artifact-cas
-    tag: 0.96.13-debian-12-r1
+    tag: 0.96.22-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1744,7 +1744,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.41.1-debian-12-r4
+    tag: 2.41.1-debian-12-r5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

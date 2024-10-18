@@ -20,9 +20,7 @@ spec:
   {{- end }}
   revisionHistoryLimit: {{ .Values.ruler.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.ruler.podManagementPolicy }}
-  {{- if .Values.ruler.service.additionalHeadless }}
   serviceName: {{ include "thanos.ruler.fullname" . }}-headless
-  {{- end }}
   {{- if .Values.ruler.updateStrategy }}
   updateStrategy: {{- toYaml .Values.ruler.updateStrategy | nindent 4 }}
   {{- end }}

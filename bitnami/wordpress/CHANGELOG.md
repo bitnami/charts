@@ -1,8 +1,25 @@
 # Changelog
 
-## 23.1.19 (2024-10-01)
+## 23.1.23 (2024-10-17)
 
-* [bitnami/wordpress] templates/ingress.yaml: fix wrong www.www tls name ([#29562](https://github.com/bitnami/charts/pull/29562))
+* [bitnami/wordpress] Release 23.1.23 ([#29970](https://github.com/bitnami/charts/pull/29970))
+
+## <small>23.1.22 (2024-10-16)</small>
+
+* [bitnami/wordpress] Release 23.1.22 (#29946) ([b96295c](https://github.com/bitnami/charts/commit/b96295c21f6f2cb7fe0631fe14b7c9da2bcde9b6)), closes [#29946](https://github.com/bitnami/charts/issues/29946)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>23.1.21 (2024-10-08)</small>
+
+* [bitnami/wordpress] Release 23.1.21 (#29833) ([99b3f1b](https://github.com/bitnami/charts/commit/99b3f1bed2f16b63487ed6c959c70245efcdf00f)), closes [#29833](https://github.com/bitnami/charts/issues/29833)
+
+## <small>23.1.20 (2024-10-08)</small>
+
+* [bitnami/wordpress] Release 23.1.20 (#29831) ([44c128f](https://github.com/bitnami/charts/commit/44c128f31abbef672d91a622d96f698c28005879)), closes [#29831](https://github.com/bitnami/charts/issues/29831)
+
+## <small>23.1.19 (2024-10-01)</small>
+
+* [bitnami/wordpress] templates/ingress.yaml: fix wrong www.www tls name (#29562) ([6590b93](https://github.com/bitnami/charts/commit/6590b9313eab453bcec62d90e4c11ff5f9873618)), closes [#29562](https://github.com/bitnami/charts/issues/29562)
 
 ## <small>23.1.18 (2024-10-01)</small>
 

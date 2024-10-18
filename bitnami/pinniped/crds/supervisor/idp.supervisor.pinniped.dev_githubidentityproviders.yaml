@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/supervisor/idp.supervisor.pinniped.dev_githubidentityproviders.yaml
-# Version: 0.33.0
+# Version: 0.34.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: githubidentityproviders.idp.supervisor.pinniped.dev
 spec:
   group: idp.supervisor.pinniped.dev
@@ -36,7 +36,6 @@ spec:
         description: |-
           GitHubIdentityProvider describes the configuration of an upstream GitHub identity provider.
           This upstream provider can be configured with either a GitHub App or a GitHub OAuth2 App.
-
 
           Right now, only web-based logins are supported, for both the pinniped-cli client and clients configured
           as OIDCClients.
@@ -76,11 +75,9 @@ spec:
                           teams within the listed GitHub organizations. Additional login rules or group filtering can optionally be
                           provided as policy expression on any Pinniped Supervisor FederationDomain that includes this IDP.
 
-
                           The configured GitHub App or GitHub OAuth App must be allowed to see membership in the listed organizations,
                           otherwise Pinniped will not be aware that the user belongs to the listed organization or any teams
                           within that organization.
-
 
                           If no organizations are listed, you must set organizations: AllGitHubUsers.
                         items:
@@ -94,9 +91,7 @@ spec:
                           Allowed values are "OnlyUsersFromAllowedOrganizations" or "AllGitHubUsers".
                           Defaults to "OnlyUsersFromAllowedOrganizations".
 
-
                           Must be set to "AllGitHubUsers" if the allowed field is empty.
-
 
                           This field only exists to ensure that Pinniped administrators are aware that an empty list of
                           allowedOrganizations means all GitHub users are allowed to log in.
@@ -129,25 +124,19 @@ spec:
                     description: |-
                       Groups configures which property of the GitHub team record shall determine the group names in Kubernetes.
 
-
                       Can be either "name" or "slug". Defaults to "slug".
-
 
                       GitHub team names can contain upper and lower case characters, whitespace, and punctuation (e.g. "Kube admins!").
 
-
                       GitHub team slugs are lower case alphanumeric characters and may contain dashes and underscores (e.g. "kube-admins").
-
 
                       Group names as presented to Kubernetes will always be prefixed by the GitHub organization name followed by a
                       forward slash (e.g. "my-org/my-team"). GitHub organization login names can only contain alphanumeric characters
                       or single hyphens, so the first forward slash `/` will be the separator between the organization login name and
                       the team name or slug.
 
-
                       If desired, an admin could configure identity transformation expressions on the Pinniped Supervisor's
                       FederationDomain to further customize how these group names are presented to Kubernetes.
-
 
                       See the response schema for
                       [List teams for the authenticated user](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#list-teams-for-the-authenticated-user).
@@ -160,9 +149,7 @@ spec:
                     description: |-
                       Username configures which property of the GitHub user record shall determine the username in Kubernetes.
 
-
                       Can be either "id", "login", or "login:id". Defaults to "login:id".
-
 
                       GitHub's user login attributes can only contain alphanumeric characters and non-repeating hyphens,
                       and may not start or end with hyphens. GitHub users are allowed to change their login name,
@@ -171,16 +158,13 @@ spec:
                       username of the first user. For this reason, it is not as safe to make authorization decisions
                       based only on the user's login attribute.
 
-
                       If desired, an admin could configure identity transformation expressions on the Pinniped Supervisor's
                       FederationDomain to further customize how these usernames are presented to Kubernetes.
-
 
                       Defaults to "login:id", which is the user login attribute, followed by a colon, followed by the unique and
                       unchanging integer ID number attribute. This blends human-readable login names with the unchanging ID value
                       from GitHub. Colons are not allowed in GitHub login attributes or ID numbers, so this is a reasonable
                       choice to concatenate the two values.
-
 
                       See the response schema for
                       [Get the authenticated user](https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user).
@@ -198,7 +182,6 @@ spec:
                     description: |-
                       SecretName contains the name of a namespace-local Secret object that provides the clientID and
                       clientSecret for an GitHub App or GitHub OAuth2 client.
-
 
                       This secret must be of type "secrets.pinniped.dev/github-client" with keys "clientID" and "clientSecret".
                     minLength: 1
@@ -282,16 +265,8 @@ spec:
                 description: Conditions represents the observations of an identity
                   provider's current state.
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -332,12 +307,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string

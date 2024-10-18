@@ -1,8 +1,20 @@
 # Changelog
 
-## 19.0.4 (2024-10-04)
+## 19.2.0 (2024-10-11)
 
-* [bitnami/contour] Release 19.0.4 ([#29688](https://github.com/bitnami/charts/pull/29688))
+*  [bitnami/contour] fixed wrong envoy-service-name arg value in contour when envoy service name is changed ([#29556](https://github.com/bitnami/charts/pull/29556))
+
+## 19.1.0 (2024-10-10)
+
+* [bitnami/contour] Expose NodePort for the metrics port in the Envoy service (#29818) ([1b98ba2](https://github.com/bitnami/charts/commit/1b98ba2878d323a74e28a11540a4a483f6afe450)), closes [#29818](https://github.com/bitnami/charts/issues/29818)
+
+## <small>19.0.5 (2024-10-09)</small>
+
+* [bitnami/contour]: Fix invalid extraVolumeMounts (#29817) ([b445bd3](https://github.com/bitnami/charts/commit/b445bd37a6c255363ba790ea37cc380a55f6c49b)), closes [#29817](https://github.com/bitnami/charts/issues/29817)
+
+## <small>19.0.4 (2024-10-04)</small>
+
+* [bitnami/contour] Release 19.0.4 (#29688) ([ad308c2](https://github.com/bitnami/charts/commit/ad308c2fcc162182933038eeff9a8880c0923991)), closes [#29688](https://github.com/bitnami/charts/issues/29688)
 
 ## <small>19.0.3 (2024-09-05)</small>
 

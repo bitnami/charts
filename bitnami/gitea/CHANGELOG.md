@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.0 (2024-10-02)
+## 3.0.1 (2024-10-09)
 
-* [bitnami/gitea] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29732](https://github.com/bitnami/charts/pull/29732))
+* [bitnami/gitea] Release 3.0.1 ([#29853](https://github.com/bitnami/charts/pull/29853))
+
+## 3.0.0 (2024-10-03)
+
+* [bitnami/gitea] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29732) ([d7f95fe](https://github.com/bitnami/charts/commit/d7f95fe48347c4cdb0a63f19752db52b5d7f9612)), closes [#29732](https://github.com/bitnami/charts/issues/29732)
 
 ## <small>2.3.23 (2024-10-02)</small>
 

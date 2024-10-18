@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.7.27 (2024-10-02)
+## 15.7.29 (2024-10-14)
 
-* [bitnami/thanos] Release 15.7.27 ([#29720](https://github.com/bitnami/charts/pull/29720))
+* [bitnami/thanos] Add customAutoScaling flag ([#29849](https://github.com/bitnami/charts/pull/29849))
+
+## <small>15.7.28 (2024-10-08)</small>
+
+* [bitnami/thanos] Revert #29673 (#29763) ([0e20117](https://github.com/bitnami/charts/commit/0e201170447506913aa97713a769732baaf3802b)), closes [#29673](https://github.com/bitnami/charts/issues/29673) [#29763](https://github.com/bitnami/charts/issues/29763)
+
+## <small>15.7.27 (2024-10-02)</small>
+
+* [bitnami/thanos] Release 15.7.27 (#29720) ([cd99907](https://github.com/bitnami/charts/commit/cd999075fe633956019ac142dd7965deba5aea09)), closes [#29720](https://github.com/bitnami/charts/issues/29720)
 
 ## <small>15.7.26 (2024-10-02)</small>
 

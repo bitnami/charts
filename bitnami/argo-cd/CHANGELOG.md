@@ -1,8 +1,24 @@
 # Changelog
 
-## 7.0.15 (2024-10-01)
+## 7.0.19 (2024-10-17)
 
-* [bitnami/argo-cd] Release 7.0.15 ([#29682](https://github.com/bitnami/charts/pull/29682))
+* [bitnami/argo-cd] Release 7.0.19 ([#29977](https://github.com/bitnami/charts/pull/29977))
+
+## <small>7.0.18 (2024-10-09)</small>
+
+* [bitnami/argo-cd] Release 7.0.18 (#29845) ([0e2b67f](https://github.com/bitnami/charts/commit/0e2b67f8038c03b13c9f5e6ac200e38a853b5b8a)), closes [#29845](https://github.com/bitnami/charts/issues/29845)
+
+## <small>7.0.17 (2024-10-09)</small>
+
+* [bitnami/argo-cd] Release 7.0.17 (#29843) ([7cec653](https://github.com/bitnami/charts/commit/7cec653341ff906ef61ffc70bc30b1a5583d1dba)), closes [#29843](https://github.com/bitnami/charts/issues/29843)
+
+## <small>7.0.16 (2024-10-09)</small>
+
+* [bitnami/argo-cd] fix: provide a functional validation function for validation (#29724) ([6eac077](https://github.com/bitnami/charts/commit/6eac07766d63a2d2ec9713a8716d1ea394441e14)), closes [#29724](https://github.com/bitnami/charts/issues/29724)
+
+## <small>7.0.15 (2024-10-01)</small>
+
+* [bitnami/argo-cd] Release 7.0.15 (#29682) ([6b89f04](https://github.com/bitnami/charts/commit/6b89f04f14ccd7aa78811dea9642754899c102da)), closes [#29682](https://github.com/bitnami/charts/issues/29682)
 
 ## <small>7.0.14 (2024-09-26)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.0.0 (2024-10-02)
+## 15.0.2 (2024-10-14)
 
-* [bitnami/discourse] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29731](https://github.com/bitnami/charts/pull/29731))
+* [bitnami/discourse]: (bugfix) fix mount path on install-plugins init-container ([#29874](https://github.com/bitnami/charts/pull/29874))
+
+## <small>15.0.1 (2024-10-08)</small>
+
+* [bitnami/discourse] Release 15.0.1 (#29827) ([0fffd76](https://github.com/bitnami/charts/commit/0fffd7689f20e475cfc7e460a4ff6b3b8c451103)), closes [#29827](https://github.com/bitnami/charts/issues/29827)
+
+## 15.0.0 (2024-10-03)
+
+* [bitnami/discourse] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29731) ([f9c4cd6](https://github.com/bitnami/charts/commit/f9c4cd65e4d5638b55da1c8a2c08d42c084032d2)), closes [#29731](https://github.com/bitnami/charts/issues/29731)
 
 ## 14.2.0 (2024-09-26)
 

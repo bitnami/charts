@@ -123,6 +123,7 @@ spec:
           volumeMounts:
             - name: empty-dir
               mountPath: /empty-dir/app-plugins-dir
+              subPath: app-plugins-dir
         {{- end }}
       containers:
         - name: discourse
