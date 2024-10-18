@@ -2209,6 +2209,11 @@
                                     "type": "object",
                                     "description": "Annotations for the headless service.",
                                     "default": {}
+                                },
+                                "extraPortsEnabled": {
+                                    "type": "boolean",
+                                    "description": "Enable or disable exposing extraPorts in the headless service.",
+                                    "default": false
                                 }
                             }
                         }
