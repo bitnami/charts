@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.2.1 (2024-10-15)
+## 19.2.1 (2024-10-21)
 
 * [bitnami/contour]: Fix invalid volume indentation ([#29890](https://github.com/bitnami/charts/pull/29890))
 
