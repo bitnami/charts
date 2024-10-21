@@ -22,9 +22,9 @@ rules:
       - 'podsecuritypolicies'
     verbs:
       - 'use'
-    resourceNames: [{{ printf "%s-master" (include "common.names.fullname" .) }}]
+    resourceNames: [{{ printf "%s-primary" (include "common.names.fullname" .) }}]
   {{- end }}
-  {{- if and .Values.sentinel.enabled .Values.sentinel.service.createMaster}}
+  {{- if and .Values.sentinel.enabled .Values.sentinel.service.createPrimary}}
   - apiGroups: [""]
     resources: ["pods"]
     verbs: ["list", "patch"]
