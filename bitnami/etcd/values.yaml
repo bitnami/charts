@@ -997,30 +997,78 @@ defrag:
     ## @param defrag.cronjob.restartPolicy Set the cronjob parameter restartPolicy
     ##
     restartPolicy: OnFailure
-    ## @param defrag.cronjob.podLabels [object] Labels that will be added to pods created by cronjob
+    ## @param defrag.cronjob.podLabels [object] Labels that will be added to pods created by Defrag cronjob
     ##
     podLabels: {}
-    ## @param defrag.cronjob.podAnnotations [object] Pod annotations for cronjob pods
+    ## @param defrag.cronjob.podAnnotations [object] Pod annotations for Defrag cronjob pods
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
-    ## @param defrag.cronjob.command [array] indicates a custom command to run
+    ## K8s Security Context for Defrag cronjob pods
+    ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ## @param defrag.cronjob.podSecurityContext.enabled Enable security context for Defrag pods
+    ## @param defrag.cronjob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param defrag.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param defrag.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param defrag.cronjob.podSecurityContext.fsGroup Group ID for the Defrag filesystem
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
+    ## Configure container security context for Defrag cronjob pods
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param defrag.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param defrag.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param defrag.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param defrag.cronjob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param defrag.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param defrag.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param defrag.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param defrag.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param defrag.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param defrag.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## @param defrag.cronjob.nodeSelector [object]  Node labels for pod assignment in Defrag cronjob
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
+    ## @param defrag.cronjob.tolerations [array] Tolerations for pod assignment in Defrag cronjob
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param defrag.cronjob.serviceAccountName Specifies the service account to use for Defrag cronjob
+    ##
+    serviceAccountName: ""
+    ## @param defrag.cronjob.command [array] Override default container command for defragmentation (useful when using custom images)
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     command: []
-    ## Configure resource requests and limits for snapshotter containers
-    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param defrag.cronjob.args [array] Override default container args (useful when using custom images)
+    ##
+    args: []
     ## @param defrag.cronjob.resourcesPreset Set container resources according to one common preset
     ## (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if
     ## defrag.cronjob.resources is set (defrag.cronjob.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
-    ## @param defrag.cronjob.resources Set container requests and limits for different resources like CPU or
+    ## @param defrag.cronjob.resources [object] Set container requests and limits for different resources like CPU or
     ## memory (essential for production workloads)
     ## Example:
     ## resources:

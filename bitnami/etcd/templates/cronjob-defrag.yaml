@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.defrag.enabled }}
-apiVersion: batch/v1
+apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
   name: {{ printf "%s-defrag" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
@@ -37,9 +37,19 @@ spec:
           {{- if .Values.defrag.cronjob.activeDeadlineSeconds }}
           activeDeadlineSeconds: {{ .Values.defrag.cronjob.activeDeadlineSeconds }}
           {{- end }}
+          serviceAccountName: {{ include "etcd.serviceAccountName" . }}
           restartPolicy: {{ .Values.defrag.cronjob.restartPolicy }}
-          {{- if .Values.podSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.defrag.cronjob.podSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defrag.cronjob.podSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defrag.cronjob.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.defrag.cronjob.nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defrag.cronjob.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.defrag.cronjob.tolerations "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defrag.cronjob.serviceAccountName }}
+          serviceAccountName: {{ .Values.defrag.cronjob.serviceAccountName | quote }}
           {{- end }}
           containers:
             - name: etcd-defrag
@@ -51,29 +61,25 @@ spec:
               env:
                 - name: BITNAMI_DEBUG
                   value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-                - name: ETCDCTL_API
-                  value: "3"
-                - name: ETCD_ON_K8S
-                  value: "yes"
-                - name: MY_STS_NAME
-                  value: {{ include "common.names.fullname" . | quote }}
-                {{- $releaseNamespace := .Release.Namespace }}
-                {{- $etcdFullname := include "common.names.fullname" . }}
-                {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
-                {{- $clusterDomain := .Values.clusterDomain }}
-                - name: ETCD_CLUSTER_DOMAIN
-                  value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
               {{- if .Values.defrag.cronjob.command }}
               command: {{ .Values.defrag.cronjob.command | toYaml | nindent 16 }}
               {{- else }}
-              command:
-                - etcdctl
+              command: ["etcdctl"]
+              {{- end }}
+              {{- if .Values.defrag.cronjob.args }}
+              args: {{ .Values.defrag.cronjob.args | toYaml | nindent 16 }}
+              {{- else }}
+              args:
                 - defrag
                 - --cluster
-                {{- $port := int .Values.service.ports.client }}
+                {{- $etcdFullname := include "common.names.fullname" . }}
+                {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
                 {{- $namespace := .Release.Namespace }}
+                {{- $clusterDomain := .Values.clusterDomain }}
+                {{- $port := int .Values.service.ports.client }}
                 {{- $endpointStr := "--endpoints=[" }}
                 {{- $replicaCount := (int .Values.replicaCount) }}
+                {{- $releaseNamespace := .Release.Namespace }}
                 {{- range $iEndpoint, $e := until $replicaCount }}
                 {{- $endpoint := printf "http://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
                 {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
@@ -88,5 +94,8 @@ spec:
               resources: {{- toYaml .Values.defrag.cronjob.resources | nindent 16 }}
               {{- else if ne .Values.defrag.cronjob.resourcesPreset "none" }}
               resources: {{- include "common.resources.preset" (dict "type" .Values.defrag.cronjob.resourcesPreset) | nindent 16 }}
+              {{- end }}
+              {{- if .Values.defrag.cronjob.containerSecurityContext.enabled }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defrag.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
 {{- end }}
