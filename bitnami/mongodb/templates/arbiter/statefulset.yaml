@@ -155,8 +155,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.arbiter.service.nameOverride" . }}"
             - name: MONGODB_REPLICA_SET_MODE
               value: "arbiter"
             - name: MONGODB_INITIAL_PRIMARY_HOST
@@ -164,7 +162,7 @@ spec:
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ .Values.replicaSetName | quote }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+              value: "$(MY_POD_NAME).{{ include "mongodb.arbiter.service.nameOverride" . }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             - name: MONGODB_PORT_NUMBER
               value: {{ .Values.arbiter.containerPorts.mongodb | quote }}
             - name: MONGODB_ENABLE_IPV6
