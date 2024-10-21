@@ -308,7 +308,13 @@ spec:
             # RFC 2136 arguments
             - --rfc2136-host={{ required "rfc2136.host must be supplied for provider 'rfc2136'" .Values.rfc2136.host }}
             - --rfc2136-port={{ .Values.rfc2136.port }}
-            - --rfc2136-zone={{ required "rfc2136.zone must be supplied for provider 'rfc2136'" .Values.rfc2136.zone }}
+              {{- $rfc2136Zones := prepend .Values.rfc2136.zones .Values.rfc2136.zone | uniq | compact }}
+              {{- if empty $rfc2136Zones }}
+                {{ fail "rfc2136.zone or rfc2136.zones must be supplied for provider 'rfc2136'" }}
+              {{- end }}
+              {{- range $rfc2136Zones }}
+            - --rfc2136-zone={{ . }}
+              {{- end }}
             - --rfc2136-min-ttl={{ .Values.rfc2136.minTTL }}
               {{- if .Values.rfc2136.tsigAxfr }}
             - --rfc2136-tsig-axfr
