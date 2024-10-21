@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.16 (2024-10-01)
+## 11.3.17 (2024-10-16)
 
-* [bitnami/consul] Release 11.3.16 ([#29687](https://github.com/bitnami/charts/pull/29687))
+* [bitnami/consul] Release 11.3.17 ([#29918](https://github.com/bitnami/charts/pull/29918))
+
+## <small>11.3.16 (2024-10-02)</small>
+
+* [bitnami/consul] Release 11.3.16 (#29687) ([3c2a220](https://github.com/bitnami/charts/commit/3c2a2201f0605e46931f7d3799aa56d588dc8c41)), closes [#29687](https://github.com/bitnami/charts/issues/29687)
 
 ## <small>11.3.15 (2024-09-17)</small>
 

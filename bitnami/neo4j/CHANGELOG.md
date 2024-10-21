@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.1.13 (2024-10-02)
+## 0.1.15 (2024-10-18)
 
-* [bitnami/neo4j] Release 0.1.13 ([#29757](https://github.com/bitnami/charts/pull/29757))
+* [bitnami/neo4j] Remove wrong entries from image verification ([#29915](https://github.com/bitnami/charts/pull/29915))
+
+## <small>0.1.14 (2024-10-16)</small>
+
+* [bitnami/neo4j] Release 0.1.14 (#29930) ([b371cca](https://github.com/bitnami/charts/commit/b371cca9ab0e0865cff14cf4d9b05745d093576c)), closes [#29930](https://github.com/bitnami/charts/issues/29930)
+
+## <small>0.1.13 (2024-10-02)</small>
+
+* [bitnami/neo4j] Release 0.1.13 (#29757) ([70a1e5e](https://github.com/bitnami/charts/commit/70a1e5e1240b563ec29150ff8db66bd4e6cba22e)), closes [#29757](https://github.com/bitnami/charts/issues/29757)
 
 ## <small>0.1.12 (2024-10-02)</small>
 

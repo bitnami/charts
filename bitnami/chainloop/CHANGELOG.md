@@ -1,8 +1,36 @@
 # Changelog
 
-## 2.0.1 (2024-10-08)
+## 2.0.8 (2024-10-18)
 
-* [bitnami/chainloop] Release 2.0.1 ([#29823](https://github.com/bitnami/charts/pull/29823))
+* [bitnami/chainloop] Remove wrong entries from image verification ([#29913](https://github.com/bitnami/charts/pull/29913))
+
+## <small>2.0.7 (2024-10-18)</small>
+
+* [bitnami/chainloop] Release 2.0.7 (#29987) ([66dbd97](https://github.com/bitnami/charts/commit/66dbd9756199c4e3d1cf57aa031782abbd6d652b)), closes [#29987](https://github.com/bitnami/charts/issues/29987)
+
+## <small>2.0.6 (2024-10-16)</small>
+
+* [bitnami/chainloop] Release 2.0.6 (#29957) ([ee5f05d](https://github.com/bitnami/charts/commit/ee5f05d0498c5b32127f84d7405de94ffa880f0b)), closes [#29957](https://github.com/bitnami/charts/issues/29957)
+
+## <small>2.0.5 (2024-10-16)</small>
+
+* [bitnami/chainloop] Release 2.0.5 (#29950) ([1ff9e78](https://github.com/bitnami/charts/commit/1ff9e78681aff62d17cf16c7249d79e4191fd878)), closes [#29950](https://github.com/bitnami/charts/issues/29950)
+
+## <small>2.0.4 (2024-10-16)</small>
+
+* [bitnami/chainloop] Release 2.0.4 (#29947) ([3340098](https://github.com/bitnami/charts/commit/334009859c437290d1ae5c2ca3ce6b529f0de0d9)), closes [#29947](https://github.com/bitnami/charts/issues/29947)
+
+## <small>2.0.3 (2024-10-16)</small>
+
+* [bitnami/chainloop] Release 2.0.3 (#29936) ([2719c14](https://github.com/bitnami/charts/commit/2719c1490c5dde079a15f42f63ca74ba9c64e016)), closes [#29936](https://github.com/bitnami/charts/issues/29936)
+
+## <small>2.0.2 (2024-10-16)</small>
+
+* [bitnami/chainloop] Release 2.0.2 (#29917) ([5005343](https://github.com/bitnami/charts/commit/5005343e562061c03f73dfc8b9809c528bbf07a7)), closes [#29917](https://github.com/bitnami/charts/issues/29917)
+
+## <small>2.0.1 (2024-10-08)</small>
+
+* [bitnami/chainloop] Release 2.0.1 (#29823) ([2ca35d5](https://github.com/bitnami/charts/commit/2ca35d58a310f81a9a5e22c7bfc5f51fcac7ba4b)), closes [#29823](https://github.com/bitnami/charts/issues/29823)
 
 ## 2.0.0 (2024-10-03)
 

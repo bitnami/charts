@@ -1,8 +1,21 @@
 # Changelog
 
-## 21.1.37 (2024-10-04)
+## 21.1.40 (2024-10-18)
 
-* [bitnami/ghost] Release 21.1.37 ([#29778](https://github.com/bitnami/charts/pull/29778))
+* [bitnami/ghost] Release 21.1.40 ([#29996](https://github.com/bitnami/charts/pull/29996))
+
+## <small>21.1.39 (2024-10-16)</small>
+
+* [bitnami/ghost] Release 21.1.39 (#29940) ([a422eda](https://github.com/bitnami/charts/commit/a422eda820576250c68b45c8789d0ef6917c56f8)), closes [#29940](https://github.com/bitnami/charts/issues/29940)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>21.1.38 (2024-10-16)</small>
+
+* [bitnami/ghost] Release 21.1.38 (#29925) ([72497f5](https://github.com/bitnami/charts/commit/72497f54214e9b2f2e3c79fb0eb17b407267bc72)), closes [#29925](https://github.com/bitnami/charts/issues/29925)
+
+## <small>21.1.37 (2024-10-04)</small>
+
+* [bitnami/ghost] Release 21.1.37 (#29778) ([b7bcc0e](https://github.com/bitnami/charts/commit/b7bcc0e46aa89bfb9c049835401f8a6c113aaa15)), closes [#29778](https://github.com/bitnami/charts/issues/29778)
 
 ## <small>21.1.36 (2024-09-27)</small>
 

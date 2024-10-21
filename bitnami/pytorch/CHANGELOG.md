@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.18 (2024-09-19)
+## 4.2.19 (2024-10-16)
 
-* [bitnami/pytorch] Release 4.2.18 ([#29516](https://github.com/bitnami/charts/pull/29516))
+* [bitnami/pytorch] Remove wrong entries from image verification ([#29916](https://github.com/bitnami/charts/pull/29916))
+
+## <small>4.2.18 (2024-09-19)</small>
+
+* [bitnami/pytorch] Release 4.2.18 (#29516) ([6d40617](https://github.com/bitnami/charts/commit/6d4061783e317fd6bdb13116bb694f3d200684f2)), closes [#29516](https://github.com/bitnami/charts/issues/29516)
 
 ## <small>4.2.17 (2024-09-15)</small>
 

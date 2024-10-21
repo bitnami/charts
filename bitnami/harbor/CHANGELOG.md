@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.0 (2024-10-02)
+## 24.0.1 (2024-10-21)
 
-* [bitnami/harbor] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29733](https://github.com/bitnami/charts/pull/29733))
+* [bitnami/harbor] Release 24.0.1 ([#30007](https://github.com/bitnami/charts/pull/30007))
+
+## 24.0.0 (2024-10-03)
+
+* [bitnami/harbor] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29733) ([017c8c3](https://github.com/bitnami/charts/commit/017c8c368e4740be7e4d465cbb9b0c54b2ca829a)), closes [#29733](https://github.com/bitnami/charts/issues/29733)
 
 ## <small>23.0.4 (2024-09-19)</small>
 
