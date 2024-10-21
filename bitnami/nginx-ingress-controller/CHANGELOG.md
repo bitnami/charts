@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.5.0 (2024-10-18)
+## 11.5.0 (2024-10-21)
 
 * [bitnami/nginx-ingress-controller] Add TCP/UDP ports name prefix param ([#29993](https://github.com/bitnami/charts/pull/29993))
 
