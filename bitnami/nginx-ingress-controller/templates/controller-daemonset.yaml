@@ -210,7 +210,7 @@ spec:
               containerPort: {{ .Values.containerPorts.metrics }}
               protocol: TCP
             {{- range $key, $value := .Values.tcp }}
-            - name: "{{ if $.Values.portNamePrefix }}{{ $.Values.portNamePrefix }}-{{ end }}{{ $key }}-tcp"
+            - name: "{{ $key }}-tcp"
               containerPort: {{ $key }}
               protocol: TCP
               {{- if $useHostPort }}
@@ -218,7 +218,7 @@ spec:
               {{- end }}
             {{- end }}
             {{- range $key, $value := .Values.udp }}
-            - name: "{{ if $.Values.portNamePrefix }}{{ $.Values.portNamePrefix }}-{{ end }}{{ $key }}-udp"
+            - name: "{{ $key }}-udp"
               containerPort: {{ $key }}
               protocol: UDP
               {{- if $useHostPort }}
