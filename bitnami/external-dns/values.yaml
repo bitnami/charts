@@ -678,9 +678,13 @@ rfc2136:
   ## @param rfc2136.port When using the rfc2136 provider, specify the RFC2136 port (optional)
   ##
   port: 53
-  ## @param rfc2136.zone When using the rfc2136 provider, specify the zone (required when provider=rfc2136)
+  ## @param rfc2136.zone When using the rfc2136 provider, specify the zone (required when provider=rfc2136 and `rfc2136.zones` is not provided.)
+  ## The content of rfc2136.zone and rfc2136.zones is merged and deduplicated.
   ##
   zone: ""
+  ## @param rfc2136.zones When using the rfc2136 provider, specify the zones (required when provider=rfc2136 and `rfc2136.zone` is not provided.)
+  ##
+  zones: []
   ## @param rfc2136.tsigSecret When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)
   ##
   tsigSecret: ""
