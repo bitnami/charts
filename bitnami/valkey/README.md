@@ -135,7 +135,7 @@ In addition to this, only one service is exposed:
 For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Valkey Sentinel cluster and query the current primary using the command below (using valkey-cli or similar):
 
 ```console
-SENTINEL get-master-addr-by-name <name of your PrimarySet. e.g: myprimary>
+SENTINEL get-primary-addr-by-name <name of your PrimarySet. e.g: myprimary>
 ```
 
 This command will return the address of the current primary, which can be accessed from inside the cluster.
