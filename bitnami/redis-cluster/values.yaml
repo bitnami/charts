@@ -570,7 +570,9 @@ redis:
   ##  - name: BEARER_AUTH
   ##    value: true
   ##
-  extraEnvVars: []
+  extraEnvVars:
+    - name: REDIS_EXPORTER_IS_CLUSTER
+      value: "true"
   ## @param redis.extraEnvVarsCM ConfigMap with extra environment variables
   ##
   extraEnvVarsCM: ""
