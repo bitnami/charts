@@ -115,6 +115,10 @@ spec:
               {{- end }}
               popd >/dev/null || exit 1
               cp -nr --preserve=mode /opt/bitnami/discourse/plugins/* /plugins
+          {{- if .Values.discourse.extraEnvVars }}
+          env:
+            {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.discourse.resources }}
           resources: {{- toYaml .Values.discourse.resources | nindent 12 }}
           {{- else if ne .Values.discourse.resourcesPreset "none" }}
