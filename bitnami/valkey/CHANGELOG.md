@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.2 (2024-10-03)
+## 2.0.0 (2024-10-21)
 
-* [bitnami/valkey] Release 1.0.2 ([#29770](https://github.com/bitnami/charts/pull/29770))
+* Valkey primary replica ([#30024](https://github.com/bitnami/charts/pull/30024))
+
+## <small>1.0.2 (2024-10-03)</small>
+
+* [bitnami/valkey] Release 1.0.2 (#29770) ([68a889f](https://github.com/bitnami/charts/commit/68a889fcb6dc21a275cfbad539c9fc1097912167)), closes [#29770](https://github.com/bitnami/charts/issues/29770)
 
 ## <small>1.0.1 (2024-09-19)</small>
 

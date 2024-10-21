@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: {{ printf "%s-master" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-primary" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: valkey
@@ -19,8 +19,8 @@ spec:
   fsGroup:
     rule: 'MustRunAs'
     ranges:
-      - min: {{ .Values.master.podSecurityContext.fsGroup }}
-        max: {{ .Values.master.podSecurityContext.fsGroup }}
+      - min: {{ .Values.primary.podSecurityContext.fsGroup }}
+        max: {{ .Values.primary.podSecurityContext.fsGroup }}
   hostIPC: false
   hostNetwork: false
   hostPID: false
@@ -31,15 +31,15 @@ spec:
   runAsUser:
     rule: 'MustRunAs'
     ranges:
-      - min: {{ .Values.master.containerSecurityContext.runAsUser }}
-        max: {{ .Values.master.containerSecurityContext.runAsUser }}
+      - min: {{ .Values.primary.containerSecurityContext.runAsUser }}
+        max: {{ .Values.primary.containerSecurityContext.runAsUser }}
   seLinux:
     rule: 'RunAsAny'
   supplementalGroups:
     rule: 'MustRunAs'
     ranges:
-      - min: {{ .Values.master.containerSecurityContext.runAsUser }}
-        max: {{ .Values.master.containerSecurityContext.runAsUser }}
+      - min: {{ .Values.primary.containerSecurityContext.runAsUser }}
+        max: {{ .Values.primary.containerSecurityContext.runAsUser }}
   volumes:
     - 'configMap'
     - 'secret'

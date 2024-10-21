@@ -40,7 +40,7 @@
             "vars_file": "valkey/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "sts-valkey-master"
+                "workload": "sts-valkey-primary"
               }
             }
           }
@@ -54,7 +54,7 @@
             "params": {
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
-              "name": "valkey-master",
+              "name": "valkey-primary",
               "password": "ComplicatedPassword123!4"
             }
           }
