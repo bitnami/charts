@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.2 (2024-10-14)
+## 15.0.3 (2024-10-21)
 
-* [bitnami/discourse]: (bugfix) fix mount path on install-plugins init-container ([#29874](https://github.com/bitnami/charts/pull/29874))
+* [bitnami/discourse] Avoid looping on subdirectories on plugins instalation ([#30022](https://github.com/bitnami/charts/pull/30022))
+
+## <small>15.0.2 (2024-10-14)</small>
+
+* [bitnami/discourse]: (bugfix) fix mount path on install-plugins init-container (#29874) ([8a8e47b](https://github.com/bitnami/charts/commit/8a8e47bf9be1dcaeb082a2afb06768488eaa4ecd)), closes [#29874](https://github.com/bitnami/charts/issues/29874)
 
 ## <small>15.0.1 (2024-10-08)</small>
 
