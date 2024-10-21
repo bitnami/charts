@@ -39,7 +39,7 @@ spec:
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.service.metrics.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
-    - name: http
+    - name: metrics
       port: {{ .Values.proxy.service.metrics.ports.http }}
       targetPort: metrics
       protocol: TCP
