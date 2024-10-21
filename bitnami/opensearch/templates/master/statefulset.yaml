@@ -296,6 +296,10 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
+            {{- if .Values.snapshots.persistence.enabled }}
+            - name: snapshots
+              mountPath: {{ include "opensearch.snapshots.mountPath" . }}
+            {{- end }}
             {{- if .Values.master.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -343,6 +347,11 @@ spec:
           secret:
             secretName: {{ template "opensearch.initScriptsSecret" . }}
             defaultMode: 0755
+        {{- end }}
+        {{- if .Values.snapshots.persistence.enabled }}
+        - name: snapshots
+          persistentVolumeClaim:
+            claimName: {{ include "opensearch.snapshots.fullname" . }}
         {{- end }}
         {{- if .Values.master.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumes "context" $) | nindent 8 }}
