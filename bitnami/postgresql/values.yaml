@@ -1484,7 +1484,7 @@ volumePermissions:
   ## @param volumePermissions.containerSecurityContext.seccompProfile.type seccompProfile.type for the init container
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     runAsGroup: 0
     runAsNonRoot: false
