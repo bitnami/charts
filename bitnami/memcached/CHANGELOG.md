@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.5.1 (2024-10-17)
+## 7.5.2 (2024-10-21)
 
-* [bitnami/memcached] Release 7.5.1 ([#29974](https://github.com/bitnami/charts/pull/29974))
+* [bitnami/memcached] Release 7.5.2 ([#30004](https://github.com/bitnami/charts/pull/30004))
+
+## <small>7.5.1 (2024-10-17)</small>
+
+* [bitnami/memcached] Release 7.5.1 (#29974) ([93ab813](https://github.com/bitnami/charts/commit/93ab8137138d45890625478410b7fd08d721f720)), closes [#29974](https://github.com/bitnami/charts/issues/29974)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 7.5.0 (2024-09-30)
 
