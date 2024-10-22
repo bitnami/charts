@@ -2,7 +2,7 @@
 
 ## 2.0.0 (2024-10-22)
 
-* Valkey primary replica ([#30024](https://github.com/bitnami/charts/pull/30024))
+* [bitnami/valkey] Update all the references from to master/slave to primary/replica ([#30024](https://github.com/bitnami/charts/pull/30024))
 
 ## <small>1.0.2 (2024-10-03)</small>
 
