@@ -37,7 +37,6 @@ spec:
           {{- if .Values.defrag.cronjob.activeDeadlineSeconds }}
           activeDeadlineSeconds: {{ .Values.defrag.cronjob.activeDeadlineSeconds }}
           {{- end }}
-          serviceAccountName: {{ include "etcd.serviceAccountName" . }}
           restartPolicy: {{ .Values.defrag.cronjob.restartPolicy }}
           {{- if .Values.defrag.cronjob.podSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defrag.cronjob.podSecurityContext "context" $) | nindent 12 }}
