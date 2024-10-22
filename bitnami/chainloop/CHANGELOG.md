@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.8 (2024-10-18)
+## 2.0.9 (2024-10-22)
 
-* [bitnami/chainloop] Remove wrong entries from image verification ([#29913](https://github.com/bitnami/charts/pull/29913))
+* [bitnami/chainloop] Release 2.0.9 ([#30040](https://github.com/bitnami/charts/pull/30040))
+
+## <small>2.0.8 (2024-10-18)</small>
+
+* [bitnami/chainloop] Remove wrong entries from image verification (#29913) ([080bd03](https://github.com/bitnami/charts/commit/080bd034f0cc91355fc0e83464c9194937e52897)), closes [#29913](https://github.com/bitnami/charts/issues/29913)
 
 ## <small>2.0.7 (2024-10-18)</small>
 
