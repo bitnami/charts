@@ -31,8 +31,8 @@ The main features of each chart are the following:
 | Valkey                                     | Valkey Cluster                                                   |
 |--------------------------------------------|------------------------------------------------------------------|
 | Supports multiple databases                | Supports only one database. Better if you have a big dataset     |
-| Single write point (single primary)         | Multiple write points (multiple primarys)                         |
-| ![Valkey Topology](img/valkey-topology.png) | ![Valkey Cluster Topology](img/valkey-cluster-topology.png)       |
+| Single write point (single primary)        | Multiple write points (multiple primary nodes)                   |
+| ![Valkey Topology](img/valkey-topology.png)| ![Valkey Cluster Topology](img/valkey-cluster-topology.png)      |
 
 ## Prerequisites
 
@@ -85,7 +85,7 @@ To successfully set the cluster up, it will need to have at least 3 primary node
 
 By default the Valkey Cluster is not accessible from outside the Kubernetes cluster, to access the Valkey Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Valkey node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
 
-The replicas will be read-only replicas of the primarys. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper primary node. For example, using `valkey-cli` you will need to provide the `-c` flag for `valkey-cli` to follow the redirection automatically.
+The replicas will be read-only replicas of the primary nodes. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper primary node. For example, using `valkey-cli` you will need to provide the `-c` flag for `valkey-cli` to follow the redirection automatically.
 
 Using the external access mode, you can connect to any of the pods and the replicas will redirect the client in the same way as explained before, but the all the IPs will be public.
 
@@ -698,7 +698,24 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 2.0.0
 
-This major updates all the references from `master/slave` to `primary/replica` to follow the upstream project strategy. Environment variables previously prefixed as `VALKEY_MASTER` or `VALKEY_SENTINEL_MASTER` use `VALKEY_PRIMARY` and `VALKEY_SENTINEL_PRIMARY` now.
+This major updates all the references from `master/slave` to `primary/replica` to follow the upstream project strategy:
+  - The term *master* has been replaced by the term *primary*. Therefore, parameters prefixed with `master` are now prefixed with `primary`.
+  - Environment variables previously prefixed as `VALKEY_MASTER` or `VALKEY_SENTINEL_MASTER` use `VALKEY_PRIMARY` and `VALKEY_SENTINEL_PRIMARY` now.
+
+Consequences:
+
+Backwards compatibility is not guaranteed. To upgrade to `2.0.0`, install a new release of the Valkey chart, and migrate the data from your previous release. You have 2 alternatives to do so:
+
+- Create a backup of the database, and restore it on the new release as explained in the [Backup and restore](#backup-and-restore) section.
+- Reuse the PVC used to hold the master data on your previous release. To do so, use the `primary.persistence.existingClaim` parameter. The following example assumes that the release name is `valkey`:
+
+```console
+helm install valkey oci://REGISTRY_NAME/REPOSITORY_NAME/valkey --set auth.password=[PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+| Note: you need to substitute the placeholder *[EXISTING_PVC]* with the name of the PVC used on your previous release, and *[PASSWORD]* with the password used in your previous release.
 
 ## License
 

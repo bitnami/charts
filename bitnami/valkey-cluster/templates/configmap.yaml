@@ -682,7 +682,7 @@ data:
     #
     # 1) Bulk transfer I/O during SYNC, from the point of view of replica.
     # 2) Primary timeout from the point of view of replicas (data, pings).
-    # 3) Replica timeout from the point of view of primarys (REPLCONF ACK pings).
+    # 3) Replica timeout from the point of view of primary nodes (REPLCONF ACK pings).
     #
     # It is important to make sure that this value is greater than the value
     # specified for repl-ping-replica-period otherwise a timeout will be detected
