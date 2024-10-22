@@ -9,7 +9,7 @@ SPDX-License-Identifier: APACHE-2.0
 Return the Fluentd image name
 */}}
 {{- define "fluentd.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.web.image "global" .Values.global) -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
