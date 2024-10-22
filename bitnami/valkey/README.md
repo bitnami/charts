@@ -1016,8 +1016,9 @@ Find more information about how to deal with common errors related to Bitnami's 
 ### To 2.0.0
 
 This major updates all the references from `master/slave` to `primary/replica` to follow the upstream project strategy:
-  - The term *master* has been replaced by the term *primary*. Therefore, parameters prefixed with `master` are now prefixed with `primary`.
-  - Environment variables previously prefixed as `VALKEY_MASTER` or `VALKEY_SENTINEL_MASTER` use `VALKEY_PRIMARY` and `VALKEY_SENTINEL_PRIMARY` now.
+
+- The term *master* has been replaced by the term *primary*. Therefore, parameters prefixed with `master` are now prefixed with `primary`.
+- Environment variables previously prefixed as `VALKEY_MASTER` or `VALKEY_SENTINEL_MASTER` use `VALKEY_PRIMARY` and `VALKEY_SENTINEL_PRIMARY` now.
 
 Consequences:
 
