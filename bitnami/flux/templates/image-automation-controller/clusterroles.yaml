@@ -57,6 +57,18 @@ rules:
       - patch
       - update
       - watch
+  - apiGroups:
+      - "coordination.k8s.io"
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
     {{- if .Values.imageAutomationController.rbac.rules }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.imageAutomationController.rbac.rules "context" $ ) | nindent 2 }}
     {{- end }}

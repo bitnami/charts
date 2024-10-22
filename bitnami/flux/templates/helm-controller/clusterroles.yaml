@@ -68,6 +68,18 @@ rules:
       - helmcharts/status
     verbs:
       - get
+  - apiGroups:
+      - "coordination.k8s.io"
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
   {{- if .Values.helmController.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.helmController.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}

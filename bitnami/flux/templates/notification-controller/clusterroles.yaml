@@ -172,6 +172,18 @@ rules:
       - ocirepositories/status
     verbs:
       - get
+  - apiGroups:
+      - "coordination.k8s.io"
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
     {{- if .Values.notificationController.rbac.rules }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.notificationController.rbac.rules "context" $ ) | nindent 2 }}
     {{- end }}
