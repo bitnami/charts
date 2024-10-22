@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.4 (2024-10-22)
+## 16.1.0 (2024-10-22)
 
 * [bitnami/mongodb] Add resources for backup cronjob ([#30021](https://github.com/bitnami/charts/pull/30021))
 
