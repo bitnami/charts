@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: cassandra
-      image: docker.io/bitnami/cassandra:5.0.2-debian-12-r0
+      image: docker.io/bitnami/cassandra:5.0.2-debian-12-r1
     - name: cassandra-exporter
       image: docker.io/bitnami/cassandra-exporter:2.3.8-debian-12-r31
     - name: os-shell
