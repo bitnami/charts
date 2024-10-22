@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 (2024-10-21)
+## 2.0.0 (2024-10-22)
 
 * Valkey primary replica ([#30024](https://github.com/bitnami/charts/pull/30024))
 
