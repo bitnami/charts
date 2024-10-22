@@ -330,7 +330,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h /opt/bitnami/pgpool/tmp -tA -c "SELECT 1" >/dev/null
+                - '{{ include "postgresql-ha.pgpoolPostgresPassword" . }} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h /opt/bitnami/pgpool/tmp -tA -c "SELECT 1" >/dev/null'
           {{- end }}
           {{- if .Values.pgpool.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customStartupProbe "context" $) | nindent 12 }}
