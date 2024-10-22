@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.3.18 (2024-10-21)
+## 11.3.18 (2024-10-22)
 
 * [bitnami/consul] Change Configmap Template ([#30016](https://github.com/bitnami/charts/pull/30016))
 
