@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.2.25 (2024-10-21)
+## 11.2.25 (2024-10-22)
 
 * [bitnami/kibana] set base host to 0.0.0.0 ([#30023](https://github.com/bitnami/charts/pull/30023))
 
