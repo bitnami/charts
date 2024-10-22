@@ -699,23 +699,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 ### To 2.0.0
 
 This major updates all the references from `master/slave` to `primary/replica` to follow the upstream project strategy:
-  - The term *master* has been replaced by the term *primary*. Therefore, parameters prefixed with `master` are now prefixed with `primary`.
-  - Environment variables previously prefixed as `VALKEY_MASTER` or `VALKEY_SENTINEL_MASTER` use `VALKEY_PRIMARY` and `VALKEY_SENTINEL_PRIMARY` now.
+
+- The term *master* has been replaced by the term *primary*. Therefore, parameters prefixed with `master` are now prefixed with `primary`.
+- Environment variables previously prefixed as `VALKEY_MASTER` or `VALKEY_SENTINEL_MASTER` use `VALKEY_PRIMARY` and `VALKEY_SENTINEL_PRIMARY` now.
 
 Consequences:
 
-Backwards compatibility is not guaranteed. To upgrade to `2.0.0`, install a new release of the Valkey chart, and migrate the data from your previous release. You have 2 alternatives to do so:
-
-- Create a backup of the database, and restore it on the new release as explained in the [Backup and restore](#backup-and-restore) section.
-- Reuse the PVC used to hold the master data on your previous release. To do so, use the `primary.persistence.existingClaim` parameter. The following example assumes that the release name is `valkey`:
-
-```console
-helm install valkey oci://REGISTRY_NAME/REPOSITORY_NAME/valkey --set auth.password=[PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-| Note: you need to substitute the placeholder *[EXISTING_PVC]* with the name of the PVC used on your previous release, and *[PASSWORD]* with the password used in your previous release.
+Backwards compatibility is not guaranteed. To upgrade to `2.0.0`, install a new release of the Valkey chart, and migrate the data from your previous release. You have to create a backup of the database, and restore it on the new release as explained in the [Backup and restore](#backup-and-restore) section.
 
 ## License
 
