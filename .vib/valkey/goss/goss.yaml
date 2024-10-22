@@ -22,7 +22,7 @@ command:
     exec: {{ $auth }} valkey-cli {{ $primary_endpoint }} ROLE
     exit-status: 0
     stdout:
-      - "primary"
+      - "master"
       {{ range $e, $i := until $replicas }}
       - "valkey-replicas-{{ $i }}"
       {{ end }}
