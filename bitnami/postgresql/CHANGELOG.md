@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.4 (2024-10-21)
+## 16.0.5 (2024-10-22)
 
-* [bitnami/postgresql] Release 16.0.4 ([#30013](https://github.com/bitnami/charts/pull/30013))
+* [bitnami/postgresql] Release 16.0.5 ([#30046](https://github.com/bitnami/charts/pull/30046))
+
+## <small>16.0.4 (2024-10-21)</small>
+
+* [bitnami/postgresql] Release 16.0.4 (#30013) ([8435f88](https://github.com/bitnami/charts/commit/8435f88ae01cc20203022eb97904ee3abeb96467)), closes [#30013](https://github.com/bitnami/charts/issues/30013)
 
 ## <small>16.0.3 (2024-10-16)</small>
 
