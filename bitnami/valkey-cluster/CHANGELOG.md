@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 (2024-10-21)
+## 2.0.0 (2024-10-22)
 
 * [bitnami/valkey-cluster] Update all the references from  to master/slave to primary/replica ([#30025](https://github.com/bitnami/charts/pull/30025))
 
