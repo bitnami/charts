@@ -533,6 +533,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 7.0.0
+
+Starting version 7.0.0, using different images for aggregator and forwarder is no longer supported.
+The values `aggregator.image` and `forwarder.image` have been removed.
+
 ### To 6.0.0
 
 This major bump changes the following security defaults:
