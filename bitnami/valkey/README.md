@@ -144,11 +144,11 @@ In case the current primary crashes, the Sentinel containers will elect a new pr
 
 `primary.replicaCount` greater than `1` is not designed for use when `sentinel.enabled=true`.
 
-### Multiple primarys (experimental)
+### Multiple primary nodes (experimental)
 
 When `primary.replicaCount` is greater than `1`, special care must be taken to create a consistent setup.
 
-An example of use case is the creation of a redundant set of standalone primarys or primary-replicas per Kubernetes node where you must ensure:
+An example of use case is the creation of a redundant set of standalone primary nodes or primary-replicas per Kubernetes node where you must ensure:
 
 - No more than `1` primary can be deployed per Kubernetes node
 - Replicas and writers can only see the single primary of their own Kubernetes node
