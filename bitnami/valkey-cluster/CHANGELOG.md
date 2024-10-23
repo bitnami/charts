@@ -1,12 +1,13 @@
 # Changelog
 
-## 2.0.0 (2024-10-22)
+## 2.0.0 (2024-10-23)
 
 * [bitnami/valkey-cluster] Update all the references from  to master/slave to primary/replica ([#30025](https://github.com/bitnami/charts/pull/30025))
 
-## 1.0.3 (2024-10-22)
+## <small>1.0.3 (2024-10-22)</small>
 
-* [bitnami/valkey-cluster] Release 1.0.3 ([#30047](https://github.com/bitnami/charts/pull/30047))
+* [bitnami/valkey-cluster] Release 1.0.3 (#30047) ([66979a1](https://github.com/bitnami/charts/commit/66979a1de5d865b84e614737f9a0c6955d3cccc0)), closes [#30047](https://github.com/bitnami/charts/issues/30047)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>1.0.2 (2024-10-03)</small>
 
