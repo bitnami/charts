@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.22 (2024-10-21)
+## 2.2.23 (2024-10-23)
 
-* [bitnami/deepspeed] Improve Goss tests reliability ([#30008](https://github.com/bitnami/charts/pull/30008))
+* [bitnami/deepspeed] Release 2.2.23 ([#30050](https://github.com/bitnami/charts/pull/30050))
+
+## <small>2.2.22 (2024-10-21)</small>
+
+* [bitnami/deepspeed] Improve Goss tests reliability (#30008) ([c43cbab](https://github.com/bitnami/charts/commit/c43cbabcff7f2116ff23a6e51ae705228d0e8b91)), closes [#30008](https://github.com/bitnami/charts/issues/30008)
 
 ## <small>2.2.21 (2024-10-18)</small>
 
