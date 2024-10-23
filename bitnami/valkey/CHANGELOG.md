@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.3 (2024-10-22)
+## 2.0.0 (2024-10-23)
 
-* [bitnami/valkey] Release 1.0.3 ([#30048](https://github.com/bitnami/charts/pull/30048))
+* [bitnami/valkey] Update all the references from to master/slave to primary/replica ([#30024](https://github.com/bitnami/charts/pull/30024))
+
+## <small>1.0.3 (2024-10-22)</small>
+
+* [bitnami/valkey] Release 1.0.3 (#30048) ([f843e7e](https://github.com/bitnami/charts/commit/f843e7ecb5b89b32e2245071bf1c910552dcb7a5)), closes [#30048](https://github.com/bitnami/charts/issues/30048)
 
 ## <small>1.0.2 (2024-10-03)</small>
 
