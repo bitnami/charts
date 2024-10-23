@@ -4,6 +4,10 @@
 
 * [bitnami/valkey] Update all the references from to master/slave to primary/replica ([#30024](https://github.com/bitnami/charts/pull/30024))
 
+## 1.0.3 (2024-10-22)
+
+* [bitnami/valkey] Release 1.0.3 ([#30048](https://github.com/bitnami/charts/pull/30048))
+
 ## <small>1.0.2 (2024-10-03)</small>
 
 * [bitnami/valkey] Release 1.0.2 (#29770) ([68a889f](https://github.com/bitnami/charts/commit/68a889fcb6dc21a275cfbad539c9fc1097912167)), closes [#29770](https://github.com/bitnami/charts/issues/29770)
