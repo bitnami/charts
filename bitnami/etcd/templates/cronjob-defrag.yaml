@@ -28,8 +28,8 @@ spec:
     spec:
       template:
         metadata:
-          {{- $mergedLabels := mergeOverwrite (dict) .Values.commonLabels .Values.defrag.cronjob.podLabels -}}
-          labels: {{- include "common.labels.standard" ( dict "customLabels" $mergedLabels "context" $ ) | nindent 10 }}
+          {{- $mergedLabels := mergeOverwrite (dict) .Values.commonLabels .Values.defrag.cronjob.podLabels }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $mergedLabels "context" $ ) | nindent 12 }}
           {{- if .Values.defrag.cronjob.podAnnotations }}
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.defrag.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
