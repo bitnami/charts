@@ -1,8 +1,13 @@
 # Changelog
 
+## 10.4.1 (2024-10-23)
+
+* [bitnami/etcd]: Fix podLabels bug ([#30052](https://github.com/bitnami/charts/pull/30052))
+
 ## 10.4.0 (2024-10-22)
 
-* [bitnami/etcd]: Automatic etcd defragmentation ([#29967](https://github.com/bitnami/charts/pull/29967))
+* [bitnami/etcd]: Automatic etcd defragmentation (#29967) ([ea1683d](https://github.com/bitnami/charts/commit/ea1683dabaf7448a1e2fc6eca0a37a70899270e2)), closes [#29967](https://github.com/bitnami/charts/issues/29967)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>10.3.1 (2024-10-16)</small>
 
