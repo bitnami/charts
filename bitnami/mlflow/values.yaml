@@ -233,7 +233,7 @@ tracking:
   ## @param tracking.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param tracking.containerSecurityContext.privileged Set containers' Security Context privileged
   ## @param tracking.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param tracking.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param tracking.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context readOnlyRootFilesystem
   ## @param tracking.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
   ## @param tracking.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ## @param tracking.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
