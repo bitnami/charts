@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.3.3 (2024-10-22)
+## 14.3.4 (2024-10-23)
 
-* [bitnami/postgresql-ha] Release 14.3.3 ([#30043](https://github.com/bitnami/charts/pull/30043))
+* [bitnami/postgresql-ha] Fix pgpool default readinessProbe ([#30028](https://github.com/bitnami/charts/pull/30028))
+
+## <small>14.3.3 (2024-10-22)</small>
+
+* [bitnami/postgresql-ha] Release 14.3.3 (#30043) ([86e60c0](https://github.com/bitnami/charts/commit/86e60c00117b07687dc05c1b902abd17ed260ac4)), closes [#30043](https://github.com/bitnami/charts/issues/30043)
 
 ## <small>14.3.2 (2024-10-20)</small>
 
