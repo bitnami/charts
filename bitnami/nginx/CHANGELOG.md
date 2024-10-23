@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.3 (2024-10-11)
+## 18.2.4 (2024-10-21)
 
-* [bitnami/nginx] Remove duplicated (and wrong) image in verification ([#29871](https://github.com/bitnami/charts/pull/29871))
+* [bitnami/nginx] Release 18.2.4 ([#30017](https://github.com/bitnami/charts/pull/30017))
+
+## <small>18.2.3 (2024-10-14)</small>
+
+* [bitnami/nginx] Remove duplicated (and wrong) image in verification (#29871) ([124709a](https://github.com/bitnami/charts/commit/124709a15fba391dabcc4bba849588466ecc70c4)), closes [#29871](https://github.com/bitnami/charts/issues/29871)
 
 ## <small>18.2.2 (2024-10-02)</small>
 

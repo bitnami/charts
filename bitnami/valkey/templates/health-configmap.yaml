@@ -119,20 +119,20 @@ data:
         PORT=$1;
         FOUND_PORT=0;
       } else if (FOUND_RUNID==1) {
-        printf "\nsentinel known-sentinel {{ .Values.sentinel.masterSet }} %s %s %s", IP, PORT, $0; FOUND_RUNID=0;
+        printf "\nsentinel known-sentinel {{ .Values.sentinel.primarySet }} %s %s %s", IP, PORT, $0; FOUND_RUNID=0;
       }
     }
 {{- end }}
-  ping_readiness_master.sh: |-
+  ping_readiness_primary.sh: |-
     #!/bin/bash
 
-    [[ -f $VALKEY_MASTER_PASSWORD_FILE ]] && export VALKEY_MASTER_PASSWORD="$(< "${VALKEY_MASTER_PASSWORD_FILE}")"
-    [[ -n "$VALKEY_MASTER_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_MASTER_PASSWORD"
+    [[ -f $VALKEY_PRIMARY_PASSWORD_FILE ]] && export VALKEY_PRIMARY_PASSWORD="$(< "${VALKEY_PRIMARY_PASSWORD_FILE}")"
+    [[ -n "$VALKEY_PRIMARY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PRIMARY_PASSWORD"
     response=$(
       timeout -s 15 $1 \
       valkey-cli \
-        -h $VALKEY_MASTER_HOST \
-        -p $VALKEY_MASTER_PORT_NUMBER \
+        -h $VALKEY_PRIMARY_HOST \
+        -p $VALKEY_PRIMARY_PORT_NUMBER \
         {{- if .Values.tls.enabled }}
         --tls \
         --cacert {{ template "valkey.tlsCACert" . }} \
@@ -151,16 +151,16 @@ data:
       echo "$response"
       exit 1
     fi
-  ping_liveness_master.sh: |-
+  ping_liveness_primary.sh: |-
     #!/bin/bash
 
-    [[ -f $VALKEY_MASTER_PASSWORD_FILE ]] && export VALKEY_MASTER_PASSWORD="$(< "${VALKEY_MASTER_PASSWORD_FILE}")"
-    [[ -n "$VALKEY_MASTER_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_MASTER_PASSWORD"
+    [[ -f $VALKEY_PRIMARY_PASSWORD_FILE ]] && export VALKEY_PRIMARY_PASSWORD="$(< "${VALKEY_PRIMARY_PASSWORD_FILE}")"
+    [[ -n "$VALKEY_PRIMARY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PRIMARY_PASSWORD"
     response=$(
       timeout -s 15 $1 \
       valkey-cli \
-        -h $VALKEY_MASTER_HOST \
-        -p $VALKEY_MASTER_PORT_NUMBER \
+        -h $VALKEY_PRIMARY_HOST \
+        -p $VALKEY_PRIMARY_PORT_NUMBER \
         {{- if .Values.tls.enabled }}
         --tls \
         --cacert {{ template "valkey.tlsCACert" . }} \
@@ -180,15 +180,15 @@ data:
       echo "$response"
       exit 1
     fi
-  ping_readiness_local_and_master.sh: |-
+  ping_readiness_local_and_primary.sh: |-
     script_dir="$(dirname "$0")"
     exit_status=0
     "$script_dir/ping_readiness_local.sh" $1 || exit_status=$?
-    "$script_dir/ping_readiness_master.sh" $1 || exit_status=$?
+    "$script_dir/ping_readiness_primary.sh" $1 || exit_status=$?
     exit $exit_status
-  ping_liveness_local_and_master.sh: |-
+  ping_liveness_local_and_primary.sh: |-
     script_dir="$(dirname "$0")"
     exit_status=0
     "$script_dir/ping_liveness_local.sh" $1 || exit_status=$?
-    "$script_dir/ping_liveness_master.sh" $1 || exit_status=$?
+    "$script_dir/ping_liveness_primary.sh" $1 || exit_status=$?
     exit $exit_status

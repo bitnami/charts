@@ -104,6 +104,12 @@ To connect to your etcd server from outside the cluster execute the following co
  * As TLS host authentication is enabled you should add the flag `--ca-file /opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}` to the etcdctl commands.
 
 {{- end }}
+{{- $autoCompactionValue := (regexReplaceAll "[^0-9]" .Values.autoCompactionRetention "" | int) }}
+{{- if and .Values.defrag.enabled (or (empty .Values.autoCompactionRetention) (eq $autoCompactionValue 0)) }}
+
+ * Disk defragmentation in etcd is most effective when paired with key history auto compaction. Consider setting "autoCompactionRetention > 0".
+  
+{{- end }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}

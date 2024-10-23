@@ -175,19 +175,19 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: VALKEY_REPLICATION_MODE
               value: replica
-            - name: VALKEY_MASTER_HOST
-            {{- if .Values.replica.externalMaster.enabled }}
-              value: {{ .Values.replica.externalMaster.host | quote }}
-            {{- else if and (eq (int64 .Values.master.replicaCount) 1) (eq .Values.master.kind "StatefulSet") }}
-              value: {{ template "common.names.fullname" . }}-master-0.{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
+            - name: VALKEY_PRIMARY_HOST
+            {{- if .Values.replica.externalPrimary.enabled }}
+              value: {{ .Values.replica.externalPrimary.host | quote }}
+            {{- else if and (eq (int64 .Values.primary.replicaCount) 1) (eq .Values.primary.kind "StatefulSet") }}
+              value: {{ template "common.names.fullname" . }}-primary-0.{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
             {{- else }}
-              value: {{ template "common.names.fullname" . }}-master.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
+              value: {{ template "common.names.fullname" . }}-primary.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
-            - name: VALKEY_MASTER_PORT_NUMBER
-            {{- if .Values.replica.externalMaster.enabled }}
-              value: {{ .Values.replica.externalMaster.port | quote }}
+            - name: VALKEY_PRIMARY_PORT_NUMBER
+            {{- if .Values.replica.externalPrimary.enabled }}
+              value: {{ .Values.replica.externalPrimary.port | quote }}
             {{- else }}
-              value: {{ .Values.master.containerPorts.valkey | quote }}
+              value: {{ .Values.primary.containerPorts.valkey | quote }}
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
@@ -195,7 +195,7 @@ spec:
             {{- if .Values.auth.usePasswordFiles }}
             - name: VALKEY_PASSWORD_FILE
               value: "/opt/bitnami/valkey/secrets/valkey-password"
-            - name: VALKEY_MASTER_PASSWORD_FILE
+            - name: VALKEY_PRIMARY_PASSWORD_FILE
               value: "/opt/bitnami/valkey/secrets/valkey-password"
             {{- else }}
             - name: VALKEY_PASSWORD
@@ -203,7 +203,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "valkey.secretName" . }}
                   key: {{ template "valkey.secretPasswordKey" . }}
-            - name: VALKEY_MASTER_PASSWORD
+            - name: VALKEY_PRIMARY_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "valkey.secretName" . }}
@@ -269,7 +269,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_liveness_local_and_master.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
+                - /health/ping_liveness_local_and_primary.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.replica.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customReadinessProbe "context" $) | nindent 12 }}
@@ -284,7 +284,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_readiness_local_and_master.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
+                - /health/ping_readiness_local_and_primary.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
           {{- end }}
           {{- end }}
           {{- if .Values.replica.resources }}
@@ -507,7 +507,7 @@ spec:
       kind: PersistentVolumeClaim
       metadata:
         name: valkey-data
-        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.labels .Values.commonLabels ) "context" . ) }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.persistence.labels .Values.commonLabels ) "context" . ) }}
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: replica
         {{- if .Values.replica.persistence.annotations }}

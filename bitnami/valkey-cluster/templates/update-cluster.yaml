@@ -95,14 +95,14 @@ spec:
                   echo "Node $nodeIP not ready, waiting for all the nodes to be ready..."
                   sleep 5
                 done
-                slave=()
+                replica=()
                 if (( $VALKEY_CLUSTER_REPLICAS >= 1 )) && (( newNodeCounter % (( $VALKEY_CLUSTER_REPLICAS + 1 )) )); then
-                  slave+=("--cluster-slave")
+                  replica+=("--cluster-slave")
                 fi
                 {{- if .Values.tls.enabled }}
-                while ! valkey-cli --cluster --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} add-node "${nodeIP}:${VALKEY_TLS_PORT_NUMBER}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_TLS_PORT_NUMBER}" ${slave[@]}; do
+                while ! valkey-cli --cluster --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} add-node "${nodeIP}:${VALKEY_TLS_PORT_NUMBER}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_TLS_PORT_NUMBER}" ${replica[@]}; do
                 {{- else }}
-                while ! valkey-cli --cluster add-node "${nodeIP}:${VALKEY_PORT_NUMBER}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_PORT_NUMBER}" ${slave[@]}; do
+                while ! valkey-cli --cluster add-node "${nodeIP}:${VALKEY_PORT_NUMBER}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_PORT_NUMBER}" ${replica[@]}; do
                 {{- end }}
                   echo "Add-node ${newNodeIndex} ${newNodeIP} failed, retrying"
                   sleep 5
@@ -125,10 +125,10 @@ spec:
               done
 
               {{- else }}
-              # number of currently deployed valkey master nodes
-              currentMasterNodesNum="$(( {{ .Values.cluster.update.currentNumberOfNodes }} / (( {{ .Values.cluster.update.currentNumberOfReplicas }} + 1 )) ))"
-              # end postion of new replicas that should be assigned to original valkey master nodes
-              slaveNodesEndPos="$(( {{ .Values.cluster.update.currentNumberOfNodes }} + (($VALKEY_CLUSTER_REPLICAS - {{ .Values.cluster.update.currentNumberOfReplicas }})) * $currentMasterNodesNum ))"
+              # number of currently deployed valkey primary nodes
+              currentPrimaryNodesNum="$(( {{ .Values.cluster.update.currentNumberOfNodes }} / (( {{ .Values.cluster.update.currentNumberOfReplicas }} + 1 )) ))"
+              # end postion of new replicas that should be assigned to original valkey primary nodes
+              replicaNodesEndPos="$(( {{ .Values.cluster.update.currentNumberOfNodes }} + (($VALKEY_CLUSTER_REPLICAS - {{ .Values.cluster.update.currentNumberOfReplicas }})) * $currentPrimaryNodesNum ))"
               for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
                 newNodeIndex="$(($node - 1))"
                 newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
@@ -141,16 +141,16 @@ spec:
                   newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
                   sleep 5
                 done
-                slave=()
-                # when the index of the new node is less than `slaveNodesEndPos`，the added node is a replica that assigned to original valkey master node
-                # when the index of the new node is greater than or equal to `slaveNodesEndPos`，and it is not a multiple of `$VALKEY_CLUSTER_REPLICAS + 1`, the added node is a replica that assigned to newly added master node
-                if (( $VALKEY_CLUSTER_REPLICAS >= 1 )) && (( (( $newNodeIndex < $slaveNodesEndPos )) || (( (( $newNodeIndex >= $slaveNodesEndPos )) && (( $newNodeIndex % (( $VALKEY_CLUSTER_REPLICAS + 1 )) )) )) )); then
-                  slave+=("--cluster-slave")
+                replica=()
+                # when the index of the new node is less than `replicaNodesEndPos`，the added node is a replica that assigned to original valkey primary node
+                # when the index of the new node is greater than or equal to `replicaNodesEndPos`，and it is not a multiple of `$VALKEY_CLUSTER_REPLICAS + 1`, the added node is a replica that assigned to newly added primary node
+                if (( $VALKEY_CLUSTER_REPLICAS >= 1 )) && (( (( $newNodeIndex < $replicaNodesEndPos )) || (( (( $newNodeIndex >= $replicaNodesEndPos )) && (( $newNodeIndex % (( $VALKEY_CLUSTER_REPLICAS + 1 )) )) )) )); then
+                  replica+=("--cluster-slave")
                 fi
                 {{- if .Values.tls.enabled }}
-                while ! valkey-cli --cluster add-node --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} "${newNodeIP}:${VALKEY_TLS_PORT_NUMBER}" "${firstNodeIP}:${VALKEY_TLS_PORT_NUMBER}" ${slave[@]}; do
+                while ! valkey-cli --cluster add-node --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} "${newNodeIP}:${VALKEY_TLS_PORT_NUMBER}" "${firstNodeIP}:${VALKEY_TLS_PORT_NUMBER}" ${replica[@]}; do
                 {{- else }}
-                while ! valkey-cli --cluster add-node "${newNodeIP}:${VALKEY_PORT_NUMBER}" "${firstNodeIP}:${VALKEY_PORT_NUMBER}" ${slave[@]}; do
+                while ! valkey-cli --cluster add-node "${newNodeIP}:${VALKEY_PORT_NUMBER}" "${firstNodeIP}:${VALKEY_PORT_NUMBER}" ${replica[@]}; do
                 {{- end }}
                   echo "Add-node ${newNodeIndex} ${newNodeIP} failed, retrying"
                   sleep 5
