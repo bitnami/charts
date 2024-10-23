@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.9 (2024-10-02)
+## 8.4.0 (2024-10-21)
 
-* [bitnami/external-dns] Release 8.3.9 ([#29690](https://github.com/bitnami/charts/pull/29690))
+* [bitnami/external-dns] add support for multiple rfc2136 zones ([#30011](https://github.com/bitnami/charts/pull/30011))
+
+## <small>8.3.9 (2024-10-02)</small>
+
+* [bitnami/external-dns] Release 8.3.9 (#29690) ([c30d45e](https://github.com/bitnami/charts/commit/c30d45e45592f7d8647c19c484f455e85359ff7e)), closes [#29690](https://github.com/bitnami/charts/issues/29690)
 
 ## <small>8.3.8 (2024-09-16)</small>
 
