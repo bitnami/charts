@@ -179,7 +179,7 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            - name: VALKEY_MASTER_PORT_NUMBER
+            - name: VALKEY_PRIMARY_PORT_NUMBER
               value: {{ .Values.replica.containerPorts.valkey | quote }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
@@ -187,7 +187,7 @@ spec:
             {{- if .Values.auth.usePasswordFiles }}
             - name: VALKEY_PASSWORD_FILE
               value: "/opt/bitnami/valkey/secrets/valkey-password"
-            - name: VALKEY_MASTER_PASSWORD_FILE
+            - name: VALKEY_PRIMARY_PASSWORD_FILE
               value: "/opt/bitnami/valkey/secrets/valkey-password"
             {{- else }}
             - name: VALKEY_PASSWORD
@@ -195,7 +195,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "valkey.secretName" . }}
                   key: {{ template "valkey.secretPasswordKey" . }}
-            - name: VALKEY_MASTER_PASSWORD
+            - name: VALKEY_PRIMARY_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "valkey.secretName" . }}
@@ -246,11 +246,11 @@ spec:
             {{- end }}
             - name: VALKEY_DATA_DIR
               value: {{ .Values.replica.persistence.path }}
-            {{- if .Values.replica.externalMaster.enabled }}
-            - name:  VALKEY_EXTERNAL_MASTER_HOST
-              value: {{ .Values.replica.externalMaster.host | quote }}
-            - name:  VALKEY_EXTERNAL_MASTER_PORT
-              value: {{ .Values.replica.externalMaster.port | quote }}
+            {{- if .Values.replica.externalPrimary.enabled }}
+            - name:  VALKEY_EXTERNAL_PRIMARY_HOST
+              value: {{ .Values.replica.externalPrimary.host | quote }}
+            - name:  VALKEY_EXTERNAL_PRIMARY_PORT
+              value: {{ .Values.replica.externalPrimary.port | quote }}
             {{- end }}
             {{- if .Values.replica.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraEnvVars "context" $ ) | nindent 12 }}
@@ -425,11 +425,11 @@ spec:
             - name: VALKEY_SENTINEL_PORT
               value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
             {{- end }}
-            {{- if .Values.sentinel.externalMaster.enabled }}
-            - name:  VALKEY_EXTERNAL_MASTER_HOST
-              value: {{ .Values.sentinel.externalMaster.host | quote }}
-            - name:  VALKEY_EXTERNAL_MASTER_PORT
-              value: {{ .Values.sentinel.externalMaster.port | quote }}
+            {{- if .Values.sentinel.externalPrimary.enabled }}
+            - name:  VALKEY_EXTERNAL_PRIMARY_HOST
+              value: {{ .Values.sentinel.externalPrimary.host | quote }}
+            - name:  VALKEY_EXTERNAL_PRIMARY_PORT
+              value: {{ .Values.sentinel.externalPrimary.port | quote }}
             {{- end }}
             {{- if .Values.sentinel.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraEnvVars "context" $ ) | nindent 12 }}
@@ -505,7 +505,7 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
-            {{- if .Values.sentinel.service.createMaster}}
+            {{- if .Values.sentinel.service.createPrimary}}
             - name: kubectl-shared
               mountPath: /etc/shared
             {{- end }}
@@ -634,7 +634,7 @@ spec:
             {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- end }}
-        {{- if .Values.sentinel.service.createMaster }}
+        {{- if .Values.sentinel.service.createPrimary }}
         - name: kubectl-shared
           image: {{ template "valkey.kubectl.image" . }}
           imagePullPolicy: {{ .Values.kubectl.image.pullPolicy | quote }}
@@ -663,7 +663,7 @@ spec:
           configMap:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
-        {{- if .Values.sentinel.service.createMaster}}
+        {{- if .Values.sentinel.service.createPrimary}}
         - name: kubectl-shared
           emptyDir: {}
         - name: kubectl-scripts

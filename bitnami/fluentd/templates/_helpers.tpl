@@ -6,22 +6,10 @@ SPDX-License-Identifier: APACHE-2.0
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Return the proper Fluentd image name
+Return the Fluentd image name
 */}}
-{{- define "fluentd.forwarder.image" -}}
-{{- $registryName := default .Values.image.registry .Values.forwarder.image.registry -}}
-{{- $repositoryName := default .Values.image.repository .Values.forwarder.image.repository -}}
-{{- $tag := default .Values.image.tag .Values.forwarder.image.tag -}}
-{{- $imageRoot := dict "registry" $registryName "repository" $repositoryName "tag" $tag -}}
-{{ include "common.images.image" (dict "imageRoot" $imageRoot "global" .Values.global) }}
-{{- end -}}
-
-{{- define "fluentd.aggregator.image" -}}
-{{- $registryName := default .Values.image.registry .Values.aggregator.image.registry -}}
-{{- $repositoryName := default .Values.image.repository .Values.aggregator.image.repository -}}
-{{- $tag := default .Values.image.tag .Values.aggregator.image.tag -}}
-{{- $imageRoot := dict "registry" $registryName "repository" $repositoryName "tag" $tag -}}
-{{ include "common.images.image" (dict "imageRoot" $imageRoot "global" .Values.global) }}
+{{- define "fluentd.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
