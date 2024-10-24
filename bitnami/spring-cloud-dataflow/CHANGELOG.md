@@ -1,8 +1,12 @@
 # Changelog
 
+## 32.0.1 (2024-10-22)
+
+* [bitnami/spring-cloud-dataflow] fix: :bug: Add missing /.m2 emptyDir ([#30034](https://github.com/bitnami/charts/pull/30034))
+
 ## 32.0.0 (2024-09-23)
 
-* [bitnami/spring-cloud-dataflow] feat!: :arrow_up: :boom: Bump RabbitMQ to 4.x.x ([#29572](https://github.com/bitnami/charts/pull/29572))
+* [bitnami/spring-cloud-dataflow] feat!: :arrow_up: :boom: Bump RabbitMQ to 4.x.x (#29572) ([7adaf80](https://github.com/bitnami/charts/commit/7adaf809d4275fa8c1dfedc2c8a23f7fab33c242)), closes [#29572](https://github.com/bitnami/charts/issues/29572)
 
 ## <small>31.0.4 (2024-09-19)</small>
 
