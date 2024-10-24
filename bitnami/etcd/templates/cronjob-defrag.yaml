@@ -94,7 +94,4 @@ spec:
               {{- else if ne .Values.defrag.cronjob.resourcesPreset "none" }}
               resources: {{- include "common.resources.preset" (dict "type" .Values.defrag.cronjob.resourcesPreset) | nindent 16 }}
               {{- end }}
-              {{- if .Values.defrag.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defrag.cronjob.containerSecurityContext "context" $) | nindent 16 }}
-              {{- end }}
 {{- end }}
