@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.20 (2024-10-02)
+## 2.3.21 (2024-10-22)
 
-* [bitnami/flux] Release 2.3.20 ([#29691](https://github.com/bitnami/charts/pull/29691))
+* [bitnami/flux] move leases.coordination.k8s.io permission from Roles to ClusterRoles ([#30032](https://github.com/bitnami/charts/pull/30032))
+
+## <small>2.3.20 (2024-10-02)</small>
+
+* [bitnami/flux] Release 2.3.20 (#29691) ([ab05b82](https://github.com/bitnami/charts/commit/ab05b82e2d7f572995086c0935b6fbfaad70d184)), closes [#29691](https://github.com/bitnami/charts/issues/29691)
 
 ## <small>2.3.19 (2024-09-26)</small>
 

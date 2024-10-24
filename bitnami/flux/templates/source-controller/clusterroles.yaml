@@ -182,6 +182,18 @@ rules:
       - get
       - patch
       - update
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
   {{- if .Values.sourceController.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.sourceController.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
