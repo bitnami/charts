@@ -55,6 +55,26 @@ Return the Tomcat credential secret name
 {{- end -}}
 
 {{/*
+Get the tomcat-username key.
+*/}}
+{{- define "tomcat.adminUsernameKey" -}}
+{{- if .Values.secretKeys.adminUsernameKey -}}
+  {{- printf "%s" (tpl .Values.secretKeys.adminUsernameKey $) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the tomcat-password key.
+*/}}
+{{- define "tomcat.adminPasswordKey" -}}
+{{- if and .Values.existingSecret .Values.secretKeys.adminPasswordKey -}}
+    {{- printf "%s" (tpl .Values.secretKeys.adminPasswordKey $) -}}
+{{- else -}}
+    {{- "tomcat-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "tomcat.checkRollingTags" -}}
