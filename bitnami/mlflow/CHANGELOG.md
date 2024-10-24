@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.3 (2024-10-23)
+## 2.0.3 (2024-10-24)
 
 * set imagePullPolicy of mlflow container to Always when latest tag is … ([#30062](https://github.com/bitnami/charts/pull/30062))
 
