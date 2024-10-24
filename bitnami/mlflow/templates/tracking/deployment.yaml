@@ -111,7 +111,11 @@ spec:
       containers:
         - name: mlflow
           image: {{ include "mlflow.v0.image" . }}
+          {{- if eq .Values.image.tag "latest"}}
+          imagePullPolicy: Always
+          {{- else }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- end }}
           {{- if .Values.tracking.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
