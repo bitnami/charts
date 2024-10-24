@@ -160,8 +160,8 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: 
-    - ip-10-0-2-8.eu-central-1.compute.internal
-    - ip-10-0-2-224.eu-central-1.compute.internal
+    - ip-10-0-1-57.eu-central-1.compute.internal
+    - ip-10-0-1-246.eu-central-1.compute.internal
 ## @param affinity Affinity for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
@@ -501,7 +501,7 @@ serverBlock: |-
      listen 0.0.0.0:8081;
      proxy_ssl_verify off;
      location / {
-       proxy_pass https://10.10.31.116:7503;
+       proxy_pass https://10.19.31.213:7503;
      }
    }
 
