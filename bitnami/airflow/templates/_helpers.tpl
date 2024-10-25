@@ -122,7 +122,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return Redis(TM) fullname
+Get the Redis&reg; fullname
 */}}
 {{- define "airflow.redis.fullname" -}}
 {{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
@@ -141,7 +141,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return Redis(TM) port
+Get the Redis&reg; port
 */}}
 {{- define "airflow.redis.port" -}}
 {{- if .Values.redis.enabled -}}
