@@ -268,9 +268,9 @@ Add environment variables to configure database values
 */}}
 {{- define "airflow.database.host" -}}
 {{- if eq .Values.postgresql.architecture "replication" }}
-{{- ternary (include "airflow.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled -}}-primary
+{{- (ternary (include "airflow.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled | printf "%s-primary") | quote -}}
 {{- else -}}
-{{- ternary (include "airflow.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled -}}
+{{- ternary (include "airflow.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled | quote -}}
 {{- end -}}
 {{- end -}}
 
@@ -376,7 +376,7 @@ Add environment variables to configure database values
   value: "true"
 {{- end }}
 - name: AIRFLOW_DATABASE_HOST
-  value: {{ include "airflow.database.host" . | quote }}
+  value: {{ include "airflow.database.host" . }}
 - name: AIRFLOW_DATABASE_PORT_NUMBER
   value: {{ include "airflow.database.port" . }}
 {{- end -}}
