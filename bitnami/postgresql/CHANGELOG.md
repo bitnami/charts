@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.6 (2024-10-24)
+## 16.0.7 (2024-10-25)
 
-* [bitnami/postgresql] Release 16.0.6 ([#30069](https://github.com/bitnami/charts/pull/30069))
+* [bitnami/postgresql] Make seLinuxOptions null to remove validation issue with openshift for postgresql volume permissions init container ([#30029](https://github.com/bitnami/charts/pull/30029))
+
+## <small>16.0.6 (2024-10-24)</small>
+
+* [bitnami/postgresql] Release 16.0.6 (#30069) ([e431b4a](https://github.com/bitnami/charts/commit/e431b4a915cb29593faedff990bba9516dc25ef6)), closes [#30069](https://github.com/bitnami/charts/issues/30069)
 
 ## <small>16.0.5 (2024-10-22)</small>
 
