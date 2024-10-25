@@ -1953,7 +1953,12 @@ redis:
     password: ""
     existingSecret: ""
   architecture: standalone
+  ## @param redis.master.service.ports.redis Redis port
+  ##
   master:
+    service:
+      ports:
+        redis: 6379
     ## Redis&reg; master resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).

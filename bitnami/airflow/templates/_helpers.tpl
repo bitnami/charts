@@ -122,11 +122,33 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Return Redis(TM) fullname
+*/}}
+{{- define "airflow.redis.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified redis name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "airflow.redis.fullname" -}}
-{{- include "common.names.dependency.fullname" (dict "chartName" "redis-master" "chartValues" .Values.redis "context" $) -}}
+{{- define "airflow.redis.host" -}}
+{{- if .Values.redis.enabled -}}
+    {{- printf "%s-master" (include "airflow.redis.fullname" .) -}}
+{{- else -}}
+    {{- print .Values.externalRedis.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return Redis(TM) port
+*/}}
+{{- define "airflow.redis.port" -}}
+{{- if .Values.redis.enabled -}}
+    {{- print .Values.redis.master.service.ports.redis -}}
+{{- else -}}
+    {{- print .Values.externalRedis.port  -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -361,9 +383,9 @@ Add environment variables to configure redis values
 {{- define "airflow.configure.redis" -}}
 {{- if (not (or (eq .Values.executor "KubernetesExecutor" ) (eq .Values.executor "LocalKubernetesExecutor" ))) }}
 - name: REDIS_HOST
-  value: {{ ternary (include "airflow.redis.fullname" .) .Values.externalRedis.host .Values.redis.enabled | quote }}
+  value: {{ include "airflow.redis.host" . | quote }}
 - name: REDIS_PORT_NUMBER
-  value: {{ ternary "6379" .Values.externalRedis.port .Values.redis.enabled | quote }}
+  value: {{ include "airflow.redis.port" . | quote }}
 {{- if and (not .Values.redis.enabled) .Values.externalRedis.username }}
 - name: REDIS_USER
   value: {{ .Values.externalRedis.username | quote }}
