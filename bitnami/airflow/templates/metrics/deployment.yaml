@@ -78,7 +78,7 @@ spec:
             - name: AIRFLOW_PROMETHEUS_DATABASE_BACKEND
               value: "postgres"
             - name: AIRFLOW_PROMETHEUS_DATABASE_HOST
-              value: {{ include "airflow.database.host" . }}
+              value: {{ include "airflow.database.host" . | quote }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_PORT
               value: {{ include "airflow.database.port" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_USER

@@ -136,7 +136,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if .Values.redis.enabled -}}
     {{- printf "%s-master" (include "airflow.redis.fullname" .) -}}
 {{- else -}}
-    {{- print .Values.externalRedis.host -}}
+    {{- printf "%s" (tpl .Values.externalRedis.host $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -267,7 +267,11 @@ Create the name of the service account to use
 Add environment variables to configure database values
 */}}
 {{- define "airflow.database.host" -}}
-{{- ternary (include "airflow.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote -}}
+{{- if eq .Values.postgresql.architecture "replication" }}
+{{- ternary (include "airflow.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled -}}-primary
+{{- else -}}
+{{- ternary (include "airflow.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -372,7 +376,7 @@ Add environment variables to configure database values
   value: "true"
 {{- end }}
 - name: AIRFLOW_DATABASE_HOST
-  value: {{ include "airflow.database.host" . }}
+  value: {{ include "airflow.database.host" . | quote }}
 - name: AIRFLOW_DATABASE_PORT_NUMBER
   value: {{ include "airflow.database.port" . }}
 {{- end -}}
