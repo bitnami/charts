@@ -1,5 +1,10 @@
 # Changelog
 
+=======
+## 2.0.2 (2024-10-30)
+
+* [bitnami/valkey] Fix default kukbectl.command when sentinel.service.createPrimary is true ([30090](https://github.com/bitnami/charts/pull/30090))
+
 ## 2.0.1 (2024-10-28)
 
 * [bitnami/valkey] Fix sentinel.service.createprimary config to sentinel.service.createPrimary to work ([#30091](https://github.com/bitnami/charts/pull/30091))
