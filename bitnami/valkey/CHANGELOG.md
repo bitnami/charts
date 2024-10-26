@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 (2024-10-26)
+
+* [bitnami/valkey] Fix sentinel.service.createprimary config to sentinel.service.createPrimary to work ([#30091](https://github.com/bitnami/charts/pull/30091)
+
 ## 2.0.0 (2024-10-23)
 
 * [bitnami/valkey] Update all the references from to master/slave to primary/replica ([#30024](https://github.com/bitnami/charts/pull/30024))
