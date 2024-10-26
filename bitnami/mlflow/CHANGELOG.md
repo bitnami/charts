@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.3 (2024-10-24)
+## 2.0.4 (2024-10-26)
 
-* fixed doc string for mlflow container security context; fixes #30059 ([#30060](https://github.com/bitnami/charts/pull/30060))
+* [bitnami/mlflow] Release 2.0.4 ([#30089](https://github.com/bitnami/charts/pull/30089))
+
+## <small>2.0.3 (2024-10-24)</small>
+
+* fixed doc string for mlflow container security context; fixes #30059 (#30060) ([c7811fe](https://github.com/bitnami/charts/commit/c7811fe1c1902bf29c35af70216cc7db2037586b)), closes [#30059](https://github.com/bitnami/charts/issues/30059) [#30060](https://github.com/bitnami/charts/issues/30060)
 
 ## <small>2.0.2 (2024-10-16)</small>
 
