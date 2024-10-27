@@ -1,5 +1,9 @@
 # Changelog
 
+## 10.4.2 (2024-10-27)
+
+* [bitnami/etcd]: Etcd defragmentation cronjob with authentication enabled clusters
+
 ## 10.4.1 (2024-10-24)
 
 * [bitnami/etcd]: Fix podLabels bug ([#30052](https://github.com/bitnami/charts/pull/30052))

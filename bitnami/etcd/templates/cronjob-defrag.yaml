@@ -60,6 +60,19 @@ spec:
               env:
                 - name: BITNAMI_DEBUG
                   value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+                {{- if and .Values.auth.rbac.create .Values.auth.token.enabled }}
+                {{- if eq .Values.auth.token.type "simple" }}
+                - name: ETCD_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "etcd.secretName" . }}
+                      key: {{ include "etcd.secretPasswordKey" . }}
+                {{- else }}
+                {{- fail "defragmention and auth.token = jwt is not supported by the helm chart"   }}
+                {{- end }}
+                - name: ETCDCTL_USER
+                  value: "root:$(ETCD_ROOT_PASSWORD)"
+                {{- end }}
               {{- if .Values.defrag.cronjob.command }}
               command: {{ .Values.defrag.cronjob.command | toYaml | nindent 16 }}
               {{- else }}
