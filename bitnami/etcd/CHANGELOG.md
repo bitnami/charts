@@ -3,6 +3,7 @@
 ## 10.4.2 (2024-10-27)
 
 * [bitnami/etcd]: Etcd defragmentation cronjob with authentication enabled clusters
+* [bitnami/etcd]: Etcd defragmentation cronjob with client secure transport enabled
 
 ## 10.4.1 (2024-10-24)
 
