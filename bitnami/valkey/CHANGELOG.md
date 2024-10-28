@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.1 (2024-10-26)
+## 2.0.1 (2024-10-28)
 
 * [bitnami/valkey] Fix sentinel.service.createprimary config to sentinel.service.createPrimary to work ([#30091](https://github.com/bitnami/charts/pull/30091))
 
