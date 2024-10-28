@@ -3567,7 +3567,7 @@ snapshots:
   repositories:
     default:
       settings:
-        location: /snapshots # This must match the snapshot repo path configured in `snapshotRepoPath`
+        location: /snapshots
       type: fs
   ## OpenSearch resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
