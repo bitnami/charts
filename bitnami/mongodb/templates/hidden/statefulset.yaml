@@ -20,7 +20,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ printf "%s-hidden-headless" (include "mongodb.fullname" .) }}
+  serviceName: {{ include "mongodb.hidden.service.nameOverride" . }}
   podManagementPolicy: {{ .Values.hidden.podManagementPolicy }}
   replicas: {{ .Values.hidden.replicaCount }}
   {{- if .Values.hidden.updateStrategy }}
@@ -134,7 +134,7 @@ spec:
           command:
             - /bitnami/scripts/generate-certs.sh
           args:
-            - -s {{ printf "%s-hidden-headless" (include "mongodb.fullname" .) }}
+            - -s {{ include "mongodb.hidden.service.nameOverride" . }}
             {{- if .Values.externalAccess.hidden.service.loadBalancerIPs }}
             - -i {{ join "," .Values.externalAccess.hidden.service.loadBalancerIPs }}
             {{- end }}
@@ -189,10 +189,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.service.nameOverride" . }}"
-            - name: K8S_HIDDEN_NODE_SERVICE_NAME
-              value: "{{ include "mongodb.fullname" . }}-hidden-headless"
             - name: MONGODB_REPLICA_SET_MODE
               value: "hidden"
             - name: MONGODB_INITIAL_PRIMARY_HOST
@@ -201,7 +197,7 @@ spec:
               value: {{ .Values.replicaSetName | quote }}
             {{- if and .Values.replicaSetHostnames (not .Values.externalAccess.hidden.enabled) }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: "$(MY_POD_NAME).$(K8S_HIDDEN_NODE_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+              value: "$(MY_POD_NAME).{{ include "mongodb.hidden.service.nameOverride" . }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- end }}
             {{- $customUsers := include "mongodb.customUsers" . -}}
             {{- $customDatabases := include "mongodb.customDatabases" . -}}
