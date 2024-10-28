@@ -9,7 +9,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.backup.cronjob.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: pg_dumpall
