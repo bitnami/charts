@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.4.2 (2024-10-27)
+## 10.4.2 (2024-10-28)
 
 * [bitnami/etcd] Fixing defrag etcd for authenticated and tls clusters ([#30096](https://github.com/bitnami/charts/pull/30096))
 
