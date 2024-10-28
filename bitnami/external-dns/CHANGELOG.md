@@ -4,9 +4,10 @@
 
 * [bitnami/external-dns] Add targetLabels option to ServiceMonitor ([#29828](https://github.com/bitnami/charts/pull/29828))
 
-## 8.3.10 (2024-10-03)
+## <small>8.3.10 (2024-10-28)</small>
 
-* [bitnami/external-dns] chore: :wrench: :construction_worker: Re-enable CRD automation ([#29266](https://github.com/bitnami/charts/pull/29266))
+* [bitnami/external-dns] chore: :wrench: :construction_worker: Re-enable CRD automation (#29266) ([9e50d55](https://github.com/bitnami/charts/commit/9e50d55475410d956d5d048b2443759050b8183e)), closes [#29266](https://github.com/bitnami/charts/issues/29266)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>8.3.9 (2024-10-02)</small>
 
