@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.3.16 (2024-10-01)
+## 11.3.18 (2024-10-22)
 
-* [bitnami/consul] Release 11.3.16 ([#29687](https://github.com/bitnami/charts/pull/29687))
+* [bitnami/consul] Change Configmap Template ([#30016](https://github.com/bitnami/charts/pull/30016))
+
+## <small>11.3.17 (2024-10-16)</small>
+
+* [bitnami/consul] Release 11.3.17 (#29918) ([1478868](https://github.com/bitnami/charts/commit/1478868d7784fc7a82fefc0302aa2ebed2dfa624)), closes [#29918](https://github.com/bitnami/charts/issues/29918)
+
+## <small>11.3.16 (2024-10-02)</small>
+
+* [bitnami/consul] Release 11.3.16 (#29687) ([3c2a220](https://github.com/bitnami/charts/commit/3c2a2201f0605e46931f7d3799aa56d588dc8c41)), closes [#29687](https://github.com/bitnami/charts/issues/29687)
 
 ## <small>11.3.15 (2024-09-17)</small>
 

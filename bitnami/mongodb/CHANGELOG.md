@@ -1,8 +1,21 @@
 # Changelog
 
-## 16.0.2 (2024-10-09)
+## 16.1.1 (2024-10-25)
 
-* [bitnami/mongodb] Release 16.0.2 ([#29855](https://github.com/bitnami/charts/pull/29855))
+* [bitnami/mongodb] Release 16.1.1 ([#30084](https://github.com/bitnami/charts/pull/30084))
+
+## 16.1.0 (2024-10-23)
+
+* [bitnami/mongodb] Add resources for backup cronjob (#30021) ([4836089](https://github.com/bitnami/charts/commit/48360898aedcdb853fb8f967ed64bfdc72399ba8)), closes [#30021](https://github.com/bitnami/charts/issues/30021)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>16.0.3 (2024-10-10)</small>
+
+* [bitnami/mongodb] Fixed awk script to extract  in order to be more st… (#29824) ([86745de](https://github.com/bitnami/charts/commit/86745de16a329beadf4277bc602a12224a93e84a)), closes [#29824](https://github.com/bitnami/charts/issues/29824)
+
+## <small>16.0.2 (2024-10-09)</small>
+
+* [bitnami/mongodb] Release 16.0.2 (#29855) ([7fec11a](https://github.com/bitnami/charts/commit/7fec11aa57b1c66cea587219b86081fde3ac0b97)), closes [#29855](https://github.com/bitnami/charts/issues/29855)
 
 ## <small>16.0.1 (2024-10-08)</small>
 

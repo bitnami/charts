@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.4.5 (2024-09-17)
+## 9.4.6 (2024-10-20)
 
-* [bitnami/solr] test: :white_check_mark: Improve reliability of ginkgo tests ([#29463](https://github.com/bitnami/charts/pull/29463))
+* [bitnami/solr] Release 9.4.6 ([#30001](https://github.com/bitnami/charts/pull/30001))
+
+## <small>9.4.5 (2024-09-17)</small>
+
+* [bitnami/solr] test: :white_check_mark: Improve reliability of ginkgo tests (#29463) ([1e01d4e](https://github.com/bitnami/charts/commit/1e01d4e63c18c978e9db4bbafa44dbbf5a89695b)), closes [#29463](https://github.com/bitnami/charts/issues/29463)
 
 ## <small>9.4.4 (2024-09-16)</small>
 

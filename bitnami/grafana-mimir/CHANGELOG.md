@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.18 (2024-10-02)
+## 1.2.19 (2024-10-21)
 
-* [bitnami/grafana-mimir] Release 1.2.18 ([#29693](https://github.com/bitnami/charts/pull/29693))
+* [bitnami/grafana-mimir] Release 1.2.19 ([#30018](https://github.com/bitnami/charts/pull/30018))
+
+## <small>1.2.18 (2024-10-02)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.18 (#29693) ([08f450e](https://github.com/bitnami/charts/commit/08f450e911970099b7b64bc3d0525cab3733c0ab)), closes [#29693](https://github.com/bitnami/charts/issues/29693)
 
 ## <small>1.2.17 (2024-09-17)</small>
 
