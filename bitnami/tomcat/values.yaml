@@ -111,7 +111,7 @@ existingSecret: ""
 ##
 secretKeys:
   adminUsernameKey: ""
-  adminPasswordKey: "tomcat-password"
+  adminPasswordKey: ""
 ## @param tomcatAllowRemoteManagement Enable remote access to management interface
 ## ref: https://github.com/bitnami/charts/tree/main/bitnami/tomcat#configuration
 ##
