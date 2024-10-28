@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.25.0 (2024-10-10)
+## 2.26.0 (2024-10-14)
 
-* [bitnami/common] Add the ability to specify namespaces for affinity ([#29479](https://github.com/bitnami/charts/pull/29479))
+* [bitnami/common] Drop unused custom empty password validators ([#29432](https://github.com/bitnami/charts/pull/29432))
 
 ## 2.24.0 (2024-10-03)
 

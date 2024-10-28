@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.7 (2024-10-02)
+## 2.4.8 (2024-10-14)
 
-* [bitnami/sealed-secrets] Release 2.4.7 ([#29718](https://github.com/bitnami/charts/pull/29718))
+* [bitnami/sealed-secrets] Fix combination of additionalNamespaces, rbac.clusterRole=false and rbac.namespacedRoles=true ([#29872](https://github.com/bitnami/charts/pull/29872))
+
+## <small>2.4.7 (2024-10-02)</small>
+
+* [bitnami/sealed-secrets] Release 2.4.7 (#29718) ([656a8f8](https://github.com/bitnami/charts/commit/656a8f88e3a3f9e4322d619e1547f67766df7363)), closes [#29718](https://github.com/bitnami/charts/issues/29718)
 
 ## <small>2.4.6 (2024-09-06)</small>
 

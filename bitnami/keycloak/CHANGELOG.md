@@ -1,8 +1,17 @@
 # Changelog
 
+## 24.0.2 (2024-10-24)
+
+* [bitnami/keycloak] Release 24.0.2 ([#30075](https://github.com/bitnami/charts/pull/30075))
+
+## <small>24.0.1 (2024-10-17)</small>
+
+* [bitnami/keycloak] Release 24.0.1 (#29968) ([fa1d5b2](https://github.com/bitnami/charts/commit/fa1d5b278cb43b38fd5105a94005ba9a840beacc)), closes [#29968](https://github.com/bitnami/charts/issues/29968)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
 ## 24.0.0 (2024-10-08)
 
-* [bitnami/keycloak] Release 24.0.0 ([#29815](https://github.com/bitnami/charts/pull/29815))
+* [bitnami/keycloak] Release 24.0.0 (#29815) ([02bf8f8](https://github.com/bitnami/charts/commit/02bf8f8821a875ca3605705f9c092a077ef29772)), closes [#29815](https://github.com/bitnami/charts/issues/29815)
 
 ## 23.0.0 (2024-10-03)
 
