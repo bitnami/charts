@@ -3560,7 +3560,7 @@ snapshots:
       description: Default snapshot policy
       enabled: true
       snapshot_config:
-        repository: default # This must match a repo name in `snapshots.repositories`
+        repository: default
   ## @param snapshots.repositories [default: SNAPSHOT_REPO_API_BODY] Each object represents a snapshot repository in YAML form, which will be converted to JSON and then passed as the HTTP body data to the OpenSearch REST API.
   ## NOTE: The field `settings.location` in each repo must match the snapshot repo path configured in `snapshotRepoPath`, if its `type` is `fs`.
   ##
