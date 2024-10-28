@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.0.3 (2024-10-27)
+## 24.0.3 (2024-10-28)
 
 * [bitnami/keycloak] switches keycloak-metrics service to poin to new port ([#30095](https://github.com/bitnami/charts/pull/30095))
 
