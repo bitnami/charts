@@ -47,6 +47,17 @@ Create a default mongo arbiter service name which can be overridden.
 {{- end }}
 
 {{/*
+Create a default mongo hidden service name which can be overridden.
+*/}}
+{{- define "mongodb.hidden.service.nameOverride" -}}
+    {{- if and .Values.hidden.service .Values.hidden.service.nameOverride -}}
+        {{- print .Values.hidden.service.nameOverride -}}
+    {{- else -}}
+        {{- printf "%s-hidden-headless" (include "mongodb.fullname" .) -}}
+    {{- end }}
+{{- end }}
+
+{{/*
 Return the proper MongoDB&reg; image name
 */}}
 {{- define "mongodb.image" -}}
@@ -232,7 +243,7 @@ Get the initialization scripts ConfigMap name.
 Get initial primary host to configure MongoDB cluster.
 */}}
 {{- define "mongodb.initialPrimaryHost" -}}
-{{ ternary ( printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
+{{ ternary ( printf "%s-0.%s.$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) (include "mongodb.service.nameOverride" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
 {{- end -}}
 
 {{/*

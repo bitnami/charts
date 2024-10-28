@@ -2249,6 +2249,9 @@ hidden:
       ##
       dataSource: {}
   service:
+    ## @param hidden.service.nameOverride The hidden service name
+    ##
+    nameOverride: ""
     ## @param hidden.service.portName MongoDB(&reg;) service port name
     ##
     portName: "mongodb"
