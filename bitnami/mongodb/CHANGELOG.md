@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.1.1 (2024-10-25)
+## 16.2.0 (2024-10-28)
 
-* [bitnami/mongodb] Release 16.1.1 ([#30084](https://github.com/bitnami/charts/pull/30084))
+* [bitnami/mongodb] fix: initial primary host variable for arbiter and hidden replicas ([#29584](https://github.com/bitnami/charts/pull/29584))
+
+## <small>16.1.1 (2024-10-25)</small>
+
+* [bitnami/mongodb] Release 16.1.1 (#30084) ([24f6cde](https://github.com/bitnami/charts/commit/24f6cde58746cdc617a672d63add5bfd8b7e6b6d)), closes [#30084](https://github.com/bitnami/charts/issues/30084)
 
 ## 16.1.0 (2024-10-23)
 
