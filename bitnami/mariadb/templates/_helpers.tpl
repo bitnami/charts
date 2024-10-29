@@ -122,10 +122,49 @@ Return the secret with MariaDB credentials
 {{- end -}}
 
 {{/*
+Return the secret with previous MariaDB credentials
+*/}}
+{{- define "mariadb.rotate-job.previousSecretName" -}}
+    {{- if .Values.passwordUpdateJob.previousPasswords.existingSecret -}}
+        {{- /* The new secret is managed externally */ -}}
+        {{- tpl .Values.passwordUpdateJob.previousPasswords.existingSecret $ -}}
+    {{- else if .Values.passwordUpdateJob.previousPasswords.rootPassword -}}
+        {{- /* The new secret is managed externally */ -}}
+        {{- printf "%s-previous-secret" (include "common.names.fullname" .) -}}
+    {{- else -}}
+        {{- /* The new secret managed by the helm chart. We use the current secret name as it has the old password */ -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret with previous MariaDB credentials
+*/}}
+{{- define "mariadb.rotate-job.newSecretName" -}}
+    {{- if and (not .Values.passwordUpdateJob.previousPasswords.existingSecret) (not .Values.passwordUpdateJob.previousPasswords.rootPassword) -}}
+        {{- /* The new secret managed by the helm chart. We create a new secret as the current one has the old password */ -}}
+        {{- printf "%s-new-secret" (include "common.names.fullname" .) -}}
+    {{- else -}}
+        {{- /* The new secret is managed externally */ -}}
+        {{- include "mariadb.secretName" . -}}
+    {{- end -}}
+{{- end -}}
+
+
+{{/*
 Return true if a secret object should be created for MariaDB
 */}}
 {{- define "mariadb.createSecret" -}}
 {{- if not (or .Values.auth.existingSecret .Values.auth.customPasswordFiles) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for MariaDB
+*/}}
+{{- define "mariadb.createPreviousSecret" -}}
+{{- if and .Values.passwordUpdateJob.previousPasswords.rootPassword (not .Values.passwordUpdateJob.previousPasswords.existingSecret) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}

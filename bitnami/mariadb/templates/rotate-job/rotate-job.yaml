@@ -1,0 +1,233 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.passwordUpdateJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-password-rotate
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mariadb
+    app.kubernetes.io/component: rotate-job
+  {{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+spec:
+  backoffLimit: {{ .Values.passwordUpdateJob.backoffLimit }}
+  template:
+    metadata:
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.passwordUpdateJob.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mariadb
+        app.kubernetes.io/component: rotate-job
+      {{- if .Values.passwordUpdateJob.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      {{- if .Values.passwordUpdateJob.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.passwordUpdateJob.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.passwordUpdateJob.automountServiceAccountToken }}
+      {{- if .Values.passwordUpdateJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.primary.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: update-credentials
+          image: {{ template "mariadb.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/bash
+            - -ec
+          args:
+            - |
+              {{- if .Values.usePasswordFiles }}
+              # We need to load all the secret env vars to the system
+              for file in $(find /bitnami/mariadb/secrets -type f); do
+                  env_var_name="$(basename $file)"
+                  echo "Exporting $env_var_name"
+                  export $env_var_name="$(< $file)"
+              done
+              {{- end }}
+              host={{ include "mariadb.primary.fullname" . }}-0.{{  printf "%s-headless" (include "common.names.fullname" .) }}
+              echo "Starting password update job"
+              if [[ -f /job-status/root-password-changed ]]; then
+                echo "Root password already updated. Skipping"
+              else
+                echo "Updating root password"
+                echo mysql -uroot -p$MARIADB_PREVIOUS_ROOT_PASSWORD -h$host -e "SET PASSWORD for 'root'@'%' = PASSWORD('$MARIADB_NEW_ROOT_PASSWORD');"
+                mysql -uroot -p$MARIADB_PREVIOUS_ROOT_PASSWORD -h$host -e "SET PASSWORD for 'root'@'%' = PASSWORD('$MARIADB_NEW_ROOT_PASSWORD');"
+                touch /job-status/root-password-changed
+                echo "Root password successfully updated"
+              fi
+              {{- if not (empty .Values.auth.username) }}
+              if [[ -f /job-status/password-changed ]]; then
+                echo "User password already updated. Skipping"
+              else
+                echo "Updating user password"
+                echo mysql -u$MARIADB_USER -p$MARIADB_PREVIOUS_PASSWORD -h$host -e "SET PASSWORD for '$MARIADB_USER'@'%' = PASSWORD('$MARIADB_NEW_PASSWORD');"
+                mysql -u$MARIADB_USER -p$MARIADB_PREVIOUS_PASSWORD -h$host -e "SET PASSWORD for '$MARIADB_USER'@'%' = PASSWORD('$MARIADB_NEW_PASSWORD');"
+                touch /job-status/password-changed
+                echo "User password successfully updated"
+              fi
+              {{- end }}
+              {{- if eq .Values.architecture "replication" }}
+              if [[ -f /job-status/replication-password-changed ]]; then
+                echo "Replication password already updated. Skipping"
+              else
+                echo "Updating replication password"
+                echo mysql -u$MARIADB_REPLICATION_USER -p$MARIADB_PREVIOUS_REPLICATION_PASSWORD -h$host -e "SET PASSWORD for '$MARIADB_REPLICATION_USER'@'%' = PASSWORD('$MARIADB_NEW_REPLICATION_PASSWORD');"
+                mysql -u$MARIADB_REPLICATION_USER -p$MARIADB_PREVIOUS_REPLICATION_PASSWORD -h$host -e "SET PASSWORD for '$MARIADB_REPLICATION_USER'@'%' = PASSWORD('$MARIADB_NEW_REPLICATION_PASSWORD');"
+                touch /job-status/replication-password-changed
+                echo "Replication password successfully updated"
+              fi
+
+              for i in $(seq 0 {{ sub .Values.secondary.replicaCount 1 }}); do
+                if [[ -f /job-status/replica-$i-changed ]]; then
+                    echo "Replica $i already updated. Skipping"
+                else
+                    replica_host={{ include "mariadb.secondary.fullname" . }}-$i.{{  printf "%s-headless" (include "common.names.fullname" .) }}
+                    echo "Updating primary password in replica $i"
+                    echo mysql -uroot -p$MARIADB_NEW_ROOT_PASSWORD -h$replica_host -e "STOP SLAVE; CHANGE MASTER TO   MASTER_PASSWORD='$MARIADB_NEW_REPLICATION_PASSWORD'; START SLAVE;"
+                    mysql -uroot -p$MARIADB_NEW_ROOT_PASSWORD -h$replica_host -e "STOP SLAVE; CHANGE MASTER TO  MASTER_PASSWORD='$MARIADB_NEW_REPLICATION_PASSWORD'; START SLAVE;"
+                    touch /job-status/replica-$i-changed
+                    echo "Replica $i updated"
+                fi
+              done
+              {{- end }}
+              {{- if .Values.passwordUpdateJob.extraCommands }}
+              {{- include "common.tplValues.render" (dict "value" .Values.passwordUpdateJob.extraCommands "context" $) | nindent 14 }}
+              {{- end }}
+              echo "Password update job finished successfully"
+          env:
+            {{- if not .Values.auth.usePasswordFiles }}
+            - name: MARIADB_PREVIOUS_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mariadb.rotate-job.previousSecretName" . }}
+                  key: mariadb-root-password
+            - name: MARIADB_NEW_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mariadb.rotate-job.newSecretName" . }}
+                  key: mariadb-root-password
+            {{- end }}
+            {{- if not (empty .Values.auth.username) }}
+            - name: MARIADB_USER
+              value: {{ .Values.auth.username | quote }}
+            {{- if not .Values.auth.usePasswordFiles }}
+            - name: MARIADB_PREVIOUS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mariadb.rotate-job.previousSecretName" . }}
+                  key: mariadb-password
+            - name: MARIADB_NEW_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mariadb.rotate-job.newSecretName" . }}
+                  key: mariadb-password
+            {{- end }}
+            {{- end }}
+            {{- if eq .Values.architecture "replication" }}
+            - name: MARIADB_REPLICATION_USER
+              value: {{ .Values.auth.replicationUser | quote }}
+            {{- if not .Values.auth.usePasswordFiles }}
+            - name: MARIADB_PREVIOUS_REPLICATION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mariadb.rotate-job.previousSecretName" . }}
+                  key: mariadb-replication-password
+            - name: MARIADB_NEW_REPLICATION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mariadb.rotate-job.newSecretName" . }}
+                  key: mariadb-replication-password
+            {{- end }}
+            {{- end }}
+          {{- if .Values.passwordUpdateJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.passwordUpdateJob.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.passwordUpdateJob.extraEnvVarsCM .Values.passwordUpdateJob.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.passwordUpdateJob.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.passwordUpdateJob.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.passwordUpdateJob.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.passwordUpdateJob.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /job-status
+              subPath: job-dir
+            {{- if .Values.usePasswordFiles }}
+            - name: mariadb-previous-credentials
+              mountPath: /bitnami/mariadb/secrets/previous
+            - name: mariadb-new-credentials
+              mountPath: /bitnami/mariadb/secrets/new
+            {{- end }}
+          {{- if .Values.passwordUpdateJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.resources }}
+          resources: {{- toYaml .Values.passwordUpdateJob.resources | nindent 12 }}
+          {{- else if ne .Values.passwordUpdateJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.passwordUpdateJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if and .Values.auth.usePasswordFiles }}
+        - name: mariadb-previous-credentials
+          secret:
+            secretName: {{ template "mariadb.rotate-job.previousSecretName" . }}
+            items:
+              - key: mariadb-root-password
+                path: MARIADB_PREVIOUS_ROOT_PASSWORD
+              - key: mariadb-password
+                path: MARIADB_PREVIOUS_PASSWORD
+              {{- if eq .Values.architecture "replication" }}
+              - key: mariadb-replication-password
+                path: MARIADB_PREVIOUS_REPLICATION_PASSWORD
+              {{- end }}
+        - name: mariadb-new-credentials
+          secret:
+            secretName: {{ template "mariadb.rotate-job.newSecretName" . }}
+            items:
+              - key: mariadb-root-password
+                path: MARIADB_NEW_ROOT_PASSWORD
+              - key: mariadb-password
+                path: MARIADB_NEW_PASSWORD
+              {{- if eq .Values.architecture "replication" }}
+              - key: mariadb-replication-password
+                path: MARIADB_NEW_REPLICATION_PASSWORD
+              {{- end }}
+        {{- end }}
+      {{- if .Values.passwordUpdateJob.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}

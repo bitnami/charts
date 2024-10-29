@@ -21,7 +21,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: secondary
-  serviceName: {{ include "mariadb.secondary.fullname" . }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   podManagementPolicy: {{ .Values.secondary.podManagementPolicy }}
   {{- if .Values.secondary.updateStrategy }}
   updateStrategy: {{- toYaml .Values.secondary.updateStrategy | nindent 4 }}
@@ -31,6 +31,9 @@ spec:
       annotations:
         {{- if (include "mariadb.secondary.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/secondary/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        passwords/last-update: {{ now | date "20060102150405" | quote }}
         {{- end }}
         {{- if .Values.secondary.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.podAnnotations "context" $) | nindent 8 }}
