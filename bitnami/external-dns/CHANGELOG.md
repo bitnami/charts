@@ -2,7 +2,7 @@
 
 ## 8.3.11 (2024-10-29)
 
-* [bitnami/external-dns] Allow rfc2136-zone to specify multiple zones ([#28681](https://github.com/bitnami/charts/pull/28681))
+* [bitnami/external-dns] fix: secret not getting created when pihole password value is set ([#30114](https://github.com/bitnami/charts/pull/30114))
 
 ## <small>8.3.10 (2024-10-28)</small>
 
