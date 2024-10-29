@@ -493,11 +493,11 @@ hostPorts:
   metrics: ""
 
 ## @section JMX Proxy Deployment Parameters
-##
+## DEPRECATED: scylla-jmx becomes optional package from ScyllaDB 6.2, not installed by default.
 jmxProxy:
   ## @param jmxProxy.enabled Enable JMX Proxy sidecar
   ##
-  enabled: true
+  enabled: false
   ## @param jmxProxy.extraEnvVars Array with extra environment variables to add to JMX Proxy sidecar
   ## e.g:
   ## extraEnvVars:

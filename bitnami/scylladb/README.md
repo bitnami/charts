@@ -491,6 +491,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/scylladb --set dbUse
 
 | Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
 
+### To 3.0.0
+
+This major version updates ScyllaDB to version 6.2. From now on, scylla-jmx becomes an optional package and is not installed by default. `jmxProxy.enabled`  has been set to `false`, and the whole JMX logic is deprecated and plan to be removed in a future release.
+
 ## License
 
 Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
