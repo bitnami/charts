@@ -296,7 +296,7 @@ Init container definition to recover log dir.
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
   {{- end }}
   {{- if .Values.resources }}
-  resources: {{- toYaml .Values.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
   {{- end }}
