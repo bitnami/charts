@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.3.11 (2024-10-28)
+## 8.3.11 (2024-10-29)
 
 * [bitnami/external-dns] fix: secret not getting created when pihole password value is set ([#30114](https://github.com/bitnami/charts/pull/30114))
 
