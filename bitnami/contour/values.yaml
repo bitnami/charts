@@ -1316,6 +1316,14 @@ envoy:
     minAvailable: ""
     maxUnavailable: ""
 
+## @section Gateway API parameters
+##
+
+gatewayAPI:
+  ## @param gatewayAPI.manageCRDs Manage the creation, upgrade and deletion of Gateway API CRDs.
+  ##
+  manageCRDs: false
+
 ## @section Default backend parameters
 ##
 
