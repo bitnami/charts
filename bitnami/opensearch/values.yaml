@@ -3448,8 +3448,8 @@ snapshots:
   ##
   fullnameOverride: ""
   ## Bitnami OpenSearch Snapshots image
-  ## @param snapshots.image.registry OpenSearch Snapshots image registry
-  ## @param snapshots.image.repository OpenSearch Snapshots image repository
+  ## @param snapshots.image.registry [default: REGISTRY_NAME] OpenSearch Snapshots image registry
+  ## @param snapshots.image.repository [default: REPOSITORY_NAME/os-shell] OpenSearch Snapshots image repository
   ## @skip snapshots.image.tag OpenSearch Snapshots image tag (immutable tags are recommended)
   ## @param snapshots.image.digest OpenSearch Snapshots image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param snapshots.image.pullPolicy OpenSearch Snapshots image pull policy
