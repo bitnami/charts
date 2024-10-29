@@ -58,8 +58,10 @@ Return the Tomcat credential secret name
 Get the tomcat-username key.
 */}}
 {{- define "tomcat.adminUsernameKey" -}}
-{{- if .Values.secretKeys.adminUsernameKey -}}
-  {{- printf "%s" (tpl .Values.secretKeys.adminUsernameKey $) -}}
+{{- if and .Values.existingSecret .Values.secretKeys.adminUsernameKey -}}
+    {{- printf "%s" (tpl .Values.secretKeys.adminUsernameKey $) -}}
+{{- else -}}
+    {{- "tomcat-username" -}}
 {{- end -}}
 {{- end -}}
 

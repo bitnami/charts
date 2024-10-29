@@ -77,16 +77,11 @@ containers:
     env:
       - name: BITNAMI_DEBUG
         value: {{ ternary "true" "false" .Values.image.debug | quote }}
-      {{- if and .Values.existingSecret .Values.secretKeys.adminUsernameKey }}
       - name: TOMCAT_USERNAME
         valueFrom:
           secretKeyRef:
             name: {{ include "tomcat.secretName" . }}
             key: {{ include "tomcat.adminUsernameKey" . }}
-      {{- else }}
-      - name: TOMCAT_USERNAME
-        value: {{ .Values.tomcatUsername | quote }}
-      {{- end }}
       - name: TOMCAT_PASSWORD
         valueFrom:
           secretKeyRef:

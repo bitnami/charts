@@ -103,10 +103,10 @@ tomcatUsername: user
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/tomcat#creating-a-custom-user
 ##
 tomcatPassword: ""
-## @param existingSecret Use existing secret for credentials details (`tomcatPassword` will be ignored and picked up from this secret. `tomcatUsername` might be ignored depending of provided `adminUsernameKey` value).
+## @param existingSecret Use existing secret for credentials details (`tomcatUsername` and `tomcatPassword` will be ignored and picked up from this secret).
 ##
 existingSecret: ""
-## @param secretKeys.adminUsernameKey Name of key in existing secret to use for Tomcat admin username (overrides `tomcatUsername` if not empty). Only used when `existingSecret` is set.
+## @param secretKeys.adminUsernameKey Name of key in existing secret to use for Tomcat admin username (overrides `tomcatUsername`). Only used when `existingSecret` is set.
 ## @param secretKeys.adminPasswordKey Name of key in existing secret to use for Tomcat admin password (overrides `tomcatPassword`). Only used when `existingSecret` is set.
 ##
 secretKeys:
