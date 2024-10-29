@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.0.0 (2024-10-02)
+## 20.0.1 (2024-10-29)
 
-* [bitnami/airflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29727](https://github.com/bitnami/charts/pull/29727))
+* [bitnami/airflow] fix: redis service name ([#30117](https://github.com/bitnami/charts/pull/30117))
+
+## 20.0.0 (2024-10-03)
+
+* [bitnami/airflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29727) ([f70e935](https://github.com/bitnami/charts/commit/f70e93590e1f9247332f76d25abf81f562d8eb1f)), closes [#29727](https://github.com/bitnami/charts/issues/29727)
 
 ## <small>19.0.10 (2024-09-23)</small>
 
