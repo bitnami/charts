@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0 (2024-10-28)
+## 3.0.0 (2024-10-29)
 
 * [bitnami/scylladb] Release 3.0.0 ([#30111](https://github.com/bitnami/charts/pull/30111))
 
