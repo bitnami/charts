@@ -7,13 +7,13 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "common.names.fullname" . }}-password-rotate
+  name: {{ include "common.names.fullname" . }}-password-update
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: mariadb
-    app.kubernetes.io/component: rotate-job
+    app.kubernetes.io/component: update-job
   {{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "hook-succeeded" }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
@@ -24,7 +24,7 @@ spec:
       {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.passwordUpdateJob.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: mariadb
-        app.kubernetes.io/component: rotate-job
+        app.kubernetes.io/component: update-job
       {{- if .Values.passwordUpdateJob.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -114,12 +114,12 @@ spec:
             - name: MARIADB_PREVIOUS_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mariadb.rotate-job.previousSecretName" . }}
+                  name: {{ template "mariadb.update-job.previousSecretName" . }}
                   key: mariadb-root-password
             - name: MARIADB_NEW_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mariadb.rotate-job.newSecretName" . }}
+                  name: {{ template "mariadb.update-job.newSecretName" . }}
                   key: mariadb-root-password
             {{- end }}
             {{- if not (empty .Values.auth.username) }}
@@ -129,12 +129,12 @@ spec:
             - name: MARIADB_PREVIOUS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mariadb.rotate-job.previousSecretName" . }}
+                  name: {{ template "mariadb.update-job.previousSecretName" . }}
                   key: mariadb-password
             - name: MARIADB_NEW_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mariadb.rotate-job.newSecretName" . }}
+                  name: {{ template "mariadb.update-job.newSecretName" . }}
                   key: mariadb-password
             {{- end }}
             {{- end }}
@@ -145,12 +145,12 @@ spec:
             - name: MARIADB_PREVIOUS_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mariadb.rotate-job.previousSecretName" . }}
+                  name: {{ template "mariadb.update-job.previousSecretName" . }}
                   key: mariadb-replication-password
             - name: MARIADB_NEW_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mariadb.rotate-job.newSecretName" . }}
+                  name: {{ template "mariadb.update-job.newSecretName" . }}
                   key: mariadb-replication-password
             {{- end }}
             {{- end }}
@@ -204,7 +204,7 @@ spec:
         {{- if and .Values.auth.usePasswordFiles }}
         - name: mariadb-previous-credentials
           secret:
-            secretName: {{ template "mariadb.rotate-job.previousSecretName" . }}
+            secretName: {{ template "mariadb.update-job.previousSecretName" . }}
             items:
               - key: mariadb-root-password
                 path: MARIADB_PREVIOUS_ROOT_PASSWORD
@@ -216,7 +216,7 @@ spec:
               {{- end }}
         - name: mariadb-new-credentials
           secret:
-            secretName: {{ template "mariadb.rotate-job.newSecretName" . }}
+            secretName: {{ template "mariadb.update-job.newSecretName" . }}
             items:
               - key: mariadb-root-password
                 path: MARIADB_NEW_ROOT_PASSWORD

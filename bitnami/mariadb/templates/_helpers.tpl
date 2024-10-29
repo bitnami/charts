@@ -124,7 +124,7 @@ Return the secret with MariaDB credentials
 {{/*
 Return the secret with previous MariaDB credentials
 */}}
-{{- define "mariadb.rotate-job.previousSecretName" -}}
+{{- define "mariadb.update-job.previousSecretName" -}}
     {{- if .Values.passwordUpdateJob.previousPasswords.existingSecret -}}
         {{- /* The new secret is managed externally */ -}}
         {{- tpl .Values.passwordUpdateJob.previousPasswords.existingSecret $ -}}
@@ -140,7 +140,7 @@ Return the secret with previous MariaDB credentials
 {{/*
 Return the secret with previous MariaDB credentials
 */}}
-{{- define "mariadb.rotate-job.newSecretName" -}}
+{{- define "mariadb.update-job.newSecretName" -}}
     {{- if and (not .Values.passwordUpdateJob.previousPasswords.existingSecret) (not .Values.passwordUpdateJob.previousPasswords.rootPassword) -}}
         {{- /* The new secret managed by the helm chart. We create a new secret as the current one has the old password */ -}}
         {{- printf "%s-new-secret" (include "common.names.fullname" .) -}}
