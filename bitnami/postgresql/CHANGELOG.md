@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.7 (2024-10-28)
+## 16.0.7 (2024-10-29)
 
 * [bitnami/postgresql] Added support for `namespaceOverride` ([#30113](https://github.com/bitnami/charts/pull/30113))
 
