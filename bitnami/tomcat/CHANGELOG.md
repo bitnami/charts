@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.3.0 (2024-10-28)
+## 11.3.0 (2024-10-29)
 
 * [bitnami/tomcat] Make existing secret key names choosable. Allow tomcat username to be set from secret ([#30080](https://github.com/bitnami/charts/pull/30080))
 
