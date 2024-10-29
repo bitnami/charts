@@ -59,7 +59,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -84,7 +84,7 @@ prometheus.additionalScrapeConfigs.external.name=kube-prometheus-prometheus-scra
 prometheus.additionalScrapeConfigs.external.key=additional-scrape-configs.yaml
 ```
 
-It is also possible to define scrape configuratios to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
+It is also possible to define scrape configurations to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
 
 ```text
 prometheus.additionalScrapeConfigs.enabled=true
@@ -481,6 +481,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.thanos.extraArgs`                                         | Additional arguments passed to the thanos sidecar container                                                                                                                                                                                           | `[]`                         |
 | `prometheus.thanos.objectStorageConfig.secretName`                    | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                                                                                                                                       | `""`                         |
 | `prometheus.thanos.objectStorageConfig.secretKey`                     | Secret key with the configuration file.                                                                                                                                                                                                               | `thanos.yaml`                |
+| `prometheus.thanos.extraEnvVars`                                      | Array with extra environment variables to add to the thanos sidecar container                                                                                                                                                                         | `[]`                         |
+| `prometheus.thanos.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for the thanos sidecar container                                                                                                                                                                 | `""`                         |
+| `prometheus.thanos.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for the thanos sidecar container                                                                                                                                                                    | `""`                         |
 | `prometheus.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `prometheus.volumes` for thanos sidecar container                                                                                                                                                                        | `[]`                         |
 | `prometheus.thanos.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.thanos.resources is set (prometheus.thanos.resources is recommended for production). | `nano`                       |
 | `prometheus.thanos.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                         |

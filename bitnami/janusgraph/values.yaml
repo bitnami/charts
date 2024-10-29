@@ -179,10 +179,9 @@ javaOptions: ""
 image:
   registry: docker.io
   repository: bitnami/janusgraph
-  tag: 1.0.0-debian-12-r10
+  tag: 1.0.0-debian-12-r17
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -637,10 +636,9 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/jmx-exporter
-    tag: 1.0.1-debian-12-r5
+    tag: 1.0.1-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -840,7 +838,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r26
+    tag: 12-debian-12-r31
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -944,6 +942,17 @@ networkPolicy:
 ## Controlled by value storageBackend.cassandra.enabled
 ##
 cassandra:
+  ## Override Cassandra default image as version 5.0 is not supported
+  ## @param cassandra.image.registry [default: REGISTRY_NAME] Cassandra image registry
+  ## @param cassandra.image.repository [default: REPOSITORY_NAME/cassandra] Cassandra image repository
+  ## @skip cassandra.image.tag Cassandra image tag (immutable tags are recommended)
+  ## @param cassandra.image.digest Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/cassandra
+    tag: 4.1.7-debian-12-r0
+    digest: ""
   ## @param cassandra.keyspace Name for cassandra's janusgraph keyspace
   ##
   keyspace: "bitnami_janusgraph"

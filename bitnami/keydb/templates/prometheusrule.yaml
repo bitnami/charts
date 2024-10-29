@@ -1,0 +1,24 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.metrics.enabled .Values.metrics.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.prometheusRule.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.metrics.prometheusRule.labels .Values.commonLabels) "context" .) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: keydb
+  {{- if or .Values.metrics.prometheusRule.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.metrics.prometheusRule.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    - name: {{ include "common.names.fullname" . }}
+      rules: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.prometheusRule.rules "context" $ ) | nindent 8 }}
+{{- end }}

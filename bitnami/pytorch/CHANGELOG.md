@@ -1,8 +1,32 @@
 # Changelog
 
-## 4.2.13 (2024-07-25)
+## 4.2.19 (2024-10-16)
 
-* [bitnami/pytorch] Release 4.2.13 ([#28510](https://github.com/bitnami/charts/pull/28510))
+* [bitnami/pytorch] Remove wrong entries from image verification ([#29916](https://github.com/bitnami/charts/pull/29916))
+
+## <small>4.2.18 (2024-09-19)</small>
+
+* [bitnami/pytorch] Release 4.2.18 (#29516) ([6d40617](https://github.com/bitnami/charts/commit/6d4061783e317fd6bdb13116bb694f3d200684f2)), closes [#29516](https://github.com/bitnami/charts/issues/29516)
+
+## <small>4.2.17 (2024-09-15)</small>
+
+* [bitnami/pytorch] Release 4.2.17 (#29426) ([5450664](https://github.com/bitnami/charts/commit/54506646c21bf39541a3eb6af8fdf74ffc71689d)), closes [#29426](https://github.com/bitnami/charts/issues/29426)
+
+## <small>4.2.16 (2024-09-11)</small>
+
+* [bitnami/pytorch] fix: add apiVersion and kind to volumeClaimTemplates (#29359) ([8b9888e](https://github.com/bitnami/charts/commit/8b9888e143016cec0fa028ac42b1c98696181c29)), closes [#29359](https://github.com/bitnami/charts/issues/29359)
+
+## <small>4.2.15 (2024-09-06)</small>
+
+* [bitnami/pytorch] Release 4.2.15 (#29271) ([9749d0c](https://github.com/bitnami/charts/commit/9749d0c7529d79c1e4fb264672c76626ad329e80)), closes [#29271](https://github.com/bitnami/charts/issues/29271)
+
+## <small>4.2.14 (2024-08-24)</small>
+
+* [bitnami/pytorch] Release 4.2.14 (#29013) ([e075c08](https://github.com/bitnami/charts/commit/e075c0899c20e0bb4709a318e24f7d02673bd37c)), closes [#29013](https://github.com/bitnami/charts/issues/29013)
+
+## <small>4.2.13 (2024-07-25)</small>
+
+* [bitnami/pytorch] Release 4.2.13 (#28510) ([e9d407c](https://github.com/bitnami/charts/commit/e9d407ce90216f5324e6be1a6175fdfef264753d)), closes [#28510](https://github.com/bitnami/charts/issues/28510)
 
 ## <small>4.2.12 (2024-07-25)</small>
 

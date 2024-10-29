@@ -1,8 +1,32 @@
 # Changelog
 
-## 6.2.11 (2024-08-13)
+## 6.2.17 (2024-10-16)
 
-* [bitnami/aspnet-core] Release 6.2.11 ([#28867](https://github.com/bitnami/charts/pull/28867))
+* [bitnami/aspnet-core] Remove wrong entries from image verification ([#29912](https://github.com/bitnami/charts/pull/29912))
+
+## <small>6.2.16 (2024-10-08)</small>
+
+* [bitnami/aspnet-core] Release 6.2.16 (#29825) ([bf9676c](https://github.com/bitnami/charts/commit/bf9676c5a8a7b8db2da364ed1a01ee66cd38d7e3)), closes [#29825](https://github.com/bitnami/charts/issues/29825)
+
+## <small>6.2.15 (2024-09-19)</small>
+
+* [bitnami/aspnet-core] Release 6.2.15 (#29505) ([ee09a07](https://github.com/bitnami/charts/commit/ee09a0792e3840df8d2d9d371b32711297f00879)), closes [#29505](https://github.com/bitnami/charts/issues/29505)
+
+## <small>6.2.14 (2024-09-15)</small>
+
+* [bitnami/aspnet-core] Release 6.2.14 (#29421) ([4d81639](https://github.com/bitnami/charts/commit/4d81639d55d1015131f20c7a8f5b514543456de4)), closes [#29421](https://github.com/bitnami/charts/issues/29421)
+
+## <small>6.2.13 (2024-09-14)</small>
+
+* [bitnami/aspnet-core] Release 6.2.13 (#29415) ([4647a68](https://github.com/bitnami/charts/commit/4647a68eb4989a2de365965dcb0606f9fe838363)), closes [#29415](https://github.com/bitnami/charts/issues/29415)
+
+## <small>6.2.12 (2024-09-14)</small>
+
+* [bitnami/aspnet-core] Release 6.2.12 (#29407) ([0f0b73d](https://github.com/bitnami/charts/commit/0f0b73d6455d83615d9e2f0e3a8eb6824b177397)), closes [#29407](https://github.com/bitnami/charts/issues/29407)
+
+## <small>6.2.11 (2024-08-13)</small>
+
+* [bitnami/aspnet-core] Release 6.2.11 (#28867) ([9792545](https://github.com/bitnami/charts/commit/97925459f3b3e61114fec96bf3395b8a26af5f15)), closes [#28867](https://github.com/bitnami/charts/issues/28867)
 
 ## <small>6.2.10 (2024-07-25)</small>
 

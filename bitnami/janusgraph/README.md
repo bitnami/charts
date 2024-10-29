@@ -314,12 +314,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Cassandra storage sub-chart
 
-| Name                          | Description                                             | Value                |
-| ----------------------------- | ------------------------------------------------------- | -------------------- |
-| `cassandra.keyspace`          | Name for cassandra's janusgraph keyspace                | `bitnami_janusgraph` |
-| `cassandra.dbUser.user`       | Cassandra admin user                                    | `bn_janusgraph`      |
-| `cassandra.dbUser.password`   | Password for `dbUser.user`. Randomly generated if empty | `""`                 |
-| `cassandra.service.ports.cql` | Cassandra cql port                                      | `9043`               |
+| Name                          | Description                                                                                               | Value                       |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `cassandra.image.registry`    | Cassandra image registry                                                                                  | `REGISTRY_NAME`             |
+| `cassandra.image.repository`  | Cassandra image repository                                                                                | `REPOSITORY_NAME/cassandra` |
+| `cassandra.image.digest`      | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
+| `cassandra.keyspace`          | Name for cassandra's janusgraph keyspace                                                                  | `bitnami_janusgraph`        |
+| `cassandra.dbUser.user`       | Cassandra admin user                                                                                      | `bn_janusgraph`             |
+| `cassandra.dbUser.password`   | Password for `dbUser.user`. Randomly generated if empty                                                   | `""`                        |
+| `cassandra.service.ports.cql` | Cassandra cql port                                                                                        | `9043`                      |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
@@ -344,7 +347,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/janus
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

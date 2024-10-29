@@ -112,7 +112,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "oci") .Values.oci.privateKeyFingerprint (not .Values.oci.secretName) -}}
+{{- else if and (eq .Values.provider "oci") (or .Values.oci.privateKeyFingerprint .Values.oci.useWorkloadIdentity) (not .Values.oci.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") (or .Values.rfc2136.tsigSecret (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword)) (not .Values.rfc2136.secretName) -}}
     {{- true -}}
@@ -473,7 +473,7 @@ external-dns: pdns.apiKey
 {{- define "external-dns.checkRollingTags" -}}
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html
++info https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html
 {{- end }}
 {{- end -}}
 

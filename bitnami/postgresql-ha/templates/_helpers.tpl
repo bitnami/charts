@@ -304,6 +304,22 @@ Return the database to use for repmgr
 {{- end -}}
 
 {{/*
+Return true if the PostgreSQL credential secret has a separate entry for the postgres user
+*/}}
+{{- define "postgresql-ha.postgresqlSeparatePostgresPassword" -}}
+{{- if (include "postgresql-ha.postgresqlCreateSecret" .) -}}
+    {{- if and (include "postgresql-ha.postgresqlPostgresPassword" .) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) -}}
+        {{- true -}}
+    {{- end -}}
+{{- else -}}
+    {{- $pgSecret := index (lookup "v1" "Secret" (include "common.names.namespace" .) (include "postgresql-ha.postgresqlSecretName" .)) "data" -}}
+    {{- if and $pgSecret (index $pgSecret "postgres-password") -}}
+        {{- true -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a secret object should be created for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresqlCreateSecret" -}}
@@ -587,12 +603,21 @@ postgresql-ha: Upgrade repmgr extension
 {{- end -}}
 {{- end -}}
 
-{{/* Set PGPASSWORD as environment variable depends on configuration */}}
+{{/* Set PostgreSQL PGPASSWORD as environment variable depends on configuration */}}
 {{- define "postgresql-ha.pgpassword" -}}
 {{- if .Values.postgresql.usePasswordFile -}}
 PGPASSWORD=$(< $POSTGRES_PASSWORD_FILE)
 {{- else -}}
 PGPASSWORD=$POSTGRES_PASSWORD
+{{- end -}}
+{{- end -}}
+
+{{/* Set Pgpool PGPASSWORD as environment variable depends on configuration */}}
+{{- define "postgresql-ha.pgpoolPostgresPassword" -}}
+{{- if .Values.postgresql.usePasswordFile -}}
+PGPASSWORD=$(< $PGPOOL_POSTGRES_PASSWORD_FILE)
+{{- else -}}
+PGPASSWORD=$PGPOOL_POSTGRES_PASSWORD
 {{- end -}}
 {{- end -}}
 

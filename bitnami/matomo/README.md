@@ -53,7 +53,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -381,6 +381,8 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.taskScheduler.serviceAccountName`                                | Attach serviceAccountName to the pod of the CronJob                                                               | `""`             |
+| `cronjobs.taskScheduler.automountServiceAccountToken`                      | Mount Service Account token in pod of the CronJob                                                                 | `true`           |
 | `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                                                               | `false`          |
 | `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                                                               | `{}`             |
 | `cronjobs.taskScheduler.nodeSelector`                                      | Node labels for CronJob pod assignment. Evaluated as a template.                                                  | `{}`             |
@@ -410,6 +412,8 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.taskScheduler.extraEnvVars`                                      | Extra environment variables for the taskScheduler CronJob                                                         | `[]`             |
 | `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.archive.serviceAccountName`                                      | Attach serviceAccountName to the pod of the CronJob                                                               | `""`             |
+| `cronjobs.archive.automountServiceAccountToken`                            | Mount Service Account token in pod of the CronJob                                                                 | `true`           |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                                                               | `false`          |
 | `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                                                               | `{}`             |
 | `cronjobs.archive.tolerations`                                             | Tolerations for CronJob pod assignment                                                                            | `[]`             |

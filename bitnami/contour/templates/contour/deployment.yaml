@@ -111,7 +111,12 @@ spec:
             - --ingress-status-address={{ .Values.contour.ingressStatusAddress }}
             {{- else }}
             - --envoy-service-namespace={{ default .Release.Namespace .Values.contour.envoyServiceNamespace }}
-            - --envoy-service-name={{ default (printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") .Values.contour.envoyServiceName }}
+            {{- $envoyServiceName := coalesce .Values.envoy.service.name .Values.contour.envoyServiceName }}
+            {{- if .Values.envoy.service.multiAz.enabled }}
+            - --envoy-service-name={{ default (printf "%s-%s-envoy" (include "common.names.fullname" .) (index .Values.envoy.service.multiAz.zones 0).name | trunc 63 | trimSuffix "-")  $envoyServiceName }}
+            {{- else }}
+            - --envoy-service-name={{ default (printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") $envoyServiceName }}
+            {{- end }}
             {{- end }}
             - --leader-election-resource-name={{ default (printf "%s-%s" (include "common.names.namespace" .) (printf "%s-contour" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-")) .Values.contour.leaderElectionResourceName }}
             {{- if .Values.contour.debug }}

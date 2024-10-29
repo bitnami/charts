@@ -70,10 +70,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 5.1.1-debian-12-r1
+  tag: 5.1.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -747,7 +746,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r27
+    tag: 12-debian-12-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -798,7 +797,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.8-debian-12-r7
+    tag: 1.0.9-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -880,10 +879,9 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r27
+    tag: 12-debian-12-r30
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -963,6 +961,12 @@ cronjobs:
     ## @param cronjobs.taskScheduler.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
+    ## @param cronjobs.taskScheduler.serviceAccountName Attach serviceAccountName to the pod of the CronJob
+    ##
+    serviceAccountName: ""
+    ## @param cronjobs.taskScheduler.automountServiceAccountToken Mount Service Account token in pod of the CronJob
+    ##
+    automountServiceAccountToken: true
     ## @param cronjobs.taskScheduler.suspend Whether to create suspended CronJob
     ##
     suspend: false
@@ -1062,6 +1066,12 @@ cronjobs:
     ## @param cronjobs.archive.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
+    ## @param cronjobs.archive.serviceAccountName Attach serviceAccountName to the pod of the CronJob
+    ##
+    serviceAccountName: ""
+    ## @param cronjobs.archive.automountServiceAccountToken Mount Service Account token in pod of the CronJob
+    ##
+    automountServiceAccountToken: true
     ## @param cronjobs.archive.suspend Whether to create suspended CronJob
     ##
     suspend: false

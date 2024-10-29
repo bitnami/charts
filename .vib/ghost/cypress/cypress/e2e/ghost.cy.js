@@ -14,7 +14,7 @@ it('allows to create and publish a new post with an image', () => {
     cy.get('textarea[placeholder="Post title"]').type(
       `${posts.newPost.title}-${random}`
     );
-    cy.get('div[contenteditable="true"]').type(posts.newPost.content, {
+    cy.get('div[contenteditable="true"]').first().type(posts.newPost.content, {
       force: true,
     });
     cy.get('[type="file"]').selectFile(

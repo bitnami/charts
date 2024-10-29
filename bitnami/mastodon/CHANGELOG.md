@@ -1,8 +1,33 @@
 # Changelog
 
-## 7.0.3 (2024-08-22)
+## 9.0.1 (2024-10-21)
 
-* [bitnami/mastodon] Release 7.0.3 ([#28973](https://github.com/bitnami/charts/pull/28973))
+* [bitnami/mastodon] Release 9.0.1 ([#30019](https://github.com/bitnami/charts/pull/30019))
+
+## 9.0.0 (2024-10-17)
+
+* [bitnami/mastodon] feat!: :sparkles: :boom: :recycle: Bump appVersion to 4.3 and refactor init conta ([ef3176d](https://github.com/bitnami/charts/commit/ef3176d2a3241029d9e825f2527802144a9ebe0d)), closes [#29900](https://github.com/bitnami/charts/issues/29900)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 8.0.0 (2024-10-03)
+
+* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29739) ([2be9de6](https://github.com/bitnami/charts/commit/2be9de659f83dc24dcbbffe1d4dd67fd4a4320bb)), closes [#29739](https://github.com/bitnami/charts/issues/29739)
+
+## <small>7.0.6 (2024-09-30)</small>
+
+* [bitnami/mastodon] Release 7.0.6 (#29672) ([dddf994](https://github.com/bitnami/charts/commit/dddf994e3793539769ffe28ec9c7f961a8711a19)), closes [#29672](https://github.com/bitnami/charts/issues/29672)
+
+## <small>7.0.5 (2024-09-19)</small>
+
+* [bitnami/mastodon] Release 7.0.5 (#29524) ([87ff268](https://github.com/bitnami/charts/commit/87ff26881dc0fe0741dd88bb6513834a56c4ad65)), closes [#29524](https://github.com/bitnami/charts/issues/29524)
+
+## <small>7.0.4 (2024-08-23)</small>
+
+* [bitnami/mastodon] Release 7.0.4 (#29009) ([0865037](https://github.com/bitnami/charts/commit/086503709d05f40bf7f881d4f8d55b7248b2e694)), closes [#29009](https://github.com/bitnami/charts/issues/29009)
+
+## <small>7.0.3 (2024-08-22)</small>
+
+* [bitnami/mastodon] Release 7.0.3 (#28973) ([f4c3d49](https://github.com/bitnami/charts/commit/f4c3d494201bb09dd721466fb3ba9d8d66f9eeff)), closes [#28973](https://github.com/bitnami/charts/issues/28973)
 
 ## <small>7.0.2 (2024-08-19)</small>
 

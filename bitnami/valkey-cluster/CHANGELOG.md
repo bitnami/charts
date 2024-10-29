@@ -1,8 +1,37 @@
 # Changelog
 
-## 0.1.9 (2024-08-14)
+## 2.0.0 (2024-10-23)
 
-* [bitnami/valkey-cluster] Fix env-vars for metrics container ([#28885](https://github.com/bitnami/charts/pull/28885))
+* [bitnami/valkey-cluster] Update all the references from  to master/slave to primary/replica ([#30025](https://github.com/bitnami/charts/pull/30025))
+
+## <small>1.0.3 (2024-10-22)</small>
+
+* [bitnami/valkey-cluster] Release 1.0.3 (#30047) ([66979a1](https://github.com/bitnami/charts/commit/66979a1de5d865b84e614737f9a0c6955d3cccc0)), closes [#30047](https://github.com/bitnami/charts/issues/30047)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.0.2 (2024-10-03)</small>
+
+* [bitnami/valkey-cluster] Release 1.0.2 (#29769) ([6d4a548](https://github.com/bitnami/charts/commit/6d4a5487c8b744fe4219bbf4acec6698939ca885)), closes [#29769](https://github.com/bitnami/charts/issues/29769)
+
+## <small>1.0.1 (2024-09-26)</small>
+
+* [bitnami/valkey-cluster] the redis_url for redis_exporter should use rediss/redis scheme, not valkey ([ab5bc91](https://github.com/bitnami/charts/commit/ab5bc9156d158b0808ead47d7d67cf5704ed37ec)), closes [#29589](https://github.com/bitnami/charts/issues/29589)
+
+## 1.0.0 (2024-09-16)
+
+* [bitnami/valkey-cluster] Release 1.0.0 (#29450) ([a6c84c2](https://github.com/bitnami/charts/commit/a6c84c2362b2577ce78ead825292e6037e1a2c13)), closes [#29450](https://github.com/bitnami/charts/issues/29450)
+
+## <small>0.1.11 (2024-09-09)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.11 (#29314) ([237b54e](https://github.com/bitnami/charts/commit/237b54eeb8fe80287e0b7a3749dac88db79b7733)), closes [#29314](https://github.com/bitnami/charts/issues/29314)
+
+## <small>0.1.10 (2024-08-28)</small>
+
+* [bitnami/valkey-cluster] test: :white_check_mark: Improve ginkgo tests reliability (#29080) ([8d4a3ba](https://github.com/bitnami/charts/commit/8d4a3baa33536661caa577bf32219823e937018b)), closes [#29080](https://github.com/bitnami/charts/issues/29080)
+
+## <small>0.1.9 (2024-08-19)</small>
+
+* [bitnami/valkey-cluster] Fix env-vars for metrics container (#28885) ([1df2599](https://github.com/bitnami/charts/commit/1df2599056ee021039b91c7e6af3f37f086ebc27)), closes [#28885](https://github.com/bitnami/charts/issues/28885)
 
 ## <small>0.1.8 (2024-07-31)</small>
 

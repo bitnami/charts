@@ -103,10 +103,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 25.0.4-debian-12-r1
+  tag: 26.0.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -166,7 +165,7 @@ tls:
   ##
   existingSecret: ""
   ## @param tls.usePem Use PEM certificates as input instead of PKS12/JKS stores
-  ## If "true", the Keycloak chart will look for the files keycloak.key and keycloak.crt inside the secret provided with 'existingSecret'.
+  ## If "true", the Keycloak chart will look for the files tls.key and tls.crt inside the secret provided with 'existingSecret'.
   ##
   usePem: false
   ## @param tls.truststoreFilename Truststore filename inside the existing secret
@@ -182,6 +181,7 @@ tls:
   ##
   truststorePassword: ""
   ## @param tls.passwordsSecret Secret containing the Keystore and Truststore passwords.
+  ## The secret must have "tls-keystore-password" and "tls-truststore-password" keys for the keystore and truststore respectively.
   ##
   passwordsSecret: ""
 ## SPI TLS settings
@@ -202,6 +202,7 @@ spi:
   ##
   truststoreFilename: "keycloak-spi.truststore.jks"
   ## @param spi.passwordsSecret Secret containing the SPI Truststore passwords.
+  ## The secret must have "spi-truststore-password" key.
   ##
   passwordsSecret: ""
   ## @param spi.hostnameVerificationPolicy Verify the hostname of the server's certificate. Allowed values: "ANY", "WILDCARD", "STRICT".
@@ -1111,10 +1112,9 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 6.1.6-debian-12-r0
+    tag: 6.1.6-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1301,6 +1301,7 @@ keycloakConfigCli:
 ## @param postgresql.auth.password Password for the custom user to create
 ## @param postgresql.auth.database Name for a custom database to create
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+## @param postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
 ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 postgresql:
@@ -1311,6 +1312,8 @@ postgresql:
     password: ""
     database: bitnami_keycloak
     existingSecret: ""
+    secretKeys:
+      userPasswordKey: password
   architecture: standalone
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false

@@ -1,8 +1,25 @@
 # Changelog
 
-## 0.1.9 (2024-07-25)
+## 0.1.13 (2024-10-28)
 
-* [bitnami/dremio] Release 0.1.9 ([#28486](https://github.com/bitnami/charts/pull/28486))
+* [bitnami/dremio] Release 0.1.13 ([#30103](https://github.com/bitnami/charts/pull/30103))
+
+## <small>0.1.12 (2024-10-25)</small>
+
+* [bitnami/dremio] Release 0.1.12 (#29923) ([1a2772d](https://github.com/bitnami/charts/commit/1a2772d6dd5343f96652bdc7e8d948e1a48884ce)), closes [#29923](https://github.com/bitnami/charts/issues/29923)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>0.1.11 (2024-08-29)</small>
+
+* [bitnami/dremio] Release 0.1.11 (#29112) ([1473bc8](https://github.com/bitnami/charts/commit/1473bc826abe517fb51d0c18513d3c23dab65422)), closes [#29112](https://github.com/bitnami/charts/issues/29112)
+
+## <small>0.1.10 (2024-08-29)</small>
+
+* [bitnami/dremio] Release 0.1.10 (#29110) ([93489b1](https://github.com/bitnami/charts/commit/93489b17f70ce8b5bdfd2338099d3a84dbe8708a)), closes [#29110](https://github.com/bitnami/charts/issues/29110)
+
+## <small>0.1.9 (2024-07-25)</small>
+
+* [bitnami/dremio] Release 0.1.9 (#28486) ([55975e8](https://github.com/bitnami/charts/commit/55975e8a9a58d7901657631ac19af3fcda1ac0c8)), closes [#28486](https://github.com/bitnami/charts/issues/28486)
 
 ## <small>0.1.8 (2024-07-24)</small>
 

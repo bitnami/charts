@@ -87,10 +87,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.15.1-debian-12-r0
+  tag: 2.17.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -117,7 +116,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.46.0-debian-12-r0
+  tag: 2.47.0-debian-12-r1
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -233,7 +232,7 @@ tracking:
   ## @param tracking.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param tracking.containerSecurityContext.privileged Set containers' Security Context privileged
   ## @param tracking.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param tracking.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param tracking.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context readOnlyRootFilesystem
   ## @param tracking.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
   ## @param tracking.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ## @param tracking.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
@@ -1210,7 +1209,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r27
+    tag: 12-debian-12-r32
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1259,7 +1258,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r27
+    tag: 12-debian-12-r32
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -1395,6 +1394,7 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
+
 ## @section External S3 parameters
 ## All of these values are only used when minio.enabled is set to false
 ## @param externalS3.host External S3 host. When using AWS S3, include appropriate [regional code](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region), e.g. "eu-central-1.amazonaws.com
@@ -1420,4 +1420,21 @@ externalS3:
   existingSecretKeySecretKey: "root-password"
   protocol: "https"
   bucket: "mlflow"
+  serveArtifacts: true
+
+## @section External Google Cloud Storage parameters
+## All of these values are only used when minio.enabled is set to false and externalS3 is not configured (host is empty)
+## @param externalGCS.bucket GCS bucket name. Activate gcs artifact storage if set
+## @param externalGCS.googleCloudProject Google Cloud Project to use (optional, needed when using "default application credentials")
+## @param externalGCS.useCredentialsInSecret Whether to read the GCS application credentials from a secret
+## @param externalGCS.existingSecret Name of an existing secret key containing the application credentials file (required when useCredentialsInSecret is true)
+## @param externalGCS.existingSecretKey Key in the existing secret containing the application credentials (required when useCredentialsInSecret is true)
+## @param externalGCS.serveArtifacts Whether artifact serving is enabled
+##
+externalGCS:
+  bucket: ""
+  googleCloudProject: ""
+  useCredentialsInSecret: false
+  existingSecret: ""
+  existingSecretKey: ""
   serveArtifacts: true

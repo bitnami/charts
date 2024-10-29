@@ -1,8 +1,37 @@
 # Changelog
 
-## 11.2.17 (2024-08-22)
+## 11.2.24 (2024-10-26)
 
-* [bitnami/tomcat] Release 11.2.17 ([#28982](https://github.com/bitnami/charts/pull/28982))
+* [bitnami/tomcat] Release 11.2.24 ([#30092](https://github.com/bitnami/charts/pull/30092))
+
+## <small>11.2.23 (2024-10-17)</small>
+
+* [bitnami/tomcat] Release 11.2.23 (#29960) ([d76f36c](https://github.com/bitnami/charts/commit/d76f36c8ba13c8fecd1ad695e7b8a14f47deee63)), closes [#29960](https://github.com/bitnami/charts/issues/29960)
+
+## <small>11.2.22 (2024-10-16)</small>
+
+* [bitnami/tomcat] Release 11.2.22 (#29937) ([5559a58](https://github.com/bitnami/charts/commit/5559a58ac027d23ac1100f807dc9616fa6853ea4)), closes [#29937](https://github.com/bitnami/charts/issues/29937)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.2.21 (2024-09-17)</small>
+
+* [bitnami/tomcat] Release 11.2.21 (#29485) ([0285e87](https://github.com/bitnami/charts/commit/0285e874e95cb490542b889370f2c1a3210c9f99)), closes [#29485](https://github.com/bitnami/charts/issues/29485)
+
+## <small>11.2.20 (2024-09-11)</small>
+
+* [bitnami/tomcat] fix: add apiVersion and kind to volumeClaimTemplates (#29355) ([88102b4](https://github.com/bitnami/charts/commit/88102b45f29a947812c1befa17d47568dddb31a0)), closes [#29355](https://github.com/bitnami/charts/issues/29355)
+
+## <small>11.2.19 (2024-09-11)</small>
+
+* [bitnami/tomcat] Release 11.2.19 (#29350) ([1001ff7](https://github.com/bitnami/charts/commit/1001ff70482ef27aa9184c15b3cac9c42871cecc)), closes [#29350](https://github.com/bitnami/charts/issues/29350)
+
+## <small>11.2.18 (2024-08-26)</small>
+
+* [bitnami/tomcat] Release 11.2.18 (#29024) ([3076a98](https://github.com/bitnami/charts/commit/3076a98a108652f161e3d11072c0dd56cc8a7f26)), closes [#29024](https://github.com/bitnami/charts/issues/29024)
+
+## <small>11.2.17 (2024-08-22)</small>
+
+* [bitnami/tomcat] Release 11.2.17 (#28982) ([73aba0b](https://github.com/bitnami/charts/commit/73aba0b224393ef425ca92aebbe46235904016ba)), closes [#28982](https://github.com/bitnami/charts/issues/28982)
 
 ## <small>11.2.16 (2024-08-07)</small>
 

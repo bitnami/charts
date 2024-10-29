@@ -6,18 +6,18 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kong
-      image: docker.io/bitnami/kong:3.7.1-debian-12-r7
+      image: docker.io/bitnami/kong:3.8.0-debian-12-r8
     - name: kong-ingress-controller
-      image: docker.io/bitnami/kong-ingress-controller:3.2.4-debian-12-r0
+      image: docker.io/bitnami/kong-ingress-controller:3.3.1-debian-12-r5
     - name: postgresql
-      image: docker.io/bitnami/postgresql:14.13.0-debian-12-r2
+      image: docker.io/bitnami/postgresql:14.13.0-debian-12-r19
 apiVersion: v2
-appVersion: 3.7.1
+appVersion: 3.8.0
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -26,7 +26,7 @@ dependencies:
 - condition: cassandra.enabled
   name: cassandra
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 11.x.x
+  version: 12.x.x
 description: Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
@@ -45,4 +45,4 @@ maintainers:
 name: kong
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kong
-version: 12.2.11
+version: 14.0.3

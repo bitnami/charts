@@ -1,8 +1,20 @@
 # Changelog
 
-## 11.1.15 (2024-08-07)
+## 11.1.19 (2024-10-16)
 
-* [bitnami/mysql] Include database in service binding secret when using root user ([#28693](https://github.com/bitnami/charts/pull/28693))
+* [bitnami/mysql] Release 11.1.19 ([#29929](https://github.com/bitnami/charts/pull/29929))
+
+## <small>11.1.17 (2024-09-17)</small>
+
+* [bitnami/mysql] test: :white_check_mark: Improve reliability of ginkgo tests (#29470) ([a233966](https://github.com/bitnami/charts/commit/a233966beb176cddf29dfe71f19228873bd99bac)), closes [#29470](https://github.com/bitnami/charts/issues/29470)
+
+## <small>11.1.16 (2024-09-03)</small>
+
+* [bitnami/mysql] Release 11.1.16 (#29168) ([27551d7](https://github.com/bitnami/charts/commit/27551d76ef425175540319c9f14fef8e09530a0c)), closes [#29168](https://github.com/bitnami/charts/issues/29168)
+
+## <small>11.1.15 (2024-08-07)</small>
+
+* [bitnami/mysql] Include database in service binding secret when using root user (#28693) ([c93c50a](https://github.com/bitnami/charts/commit/c93c50a16e77320c87d242b8f63b1e7c843401ef)), closes [#28693](https://github.com/bitnami/charts/issues/28693) [#28627](https://github.com/bitnami/charts/issues/28627)
 
 ## <small>11.1.14 (2024-07-25)</small>
 

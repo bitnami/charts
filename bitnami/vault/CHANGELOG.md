@@ -1,8 +1,40 @@
 # Changelog
 
-## 1.4.18 (2024-08-08)
+## 1.4.26 (2024-10-09)
 
-* [bitnami/vault] Release 1.4.18 ([#28781](https://github.com/bitnami/charts/pull/28781))
+* [bitnami/vault] Release 1.4.26 ([#29839](https://github.com/bitnami/charts/pull/29839))
+
+## <small>1.4.25 (2024-10-02)</small>
+
+* [bitnami/vault] Release 1.4.25 (#29721) ([692d7a2](https://github.com/bitnami/charts/commit/692d7a2287c4fe16692384f80064e368e8c5e44a)), closes [#29721](https://github.com/bitnami/charts/issues/29721)
+
+## <small>1.4.24 (2024-10-02)</small>
+
+* [bitnami/vault] Fix documentation in README.md (#29665) ([3cf178a](https://github.com/bitnami/charts/commit/3cf178a2d8ba3d6002ed076044b221f548b5e868)), closes [#29665](https://github.com/bitnami/charts/issues/29665)
+
+## <small>1.4.23 (2024-09-26)</small>
+
+* [bitnami/vault] Release 1.4.23 (#29608) ([155118f](https://github.com/bitnami/charts/commit/155118f32248d78de3dbee0412c0350bccf849c2)), closes [#29608](https://github.com/bitnami/charts/issues/29608)
+
+## <small>1.4.22 (2024-09-11)</small>
+
+* [bitnami/vault] fix: add apiVersion and kind to volumeClaimTemplates (#29353) ([e870d71](https://github.com/bitnami/charts/commit/e870d71f3b5f8bb0c5ed174cdaca739af4aaa83b)), closes [#29353](https://github.com/bitnami/charts/issues/29353)
+
+## <small>1.4.21 (2024-09-06)</small>
+
+* [bitnami/vault] Release 1.4.21 (#29269) ([bb12732](https://github.com/bitnami/charts/commit/bb1273268ea62c2cd2604fc96744f0afef421b78)), closes [#29269](https://github.com/bitnami/charts/issues/29269)
+
+## <small>1.4.20 (2024-08-31)</small>
+
+* [bitnami/vault] Release 1.4.20 (#29140) ([7134ec1](https://github.com/bitnami/charts/commit/7134ec1db9fa5b1e9dcf04a131c09f17f1f21f1c)), closes [#29140](https://github.com/bitnami/charts/issues/29140)
+
+## <small>1.4.19 (2024-08-29)</small>
+
+* [bitnami/vault] Release 1.4.19 (#29115) ([94f3eaf](https://github.com/bitnami/charts/commit/94f3eaf77153071646f392ae5e142eee08ca04c6)), closes [#29115](https://github.com/bitnami/charts/issues/29115)
+
+## <small>1.4.18 (2024-08-08)</small>
+
+* [bitnami/vault] Release 1.4.18 (#28781) ([ef9ddad](https://github.com/bitnami/charts/commit/ef9ddadb67fa4346667842b54e32108179fa344b)), closes [#28781](https://github.com/bitnami/charts/issues/28781)
 
 ## <small>1.4.17 (2024-08-07)</small>
 

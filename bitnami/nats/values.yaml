@@ -76,10 +76,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.10.18-debian-12-r3
+  tag: 2.10.22-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -235,6 +234,7 @@ configuration: |-
   write_deadline: {{ .Values.writeDeadline | quote }}
   {{- end }}
 
+  {{- if gt (int .Values.replicaCount) 1 }}
   # Clustering definition
   cluster {
     name: {{ .Values.cluster.name | quote }}
@@ -262,6 +262,7 @@ configuration: |-
     connect_retries: {{ .Values.cluster.connectRetries }}
     {{- end }}
   }
+  {{- end }}
 
   {{- if .Values.jetstream.enabled }}
   # JetStream configuration
@@ -813,7 +814,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.15.0-debian-12-r11
+    tag: 0.15.0-debian-12-r15
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -940,6 +941,19 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
+## Persistent Volume Claim Retention Policy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+##
+persistentVolumeClaimRetentionPolicy:
+  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for NATS statefulset
+  ##
+  enabled: false
+  ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ##
+  whenScaled: Retain
+  ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  whenDeleted: Retain
 ## @section Other parameters
 
 ## NATS Pod Disruption Budget configuration

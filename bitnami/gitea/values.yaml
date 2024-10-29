@@ -70,10 +70,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/gitea
-  tag: 1.22.1-debian-12-r8
+  tag: 1.22.3-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -744,7 +743,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r27
+    tag: 12-debian-12-r31
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

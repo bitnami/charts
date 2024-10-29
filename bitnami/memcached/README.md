@@ -49,7 +49,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -223,6 +223,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `terminationGracePeriodSeconds`                     | In seconds, time the given to the memcached pod needs to terminate gracefully                                                                                                                                     | `""`             |
 | `updateStrategy.type`                               | Memcached statefulset strategy type                                                                                                                                                                               | `RollingUpdate`  |
 | `updateStrategy.rollingUpdate`                      | Memcached statefulset rolling update configuration parameters                                                                                                                                                     | `{}`             |
+| `emptyDir.medium`                                   | Override emptyDir Volume type, defaults to emptyDir: {}                                                                                                                                                           | `""`             |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for the Memcached pod(s)                                                                                                                                      | `[]`             |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Memcached container(s)                                                                                                                           | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the Memcached pod(s)                                                                                                                                                         | `[]`             |

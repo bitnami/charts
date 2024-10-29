@@ -1,8 +1,56 @@
 # Changelog
 
-## 20.0.3 (2024-08-20)
+## 20.2.1 (2024-10-15)
 
-* [bitnami/redis] Release 20.0.3 ([#28941](https://github.com/bitnami/charts/pull/28941))
+* [bitnami/redis] Fix preExecCmds parameter ([#29898](https://github.com/bitnami/charts/pull/29898))
+
+## 20.2.0 (2024-10-09)
+
+* [bitnami/redis] add extraPodSpec (#29725) ([0d2b826](https://github.com/bitnami/charts/commit/0d2b8269e0e5c1a287fcd8e44c623afa6311e761)), closes [#29725](https://github.com/bitnami/charts/issues/29725)
+
+## <small>20.1.7 (2024-10-02)</small>
+
+* [bitnami/redis] Release 20.1.7 (#29756) ([bc01e03](https://github.com/bitnami/charts/commit/bc01e03cea20cd93fdd43a4fece348aabb3f1ea4)), closes [#29756](https://github.com/bitnami/charts/issues/29756)
+
+## <small>20.1.6 (2024-10-02)</small>
+
+* [bitnami/redis] adds kind & apiVersion for pvc template in statefulset (#29678) ([13212d2](https://github.com/bitnami/charts/commit/13212d218c0eea9d60a3b9d08f8d5ca1b5951d74)), closes [#29678](https://github.com/bitnami/charts/issues/29678)
+
+## <small>20.1.5 (2024-09-26)</small>
+
+* [bitnami/redis] - fix additionalEndpoints in servicemonitor (#29595) ([6e674ff](https://github.com/bitnami/charts/commit/6e674ff9f082dc60676e4451917400a48c05a6ad)), closes [#29595](https://github.com/bitnami/charts/issues/29595)
+
+## <small>20.1.4 (2024-09-19)</small>
+
+* [bitnami/redis] Release 20.1.4 (#29530) ([8053b1a](https://github.com/bitnami/charts/commit/8053b1a13272f5485ca5c6ec0ace6741cf202262)), closes [#29530](https://github.com/bitnami/charts/issues/29530)
+
+## <small>20.1.3 (2024-09-14)</small>
+
+* [bitnami/redis] Release 20.1.3 (#29411) ([b0b5c88](https://github.com/bitnami/charts/commit/b0b5c88f48cbb67d367121d92cf44afd5ddb424f)), closes [#29411](https://github.com/bitnami/charts/issues/29411)
+
+## <small>20.1.2 (2024-09-13)</small>
+
+* [bitnami/redis] Use common password manager to handle password (#29376) ([6ec3657](https://github.com/bitnami/charts/commit/6ec365736a61521aeb8f44d475420bf529f7f1fd)), closes [#29376](https://github.com/bitnami/charts/issues/29376)
+
+## <small>20.1.1 (2024-09-13)</small>
+
+* [bitnami/redis] fix: move variable from annotation to label (#29209) ([396fa01](https://github.com/bitnami/charts/commit/396fa01503a29a5c4695073ed9e6bde1923b187b)), closes [#29209](https://github.com/bitnami/charts/issues/29209)
+
+## 20.1.0 (2024-09-09)
+
+* [bitnami/redis] Support extraEnvVars on volume-permissions for dynamic subfolders (#29195) ([b33ff20](https://github.com/bitnami/charts/commit/b33ff200f4710173de48581071bc132d09618594)), closes [#29195](https://github.com/bitnami/charts/issues/29195)
+
+## <small>20.0.5 (2024-09-05)</small>
+
+* [bitnami/redis] label slave pod using sentinel masterService (#29121) ([6ae397f](https://github.com/bitnami/charts/commit/6ae397fb40ff4af6a578c54911f96383e30fed96)), closes [#29121](https://github.com/bitnami/charts/issues/29121)
+
+## <small>20.0.4 (2024-09-04)</small>
+
+* [bitnami/redis] update values.schema.json (#29106) ([8a2fea3](https://github.com/bitnami/charts/commit/8a2fea3d935989fc929092083e3af341d4eb545f)), closes [#29106](https://github.com/bitnami/charts/issues/29106)
+
+## <small>20.0.3 (2024-08-20)</small>
+
+* [bitnami/redis] Release 20.0.3 (#28941) ([d2a1abb](https://github.com/bitnami/charts/commit/d2a1abbba3a6125260c2df569ef060e165be88fa)), closes [#28941](https://github.com/bitnami/charts/issues/28941)
 
 ## <small>20.0.2 (2024-08-14)</small>
 

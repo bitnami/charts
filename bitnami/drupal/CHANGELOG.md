@@ -1,8 +1,48 @@
 # Changelog
 
-## 20.0.1 (2024-08-22)
+## 20.0.11 (2024-10-23)
 
-* [bitnami/drupal] Release 20.0.1 ([#28965](https://github.com/bitnami/charts/pull/28965))
+* [bitnami/drupal] Release 20.0.11 ([#30057](https://github.com/bitnami/charts/pull/30057))
+
+## <small>20.0.10 (2024-10-09)</small>
+
+* [bitnami/drupal] Release 20.0.10 (#29842) ([a781e77](https://github.com/bitnami/charts/commit/a781e775554f74ae029d2e2bb3a3758a5871ad33)), closes [#29842](https://github.com/bitnami/charts/issues/29842)
+
+## <small>20.0.9 (2024-10-03)</small>
+
+* [bitnami/drupal] Release 20.0.9 (#29760) ([7811272](https://github.com/bitnami/charts/commit/7811272b7e19eb908077cfc533b3098ff7be3a98)), closes [#29760](https://github.com/bitnami/charts/issues/29760)
+
+## <small>20.0.8 (2024-10-01)</small>
+
+* [bitnami/drupal] templates/ingress.yaml: fix wrong www.www tls name (#29564) ([1eca3e6](https://github.com/bitnami/charts/commit/1eca3e6fd6543df2775265a19cccab9e549b202d)), closes [#29564](https://github.com/bitnami/charts/issues/29564)
+
+## <small>20.0.7 (2024-09-19)</small>
+
+* [bitnami/drupal] Release 20.0.7 (#29515) ([cfcfb7f](https://github.com/bitnami/charts/commit/cfcfb7fd7ae06eb0f766a71230bafb788893bc3c)), closes [#29515](https://github.com/bitnami/charts/issues/29515)
+
+## <small>20.0.6 (2024-09-17)</small>
+
+* [bitnami/drupal] Release 20.0.6 (#29486) ([20f086c](https://github.com/bitnami/charts/commit/20f086c05eb4887baaec9173be5ea0d89bfcb3e4)), closes [#29486](https://github.com/bitnami/charts/issues/29486)
+
+## <small>20.0.5 (2024-09-12)</small>
+
+* [bitnami/drupal] Release 20.0.5 (#29384) ([6621c14](https://github.com/bitnami/charts/commit/6621c14db7381b042a98fb024ec3fd9613431f92)), closes [#29384](https://github.com/bitnami/charts/issues/29384)
+
+## <small>20.0.4 (2024-09-06)</small>
+
+* [bitnami/drupal] Release 20.0.4 (#29286) ([cc775b8](https://github.com/bitnami/charts/commit/cc775b8b4889f3a393e7d39ed20feecc4221b9b2)), closes [#29286](https://github.com/bitnami/charts/issues/29286)
+
+## <small>20.0.3 (2024-09-06)</small>
+
+* [bitnami/drupal] Release 20.0.3 (#29283) ([bd9d1b2](https://github.com/bitnami/charts/commit/bd9d1b2d6f05498ae7e61e28e7cc1f45076a29e9)), closes [#29283](https://github.com/bitnami/charts/issues/29283)
+
+## <small>20.0.2 (2024-09-05)</small>
+
+* [bitnami/drupal] Release 20.0.2 (#29222) ([c9daacb](https://github.com/bitnami/charts/commit/c9daacbab47a8d7bf8185c8bc0cca237accd9d9a)), closes [#29222](https://github.com/bitnami/charts/issues/29222)
+
+## <small>20.0.1 (2024-08-22)</small>
+
+* [bitnami/drupal] Release 20.0.1 (#28965) ([0490b9c](https://github.com/bitnami/charts/commit/0490b9c70cfc28df4bc9993eaae36cd58ba11337)), closes [#28965](https://github.com/bitnami/charts/issues/28965)
 
 ## 20.0.0 (2024-08-13)
 

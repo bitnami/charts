@@ -49,7 +49,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -337,14 +337,17 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Persistence parameters
 
-| Name                       | Description                                                         | Value               |
-| -------------------------- | ------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`      | Enable NATS data persistence using PVC(s)                           | `false`             |
-| `persistence.storageClass` | PVC Storage Class for NATS data volume                              | `""`                |
-| `persistence.accessModes`  | PVC Access modes                                                    | `["ReadWriteOnce"]` |
-| `persistence.size`         | PVC Storage Request for NATS data volume                            | `8Gi`               |
-| `persistence.annotations`  | Annotations for the PVC                                             | `{}`                |
-| `persistence.selector`     | Selector to match an existing Persistent Volume for NATS's data PVC | `{}`                |
+| Name                                               | Description                                                                    | Value               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------- |
+| `persistence.enabled`                              | Enable NATS data persistence using PVC(s)                                      | `false`             |
+| `persistence.storageClass`                         | PVC Storage Class for NATS data volume                                         | `""`                |
+| `persistence.accessModes`                          | PVC Access modes                                                               | `["ReadWriteOnce"]` |
+| `persistence.size`                                 | PVC Storage Request for NATS data volume                                       | `8Gi`               |
+| `persistence.annotations`                          | Annotations for the PVC                                                        | `{}`                |
+| `persistence.selector`                             | Selector to match an existing Persistent Volume for NATS's data PVC            | `{}`                |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for NATS statefulset                 | `false`             |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced | `Retain`            |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted         | `Retain`            |
 
 ### Other parameters
 

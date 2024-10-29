@@ -1,8 +1,24 @@
 # Changelog
 
-## 7.2.15 (2024-08-21)
+## 8.0.0 (2024-10-02)
 
-* [bitnami/juypterhub] postgres image missing when postgres is disabled (fluxCD/argoCD) ([#28841](https://github.com/bitnami/charts/pull/28841))
+* [bitnami/jupyterhub] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29734](https://github.com/bitnami/charts/pull/29734))
+
+## <small>7.2.18 (2024-09-30)</small>
+
+* [bitnami/jupyterhub] Release 7.2.18 (#29655) ([f7d0390](https://github.com/bitnami/charts/commit/f7d0390059a17e17d6d0e5b0d9fc2f2d6aa4f2c2)), closes [#29655](https://github.com/bitnami/charts/issues/29655)
+
+## <small>7.2.17 (2024-08-28)</small>
+
+* [bitnami/jupyterhub] Fix indents of singleuser extra volumes & mounts for #24458 (#29032) ([0592bba](https://github.com/bitnami/charts/commit/0592bbaa59bc68adbd322d4cc3101249d582fde9)), closes [#24458](https://github.com/bitnami/charts/issues/24458) [#29032](https://github.com/bitnami/charts/issues/29032)
+
+## <small>7.2.16 (2024-08-24)</small>
+
+* [bitnami/jupyterhub] Release 7.2.16 (#29014) ([eaa5262](https://github.com/bitnami/charts/commit/eaa526250ca6eafe1ed19f78c81a5544c46ba1c8)), closes [#29014](https://github.com/bitnami/charts/issues/29014)
+
+## <small>7.2.15 (2024-08-23)</small>
+
+* [bitnami/juypterhub] postgres image missing when postgres is disabled (fluxCD/argoCD) (#28841) ([079ff70](https://github.com/bitnami/charts/commit/079ff70f37743a8711ad750eac6b0b9f5dab1e10)), closes [#28841](https://github.com/bitnami/charts/issues/28841)
 
 ## <small>7.2.14 (2024-07-31)</small>
 

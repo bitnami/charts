@@ -1,8 +1,44 @@
 # Changelog
 
-## 15.7.21 (2024-08-19)
+## 15.8.0 (2024-10-15)
 
-* [bitnami/thanos] Update index cache config for sharded store gateway ([#28747](https://github.com/bitnami/charts/pull/28747))
+* [bitnami/thanos] Add compactor dataDir setting ([#29856](https://github.com/bitnami/charts/pull/29856))
+
+## <small>15.7.29 (2024-10-14)</small>
+
+* [bitnami/thanos] Add customAutoScaling flag (#29849) ([6cf283d](https://github.com/bitnami/charts/commit/6cf283dcd11068207dfad8aa61bd9f614b2634b5)), closes [#29849](https://github.com/bitnami/charts/issues/29849)
+
+## <small>15.7.28 (2024-10-08)</small>
+
+* [bitnami/thanos] Revert #29673 (#29763) ([0e20117](https://github.com/bitnami/charts/commit/0e201170447506913aa97713a769732baaf3802b)), closes [#29673](https://github.com/bitnami/charts/issues/29673) [#29763](https://github.com/bitnami/charts/issues/29763)
+
+## <small>15.7.27 (2024-10-02)</small>
+
+* [bitnami/thanos] Release 15.7.27 (#29720) ([cd99907](https://github.com/bitnami/charts/commit/cd999075fe633956019ac142dd7965deba5aea09)), closes [#29720](https://github.com/bitnami/charts/issues/29720)
+
+## <small>15.7.26 (2024-10-02)</small>
+
+* [bitnami/thanos] Fix serviceNames based on additionalHeadless (#29673) ([418a890](https://github.com/bitnami/charts/commit/418a890c3210947ff9e1aa9d75ba0fb611681b45)), closes [#29673](https://github.com/bitnami/charts/issues/29673)
+
+## <small>15.7.25 (2024-09-06)</small>
+
+* [bitnami/thanos] Release 15.7.25 (#29260) ([254365c](https://github.com/bitnami/charts/commit/254365c371be4c7bc6ee0fcc50647c5aab6ab5df)), closes [#29260](https://github.com/bitnami/charts/issues/29260)
+
+## <small>15.7.24 (2024-09-05)</small>
+
+* [bitnami/thanos] Added apiVersion and kind to volumeClaimTemplates (#29200) ([44aca55](https://github.com/bitnami/charts/commit/44aca5511b5522cae34d1f22df6755571cdc9929)), closes [#29200](https://github.com/bitnami/charts/issues/29200) [#29178](https://github.com/bitnami/charts/issues/29178)
+
+## <small>15.7.23 (2024-08-27)</small>
+
+* [bitnami/thanos] Release 15.7.23 (#29068) ([9ed3b18](https://github.com/bitnami/charts/commit/9ed3b1881f42b9058c89555ec6b52f521a52045b)), closes [#29068](https://github.com/bitnami/charts/issues/29068)
+
+## <small>15.7.22 (2024-08-27)</small>
+
+* add custom relabel config while thanos storegateway hash shard (#28969) ([10a31bd](https://github.com/bitnami/charts/commit/10a31bdbf51328190ec3eebc269a780448f62e53)), closes [#28969](https://github.com/bitnami/charts/issues/28969)
+
+## <small>15.7.21 (2024-08-20)</small>
+
+* [bitnami/thanos] Update index cache config for sharded store gateway (#28747) ([f7caac5](https://github.com/bitnami/charts/commit/f7caac595cb3278bf69f8a5897003f864b8af172)), closes [#28747](https://github.com/bitnami/charts/issues/28747)
 
 ## <small>15.7.20 (2024-08-13)</small>
 

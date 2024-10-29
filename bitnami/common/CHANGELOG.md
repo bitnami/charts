@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.22.0 (2024-08-07)
+## 2.26.0 (2024-10-14)
 
-* [bitnami/common] Fallback to chart appVersion in common.images.image ([#28764](https://github.com/bitnami/charts/pull/28764))
+* [bitnami/common] Drop unused custom empty password validators ([#29432](https://github.com/bitnami/charts/pull/29432))
+
+## 2.24.0 (2024-10-03)
+
+* [bitnami/common] Add common.tplvalues.merge-overwrite helper (#29668) ([611b2a5](https://github.com/bitnami/charts/commit/611b2a59e06feaac878b3b218fd848a687216158)), closes [#29668](https://github.com/bitnami/charts/issues/29668)
+
+## 2.23.0 (2024-09-13)
+
+* [bitnami/common] Add option to remove empty seLinuxOptions from securityContext in non OpenShift env ([7e44e64](https://github.com/bitnami/charts/commit/7e44e64626f5b1fc6d56889cdfdeadc1f62c7cf1)), closes [#28945](https://github.com/bitnami/charts/issues/28945)
+
+## 2.22.0 (2024-08-08)
+
+* [bitnami/common] Fallback to chart appVersion in common.images.image (#28764) ([b4aa0a6](https://github.com/bitnami/charts/commit/b4aa0a685a21c50ca10e41e3eb2023bbd4282cf7)), closes [#28764](https://github.com/bitnami/charts/issues/28764)
 
 ## 2.21.0 (2024-08-05)
 

@@ -1,8 +1,36 @@
 # Changelog
 
-## 1.2.11 (2024-08-07)
+## 1.2.18 (2024-10-02)
 
-* [bitnami/kuberay] Release 1.2.11 ([#28726](https://github.com/bitnami/charts/pull/28726))
+* [bitnami/kuberay] Release 1.2.18 ([#29703](https://github.com/bitnami/charts/pull/29703))
+
+## <small>1.2.17 (2024-09-29)</small>
+
+* [bitnami/kuberay] Release 1.2.17 (#29651) ([6635179](https://github.com/bitnami/charts/commit/6635179dc8b474d583c22337d3f076b9a5b7631d)), closes [#29651](https://github.com/bitnami/charts/issues/29651)
+
+## <small>1.2.16 (2024-09-06)</small>
+
+* [bitnami/kuberay] Release 1.2.16 (#29245) ([a7faa67](https://github.com/bitnami/charts/commit/a7faa6703781d406d18cd92b81dad24f12cfc260)), closes [#29245](https://github.com/bitnami/charts/issues/29245)
+
+## <small>1.2.15 (2024-09-05)</small>
+
+* [bitnami/kuberay] Release 1.2.15 (#29220) ([5f595ef](https://github.com/bitnami/charts/commit/5f595ef89c1cb323f252d81e6b56e57ffc31b199)), closes [#29220](https://github.com/bitnami/charts/issues/29220)
+
+## <small>1.2.14 (2024-09-05)</small>
+
+* [bitnami/kuberay] Release 1.2.14 (#29143) ([df1a61b](https://github.com/bitnami/charts/commit/df1a61ba9ed6c7e7ceacb67c24ce8ee456668861)), closes [#29143](https://github.com/bitnami/charts/issues/29143)
+
+## <small>1.2.13 (2024-08-27)</small>
+
+* [bitnami/kuberay] Release 1.2.13 (#29066) ([8206354](https://github.com/bitnami/charts/commit/82063541e28ad12c93228eaf911efd9a0562da01)), closes [#29066](https://github.com/bitnami/charts/issues/29066)
+
+## <small>1.2.12 (2024-08-23)</small>
+
+* [bitnami/kuberay] Release 1.2.12 (#29000) ([3f938b9](https://github.com/bitnami/charts/commit/3f938b946e4598c4059650ba97fb66525ad5f47f)), closes [#29000](https://github.com/bitnami/charts/issues/29000)
+
+## <small>1.2.11 (2024-08-07)</small>
+
+* [bitnami/kuberay] Release 1.2.11 (#28726) ([3b8ba77](https://github.com/bitnami/charts/commit/3b8ba775cab9bbd9f7a90402baea49e457c77039)), closes [#28726](https://github.com/bitnami/charts/issues/28726)
 
 ## <small>1.2.10 (2024-07-25)</small>
 

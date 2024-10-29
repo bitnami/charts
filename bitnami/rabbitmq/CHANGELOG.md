@@ -1,8 +1,45 @@
 # Changelog
 
-## 14.6.6 (2024-07-25)
+## 15.0.3 (2024-10-14)
 
-* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts ([#27900](https://github.com/bitnami/charts/pull/27900))
+* [bitnami/rabbitmq] Use common password/secrets manager to handle credentials ([#29879](https://github.com/bitnami/charts/pull/29879))
+
+## <small>15.0.2 (2024-10-07)</small>
+
+* [Bitnami/rabbitmq] - Fix duplicate key issue with Helm/FluxCD integration (#29780) ([cea9e6c](https://github.com/bitnami/charts/commit/cea9e6c9ea4b97b5ec48c5156d8d6c9fcd1ded13)), closes [#29780](https://github.com/bitnami/charts/issues/29780)
+
+## <small>15.0.1 (2024-09-25)</small>
+
+* [bitnami/rabbitmq] docs: :memo: Add upgrade notes for version 15.x.x ([012685d](https://github.com/bitnami/charts/commit/012685db9831eefe1a77be9122fbcdf5933198a1))
+* [bitnami/rabbitmq] Release 15.0.1 (#29600) ([f0bcc5c](https://github.com/bitnami/charts/commit/f0bcc5cb258b5329bcb6cacd998d4f4170d3b06a)), closes [#29600](https://github.com/bitnami/charts/issues/29600)
+
+## 15.0.0 (2024-09-20)
+
+* [bitnami/rabbitmq] Release 15.0.0 (#29555) ([595df29](https://github.com/bitnami/charts/commit/595df29e55c616de44a5f0794738bf7520e6eb58)), closes [#29555](https://github.com/bitnami/charts/issues/29555)
+
+## 14.7.0 (2024-09-12)
+
+* [bitnami/rabbitmq] Breaking out RabbitMQ metrics endpoints to configure separately (#28891) ([3b9cfe9](https://github.com/bitnami/charts/commit/3b9cfe99e23c485ea95bbeb128dc44961374d434)), closes [#28891](https://github.com/bitnami/charts/issues/28891)
+
+## <small>14.6.10 (2024-09-11)</small>
+
+* [bitnami/rabbitmq] Allow rendering resources values (#29347) ([7479317](https://github.com/bitnami/charts/commit/747931744d2242abe11ff29ea8f499ed292e731a)), closes [#29347](https://github.com/bitnami/charts/issues/29347)
+
+## <small>14.6.9 (2024-08-28)</small>
+
+* [bitnami/rabbitmq] Release 14.6.9 (#29092) ([711e2f7](https://github.com/bitnami/charts/commit/711e2f720d92e936b9a67bbdc269d57c33a9dca6)), closes [#29092](https://github.com/bitnami/charts/issues/29092)
+
+## <small>14.6.8 (2024-08-28)</small>
+
+* [bitnami/rabbitmq] Improve Ginkgo test (#29082) ([778a269](https://github.com/bitnami/charts/commit/778a269c23fd9e6534c3c15e85f016c38f498e81)), closes [#29082](https://github.com/bitnami/charts/issues/29082)
+
+## <small>14.6.7 (2024-08-26)</small>
+
+* [bitnami/rabbitmq] Release 14.6.7 (#29018) ([8eb9085](https://github.com/bitnami/charts/commit/8eb9085b47699e839bae9f0238a775c1d0b0dfa5)), closes [#29018](https://github.com/bitnami/charts/issues/29018)
+
+## <small>14.6.6 (2024-08-08)</small>
+
+* [bitnami/rabbitmq] Fix rabbitmq pods not being restarted after changing init scripts (#27900) ([95148a9](https://github.com/bitnami/charts/commit/95148a9ae1363f9da6415b64085aadfd8add1413)), closes [#27900](https://github.com/bitnami/charts/issues/27900)
 
 ## <small>14.6.5 (2024-07-25)</small>
 

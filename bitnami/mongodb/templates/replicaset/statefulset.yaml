@@ -143,7 +143,7 @@ spec:
             - -n {{ join "," ( concat .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames ) }}
             {{- end }}
           {{- if .Values.tls.resources }}
-          resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.tls.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -193,15 +193,13 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
-            - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.service.nameOverride" . }}"
             - name: MONGODB_INITIAL_PRIMARY_HOST
               value: {{ include "mongodb.initialPrimaryHost" . | quote }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ .Values.replicaSetName | quote }}
             {{- if and .Values.replicaSetHostnames (not .Values.externalAccess.enabled) }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+              value: "$(MY_POD_NAME).{{ include "mongodb.service.nameOverride" . }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- end }}
             {{- $customUsers := include "mongodb.customUsers" . -}}
             {{- $customDatabases := include "mongodb.customDatabases" . -}}
@@ -320,7 +318,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -457,7 +455,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}

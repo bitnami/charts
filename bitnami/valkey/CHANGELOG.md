@@ -1,8 +1,40 @@
 # Changelog
 
-## 0.3.15 (2024-08-19)
+## 2.0.0 (2024-10-23)
 
-* [bitnami/valkey] Fix env-vars for metrics container ([#28884](https://github.com/bitnami/charts/pull/28884))
+* [bitnami/valkey] Update all the references from to master/slave to primary/replica ([#30024](https://github.com/bitnami/charts/pull/30024))
+
+## <small>1.0.3 (2024-10-22)</small>
+
+* [bitnami/valkey] Release 1.0.3 (#30048) ([f843e7e](https://github.com/bitnami/charts/commit/f843e7ecb5b89b32e2245071bf1c910552dcb7a5)), closes [#30048](https://github.com/bitnami/charts/issues/30048)
+
+## <small>1.0.2 (2024-10-03)</small>
+
+* [bitnami/valkey] Release 1.0.2 (#29770) ([68a889f](https://github.com/bitnami/charts/commit/68a889fcb6dc21a275cfbad539c9fc1097912167)), closes [#29770](https://github.com/bitnami/charts/issues/29770)
+
+## <small>1.0.1 (2024-09-19)</small>
+
+* [bitnami/valkey] Release 1.0.1 (#29532) ([77709d5](https://github.com/bitnami/charts/commit/77709d5c1d7b621ce46e3ed92e0ec9ab2b560448)), closes [#29532](https://github.com/bitnami/charts/issues/29532)
+
+## 1.0.0 (2024-09-17)
+
+* [bitnami/valkey] Release 1.0.0 (#29482) ([ee769e6](https://github.com/bitnami/charts/commit/ee769e6a4f7383876fe64aaf625bad99923fb6e3)), closes [#29482](https://github.com/bitnami/charts/issues/29482)
+
+## <small>0.3.18 (2024-09-17)</small>
+
+* [bitnami/valkey] test: :white_check_mark: Improve reliability of ginkgo tests (#29474) ([4bccd45](https://github.com/bitnami/charts/commit/4bccd45d29911575dd7c8c7bb060f4abf036f822)), closes [#29474](https://github.com/bitnami/charts/issues/29474)
+
+## <small>0.3.17 (2024-09-14)</small>
+
+* [bitnami/valkey] Release 0.3.17 (#29413) ([0dd6ee7](https://github.com/bitnami/charts/commit/0dd6ee77dbc152583d6412260f801bfcefd3114d)), closes [#29413](https://github.com/bitnami/charts/issues/29413)
+
+## <small>0.3.16 (2024-09-11)</small>
+
+* [bitnami/valkey] Fix 404 in docs link (#29333) ([55b1d3d](https://github.com/bitnami/charts/commit/55b1d3deff6fb701459a532f5a40b59716f61fcf)), closes [#29333](https://github.com/bitnami/charts/issues/29333)
+
+## <small>0.3.15 (2024-08-19)</small>
+
+* [bitnami/valkey] Fix env-vars for metrics container (#28884) ([17ffafe](https://github.com/bitnami/charts/commit/17ffafe703df7a81853b3632e03e2af79dfb41f2)), closes [#28884](https://github.com/bitnami/charts/issues/28884)
 
 ## <small>0.3.14 (2024-08-14)</small>
 
