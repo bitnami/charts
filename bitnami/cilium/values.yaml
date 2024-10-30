@@ -129,7 +129,6 @@ agent:
     tag: 1.16.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1007,7 +1006,6 @@ operator:
     tag: 1.16.3-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1511,7 +1509,6 @@ envoy:
     tag: 1.29.9-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2109,7 +2106,6 @@ hubble:
       tag: 1.16.3-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -2703,7 +2699,6 @@ hubble:
         tag: 0.13.1-debian-12-r8
         digest: ""
         ## Specify a imagePullPolicy
-        ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
@@ -2884,7 +2879,6 @@ hubble:
         tag: 0.13.1-debian-12-r12
         digest: ""
         ## Specify a imagePullPolicy
-        ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent

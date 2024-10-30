@@ -8,7 +8,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
+  namespace: {{ coalesce .Values.metrics.prometheusRule.namespace (include "common.names.namespace" .) | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.prometheusRule.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: metrics
