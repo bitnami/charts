@@ -1,8 +1,18 @@
 # Changelog
 
-## 20.0.0 (2024-10-02)
+## 21.0.0 (2024-10-30)
 
-* [bitnami/airflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29727](https://github.com/bitnami/charts/pull/29727))
+* [bitnami/airflow] Use a single Airflow image ([#30137](https://github.com/bitnami/charts/pull/30137))
+
+## <small>20.0.1 (2024-10-30)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/airflow] Support `nameOverride` and `fullnameOverride` for internal Redis® (#30081) ([7adff78](https://github.com/bitnami/charts/commit/7adff78a8a1a855b7978f6e65417e84807a9b427)), closes [#30081](https://github.com/bitnami/charts/issues/30081)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 20.0.0 (2024-10-03)
+
+* [bitnami/airflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29727) ([f70e935](https://github.com/bitnami/charts/commit/f70e93590e1f9247332f76d25abf81f562d8eb1f)), closes [#29727](https://github.com/bitnami/charts/issues/29727)
 
 ## <small>19.0.10 (2024-09-23)</small>
 
