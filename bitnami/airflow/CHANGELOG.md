@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.0.1 (2024-10-28)
+## 20.0.1 (2024-10-30)
 
 * [bitnami/airflow] Support `nameOverride` and `fullnameOverride` for internal Redis® ([#30081](https://github.com/bitnami/charts/pull/30081))
 
