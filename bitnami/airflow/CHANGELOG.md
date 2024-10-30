@@ -1,8 +1,8 @@
 # Changelog
 
-## 21.0.0 (2024-10-30)
+## 20.0.2 (2024-10-30)
 
-* [bitnami/airflow] Use a single Airflow image ([#30137](https://github.com/bitnami/charts/pull/30137))
+* [bitnami/airflow] Release 20.0.2 ([#30138](https://github.com/bitnami/charts/pull/30138))
 
 ## <small>20.0.1 (2024-10-30)</small>
 
