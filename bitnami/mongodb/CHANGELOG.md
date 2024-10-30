@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.2.1 (2024-10-29)
+
+* [bitnami/mongodb] Fix render values of resources on log dir init container ([#30115](https://github.com/bitnami/charts/pull/30115))
+
 ## 16.2.0 (2024-10-28)
 
-* [bitnami/mongodb] fix: initial primary host variable for arbiter and hidden replicas ([#29584](https://github.com/bitnami/charts/pull/29584))
+* [bitnami/mongodb] fix: initial primary host variable for arbiter and hidden replicas (#29584) ([a1df969](https://github.com/bitnami/charts/commit/a1df96944f48ea2cde075396d235a07a6d7aa165)), closes [#29584](https://github.com/bitnami/charts/issues/29584)
 
 ## <small>16.1.1 (2024-10-25)</small>
 

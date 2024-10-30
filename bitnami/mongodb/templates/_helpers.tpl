@@ -267,7 +267,7 @@ Init container definition to change/establish volume permissions.
   securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
   {{- end }}
   {{- if .Values.volumePermissions.resources }}
-  resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
   {{- end }}
@@ -296,7 +296,7 @@ Init container definition to recover log dir.
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
   {{- end }}
   {{- if .Values.resources }}
-  resources: {{- toYaml .Values.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
   {{- end }}
@@ -324,7 +324,7 @@ Init container definition to get external IP addresses.
     - name: SHARED_FILE
       value: "/shared/info.txt"
   {{- if .Values.externalAccess.autoDiscovery.resources }}
-  resources: {{- toYaml .Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.externalAccess.autoDiscovery.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
   {{- end }}
