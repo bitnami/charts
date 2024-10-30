@@ -82,8 +82,8 @@ diagnosticMode:
 ## @param image.debug Enable image debug mode
 image:
   registry: docker.io
-  repository: juanariza131/airflow
-  tag: generic-np
+  repository: bitnami/airflow
+  tag: 2.10.2-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
