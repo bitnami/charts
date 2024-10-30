@@ -1,9 +1,5 @@
 # Changelog
 
-## 14.3.5 (2024-10-29)
-
-* [bitnami/postgresql-ha] fix POSTGRES_POSTGRES_PASSWORD env var when generating secrets ([#30106](https://github.com/bitnami/charts/pull/30106))
-
 ## <small>14.3.4 (2024-10-23)</small>
 
 * [bitnami/postgresql-ha] Fix pgpool default readinessProbe (#30028) ([49ad0af](https://github.com/bitnami/charts/commit/49ad0af9b7975aaa956f694455931a14ed7f20c8)), closes [#30028](https://github.com/bitnami/charts/issues/30028)

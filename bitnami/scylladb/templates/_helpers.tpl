@@ -288,3 +288,12 @@ WARNING: JVM New Heap Size not set in value jvm.newHeapSize. When not set, the c
      MAX(Memory Limit (if set) / 64, 256M)
 {{- end }}
 {{- end -}}
+
+{{/*
+Print warning if jmx is set
+*/}}
+{{- define "scylladb.warnings.jmx" -}}
+{{- if .Values.jmxProxy.enabled }}
+WARNING: scylla-jmx is an optional package and it is not installed by default from ScyllaDB 6.2. It will fail unless you use a previous or a custom version of the image including scylla-jmx.
+{{- end }}
+{{- end -}}

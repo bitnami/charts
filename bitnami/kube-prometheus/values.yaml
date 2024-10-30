@@ -78,7 +78,6 @@ operator:
     tag: 0.77.2-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1401,7 +1400,6 @@ prometheus:
       repository: bitnami/thanos
       tag: 0.36.1-debian-12-r3
       digest: ""
-      ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent

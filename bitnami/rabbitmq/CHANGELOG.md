@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.3 (2024-10-14)
+## 15.0.4 (2024-10-28)
 
-* [bitnami/rabbitmq] Use common password/secrets manager to handle credentials ([#29879](https://github.com/bitnami/charts/pull/29879))
+* [bitnami/rabbitmq] Allow missing memory limit when memoryHighWatermark is absolute ([#30079](https://github.com/bitnami/charts/pull/30079))
+
+## <small>15.0.3 (2024-10-14)</small>
+
+* [bitnami/rabbitmq] Use common password/secrets manager to handle credentials (#29879) ([456bfb2](https://github.com/bitnami/charts/commit/456bfb2a2762fb78e96ae09d55d82cfaacc74d45)), closes [#29879](https://github.com/bitnami/charts/issues/29879)
 
 ## <small>15.0.2 (2024-10-07)</small>
 

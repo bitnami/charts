@@ -51,7 +51,6 @@ image:
   ##
   debug: false
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -495,7 +494,9 @@ configuration: |-
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold
   ##
+  {{- if (dig "limits" "memory" "" .Values.resources) }}
   total_memory_available_override_value = {{ include "rabbitmq.toBytes" (dig "limits" "memory" "" .Values.resources) }}
+  {{- end }}
   {{- if (eq .Values.memoryHighWatermark.type "absolute") }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ include "rabbitmq.toBytes" .Values.memoryHighWatermark.value }}
   {{- else if (eq .Values.memoryHighWatermark.type "relative") }}
@@ -1563,7 +1564,6 @@ volumePermissions:
     tag: 12-debian-12-r30
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
