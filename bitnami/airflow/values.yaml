@@ -1953,9 +1953,9 @@ redis:
     password: ""
     existingSecret: ""
   architecture: standalone
-  ## @param redis.master.service.ports.redis Redis&reg; port
-  ##
   master:
+    ## @param redis.master.service.ports.redis Redis&reg; port
+    ##
     service:
       ports:
         redis: 6379
