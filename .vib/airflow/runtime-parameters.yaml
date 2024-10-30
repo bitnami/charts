@@ -1,7 +1,13 @@
 auth:
   password: ComplicatedPassword123!4
-loadExamples: true
 service:
   ports:
     http: 80
   type: LoadBalancer
+dags:
+  enabled: true
+  repositories:
+    - repository: https://github.com/apache/airflow
+      branch: main
+      name: examples
+      path: airflow/example_dags
