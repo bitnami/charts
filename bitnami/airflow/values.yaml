@@ -1221,9 +1221,13 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param worker.updateStrategy.type Airflow worker deployment strategy type
-  ## @param worker.updateStrategy.rollingUpdate Airflow worker deployment rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## @param worker.podManagementPolicy Pod management policy for the worker statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## @param worker.updateStrategy.type Airflow worker statefulset strategy type
+  ## @param worker.updateStrategy.rollingUpdate Airflow worker statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
@@ -1351,6 +1355,7 @@ worker:
 ## @param ldap.searchAttribute if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
 ## @param ldap.binddn DN of the account used to search in the LDAP server.
 ## @param ldap.bindpw Bind Password
+## @param ldap.existingSecret Name of an existing secret containing the LDAP bind password
 ## @param ldap.userRegistration Set to True to enable user self registration
 ## @param ldap.userRegistrationRole Set role name to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration
 ## @param ldap.rolesMapping mapping from LDAP DN to a list of roles
@@ -1363,6 +1368,7 @@ ldap:
   searchAttribute: "cn"
   binddn: "cn=admin,dc=example,dc=org"
   bindpw: ""
+  existingSecret: ""
   userRegistration: 'True'
   userRegistrationRole: "Public"
   rolesMapping: '{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }'
@@ -1735,14 +1741,27 @@ metrics:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
+  ## @param metrics.priorityClassName Airflow exporter pods' priorityClassName
+  ##
+  priorityClassName: ""
   ## @param metrics.tolerations Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param metrics.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
   ## @param metrics.schedulerName Name of the k8s scheduler (other than default) for Airflow exporter
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Airflow exporter pods
+  ##
+  extraVolumes: []
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow exporter containers
+  ##
+  extraVolumeMounts: []
   ## Airflow exporter service configuration
   ##
   service:
