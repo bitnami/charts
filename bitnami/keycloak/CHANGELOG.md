@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.2 (2024-10-24)
+## 24.0.3 (2024-10-31)
 
-* [bitnami/keycloak] Release 24.0.2 ([#30075](https://github.com/bitnami/charts/pull/30075))
+* [bitnami/keycloak] Release 24.0.3 ([#30147](https://github.com/bitnami/charts/pull/30147))
+
+## <small>24.0.2 (2024-10-24)</small>
+
+* [bitnami/keycloak] Release 24.0.2 (#30075) ([d86c1ee](https://github.com/bitnami/charts/commit/d86c1eedb774206f0eaeb191ad34551764be498b)), closes [#30075](https://github.com/bitnami/charts/issues/30075)
 
 ## <small>24.0.1 (2024-10-17)</small>
 
