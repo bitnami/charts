@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.45 (2024-10-28)
+## 21.1.46 (2024-10-31)
 
-* [bitnami/ghost] Release 21.1.45 ([#30104](https://github.com/bitnami/charts/pull/30104))
+* [bitnami/ghost] Release 21.1.46 ([#30150](https://github.com/bitnami/charts/pull/30150))
+
+## <small>21.1.45 (2024-10-28)</small>
+
+* [bitnami/ghost] Release 21.1.45 (#30104) ([a5afdbe](https://github.com/bitnami/charts/commit/a5afdbe173b219f39f03487275228266bb4a4b48)), closes [#30104](https://github.com/bitnami/charts/issues/30104)
 
 ## <small>21.1.44 (2024-10-28)</small>
 
