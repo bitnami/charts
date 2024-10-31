@@ -1,8 +1,8 @@
 # Changelog
 
-## 17.0.1 (2024-10-14)
+## 17.0.2 (2024-10-31)
 
-* [bitnami/kubeapps] Release 17.0.1 ([#29886](https://github.com/bitnami/charts/pull/29886))
+* [bitnami/kubeapps] Release 17.0.2 ([#30164](https://github.com/bitnami/charts/pull/30164))
 
 ## 17.0.0 (2024-10-03)
 
