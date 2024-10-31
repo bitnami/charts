@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.6.5 (2024-10-29)
+## 9.6.6 (2024-10-31)
 
-* [bitnami/kube-prometheus] Fix spec for thanos sidecar if no extraEnv is provided ([#30127](https://github.com/bitnami/charts/pull/30127))
+* [bitnami/kube-prometheus] Release 9.6.6 ([#30142](https://github.com/bitnami/charts/pull/30142))
+
+## <small>9.6.5 (2024-10-30)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kube-prometheus] Fix spec for thanos sidecar if no extraEnv is provided (#30127) ([74cd002](https://github.com/bitnami/charts/commit/74cd00208c7e9d093e8abd6e603547103b40d39c)), closes [#30127](https://github.com/bitnami/charts/issues/30127)
 
 ## <small>9.6.4 (2024-10-24)</small>
 
