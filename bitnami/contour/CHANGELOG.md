@@ -1,5 +1,9 @@
 # Changelog
 
+## 19.3.0 (2024-10-31)
+
+* [bitnami/contour] Add Gateway API CRDs ([#30166](https://github.com/bitnami/charts/pull/30166))
+
 ## 19.2.2 (2024-11-04)
 
 * [bitnami/contour] Release 19.2.2 ([#30198](https://github.com/bitnami/charts/pull/30198))
