@@ -69,8 +69,8 @@ spec:
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.createDefaultConfig" . | nindent 8 }}
-        {{- if or .Values.dags.enabled .Values.plugins.enabled }}
-        {{- include "airflow.defaultInitContainers.loadDAGsPlugins" . | nindent 8 }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
@@ -269,8 +269,8 @@ spec:
               mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
               readOnly: true
             {{- end }}
-            {{- if or .Values.dags.enabled .Values.plugins.enabled }}
-            {{- include "airflow.dagsPlugins.volumeMounts" . | nindent 12 }}
+            {{- if .Values.plugins.enabled }}
+            {{- include "airflow.plugins.volumeMounts" . | nindent 12 }}
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -278,8 +278,8 @@ spec:
             {{- if .Values.web.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-        {{- if or .Values.dags.enabled .Values.plugins.enabled }}
-        {{- include "airflow.defaultSidecars.syncDAGsPlugins" . | nindent 8 }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
@@ -290,11 +290,6 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.dags.enabled .Values.dags.existingConfigmap }}
-        - name: external-dags
-          configMap:
-            name: {{ tpl .Values.dags.existingConfigmap $ }}
-        {{- end }}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: custom-configuration-file
           configMap:
