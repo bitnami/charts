@@ -1,8 +1,13 @@
 # Changelog
 
-## 20.0.12 (2024-10-31)
+## 20.0.13 (2024-10-31)
 
-* [bitnami/drupal] Release 20.0.12 ([#30145](https://github.com/bitnami/charts/pull/30145))
+* [bitnami/drupal] Release 20.0.13 ([#30165](https://github.com/bitnami/charts/pull/30165))
+
+## <small>20.0.12 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/drupal] Release 20.0.12 (#30145) ([7e6d111](https://github.com/bitnami/charts/commit/7e6d111ee64254fc33e8491a0ac7df1b7340c9d5)), closes [#30145](https://github.com/bitnami/charts/issues/30145)
 
 ## <small>20.0.11 (2024-10-23)</small>
 
