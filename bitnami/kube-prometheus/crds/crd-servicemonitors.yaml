@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
-# Version: 0.77.2
+# Version: 0.78.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
-    operator.prometheus.io/version: 0.77.2
+    controller-gen.kubebuilder.io/version: v0.16.4
+    operator.prometheus.io/version: 0.78.0
   name: servicemonitors.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -1070,6 +1070,23 @@ spec:
                       type: string
                     type: array
                 type: object
+              nativeHistogramBucketLimit:
+                description: |-
+                  If there are more than this many buckets in a native histogram,
+                  buckets will be merged to stay within the limit.
+                  It requires Prometheus >= v2.45.0.
+                format: int64
+                type: integer
+              nativeHistogramMinBucketFactor:
+                anyOf:
+                - type: integer
+                - type: string
+                description: |-
+                  If the growth factor of one bucket to the next is smaller than this,
+                  buckets will be merged to increase the factor sufficiently.
+                  It requires Prometheus >= v2.50.0.
+                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                x-kubernetes-int-or-string: true
               podTargetLabels:
                 description: |-
                   `podTargetLabels` defines the labels which are transferred from the
@@ -1087,6 +1104,11 @@ spec:
                 description: The scrape class to apply.
                 minLength: 1
                 type: string
+              scrapeClassicHistograms:
+                description: |-
+                  Whether to scrape a classic histogram that is also exposed as a native histogram.
+                  It requires Prometheus >= v2.45.0.
+                type: boolean
               scrapeProtocols:
                 description: |-
                   `scrapeProtocols` defines the protocols to negotiate during a scrape. It tells clients the
