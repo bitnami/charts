@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.15 (2024-10-18)
+## 0.1.16 (2024-10-31)
 
-* [bitnami/neo4j] Remove wrong entries from image verification ([#29915](https://github.com/bitnami/charts/pull/29915))
+* [bitnami/neo4j] Release 0.1.16 ([#30153](https://github.com/bitnami/charts/pull/30153))
+
+## <small>0.1.15 (2024-10-18)</small>
+
+* [bitnami/neo4j] Remove wrong entries from image verification (#29915) ([0d3586a](https://github.com/bitnami/charts/commit/0d3586acf10b4ab410e00608c832c59b4f2febc4)), closes [#29915](https://github.com/bitnami/charts/issues/29915)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>0.1.14 (2024-10-16)</small>
 
