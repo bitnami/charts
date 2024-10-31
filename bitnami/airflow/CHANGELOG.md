@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.1 (2024-10-31)
+## 21.0.2 (2024-10-31)
 
-* [bitnami/airflow] Split init containers ([#30155](https://github.com/bitnami/charts/pull/30155))
+* [bitnami/airflow] Release 21.0.2 ([#30160](https://github.com/bitnami/charts/pull/30160))
+
+## <small>21.0.1 (2024-10-31)</small>
+
+* [bitnami/airflow] Split init containers (#30155) ([4945ae6](https://github.com/bitnami/charts/commit/4945ae6dd96d51a312a9b368cdfdbc6bb2c31fb6)), closes [#30155](https://github.com/bitnami/charts/issues/30155)
 
 ## 21.0.0 (2024-10-31)
 
