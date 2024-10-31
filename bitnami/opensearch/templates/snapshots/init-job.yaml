@@ -25,6 +25,7 @@ spec:
       containers:
         - args:
             - --silent
+            - --show-error
             - "file:///dev/null" # Starting with curl 8, a URL is required before the first `--next`
           {{- range $name, $_ := $.Values.snapshots.repositories }}
             # Register snapshot repository:
