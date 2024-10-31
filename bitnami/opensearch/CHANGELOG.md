@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.0 (2024-10-29)
+## 1.4.0 (2024-10-31)
 
 * [bitnami/opensearch] Enable automated setup of snapshot policies ([#29796](https://github.com/bitnami/charts/pull/29796))
 
