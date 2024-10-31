@@ -16,7 +16,7 @@ metadata:
 data:
   kibana.yml: |
     pid.file: /opt/bitnami/kibana/tmp/kibana.pid
-    server.host: "::"
+    server.host: {{ .Values.configuration.server.host | quote }}
     server.port: {{ .Values.containerPorts.http }}
     elasticsearch.hosts: [{{ include "kibana.elasticsearch.url" . }}]
     {{- if .Values.configuration.server.basePath }}
