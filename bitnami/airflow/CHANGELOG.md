@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.0.0 (2024-10-30)
+## 21.0.0 (2024-10-31)
 
 * [bitnami/airflow] Use a single Airflow image ([#30137](https://github.com/bitnami/charts/pull/30137))
 
