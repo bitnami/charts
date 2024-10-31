@@ -62,7 +62,7 @@ spec:
           {{- if .Values.snapshots.resources }}
           resources: {{- toYaml .Values.snapshots.resources | nindent 12 }}
           {{- else if ne .Values.snapshots.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.snapshots.resourcesPreset) | nindent 10 }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.snapshots.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: repo-data
