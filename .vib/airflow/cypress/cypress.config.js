@@ -7,6 +7,6 @@ module.exports = {
   },
   e2e: {
     setupNodeEvents(on, config) {},
-    baseUrl: 'http://localhost',
+    baseUrl: 'http://localhost:8080',
   },
 }

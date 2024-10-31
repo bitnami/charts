@@ -1,5 +1,6 @@
 auth:
   password: ComplicatedPassword123!4
+loadExamples: true
 service:
   ports:
     http: 80
@@ -7,7 +8,7 @@ service:
 dags:
   enabled: true
   repositories:
-    - repository: https://github.com/apache/airflow
+    - repository: https://github.com/astronomer/2-9-example-dags
       branch: main
-      name: examples
-      path: airflow/example_dags
+      name: toys
+      path: dags/toys
