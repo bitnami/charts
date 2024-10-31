@@ -74,8 +74,11 @@ spec:
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.createDefaultConfig" . | nindent 8 }}
-        {{- if or .Values.dags.enabled .Values.plugins.enabled }}
-        {{- include "airflow.defaultInitContainers.loadDAGsPlugins" . | nindent 8 }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
@@ -216,8 +219,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-default-conf-dir/webserver_config.py
-            {{- if or .Values.dags.enabled .Values.plugins.enabled }}
-            {{- include "airflow.dagsPlugins.volumeMounts" . | nindent 12 }}
+            {{- if .Values.dags.enabled }}
+            {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.plugins.enabled }}
+            {{- include "airflow.plugins.volumeMounts" . | nindent 12 }}
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -225,8 +231,11 @@ spec:
             {{- if .Values.worker.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-        {{- if or .Values.dags.enabled .Values.plugins.enabled }}
-        {{- include "airflow.defaultSidecars.syncDAGsPlugins" . | nindent 8 }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}

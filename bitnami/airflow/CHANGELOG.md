@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.0.1 (2024-10-31)
+
+* [bitnami/airflow] Split init containers ([#30155](https://github.com/bitnami/charts/pull/30155))
+
 ## 21.0.0 (2024-10-31)
 
-* [bitnami/airflow] Use a single Airflow image ([#30137](https://github.com/bitnami/charts/pull/30137))
+* [bitnami/airflow] Use a single Airflow image (#30137) ([e9aed1b](https://github.com/bitnami/charts/commit/e9aed1bfed27dddaff454760ef3318d81e3bb05a)), closes [#30137](https://github.com/bitnami/charts/issues/30137)
 
 ## <small>20.0.2 (2024-10-30)</small>
 

@@ -396,6 +396,7 @@ extraVolumeMounts: []
 extraVolumes: []
 
 ## @section Airflow web parameters
+##
 web:
   ## @param web.baseUrl URL used to access to Airflow web ui
   ##
@@ -709,7 +710,9 @@ web:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+
 ## @section Airflow scheduler parameters
+##
 scheduler:
   ## @param scheduler.replicaCount Number of scheduler replicas
   ##
@@ -1013,7 +1016,9 @@ scheduler:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+
 ## @section Airflow worker parameters
+##
 worker:
   ## @param worker.command Override default container command (useful when using custom images)
   ##

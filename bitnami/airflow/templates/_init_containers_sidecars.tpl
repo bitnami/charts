@@ -46,11 +46,10 @@ create folders or volume names
 {{- end -}}
 
 {{/*
-Returns an init-container that loads DAGs and/or plugins from a ConfigMap or Git repositories
+Returns shared structure between load-dags and load-plugins init containers
 */}}
-{{- define "airflow.defaultInitContainers.loadDAGsPlugins" -}}
-- name: load-dags-plugins
-  image: {{ include "airflow.image" . }}
+{{- define "airflow.defaultInitContainers.shared" -}}
+- image: {{ include "airflow.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.defaultInitContainers.loadDAGsPlugins.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.loadDAGsPlugins.containerSecurityContext "context" .) | nindent 4 }}
@@ -64,28 +63,6 @@ Returns an init-container that loads DAGs and/or plugins from a ConfigMap or Git
   command: {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.command "context" .) | nindent 4 }}
   {{- else }}
   command: ["/bin/bash"]
-  {{- end }}
-  {{- if .Values.defaultInitContainers.loadDAGsPlugins.args }}
-  args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.args "context" .) | nindent 4 }}
-  {{- else }}
-  args:
-    - -ec
-    - |
-      . /opt/bitnami/scripts/libfs.sh
-
-    {{- if .Values.dags.enabled }}
-      {{- range .Values.dags.repositories }}
-      is_dir_empty "/dags/{{ include "airflow.dagsPlugins.repository.name" . }}" && git clone {{ .repository }} --depth 1 --branch {{ .branch }} /dags/{{ include "airflow.dagsPlugins.repository.name" . }}
-      {{- end }}
-    {{- end }}
-    {{- if .Values.plugins.enabled }}
-      {{- range .Values.plugins.repositories }}
-      is_dir_empty "/plugins/{{ include "airflow.dagsPlugins.repository.name" . }}" && git clone {{ .repository }} --depth 1 --branch {{ .branch }} /plugins/{{ include "airflow.dagsPlugins.repository.name" . }}
-      {{- end }}
-    {{- end }}
-    {{- if not (empty .Values.dags.existingConfigmap) }}
-      cp /configmap/* /dags/external
-    {{- end }}
   {{- end }}
   {{- if .Values.defaultInitContainers.loadDAGsPlugins.extraEnvVars }}
   env: {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.extraEnvVars "context" .) | nindent 4 }}
@@ -111,6 +88,16 @@ Returns an init-container that loads DAGs and/or plugins from a ConfigMap or Git
     - name: empty-dir
       mountPath: /.ssh
       subPath: ssh-dir
+    {{- if .Values.defaultInitContainers.loadDAGsPlugins.extraVolumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.extraVolumeMounts "context" $) | nindent 4 }}
+    {{- end }}
+{{- end -}}
+
+{{/*
+Returns an init-container that loads DAGs from a ConfigMap or Git repositories
+*/}}
+{{- define "airflow.defaultInitContainers.loadDAGs" -}}
+{{ include "airflow.defaultInitContainers.shared" . }}
     {{- if not (empty .Values.dags.existingConfigmap) }}
     - name: external-dags
       mountPath: /configmap
@@ -120,22 +107,52 @@ Returns an init-container that loads DAGs and/or plugins from a ConfigMap or Git
       mountPath: /dags
       subPath: app-dags-dir
     {{- end }}
-    {{- if not (empty .Values.plugins.repositories) }}
-    - name: empty-dir
-      mountPath: /plugins
-      subPath: app-plugins-dir
+  {{- if .Values.defaultInitContainers.loadDAGsPlugins.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.args "context" .) | nindent 4 }}
+  {{- else }}
+  args:
+    - -ec
+    - |
+      . /opt/bitnami/scripts/libfs.sh
+
+    {{- range .Values.dags.repositories }}
+      is_dir_empty "/dags/{{ include "airflow.dagsPlugins.repository.name" . }}" && git clone {{ .repository }} --depth 1 --branch {{ .branch }} /dags/{{ include "airflow.dagsPlugins.repository.name" . }}
     {{- end }}
-    {{- if .Values.defaultInitContainers.loadDAGsPlugins.extraVolumeMounts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.extraVolumeMounts "context" $) | nindent 4 }}
+    {{- if not (empty .Values.dags.existingConfigmap) }}
+      cp /configmap/* /dags/external
     {{- end }}
+  {{- end }}
+  name: load-dags
 {{- end -}}
 
 {{/*
-Returns a sidecar that syncs DAGs and/or plugins from Git repositories
+Returns an init-container that loads plugins from  Git repositories
 */}}
-{{- define "airflow.defaultSidecars.syncDAGsPlugins" -}}
-- name: sync-dags-plugins
-  image: {{ include "airflow.image" . }}
+{{- define "airflow.defaultInitContainers.loadPlugins" -}}
+{{ include "airflow.defaultInitContainers.shared" . }}
+    - name: empty-dir
+      mountPath: /plugins
+      subPath: app-plugins-dir
+  {{- if .Values.defaultInitContainers.loadDAGsPlugins.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.args "context" .) | nindent 4 }}
+  {{- else }}
+  args:
+    - -ec
+    - |
+      . /opt/bitnami/scripts/libfs.sh
+
+    {{- range .Values.plugins.repositories }}
+      is_dir_empty "/plugins/{{ include "airflow.dagsPlugins.repository.name" . }}" && git clone {{ .repository }} --depth 1 --branch {{ .branch }} /plugins/{{ include "airflow.dagsPlugins.repository.name" . }}
+    {{- end }}
+  {{- end }}
+  name: load-plugins
+{{- end -}}
+
+{{/*
+Returns shared structure between sync-dags and sync-plugins sidecars
+*/}}
+{{- define "airflow.defaultSidecars.shared" -}}
+- image: {{ include "airflow.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.defaultSidecars.syncDAGsPlugins.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultSidecars.syncDAGsPlugins.containerSecurityContext "context" .) | nindent 4 }}
@@ -149,27 +166,6 @@ Returns a sidecar that syncs DAGs and/or plugins from Git repositories
   command: {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.command "context" .) | nindent 4 }}
   {{- else }}
   command: ["/bin/bash"]
-  {{- end }}
-  {{- if .Values.defaultSidecars.syncDAGsPlugins.args }}
-  args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.args "context" .) | nindent 4 }}
-  {{- else }}
-  args:
-    - -ec
-    - |
-      while true; do
-    {{- if .Values.dags.enabled }}
-      {{- range .Values.dags.repositories }}
-          cd /dags/{{ include "airflow.dagsPlugins.repository.name" . }} && git pull origin {{ .branch }} || true
-          ls -la /dags/{{ include "airflow.dagsPlugins.repository.name" . }}
-      {{- end }}
-    {{- end }}
-    {{- if .Values.plugins.enabled }}
-      {{- range .Values.plugins.repositories }}
-          cd /plugins/{{ include "airflow.dagsPlugins.repository.name" . }} && git pull origin {{ .branch }} || true
-      {{- end }}
-    {{- end }}
-          sleep {{ default "60" .Values.defaultSidecars.syncDAGsPlugins.interval }}
-      done
   {{- end }}
   {{- if .Values.defaultSidecars.syncDAGsPlugins.extraEnvVars }}
   env: {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.extraEnvVars "context" .) | nindent 4 }}
@@ -195,26 +191,63 @@ Returns a sidecar that syncs DAGs and/or plugins from Git repositories
     - name: empty-dir
       mountPath: /.ssh
       subPath: ssh-dir
-    {{- if not (empty .Values.dags.repositories) }}
-    - name: empty-dir
-      mountPath: /dags
-      subPath: app-dags-dir
-    {{- end }}
-    {{- if not (empty .Values.plugins.repositories) }}
-    - name: empty-dir
-      mountPath: /plugins
-      subPath: app-plugins-dir
-    {{- end }}
     {{- if .Values.defaultSidecars.syncDAGsPlugins.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.extraVolumeMounts "context" $) | nindent 4 }}
     {{- end }}
 {{- end -}}
 
 {{/*
-Returns the volume mounts to use on Airflow containers to mount custom DAGs and plugins
+Returns a sidecar that syncs DAGs from Git repositories
 */}}
-{{- define "airflow.dagsPlugins.volumeMounts" -}}
-{{- if .Values.dags.enabled }}
+{{- define "airflow.defaultSidecars.syncDAGs" -}}
+{{ include "airflow.defaultSidecars.shared" . }}
+    - name: empty-dir
+      mountPath: /dags
+      subPath: app-dags-dir
+  {{- if .Values.defaultSidecars.syncDAGsPlugins.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.args "context" .) | nindent 4 }}
+  {{- else }}
+  args:
+    - -ec
+    - |
+      while true; do
+    {{- range .Values.dags.repositories }}
+          cd /dags/{{ include "airflow.dagsPlugins.repository.name" . }} && git pull origin {{ .branch }} || true
+    {{- end }}
+          sleep {{ default "60" .Values.defaultSidecars.syncDAGsPlugins.interval }}
+      done
+  {{- end }}
+  name: sync-dags
+{{- end -}}
+
+{{/*
+Returns a sidecar that syncs plugins from Git repositories
+*/}}
+{{- define "airflow.defaultSidecars.syncPlugins" -}}
+{{ include "airflow.defaultSidecars.shared" . }}
+    - name: empty-dir
+      mountPath: /plugins
+      subPath: app-plugins-dir
+  {{- if .Values.defaultSidecars.syncDAGsPlugins.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.args "context" .) | nindent 4 }}
+  {{- else }}
+  args:
+    - -ec
+    - |
+      while true; do
+    {{- range .Values.plugins.repositories }}
+          cd /plugins/{{ include "airflow.dagsPlugins.repository.name" . }} && git pull origin {{ .branch }} || true
+    {{- end }}
+          sleep {{ default "60" .Values.defaultSidecars.syncDAGsPlugins.interval }}
+      done
+  {{- end }}
+  name: sync-plugins
+{{- end -}}
+
+{{/*
+Returns the volume mounts to use on Airflow containers to mount custom DAGs
+*/}}
+{{- define "airflow.dags.volumeMounts" -}}
 {{- if not (empty .Values.dags.existingConfigmap) }}
 - name: empty-dir
   mountPath: /opt/bitnami/airflow/dags/external
@@ -229,8 +262,12 @@ Returns the volume mounts to use on Airflow containers to mount custom DAGs and 
   subPath: app-dags-dir/{{ include "airflow.dagsPlugins.repository.name" . }}
   {{- end }}
 {{- end }}
-{{- end }}
-{{- if .Values.plugins.enabled }}
+{{- end -}}
+
+{{/*
+Returns the volume mounts to use on Airflow containers to mount custom plugins
+*/}}
+{{- define "airflow.plugins.volumeMounts" -}}
 {{- range .Values.plugins.repositories }}
 - name: empty-dir
   mountPath: /opt/bitnami/airflow/plugins/git_{{ include "airflow.dagsPlugins.repository.name" . }}
@@ -238,7 +275,6 @@ Returns the volume mounts to use on Airflow containers to mount custom DAGs and 
   subPath: app-plugins-dir/{{ include "airflow.dagsPlugins.repository.name" . }}/{{ .path }}
   {{- else }}
   subPath: app-plugins-dir/{{ include "airflow.dagsPlugins.repository.name" . }}
-  {{- end }}
   {{- end }}
 {{- end }}
 {{- end -}}
