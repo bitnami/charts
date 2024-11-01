@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.27 (2024-10-31)
+## 1.4.27 (2024-11-01)
 
 * [bitnami/vault] Release 1.4.27 ([#30167](https://github.com/bitnami/charts/pull/30167))
 
