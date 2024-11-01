@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.26 (2024-10-09)
+## 1.4.27 (2024-11-01)
 
-* [bitnami/vault] Release 1.4.26 ([#29839](https://github.com/bitnami/charts/pull/29839))
+* [bitnami/vault] Release 1.4.27 ([#30167](https://github.com/bitnami/charts/pull/30167))
+
+## <small>1.4.26 (2024-10-09)</small>
+
+* [bitnami/vault] Release 1.4.26 (#29839) ([545c006](https://github.com/bitnami/charts/commit/545c006dff7f6fcdaf4d875a903f56a643f8d8fd)), closes [#29839](https://github.com/bitnami/charts/issues/29839)
 
 ## <small>1.4.25 (2024-10-02)</small>
 
