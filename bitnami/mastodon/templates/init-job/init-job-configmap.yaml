@@ -14,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{- if or .Values.initJob.migrateAndCreateAdmin.migrateDB .Values.initJob.migrateAndCreateAdmin .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch }}
+  {{- if or .Values.initJob.migrateAndCreateAdmin.migrateDB .Values.initJob.migrateAndCreateAdmin.createAdmin .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch }}
   # All these operations require access to PostgreSQL (including Elasticsearch migration) and Redis. In order to avoid
   # potential race conditions we include them in the same script.
   migrate-and-create-admin.sh: |-
@@ -47,7 +47,7 @@ data:
     mastodon_rake_execute chewy:upgrade
     {{- end }}
 
-    {{- if .Values.initJob.migrateAndCreateAdmin }}
+    {{- if .Values.initJob.migrateAndCreateAdmin.createAdmin }}
     mastodon_ensure_admin_user_exists
     {{- end }}
   {{- end }}
