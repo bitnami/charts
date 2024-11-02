@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.3 (2024-10-31)
+## 5.0.4 (2024-11-02)
 
-* [bitnami/concourse] Release 5.0.3 ([#30144](https://github.com/bitnami/charts/pull/30144))
+* [bitnami/concourse] Release 5.0.4 ([#30175](https://github.com/bitnami/charts/pull/30175))
+
+## <small>5.0.3 (2024-10-31)</small>
+
+* [bitnami/concourse] Release 5.0.3 (#30144) ([446f4b5](https://github.com/bitnami/charts/commit/446f4b570014f85d7a3904a2ce2a1cdff2ef2936)), closes [#30144](https://github.com/bitnami/charts/issues/30144)
 
 ## <small>5.0.2 (2024-10-29)</small>
 
