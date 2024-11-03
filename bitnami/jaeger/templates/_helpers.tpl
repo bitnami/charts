@@ -147,7 +147,7 @@ an issue about env vars collision with the chart name when the release name is s
 ref. https://github.com/jaegertracing/jaeger-operator/issues/1158
 */}}
 {{- define "jaeger.agent.fullname" -}}
-    {{ printf "%s--agent" (include "common.names.fullname" .) }}
+    {{ printf "%s-agent" (include "common.names.fullname" .) }}
 {{- end -}}
 
 {{/*
