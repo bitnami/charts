@@ -320,6 +320,7 @@ spec:
               value: {{ .Values.ldap.port | quote }}
             - name: POSTGRESQL_LDAP_SCHEME
               value: {{ .Values.ldap.scheme }}
+            {{- end }}
             {{- if (include "postgresql.v1.ldap.tls.enabled" .) }}
             - name: POSTGRESQL_LDAP_TLS
               value: "1"
@@ -343,7 +344,6 @@ spec:
               value: {{ coalesce .Values.ldap.search_attr .Values.ldap.searchAttribute }}
             - name: POSTGRESQL_LDAP_SEARCH_FILTER
               value: {{ coalesce .Values.ldap.search_filter .Values.ldap.searchFilter }}
-            {{- end }}
             {{- end }}
             # TLS
             - name: POSTGRESQL_ENABLE_TLS
