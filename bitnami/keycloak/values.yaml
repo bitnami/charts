@@ -1011,7 +1011,7 @@ metrics:
     ## @param metrics.service.ports.http Metrics service HTTP port
     ##
     ports:
-      http: 8080
+      http: 9000
     ## @param metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints
     ##
     annotations:

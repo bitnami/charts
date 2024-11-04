@@ -541,9 +541,9 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                               | Value   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------- |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |---------|
 | `metrics.enabled`                          | Enable exposing Keycloak statistics                                                                                       | `false` |
-| `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                 | `8080`  |
+| `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                 | `9000`  |
 | `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`    |
 | `metrics.service.extraPorts`               | Add additional ports to the keycloak metrics service (i.e. admin port 9000)                                               | `[]`    |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false` |
@@ -681,6 +681,11 @@ Keycloak realms, users and clients can be created from the Keycloak administrati
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 24.1.0
+
+With this update the metrics service listening port is switched to 9000, the same as the keycloak management endpoint is using. 
+This can be changed by setting `metrics.service.ports.http` to a different value, e.g. 8080 like before this change. 
 
 ### To 23.0.0
 
