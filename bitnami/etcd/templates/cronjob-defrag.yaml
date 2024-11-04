@@ -60,6 +60,27 @@ spec:
               env:
                 - name: BITNAMI_DEBUG
                   value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+                {{- if and .Values.auth.rbac.create .Values.auth.token.enabled }}
+                {{- if eq .Values.auth.token.type "simple" }}
+                - name: ETCD_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "etcd.secretName" . }}
+                      key: {{ include "etcd.secretPasswordKey" . }}
+                {{- else }}
+                {{- fail "defragmention and auth.token = jwt is not supported by the helm chart"   }}
+                {{- end }}
+                - name: ETCDCTL_USER
+                  value: "root:$(ETCD_ROOT_PASSWORD)"
+                {{- end }}
+                {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
+                - name: ETCDCTL_CA_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
+                - name: ETCDCTL_KEY_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
+                - name: ETCDCTL_CERT_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
+                {{- end }}
               {{- if .Values.defrag.cronjob.command }}
               command: {{ .Values.defrag.cronjob.command | toYaml | nindent 16 }}
               {{- else }}
@@ -97,4 +118,17 @@ spec:
               {{- if .Values.defrag.cronjob.containerSecurityContext.enabled }}
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defrag.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
+              {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
+              volumeMounts:
+                - name: etcd-client-certs
+                  mountPath: /opt/bitnami/etcd/certs/client/
+                  readOnly: true
+              {{- end }}
+        {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
+        volumes:
+          - name: etcd-client-certs
+            secret:
+              secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
+              defaultMode: 256
+        {{- end }}
 {{- end }}

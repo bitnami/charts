@@ -848,7 +848,6 @@ externalAccess:
       tag: 1.31.2-debian-12-r3
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -898,7 +897,6 @@ externalAccess:
       tag: 12-debian-12-r32
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -1491,7 +1489,6 @@ volumePermissions:
     tag: 12-debian-12-r32
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2249,6 +2246,9 @@ hidden:
       ##
       dataSource: {}
   service:
+    ## @param hidden.service.nameOverride The hidden service name
+    ##
+    nameOverride: ""
     ## @param hidden.service.portName MongoDB(&reg;) service port name
     ##
     portName: "mongodb"

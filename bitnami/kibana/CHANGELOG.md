@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.2.24 (2024-10-17)
+## 11.3.0 (2024-10-30)
 
-* [bitnami/kibana] Release 11.2.24 ([#29971](https://github.com/bitnami/charts/pull/29971))
+* [bitnami/kibana] set base host to 0.0.0.0 ([#30131](https://github.com/bitnami/charts/pull/30131))
+
+## <small>11.2.24 (2024-10-17)</small>
+
+* [bitnami/kibana] Release 11.2.24 (#29971) ([7029c3e](https://github.com/bitnami/charts/commit/7029c3e482067672e26d31ee3a0dbcf9b4f2a239)), closes [#29971](https://github.com/bitnami/charts/issues/29971)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>11.2.23 (2024-09-26)</small>
 

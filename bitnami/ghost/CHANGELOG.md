@@ -1,8 +1,21 @@
 # Changelog
 
-## 21.1.44 (2024-10-28)
+## 21.1.47 (2024-11-01)
 
-* [bitnami/ghost] Release 21.1.44 ([#30098](https://github.com/bitnami/charts/pull/30098))
+* [bitnami/ghost] Release 21.1.47 ([#30172](https://github.com/bitnami/charts/pull/30172))
+
+## <small>21.1.46 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/ghost] Release 21.1.46 (#30150) ([65f390b](https://github.com/bitnami/charts/commit/65f390b79a1e3489c04438c736ac6c9c5d319cbc)), closes [#30150](https://github.com/bitnami/charts/issues/30150)
+
+## <small>21.1.45 (2024-10-28)</small>
+
+* [bitnami/ghost] Release 21.1.45 (#30104) ([a5afdbe](https://github.com/bitnami/charts/commit/a5afdbe173b219f39f03487275228266bb4a4b48)), closes [#30104](https://github.com/bitnami/charts/issues/30104)
+
+## <small>21.1.44 (2024-10-28)</small>
+
+* [bitnami/ghost] Release 21.1.44 (#30098) ([6f51c16](https://github.com/bitnami/charts/commit/6f51c16271e78fa83a38242304550e6c09960a38)), closes [#30098](https://github.com/bitnami/charts/issues/30098)
 
 ## <small>21.1.43 (2024-10-24)</small>
 

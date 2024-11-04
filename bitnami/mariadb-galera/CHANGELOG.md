@@ -1,8 +1,13 @@
 # Changelog
 
-## 14.0.10 (2024-09-23)
+## 14.0.11 (2024-11-02)
 
-* [bitnami/mariadb-galera] Release 14.0.10 ([#29574](https://github.com/bitnami/charts/pull/29574))
+* [bitnami/mariadb-galera] Release 14.0.11 ([#30177](https://github.com/bitnami/charts/pull/30177))
+
+## <small>14.0.10 (2024-09-23)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.10 (#29574) ([ad8f8ea](https://github.com/bitnami/charts/commit/ad8f8eacdbec058174a1173df49ee231c9fb41aa)), closes [#29574](https://github.com/bitnami/charts/issues/29574)
+* Update README.md (typo fix) (#29335) ([2613b9f](https://github.com/bitnami/charts/commit/2613b9f8f0a6b77f024755ba2427f02f71667f30)), closes [#29335](https://github.com/bitnami/charts/issues/29335)
 
 ## <small>14.0.9 (2024-08-14)</small>
 
