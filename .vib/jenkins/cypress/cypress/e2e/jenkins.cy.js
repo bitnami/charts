@@ -29,7 +29,7 @@ it('should be possible to create a new Jenkins pipeline', () => {
   cy.contains('Build Now');
   // Depending on the setup, the node where to execute the build needs to be
   // provisioned, which can take up some time
-  cy.get(`a[href$='/${nextBuildNumber}/'][class*='display-name']`).click();
+  cy.get(`a[href$='/${nextBuildNumber}/'][class*='app-builds']`).click();
 
   cy.fixture('items').then((item) => {
     cy.visit(
