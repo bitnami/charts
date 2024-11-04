@@ -582,6 +582,46 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `serviceAccount.annotations`                  | Additional annotations to be included on the service account | `{}`    |
 | `serviceAccount.labels`                       | Additional labels to be included on the service account      | `{}`    |
 
+### Defragmentation parameters
+
+| Name                                                               | Description                                                                                                                                | Value            |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `defrag.enabled`                                                   | Enable automatic defragmentation. This is most effective when paired with auto compaction: consider setting "autoCompactionRetention > 0". | `false`          |
+| `defrag.cronjob.startingDeadlineSeconds`                           | Number of seconds representing the deadline for starting the job if it misses scheduled time for any reason                                | `""`             |
+| `defrag.cronjob.schedule`                                          | Schedule in Cron format to defrag (daily at midnight by default)                                                                           | `0 0 * * *`      |
+| `defrag.cronjob.concurrencyPolicy`                                 | Set the cronjob parameter concurrencyPolicy                                                                                                | `Forbid`         |
+| `defrag.cronjob.suspend`                                           | Boolean that indicates if the controller must suspend subsequent executions (not applied to already started executions)                    | `false`          |
+| `defrag.cronjob.successfulJobsHistoryLimit`                        | Number of successful finished jobs to retain                                                                                               | `1`              |
+| `defrag.cronjob.failedJobsHistoryLimit`                            | Number of failed finished jobs to retain                                                                                                   | `1`              |
+| `defrag.cronjob.labels`                                            | Additional labels to be added to the Defrag cronjob                                                                                        | `{}`             |
+| `defrag.cronjob.annotations`                                       | Annotations to be added to the Defrag cronjob                                                                                              | `{}`             |
+| `defrag.cronjob.activeDeadlineSeconds`                             | Number of seconds relative to the startTime that the job may be continuously active before the system tries to terminate it                | `""`             |
+| `defrag.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                                    | `OnFailure`      |
+| `defrag.cronjob.podLabels`                                         | Labels that will be added to pods created by Defrag cronjob                                                                                | `{}`             |
+| `defrag.cronjob.podAnnotations`                                    | Pod annotations for Defrag cronjob pods                                                                                                    | `{}`             |
+| `defrag.cronjob.podSecurityContext.enabled`                        | Enable security context for Defrag pods                                                                                                    | `true`           |
+| `defrag.cronjob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                         | `Always`         |
+| `defrag.cronjob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                             | `[]`             |
+| `defrag.cronjob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                | `[]`             |
+| `defrag.cronjob.podSecurityContext.fsGroup`                        | Group ID for the Defrag filesystem                                                                                                         | `1001`           |
+| `defrag.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                       | `true`           |
+| `defrag.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                           | `{}`             |
+| `defrag.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                 | `1001`           |
+| `defrag.cronjob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                | `1001`           |
+| `defrag.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                              | `true`           |
+| `defrag.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                | `false`          |
+| `defrag.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                    | `true`           |
+| `defrag.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                  | `false`          |
+| `defrag.cronjob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                         | `["ALL"]`        |
+| `defrag.cronjob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                           | `RuntimeDefault` |
+| `defrag.cronjob.nodeSelector`                                      | Node labels for pod assignment in Defrag cronjob                                                                                           | `{}`             |
+| `defrag.cronjob.tolerations`                                       | Tolerations for pod assignment in Defrag cronjob                                                                                           | `[]`             |
+| `defrag.cronjob.serviceAccountName`                                | Specifies the service account to use for Defrag cronjob                                                                                    | `""`             |
+| `defrag.cronjob.command`                                           | Override default container command for defragmentation (useful when using custom images)                                                   | `[]`             |
+| `defrag.cronjob.args`                                              | Override default container args (useful when using custom images)                                                                          | `[]`             |
+| `defrag.cronjob.resourcesPreset`                                   | Set container resources according to one common preset                                                                                     | `nano`           |
+| `defrag.cronjob.resources`                                         | Set container requests and limits for different resources like CPU or                                                                      | `{}`             |
+
 ### Other parameters
 
 | Name                 | Description                                                    | Value  |

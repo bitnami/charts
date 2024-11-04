@@ -81,10 +81,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/valkey-cluster
-  tag: 8.0.1-debian-12-r0
+  tag: 8.0.1-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -431,7 +430,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r31
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -547,7 +546,7 @@ valkey:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param valkey.priorityClassName Valkey Master pod priorityClassName
+  ## @param valkey.priorityClassName Valkey Primary pod priorityClassName
   ##
   priorityClassName: ""
   ## @param valkey.defaultConfigOverride Optional default Valkey configuration for the nodes
@@ -830,16 +829,16 @@ cluster:
   ## Number of Valkey nodes to be deployed
   ##
   ## Note:
-  ## This is total number of nodes including the replicas. Meaning there will be 3 master and 3 replica
-  ## nodes (as replica count is set to 1 by default, there will be 1 replica per master node).
-  ## Hence, nodes = numberOfMasterNodes + numberOfMasterNodes * replicas
+  ## This is total number of nodes including the replicas. Meaning there will be 3 primary and 3 replica
+  ## nodes (as replica count is set to 1 by default, there will be 1 replica per primary node).
+  ## Hence, nodes = numberOfPrimaryNodes + numberOfPrimaryNodes * replicas
   ##
-  ## @param cluster.nodes The number of master nodes should always be >= 3, otherwise cluster creation will fail
+  ## @param cluster.nodes The number of primary nodes should always be >= 3, otherwise cluster creation will fail
   ##
   nodes: 6
-  ## @param cluster.replicas Number of replicas for every master in the cluster
+  ## @param cluster.replicas Number of replicas for every primary in the cluster
   ## Parameter to be passed as --cluster-replicas to the valkey-cli --cluster create
-  ## 1 means that we want a replica for every master created
+  ## 1 means that we want a replica for every primary created
   ##
   replicas: 1
   ## Configuration to access the Valkey Cluster from outside the Kubernetes cluster
@@ -913,7 +912,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.63.0-debian-12-r1
+    tag: 1.65.0-debian-12-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1119,7 +1118,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r30
+  tag: 12-debian-12-r31
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

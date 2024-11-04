@@ -1,8 +1,17 @@
 # Changelog
 
-## 3.0.3 (2024-10-16)
+## 3.0.5 (2024-10-31)
 
-* [bitnami/seaweedfs] Release 3.0.3 ([#29944](https://github.com/bitnami/charts/pull/29944))
+* [bitnami/seaweedfs] Release 3.0.5 ([#30149](https://github.com/bitnami/charts/pull/30149))
+
+## <small>3.0.4 (2024-10-28)</small>
+
+* [bitnami/seaweedfs] Release 3.0.4 (#30097) ([f6a1c6f](https://github.com/bitnami/charts/commit/f6a1c6f46a5af99b8307b8b05ca1a2e61497ae03)), closes [#30097](https://github.com/bitnami/charts/issues/30097)
+
+## <small>3.0.3 (2024-10-16)</small>
+
+* [bitnami/seaweedfs] Release 3.0.3 (#29944) ([1dea08b](https://github.com/bitnami/charts/commit/1dea08b301bf082f6a32cf98332ebde411bb9f2b)), closes [#29944](https://github.com/bitnami/charts/issues/29944)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.0.2 (2024-10-07)</small>
 

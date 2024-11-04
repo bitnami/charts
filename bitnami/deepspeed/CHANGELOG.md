@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.2.21 (2024-10-18)
+## 2.2.24 (2024-10-29)
 
-* [bitnami/deepspeed] Release 2.2.21 ([#29994](https://github.com/bitnami/charts/pull/29994))
+* [bitnami/deepspeed] chore: increase client memory ([#30126](https://github.com/bitnami/charts/pull/30126))
+
+## <small>2.2.23 (2024-10-23)</small>
+
+* [bitnami/deepspeed] Release 2.2.23 (#30050) ([3ff6f15](https://github.com/bitnami/charts/commit/3ff6f151a462020c7f88f7c5dc8c6c50df3a4038)), closes [#30050](https://github.com/bitnami/charts/issues/30050)
+
+## <small>2.2.22 (2024-10-21)</small>
+
+* [bitnami/deepspeed] Improve Goss tests reliability (#30008) ([c43cbab](https://github.com/bitnami/charts/commit/c43cbabcff7f2116ff23a6e51ae705228d0e8b91)), closes [#30008](https://github.com/bitnami/charts/issues/30008)
+
+## <small>2.2.21 (2024-10-18)</small>
+
+* [bitnami/deepspeed] Release 2.2.21 (#29994) ([0cb0522](https://github.com/bitnami/charts/commit/0cb05227c504344586f69ec5bac73f574336ec62)), closes [#29994](https://github.com/bitnami/charts/issues/29994)
 
 ## <small>2.2.20 (2024-10-17)</small>
 
