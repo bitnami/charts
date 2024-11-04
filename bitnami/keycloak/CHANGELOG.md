@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.4 (2024-11-01)
+## 24.0.5 (2024-11-04)
 
-* [bitnami/keycloak] Release 24.0.4 ([#30169](https://github.com/bitnami/charts/pull/30169))
+* [bitnami/keycloak] switches keycloak-metrics service to point to new port ([#30095](https://github.com/bitnami/charts/pull/30095))
+
+## <small>24.0.4 (2024-11-01)</small>
+
+* [bitnami/keycloak] Release 24.0.4 (#30169) ([701a2b9](https://github.com/bitnami/charts/commit/701a2b96d7eff0b3d0c8a77c1ac14f24e0d3ccda)), closes [#30169](https://github.com/bitnami/charts/issues/30169)
 
 ## <small>24.0.3 (2024-10-31)</small>
 
