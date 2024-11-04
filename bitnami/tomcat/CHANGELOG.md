@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.24 (2024-10-26)
+## 11.3.0 (2024-10-30)
 
-* [bitnami/tomcat] Release 11.2.24 ([#30092](https://github.com/bitnami/charts/pull/30092))
+* [bitnami/tomcat] Make existing secret key names choosable. Allow tomcat username to be set from secret ([#30080](https://github.com/bitnami/charts/pull/30080))
+
+## <small>11.2.24 (2024-10-26)</small>
+
+* [bitnami/tomcat] Release 11.2.24 (#30092) ([e5764e1](https://github.com/bitnami/charts/commit/e5764e1ce621a9f3365e27ee627249c312fd49c1)), closes [#30092](https://github.com/bitnami/charts/issues/30092)
 
 ## <small>11.2.23 (2024-10-17)</small>
 

@@ -6,17 +6,15 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ printf "%s-web" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.web.image "chart" .Chart ) ) }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  name: {{ template "airflow.web.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: web
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: web
@@ -70,39 +68,9 @@ spec:
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-        - name: create-default-config
-          image: {{ include "airflow.image" . }}
-          imagePullPolicy: {{ .Values.web.image.pullPolicy | quote }}
-          {{- if .Values.web.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              #!/bin/bash
-
-              cp "$(find /opt/bitnami/airflow -name default_airflow.cfg)" /default-conf/airflow.cfg
-              cp "$(find /opt/bitnami/airflow -name default_webserver_config.py)" /default-conf/webserver_config.py
-              # HACK: When testing the connection it creates an empty airflow.db file at the
-              # application root
-              touch /default-conf/airflow.db
-          {{- if .Values.web.resources }}
-          resources: {{- toYaml .Values.web.resources | nindent 12 }}
-          {{- else if ne .Values.web.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.web.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            - name: empty-dir
-              mountPath: /default-conf
-              subPath: app-default-conf-dir
-        {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.web.containerSecurityContext "context" $) | trim | nindent 8 }}
-        {{- if .Values.dags.existingConfigmap }}
-        {{- include "airflow.loadDAGsInitContainer" (dict "component" "web" "context" . ) | trim | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.createDefaultConfig" . | nindent 8 }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
@@ -111,10 +79,9 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
       containers:
-        {{- include "airflow.git.containers.sync" (dict "securityContext" .Values.web.containerSecurityContext "context" $) | trim | nindent 8 }}
         - name: airflow-web
           image: {{ include "airflow.image" . }}
-          imagePullPolicy: {{ .Values.web.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.web.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -156,9 +123,9 @@ spec:
             - name: AIRFLOW_LDAP_URI
               value: {{ .Values.ldap.uri | quote }}
             - name: AIRFLOW_LDAP_SEARCH
-              value: {{ coalesce .Values.ldap.base .Values.ldap.basedn | quote }}
+              value: {{ .Values.ldap.basedn | quote }}
             - name: AIRFLOW_LDAP_UID_FIELD
-              value: {{ coalesce .Values.ldap.uidField .Values.ldap.searchAttribute | quote }}
+              value: {{ .Values.ldap.searchAttribute | quote }}
             - name: AIRFLOW_LDAP_BIND_USER
               value: {{ .Values.ldap.binddn | quote }}
             - name: AIRFLOW_LDAP_BIND_PASSWORD
@@ -180,7 +147,7 @@ spec:
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
               value: {{ ternary "True" "False" .Values.ldap.tls.allowSelfSigned | quote }}
             - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
-              value: {{ include "airflow.ldapCAFilename" . | quote }}
+              value: {{ printf "%s/%s" .Values.ldap.tls.certificatesMountPath .Values.ldap.tls.CAFilename | quote }}
             {{- end }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
@@ -279,15 +246,6 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/tmp
               subPath: app-tmp-dir
-            {{- if .Files.Glob "files/dags/*.py" }}
-            - name: local-dag-files
-              mountPath: /opt/bitnami/airflow/dags/local
-            {{- end }}
-            {{- if .Values.dags.existingConfigmap }}
-            - name: empty-dir
-              mountPath: /opt/bitnami/airflow/dags/external
-              subPath: app-external-dag-dir
-            {{- end }}
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: custom-configuration-file
               mountPath: /opt/bitnami/airflow/airflow.cfg
@@ -311,13 +269,18 @@ spec:
               mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
               readOnly: true
             {{- end }}
+            {{- if .Values.plugins.enabled }}
+            {{- include "airflow.plugins.volumeMounts" . | nindent 12 }}
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
             {{- if .Values.web.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-            {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.defaultSidecars.syncPlugins" . | nindent 8 }}
+        {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
@@ -327,11 +290,6 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.dags.existingConfigmap }}
-        - name: load-external-dag-files
-          configMap:
-            name: {{ tpl .Values.dags.existingConfigmap $ }}
-        {{- end }}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: custom-configuration-file
           configMap:
@@ -345,7 +303,7 @@ spec:
         {{- if .Values.ldap.tls.enabled }}
         - name: airflow-ldap-ca-certificate
           secret:
-            secretName: {{ required "A secret containing the LDAP CA certificate. It is required when SSL in enabled" (coalesce .Values.ldap.tls.CAcertificateSecret .Values.ldap.tls.certificatesSecret) }}
+            secretName: {{ required "A secret containing the LDAP CA certificate. It is required when SSL in enabled" .Values.ldap.tls.certificatesSecret }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.extraVolumes }}

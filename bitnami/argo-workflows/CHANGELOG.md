@@ -1,8 +1,12 @@
 # Changelog
 
+## 10.0.1 (2024-10-31)
+
+* [bitnami/argo-workflows] Release 10.0.1 ([#30156](https://github.com/bitnami/charts/pull/30156))
+
 ## 10.0.0 (2024-10-03)
 
-* [bitnami/argo-workflows] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29728](https://github.com/bitnami/charts/pull/29728))
+* [bitnami/argo-workflows] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29728) ([25732e6](https://github.com/bitnami/charts/commit/25732e6386f7b52adf8a444ba587790b97972622)), closes [#29728](https://github.com/bitnami/charts/issues/29728)
 
 ## <small>9.1.18 (2024-10-02)</small>
 
