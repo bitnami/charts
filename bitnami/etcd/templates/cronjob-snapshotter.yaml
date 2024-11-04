@@ -36,8 +36,8 @@ spec:
           tolerations: {{- toYaml .Values.disasterRecovery.cronjob.tolerations | nindent 12 }}
           {{- end }}
           restartPolicy: OnFailure
-          {{- if .Values.podSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.disasterRecovery.cronjob.podSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.disasterRecovery.cronjob.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.disasterRecovery.cronjob.serviceAccountName }}
           serviceAccountName: {{ .Values.disasterRecovery.cronjob.serviceAccountName | quote }}
