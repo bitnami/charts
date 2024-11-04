@@ -50,7 +50,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -439,15 +439,16 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Persistence parameters
 
-| Name                        | Description                                                          | Value                 |
-| --------------------------- | -------------------------------------------------------------------- | --------------------- |
-| `persistence.enabled`       | Enable MinIO&reg; data persistence using PVC. If false, use emptyDir | `true`                |
-| `persistence.storageClass`  | PVC Storage Class for MinIO&reg; data volume                         | `""`                  |
-| `persistence.mountPath`     | Data volume mount path                                               | `/bitnami/minio/data` |
-| `persistence.accessModes`   | PVC Access Modes for MinIO&reg; data volume                          | `["ReadWriteOnce"]`   |
-| `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                       | `8Gi`                 |
-| `persistence.annotations`   | Annotations for the PVC                                              | `{}`                  |
-| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`                  |
+| Name                        | Description                                                                            | Value                 |
+| --------------------------- | -------------------------------------------------------------------------------------- | --------------------- |
+| `persistence.enabled`       | Enable MinIO&reg; data persistence using PVC. If false, use emptyDir                   | `true`                |
+| `persistence.storageClass`  | PVC Storage Class for MinIO&reg; data volume                                           | `""`                  |
+| `persistence.mountPath`     | Data volume mount path                                                                 | `/bitnami/minio/data` |
+| `persistence.accessModes`   | PVC Access Modes for MinIO&reg; data volume                                            | `["ReadWriteOnce"]`   |
+| `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                                         | `8Gi`                 |
+| `persistence.annotations`   | Annotations for the PVC                                                                | `{}`                  |
+| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)                             | `""`                  |
+| `persistence.selector`      | Configure custom selector for existing Persistent Volume. (only in `distributed` mode) | `{}`                  |
 
 ### Volume Permissions parameters
 
@@ -604,7 +605,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

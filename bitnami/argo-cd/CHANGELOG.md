@@ -1,8 +1,17 @@
 # Changelog
 
-## 7.0.18 (2024-10-09)
+## 7.0.20 (2024-10-18)
 
-* [bitnami/argo-cd] Release 7.0.18 ([#29845](https://github.com/bitnami/charts/pull/29845))
+* [bitnami/argo-cd] Release 7.0.20 ([#29997](https://github.com/bitnami/charts/pull/29997))
+
+## <small>7.0.19 (2024-10-17)</small>
+
+* [bitnami/argo-cd] Release 7.0.19 (#29977) ([83436f5](https://github.com/bitnami/charts/commit/83436f524ace533fd20d0bafec4b8411b444985f)), closes [#29977](https://github.com/bitnami/charts/issues/29977)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>7.0.18 (2024-10-09)</small>
+
+* [bitnami/argo-cd] Release 7.0.18 (#29845) ([0e2b67f](https://github.com/bitnami/charts/commit/0e2b67f8038c03b13c9f5e6ac200e38a853b5b8a)), closes [#29845](https://github.com/bitnami/charts/issues/29845)
 
 ## <small>7.0.17 (2024-10-09)</small>
 

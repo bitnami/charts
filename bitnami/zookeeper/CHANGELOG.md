@@ -4,6 +4,10 @@
 
 * [bitnami/zookeeper] Make the ZOO_SERVERS environment variable configurable ([#29921](https://github.com/bitnami/charts/pull/29921))
 
+## 13.5.1 (2024-10-26)
+
+* [bitnami/zookeeper] Release 13.5.1 ([#30094](https://github.com/bitnami/charts/pull/30094))
+
 ## 13.5.0 (2024-10-10)
 
 * [bitnami/zookeeper] Rename metrics port and expose scheme, and tlsConfig for Istio compatibility (#2 ([0bcfc6d](https://github.com/bitnami/charts/commit/0bcfc6d635eb09f0cc2f7d8187254b5a4ffe95be)), closes [#29683](https://github.com/bitnami/charts/issues/29683)

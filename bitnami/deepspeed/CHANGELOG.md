@@ -1,8 +1,29 @@
 # Changelog
 
-## 2.2.19 (2024-09-19)
+## 2.2.24 (2024-10-29)
 
-* [bitnami/deepspeed] Release 2.2.19 ([#29503](https://github.com/bitnami/charts/pull/29503))
+* [bitnami/deepspeed] chore: increase client memory ([#30126](https://github.com/bitnami/charts/pull/30126))
+
+## <small>2.2.23 (2024-10-23)</small>
+
+* [bitnami/deepspeed] Release 2.2.23 (#30050) ([3ff6f15](https://github.com/bitnami/charts/commit/3ff6f151a462020c7f88f7c5dc8c6c50df3a4038)), closes [#30050](https://github.com/bitnami/charts/issues/30050)
+
+## <small>2.2.22 (2024-10-21)</small>
+
+* [bitnami/deepspeed] Improve Goss tests reliability (#30008) ([c43cbab](https://github.com/bitnami/charts/commit/c43cbabcff7f2116ff23a6e51ae705228d0e8b91)), closes [#30008](https://github.com/bitnami/charts/issues/30008)
+
+## <small>2.2.21 (2024-10-18)</small>
+
+* [bitnami/deepspeed] Release 2.2.21 (#29994) ([0cb0522](https://github.com/bitnami/charts/commit/0cb05227c504344586f69ec5bac73f574336ec62)), closes [#29994](https://github.com/bitnami/charts/issues/29994)
+
+## <small>2.2.20 (2024-10-17)</small>
+
+* [bitnami/deepspeed] Release 2.2.20 (#29964) ([b7158b6](https://github.com/bitnami/charts/commit/b7158b61f31b48ba80ba316e66f56a6d35cd0865)), closes [#29964](https://github.com/bitnami/charts/issues/29964)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.2.19 (2024-09-19)</small>
+
+* [bitnami/deepspeed] Release 2.2.19 (#29503) ([b49ff53](https://github.com/bitnami/charts/commit/b49ff53d20fe26cf730839ea0ee98bd770230844)), closes [#29503](https://github.com/bitnami/charts/issues/29503)
 
 ## <small>2.2.18 (2024-09-15)</small>
 

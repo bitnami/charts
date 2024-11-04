@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.7.11 (2024-10-02)
+## 3.7.12 (2024-10-16)
 
-* [bitnami/grafana-tempo] Release 3.7.11 ([#29696](https://github.com/bitnami/charts/pull/29696))
+* [bitnami/grafana-tempo] Release 3.7.12 ([#29920](https://github.com/bitnami/charts/pull/29920))
+
+## <small>3.7.11 (2024-10-02)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.11 (#29696) ([2005158](https://github.com/bitnami/charts/commit/20051588319b3f1ea172bb6792500886924a11cf)), closes [#29696](https://github.com/bitnami/charts/issues/29696)
 
 ## <small>3.7.10 (2024-09-11)</small>
 

@@ -2,7 +2,7 @@ architecture: replication
 auth:
   enabled: true
   password: ComplicatedPassword123!4
-master:
+primary:
   replicaCount: 1
   disableCommands:
     - FLUSHALL

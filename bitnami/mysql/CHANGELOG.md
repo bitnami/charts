@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.1.18 (2024-10-14)
+## 11.1.20 (2024-10-18)
 
-* [bitnami/mysql] Release 11.1.18 ([#29887](https://github.com/bitnami/charts/pull/29887))
+* [bitnami/mysql] Drop unused `getValueFromSecret` local helper ([#29962](https://github.com/bitnami/charts/pull/29962))
+
+## <small>11.1.19 (2024-10-16)</small>
+
+* [bitnami/mysql] Release 11.1.18 (#29887) ([57306e6](https://github.com/bitnami/charts/commit/57306e6212ae61b7140d67c41effb9e5fffb66d7)), closes [#29887](https://github.com/bitnami/charts/issues/29887)
+* [bitnami/mysql] Release 11.1.19 (#29929) ([1381f66](https://github.com/bitnami/charts/commit/1381f665f7a58bd3c2abae738b05c3be1da0062b)), closes [#29929](https://github.com/bitnami/charts/issues/29929)
 
 ## <small>11.1.17 (2024-09-17)</small>
 

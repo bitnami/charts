@@ -52,7 +52,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -154,7 +154,7 @@ initScriptsSecret=special-scripts-sensitive
 
 ### Forwarder Security Context & Policy
 
-By default, the **forwarder** `DaemonSet` from this chart **runs as the `root` user**, within the `root` group, assigning `root` file system permissions. This is different to the default behaviour of most Bitnami Helm charts where we [prefer to work with non-root containers](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+By default, the **forwarder** `DaemonSet` from this chart **runs as the `root` user**, within the `root` group, assigning `root` file system permissions. This is different to the default behaviour of most Bitnami Helm charts where we [prefer to work with non-root containers](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 The default behaviour is to run as `root` because:
 
@@ -233,8 +233,6 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                                                                                                                                              | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                                                                                                                                                 | `false`                                                    |
 | `forwarder.enabled`                                            | Enable forwarder daemonset                                                                                                                                                                                                              | `true`                                                     |
-| `forwarder.image.registry`                                     | Fluentd forwarder image registry override                                                                                                                                                                                               | `""`                                                       |
-| `forwarder.image.repository`                                   | Fluentd forwarder image repository override                                                                                                                                                                                             | `""`                                                       |
 | `forwarder.daemonUser`                                         | Forwarder daemon user and group (set to root by default because it reads from host paths)                                                                                                                                               | `root`                                                     |
 | `forwarder.daemonGroup`                                        | Fluentd forwarder daemon system group                                                                                                                                                                                                   | `root`                                                     |
 | `forwarder.automountServiceAccountToken`                       | Mount Service Account token in pod                                                                                                                                                                                                      | `true`                                                     |
@@ -345,8 +343,6 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `forwarder.initScriptsCM`                                      | ConfigMap with the init scripts. Evaluated as a template.                                                                                                                                                                               | `""`                                                       |
 | `forwarder.initScriptsSecret`                                  | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.                                                                                     | `""`                                                       |
 | `aggregator.enabled`                                           | Enable Fluentd aggregator statefulset                                                                                                                                                                                                   | `true`                                                     |
-| `aggregator.image.registry`                                    | Fluentd aggregator image registry override                                                                                                                                                                                              | `""`                                                       |
-| `aggregator.image.repository`                                  | Fluentd aggregator image repository override                                                                                                                                                                                            | `""`                                                       |
 | `aggregator.replicaCount`                                      | Number of aggregator pods to deploy in the Stateful Set                                                                                                                                                                                 | `1`                                                        |
 | `aggregator.podSecurityContext.enabled`                        | Enable security context for aggregator pods                                                                                                                                                                                             | `true`                                                     |
 | `aggregator.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                      | `Always`                                                   |
@@ -533,6 +529,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 7.0.0
+
+Starting version 7.0.0, using different images for aggregator and forwarder is no longer supported.
+The values `aggregator.image` and `forwarder.image` have been removed.
+
 ### To 6.0.0
 
 This major bump changes the following security defaults:
@@ -585,7 +586,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
