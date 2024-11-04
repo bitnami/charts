@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.4.3 (2024-11-04)
+## 10.5.0 (2024-11-04)
 
 * [bitnami/etcd]: Fix Defrag "bug" and prevent CronJob templates ambiguity ([#30077](https://github.com/bitnami/charts/pull/30077))
 
