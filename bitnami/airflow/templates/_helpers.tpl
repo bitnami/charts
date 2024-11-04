@@ -27,6 +27,13 @@ Return the proper Airflow Dag Processor fullname
 {{- end -}}
 
 {{/*
+Return the proper Airflow Triggerer fullname
+*/}}
+{{- define "airflow.triggerer.fullname" -}}
+{{- printf "%s-triggerer" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper Airflow Worker fullname
 */}}
 {{- define "airflow.worker.fullname" -}}
@@ -420,6 +427,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "airflow.validateValues.dags.repository_details" .) -}}
 {{- $messages := append $messages (include "airflow.validateValues.plugins.repositories" .) -}}
 {{- $messages := append $messages (include "airflow.validateValues.plugins.repository_details" .) -}}
+{{- $messages := append $messages (include "airflow.validateValues.triggerer.replicaCount" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -491,6 +499,21 @@ airflow: plugins.repositories[$index].branch
     from git repository (--set plugins.repositories[$index].branch="xxx")
 {{- end -}}
 {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Airflow - number of Triggerer replicas
+*/}}
+{{- define "airflow.validateValues.triggerer.replicaCount" -}}
+{{- $replicaCount := int .Values.triggerer.replicaCount }}
+{{- if and .Values.triggerer.enabled .Values.triggerer.persistence.enabled .Values.triggerer.persistence.existingClaim (or (gt $replicaCount 1) .Values.triggerer.autoscaling.hpa.enabled) -}}
+triggerer.replicaCount
+    A single existing PVC cannot be shared between multiple replicas.
+    Please set a valid number of replicas (--set triggerer.replicaCount=1),
+    disable HPA (--set triggerer.autoscaling.hpa.enabled=false), disable persistence
+    (--set triggerer.persistence.enabled=false) or rely on dynamic provisioning via Persistent
+    Volume Claims (--set triggerer.persistence.existingClaim="").
 {{- end -}}
 {{- end -}}
 
