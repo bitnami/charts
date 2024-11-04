@@ -67,8 +67,8 @@ spec:
             - name: etcd-snapshotter
               image: {{ include "etcd.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-              {{- if .Values.containerSecurityContext.enabled }}
-              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 16 }}
+              {{- if .Values.disasterRecovery.cronjob.containerSecurityContext }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.disasterRecovery.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.diagnosticMode.enabled }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}

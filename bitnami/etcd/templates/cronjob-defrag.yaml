@@ -54,9 +54,6 @@ spec:
             - name: etcd-defrag
               image: {{ include "etcd.image" . }}
               imagePullPolicy: "IfNotPresent"
-              {{- if .Values.containerSecurityContext.enabled }}
-              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 16 }}
-              {{- end }}
               env:
                 - name: BITNAMI_DEBUG
                   value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
@@ -114,6 +111,9 @@ spec:
               resources: {{- toYaml .Values.defrag.cronjob.resources | nindent 16 }}
               {{- else if ne .Values.defrag.cronjob.resourcesPreset "none" }}
               resources: {{- include "common.resources.preset" (dict "type" .Values.defrag.cronjob.resourcesPreset) | nindent 16 }}
+              {{- end }}
+              {{- if .Values.defrag.cronjob.containerSecurityContext.enabled }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defrag.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
               volumeMounts:
