@@ -1,8 +1,14 @@
 # Changelog
 
-## 14.0.11 (2024-11-02)
+## 14.0.12 (2024-11-04)
 
-* [bitnami/mariadb-galera] Release 14.0.11 ([#30177](https://github.com/bitnami/charts/pull/30177))
+* [bitnami/mariadb-galera] Release 14.0.12 ([#30200](https://github.com/bitnami/charts/pull/30200))
+
+## <small>14.0.11 (2024-11-02)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mariadb-galera] Release 14.0.11 (#30177) ([875ca56](https://github.com/bitnami/charts/commit/875ca56f13f7d8894008940b856c9a777e54e6a9)), closes [#30177](https://github.com/bitnami/charts/issues/30177)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>14.0.10 (2024-09-23)</small>
 
