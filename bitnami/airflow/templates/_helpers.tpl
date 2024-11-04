@@ -20,6 +20,13 @@ Return the proper Airflow Scheduler fullname
 {{- end -}}
 
 {{/*
+Return the proper Airflow Dag Processor fullname
+*/}}
+{{- define "airflow.dagProcessor.fullname" -}}
+{{- printf "%s-dag-processor" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper Airflow Worker fullname
 */}}
 {{- define "airflow.worker.fullname" -}}
@@ -330,6 +337,8 @@ Add environment variables to configure airflow common values
       key: airflow-secret-key
 - name: AIRFLOW_LOAD_EXAMPLES
   value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
+- name: AIRFLOW_STANDALONE_DAG_PROCESSOR
+  value: {{ ternary "yes" "no" .Values.dagProcessor.enabled | quote }}
 {{- if not (or .Values.configuration .Values.existingConfigmap) }}
 - name: AIRFLOW_FORCE_OVERWRITE_CONF_FILE
   value: "yes"
