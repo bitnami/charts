@@ -72,7 +72,6 @@ image:
   tag: 0.15.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -853,6 +852,10 @@ txtEncrypt:
 ## @param extraArgs Extra arguments to be passed to external-dns
 ##
 extraArgs: {}
+##extraArgs:
+##  rfc2136-zone:
+##    - extra-zone1.com
+##    - extra-zone2.com
 ## @param extraEnvVars An array to add extra env vars
 ##
 extraEnvVars: []

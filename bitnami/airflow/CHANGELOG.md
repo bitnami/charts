@@ -1,8 +1,38 @@
 # Changelog
 
-## 20.0.0 (2024-10-02)
+## 21.1.0 (2024-11-04)
 
-* [bitnami/airflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29727](https://github.com/bitnami/charts/pull/29727))
+* [bitnami/airflow] Add support to run Dag Processor in standalone mode ([#30159](https://github.com/bitnami/charts/pull/30159))
+
+## <small>21.0.3 (2024-10-31)</small>
+
+* [bitnami/airflow] Release 21.0.3 (#30161) ([89e392b](https://github.com/bitnami/charts/commit/89e392b7297346863c80c49ba2325c72321142e3)), closes [#30161](https://github.com/bitnami/charts/issues/30161)
+
+## <small>21.0.2 (2024-10-31)</small>
+
+* [bitnami/airflow] Release 21.0.2 (#30160) ([07568a9](https://github.com/bitnami/charts/commit/07568a9c3b6cff4fb6cec217b40ebdd24f349aa2)), closes [#30160](https://github.com/bitnami/charts/issues/30160)
+
+## <small>21.0.1 (2024-10-31)</small>
+
+* [bitnami/airflow] Split init containers (#30155) ([4945ae6](https://github.com/bitnami/charts/commit/4945ae6dd96d51a312a9b368cdfdbc6bb2c31fb6)), closes [#30155](https://github.com/bitnami/charts/issues/30155)
+
+## 21.0.0 (2024-10-31)
+
+* [bitnami/airflow] Use a single Airflow image (#30137) ([e9aed1b](https://github.com/bitnami/charts/commit/e9aed1bfed27dddaff454760ef3318d81e3bb05a)), closes [#30137](https://github.com/bitnami/charts/issues/30137)
+
+## <small>20.0.2 (2024-10-30)</small>
+
+* [bitnami/airflow] Release 20.0.2 (#30138) ([bd4b9b9](https://github.com/bitnami/charts/commit/bd4b9b984d012a85471d654329cb0c16b5b0f062)), closes [#30138](https://github.com/bitnami/charts/issues/30138)
+
+## <small>20.0.1 (2024-10-30)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/airflow] Support `nameOverride` and `fullnameOverride` for internal Redis® (#30081) ([7adff78](https://github.com/bitnami/charts/commit/7adff78a8a1a855b7978f6e65417e84807a9b427)), closes [#30081](https://github.com/bitnami/charts/issues/30081)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 20.0.0 (2024-10-03)
+
+* [bitnami/airflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29727) ([f70e935](https://github.com/bitnami/charts/commit/f70e93590e1f9247332f76d25abf81f562d8eb1f)), closes [#29727](https://github.com/bitnami/charts/issues/29727)
 
 ## <small>19.0.10 (2024-09-23)</small>
 

@@ -114,7 +114,11 @@ spec:
               RAILS_ENV=production LOAD_PLUGINS=0 bundle exec rake plugin:pull_compatible_all
               {{- end }}
               popd >/dev/null || exit 1
-              cp -r --preserve=mode /opt/bitnami/discourse/plugins /empty-dir/app-plugins-dir
+              cp -nr --preserve=mode /opt/bitnami/discourse/plugins/* /plugins
+          {{- if .Values.discourse.extraEnvVars }}
+          env:
+            {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.discourse.resources }}
           resources: {{- toYaml .Values.discourse.resources | nindent 12 }}
           {{- else if ne .Values.discourse.resourcesPreset "none" }}
@@ -122,7 +126,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: empty-dir
-              mountPath: /empty-dir/app-plugins-dir
+              mountPath: /plugins
               subPath: app-plugins-dir
         {{- end }}
       containers:
@@ -148,7 +152,7 @@ spec:
           args:
             - -ec
             - |
-              cp -r --preserve=mode /plugins /opt/bitnami/discourse/plugins
+              cp -nr --preserve=mode /plugins/* /opt/bitnami/discourse/plugins
               /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/run.sh
           {{- end }}
           env:

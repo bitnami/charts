@@ -1,8 +1,17 @@
 # Changelog
 
+## 9.0.2 (2024-11-01)
+
+* [bitnami/mastodon] Mastodon initjob always tries to create admin on upgrade ([#30171](https://github.com/bitnami/charts/pull/30171))
+
+## <small>9.0.1 (2024-10-21)</small>
+
+* [bitnami/mastodon] Release 9.0.1 (#30019) ([3ab0d63](https://github.com/bitnami/charts/commit/3ab0d63af56499b5072e7d82c168ce42b3e55c84)), closes [#30019](https://github.com/bitnami/charts/issues/30019)
+
 ## 9.0.0 (2024-10-17)
 
-* [bitnami/mastodon] feat!: :sparkles: :boom: :recycle: Bump appVersion to 4.3 and refactor init containers ([#29900](https://github.com/bitnami/charts/pull/29900))
+* [bitnami/mastodon] feat!: :sparkles: :boom: :recycle: Bump appVersion to 4.3 and refactor init conta ([ef3176d](https://github.com/bitnami/charts/commit/ef3176d2a3241029d9e825f2527802144a9ebe0d)), closes [#29900](https://github.com/bitnami/charts/issues/29900)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 8.0.0 (2024-10-03)
 

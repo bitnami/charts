@@ -102,12 +102,12 @@ spec:
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
 
-{{- if and .Values.sentinel.enabled .Values.sentinel.service.createMaster}}
+{{- if and .Values.sentinel.enabled .Values.sentinel.service.createPrimary}}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ template "common.names.fullname" . }}-master"
+  name: "{{ template "common.names.fullname" . }}-primary"
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
@@ -156,7 +156,7 @@ spec:
       nodePort:  {{ $valkeyport }}
       {{- end }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
-    isMaster: "true"
+    isPrimary: "true"
 {{- end }}
 {{- end }}
 {{- end }}

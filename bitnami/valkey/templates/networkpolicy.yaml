@@ -32,7 +32,7 @@ spec:
           protocol: UDP
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ .Values.master.containerPorts.valkey }}
+        - port: {{ .Values.primary.containerPorts.valkey }}
         {{- if .Values.sentinel.enabled }}
         - port: {{ .Values.sentinel.containerPorts.sentinel }}
         {{- end }}
@@ -47,7 +47,7 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.master.containerPorts.valkey }}
+        - port: {{ .Values.primary.containerPorts.valkey }}
         {{- if .Values.sentinel.enabled }}
         - port: {{ .Values.sentinel.containerPorts.sentinel }}
         {{- end }}

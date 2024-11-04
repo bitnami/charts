@@ -132,16 +132,16 @@ Create the name of the shared service account to use
 {{- end -}}
 
 {{/*
-Create the name of the master service account to use
+Create the name of the primary service account to use
 */}}
-{{- define "valkey.masterServiceAccountName" -}}
-{{- if .Values.master.serviceAccount.create -}}
-    {{ default (printf "%s-master" (include "common.names.fullname" .)) .Values.master.serviceAccount.name }}
+{{- define "valkey.primaryServiceAccountName" -}}
+{{- if .Values.primary.serviceAccount.create -}}
+    {{ default (printf "%s-primary" (include "common.names.fullname" .)) .Values.primary.serviceAccount.name }}
 {{- else -}}
     {{- if .Values.serviceAccount.create -}}
         {{ template "valkey.serviceAccountName" . }}
     {{- else -}}
-        {{ default "default" .Values.master.serviceAccount.name }}
+        {{ default "default" .Values.primary.serviceAccount.name }}
     {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -220,7 +220,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "valkey.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.podSecurityPolicy.create" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.tls" .) -}}
-{{- $messages := append $messages (include "valkey.validateValues.createMaster" .) -}}
+{{- $messages := append $messages (include "valkey.validateValues.createPrimary" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -272,11 +272,11 @@ valkey: tls.enabled
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Valkey - master service enabled */}}
-{{- define "valkey.validateValues.createMaster" -}}
-{{- if and .Values.sentinel.service.createMaster (or (not .Values.rbac.create) (not .Values.replica.automountServiceAccountToken) (not .Values.serviceAccount.create)) }}
-valkey: sentinel.service.createMaster
-    In order to redirect requests only to the master pod via the service, you also need to
+{{/* Validate values of Valkey - primary service enabled */}}
+{{- define "valkey.validateValues.createPrimary" -}}
+{{- if and .Values.sentinel.service.createPrimary (or (not .Values.rbac.create) (not .Values.replica.automountServiceAccountToken) (not .Values.serviceAccount.create)) }}
+valkey: sentinel.service.createPrimary
+    In order to redirect requests only to the primary pod via the service, you also need to
     create rbac and serviceAccount. In addition, you need to enable
     replica.automountServiceAccountToken.
 {{- end -}}

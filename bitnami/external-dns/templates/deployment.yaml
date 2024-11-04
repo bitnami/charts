@@ -352,12 +352,18 @@ spec:
             - --txt-encrypt-enabled
             - --txt-encrypt-aes-key=$(TXT_AES_ENCRYPTION_KEY)
             {{- end }}
-            {{- range $key, $value := .Values.extraArgs }}
-             # Extra arguments
-              {{- if $value }}
+            {{- if .Values.extraArgs }}
+              {{- range $key, $value := .Values.extraArgs }}
+            # Extra arguments
+                {{- if kindIs "slice" $value }}
+                  {{- range $val := $value }}
+            - --{{ $key }}={{ $val }}
+                  {{- end }}
+                {{- else if $value }}
             - --{{ $key }}={{ $value }}
-              {{- else }}
+                {{- else }}
             - --{{ $key }}
+                {{- end }}
               {{- end }}
             {{- end }}
           {{- end }}

@@ -77,10 +77,9 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.5.11-debian-12-r1
+    tag: 3.5.12-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -565,10 +564,9 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.5.11-debian-12-r1
+    tag: 3.5.12-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1119,10 +1117,9 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.5.11-debian-12-r1
+    tag: 3.5.12-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent

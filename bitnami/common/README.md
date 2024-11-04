@@ -61,7 +61,7 @@ tag:
 
 pullPolicy:
   type: string
-  description: Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  description: Specify a imagePullPolicy.'
 
 pullSecrets:
   type: array

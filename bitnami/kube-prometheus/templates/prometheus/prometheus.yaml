@@ -294,6 +294,7 @@ spec:
         {{- if .Values.prometheus.thanos.extraEnvVars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVars "context" $) | nindent 8 }}
         {{- end }}
+      {{- if or .Values.prometheus.thanos.extraEnvVarsCM .Values.prometheus.thanos.extraEnvVarsSecret }}
       envFrom:
         {{- if .Values.prometheus.thanos.extraEnvVarsCM }}
         - configMapRef:
@@ -303,6 +304,7 @@ spec:
         - secretRef:
             name: {{ include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVarsSecret "context" $) }}
         {{- end }}
+      {{- end}}
       {{- if .Values.prometheus.thanos.resources }}
       resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
       {{- else if ne .Values.prometheus.thanos.resourcesPreset "none" }}

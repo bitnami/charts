@@ -1,8 +1,18 @@
 # Changelog
 
-## 4.2.19 (2024-10-16)
+## 4.2.21 (2024-10-31)
 
-* [bitnami/pytorch] Remove wrong entries from image verification ([#29916](https://github.com/bitnami/charts/pull/29916))
+* [bitnami/pytorch] Release 4.2.21 ([#30158](https://github.com/bitnami/charts/pull/30158))
+
+## <small>4.2.20 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/pytorch] Release 4.2.20 (#30120) ([ff3e238](https://github.com/bitnami/charts/commit/ff3e238ec2f00d406e23ce2576383c51a224d67e)), closes [#30120](https://github.com/bitnami/charts/issues/30120)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.2.19 (2024-10-16)</small>
+
+* [bitnami/pytorch] Remove wrong entries from image verification (#29916) ([a779521](https://github.com/bitnami/charts/commit/a779521612cf76395780acc0fed13690c6a6f603)), closes [#29916](https://github.com/bitnami/charts/issues/29916)
 
 ## <small>4.2.18 (2024-09-19)</small>
 

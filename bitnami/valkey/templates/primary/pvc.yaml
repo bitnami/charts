@@ -1,0 +1,34 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (eq .Values.architecture "standalone") (eq .Values.primary.kind "Deployment") (.Values.primary.persistence.enabled) (not .Values.primary.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ printf "valkey-data-%s-primary" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.persistence.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/part-of: valkey
+  {{- if .Values.primary.persistence.annotations }}
+  annotations: {{- toYaml .Values.primary.persistence.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.primary.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.primary.persistence.size | quote }}
+  {{- if .Values.primary.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.primary.persistence.selector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.primary.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.primary.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.primary.persistence "global" .Values.global) | nindent 2 }}
+{{- end }}

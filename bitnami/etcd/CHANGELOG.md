@@ -1,8 +1,21 @@
 # Changelog
 
-## 10.3.1 (2024-10-16)
+## 10.4.2 (2024-10-28)
 
-* fix etcd cronjob volume ([#29895](https://github.com/bitnami/charts/pull/29895))
+* [bitnami/etcd] Fixing defrag etcd for authenticated and tls clusters ([#30096](https://github.com/bitnami/charts/pull/30096))
+
+## <small>10.4.1 (2024-10-24)</small>
+
+* [bitnami/etcd]: Fix podLabels bug (#30052) ([9a5b58e](https://github.com/bitnami/charts/commit/9a5b58eff6fadde572f596f387ee921259a80469)), closes [#30052](https://github.com/bitnami/charts/issues/30052)
+
+## 10.4.0 (2024-10-22)
+
+* [bitnami/etcd]: Automatic etcd defragmentation (#29967) ([ea1683d](https://github.com/bitnami/charts/commit/ea1683dabaf7448a1e2fc6eca0a37a70899270e2)), closes [#29967](https://github.com/bitnami/charts/issues/29967)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>10.3.1 (2024-10-16)</small>
+
+* [bitnami/etcd] fix etcd cronjob volume (#29895) ([64aad9b](https://github.com/bitnami/charts/commit/64aad9b12ec2e7f48636944a4cc9d180b5c761a4)), closes [#29895](https://github.com/bitnami/charts/issues/29895)
 
 ## 10.3.0 (2024-10-14)
 

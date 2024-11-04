@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.3 (2024-09-30)
+## 12.0.4 (2024-10-22)
 
-* [bitnami/cassandra] Release 12.0.3 ([#29666](https://github.com/bitnami/charts/pull/29666))
+* [bitnami/cassandra] Release 12.0.4 ([#29999](https://github.com/bitnami/charts/pull/29999))
+
+## <small>12.0.3 (2024-09-30)</small>
+
+* [bitnami/cassandra] Release 12.0.3 (#29666) ([acf52f1](https://github.com/bitnami/charts/commit/acf52f17121eced58c2b8241b419e11997215b25)), closes [#29666](https://github.com/bitnami/charts/issues/29666)
 
 ## <small>12.0.2 (2024-09-26)</small>
 
