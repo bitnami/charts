@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.4.27 (2024-10-31)
+## 13.4.27 (2024-11-04)
 
 * [bitnami/jenkins] Release 13.4.27 ([#30143](https://github.com/bitnami/charts/pull/30143))
 
