@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.2 (2024-09-25)
+## 21.0.3 (2024-11-04)
 
-* [bitnami/schema-registry] Release 21.0.2 ([#29596](https://github.com/bitnami/charts/pull/29596))
+* hotfix(schema-registry): correct HPA to scale sts instead of deployment ([#30188](https://github.com/bitnami/charts/pull/30188))
+
+## <small>21.0.2 (2024-09-25)</small>
+
+* [bitnami/schema-registry] Release 21.0.2 (#29596) ([a63864e](https://github.com/bitnami/charts/commit/a63864e215d7a6a01af762d12d93b7753daa448e)), closes [#29596](https://github.com/bitnami/charts/issues/29596)
 
 ## <small>21.0.1 (2024-09-12)</small>
 
