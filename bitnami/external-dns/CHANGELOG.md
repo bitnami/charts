@@ -4,6 +4,15 @@
 
 * [bitnami/external-dns] Add targetLabels option to ServiceMonitor ([#29828](https://github.com/bitnami/charts/pull/29828))
 
+## 8.3.12 (2024-10-29)
+
+* [bitnami/external-dns] Allow rfc2136-zone to specify multiple zones ([#28681](https://github.com/bitnami/charts/pull/28681))
+
+## <small>8.3.11 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/external-dns] fix: secret not getting created when pihole password value is set (#30114) ([15c8fa0](https://github.com/bitnami/charts/commit/15c8fa0ff4bcb0b36d8504a6b0b0104634c6ba6c)), closes [#30114](https://github.com/bitnami/charts/issues/30114)
+
 ## <small>8.3.10 (2024-10-28)</small>
 
 * [bitnami/external-dns] chore: :wrench: :construction_worker: Re-enable CRD automation (#29266) ([9e50d55](https://github.com/bitnami/charts/commit/9e50d55475410d956d5d048b2443759050b8183e)), closes [#29266](https://github.com/bitnami/charts/issues/29266)

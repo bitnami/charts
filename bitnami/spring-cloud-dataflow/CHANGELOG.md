@@ -1,8 +1,13 @@
 # Changelog
 
-## 32.0.1 (2024-10-22)
+## 32.0.2 (2024-10-29)
 
-* [bitnami/spring-cloud-dataflow] fix: :bug: Add missing /.m2 emptyDir ([#30034](https://github.com/bitnami/charts/pull/30034))
+* [bitnami/spring-cloud-dataflow] Release 32.0.2 ([#30122](https://github.com/bitnami/charts/pull/30122))
+
+## <small>32.0.1 (2024-10-22)</small>
+
+* [bitnami/spring-cloud-dataflow] fix: :bug: Add missing /.m2 emptyDir (#30034) ([483b762](https://github.com/bitnami/charts/commit/483b762831fff2de246581452b91501e6309f052)), closes [#30034](https://github.com/bitnami/charts/issues/30034)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 32.0.0 (2024-09-23)
 

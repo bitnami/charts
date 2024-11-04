@@ -44,7 +44,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 4.0.2-debian-12-r0
+  tag: 4.0.3-debian-12-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -494,7 +494,9 @@ configuration: |-
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold
   ##
+  {{- if (dig "limits" "memory" "" .Values.resources) }}
   total_memory_available_override_value = {{ include "rabbitmq.toBytes" (dig "limits" "memory" "" .Values.resources) }}
+  {{- end }}
   {{- if (eq .Values.memoryHighWatermark.type "absolute") }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ include "rabbitmq.toBytes" .Values.memoryHighWatermark.value }}
   {{- else if (eq .Values.memoryHighWatermark.type "relative") }}
@@ -1559,7 +1561,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r32
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

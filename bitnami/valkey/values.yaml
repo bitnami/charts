@@ -1433,10 +1433,10 @@ sentinel:
     ##
     clusterIP: ""
 
-    ## @param sentinel.service.createprimary Enable primary service pointing to the current primary (experimental)
+    ## @param sentinel.service.createPrimary Enable primary service pointing to the current primary (experimental)
     ## NOTE: rbac.create need to be set to true
     ##
-    createprimary: false
+    createPrimary: false
 
     ## @param sentinel.service.loadBalancerIP Valkey Sentinel service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -2082,7 +2082,7 @@ kubectl:
     pullSecrets: []
   ## @param kubectl.command kubectl command to execute
   ##
-  command: ["/opt/bitnami/scripts/kubectl-scripts/update-master-label.sh"]
+  command: ["/opt/bitnami/scripts/kubectl-scripts/update-primary-label.sh"]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param kubectl.containerSecurityContext.enabled Enabled kubectl containers' Security Context
