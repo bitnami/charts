@@ -7,6 +7,8 @@ service:
   type: LoadBalancer
 dagProcessor:
   enabled: true
+triggerer:
+  enabled: true
 dags:
   enabled: true
   repositories:

@@ -136,6 +136,9 @@ tracking:
   ## @param tracking.replicaCount Number of mlflow replicas to deploy
   ##
   replicaCount: 1
+  ## @param tracking.host mlflow tracking listening host. Set to "[::]" to use ipv6. 
+  ## 
+  host: "0.0.0.0"
   ## @param tracking.containerPorts.http mlflow HTTP container port
   ##
   containerPorts:
