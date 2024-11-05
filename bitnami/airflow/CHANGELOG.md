@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.1 (2024-11-05)
+## 21.3.0 (2024-11-05)
 
-* [bitnami/airflow] bugfix: pod template ([#30216](https://github.com/bitnami/charts/pull/30216))
+* [bitnami/airflow] Standardize autoscaling ([#30220](https://github.com/bitnami/charts/pull/30220))
+
+## <small>21.2.1 (2024-11-05)</small>
+
+* [bitnami/airflow] bugfix: pod template (#30216) ([528d26f](https://github.com/bitnami/charts/commit/528d26f262befe7263b0f0e7728dbe706dd33c92)), closes [#30216](https://github.com/bitnami/charts/issues/30216)
 
 ## 21.2.0 (2024-11-05)
 
