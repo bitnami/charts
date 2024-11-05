@@ -1,8 +1,21 @@
 # Changelog
 
-## 2.0.13 (2024-10-31)
+## 2.0.16 (2024-11-05)
 
-* [bitnami/chainloop] Release 2.0.13 ([#30139](https://github.com/bitnami/charts/pull/30139))
+* [bitnami/chainloop] Release 2.0.16 ([#30225](https://github.com/bitnami/charts/pull/30225))
+
+## <small>2.0.15 (2024-11-05)</small>
+
+* [bitnami/chainloop] Release 2.0.15 (#30222) ([830bfcc](https://github.com/bitnami/charts/commit/830bfcc15a9df453cd7156dc398e12e3b33c5301)), closes [#30222](https://github.com/bitnami/charts/issues/30222)
+
+## <small>2.0.14 (2024-11-04)</small>
+
+* [bitnami/chainloop] Release 2.0.14 (#30205) ([9883cd3](https://github.com/bitnami/charts/commit/9883cd3b1049803d0f2d54802cdc343c5a53f181)), closes [#30205](https://github.com/bitnami/charts/issues/30205)
+
+## <small>2.0.13 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/chainloop] Release 2.0.13 (#30139) ([e54635a](https://github.com/bitnami/charts/commit/e54635ac52cf9397069d66dbe8eb8b6540207d69)), closes [#30139](https://github.com/bitnami/charts/issues/30139)
 
 ## <small>2.0.12 (2024-10-25)</small>
 
