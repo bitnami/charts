@@ -107,6 +107,7 @@ spec:
               # directories writable, so we need to copy it to an empty dir volume
               cp -r --preserve=mode /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
               cp -r --preserve=mode /opt/bitnami/keycloak/data /emptydir/app-data-dir
+              cp -r --preserve=mode /opt/bitnami/keycloak/providers /emptydir/app-providers-dir
               info "Copy operation completed"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
@@ -301,6 +302,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/keycloak/data
               subPath: app-data-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/providers
+              subPath: app-providers-dir
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: keycloak-config
               mountPath: /bitnami/keycloak/conf/keycloak.conf

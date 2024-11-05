@@ -19,7 +19,9 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: scheduler
+  {{- if not .Values.scheduler.autoscaling.hpa.enabled }}
   replicas: {{ .Values.scheduler.replicaCount }}
+  {{- end }}
   {{- if .Values.scheduler.updateStrategy }}
   strategy: {{- toYaml .Values.scheduler.updateStrategy | nindent 4 }}
   {{- end }}

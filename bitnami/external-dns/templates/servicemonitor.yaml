@@ -37,6 +37,12 @@ spec:
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
+  {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
+  podTargetLabels: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.podTargetLabels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.metrics.serviceMonitor.targetLabels }}
+  targetLabels: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.targetLabels "context" $) | nindent 4 }}
+  {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}

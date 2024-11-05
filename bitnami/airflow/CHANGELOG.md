@@ -1,8 +1,24 @@
 # Changelog
 
+## 21.3.0 (2024-11-05)
+
+* [bitnami/airflow] Standardize autoscaling ([#30220](https://github.com/bitnami/charts/pull/30220))
+
+## <small>21.2.1 (2024-11-05)</small>
+
+* [bitnami/airflow] bugfix: pod template (#30216) ([528d26f](https://github.com/bitnami/charts/commit/528d26f262befe7263b0f0e7728dbe706dd33c92)), closes [#30216](https://github.com/bitnami/charts/issues/30216)
+
+## 21.2.0 (2024-11-05)
+
+* [bitnami/airflow] Add support for Triggerer (#30211) ([fe4e81f](https://github.com/bitnami/charts/commit/fe4e81f3e56101d429903b805b3c487095492a5d)), closes [#30211](https://github.com/bitnami/charts/issues/30211)
+
+## <small>21.1.1 (2024-11-04)</small>
+
+* [bitnami/airflow] Release 21.1.1 (#30201) ([8cccffc](https://github.com/bitnami/charts/commit/8cccffc1a9618afbd5c3bc80b3b92933ddfd9851)), closes [#30201](https://github.com/bitnami/charts/issues/30201)
+
 ## 21.1.0 (2024-11-04)
 
-* [bitnami/airflow] Add support to run Dag Processor in standalone mode ([#30159](https://github.com/bitnami/charts/pull/30159))
+* [bitnami/airflow] Add support to run Dag Processor in standalone mode (#30159) ([7eb2f51](https://github.com/bitnami/charts/commit/7eb2f519f77638c5e1b60aa62f3d3fa2f4cddbe8)), closes [#30159](https://github.com/bitnami/charts/issues/30159)
 
 ## <small>21.0.3 (2024-10-31)</small>
 
