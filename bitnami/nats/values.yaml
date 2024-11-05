@@ -321,6 +321,9 @@ updateStrategy:
   ## @param updateStrategy.type StrategyType. Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
+## @param podManagementPolicy StatefulSet pod management policy
+##
+podManagementPolicy: OrderedReady
 ## @param containerPorts.client NATS client container port
 ## @param containerPorts.cluster NATS cluster container port
 ## @param containerPorts.monitoring NATS monitoring container port
