@@ -133,7 +133,7 @@ spec:
             - name: AIRFLOW_LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "airflow.secretName" . }}
+                  name: {{ include "airflow.ldapSecretName" . }}
                   key: bind-password
             - name: AIRFLOW_LDAP_USER_REGISTRATION
               value: {{ .Values.ldap.userRegistration | quote }}
