@@ -541,7 +541,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                               | Value   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |---------|
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `metrics.enabled`                          | Enable exposing Keycloak statistics                                                                                       | `false` |
 | `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                 | `9000`  |
 | `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`    |
