@@ -939,6 +939,16 @@ backup:
   ## @param backup.retentionDays Retention time in days for backups (older backups are deleted)
   ##
   retentionDays: 10
+  ## @param backup.restore Parameter for restore
+  ## 
+  restore:
+    ## @param Enable restore. Should be used when backup is enabled
+    ##
+    enabled: false
+    ## @param backup.restore.exisitingClaim Exisiting PVC where restored data will be stored temporarily. Should be created beforehand
+    ## If not specified backup PVC is used to restore data
+    exisitingClaim: ""
+
 
   ## Persistence parameters
   ##
@@ -1263,3 +1273,13 @@ backup:
       ##     memory: 1024Mi
       ##
       resources: {}
+## @section InfluxDB&trade; restore parameters
+## 
+restore:
+  ## @param Enable restore. Should be enabled when backup is enabled.
+  ##
+  enabled: false
+  ## @param subPath in the backup persistence volume where restored data is tempororily stored
+  ## Should be provided if the cloud provider is enabled. If not provided backup.directory is used as absolute path
+  restoreSubPath: ""
+  
