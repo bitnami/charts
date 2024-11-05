@@ -50,7 +50,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -89,10 +89,6 @@ existingConfiguration=scylladb-configuration
 ```
 
 > NOTE: This ConfigMap will override other ScyllaDB configuration variables set in the chart.
-
-### Backup and restore
-
-Refer to our detailed tutorial on [backing up and restoring Bitnami ScyllaDB deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-backup-restore-data-scylladb-kubernetes-index.html).
 
 ### Set pod affinity
 
@@ -271,7 +267,7 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 | Name                                                         | Description                                                                                                                                                                                                                         | Value            |
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `jmxProxy.enabled`                                           | Enable JMX Proxy sidecar                                                                                                                                                                                                            | `true`           |
+| `jmxProxy.enabled`                                           | Enable JMX Proxy sidecar                                                                                                                                                                                                            | `false`          |
 | `jmxProxy.extraEnvVars`                                      | Array with extra environment variables to add to JMX Proxy sidecar                                                                                                                                                                  | `[]`             |
 | `jmxProxy.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for JMX Proxy sidecar                                                                                                                                                          | `""`             |
 | `jmxProxy.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for JMX Proxy sidecar                                                                                                                                                             | `""`             |
@@ -494,6 +490,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/scylladb --set dbUse
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
+
+### To 3.0.0
+
+This major version updates ScyllaDB to version 6.2. From now on, scylla-jmx becomes an optional package and is not installed by default. `jmxProxy.enabled`  has been set to `false`, and the whole JMX logic is deprecated and plan to be removed in a future release.
 
 ## License
 

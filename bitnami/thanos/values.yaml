@@ -68,7 +68,6 @@ image:
   repository: bitnami/thanos
   tag: 0.36.1-debian-12-r3
   digest: ""
-  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -714,6 +713,13 @@ query:
   ## @param query.autoscaling.maxReplicas Maximum number of Thanos Query replicas
   ## @param query.autoscaling.targetCPU Target CPU utilization percentage
   ## @param query.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param query.autoscaling.targetPodMetrics [array] List of custom pod metrics name and averageValue to evaluate for scaling
+  ## e.g.
+  ## targetPodMetrics:
+  ## - name: thanos_query_range_query_duration
+  ##   averageValue: 2
+  ## - name: thanos_query_promql_duration_metric
+  ##   averageValue: 0.5
   ##
   autoscaling:
     enabled: false
@@ -721,6 +727,7 @@ query:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
+    targetPodMetrics: []
   ## Thanos Query Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param query.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Query
@@ -1975,6 +1982,9 @@ compactor:
   ## @param compactor.logFormat Thanos Compactor log format
   ##
   logFormat: logfmt
+  ## @param compactor.dataDir Thanos Compactor data directory
+  ##
+  dataDir: /data
   ## Resolution and Retention flags
   ## @param compactor.retentionResolutionRaw Resolution and Retention flag
   ## @param compactor.retentionResolution5m Resolution and Retention flag
@@ -4975,7 +4985,6 @@ volumePermissions:
     repository: bitnami/os-shell
     tag: 12-debian-12-r30
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent

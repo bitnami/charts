@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.2 (2024-10-02)
+## 2.3.3 (2024-10-17)
 
-* [bitnami/pinniped] Release 2.3.2 ([#29714](https://github.com/bitnami/charts/pull/29714))
+* [bitnami/pinniped] Release 2.3.3 ([#29959](https://github.com/bitnami/charts/pull/29959))
+
+## <small>2.3.2 (2024-10-02)</small>
+
+* [bitnami/pinniped] Release 2.3.2 (#29714) ([4871f7b](https://github.com/bitnami/charts/commit/4871f7bf11f3641b4700eb161ffb22ca49d7fe60)), closes [#29714](https://github.com/bitnami/charts/issues/29714)
 
 ## <small>2.3.1 (2024-09-06)</small>
 

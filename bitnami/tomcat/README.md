@@ -53,7 +53,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -164,26 +164,28 @@ You can enable this init container by setting `volumePermissions.enabled` to `tr
 
 ### Tomcat parameters
 
-| Name                           | Description                                                                                                                                                     | Value                    |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `image.registry`               | Tomcat image registry                                                                                                                                           | `REGISTRY_NAME`          |
-| `image.repository`             | Tomcat image repository                                                                                                                                         | `REPOSITORY_NAME/tomcat` |
-| `image.digest`                 | Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                          | `""`                     |
-| `image.pullPolicy`             | Tomcat image pull policy                                                                                                                                        | `IfNotPresent`           |
-| `image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                                                | `[]`                     |
-| `image.debug`                  | Specify if debug logs should be enabled                                                                                                                         | `false`                  |
-| `automountServiceAccountToken` | Mount Service Account token in pod                                                                                                                              | `false`                  |
-| `hostAliases`                  | Deployment pod host aliases                                                                                                                                     | `[]`                     |
-| `tomcatUsername`               | Tomcat admin user                                                                                                                                               | `user`                   |
-| `tomcatPassword`               | Tomcat admin password                                                                                                                                           | `""`                     |
-| `existingSecret`               | Use existing secret for password details (`tomcatPassword` will be ignored and picked up from this secret). The secret has to contain the key `tomcat-password` | `""`                     |
-| `tomcatAllowRemoteManagement`  | Enable remote access to management interface                                                                                                                    | `0`                      |
-| `catalinaOpts`                 | Java runtime option used by tomcat JVM                                                                                                                          | `""`                     |
-| `command`                      | Override default container command (useful when using custom images)                                                                                            | `[]`                     |
-| `args`                         | Override default container args (useful when using custom images)                                                                                               | `[]`                     |
-| `extraEnvVars`                 | Extra environment variables to be set on Tomcat container                                                                                                       | `[]`                     |
-| `extraEnvVarsCM`               | Name of existing ConfigMap containing extra environment variables                                                                                               | `""`                     |
-| `extraEnvVarsSecret`           | Name of existing Secret containing extra environment variables                                                                                                  | `""`                     |
+| Name                           | Description                                                                                                                                                                          | Value                    |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `image.registry`               | Tomcat image registry                                                                                                                                                                | `REGISTRY_NAME`          |
+| `image.repository`             | Tomcat image repository                                                                                                                                                              | `REPOSITORY_NAME/tomcat` |
+| `image.digest`                 | Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                     |
+| `image.pullPolicy`             | Tomcat image pull policy                                                                                                                                                             | `IfNotPresent`           |
+| `image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                                                                     | `[]`                     |
+| `image.debug`                  | Specify if debug logs should be enabled                                                                                                                                              | `false`                  |
+| `automountServiceAccountToken` | Mount Service Account token in pod                                                                                                                                                   | `false`                  |
+| `hostAliases`                  | Deployment pod host aliases                                                                                                                                                          | `[]`                     |
+| `tomcatUsername`               | Tomcat admin user                                                                                                                                                                    | `user`                   |
+| `tomcatPassword`               | Tomcat admin password                                                                                                                                                                | `""`                     |
+| `existingSecret`               | Use existing secret for credentials details (`tomcatUsername` and `tomcatPassword` will be ignored and picked up from this secret)                                                   | `""`                     |
+| `secretKeys.adminUsernameKey`  | Name of key in existing secret to use instead of default `tomcat-username` key to provide Tomcat admin username (overrides `tomcatUsername`). Only used when `existingSecret` is set | `""`                     |
+| `secretKeys.adminPasswordKey`  | Name of key in existing secret to use instead of default `tomcat-password` key to provide Tomcat admin password (overrides `tomcatPassword`). Only used when `existingSecret` is set | `""`                     |
+| `tomcatAllowRemoteManagement`  | Enable remote access to management interface                                                                                                                                         | `0`                      |
+| `catalinaOpts`                 | Java runtime option used by tomcat JVM                                                                                                                                               | `""`                     |
+| `command`                      | Override default container command (useful when using custom images)                                                                                                                 | `[]`                     |
+| `args`                         | Override default container args (useful when using custom images)                                                                                                                    | `[]`                     |
+| `extraEnvVars`                 | Extra environment variables to be set on Tomcat container                                                                                                                            | `[]`                     |
+| `extraEnvVarsCM`               | Name of existing ConfigMap containing extra environment variables                                                                                                                    | `""`                     |
+| `extraEnvVarsSecret`           | Name of existing Secret containing extra environment variables                                                                                                                       | `""`                     |
 
 ### Tomcat deployment parameters
 

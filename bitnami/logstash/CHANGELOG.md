@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.5 (2024-09-26)
+## 6.3.6 (2024-10-17)
 
-* [bitnami/logstash] Release 6.3.5 ([#29633](https://github.com/bitnami/charts/pull/29633))
+* [bitnami/logstash] Release 6.3.6 ([#29969](https://github.com/bitnami/charts/pull/29969))
+
+## <small>6.3.5 (2024-09-26)</small>
+
+* [bitnami/logstash] Release 6.3.5 (#29633) ([abd6fed](https://github.com/bitnami/charts/commit/abd6fedf0711acaa28f61094575057255965ff14)), closes [#29633](https://github.com/bitnami/charts/issues/29633)
 
 ## <small>6.3.4 (2024-09-11)</small>
 

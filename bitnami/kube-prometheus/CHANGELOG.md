@@ -1,8 +1,17 @@
 # Changelog
 
-## 9.6.3 (2024-10-02)
+## 9.6.5 (2024-10-29)
 
-* [bitnami/kube-prometheus] Release 9.6.3 ([#29715](https://github.com/bitnami/charts/pull/29715))
+* [bitnami/kube-prometheus] Fix spec for thanos sidecar if no extraEnv is provided ([#30127](https://github.com/bitnami/charts/pull/30127))
+
+## <small>9.6.4 (2024-10-24)</small>
+
+* [bitnami/kube-prometheus] Release 9.6.4 (#30073) ([d809c39](https://github.com/bitnami/charts/commit/d809c39849c5a04fb5928f37c5d9cf9da310f2bc)), closes [#30073](https://github.com/bitnami/charts/issues/30073)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>9.6.3 (2024-10-02)</small>
+
+* [bitnami/kube-prometheus] Release 9.6.3 (#29715) ([cff710b](https://github.com/bitnami/charts/commit/cff710b336b09df69aee200754b7d9b1267c8d04)), closes [#29715](https://github.com/bitnami/charts/issues/29715)
 
 ## <small>9.6.2 (2024-09-25)</small>
 

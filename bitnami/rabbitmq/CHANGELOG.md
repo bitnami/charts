@@ -1,8 +1,22 @@
 # Changelog
 
-## 15.0.2 (2024-10-05)
+## 15.0.5 (2024-10-31)
 
-* [Bitnami/rabbitmq] - Fix duplicate key issue with Helm/FluxCD integration ([#29780](https://github.com/bitnami/charts/pull/29780))
+* [bitnami/rabbitmq] Release 15.0.5 ([#30152](https://github.com/bitnami/charts/pull/30152))
+
+## <small>15.0.4 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/rabbitmq] Allow missing memory limit when memoryHighWatermark is absolute (#30079) ([b92af12](https://github.com/bitnami/charts/commit/b92af12ad55e92c8b1377987b222090787d23b02)), closes [#30079](https://github.com/bitnami/charts/issues/30079)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>15.0.3 (2024-10-14)</small>
+
+* [bitnami/rabbitmq] Use common password/secrets manager to handle credentials (#29879) ([456bfb2](https://github.com/bitnami/charts/commit/456bfb2a2762fb78e96ae09d55d82cfaacc74d45)), closes [#29879](https://github.com/bitnami/charts/issues/29879)
+
+## <small>15.0.2 (2024-10-07)</small>
+
+* [Bitnami/rabbitmq] - Fix duplicate key issue with Helm/FluxCD integration (#29780) ([cea9e6c](https://github.com/bitnami/charts/commit/cea9e6c9ea4b97b5ec48c5156d8d6c9fcd1ded13)), closes [#29780](https://github.com/bitnami/charts/issues/29780)
 
 ## <small>15.0.1 (2024-09-25)</small>
 

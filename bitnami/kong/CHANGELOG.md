@@ -1,8 +1,20 @@
 # Changelog
 
-## 14.0.0 (2024-10-02)
+## 14.0.3 (2024-10-28)
 
-* [bitnami/kong] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29736](https://github.com/bitnami/charts/pull/29736))
+* [bitnami/kong] Release 14.0.3 ([#30102](https://github.com/bitnami/charts/pull/30102))
+
+## <small>14.0.2 (2024-10-16)</small>
+
+* [bitnami/kong] Release 14.0.2 (#29926) ([33bd511](https://github.com/bitnami/charts/commit/33bd5119767d11ee76a34dd137380558a7d4a584)), closes [#29926](https://github.com/bitnami/charts/issues/29926)
+
+## <small>14.0.1 (2024-10-16)</small>
+
+* [bitnami/kong] Release 14.0.1 (#29922) ([db33704](https://github.com/bitnami/charts/commit/db33704cd47f8afa9fc0c7822061212668674f42)), closes [#29922](https://github.com/bitnami/charts/issues/29922)
+
+## 14.0.0 (2024-10-03)
+
+* [bitnami/kong] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29736) ([2f9809b](https://github.com/bitnami/charts/commit/2f9809b8abe8a576cdb4f14be16749a4d1a9792a)), closes [#29736](https://github.com/bitnami/charts/issues/29736)
 
 ## <small>13.0.3 (2024-09-19)</small>
 

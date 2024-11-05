@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.7.28 (2024-10-03)
+## 15.8.0 (2024-10-15)
 
-* [bitnami/thanos] Revert #29673 ([#29763](https://github.com/bitnami/charts/pull/29763))
+* [bitnami/thanos] Add compactor dataDir setting ([#29856](https://github.com/bitnami/charts/pull/29856))
+
+## <small>15.7.29 (2024-10-14)</small>
+
+* [bitnami/thanos] Add customAutoScaling flag (#29849) ([6cf283d](https://github.com/bitnami/charts/commit/6cf283dcd11068207dfad8aa61bd9f614b2634b5)), closes [#29849](https://github.com/bitnami/charts/issues/29849)
+
+## <small>15.7.28 (2024-10-08)</small>
+
+* [bitnami/thanos] Revert #29673 (#29763) ([0e20117](https://github.com/bitnami/charts/commit/0e201170447506913aa97713a769732baaf3802b)), closes [#29673](https://github.com/bitnami/charts/issues/29673) [#29763](https://github.com/bitnami/charts/issues/29763)
 
 ## <small>15.7.27 (2024-10-02)</small>
 

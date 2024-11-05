@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/rabbitmq/cluster-operator/v{version}/config/crd/bases/rabbitmq.com_rabbitmqclusters.yaml
-# Version: 2.10.0
+# Version: 2.11.0
 # RabbitMQ Cluster Operator
 #
 # Copyright 2020 VMware, Inc. All Rights Reserved.
@@ -12,7 +12,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: rabbitmqclusters.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -331,7 +331,7 @@ spec:
                                       pod labels will be ignored. The default value is empty.
                                       The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                       Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                      This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                      This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                     items:
                                       type: string
                                     type: array
@@ -346,7 +346,7 @@ spec:
                                       pod labels will be ignored. The default value is empty.
                                       The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                       Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                      This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                      This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                     items:
                                       type: string
                                     type: array
@@ -507,7 +507,7 @@ spec:
                                   pod labels will be ignored. The default value is empty.
                                   The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                   Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                  This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                  This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                 items:
                                   type: string
                                 type: array
@@ -522,7 +522,7 @@ spec:
                                   pod labels will be ignored. The default value is empty.
                                   The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                   Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                  This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                  This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                 items:
                                   type: string
                                 type: array
@@ -676,7 +676,7 @@ spec:
                                       pod labels will be ignored. The default value is empty.
                                       The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                       Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                      This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                      This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                     items:
                                       type: string
                                     type: array
@@ -691,7 +691,7 @@ spec:
                                       pod labels will be ignored. The default value is empty.
                                       The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                       Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                      This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                      This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                     items:
                                       type: string
                                     type: array
@@ -852,7 +852,7 @@ spec:
                                   pod labels will be ignored. The default value is empty.
                                   The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                   Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                  This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                  This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                 items:
                                   type: string
                                 type: array
@@ -867,7 +867,7 @@ spec:
                                   pod labels will be ignored. The default value is empty.
                                   The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                   Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                  This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                  This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                 items:
                                   type: string
                                 type: array
@@ -978,9 +978,7 @@ spec:
                           This field is effectively required, but due to backwards compatibility is
                           allowed to be empty. Instances of this type with an empty value here are
                           almost certainly wrong.
-                          TODO: Add other useful fields. apiVersion, kind, uid?
                           More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
@@ -1869,6 +1867,7 @@ spec:
                                                     format: int32
                                                     type: integer
                                                   service:
+                                                    default: ""
                                                     type: string
                                                 required:
                                                   - port
@@ -1975,6 +1974,7 @@ spec:
                                                     format: int32
                                                     type: integer
                                                   service:
+                                                    default: ""
                                                     type: string
                                                 required:
                                                   - port
@@ -2055,6 +2055,8 @@ spec:
                                                 items:
                                                   properties:
                                                     name:
+                                                      type: string
+                                                    request:
                                                       type: string
                                                   required:
                                                     - name
@@ -2173,6 +2175,7 @@ spec:
                                                     format: int32
                                                     type: integer
                                                   service:
+                                                    default: ""
                                                     type: string
                                                 required:
                                                   - port
@@ -2574,6 +2577,7 @@ spec:
                                                     format: int32
                                                     type: integer
                                                   service:
+                                                    default: ""
                                                     type: string
                                                 required:
                                                   - port
@@ -2680,6 +2684,7 @@ spec:
                                                     format: int32
                                                     type: integer
                                                   service:
+                                                    default: ""
                                                     type: string
                                                 required:
                                                   - port
@@ -2760,6 +2765,8 @@ spec:
                                                 items:
                                                   properties:
                                                     name:
+                                                      type: string
+                                                    request:
                                                       type: string
                                                   required:
                                                     - name
@@ -2878,6 +2885,7 @@ spec:
                                                     format: int32
                                                     type: integer
                                                   service:
+                                                    default: ""
                                                     type: string
                                                 required:
                                                   - port
@@ -3293,6 +3301,7 @@ spec:
                                                     format: int32
                                                     type: integer
                                                   service:
+                                                    default: ""
                                                     type: string
                                                 required:
                                                   - port
@@ -3399,6 +3408,7 @@ spec:
                                                     format: int32
                                                     type: integer
                                                   service:
+                                                    default: ""
                                                     type: string
                                                 required:
                                                   - port
@@ -3479,6 +3489,8 @@ spec:
                                                 items:
                                                   properties:
                                                     name:
+                                                      type: string
+                                                    request:
                                                       type: string
                                                   required:
                                                     - name
@@ -3597,6 +3609,7 @@ spec:
                                                     format: int32
                                                     type: integer
                                                   service:
+                                                    default: ""
                                                     type: string
                                                 required:
                                                   - port
@@ -3761,13 +3774,10 @@ spec:
                                         properties:
                                           name:
                                             type: string
-                                          source:
-                                            properties:
-                                              resourceClaimName:
-                                                type: string
-                                              resourceClaimTemplateName:
-                                                type: string
-                                            type: object
+                                          resourceClaimName:
+                                            type: string
+                                          resourceClaimTemplateName:
+                                            type: string
                                         required:
                                           - name
                                         type: object
@@ -3843,6 +3853,8 @@ spec:
                                             type: integer
                                           type: array
                                           x-kubernetes-list-type: atomic
+                                        supplementalGroupsPolicy:
+                                          type: string
                                         sysctls:
                                           items:
                                             properties:
@@ -3982,10 +3994,12 @@ spec:
                                               diskURI:
                                                 type: string
                                               fsType:
+                                                default: ext4
                                                 type: string
                                               kind:
                                                 type: string
                                               readOnly:
+                                                default: false
                                                 type: boolean
                                             required:
                                               - diskName
@@ -4345,6 +4359,13 @@ spec:
                                             required:
                                               - path
                                             type: object
+                                          image:
+                                            properties:
+                                              pullPolicy:
+                                                type: string
+                                              reference:
+                                                type: string
+                                            type: object
                                           iscsi:
                                             properties:
                                               chapAuthDiscovery:
@@ -4358,6 +4379,7 @@ spec:
                                               iqn:
                                                 type: string
                                               iscsiInterface:
+                                                default: default
                                                 type: string
                                               lun:
                                                 format: int32
@@ -4606,6 +4628,7 @@ spec:
                                               image:
                                                 type: string
                                               keyring:
+                                                default: /etc/ceph/keyring
                                                 type: string
                                               monitors:
                                                 items:
@@ -4613,6 +4636,7 @@ spec:
                                                 type: array
                                                 x-kubernetes-list-type: atomic
                                               pool:
+                                                default: rbd
                                                 type: string
                                               readOnly:
                                                 type: boolean
@@ -4624,6 +4648,7 @@ spec:
                                                 type: object
                                                 x-kubernetes-map-type: atomic
                                               user:
+                                                default: admin
                                                 type: string
                                             required:
                                               - image
@@ -4632,6 +4657,7 @@ spec:
                                           scaleIO:
                                             properties:
                                               fsType:
+                                                default: xfs
                                                 type: string
                                               gateway:
                                                 type: string
@@ -4649,6 +4675,7 @@ spec:
                                               sslEnabled:
                                                 type: boolean
                                               storageMode:
+                                                default: ThinProvisioned
                                                 type: string
                                               storagePool:
                                                 type: string
@@ -4942,10 +4969,8 @@ spec:
                         Claims lists the names of resources, defined in spec.resourceClaims,
                         that are used by this container.
 
-
                         This is an alpha field and requires enabling the
                         DynamicResourceAllocation feature gate.
-
 
                         This field is immutable. It can only be set for containers.
                       items:
@@ -4956,6 +4981,12 @@ spec:
                               Name must match the name of one entry in pod.spec.resourceClaims of
                               the Pod where this field is used. It makes that resource available
                               inside a container.
+                            type: string
+                          request:
+                            description: |-
+                              Request is the name chosen for a request in the referenced claim.
+                              If empty, everything from the claim is made available, otherwise
+                              only the result of this request.
                             type: string
                         required:
                           - name
@@ -5006,9 +5037,7 @@ spec:
                             This field is effectively required, but due to backwards compatibility is
                             allowed to be empty. Instances of this type with an empty value here are
                             almost certainly wrong.
-                            TODO: Add other useful fields. apiVersion, kind, uid?
                             More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                            TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                           type: string
                       type: object
                       x-kubernetes-map-type: atomic
@@ -5198,9 +5227,7 @@ spec:
                         This field is effectively required, but due to backwards compatibility is
                         allowed to be empty. Instances of this type with an empty value here are
                         almost certainly wrong.
-                        TODO: Add other useful fields. apiVersion, kind, uid?
                         More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                        TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                       type: string
                   type: object
                   x-kubernetes-map-type: atomic

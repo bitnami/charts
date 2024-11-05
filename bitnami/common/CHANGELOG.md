@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.24.0 (2024-10-02)
+## 2.26.0 (2024-10-14)
 
-* [bitnami/common] Add common.tplvalues.merge-overwrite helper ([#29668](https://github.com/bitnami/charts/pull/29668))
+* [bitnami/common] Drop unused custom empty password validators ([#29432](https://github.com/bitnami/charts/pull/29432))
+
+## 2.24.0 (2024-10-03)
+
+* [bitnami/common] Add common.tplvalues.merge-overwrite helper (#29668) ([611b2a5](https://github.com/bitnami/charts/commit/611b2a59e06feaac878b3b218fd848a687216158)), closes [#29668](https://github.com/bitnami/charts/issues/29668)
 
 ## 2.23.0 (2024-09-13)
 

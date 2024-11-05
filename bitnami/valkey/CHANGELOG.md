@@ -1,8 +1,25 @@
 # Changelog
 
-## 1.0.2 (2024-10-03)
+## 2.0.2 (2024-10-30)
 
-* [bitnami/valkey] Release 1.0.2 ([#29770](https://github.com/bitnami/charts/pull/29770))
+* [bitnami/valkey] Fix default kukbectl.command when sentinel.service.createPrimary is true ([#30090](https://github.com/bitnami/charts/pull/30090))
+
+## <small>2.0.1 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/valkey] Fix sentinel.service.createprimary config to sentinel.service.createPrimary to work ([e330cab](https://github.com/bitnami/charts/commit/e330cab75828f69fb18cd5ef1140add5f6f9d858)), closes [#30091](https://github.com/bitnami/charts/issues/30091)
+
+## 2.0.0 (2024-10-23)
+
+* [bitnami/valkey] Update all the references from to master/slave to primary/replica (#30024) ([75cc62d](https://github.com/bitnami/charts/commit/75cc62d9caf28c6f522042cd0f94cb9aca877837)), closes [#30024](https://github.com/bitnami/charts/issues/30024)
+
+## <small>1.0.3 (2024-10-22)</small>
+
+* [bitnami/valkey] Release 1.0.3 (#30048) ([f843e7e](https://github.com/bitnami/charts/commit/f843e7ecb5b89b32e2245071bf1c910552dcb7a5)), closes [#30048](https://github.com/bitnami/charts/issues/30048)
+
+## <small>1.0.2 (2024-10-03)</small>
+
+* [bitnami/valkey] Release 1.0.2 (#29770) ([68a889f](https://github.com/bitnami/charts/commit/68a889fcb6dc21a275cfbad539c9fc1097912167)), closes [#29770](https://github.com/bitnami/charts/issues/29770)
 
 ## <small>1.0.1 (2024-09-19)</small>
 
