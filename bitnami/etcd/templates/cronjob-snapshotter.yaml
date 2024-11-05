@@ -36,8 +36,8 @@ spec:
           tolerations: {{- toYaml .Values.disasterRecovery.cronjob.tolerations | nindent 12 }}
           {{- end }}
           restartPolicy: OnFailure
-          {{- if .Values.podSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.disasterRecovery.cronjob.podSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.disasterRecovery.cronjob.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.disasterRecovery.cronjob.serviceAccountName }}
           serviceAccountName: {{ .Values.disasterRecovery.cronjob.serviceAccountName | quote }}
@@ -67,8 +67,8 @@ spec:
             - name: etcd-snapshotter
               image: {{ include "etcd.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-              {{- if .Values.containerSecurityContext.enabled }}
-              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 16 }}
+              {{- if .Values.disasterRecovery.cronjob.containerSecurityContext.enabled }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.disasterRecovery.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.diagnosticMode.enabled }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}

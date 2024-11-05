@@ -19,7 +19,9 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: scheduler
+  {{- if not .Values.scheduler.autoscaling.hpa.enabled }}
   replicas: {{ .Values.scheduler.replicaCount }}
+  {{- end }}
   {{- if .Values.scheduler.updateStrategy }}
   strategy: {{- toYaml .Values.scheduler.updateStrategy | nindent 4 }}
   {{- end }}
@@ -70,7 +72,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.createDefaultConfig" . | nindent 8 }}
-        {{- if and .Values.dags.enabled }}
+        {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
         {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
         {{- end }}
         {{- if .Values.plugins.enabled }}
@@ -222,7 +224,7 @@ spec:
               mountPath: /opt/bitnami/airflow/pod_template.yaml
               subPath: pod_template.yaml
             {{- end }}
-            {{- if and .Values.dags.enabled }}
+            {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
             {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
             {{- end }}
             {{- if .Values.plugins.enabled }}
@@ -234,7 +236,7 @@ spec:
             {{- if .Values.scheduler.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-        {{- if and .Values.dags.enabled }}
+        {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
         {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
         {{- end }}
         {{- if .Values.plugins.enabled }}
@@ -249,7 +251,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.dags.enabled .Values.dags.existingConfigmap }}
+        {{- if and .Values.dags.enabled .Values.dags.existingConfigmap (not .Values.dagProcessor.enabled) }}
         - name: external-dags
           configMap:
             name: {{ tpl .Values.dags.existingConfigmap $ }}

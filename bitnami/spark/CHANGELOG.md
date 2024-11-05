@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.12 (2024-09-25)
+## 9.2.13 (2024-11-04)
 
-* [bitnami/spark] Fix extraEgress being applied from master instead of worker ([#29591](https://github.com/bitnami/charts/pull/29591))
+* [bitnami/spark] Release 9.2.13 ([#30189](https://github.com/bitnami/charts/pull/30189))
+
+## <small>9.2.12 (2024-10-01)</small>
+
+* [bitnami/spark] Fix extraEgress being applied from master instead of worker (#29591) ([65b08b5](https://github.com/bitnami/charts/commit/65b08b500c0324ba079d1a8c18306330d4812026)), closes [#29591](https://github.com/bitnami/charts/issues/29591)
 
 ## <small>9.2.11 (2024-09-25)</small>
 

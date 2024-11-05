@@ -5,6 +5,10 @@ service:
   ports:
     http: 80
   type: LoadBalancer
+dagProcessor:
+  enabled: true
+triggerer:
+  enabled: true
 dags:
   enabled: true
   repositories:

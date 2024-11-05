@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.1.1 (2024-11-03)
+## 16.1.2 (2024-11-03)
 
 * [bitnami/postgresql] Fixed if statement end for ldap.uri ([#30181](https://github.com/bitnami/charts/pull/30181))
+
+## 16.1.1 (2024-10-31)
+
+* [bitnami/postgresql] metrics.collectors applies to read replicas ([#30133](https://github.com/bitnami/charts/pull/30133))
 
 ## 16.1.0 (2024-10-30)
 
