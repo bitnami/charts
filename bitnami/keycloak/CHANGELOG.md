@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.5 (2024-11-04)
+## 24.1.0 (2024-11-05)
 
 * [bitnami/keycloak] switches keycloak-metrics service to point to new port ([#30095](https://github.com/bitnami/charts/pull/30095))
+
+## <small>24.0.5 (2024-11-04)</small>
+
+* [bitnami/keycloak] Added providers to the list of writable dirs (#29998) ([9de041c](https://github.com/bitnami/charts/commit/9de041c92e2788a108631052aa5401a9469e3592)), closes [#29998](https://github.com/bitnami/charts/issues/29998)
 
 ## <small>24.0.4 (2024-11-01)</small>
 
