@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.6.0 (2024-11-04)
+## 13.6.0 (2024-11-05)
 
 * [bitnami/zookeeper] Make the ZOO_SERVERS environment variable configurable ([#29921](https://github.com/bitnami/charts/pull/29921))
 
