@@ -684,8 +684,8 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 24.1.0
 
-With this update the metrics service listening port is switched to 9000, the same as the keycloak management endpoint is using. 
-This can be changed by setting `metrics.service.ports.http` to a different value, e.g. 8080 like before this change. 
+With this update the metrics service listening port is switched to 9000, the same as the keycloak management endpoint is using.
+This can be changed by setting `metrics.service.ports.http` to a different value, e.g. 8080 like before this change.
 
 ### To 23.0.0
 
