@@ -1,8 +1,13 @@
 # Changelog
 
-## 23.1.25 (2024-10-31)
+## 23.1.26 (2024-11-04)
 
-* [bitnami/wordpress] Release 23.1.25 ([#30163](https://github.com/bitnami/charts/pull/30163))
+* [bitnami/wordpress] Release 23.1.26 ([#30206](https://github.com/bitnami/charts/pull/30206))
+
+## <small>23.1.25 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/wordpress] Release 23.1.25 (#30163) ([fe0f413](https://github.com/bitnami/charts/commit/fe0f413d521edde0706576769472fd2cace48148)), closes [#30163](https://github.com/bitnami/charts/issues/30163)
 
 ## <small>23.1.24 (2024-10-24)</small>
 
