@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.4.2 (2024-10-28)
+## 10.5.0 (2024-11-04)
 
-* [bitnami/etcd] Fixing defrag etcd for authenticated and tls clusters ([#30096](https://github.com/bitnami/charts/pull/30096))
+* [bitnami/etcd]: Fix Defrag "bug" and prevent CronJob templates ambiguity ([#30077](https://github.com/bitnami/charts/pull/30077))
+
+## <small>10.4.2 (2024-10-28)</small>
+
+* [bitnami/etcd] Fixing defrag etcd for authenticated and tls clusters (#30096) ([558e971](https://github.com/bitnami/charts/commit/558e971fd3951ea349cb14739920d3c948f84edb)), closes [#30096](https://github.com/bitnami/charts/issues/30096)
 
 ## <small>10.4.1 (2024-10-24)</small>
 

@@ -93,9 +93,8 @@ Get the root password key.
 Return true if a secret object should be created
 */}}
 {{- define "minio.createSecret" -}}
-{{- if .Values.auth.existingSecret -}}
-{{- else -}}
-    {{- .Values.auth.useSecret -}}
+{{- if and (not .Values.auth.existingSecret) .Values.auth.useSecret -}}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 

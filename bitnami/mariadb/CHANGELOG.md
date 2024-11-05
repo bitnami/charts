@@ -1,8 +1,18 @@
 # Changelog
 
+## 19.1.2 (2024-11-04)
+
+* [bitnami/mariadb] Release 19.1.2 ([#30203](https://github.com/bitnami/charts/pull/30203))
+
+## <small>19.1.1 (2024-11-02)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mariadb] Release 19.1.1 (#30176) ([6e6c654](https://github.com/bitnami/charts/commit/6e6c654a7a0d175f9ae47aa6f70aef9bbe11fb65)), closes [#30176](https://github.com/bitnami/charts/issues/30176)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
 ## 19.1.0 (2024-10-10)
 
-* [bitnami/mariadb] add default binlog expiry configuration of 30 days ([#29841](https://github.com/bitnami/charts/pull/29841))
+* [bitnami/mariadb] add default binlog expiry configuration of 30 days (#29841) ([bb0c258](https://github.com/bitnami/charts/commit/bb0c258b0ee0965ab2b97f2bc30e3d8e0710be07)), closes [#29841](https://github.com/bitnami/charts/issues/29841)
 
 ## <small>19.0.7 (2024-09-23)</small>
 

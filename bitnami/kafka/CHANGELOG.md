@@ -1,8 +1,13 @@
 # Changelog
 
-## 30.1.7 (2024-10-29)
+## 30.1.8 (2024-10-31)
 
-* [bitnami/kafka] Release 30.1.7 ([#30119](https://github.com/bitnami/charts/pull/30119))
+* [bitnami/kafka] Release 30.1.8 ([#30146](https://github.com/bitnami/charts/pull/30146))
+
+## <small>30.1.7 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kafka] Release 30.1.7 (#30119) ([eee4d5b](https://github.com/bitnami/charts/commit/eee4d5b67fdbea9df74ef21bc2fc7d5214dbb2f4)), closes [#30119](https://github.com/bitnami/charts/issues/30119)
 
 ## <small>30.1.6 (2024-10-18)</small>
 

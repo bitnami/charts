@@ -1,8 +1,44 @@
 # Changelog
 
-## 20.0.2 (2024-10-30)
+## 21.3.0 (2024-11-05)
 
-* [bitnami/airflow] Release 20.0.2 ([#30138](https://github.com/bitnami/charts/pull/30138))
+* [bitnami/airflow] Standardize autoscaling ([#30220](https://github.com/bitnami/charts/pull/30220))
+
+## <small>21.2.1 (2024-11-05)</small>
+
+* [bitnami/airflow] bugfix: pod template (#30216) ([528d26f](https://github.com/bitnami/charts/commit/528d26f262befe7263b0f0e7728dbe706dd33c92)), closes [#30216](https://github.com/bitnami/charts/issues/30216)
+
+## 21.2.0 (2024-11-05)
+
+* [bitnami/airflow] Add support for Triggerer (#30211) ([fe4e81f](https://github.com/bitnami/charts/commit/fe4e81f3e56101d429903b805b3c487095492a5d)), closes [#30211](https://github.com/bitnami/charts/issues/30211)
+
+## <small>21.1.1 (2024-11-04)</small>
+
+* [bitnami/airflow] Release 21.1.1 (#30201) ([8cccffc](https://github.com/bitnami/charts/commit/8cccffc1a9618afbd5c3bc80b3b92933ddfd9851)), closes [#30201](https://github.com/bitnami/charts/issues/30201)
+
+## 21.1.0 (2024-11-04)
+
+* [bitnami/airflow] Add support to run Dag Processor in standalone mode (#30159) ([7eb2f51](https://github.com/bitnami/charts/commit/7eb2f519f77638c5e1b60aa62f3d3fa2f4cddbe8)), closes [#30159](https://github.com/bitnami/charts/issues/30159)
+
+## <small>21.0.3 (2024-10-31)</small>
+
+* [bitnami/airflow] Release 21.0.3 (#30161) ([89e392b](https://github.com/bitnami/charts/commit/89e392b7297346863c80c49ba2325c72321142e3)), closes [#30161](https://github.com/bitnami/charts/issues/30161)
+
+## <small>21.0.2 (2024-10-31)</small>
+
+* [bitnami/airflow] Release 21.0.2 (#30160) ([07568a9](https://github.com/bitnami/charts/commit/07568a9c3b6cff4fb6cec217b40ebdd24f349aa2)), closes [#30160](https://github.com/bitnami/charts/issues/30160)
+
+## <small>21.0.1 (2024-10-31)</small>
+
+* [bitnami/airflow] Split init containers (#30155) ([4945ae6](https://github.com/bitnami/charts/commit/4945ae6dd96d51a312a9b368cdfdbc6bb2c31fb6)), closes [#30155](https://github.com/bitnami/charts/issues/30155)
+
+## 21.0.0 (2024-10-31)
+
+* [bitnami/airflow] Use a single Airflow image (#30137) ([e9aed1b](https://github.com/bitnami/charts/commit/e9aed1bfed27dddaff454760ef3318d81e3bb05a)), closes [#30137](https://github.com/bitnami/charts/issues/30137)
+
+## <small>20.0.2 (2024-10-30)</small>
+
+* [bitnami/airflow] Release 20.0.2 (#30138) ([bd4b9b9](https://github.com/bitnami/charts/commit/bd4b9b984d012a85471d654329cb0c16b5b0f062)), closes [#30138](https://github.com/bitnami/charts/issues/30138)
 
 ## <small>20.0.1 (2024-10-30)</small>
 

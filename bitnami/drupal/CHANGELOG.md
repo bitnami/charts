@@ -1,8 +1,18 @@
 # Changelog
 
-## 20.0.11 (2024-10-23)
+## 20.0.13 (2024-10-31)
 
-* [bitnami/drupal] Release 20.0.11 ([#30057](https://github.com/bitnami/charts/pull/30057))
+* [bitnami/drupal] Release 20.0.13 ([#30165](https://github.com/bitnami/charts/pull/30165))
+
+## <small>20.0.12 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/drupal] Release 20.0.12 (#30145) ([7e6d111](https://github.com/bitnami/charts/commit/7e6d111ee64254fc33e8491a0ac7df1b7340c9d5)), closes [#30145](https://github.com/bitnami/charts/issues/30145)
+
+## <small>20.0.11 (2024-10-23)</small>
+
+* [bitnami/drupal] Release 20.0.11 (#30057) ([f14d986](https://github.com/bitnami/charts/commit/f14d986d3713716a9b263075ac784ef749438a04)), closes [#30057](https://github.com/bitnami/charts/issues/30057)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>20.0.10 (2024-10-09)</small>
 
