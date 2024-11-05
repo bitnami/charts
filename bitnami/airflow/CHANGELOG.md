@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.2.1 (2024-11-05)
+
+* [bitnami/airflow] bugfix: pod template ([#30216](https://github.com/bitnami/charts/pull/30216))
+
 ## 21.2.0 (2024-11-05)
 
-* [bitnami/airflow] Add support for Triggerer ([#30211](https://github.com/bitnami/charts/pull/30211))
+* [bitnami/airflow] Add support for Triggerer (#30211) ([fe4e81f](https://github.com/bitnami/charts/commit/fe4e81f3e56101d429903b805b3c487095492a5d)), closes [#30211](https://github.com/bitnami/charts/issues/30211)
 
 ## <small>21.1.1 (2024-11-04)</small>
 
