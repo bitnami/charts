@@ -18,7 +18,9 @@ spec:
   {{- if .Values.worker.podManagementPolicy }}
   podManagementPolicy: {{ .Values.worker.podManagementPolicy | quote }}
   {{- end }}
+  {{- if not (coalesce .Values.worker.autoscaling.hpa.enabled .Values.worker.autoscaling.enabled) }}
   replicas: {{ .Values.worker.replicaCount }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}

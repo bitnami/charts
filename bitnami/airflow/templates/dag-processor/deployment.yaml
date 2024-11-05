@@ -19,7 +19,9 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: dag-processor
+  {{- if not .Values.dagProcessor.autoscaling.hpa.enabled }}
   replicas: {{ .Values.dagProcessor.replicaCount }}
+  {{- end }}
   {{- if .Values.dagProcessor.updateStrategy }}
   strategy: {{- toYaml .Values.dagProcessor.updateStrategy | nindent 4 }}
   {{- end }}
