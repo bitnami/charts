@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.1.1 (2024-11-04)
+
+* [bitnami/airflow] Release 21.1.1 ([#30201](https://github.com/bitnami/charts/pull/30201))
+
 ## 21.1.0 (2024-11-04)
 
-* [bitnami/airflow] Add support to run Dag Processor in standalone mode ([#30159](https://github.com/bitnami/charts/pull/30159))
+* [bitnami/airflow] Add support to run Dag Processor in standalone mode (#30159) ([7eb2f51](https://github.com/bitnami/charts/commit/7eb2f519f77638c5e1b60aa62f3d3fa2f4cddbe8)), closes [#30159](https://github.com/bitnami/charts/issues/30159)
 
 ## <small>21.0.3 (2024-10-31)</small>
 

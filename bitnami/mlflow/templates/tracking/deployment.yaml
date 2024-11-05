@@ -155,7 +155,7 @@ spec:
             {{ else }}
             - --serve-artifacts
             {{- end }}
-            - --host=0.0.0.0
+            - --host={{ .Values.tracking.host }}
             - --port={{ .Values.tracking.containerPorts.http }}
             {{- if .Values.tracking.metrics.enabled }}
             - --expose-prometheus={{ .Values.tracking.persistence.mountPath }}/metrics

@@ -1,8 +1,8 @@
 # Changelog
 
-## 8.4.0 (2024-11-05)
+## 8.4.0 (2024-11-04)
 
-* [bitnami/external-dns] Add targetLabels option to ServiceMonitor ([#29828](https://github.com/bitnami/charts/pull/29828))
+* [bitnami/external-dns] add support for multiple rfc2136 zones ([#30011](https://github.com/bitnami/charts/pull/30011))
 
 ## <small>8.3.12 (2024-10-29)</small>
 

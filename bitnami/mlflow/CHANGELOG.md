@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.0.5 (2024-10-31)
+## 2.1.0 (2024-11-04)
 
-* [bitnami/mlflow] Release 2.0.5 ([#30157](https://github.com/bitnami/charts/pull/30157))
+* [bitnami/mlflow] Make mlflow host part of values ([#29862](https://github.com/bitnami/charts/pull/29862))
+
+## <small>2.0.5 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mlflow] Release 2.0.5 (#30157) ([6610a2d](https://github.com/bitnami/charts/commit/6610a2d1f4cf26b83ae86ce5b7171360c2f80007)), closes [#30157](https://github.com/bitnami/charts/issues/30157)
 
 ## <small>2.0.4 (2024-10-26)</small>
 
