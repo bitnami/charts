@@ -187,6 +187,9 @@ minServerId: 1
 ## @param listenOnAllIPs Allow ZooKeeper to listen for connections from its peers on all available IP addresses
 ##
 listenOnAllIPs: false
+## @param zooServers ZooKeeper space separated servers list. Leave empty to use the default ZooKeeper server names.
+##
+zooServers: ""
 ## Ongoing data directory cleanup configuration
 ##
 autopurge:
