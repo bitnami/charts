@@ -133,7 +133,7 @@ spec:
             - name: AIRFLOW_LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "airflow.ldapSecretName" . }}
+                  name: {{ include "airflow.ldap.secretName" . }}
                   key: bind-password
             - name: AIRFLOW_LDAP_USER_REGISTRATION
               value: {{ .Values.ldap.userRegistration | quote }}
@@ -292,6 +292,9 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.plugins.volumes" . | nindent 8 }}
+        {{- end }}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: custom-configuration-file
           configMap:

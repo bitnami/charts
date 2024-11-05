@@ -275,10 +275,11 @@ data:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.dags.enabled .Values.dags.existingConfigmap }}
-        - name: external-dags
-          configMap:
-            name: {{ tpl .Values.dags.existingConfigmap $ }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.dags.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.plugins.volumes" . | nindent 8 }}
         {{- end }}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: custom-configuration-file

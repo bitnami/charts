@@ -161,6 +161,15 @@ dags:
   ##     path: /
   ##
   repositories: []
+  ## @param dags.sshKey SSH Private key used to clone/sync DAGs from Git repositories (ignored if dags.existingSshKeySecret is set)
+  ##
+  sshKey: ""
+  ## @param dags.existingSshKeySecret Name of a secret containing the SSH private key used to clone/sync DAGs from Git repositories
+  ##
+  existingSshKeySecret: ""
+  ## @param dags.existingSshKeySecretKey Key in the existing secret containing the SSH private key
+  ##
+  existingSshKeySecretKey: ""
 ## Load custom plugins from Git repositories
 ## @param plugins.enabled Enable loading plugins from Git repositories
 ## @param plugins.repositories [array] Array of repositories from which to download plugins
@@ -175,6 +184,15 @@ plugins:
   ##     path: /
   ##
   repositories: []
+  ## @param plugins.sshKey SSH Private key used to clone/sync plugins from Git repositories (ignored if plugins.existingSshKeySecret is set)
+  ##
+  sshKey: ""
+  ## @param plugins.existingSshKeySecret Name of a secret containing the SSH private key used to clone/sync plugins from Git repositories
+  ##
+  existingSshKeySecret: ""
+  ## @param plugins.existingSshKeySecretKey Key in the existing secret containing the SSH private key
+  ##
+  existingSshKeySecretKey: ""
 ## Default init Containers
 ##
 defaultInitContainers:
