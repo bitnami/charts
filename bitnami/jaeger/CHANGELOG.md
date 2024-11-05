@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.5 (2024-11-03)
+## 3.0.5 (2024-11-05)
 
 * bitnami/jaeger Update _helpers.tpl ([#30179](https://github.com/bitnami/charts/pull/30179))
 
