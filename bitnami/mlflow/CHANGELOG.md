@@ -6,7 +6,7 @@
 
 ## 2.1.0 (2024-11-04)
 
-* [bitnami/mlflow] Make mlflow host part of values ([#29862](https://github.com/bitnami/charts/pull/29862))
+* [bitnami/mlflow] Make mlflow host part of values (#29862) ([148ff74](https://github.com/bitnami/charts/commit/148ff74ddb1e0aa6c268f37a4a8f98d08fe821fb)), closes [#29862](https://github.com/bitnami/charts/issues/29862)
 
 ## <small>2.0.5 (2024-10-31)</small>
 
@@ -20,7 +20,6 @@
 ## <small>2.0.3 (2024-10-24)</small>
 
 * fixed doc string for mlflow container security context; fixes #30059 (#30060) ([c7811fe](https://github.com/bitnami/charts/commit/c7811fe1c1902bf29c35af70216cc7db2037586b)), closes [#30059](https://github.com/bitnami/charts/issues/30059) [#30060](https://github.com/bitnami/charts/issues/30060)
-
 
 ## <small>2.0.2 (2024-10-16)</small>
 
