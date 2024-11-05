@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.4.0 (2024-11-05)
+
+* [bitnami/airflow] Support adding SSH keys to load DAGs/plugins from private repos ([#30224](https://github.com/bitnami/charts/pull/30224))
+
 ## 21.3.0 (2024-11-05)
 
-* [bitnami/airflow] Standardize autoscaling ([#30220](https://github.com/bitnami/charts/pull/30220))
+* [bitnami/airflow] Standardize autoscaling (#30220) ([6b646c0](https://github.com/bitnami/charts/commit/6b646c0d538d9700218951da1fd043c6c5eb9319)), closes [#30220](https://github.com/bitnami/charts/issues/30220)
 
 ## <small>21.2.1 (2024-11-05)</small>
 
