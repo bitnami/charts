@@ -83,10 +83,13 @@ Returns shared structure between load-dags and load-plugins init containers
       mountPath: /tmp
       subPath: tmp-dir
     - name: empty-dir
+      mountPath: /opt/bitnami/airflow/nss-wrapper
+      subPath: app-nss-wrapper-dir
+    - name: empty-dir
       mountPath: /etc/ssh
       subPath: etc-ssh-dir
     - name: empty-dir
-      mountPath: /.ssh
+      mountPath: /opt/bitnami/airflow/.ssh
       subPath: ssh-dir
     {{- if .Values.defaultInitContainers.loadDAGsPlugins.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.extraVolumeMounts "context" $) | nindent 4 }}
@@ -107,6 +110,11 @@ Returns an init-container that loads DAGs from a ConfigMap or Git repositories
       mountPath: /dags
       subPath: app-dags-dir
     {{- end }}
+    {{- if or .Values.dags.sshKey .Values.dags.existingSshKeySecret }}
+    - name: dags-ssh-key
+      mountPath: /opt/bitnami/airflow/.ssh/dags-ssh-key
+      subPath: dags-ssh-key
+    {{- end }}
   {{- if .Values.defaultInitContainers.loadDAGsPlugins.args }}
   args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.args "context" .) | nindent 4 }}
   {{- else }}
@@ -114,7 +122,19 @@ Returns an init-container that loads DAGs from a ConfigMap or Git repositories
     - -ec
     - |
       . /opt/bitnami/scripts/libfs.sh
+      . /opt/bitnami/scripts/libos.sh
 
+      if ! am_i_root && [[ -e "$LIBNSS_WRAPPER_PATH" ]]; then
+          echo "airflow:x:$(id -u):$(id -g):Airflow:$AIRFLOW_HOME:/bin/false" > "$NSS_WRAPPER_PASSWD"
+          echo "airflow:x:$(id -g):" > "$NSS_WRAPPER_GROUP"
+
+          export LD_PRELOAD="$LIBNSS_WRAPPER_PATH"
+          export HOME="$AIRFLOW_HOME"
+      fi
+
+    {{- if or .Values.dags.sshKey .Values.dags.existingSshKeySecret }}
+      export GIT_SSH_COMMAND="ssh -i /opt/bitnami/airflow/.ssh/dags-ssh-key -o StrictHostKeyChecking=no"
+    {{- end }}
     {{- range .Values.dags.repositories }}
       is_dir_empty "/dags/{{ include "airflow.dagsPlugins.repository.name" . }}" && git clone {{ .repository }} --depth 1 --branch {{ .branch }} /dags/{{ include "airflow.dagsPlugins.repository.name" . }}
     {{- end }}
@@ -133,6 +153,11 @@ Returns an init-container that loads plugins from  Git repositories
     - name: empty-dir
       mountPath: /plugins
       subPath: app-plugins-dir
+    {{- if or .Values.plugins.sshKey .Values.plugins.existingSshKeySecret }}
+    - name: plugins-ssh-key
+      mountPath: /opt/bitnami/airflow/.ssh/plugins-ssh-key
+      subPath: plugins-ssh-key
+    {{- end }}
   {{- if .Values.defaultInitContainers.loadDAGsPlugins.args }}
   args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultInitContainers.loadDAGsPlugins.args "context" .) | nindent 4 }}
   {{- else }}
@@ -140,7 +165,19 @@ Returns an init-container that loads plugins from  Git repositories
     - -ec
     - |
       . /opt/bitnami/scripts/libfs.sh
+      . /opt/bitnami/scripts/libos.sh
 
+      if ! am_i_root && [[ -e "$LIBNSS_WRAPPER_PATH" ]]; then
+          echo "airflow:x:$(id -u):$(id -g):Airflow:$AIRFLOW_HOME:/bin/false" > "$NSS_WRAPPER_PASSWD"
+          echo "airflow:x:$(id -g):" > "$NSS_WRAPPER_GROUP"
+
+          export LD_PRELOAD="$LIBNSS_WRAPPER_PATH"
+          export HOME="$AIRFLOW_HOME"
+      fi
+
+    {{- if or .Values.plugins.sshKey .Values.plugins.existingSshKeySecret }}
+      export GIT_SSH_COMMAND="ssh -i /opt/bitnami/airflow/.ssh/plugins-ssh-key -o StrictHostKeyChecking=no"
+    {{- end }}
     {{- range .Values.plugins.repositories }}
       is_dir_empty "/plugins/{{ include "airflow.dagsPlugins.repository.name" . }}" && git clone {{ .repository }} --depth 1 --branch {{ .branch }} /plugins/{{ include "airflow.dagsPlugins.repository.name" . }}
     {{- end }}
@@ -186,10 +223,13 @@ Returns shared structure between sync-dags and sync-plugins sidecars
       mountPath: /tmp
       subPath: tmp-dir
     - name: empty-dir
+      mountPath: /opt/bitnami/airflow/nss-wrapper
+      subPath: app-nss-wrapper-dir
+    - name: empty-dir
       mountPath: /etc/ssh
       subPath: etc-ssh-dir
     - name: empty-dir
-      mountPath: /.ssh
+      mountPath: /opt/bitnami/airflow/.ssh
       subPath: ssh-dir
     {{- if .Values.defaultSidecars.syncDAGsPlugins.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.extraVolumeMounts "context" $) | nindent 4 }}
@@ -204,13 +244,31 @@ Returns a sidecar that syncs DAGs from Git repositories
     - name: empty-dir
       mountPath: /dags
       subPath: app-dags-dir
+    {{- if or .Values.dags.sshKey .Values.dags.existingSshKeySecret }}
+    - name: dags-ssh-key
+      mountPath: /opt/bitnami/airflow/.ssh/dags-ssh-key
+      subPath: dags-ssh-key
+    {{- end }}
   {{- if .Values.defaultSidecars.syncDAGsPlugins.args }}
   args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.args "context" .) | nindent 4 }}
   {{- else }}
   args:
     - -ec
     - |
+      . /opt/bitnami/scripts/libos.sh
+
+      if ! am_i_root && [[ -e "$LIBNSS_WRAPPER_PATH" ]]; then
+          echo "airflow:x:$(id -u):$(id -g):Airflow:$AIRFLOW_HOME:/bin/false" > "$NSS_WRAPPER_PASSWD"
+          echo "airflow:x:$(id -g):" > "$NSS_WRAPPER_GROUP"
+
+          export LD_PRELOAD="$LIBNSS_WRAPPER_PATH"
+          export HOME="$AIRFLOW_HOME"
+      fi
+
       while true; do
+    {{- if or .Values.dags.sshKey .Values.dags.existingSshKeySecret }}
+      export GIT_SSH_COMMAND="ssh -i /opt/bitnami/airflow/.ssh/dags-ssh-key -o StrictHostKeyChecking=no"
+    {{- end }}
     {{- range .Values.dags.repositories }}
           cd /dags/{{ include "airflow.dagsPlugins.repository.name" . }} && git pull origin {{ .branch }} || true
     {{- end }}
@@ -228,12 +286,29 @@ Returns a sidecar that syncs plugins from Git repositories
     - name: empty-dir
       mountPath: /plugins
       subPath: app-plugins-dir
+    {{- if or .Values.plugins.sshKey .Values.plugins.existingSshKeySecret }}
+    - name: plugins-ssh-key
+      mountPath: /opt/bitnami/airflow/.ssh/plugins-ssh-key
+      subPath: plugins-ssh-key
+    {{- end }}
   {{- if .Values.defaultSidecars.syncDAGsPlugins.args }}
   args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultSidecars.syncDAGsPlugins.args "context" .) | nindent 4 }}
   {{- else }}
   args:
     - -ec
     - |
+      . /opt/bitnami/scripts/libos.sh
+
+      if ! am_i_root && [[ -e "$LIBNSS_WRAPPER_PATH" ]]; then
+          echo "airflow:x:$(id -u):$(id -g):Airflow:$AIRFLOW_HOME:/bin/false" > "$NSS_WRAPPER_PASSWD"
+          echo "airflow:x:$(id -g):" > "$NSS_WRAPPER_GROUP"
+
+          export LD_PRELOAD="$LIBNSS_WRAPPER_PATH"
+          export HOME="$AIRFLOW_HOME"
+      fi
+    {{- if or .Values.plugins.sshKey .Values.plugins.existingSshKeySecret }}
+      export GIT_SSH_COMMAND="ssh -i /opt/bitnami/airflow/.ssh/plugins-ssh-key -o StrictHostKeyChecking=no"
+    {{- end }}
       while true; do
     {{- range .Values.plugins.repositories }}
           cd /plugins/{{ include "airflow.dagsPlugins.repository.name" . }} && git pull origin {{ .branch }} || true
@@ -265,6 +340,26 @@ Returns the volume mounts to use on Airflow containers to mount custom DAGs
 {{- end -}}
 
 {{/*
+Returns the extra volumes to add on Airflow pods to load custom DAGS
+*/}}
+{{- define "airflow.dags.volumes" -}}
+{{- if .Values.dags.existingConfigmap }}
+- name: external-dags
+  configMap:
+    name: {{ tpl .Values.dags.existingConfigmap $ }}
+{{- end }}
+{{- if or .Values.dags.sshKey .Values.dags.existingSshKeySecret }}
+- name: dags-ssh-key
+  secret:
+    secretName: {{ include "airflow.dags.ssh.secretName" . }}
+    items:
+      - key: {{ default "dags-ssh-key" (tpl .Values.dags.existingSshKeySecretKey .) }}
+        path: dags-ssh-key
+        mode: 0600
+{{- end }}
+{{- end -}}
+
+{{/*
 Returns the volume mounts to use on Airflow containers to mount custom plugins
 */}}
 {{- define "airflow.plugins.volumeMounts" -}}
@@ -276,5 +371,20 @@ Returns the volume mounts to use on Airflow containers to mount custom plugins
   {{- else }}
   subPath: app-plugins-dir/{{ include "airflow.dagsPlugins.repository.name" . }}
   {{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Returns the extra volumes to add on Airflow pods to load custom plugins
+*/}}
+{{- define "airflow.plugins.volumes" -}}
+{{- if or .Values.plugins.sshKey .Values.plugins.existingSshKeySecret }}
+- name: plugins-ssh-key
+  secret:
+    secretName: {{ include "airflow.plugins.ssh.secretName" . }}
+    items:
+      - key: {{ default "plugins-ssh-key" (tpl .Values.plugins.existingSshKeySecretKey .) }}
+        path: plugins-ssh-key
+        mode: 0600
 {{- end }}
 {{- end -}}
