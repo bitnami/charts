@@ -249,7 +249,7 @@ spec:
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
             {{- end }}
-            {{- if and (.Values.metrics.enabled) (not (eq (.Values.containerPorts.http | quote) (.Values.containerPorts.metrics | quote) )) }}
+            {{- if and (.Values.metrics.enabled) (not (eq (.Values.containerPorts.http | int) (.Values.containerPorts.metrics | int) )) }}
             - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}
               protocol: TCP
