@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.15 (2024-11-05)
+## 2.0.16 (2024-11-05)
 
-* [bitnami/chainloop] Release 2.0.15 ([#30222](https://github.com/bitnami/charts/pull/30222))
+* [bitnami/chainloop] Release 2.0.16 ([#30225](https://github.com/bitnami/charts/pull/30225))
+
+## <small>2.0.15 (2024-11-05)</small>
+
+* [bitnami/chainloop] Release 2.0.15 (#30222) ([830bfcc](https://github.com/bitnami/charts/commit/830bfcc15a9df453cd7156dc398e12e3b33c5301)), closes [#30222](https://github.com/bitnami/charts/issues/30222)
 
 ## <small>2.0.14 (2024-11-04)</small>
 
