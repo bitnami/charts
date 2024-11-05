@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.4.0 (2024-11-04)
+## 8.4.0 (2024-11-05)
 
 * [bitnami/external-dns] Add targetLabels option to ServiceMonitor ([#29828](https://github.com/bitnami/charts/pull/29828))
 
