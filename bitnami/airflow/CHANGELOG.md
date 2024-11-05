@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.4.1 (2024-11-05)
+
+* [bitnami/airflow] Release 21.4.1 ([#30229](https://github.com/bitnami/charts/pull/30229))
+
 ## 21.4.0 (2024-11-05)
 
-* [bitnami/airflow] Support adding SSH keys to load DAGs/plugins from private repos ([#30224](https://github.com/bitnami/charts/pull/30224))
+* [bitnami/airflow] Support adding SSH keys to load DAGs/plugins from private repos (#30224) ([d5d454c](https://github.com/bitnami/charts/commit/d5d454cbdac891c68ae04b957ce2a53e90b742e8)), closes [#30224](https://github.com/bitnami/charts/issues/30224)
 
 ## 21.3.0 (2024-11-05)
 
