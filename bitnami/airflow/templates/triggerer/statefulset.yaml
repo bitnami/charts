@@ -22,8 +22,8 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: triggerer
-  {{- if .Values.worker.podManagementPolicy }}
-  podManagementPolicy: {{ .Values.worker.podManagementPolicy | quote }}
+  {{- if .Values.triggerer.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.triggerer.podManagementPolicy | quote }}
   {{- end }}
   serviceName: {{ template "airflow.triggerer.fullname" . }}
   {{- if .Values.triggerer.updateStrategy }}
