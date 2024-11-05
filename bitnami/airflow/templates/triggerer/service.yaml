@@ -1,0 +1,54 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.triggerer.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "airflow.triggerer.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: triggerer
+  {{- if or .Values.triggerer.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.triggerer.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.triggerer.service.type }}
+  {{- if .Values.triggerer.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.triggerer.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.triggerer.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.triggerer.service.clusterIP (eq .Values.triggerer.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.triggerer.service.clusterIP }}
+  {{- end }}
+  {{- if or (eq .Values.triggerer.service.type "LoadBalancer") (eq .Values.triggerer.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.triggerer.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.triggerer.service.type "LoadBalancer") (not (empty .Values.triggerer.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.triggerer.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.triggerer.service.type "LoadBalancer") (not (empty .Values.triggerer.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.triggerer.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: logs
+      port: {{ .Values.triggerer.service.ports.logs }}
+      protocol: TCP
+      targetPort: logs
+      {{- if (and (or (eq .Values.triggerer.service.type "NodePort") (eq .Values.triggerer.service.type "LoadBalancer")) (not (empty .Values.triggerer.service.nodePorts.logs))) }}
+      nodePort: {{ .Values.triggerer.service.nodePorts.logs }}
+      {{- else if eq .Values.triggerer.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.triggerer.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.triggerer.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: triggerer
+{{- end }}

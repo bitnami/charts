@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.1 (2024-11-04)
+## 21.2.0 (2024-11-05)
 
-* [bitnami/airflow] Release 21.1.1 ([#30201](https://github.com/bitnami/charts/pull/30201))
+* [bitnami/airflow] Add support for Triggerer ([#30211](https://github.com/bitnami/charts/pull/30211))
+
+## <small>21.1.1 (2024-11-04)</small>
+
+* [bitnami/airflow] Release 21.1.1 (#30201) ([8cccffc](https://github.com/bitnami/charts/commit/8cccffc1a9618afbd5c3bc80b3b92933ddfd9851)), closes [#30201](https://github.com/bitnami/charts/issues/30201)
 
 ## 21.1.0 (2024-11-04)
 
