@@ -18,7 +18,9 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: web
+  {{- if not .Values.web.autoscaling.hpa.enabled }}
   replicas: {{ .Values.web.replicaCount }}
+  {{- end }}
   {{- if .Values.web.updateStrategy }}
   strategy: {{- toYaml .Values.web.updateStrategy | nindent 4 }}
   {{- end }}
@@ -131,7 +133,7 @@ spec:
             - name: AIRFLOW_LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "airflow.ldapSecretName" . }}
+                  name: {{ include "airflow.secretName" . }}
                   key: bind-password
             - name: AIRFLOW_LDAP_USER_REGISTRATION
               value: {{ .Values.ldap.userRegistration | quote }}
