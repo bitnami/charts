@@ -31,6 +31,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
+- name: kube-prometheus-crds
+  repository: "file://./charts/kube-prometheus-crds"
+  version: 0.x.x
 description: Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/prometheus-operator/img/prometheus-operator-stack-220x234.png
@@ -46,4 +49,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 9.6.6
+version: 10.0.0

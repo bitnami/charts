@@ -939,6 +939,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kube-prometheus
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
+### To 10.0.0
+
+This major bump moves the crds to a local subchart called `kube-prometheus-crds`. This avoids an [installation issue](https://github.com/bitnami/charts/issues/29876) due to the size of the release secret created by helm. No issues are expected during upgrades.
+
 ### To 9.0.0
 
 This major bump changes the following security defaults:
