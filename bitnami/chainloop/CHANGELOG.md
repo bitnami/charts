@@ -1,8 +1,45 @@
 # Changelog
 
-## 2.0.7 (2024-10-18)
+## 2.0.16 (2024-11-05)
 
-* [bitnami/chainloop] Release 2.0.7 ([#29987](https://github.com/bitnami/charts/pull/29987))
+* [bitnami/chainloop] Release 2.0.16 ([#30225](https://github.com/bitnami/charts/pull/30225))
+
+## <small>2.0.15 (2024-11-05)</small>
+
+* [bitnami/chainloop] Release 2.0.15 (#30222) ([830bfcc](https://github.com/bitnami/charts/commit/830bfcc15a9df453cd7156dc398e12e3b33c5301)), closes [#30222](https://github.com/bitnami/charts/issues/30222)
+
+## <small>2.0.14 (2024-11-04)</small>
+
+* [bitnami/chainloop] Release 2.0.14 (#30205) ([9883cd3](https://github.com/bitnami/charts/commit/9883cd3b1049803d0f2d54802cdc343c5a53f181)), closes [#30205](https://github.com/bitnami/charts/issues/30205)
+
+## <small>2.0.13 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/chainloop] Release 2.0.13 (#30139) ([e54635a](https://github.com/bitnami/charts/commit/e54635ac52cf9397069d66dbe8eb8b6540207d69)), closes [#30139](https://github.com/bitnami/charts/issues/30139)
+
+## <small>2.0.12 (2024-10-25)</small>
+
+* [bitnami/chainloop] Release 2.0.12 (#30083) ([ad4dbb7](https://github.com/bitnami/charts/commit/ad4dbb74036fb82669cfabf66bbdcceb1cd6ff8e)), closes [#30083](https://github.com/bitnami/charts/issues/30083)
+
+## <small>2.0.11 (2024-10-24)</small>
+
+* [bitnami/chainloop] Release 2.0.11 (#30068) ([b1b103f](https://github.com/bitnami/charts/commit/b1b103fd40f5c32acba3dcf492f4f6bd937c204f)), closes [#30068](https://github.com/bitnami/charts/issues/30068)
+
+## <small>2.0.10 (2024-10-23)</small>
+
+* [bitnami/chainloop] Release 2.0.10 (#30054) ([33003d3](https://github.com/bitnami/charts/commit/33003d3dae7efd8bb4af2523227feedc5c1038c7)), closes [#30054](https://github.com/bitnami/charts/issues/30054)
+
+## <small>2.0.9 (2024-10-22)</small>
+
+* [bitnami/chainloop] Release 2.0.9 (#30040) ([5720383](https://github.com/bitnami/charts/commit/57203838c22e88af05c04513456ab980e22fb56c)), closes [#30040](https://github.com/bitnami/charts/issues/30040)
+
+## <small>2.0.8 (2024-10-18)</small>
+
+* [bitnami/chainloop] Remove wrong entries from image verification (#29913) ([080bd03](https://github.com/bitnami/charts/commit/080bd034f0cc91355fc0e83464c9194937e52897)), closes [#29913](https://github.com/bitnami/charts/issues/29913)
+
+## <small>2.0.7 (2024-10-18)</small>
+
+* [bitnami/chainloop] Release 2.0.7 (#29987) ([66dbd97](https://github.com/bitnami/charts/commit/66dbd9756199c4e3d1cf57aa031782abbd6d652b)), closes [#29987](https://github.com/bitnami/charts/issues/29987)
 
 ## <small>2.0.6 (2024-10-16)</small>
 

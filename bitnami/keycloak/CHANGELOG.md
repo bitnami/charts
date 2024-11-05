@@ -1,8 +1,26 @@
 # Changelog
 
-## 24.0.1 (2024-10-17)
+## 24.0.5 (2024-11-04)
 
-* [bitnami/keycloak] Release 24.0.1 ([#29968](https://github.com/bitnami/charts/pull/29968))
+* [bitnami/keycloak] Added providers to the list of writable dirs ([#29998](https://github.com/bitnami/charts/pull/29998))
+
+## <small>24.0.4 (2024-11-01)</small>
+
+* [bitnami/keycloak] Release 24.0.4 (#30169) ([701a2b9](https://github.com/bitnami/charts/commit/701a2b96d7eff0b3d0c8a77c1ac14f24e0d3ccda)), closes [#30169](https://github.com/bitnami/charts/issues/30169)
+
+## <small>24.0.3 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/keycloak] Release 24.0.3 (#30147) ([1cec61e](https://github.com/bitnami/charts/commit/1cec61e327d14d3be91ca06357bc68ddcafeceb7)), closes [#30147](https://github.com/bitnami/charts/issues/30147)
+
+## <small>24.0.2 (2024-10-24)</small>
+
+* [bitnami/keycloak] Release 24.0.2 (#30075) ([d86c1ee](https://github.com/bitnami/charts/commit/d86c1eedb774206f0eaeb191ad34551764be498b)), closes [#30075](https://github.com/bitnami/charts/issues/30075)
+
+## <small>24.0.1 (2024-10-17)</small>
+
+* [bitnami/keycloak] Release 24.0.1 (#29968) ([fa1d5b2](https://github.com/bitnami/charts/commit/fa1d5b278cb43b38fd5105a94005ba9a840beacc)), closes [#29968](https://github.com/bitnami/charts/issues/29968)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 24.0.0 (2024-10-08)
 

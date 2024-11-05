@@ -1,8 +1,12 @@
 # Changelog
 
+## 24.0.1 (2024-10-22)
+
+* [bitnami/parse] Release 24.0.1 ([#30039](https://github.com/bitnami/charts/pull/30039))
+
 ## 24.0.0 (2024-10-08)
 
-* [bitnami/parse] Update MongoDB chart to 16.0.0 ([#29808](https://github.com/bitnami/charts/pull/29808))
+* [bitnami/parse] Update MongoDB chart to 16.0.0 (#29808) ([477a654](https://github.com/bitnami/charts/commit/477a654e1c0f3f6c91d7336306e2df1a4c35cc02)), closes [#29808](https://github.com/bitnami/charts/issues/29808)
 
 ## <small>23.2.15 (2024-10-04)</small>
 

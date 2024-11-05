@@ -87,10 +87,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.17.0-debian-12-r1
+  tag: 2.17.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -117,7 +116,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.47.0-debian-12-r0
+  tag: 2.47.0-debian-12-r1
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -137,6 +136,9 @@ tracking:
   ## @param tracking.replicaCount Number of mlflow replicas to deploy
   ##
   replicaCount: 1
+  ## @param tracking.host mlflow tracking listening host. Set to "[::]" to use ipv6. 
+  ## 
+  host: "0.0.0.0"
   ## @param tracking.containerPorts.http mlflow HTTP container port
   ##
   containerPorts:
@@ -233,7 +235,7 @@ tracking:
   ## @param tracking.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param tracking.containerSecurityContext.privileged Set containers' Security Context privileged
   ## @param tracking.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param tracking.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param tracking.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context readOnlyRootFilesystem
   ## @param tracking.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
   ## @param tracking.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ## @param tracking.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
@@ -1210,7 +1212,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r31
+    tag: 12-debian-12-r32
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1259,7 +1261,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r31
+    tag: 12-debian-12-r32
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

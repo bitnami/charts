@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.4.4 (2024-10-09)
+## 11.5.2 (2024-11-04)
 
-* [bitnami/nginx-ingress-controller] Release 11.4.4 ([#29844](https://github.com/bitnami/charts/pull/29844))
+* [bitnami/nginx-ingress-controller] Release 11.5.2 ([#30202](https://github.com/bitnami/charts/pull/30202))
+
+## <small>11.5.1 (2024-10-22)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.5.1 (#30042) ([43badcf](https://github.com/bitnami/charts/commit/43badcf10a7a62803d3369dad93b73b266fe50ef)), closes [#30042](https://github.com/bitnami/charts/issues/30042)
+
+## 11.5.0 (2024-10-21)
+
+* [bitnami/nginx-ingress-controller] Add TCP/UDP ports name prefix param (#29993) ([d231122](https://github.com/bitnami/charts/commit/d23112299b4283a768d575d2c0416781186c48dc)), closes [#29993](https://github.com/bitnami/charts/issues/29993)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.4.4 (2024-10-09)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.4.4 (#29844) ([fb4ef79](https://github.com/bitnami/charts/commit/fb4ef7908ee64092532219995ab184f209b799e4)), closes [#29844](https://github.com/bitnami/charts/issues/29844)
 
 ## <small>11.4.3 (2024-10-02)</small>
 

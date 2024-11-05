@@ -1,8 +1,30 @@
 # Changelog
 
-## 14.3.1 (2024-10-16)
+## 14.3.6 (2024-11-05)
 
-* [bitnami/postgresql-ha] Release 14.3.1 ([#29934](https://github.com/bitnami/charts/pull/29934))
+* [bitnami/postgresql-ha] Fix pgpool deployment init container security context ([#29857](https://github.com/bitnami/charts/pull/29857))
+
+## <small>14.3.5 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/postgresql-ha] Cloning huge data from primary node fails due to livenessProbe (#29948) ([16bd148](https://github.com/bitnami/charts/commit/16bd1481b05a3a48f4637ea946faf75d3d5686bb)), closes [#29948](https://github.com/bitnami/charts/issues/29948)
+
+## <small>14.3.4 (2024-10-23)</small>
+
+* [bitnami/postgresql-ha] Fix pgpool default readinessProbe (#30028) ([49ad0af](https://github.com/bitnami/charts/commit/49ad0af9b7975aaa956f694455931a14ed7f20c8)), closes [#30028](https://github.com/bitnami/charts/issues/30028)
+
+## <small>14.3.3 (2024-10-22)</small>
+
+* [bitnami/postgresql-ha] Release 14.3.3 (#30043) ([86e60c0](https://github.com/bitnami/charts/commit/86e60c00117b07687dc05c1b902abd17ed260ac4)), closes [#30043](https://github.com/bitnami/charts/issues/30043)
+
+## <small>14.3.2 (2024-10-20)</small>
+
+* [bitnami/postgresql-ha] Release 14.3.2 (#30002) ([cb25907](https://github.com/bitnami/charts/commit/cb2590765c39cddd0d1c686a2e28458c8960b490)), closes [#30002](https://github.com/bitnami/charts/issues/30002)
+
+## <small>14.3.1 (2024-10-16)</small>
+
+* [bitnami/postgresql-ha] Release 14.3.1 (#29934) ([ae61e7a](https://github.com/bitnami/charts/commit/ae61e7a627a0d6c1864e43bfe773ffb27c557ca0)), closes [#29934](https://github.com/bitnami/charts/issues/29934)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 14.3.0 (2024-10-16)
 

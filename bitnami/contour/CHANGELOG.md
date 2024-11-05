@@ -1,8 +1,17 @@
 # Changelog
 
-## 19.2.0 (2024-10-11)
+## 19.2.2 (2024-11-04)
 
-*  [bitnami/contour] fixed wrong envoy-service-name arg value in contour when envoy service name is changed ([#29556](https://github.com/bitnami/charts/pull/29556))
+* [bitnami/contour] Release 19.2.2 ([#30198](https://github.com/bitnami/charts/pull/30198))
+
+## <small>19.2.1 (2024-10-21)</small>
+
+* [bitnami/contour]: Fix invalid volume indentation (#29890) ([d135756](https://github.com/bitnami/charts/commit/d135756e51a90a958255a4551c5d79dfb468402d)), closes [#29890](https://github.com/bitnami/charts/issues/29890)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 19.2.0 (2024-10-14)
+
+* fixed wrong envoy-service-name arg value in contour when envoy service name is changed (#29556) ([268d5b8](https://github.com/bitnami/charts/commit/268d5b84cba4ce10cc6132de86f6e209cd0068f6)), closes [#29556](https://github.com/bitnami/charts/issues/29556)
 
 ## 19.1.0 (2024-10-10)
 
