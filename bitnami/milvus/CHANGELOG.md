@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.0.9 (2024-10-18)
+## 9.0.10 (2024-11-05)
 
-* [bitnami/milvus] Fixed bug/typo in datanode networkpolicy.yaml to allow all egress raffic ([#29956](https://github.com/bitnami/charts/pull/29956))
+* [bitnami/milvus] Release 9.0.10 ([#30214](https://github.com/bitnami/charts/pull/30214))
+
+## <small>9.0.9 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/milvus] Fixed bug/typo in datanode networkpolicy.yaml to allow all egress raffic (#29956) ([9a2eba2](https://github.com/bitnami/charts/commit/9a2eba284f5c803bc0b7180b9cda8aadf57d34e8)), closes [#29956](https://github.com/bitnami/charts/issues/29956)
 
 ## <small>9.0.8 (2024-10-16)</small>
 
