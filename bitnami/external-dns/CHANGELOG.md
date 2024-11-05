@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.3.12 (2024-10-29)
+## 8.4.0 (2024-11-04)
 
-* [bitnami/external-dns] Allow rfc2136-zone to specify multiple zones ([#28681](https://github.com/bitnami/charts/pull/28681))
+* [bitnami/external-dns] add support for multiple rfc2136 zones ([#30011](https://github.com/bitnami/charts/pull/30011))
+
+## <small>8.3.12 (2024-10-29)</small>
+
+* [bitnami/external-dns] Allow rfc2136-zone to specify multiple zones (#28681) ([0868c63](https://github.com/bitnami/charts/commit/0868c633cc6b2f16efcbbd86e0dce126ac0fdcd1)), closes [#28681](https://github.com/bitnami/charts/issues/28681)
 
 ## <small>8.3.11 (2024-10-29)</small>
 
