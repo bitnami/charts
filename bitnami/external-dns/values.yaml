@@ -1275,15 +1275,9 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     labels: {}
-    ## @param metrics.serviceMonitor.targetLabels Used to keep given service's labels in target
-    ## e.g:
-    ## - app.kubernetes.io/name
-    ##
+    ## @param metrics.serviceMonitor.targetLabels Labels from the Kubernetes service to be transferred to the created metrics
     targetLabels: []
-    ## @param metrics.serviceMonitor.podTargetLabels Used to keep given pod's labels in target
-    ## e.g:
-    ## - app.kubernetes.io/name
-    ##
+    ## @param metrics.serviceMonitor.podTargetLabels Labels from the Kubernetes pod to be transferred to the created metrics
     podTargetLabels: []
     ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
     ##
