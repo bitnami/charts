@@ -42,7 +42,7 @@ jobs:
           charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
           # Using grep -c as a better alternative to wc -l when dealing with empty strings."
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
-          num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|endswith("Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
+          num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|match("bitnami/[^/]+/Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
           non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
 
           if [[ $(curl -Lks "${PULL_REQUEST_URL}" | jq '.state | index("closed")') != *null* ]]; then
@@ -89,14 +89,11 @@ jobs:
             } else {
               core.warning(message);
             }
-  check-images:
+  chart-tests:
     runs-on: ubuntu-latest
     needs: [get-chart]
     name: Look for hardcoded images
     if: needs.get-chart.outputs.result == 'ok'
-    outputs:
-      result: ${{ steps.check-images.outputs.result }}
-      error: ${{ steps.check-images.outputs.error }}
     steps:
       - name: Checkout bitnami/charts
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -104,7 +101,7 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           path: charts
-      - id: check-images
+      - id: check-hardcoded-images
         name: Look for hardcoded images
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
@@ -118,23 +115,52 @@ jobs:
 
           echo "${hardcoded_images[@]}"
           if [[ ${#hardcoded_images[@]} -gt 0 ]] ; then
-            echo "error=Found hardcoded images in the chart templates: ${hardcoded_images[@]}" >> $GITHUB_OUTPUT
-            echo "result=fail" >> $GITHUB_OUTPUT
-          else
-            echo "result=ok" >> $GITHUB_OUTPUT
+            echo "error=Found hardcoded images in the chart templates: ${hardcoded_images[@]}"
+            exit 1
           fi
-      - id: show-error
-        name: Show error
-        if: ${{ steps.check-images.outputs.result != 'ok' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
-        with:
-          script: |
-            let message='${{ steps.check-images.outputs.error }}';
-            if ('${{ steps.check-images.outputs.result }}' === 'fail' ) {
-              core.setFailed(message);
-            } else {
-              core.warning(message);
-            }
+      - id: check-image-warning-list
+        name: Check image warning list
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          if [[ "$CHART" != "common" && "$CHART" != "fluentd" ]]; then
+            readarray -t tag_paths < <(yq e '.. | (path | join("."))' charts/bitnami/$CHART/values.yaml | grep -E '\.tag$' | sed 's/.tag$//g' | sort -u)
+            readarray -t registry_paths < <(yq e '.. | (path | join("."))' charts/bitnami/$CHART/values.yaml | grep '\.registry$' | sed 's/.registry$//g' | sort -u)
+
+            # We assume that image objects are those that contain both keys 'tag' and 'registry'
+            images_paths=()
+            for path in ${tag_paths[@]}; do
+              if echo "${registry_paths[@]}" | grep -w -q "$path"; then
+                if [[ -n "$path" ]]; then
+                  images_paths+=("$path")
+                fi
+              fi
+            done
+
+            # Get the images defined in the image warning helper
+            readarray -d ' ' -t images_list_tmp < <(grep -E 'common.warnings.modifiedImages' charts/bitnami/$CHART/templates/NOTES.txt | sed -E 's/.*\(list (.+)\) "context".*/\1/' | sed 's/.Values.//g')
+
+            # Remove any empty element from the array
+            images_list=()
+            for i in "${images_list_tmp[@]}"; do
+              if echo $i | grep -q -E "\S+"; then
+                images_list+=("$i")
+              fi
+            done
+
+            # Compare the image objects and the image warning list
+            if [[ ${#images_list[@]} -eq ${#images_paths[@]} ]]; then
+              for path in ${images_list[@]}; do
+                if ! echo ${images_paths[*]} | grep -w -q "$path"; then
+                  echo "Found inconsistencies in the images warning list: '${images_list[@]}' should be equal to '${images_paths[@]}'"
+                  exit 1
+                fi
+              done
+            else
+                echo "Found inconsistencies in the images warning list: '${images_list[@]}' should be equal to '${images_paths[@]}'"
+                exit 1
+            fi
+          fi
   update-pr:
     runs-on: ubuntu-latest
     needs: [get-chart]

@@ -1,8 +1,13 @@
 # Changelog
 
-## 14.3.5 (2024-10-24)
+## 14.3.6 (2024-11-05)
 
-* [bitnami/postgresql-ha] Cloning huge data from primary node fails due to livenessProbe ([#29948](https://github.com/bitnami/charts/pull/29948))
+* [bitnami/postgresql-ha] Fix pgpool deployment init container security context ([#29857](https://github.com/bitnami/charts/pull/29857))
+
+## <small>14.3.5 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/postgresql-ha] Cloning huge data from primary node fails due to livenessProbe (#29948) ([16bd148](https://github.com/bitnami/charts/commit/16bd1481b05a3a48f4637ea946faf75d3d5686bb)), closes [#29948](https://github.com/bitnami/charts/issues/29948)
 
 ## <small>14.3.4 (2024-10-23)</small>
 

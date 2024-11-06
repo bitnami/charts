@@ -12,9 +12,9 @@ annotations:
     - name: postgresql
       image: docker.io/bitnami/postgresql:17.0.0-debian-12-r10
     - name: seaweedfs
-      image: docker.io/bitnami/seaweedfs:3.78.0-debian-12-r0
+      image: docker.io/bitnami/seaweedfs:3.79.0-debian-12-r0
 apiVersion: v2
-appVersion: 3.78.0
+appVersion: 3.79.0
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
@@ -50,4 +50,4 @@ name: seaweedfs
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/seawwedfs
 - https://github.com/bitnami/containers/tree/main/bitnami/seaweedfs
-version: 3.0.4
+version: 3.0.5

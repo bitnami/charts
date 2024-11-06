@@ -1,0 +1,25 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.dagProcessor.enabled .Values.dagProcessor.pdb.create }}
+kind: PodDisruptionBudget
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+metadata:
+  name: {{ template "airflow.dagProcessor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: dag-processor
+spec:
+  {{- if .Values.dagProcessor.pdb.minAvailable }}
+  minAvailable: {{ .Values.dagProcessor.pdb.minAvailable }}
+  {{- end }}
+  {{- if or .Values.dagProcessor.pdb.maxUnavailable ( not .Values.dagProcessor.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.dagProcessor.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dagProcessor.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: dag-processor
+{{- end }}

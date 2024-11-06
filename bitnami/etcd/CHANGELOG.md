@@ -1,8 +1,17 @@
 # Changelog
 
-## 10.4.2 (2024-10-28)
+## 10.5.1 (2024-11-06)
 
-* [bitnami/etcd] Fixing defrag etcd for authenticated and tls clusters ([#30096](https://github.com/bitnami/charts/pull/30096))
+* [bitnami/etcd]: Fix volume indentation for defrag cronjob ([#30192](https://github.com/bitnami/charts/pull/30192))
+
+## 10.5.0 (2024-11-05)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/etcd]: Fix Defrag "bug" and prevent CronJob templates ambiguity (#30077) ([15e3fea](https://github.com/bitnami/charts/commit/15e3feae76b32ac9c6af4588c7b12a14cb76c3b2)), closes [#30077](https://github.com/bitnami/charts/issues/30077) [#30053](https://github.com/bitnami/charts/issues/30053) [#30053](https://github.com/bitnami/charts/issues/30053)
+
+## <small>10.4.2 (2024-10-28)</small>
+
+* [bitnami/etcd] Fixing defrag etcd for authenticated and tls clusters (#30096) ([558e971](https://github.com/bitnami/charts/commit/558e971fd3951ea349cb14739920d3c948f84edb)), closes [#30096](https://github.com/bitnami/charts/issues/30096)
 
 ## <small>10.4.1 (2024-10-24)</small>
 
