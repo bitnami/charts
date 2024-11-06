@@ -1,8 +1,24 @@
 # Changelog
 
+## 21.4.1 (2024-11-05)
+
+* [bitnami/airflow] Release 21.4.1 ([#30229](https://github.com/bitnami/charts/pull/30229))
+
+## 21.4.0 (2024-11-05)
+
+* [bitnami/airflow] Support adding SSH keys to load DAGs/plugins from private repos (#30224) ([d5d454c](https://github.com/bitnami/charts/commit/d5d454cbdac891c68ae04b957ce2a53e90b742e8)), closes [#30224](https://github.com/bitnami/charts/issues/30224)
+
+## 21.3.0 (2024-11-05)
+
+* [bitnami/airflow] Standardize autoscaling (#30220) ([6b646c0](https://github.com/bitnami/charts/commit/6b646c0d538d9700218951da1fd043c6c5eb9319)), closes [#30220](https://github.com/bitnami/charts/issues/30220)
+
+## <small>21.2.1 (2024-11-05)</small>
+
+* [bitnami/airflow] bugfix: pod template (#30216) ([528d26f](https://github.com/bitnami/charts/commit/528d26f262befe7263b0f0e7728dbe706dd33c92)), closes [#30216](https://github.com/bitnami/charts/issues/30216)
+
 ## 21.2.0 (2024-11-05)
 
-* [bitnami/airflow] Add support for Triggerer ([#30211](https://github.com/bitnami/charts/pull/30211))
+* [bitnami/airflow] Add support for Triggerer (#30211) ([fe4e81f](https://github.com/bitnami/charts/commit/fe4e81f3e56101d429903b805b3c487095492a5d)), closes [#30211](https://github.com/bitnami/charts/issues/30211)
 
 ## <small>21.1.1 (2024-11-04)</small>
 

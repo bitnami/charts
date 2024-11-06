@@ -13,7 +13,7 @@ it('allows to create a collection', () => {
   // Go to the collections page
   cy.visit('#/databases');
   // Wait for DOM content to load
-  cy.wait(2000);
+  cy.wait(50000);
   cy.get('button').contains('Collection').click({force: true});
   cy.wait(2000);
   cy.fixture('collection').then((c) => {
@@ -27,16 +27,17 @@ it('allows to create a collection', () => {
     });
     // Create collection index and load
     cy.get(`[href$="${c.collection.name}${random}/overview"]`).click({force: true});
+    // Reload and wait for DOM content load
+    cy.wait(50000);
     cy.get('button').contains('Create Index').click({force: true});
     cy.get('[data-cy="index_name"]').type(`${c.collection.idName}{enter}`);
-    // Reload and wait for DOM content load
-    cy.visit('#/databases');
-    cy.wait(2000);
-    cy.get('td [role="button"]').contains('unloaded').click({force: true});
+    cy.wait(25000);
+    cy.contains('unloaded').click({force: true});
     cy.get('button').contains('Load').click({force: true});
     cy.contains('loaded');
     // Add sample data
-    cy.get(`[href$="${c.collection.name}${random}/overview"]`).click({force: true});
+    cy.reload();
+    cy.wait(50000);
     cy.get('button[class*=MuiTab-root]').contains('Data').click({force: true});
     cy.get('span').contains('Insert Sample Data').click({force: true});
     cy.wait(2000);

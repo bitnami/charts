@@ -83,7 +83,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 2.10.2-debian-12-r7
+  tag: 2.10.3-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -161,6 +161,15 @@ dags:
   ##     path: /
   ##
   repositories: []
+  ## @param dags.sshKey SSH Private key used to clone/sync DAGs from Git repositories (ignored if dags.existingSshKeySecret is set)
+  ##
+  sshKey: ""
+  ## @param dags.existingSshKeySecret Name of a secret containing the SSH private key used to clone/sync DAGs from Git repositories
+  ##
+  existingSshKeySecret: ""
+  ## @param dags.existingSshKeySecretKey Key in the existing secret containing the SSH private key
+  ##
+  existingSshKeySecretKey: ""
 ## Load custom plugins from Git repositories
 ## @param plugins.enabled Enable loading plugins from Git repositories
 ## @param plugins.repositories [array] Array of repositories from which to download plugins
@@ -175,6 +184,15 @@ plugins:
   ##     path: /
   ##
   repositories: []
+  ## @param plugins.sshKey SSH Private key used to clone/sync plugins from Git repositories (ignored if plugins.existingSshKeySecret is set)
+  ##
+  sshKey: ""
+  ## @param plugins.existingSshKeySecret Name of a secret containing the SSH private key used to clone/sync plugins from Git repositories
+  ##
+  existingSshKeySecret: ""
+  ## @param plugins.existingSshKeySecretKey Key in the existing secret containing the SSH private key
+  ##
+  existingSshKeySecretKey: ""
 ## Default init Containers
 ##
 defaultInitContainers:
@@ -655,6 +673,40 @@ web:
     create: true
     minAvailable: ""
     maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param web.autoscaling.vpa.enabled Enable VPA for Airflow web
+    ## @param web.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param web.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param web.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param web.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param web.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param web.autoscaling.hpa.enabled Enable HPA for Airflow web
+    ## @param web.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param web.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param web.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param web.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
   ## Web Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -961,6 +1013,40 @@ scheduler:
     create: true
     minAvailable: ""
     maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param scheduler.autoscaling.vpa.enabled Enable VPA for Airflow scheduler
+    ## @param scheduler.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param scheduler.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param scheduler.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param scheduler.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param scheduler.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param scheduler.autoscaling.hpa.enabled Enable HPA for Airflow scheduler
+    ## @param scheduler.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param scheduler.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param scheduler.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param scheduler.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
   ## Scheduler Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -1268,6 +1354,40 @@ dagProcessor:
     create: true
     minAvailable: ""
     maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param dagProcessor.autoscaling.vpa.enabled Enable VPA for Airflow Dag Processor
+    ## @param dagProcessor.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param dagProcessor.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param dagProcessor.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param dagProcessor.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param dagProcessor.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param dagProcessor.autoscaling.hpa.enabled Enable HPA for Airflow Dag Processor
+    ## @param dagProcessor.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param dagProcessor.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param dagProcessor.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param dagProcessor.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
   ## Airflow Dag Processor Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -2042,20 +2162,50 @@ worker:
     create: true
     minAvailable: ""
     maxUnavailable: ""
-  ## Enable HorizontalPodAutoscaler for worker pods
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param worker.autoscaling.enabled Whether enable horizontal pod autoscaler
-  ## @param worker.autoscaling.minReplicas Configure a minimum amount of pods
-  ## @param worker.autoscaling.maxReplicas Configure a maximum amount of pods
-  ## @param worker.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
-  ## @param worker.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
+    ## @param worker.autoscaling.enabled DEPRECATED: use worker.autoscaling.hpa.enabled instead
+    ## @param worker.autoscaling.minReplicas DEPRECATED: use worker.autoscaling.hpa.minReplicas instead
+    ## @param worker.autoscaling.maxReplicas DEPRECATED: use worker.autoscaling.hpa.minReplicas instead
+    ## @param worker.autoscaling.targetMemory DEPRECATED: use worker.autoscaling.hpa.targetMemory instead
+    ## @param worker.autoscaling.targetCPU DEPRECATED: use worker.autoscaling.hpa.targetCPU instead
     enabled: false
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPU: 80
-    targetMemory: 80
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+    ## @param worker.autoscaling.vpa.enabled Enable VPA for Airflow Worker
+    ## @param worker.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param worker.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param worker.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param worker.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param worker.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param worker.autoscaling.hpa.enabled Enable HPA for Airflow Worker
+    ## @param worker.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param worker.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param worker.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param worker.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPU: 80
+      targetMemory: 80
   ## Worker Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##

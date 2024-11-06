@@ -293,10 +293,12 @@ replicaCount: 1
 revisionHistoryLimitCount: 10
 ## @param containerPorts.http Keycloak HTTP container port
 ## @param containerPorts.https Keycloak HTTPS container port
+## @param containerPorts.metrics Keycloak metrics container port
 ##
 containerPorts:
   http: 8080
   https: 8443
+  metrics: 9000
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
 extraContainerPorts: []
@@ -1009,7 +1011,7 @@ metrics:
     ## @param metrics.service.ports.http Metrics service HTTP port
     ##
     ports:
-      http: 8080
+      http: 9000
     ## @param metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints
     ##
     annotations:

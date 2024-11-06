@@ -248,10 +248,11 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.dags.enabled .Values.dags.existingConfigmap }}
-        - name: external-dags
-          configMap:
-            name: {{ tpl .Values.dags.existingConfigmap $ }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.dags.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.plugins.volumes" . | nindent 8 }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

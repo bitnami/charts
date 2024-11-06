@@ -18,7 +18,9 @@ spec:
   {{- if .Values.worker.podManagementPolicy }}
   podManagementPolicy: {{ .Values.worker.podManagementPolicy | quote }}
   {{- end }}
+  {{- if not (coalesce .Values.worker.autoscaling.hpa.enabled .Values.worker.autoscaling.enabled) }}
   replicas: {{ .Values.worker.replicaCount }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -246,10 +248,11 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.dags.enabled .Values.dags.existingConfigmap }}
-        - name: external-dags
-          configMap:
-            name: {{ tpl .Values.dags.existingConfigmap $ }}
+        {{- if .Values.dags.enabled }}
+        {{- include "airflow.dags.volumes" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.plugins.enabled }}
+        {{- include "airflow.plugins.volumes" . | nindent 8 }}
         {{- end }}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: custom-configuration-file

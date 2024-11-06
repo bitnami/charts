@@ -170,11 +170,33 @@ Get the configmap name
 {{/*
 Return the LDAP credentials secret.
 */}}
-{{- define "airflow.ldapSecretName" -}}
+{{- define "airflow.ldap.secretName" -}}
 {{- if .Values.ldap.existingSecret -}}
     {{- print (tpl .Values.ldap.existingSecret .) -}}
 {{- else -}}
     {{- printf "%s-ldap" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret name containing the SSH keys for loading DAGs Git repositories
+*/}}
+{{- define "airflow.dags.ssh.secretName" -}}
+{{- if .Values.dags.existingSshKeySecret -}}
+    {{- print (tpl .Values.dags.existingSshKeySecret .) -}}
+{{- else -}}
+    {{- printf "%s-ssh" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret name containing the SSH keys for loading plugins Git repositories
+*/}}
+{{- define "airflow.plugins.ssh.secretName" -}}
+{{- if .Values.plugins.existingSshKeySecret -}}
+    {{- print (tpl .Values.plugins.existingSshKeySecret .) -}}
+{{- else -}}
+    {{- printf "%s-ssh" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
