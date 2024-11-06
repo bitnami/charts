@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.3.24 (2024-10-22)
+## 1.3.25 (2024-11-06)
 
-* [bitnami/prometheus] Release 1.3.24 ([#30045](https://github.com/bitnami/charts/pull/30045))
+* [bitnami/prometheus] Release 1.3.25 ([#30239](https://github.com/bitnami/charts/pull/30239))
+
+## <small>1.3.24 (2024-10-22)</small>
+
+* [bitnami/prometheus] Release 1.3.24 (#30045) ([a08faca](https://github.com/bitnami/charts/commit/a08facaa0f3050b722e4c8160c5e667eb28b5f7d)), closes [#30045](https://github.com/bitnami/charts/issues/30045)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>1.3.23 (2024-10-02)</small>
 
