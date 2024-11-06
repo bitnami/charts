@@ -82,6 +82,7 @@ spec:
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
         {{- end }}
+        {{- include "airflow.defaultInitContainers.waitForWebServer" . | nindent 8 }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}

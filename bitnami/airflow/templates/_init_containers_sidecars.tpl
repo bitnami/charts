@@ -37,6 +37,38 @@ Returns an init-container that copies the default configuration files so they ar
 {{- end -}}
 
 {{/*
+Returns an init-container that waits for web server to be ready
+The web server runs the database migrations so once it is ready the database is ready
+*/}}
+{{- define "airflow.defaultInitContainers.waitForWebServer" -}}
+- name: wait-for-web-server
+  image: {{ include "airflow.image" . }}
+  imagePullPolicy: {{ .Values.image.pullPolicy }}
+  {{- if .Values.defaultInitContainers.waitForWebServer.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.waitForWebServer.containerSecurityContext "context" .) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.defaultInitContainers.waitForWebServer.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.waitForWebServer.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.waitForWebServer.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForWebServer.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      . /opt/bitnami/scripts/libairflow.sh
+
+      info "Waiting for Airflow Webserver to be up"
+      airflow_wait_for_webserver "$AIRFLOW_WEBSERVER_HOST" "$AIRFLOW_WEBSERVER_PORT_NUMBER"
+  env:
+    - name: AIRFLOW_WEBSERVER_HOST
+      value: {{ include "common.names.fullname" . }}
+    - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+      value: {{ .Values.service.ports.http | quote }}
+{{- end -}}
+
+{{/*
 Returns the name that will identify the repository internally and it will be used to
 create folders or volume names
 */}}
