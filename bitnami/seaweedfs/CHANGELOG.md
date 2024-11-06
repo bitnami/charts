@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.0.5 (2024-10-31)
+## 3.0.6 (2024-11-06)
 
-* [bitnami/seaweedfs] Release 3.0.5 ([#30149](https://github.com/bitnami/charts/pull/30149))
+* [bitnami/seaweedfs] Mount security.toml regardless security enhancements are enabled ([#30235](https://github.com/bitnami/charts/pull/30235))
+
+## <small>3.0.5 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/seaweedfs] Release 3.0.5 (#30149) ([86395d9](https://github.com/bitnami/charts/commit/86395d98966d8ed6bd4a445e96ca112f7c0b0709)), closes [#30149](https://github.com/bitnami/charts/issues/30149)
 
 ## <small>3.0.4 (2024-10-28)</small>
 
