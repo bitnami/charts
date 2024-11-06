@@ -80,7 +80,7 @@ Params:
   - failOnNew - Boolean - Optional - Default to true. If set to false, skip errors adding new keys to existing secrets.
   - skipB64enc - Boolean - Optional - Default to false. If set to true, no the secret will not be base64 encrypted.
   - skipQuote - Boolean - Optional - Default to false. If set to true, no quotes will be added around the secret.
-  - honorProvidedValues - Boolean - Optional - Default to false. If set to true, the values in providedValues
+  - honorProvidedValues - Boolean - Optional - Default to false. If set to true, the values in providedValues have higher priority than an existing secret
 The order in which this function returns a secret password:
   1. Password provided via the values.yaml if honorProvidedValues = true
      (If one of the keys passed to the 'providedValues' parameter to this function is a valid path to a key in the values.yaml and has a value, the value of the first key with a value will be returned)
