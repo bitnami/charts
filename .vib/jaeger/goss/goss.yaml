@@ -5,7 +5,7 @@ addr:
   tcp://localhost:{{ .Vars.agent.containerPorts.config }}:
     reachable: true
 http:
-  http://jaeger--agent:{{ .Vars.agent.service.ports.admin }}/:
+  http://jaeger-agent:{{ .Vars.agent.service.ports.admin }}/:
     status: 200
     body:
       - Server available

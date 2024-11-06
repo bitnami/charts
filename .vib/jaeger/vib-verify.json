@@ -41,7 +41,7 @@
             "vars_file": "jaeger/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-jaeger--agent"
+                "workload": "deploy-jaeger-agent"
               }
             }
           }
