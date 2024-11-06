@@ -121,11 +121,11 @@ spec:
                   mountPath: /opt/bitnami/etcd/certs/client/
                   readOnly: true
               {{- end }}
-        {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
-        volumes:
-          - name: etcd-client-certs
-            secret:
-              secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
-              defaultMode: 256
-        {{- end }}
+          {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
+          volumes:
+            - name: etcd-client-certs
+              secret:
+                secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
+                defaultMode: 256
+          {{- end }}
 {{- end }}
