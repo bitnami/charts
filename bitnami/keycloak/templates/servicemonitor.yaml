@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
-apiVersion: monitoring.coreos.com/v1
+apiVersion: {{ .Values.metrics.serviceMonitor.apiVersion}}
 kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}
