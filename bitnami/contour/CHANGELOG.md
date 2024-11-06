@@ -1,8 +1,13 @@
 # Changelog
 
-## 19.2.2 (2024-11-04)
+## 19.3.0 (2024-11-05)
 
-* [bitnami/contour] Release 19.2.2 ([#30198](https://github.com/bitnami/charts/pull/30198))
+* [bitnami/contour] Add Gateway API CRDs ([#30166](https://github.com/bitnami/charts/pull/30166))
+
+## <small>19.2.2 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/contour] Release 19.2.2 (#30198) ([f91ea1b](https://github.com/bitnami/charts/commit/f91ea1bfb5bfadb6616ff169b66fabfa525e5828)), closes [#30198](https://github.com/bitnami/charts/issues/30198)
 
 ## <small>19.2.1 (2024-10-21)</small>
 
