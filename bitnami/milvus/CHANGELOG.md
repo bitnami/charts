@@ -1,5 +1,13 @@
 # Changelog
 
+## 9.0.11 (2024-11-06)
+
+* [bitnami/milvus] Release 9.0.10 ([#30214](https://github.com/bitnami/charts/pull/30214))
+
+## <small>9.0.10 (2024-11-05)</small>
+
+* [bitnami/milvus] Release 9.0.9 (#30148) ([c11e8b3](https://github.com/bitnami/charts/commit/c11e8b31bb20b343e6c4441969277d099d543db1)), closes [#30148](https://github.com/bitnami/charts/issues/30148)
+
 ## <small>9.0.9 (2024-11-04)</small>
 
 * [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
