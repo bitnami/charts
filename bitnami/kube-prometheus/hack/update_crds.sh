@@ -32,9 +32,9 @@ for line in "${FILES[@]}"; do
 
     echo -e "Downloading Prometheus Operator CRD with Version ${VERSION}:\n${URL}\n"
 
-    echo "# ${URL}" > "${SCRIPT_DIR}/../crds/${DESTINATION}"
+    echo "# ${URL}" > "${SCRIPT_DIR}/charts/kube-prometheus-crds/crds/${DESTINATION}"
 
-    if ! curl --silent --retry-all-errors --fail --location "${URL}" >> "${SCRIPT_DIR}/../crds/${DESTINATION}"; then
+    if ! curl --silent --retry-all-errors --fail --location "${URL}" >> "${SCRIPT_DIR}/../charts/kube-prometheus-cds/crds/${DESTINATION}"; then
       echo -e "Failed to download ${URL}!"
       exit 1
     fi
