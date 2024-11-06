@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.3.12 (2024-10-17)
+## 1.3.13 (2024-11-06)
 
-* [bitnami/opensearch] Release 1.3.12 ([#29958](https://github.com/bitnami/charts/pull/29958))
+* [bitnami/opensearch] Release 1.3.13 ([#30232](https://github.com/bitnami/charts/pull/30232))
+
+## <small>1.3.12 (2024-10-17)</small>
+
+* [bitnami/opensearch] Release 1.3.12 (#29958) ([5fe7ee5](https://github.com/bitnami/charts/commit/5fe7ee5945e7005a923158b5d85dc8a8757beaf5)), closes [#29958](https://github.com/bitnami/charts/issues/29958)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>1.3.11 (2024-10-03)</small>
 
