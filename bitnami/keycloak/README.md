@@ -547,6 +547,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`    |
 | `metrics.service.extraPorts`               | Add additional ports to the keycloak metrics service (i.e. admin port 9000)                                               | `[]`    |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false` |
+| `metrics.serviceMonitor.apiVersion`        | ServiceMonitor API version                                                                                                | `monitoring.coreos.com/v1` |
 | `metrics.serviceMonitor.port`              | Metrics service HTTP port                                                                                                 | `http`  |
 | `metrics.serviceMonitor.endpoints`         | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`    |
 | `metrics.serviceMonitor.path`              | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                | `""`    |

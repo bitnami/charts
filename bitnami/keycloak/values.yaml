@@ -1026,6 +1026,9 @@ metrics:
     ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
     ##
     enabled: false
+    ## @param metrics.serviceMonitor.apiVersion ServiceMonitor API version
+    ##
+    apiVersion: monitoring.coreos.com/v1
     ## @param metrics.serviceMonitor.port Metrics service HTTP port
     ##
     port: http
