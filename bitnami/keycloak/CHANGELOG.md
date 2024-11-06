@@ -2,7 +2,7 @@
 
 ## 24.1.1 (2024-11-06)
 
-* Add servicemonitor apiVersion value ([#30236](https://github.com/bitnami/charts/pull/30236))
+* [bitnami/keycloak] Add servicemonitor apiVersion value ([#30236](https://github.com/bitnami/charts/pull/30236))
 
 ## 24.1.0 (2024-11-06)
 
