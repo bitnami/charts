@@ -147,7 +147,7 @@ Bitnami charts configure credentials at first boot. Any further change in the se
 - Update the user password following [the upstream documentation](https://milvus.io/docs/authenticate.md#Update-user-password)
 - Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and ROOT_PASSWORD placeholders)
 
-```
+```shell
 kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --from-literal=root-password=ROOT_PASSWORD --dry-run -o yaml | kubectl apply -f -
 ```
 
