@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.8.2 (2024-10-31)
+## 14.8.3 (2024-11-05)
 
-* [bitnami/minio] fix secret creation check ([#30135](https://github.com/bitnami/charts/pull/30135))
+* [bitnami/minio] Fix invalid sts template in distributed mode ([#30187](https://github.com/bitnami/charts/pull/30187))
+
+## <small>14.8.2 (2024-11-04)</small>
+
+* [bitnami/minio] fix secret creation check (#30135) ([5a9163e](https://github.com/bitnami/charts/commit/5a9163eef82540b6a5136f7c475dac2acffae21c)), closes [#30135](https://github.com/bitnami/charts/issues/30135)
 
 ## <small>14.8.1 (2024-10-31)</small>
 
