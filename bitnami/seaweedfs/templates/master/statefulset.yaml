@@ -33,9 +33,7 @@ spec:
         {{- if and .Values.master.config (empty .Values.master.existingConfigmap) }}
         checksum/config: {{ include (print $.Template.BasePath "/master/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if .Values.security.enabled }}
         checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
-        {{- end }}
         {{- if .Values.master.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.master.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -134,9 +132,7 @@ spec:
           args:
             - -logtostderr=true
             - -v={{ .Values.master.logLevel }}
-            {{- if or .Values.security.enabled .Values.master.config .Values.master.existingConfigmap }}
             - -config_dir=/etc/seaweedfs
-            {{- end }}
             - master
             - -mdir={{ .Values.master.persistence.mountPath }}
             - -ip.bind={{ .Values.master.bindAddress }}
@@ -235,7 +231,6 @@ spec:
               subPath: master.toml
               readOnly: true
             {{- end }}
-            {{- if .Values.security.enabled }}
             - name: security-config
               mountPath: /etc/seaweedfs/security.toml
               subPath: security.toml
@@ -259,7 +254,6 @@ spec:
               readOnly: true
               mountPath: /certs/client
             {{- end }}
-            {{- end }}
           {{- if .Values.master.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -274,7 +268,6 @@ spec:
           configMap:
             name: {{ template "seaweedfs.master.configmapName" . }}
         {{- end }}
-        {{- if .Values.security.enabled }}
         - name: security-config
           configMap:
             name: {{ printf "%s-security" (include "common.names.fullname" .) }}
@@ -299,7 +292,6 @@ spec:
         - name: client-cert
           secret:
             secretName: {{ template "seaweedfs.security.mTLS.client.secretName" . }}
-        {{- end }}
         {{- end }}
         {{- if .Values.master.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumes "context" $) | nindent 8 }}
