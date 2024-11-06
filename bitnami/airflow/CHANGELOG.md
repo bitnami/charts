@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.4.1 (2024-11-05)
+## 21.5.0 (2024-11-06)
 
-* [bitnami/airflow] Release 21.4.1 ([#30229](https://github.com/bitnami/charts/pull/30229))
+* [bitnami/airflow] feat: add init container to wait for db migrations ([#30246](https://github.com/bitnami/charts/pull/30246))
+
+## <small>21.4.1 (2024-11-05)</small>
+
+* [bitnami/airflow] Release 21.4.1 (#30229) ([237ac1a](https://github.com/bitnami/charts/commit/237ac1afdb7ae7256fc1de97f315c7faaa27fbf8)), closes [#30229](https://github.com/bitnami/charts/issues/30229)
 
 ## 21.4.0 (2024-11-05)
 
