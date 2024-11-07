@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.5.2 (2024-11-04)
+## 11.5.3 (2024-11-07)
 
-* [bitnami/nginx-ingress-controller] Release 11.5.2 ([#30202](https://github.com/bitnami/charts/pull/30202))
+* [bitnami/nginx-ingress-controller] Release 11.5.3 ([#30286](https://github.com/bitnami/charts/pull/30286))
+
+## <small>11.5.2 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/nginx-ingress-controller] Release 11.5.2 (#30202) ([e775a70](https://github.com/bitnami/charts/commit/e775a70c8338b3bf3f521cf13654ea9453e75dad)), closes [#30202](https://github.com/bitnami/charts/issues/30202)
 
 ## <small>11.5.1 (2024-10-22)</small>
 
