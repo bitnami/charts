@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.3.25 (2024-10-16)
+## 4.3.26 (2024-11-07)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.3.25 ([#29935](https://github.com/bitnami/charts/pull/29935))
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.26 ([#30290](https://github.com/bitnami/charts/pull/30290))
+
+## <small>4.3.25 (2024-10-16)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.25 (#29935) ([a59958e](https://github.com/bitnami/charts/commit/a59958e23e1296d0b5bd52eee09803a907366d7e)), closes [#29935](https://github.com/bitnami/charts/issues/29935)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>4.3.24 (2024-10-02)</small>
 
