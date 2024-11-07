@@ -1,8 +1,14 @@
 # Changelog
 
-## 1.4.27 (2024-11-01)
+## 1.4.28 (2024-11-07)
 
-* [bitnami/vault] Release 1.4.27 ([#30167](https://github.com/bitnami/charts/pull/30167))
+* [bitnami/vault] Release 1.4.28 ([#30297](https://github.com/bitnami/charts/pull/30297))
+
+## <small>1.4.27 (2024-11-01)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/vault] Release 1.4.27 (#30167) ([3f157ed](https://github.com/bitnami/charts/commit/3f157edcff98a7f7c694b043a6ff3e36e0e515b5)), closes [#30167](https://github.com/bitnami/charts/issues/30167)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>1.4.26 (2024-10-09)</small>
 
