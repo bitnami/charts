@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.1.2 (2024-11-04)
+## 20.0.0 (2024-11-07)
 
-* [bitnami/mariadb] Release 19.1.2 ([#30203](https://github.com/bitnami/charts/pull/30203))
+* [bitnami/mariadb] fix!: :bug: :boom: Set correct serviceName and add Password Update Job ([#30300](https://github.com/bitnami/charts/pull/30300))
+
+## <small>19.1.2 (2024-11-04)</small>
+
+* [bitnami/mariadb] Release 19.1.2 (#30203) ([86984d1](https://github.com/bitnami/charts/commit/86984d109d4bb2be040824fe362649b8678f7ae6)), closes [#30203](https://github.com/bitnami/charts/issues/30203)
 
 ## <small>19.1.1 (2024-11-02)</small>
 
