@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.25 (2024-10-24)
+## 11.3.26 (2024-11-07)
 
-* [bitnami/grafana] Release 11.3.25 ([#30070](https://github.com/bitnami/charts/pull/30070))
+* [bitnami/grafana] Release 11.3.26 ([#30270](https://github.com/bitnami/charts/pull/30270))
+
+## <small>11.3.25 (2024-10-24)</small>
+
+* [bitnami/grafana] Release 11.3.25 (#30070) ([27509cf](https://github.com/bitnami/charts/commit/27509cfdd2d6ed422279a20426ad0128460bbdcf)), closes [#30070](https://github.com/bitnami/charts/issues/30070)
 
 ## <small>11.3.24 (2024-10-22)</small>
 
