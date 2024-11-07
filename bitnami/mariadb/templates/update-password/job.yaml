@@ -72,7 +72,7 @@ spec:
                 echo "Root password already updated. Skipping"
               else
                 echo "Updating root password"
-                mysql -uroot -p$MARIADB_PREVIOUS_ROOT_PASSWORD -h$primary_host -e "SET PASSWORD for 'root'@'%' = PASSWORD('$MARIADB_NEW_ROOT_PASSWORD');"
+                mysql -uroot -p$MARIADB_PREVIOUS_ROOT_PASSWORD -h$primary_host --port={{ .Values.primary.containerPorts.mysql }} -e "SET PASSWORD for 'root'@'%' = PASSWORD('$MARIADB_NEW_ROOT_PASSWORD');"
                 touch /job-status/root-password-changed
                 echo "Root password successfully updated"
               fi
@@ -81,7 +81,7 @@ spec:
                 echo "User password already updated. Skipping"
               else
                 echo "Updating user password"
-                mysql -u$MARIADB_USER -p$MARIADB_PREVIOUS_PASSWORD -h$primary_host -e "SET PASSWORD for '$MARIADB_USER'@'%' = PASSWORD('$MARIADB_NEW_PASSWORD');"
+                mysql -u$MARIADB_USER -p$MARIADB_PREVIOUS_PASSWORD -h$primary_host --port={{ .Values.primary.containerPorts.mysql }} -e "SET PASSWORD for '$MARIADB_USER'@'%' = PASSWORD('$MARIADB_NEW_PASSWORD');"
                 touch /job-status/password-changed
                 echo "User password successfully updated"
               fi
@@ -91,7 +91,7 @@ spec:
                 echo "Replication password already updated. Skipping"
               else
                 echo "Updating replication password"
-                mysql -u$MARIADB_REPLICATION_USER -p$MARIADB_PREVIOUS_REPLICATION_PASSWORD -h$primary_host -e "SET PASSWORD for '$MARIADB_REPLICATION_USER'@'%' = PASSWORD('$MARIADB_NEW_REPLICATION_PASSWORD');"
+                mysql -u$MARIADB_REPLICATION_USER -p$MARIADB_PREVIOUS_REPLICATION_PASSWORD -h$primary_host --port={{ .Values.primary.containerPorts.mysql }} -e "SET PASSWORD for '$MARIADB_REPLICATION_USER'@'%' = PASSWORD('$MARIADB_NEW_REPLICATION_PASSWORD');"
                 touch /job-status/replication-password-changed
                 echo "Replication password successfully updated"
               fi
@@ -102,7 +102,7 @@ spec:
                 else
                     replica_host={{ include "mariadb.secondary.fullname" . }}-$i.{{  printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
                     echo "Updating primary password in replica $i"
-                    mysql -uroot -p$MARIADB_NEW_ROOT_PASSWORD -h$replica_host -e "STOP SLAVE; CHANGE MASTER TO MASTER_PASSWORD='$MARIADB_NEW_REPLICATION_PASSWORD'; START SLAVE;"
+                    mysql -uroot -p$MARIADB_NEW_ROOT_PASSWORD -h$replica_host --port={{ .Values.secondary.containerPorts.mysql }} -e "STOP SLAVE; CHANGE MASTER TO MASTER_PASSWORD='$MARIADB_NEW_REPLICATION_PASSWORD'; START SLAVE;"
                     touch /job-status/replica-$i-changed
                     echo "Replica $i updated"
                 fi
