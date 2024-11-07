@@ -564,19 +564,20 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### Volume Server Persistence Parameters
 
-| Name                                              | Description                                                                                             | Value               |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
-| `volume.dataVolumes[0].name`                      | Name of the data volume                                                                                 | `data-0`            |
-| `volume.dataVolumes[0].mountPath`                 | Path to mount the volume at.                                                                            | `/data-0`           |
-| `volume.dataVolumes[0].subPath`                   | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
-| `volume.dataVolumes[0].persistence.enabled`       | Enable persistence on Volume Server using Persistent Volume Claims                                      | `true`              |
-| `volume.dataVolumes[0].persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                |
-| `volume.dataVolumes[0].persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                |
-| `volume.dataVolumes[0].persistence.accessModes`   | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
-| `volume.dataVolumes[0].persistence.size`          | Size of data volume                                                                                     | `8Gi`               |
-| `volume.dataVolumes[0].persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
-| `volume.dataVolumes[0].persistence.selector`      | Selector to match an existing Persistent Volume for data PVC                                            | `{}`                |
-| `volume.dataVolumes[0].persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
+| Name                                              | Description                                                                                                                                                                   | Value               |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `volume.dataVolumes[0].name`                      | Name of the data volume                                                                                                                                                       | `data-0`            |
+| `volume.dataVolumes[0].mountPath`                 | Path to mount the volume at.                                                                                                                                                  | `/data-0`           |
+| `volume.dataVolumes[0].subPath`                   | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                                                       | `""`                |
+| `volume.dataVolumes[0].maxVolumes`                | Max number of SeaweedFS volumes this data volume can be divided into. If set to 0, the limit will be auto configured as free disk space divided by default volume size (30GB) | `8`                 |
+| `volume.dataVolumes[0].persistence.enabled`       | Enable persistence on Volume Server using Persistent Volume Claims                                                                                                            | `true`              |
+| `volume.dataVolumes[0].persistence.storageClass`  | Storage class of backing PVC                                                                                                                                                  | `""`                |
+| `volume.dataVolumes[0].persistence.annotations`   | Persistent Volume Claim annotations                                                                                                                                           | `{}`                |
+| `volume.dataVolumes[0].persistence.accessModes`   | Persistent Volume Access Modes                                                                                                                                                | `["ReadWriteOnce"]` |
+| `volume.dataVolumes[0].persistence.size`          | Size of data volume                                                                                                                                                           | `8Gi`               |
+| `volume.dataVolumes[0].persistence.existingClaim` | The name of an existing PVC to use for persistence                                                                                                                            | `""`                |
+| `volume.dataVolumes[0].persistence.selector`      | Selector to match an existing Persistent Volume for data PVC                                                                                                                  | `{}`                |
+| `volume.dataVolumes[0].persistence.dataSource`    | Custom PVC data source                                                                                                                                                        | `{}`                |
 
 ### Volume Server Metrics Parameters
 
