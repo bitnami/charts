@@ -1,8 +1,30 @@
 # Changelog
 
-## 3.0.3 (2024-10-16)
+## 3.1.0 (2024-11-07)
 
-* [bitnami/seaweedfs] Release 3.0.3 ([#29944](https://github.com/bitnami/charts/pull/29944))
+* [bitnami/seaweedfs] Support configuring max number of volumes per disk ([#30294](https://github.com/bitnami/charts/pull/30294))
+
+## <small>3.0.7 (2024-11-07)</small>
+
+* [bitnami/seaweedfs] Release 3.0.7 (#30292) ([cc3cbf6](https://github.com/bitnami/charts/commit/cc3cbf69cc6523de1b28de138cbe38afda75a00f)), closes [#30292](https://github.com/bitnami/charts/issues/30292)
+
+## <small>3.0.6 (2024-11-06)</small>
+
+* [bitnami/seaweedfs] Mount security.toml regardless security enhancements are enabled (#30235) ([2ec7ec9](https://github.com/bitnami/charts/commit/2ec7ec965a444558f5e74edba80d12b8c9420f5a)), closes [#30235](https://github.com/bitnami/charts/issues/30235)
+
+## <small>3.0.5 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/seaweedfs] Release 3.0.5 (#30149) ([86395d9](https://github.com/bitnami/charts/commit/86395d98966d8ed6bd4a445e96ca112f7c0b0709)), closes [#30149](https://github.com/bitnami/charts/issues/30149)
+
+## <small>3.0.4 (2024-10-28)</small>
+
+* [bitnami/seaweedfs] Release 3.0.4 (#30097) ([f6a1c6f](https://github.com/bitnami/charts/commit/f6a1c6f46a5af99b8307b8b05ca1a2e61497ae03)), closes [#30097](https://github.com/bitnami/charts/issues/30097)
+
+## <small>3.0.3 (2024-10-16)</small>
+
+* [bitnami/seaweedfs] Release 3.0.3 (#29944) ([1dea08b](https://github.com/bitnami/charts/commit/1dea08b301bf082f6a32cf98332ebde411bb9f2b)), closes [#29944](https://github.com/bitnami/charts/issues/29944)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.0.2 (2024-10-07)</small>
 

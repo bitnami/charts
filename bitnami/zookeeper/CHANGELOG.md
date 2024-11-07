@@ -1,8 +1,17 @@
 # Changelog
 
-## 13.5.0 (2024-10-09)
+## 13.6.0 (2024-11-05)
 
-* [bitnami/zookeeper] Rename metrics port and expose scheme, and tlsConfig for Istio compatibility ([#29683](https://github.com/bitnami/charts/pull/29683))
+* [bitnami/zookeeper] Make the ZOO_SERVERS environment variable configurable ([#29921](https://github.com/bitnami/charts/pull/29921))
+
+## <small>13.5.1 (2024-10-26)</small>
+
+* [bitnami/zookeeper] Release 13.5.1 (#30094) ([671cf5e](https://github.com/bitnami/charts/commit/671cf5e571a5e86d0943d002da4f8bef72a54fed)), closes [#30094](https://github.com/bitnami/charts/issues/30094)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 13.5.0 (2024-10-10)
+
+* [bitnami/zookeeper] Rename metrics port and expose scheme, and tlsConfig for Istio compatibility (#2 ([0bcfc6d](https://github.com/bitnami/charts/commit/0bcfc6d635eb09f0cc2f7d8187254b5a4ffe95be)), closes [#29683](https://github.com/bitnami/charts/issues/29683)
 
 ## <small>13.4.15 (2024-10-09)</small>
 

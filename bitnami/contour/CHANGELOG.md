@@ -1,8 +1,26 @@
 # Changelog
 
-## 19.2.0 (2024-10-11)
+## 19.3.1 (2024-11-07)
 
-*  [bitnami/contour] fixed wrong envoy-service-name arg value in contour when envoy service name is changed ([#29556](https://github.com/bitnami/charts/pull/29556))
+* [bitnami/contour] Release 19.3.1 ([#30260](https://github.com/bitnami/charts/pull/30260))
+
+## 19.3.0 (2024-11-06)
+
+* [bitnami/contour] Add Gateway API CRDs (#30166) ([07b77f3](https://github.com/bitnami/charts/commit/07b77f3cd37719392b3f71489a6a9e2d235304bc)), closes [#30166](https://github.com/bitnami/charts/issues/30166)
+
+## <small>19.2.2 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/contour] Release 19.2.2 (#30198) ([f91ea1b](https://github.com/bitnami/charts/commit/f91ea1bfb5bfadb6616ff169b66fabfa525e5828)), closes [#30198](https://github.com/bitnami/charts/issues/30198)
+
+## <small>19.2.1 (2024-10-21)</small>
+
+* [bitnami/contour]: Fix invalid volume indentation (#29890) ([d135756](https://github.com/bitnami/charts/commit/d135756e51a90a958255a4551c5d79dfb468402d)), closes [#29890](https://github.com/bitnami/charts/issues/29890)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 19.2.0 (2024-10-14)
+
+* fixed wrong envoy-service-name arg value in contour when envoy service name is changed (#29556) ([268d5b8](https://github.com/bitnami/charts/commit/268d5b84cba4ce10cc6132de86f6e209cd0068f6)), closes [#29556](https://github.com/bitnami/charts/issues/29556)
 
 ## 19.1.0 (2024-10-10)
 

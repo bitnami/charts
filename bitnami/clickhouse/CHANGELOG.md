@@ -1,8 +1,21 @@
 # Changelog
 
-## 6.2.28 (2024-10-17)
+## 6.3.1 (2024-11-01)
 
-* [bitnami/clickhouse] Release 6.2.28 ([#29966](https://github.com/bitnami/charts/pull/29966))
+* [bitnami/clickhouse] Release 6.3.1 ([#30168](https://github.com/bitnami/charts/pull/30168))
+
+## 6.3.0 (2024-10-18)
+
+* [bitnami/clickhouse] Allow change ClickHouse cluster name (#29939) ([f291ab7](https://github.com/bitnami/charts/commit/f291ab719d4daa2112058b23277d8eab02f2d9b1)), closes [#29939](https://github.com/bitnami/charts/issues/29939)
+
+## <small>6.2.29 (2024-10-18)</small>
+
+* [bitnami/clickhouse] Release 6.2.29 (#29983) ([18b931a](https://github.com/bitnami/charts/commit/18b931a3de20a84725be0fa01d282e8bb2344bc1)), closes [#29983](https://github.com/bitnami/charts/issues/29983)
+
+## <small>6.2.28 (2024-10-17)</small>
+
+* [bitnami/clickhouse] Release 6.2.28 (#29966) ([9559903](https://github.com/bitnami/charts/commit/9559903a9fe5f9900cbe575f43cd600468d7bc0e)), closes [#29966](https://github.com/bitnami/charts/issues/29966)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>6.2.27 (2024-10-03)</small>
 

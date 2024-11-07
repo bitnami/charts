@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.5.1 (2024-09-29)
+## 3.5.2 (2024-10-21)
 
-* [bitnami/apisix] Release 3.5.1 ([#29652](https://github.com/bitnami/charts/pull/29652))
+* [bitnami/apisix] Release 3.5.2 ([#30014](https://github.com/bitnami/charts/pull/30014))
+
+## <small>3.5.1 (2024-09-29)</small>
+
+* [bitnami/apisix] Release 3.5.1 (#29652) ([d4851f4](https://github.com/bitnami/charts/commit/d4851f402eae31a590ec6275226b3cfb449a47c7)), closes [#29652](https://github.com/bitnami/charts/issues/29652)
 
 ## 3.5.0 (2024-09-23)
 

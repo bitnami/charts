@@ -309,10 +309,9 @@ terminationGracePeriodSeconds: ""
 image:
   registry: docker.io
   repository: bitnami/haproxy
-  tag: 3.0.5-debian-12-r3
+  tag: 3.0.5-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent

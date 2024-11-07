@@ -603,12 +603,21 @@ postgresql-ha: Upgrade repmgr extension
 {{- end -}}
 {{- end -}}
 
-{{/* Set PGPASSWORD as environment variable depends on configuration */}}
+{{/* Set PostgreSQL PGPASSWORD as environment variable depends on configuration */}}
 {{- define "postgresql-ha.pgpassword" -}}
 {{- if .Values.postgresql.usePasswordFile -}}
 PGPASSWORD=$(< $POSTGRES_PASSWORD_FILE)
 {{- else -}}
 PGPASSWORD=$POSTGRES_PASSWORD
+{{- end -}}
+{{- end -}}
+
+{{/* Set Pgpool PGPASSWORD as environment variable depends on configuration */}}
+{{- define "postgresql-ha.pgpoolPostgresPassword" -}}
+{{- if .Values.postgresql.usePasswordFile -}}
+PGPASSWORD=$(< $PGPOOL_POSTGRES_PASSWORD_FILE)
+{{- else -}}
+PGPASSWORD=$PGPOOL_POSTGRES_PASSWORD
 {{- end -}}
 {{- end -}}
 

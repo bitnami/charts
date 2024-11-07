@@ -166,7 +166,7 @@ spec:
         {{- if .Values.defaultBackend.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.sidecars "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.defaultBackend.extraVolumes }}
-        volumes: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraVolumes "context" $ ) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.defaultBackend.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraVolumes "context" $ ) | nindent 6 }}
+      {{- end }}
 {{- end }}

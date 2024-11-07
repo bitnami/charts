@@ -8,7 +8,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "postgresql.v1.primary.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
+  namespace: {{ coalesce .Values.metrics.serviceMonitor.namespace (include "common.names.namespace" .) | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: metrics
@@ -42,5 +42,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace | quote }}
+      - {{ include "common.names.namespace" . | quote }}
 {{- end }}

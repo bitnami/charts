@@ -299,6 +299,7 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `kubeVersion`            | Override Kubernetes version                                                                  | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`            |
 | `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`            |
 | `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`            |

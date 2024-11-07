@@ -4,6 +4,10 @@
 
 * [bitnami/opensearch] Enable automated setup of snapshot policies ([#29796](https://github.com/bitnami/charts/pull/29796))
 
+## <small>1.3.13 (2024-11-06)</small>
+
+* [bitnami/opensearch] Release 1.3.13 ([#30232](https://github.com/bitnami/charts/pull/30232))
+
 ## <small>1.3.12 (2024-10-17)</small>
 
 * [bitnami/opensearch] Release 1.3.12 (#29958) ([5fe7ee5](https://github.com/bitnami/charts/commit/5fe7ee5945e7005a923158b5d85dc8a8757beaf5)), closes [#29958](https://github.com/bitnami/charts/issues/29958)

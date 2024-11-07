@@ -86,10 +86,9 @@ mimir:
   image:
     registry: docker.io
     repository: bitnami/grafana-mimir
-    tag: 2.13.0-debian-12-r10
+    tag: 2.14.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1573,10 +1572,9 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.27.1-debian-12-r5
+    tag: 1.27.2-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -4849,7 +4847,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r32
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -5068,7 +5066,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.31-debian-12-r0
+    tag: 1.6.32-debian-12-r1
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -5124,7 +5122,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.31-debian-12-r0
+    tag: 1.6.32-debian-12-r1
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -5180,7 +5178,7 @@ memcachedindex:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.31-debian-12-r0
+    tag: 1.6.32-debian-12-r1
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -5236,7 +5234,7 @@ memcachedmetadata:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.31-debian-12-r0
+    tag: 1.6.32-debian-12-r1
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##

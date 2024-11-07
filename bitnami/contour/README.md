@@ -522,6 +522,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `envoy.pdb.minAvailable`                                                  | Minimum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                                | `""`                    |
 | `envoy.pdb.maxUnavailable`                                                | Maximum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                                | `""`                    |
 
+### Gateway API parameters
+
+| Name                    | Description                                                    | Value   |
+| ----------------------- | -------------------------------------------------------------- | ------- |
+| `gatewayAPI.manageCRDs` | Manage the creation, upgrade and deletion of Gateway API CRDs. | `false` |
+
 ### Default backend parameters
 
 | Name                                                               | Description                                                                                                                                                                                                                                     | Value                    |

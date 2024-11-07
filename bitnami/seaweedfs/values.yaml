@@ -82,10 +82,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/seaweedfs
-  tag: 3.77.0-debian-12-r0
+  tag: 3.79.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -1362,6 +1361,11 @@ volume:
       ## @param volume.dataVolumes[0].subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
       ##
       subPath: ""
+      ## @param volume.dataVolumes[0].maxVolumes Max number of SeaweedFS volumes this data volume can be divided into. If set to 0, the limit will be auto configured as free disk space divided by default volume size (30GB)
+      ## ref: https://github.com/seaweedfs/seaweedfs/wiki/FAQ#how-many-volumes-do-i-need
+      ## ref: https://github.com/seaweedfs/seaweedfs/blob/master/weed/util/constants_4bytes.go#L8
+      ##
+      maxVolumes: 8
       ## Enable persistence using Persistent Volume Claims
       ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
       ##
@@ -3215,7 +3219,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r31
+    tag: 12-debian-12-r32
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3299,10 +3303,9 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 11.4.3-debian-12-r2
+    tag: 11.4.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -3401,10 +3404,9 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 17.0.0-debian-12-r3
+    tag: 17.0.0-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent

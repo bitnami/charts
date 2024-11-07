@@ -70,10 +70,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2024.10.13-debian-12-r0
+  tag: 2024.10.29-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -98,7 +97,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2024.10.8-debian-12-r0
+  tag: 2024.10.29-debian-12-r0
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -1089,6 +1088,12 @@ persistence:
   ## @param persistence.existingClaim Name of an existing PVC to use (only in `standalone` mode)
   ##
   existingClaim: ""
+  ## @param persistence.selector Configure custom selector for existing Persistent Volume. (only in `distributed` mode)
+  ## selector:
+  ##   matchLabels:
+  ##     volume:
+  ##
+  selector: {}
 ## @section Volume Permissions parameters
 
 ## Init containers parameters:
@@ -1108,7 +1113,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r31
+    tag: 12-debian-12-r32
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

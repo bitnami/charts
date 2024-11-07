@@ -212,7 +212,7 @@ kubectl create namespace monitoring
 helm install prometheus \
     --namespace monitoring \
     oci://REGISTRY_NAME/REPOSITORY_NAME/prometheus
-helm install grafana-mimir \
+helm install grafana \
     --values values.yaml \
     --namespace monitoring \
     oci://REGISTRY_NAME/REPOSITORY_NAME/grafana

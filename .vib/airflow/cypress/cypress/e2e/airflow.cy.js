@@ -10,7 +10,7 @@ it('allows triggering execution of a sample DAG', () => {
   cy.login();
   cy.fixture('DAGs').then((dags) => {
     cy.visit(`dags/${dags.triggered.id}/grid`);
-    cy.get('[aria-label="Trigger DAG"]').click();
+    cy.get('[aria-label="Trigger DAG"]').click({force: true});
 
     // Verify the DAG appears in the list of active jobs
     cy.visit('home?status=active');

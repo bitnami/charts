@@ -1,8 +1,18 @@
 # Changelog
 
+## 10.0.2 (2024-11-07)
+
+* [bitnami/argo-workflows] Release 10.0.2 ([#30254](https://github.com/bitnami/charts/pull/30254))
+
+## <small>10.0.1 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/argo-workflows] Release 10.0.1 (#30156) ([844a5df](https://github.com/bitnami/charts/commit/844a5df12aab12876d5822155d9c0c0f0dcb0aa5)), closes [#30156](https://github.com/bitnami/charts/issues/30156)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
 ## 10.0.0 (2024-10-03)
 
-* [bitnami/argo-workflows] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29728](https://github.com/bitnami/charts/pull/29728))
+* [bitnami/argo-workflows] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29728) ([25732e6](https://github.com/bitnami/charts/commit/25732e6386f7b52adf8a444ba587790b97972622)), closes [#29728](https://github.com/bitnami/charts/issues/29728)
 
 ## <small>9.1.18 (2024-10-02)</small>
 

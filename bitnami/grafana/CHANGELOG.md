@@ -1,8 +1,25 @@
 # Changelog
 
-## 11.3.22 (2024-10-02)
+## 11.3.26 (2024-11-07)
 
-* [bitnami/grafana] Release 11.3.22 ([#29697](https://github.com/bitnami/charts/pull/29697))
+* [bitnami/grafana] Release 11.3.26 ([#30270](https://github.com/bitnami/charts/pull/30270))
+
+## <small>11.3.25 (2024-10-24)</small>
+
+* [bitnami/grafana] Release 11.3.25 (#30070) ([27509cf](https://github.com/bitnami/charts/commit/27509cfdd2d6ed422279a20426ad0128460bbdcf)), closes [#30070](https://github.com/bitnami/charts/issues/30070)
+
+## <small>11.3.24 (2024-10-22)</small>
+
+* [bitnami/grafana] Release 11.3.24 (#30041) ([02118be](https://github.com/bitnami/charts/commit/02118be5a0b8a7ae049736478200446d3e51f929)), closes [#30041](https://github.com/bitnami/charts/issues/30041)
+
+## <small>11.3.23 (2024-10-18)</small>
+
+* [bitnami/grafana] Release 11.3.23 (#29992) ([78e41be](https://github.com/bitnami/charts/commit/78e41bedaeb1b7dea2f591ad72983232ce081d83)), closes [#29992](https://github.com/bitnami/charts/issues/29992)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.3.22 (2024-10-02)</small>
+
+* [bitnami/grafana] Release 11.3.22 (#29697) ([492f272](https://github.com/bitnami/charts/commit/492f2725e775a318ce0028d4dacc4e28ee8224e2)), closes [#29697](https://github.com/bitnami/charts/issues/29697)
 
 ## <small>11.3.21 (2024-09-26)</small>
 

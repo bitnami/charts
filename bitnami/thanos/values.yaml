@@ -66,9 +66,8 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.36.1-debian-12-r3
+  tag: 0.36.1-debian-12-r5
   digest: ""
-  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -1983,6 +1982,9 @@ compactor:
   ## @param compactor.logFormat Thanos Compactor log format
   ##
   logFormat: logfmt
+  ## @param compactor.dataDir Thanos Compactor data directory
+  ##
+  dataDir: /data
   ## Resolution and Retention flags
   ## @param compactor.retentionResolutionRaw Resolution and Retention flag
   ## @param compactor.retentionResolution5m Resolution and Retention flag
@@ -4981,9 +4983,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r32
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent

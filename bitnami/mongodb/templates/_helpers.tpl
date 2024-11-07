@@ -47,6 +47,17 @@ Create a default mongo arbiter service name which can be overridden.
 {{- end }}
 
 {{/*
+Create a default mongo hidden service name which can be overridden.
+*/}}
+{{- define "mongodb.hidden.service.nameOverride" -}}
+    {{- if and .Values.hidden.service .Values.hidden.service.nameOverride -}}
+        {{- print .Values.hidden.service.nameOverride -}}
+    {{- else -}}
+        {{- printf "%s-hidden-headless" (include "mongodb.fullname" .) -}}
+    {{- end }}
+{{- end }}
+
+{{/*
 Return the proper MongoDB&reg; image name
 */}}
 {{- define "mongodb.image" -}}
@@ -232,7 +243,7 @@ Get the initialization scripts ConfigMap name.
 Get initial primary host to configure MongoDB cluster.
 */}}
 {{- define "mongodb.initialPrimaryHost" -}}
-{{ ternary ( printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
+{{ ternary ( printf "%s-0.%s.$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) (include "mongodb.service.nameOverride" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
 {{- end -}}
 
 {{/*
@@ -256,7 +267,7 @@ Init container definition to change/establish volume permissions.
   securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
   {{- end }}
   {{- if .Values.volumePermissions.resources }}
-  resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
   {{- end }}
@@ -285,7 +296,7 @@ Init container definition to recover log dir.
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
   {{- end }}
   {{- if .Values.resources }}
-  resources: {{- toYaml .Values.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
   {{- end }}
@@ -313,7 +324,7 @@ Init container definition to get external IP addresses.
     - name: SHARED_FILE
       value: "/shared/info.txt"
   {{- if .Values.externalAccess.autoDiscovery.resources }}
-  resources: {{- toYaml .Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.externalAccess.autoDiscovery.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
   {{- end }}
