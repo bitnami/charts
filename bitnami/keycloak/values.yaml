@@ -1008,15 +1008,21 @@ metrics:
   ## Keycloak metrics service parameters
   ##
   service:
-    ## @param metrics.service.ports.http Metrics service HTTP port
-    ##
     ports:
-      http: 9000
+      ## @param metrics.service.ports.http Metrics service HTTP port
+      ##
+      http: 8080
+      ## @param metrics.service.ports.https Metrics service HTTPS port
+      ##
+      https: 8443
+      ## @param metrics.service.ports.metrics Metrics service Metrics port
+      ##
+      metrics: 9000
     ## @param metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints
     ##
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.ports.http }}"
+      prometheus.io/port: "{{ .Values.metrics.service.ports.metrics }}"
     ## @param metrics.service.extraPorts [array] Add additional ports to the keycloak metrics service (i.e. admin port 9000)
     ##
     extraPorts: []
@@ -1028,12 +1034,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.port Metrics service HTTP port
     ##
-    port: http
-    ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten.
+    port: metrics
+    ## @param metrics.serviceMonitor.scheme Metrics service scheme
+    ##
+    scheme: http
+    ## @param metrics.serviceMonitor.tlsConfig Metrics service TLS configuration
+    ##
+    tlsConfig: {}
+    ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Port, scheme, tlsConfig, interval, timeout and labellings can be overwritten.
     ##
     endpoints:
       - path: '{{ include "keycloak.httpPath" . }}metrics'
       - path: '{{ include "keycloak.httpPath" . }}realms/{{ .Values.adminRealm }}/metrics'
+        port: http
     ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
     ##
     path: ""
