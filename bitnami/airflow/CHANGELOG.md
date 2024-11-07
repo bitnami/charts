@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.5.0 (2024-11-06)
+## 21.5.0 (2024-11-07)
 
 * [bitnami/airflow] feat: add init container to wait for db migrations ([#30246](https://github.com/bitnami/charts/pull/30246))
 
