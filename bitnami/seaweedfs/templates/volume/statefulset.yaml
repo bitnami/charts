@@ -140,10 +140,17 @@ spec:
             - -config_dir=/etc/seaweedfs
             - volume
             {{- $dataDirs := list }}
+            {{- $maxVolumes := list }}
             {{- range .Values.volume.dataVolumes }}
             {{- $dataDirs = append $dataDirs .mountPath }}
+            {{- if eq (.maxVolumes | toString) "0" }}
+            {{- $maxVolumes = append $maxVolumes 0 }}
+            {{- else }}
+            {{- $maxVolumes = append $maxVolumes (default 8 .maxVolumes) }}
+            {{- end }}
             {{- end }}
             - -dir={{ join "," $dataDirs }}
+            - -max={{ join "," $maxVolumes }}
             - -ip.bind={{ .Values.volume.bindAddress }}
             - -ip=$(POD_NAME).{{ printf "%s-headless" (include "seaweedfs.volume.fullname" .) }}.$(NAMESPACE).svc.{{ .Values.clusterDomain }}
             - -port={{ .Values.volume.containerPorts.http }}
