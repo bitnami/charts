@@ -1050,19 +1050,24 @@ passwordUpdateJob:
   ## @param passwordUpdateJob.backoffLimit set backoff limit of the job
   ##
   backoffLimit: 10
-  ## @param passwordUpdateJob.extraVolumes Optionally specify extra list of additional volumes for the credential init job
+  ## @param passwordUpdateJob.command Override default container command on MariaDB Primary container(s) (useful when using custom images)
   ##
-  extraVolumes: []
+  command: []
+  ## @param passwordUpdateJob.args Override default container args on MariaDB Primary container(s) (useful when using custom images)
+  ##
+  args: []
   ## @param passwordUpdateJob.extraCommands Extra commands to pass to the generation job
   ##
   extraCommands: ""
   ## @param passwordUpdateJob.previousPasswords.rootPassword Previous root password (set if the password secret was already changed)
   ## @param passwordUpdateJob.previousPasswords.password Previous password (set if the password secret was already changed)
   ## @param passwordUpdateJob.previousPasswords.replicationPassword Previous replication password (set if the password secret was already changed)
+  ## @param passwordUpdateJob.previousPasswords.existingSecret Name of a secret containing the previous passwords (set if the password secret was already changed)
   previousPasswords:
     rootPassword: ""
     password: ""
     replicationPassword: ""
+    existingSecret: ""
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param passwordUpdateJob.containerSecurityContext.enabled Enabled containers' Security Context
@@ -1116,9 +1121,15 @@ passwordUpdateJob:
   ## @param passwordUpdateJob.extraEnvVarsSecret Secret containing extra env vars to configure the credential init job (in case of sensitive data)
   ##
   extraEnvVarsSecret: ""
+  ## @param passwordUpdateJob.extraVolumes Optionally specify extra list of additional volumes for the credential init job
+  ##
+  extraVolumes: []
   ## @param passwordUpdateJob.extraVolumeMounts Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
+  ## @param passwordUpdateJob.initContainers Add additional init containers for the MariaDB Primary pod(s)
+  ##
+  initContainers: []
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param passwordUpdateJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production).

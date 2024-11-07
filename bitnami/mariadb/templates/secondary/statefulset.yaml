@@ -8,8 +8,9 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mariadb.secondary.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mariadb
     app.kubernetes.io/component: secondary
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -20,8 +21,9 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mariadb
       app.kubernetes.io/component: secondary
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   podManagementPolicy: {{ .Values.secondary.podManagementPolicy }}
   {{- if .Values.secondary.updateStrategy }}
   updateStrategy: {{- toYaml .Values.secondary.updateStrategy | nindent 4 }}
@@ -33,12 +35,13 @@ spec:
         checksum/configuration: {{ include (print $.Template.BasePath "/secondary/configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.passwordUpdateJob.enabled }}
-        passwords/last-update: {{ now | date "20060102150405" | quote }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
         {{- end }}
         {{- if .Values.secondary.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mariadb
         app.kubernetes.io/component: secondary
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}

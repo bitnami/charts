@@ -62,6 +62,55 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 To modify the MariaDB version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mariadb/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
+### Update credentials
+
+Bitnami charts, with its default settings, configure credentials at first boot. Any further change in the secrets or credentials can be done using one of the following methods:
+
+### Manual update of the passwords and secrets
+
+- Update the user password following [the upstream documentation](https://milvus.io/docs/authenticate.md#Update-user-password)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and ROOT_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --from-literal=root-password=ROOT_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Automated update using a password update job
+
+The Bitnami MariaDB provides a password update job that will automatically change the MariaDB passwords when running helm upgrade. To enable the job set `passwordUpdateJob.enabled=true`. This job requires:
+
+- The new passwords: this is configured using either `auth.rootPassword`, `auth.password` and `auth.replicationPassword` (if applicable) or setting `auth.existingSecret`.
+- The previous passwords: This value is taken automatically from already deployed secret object. If you are using `auth.existingSecret` or `helm template` instead of `helm upgrade`, then set either `passwordUpdate.job.previousPasswords.rootPassword`, `passwordUpdate.job.previousPasswords.password`, `passwordUpdate.job.previousPasswords.replicationPassword` (when applicable), setting `auth.existingSecret`.
+
+In the following example we update the password via values.yaml in a mariadb installation with replication
+
+```yaml
+architecture: "replication"
+
+auth:
+  user: "user"
+  rootPassword: "newRootPassword123"
+  password: "newUserPassword123"
+  replicationPassword: "newReplicationPassword123"
+
+passwordUpdateJob:
+  enabled: true
+```
+
+In this example we use two existing secrets (`new-password-secret` and `previous-password-secret`) to update the passwords:
+
+```yaml
+auth:
+  existingSecret: new-password-secret
+
+passwordUpdateJob:
+  enabled: true
+  previousPasswords:
+    existingSecret: previous-password-secret
+```
+
+You can add extra update commands using the `passwordUpdateJob.extraCommands` value.
+
 ### Initialize a fresh instance
 
 The [Bitnami MariaDB](https://github.com/bitnami/containers/tree/main/bitnami/mariadb) image allows you to use your custom scripts to initialize a fresh instance. Custom scripts may be specified using the `initdbScripts` parameter. Alternatively, an external ConfigMap may be created with all the initialization scripts and the ConfigMap passed to the chart via the `initdbScriptsConfigMap` parameter. Note that this will override the `initdbScripts` parameter.
@@ -417,11 +466,13 @@ As an alternative, this chart supports using an initContainer to change the owne
 | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `passwordUpdateJob.enabled`                                           | Enable password update job                                                                                                                                                                                                                            | `false`          |
 | `passwordUpdateJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                                                                                                                          | `10`             |
-| `passwordUpdateJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                                                                                                                       | `[]`             |
+| `passwordUpdateJob.command`                                           | Override default container command on MariaDB Primary container(s) (useful when using custom images)                                                                                                                                                  | `[]`             |
+| `passwordUpdateJob.args`                                              | Override default container args on MariaDB Primary container(s) (useful when using custom images)                                                                                                                                                     | `[]`             |
 | `passwordUpdateJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                                                                                                                          | `""`             |
 | `passwordUpdateJob.previousPasswords.rootPassword`                    | Previous root password (set if the password secret was already changed)                                                                                                                                                                               | `""`             |
 | `passwordUpdateJob.previousPasswords.password`                        | Previous password (set if the password secret was already changed)                                                                                                                                                                                    | `""`             |
 | `passwordUpdateJob.previousPasswords.replicationPassword`             | Previous replication password (set if the password secret was already changed)                                                                                                                                                                        | `""`             |
+| `passwordUpdateJob.previousPasswords.existingSecret`                  | Name of a secret containing the previous passwords (set if the password secret was already changed)                                                                                                                                                   | `""`             |
 | `passwordUpdateJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                  | `true`           |
 | `passwordUpdateJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                      | `{}`             |
 | `passwordUpdateJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                            | `1001`           |
@@ -440,7 +491,9 @@ As an alternative, this chart supports using an initContainer to change the owne
 | `passwordUpdateJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                                                                                                                                                  | `[]`             |
 | `passwordUpdateJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                                                                                                                                              | `""`             |
 | `passwordUpdateJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                                                                                                                                                     | `""`             |
+| `passwordUpdateJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                                                                                                                       | `[]`             |
 | `passwordUpdateJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                                                                                                                             | `[]`             |
+| `passwordUpdateJob.initContainers`                                    | Add additional init containers for the MariaDB Primary pod(s)                                                                                                                                                                                         | `[]`             |
 | `passwordUpdateJob.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production). | `micro`          |
 | `passwordUpdateJob.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`             |
 | `passwordUpdateJob.livenessProbe.enabled`                             | Enable livenessProbe on init job                                                                                                                                                                                                                      | `true`           |
@@ -588,6 +641,32 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb --set auth.r
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
+
+### To 20.0.0
+
+This major bump updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+
+# If architecture = "standalone"
+kubectl delete sts RELEASE_NAME --cascade=false
+
+# If architecture = "replication"
+kubectl delete sts RELEASE_NAME-primary --cascade=false
+kubectl delete sts RELEASE_NAME-secondary --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
+Additionally, this new major provides a new, optional, password update job for automating this second-day operation in the chart. See the [Update credential](#password-update-job) for detailed instructions.
+
+### To 19.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-between-minor-versions-on-linux/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
+
+### To 18.0.0
+
+This major release bumps the MariaDB version to 11.3. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-between-minor-versions-on-linux/) for upgrading from MariaDB 11.2 to 11.3. No major issues are expected during the upgrade.
 
 ### To 17.0.0
 

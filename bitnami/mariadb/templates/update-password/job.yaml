@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "common.names.fullname" . }}-password-update
+  name: {{ printf "%s-password-update" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
@@ -39,16 +39,23 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if .Values.primary.initContainers }}
+        {{- if .Values.passwordUpdateJob.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: update-credentials
           image: {{ template "mariadb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.passwordUpdateJob.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
+          {{- end }}
+          {{- if .Values.passwordUpdateJob.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             - |
               {{- if .Values.usePasswordFiles }}
@@ -59,14 +66,13 @@ spec:
                   export $env_var_name="$(< $file)"
               done
               {{- end }}
-              host={{ include "mariadb.primary.fullname" . }}-0.{{  printf "%s-headless" (include "common.names.fullname" .) }}
+              primary_host={{ include "mariadb.primary.fullname" . }}-0.{{  printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
               echo "Starting password update job"
               if [[ -f /job-status/root-password-changed ]]; then
                 echo "Root password already updated. Skipping"
               else
                 echo "Updating root password"
-                echo mysql -uroot -p$MARIADB_PREVIOUS_ROOT_PASSWORD -h$host -e "SET PASSWORD for 'root'@'%' = PASSWORD('$MARIADB_NEW_ROOT_PASSWORD');"
-                mysql -uroot -p$MARIADB_PREVIOUS_ROOT_PASSWORD -h$host -e "SET PASSWORD for 'root'@'%' = PASSWORD('$MARIADB_NEW_ROOT_PASSWORD');"
+                mysql -uroot -p$MARIADB_PREVIOUS_ROOT_PASSWORD -h$primary_host -e "SET PASSWORD for 'root'@'%' = PASSWORD('$MARIADB_NEW_ROOT_PASSWORD');"
                 touch /job-status/root-password-changed
                 echo "Root password successfully updated"
               fi
@@ -75,8 +81,7 @@ spec:
                 echo "User password already updated. Skipping"
               else
                 echo "Updating user password"
-                echo mysql -u$MARIADB_USER -p$MARIADB_PREVIOUS_PASSWORD -h$host -e "SET PASSWORD for '$MARIADB_USER'@'%' = PASSWORD('$MARIADB_NEW_PASSWORD');"
-                mysql -u$MARIADB_USER -p$MARIADB_PREVIOUS_PASSWORD -h$host -e "SET PASSWORD for '$MARIADB_USER'@'%' = PASSWORD('$MARIADB_NEW_PASSWORD');"
+                mysql -u$MARIADB_USER -p$MARIADB_PREVIOUS_PASSWORD -h$primary_host -e "SET PASSWORD for '$MARIADB_USER'@'%' = PASSWORD('$MARIADB_NEW_PASSWORD');"
                 touch /job-status/password-changed
                 echo "User password successfully updated"
               fi
@@ -86,8 +91,7 @@ spec:
                 echo "Replication password already updated. Skipping"
               else
                 echo "Updating replication password"
-                echo mysql -u$MARIADB_REPLICATION_USER -p$MARIADB_PREVIOUS_REPLICATION_PASSWORD -h$host -e "SET PASSWORD for '$MARIADB_REPLICATION_USER'@'%' = PASSWORD('$MARIADB_NEW_REPLICATION_PASSWORD');"
-                mysql -u$MARIADB_REPLICATION_USER -p$MARIADB_PREVIOUS_REPLICATION_PASSWORD -h$host -e "SET PASSWORD for '$MARIADB_REPLICATION_USER'@'%' = PASSWORD('$MARIADB_NEW_REPLICATION_PASSWORD');"
+                mysql -u$MARIADB_REPLICATION_USER -p$MARIADB_PREVIOUS_REPLICATION_PASSWORD -h$primary_host -e "SET PASSWORD for '$MARIADB_REPLICATION_USER'@'%' = PASSWORD('$MARIADB_NEW_REPLICATION_PASSWORD');"
                 touch /job-status/replication-password-changed
                 echo "Replication password successfully updated"
               fi
@@ -96,19 +100,20 @@ spec:
                 if [[ -f /job-status/replica-$i-changed ]]; then
                     echo "Replica $i already updated. Skipping"
                 else
-                    replica_host={{ include "mariadb.secondary.fullname" . }}-$i.{{  printf "%s-headless" (include "common.names.fullname" .) }}
+                    replica_host={{ include "mariadb.secondary.fullname" . }}-$i.{{  printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
                     echo "Updating primary password in replica $i"
-                    echo mysql -uroot -p$MARIADB_NEW_ROOT_PASSWORD -h$replica_host -e "STOP SLAVE; CHANGE MASTER TO   MASTER_PASSWORD='$MARIADB_NEW_REPLICATION_PASSWORD'; START SLAVE;"
-                    mysql -uroot -p$MARIADB_NEW_ROOT_PASSWORD -h$replica_host -e "STOP SLAVE; CHANGE MASTER TO  MASTER_PASSWORD='$MARIADB_NEW_REPLICATION_PASSWORD'; START SLAVE;"
+                    mysql -uroot -p$MARIADB_NEW_ROOT_PASSWORD -h$replica_host -e "STOP SLAVE; CHANGE MASTER TO MASTER_PASSWORD='$MARIADB_NEW_REPLICATION_PASSWORD'; START SLAVE;"
                     touch /job-status/replica-$i-changed
                     echo "Replica $i updated"
                 fi
               done
               {{- end }}
               {{- if .Values.passwordUpdateJob.extraCommands }}
+              echo "Running extra commmands"
               {{- include "common.tplValues.render" (dict "value" .Values.passwordUpdateJob.extraCommands "context" $) | nindent 14 }}
               {{- end }}
               echo "Password update job finished successfully"
+          {{- end }}
           env:
             {{- if not .Values.auth.usePasswordFiles }}
             - name: MARIADB_PREVIOUS_ROOT_PASSWORD
@@ -154,6 +159,20 @@ spec:
                   key: mariadb-replication-password
             {{- end }}
             {{- end }}
+            {{- if .Values.passwordUpdateJob.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.passwordUpdateJob.extraEnvVarsCM .Values.passwordUpdateJob.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.passwordUpdateJob.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.passwordUpdateJob.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.passwordUpdateJob.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.passwordUpdateJob.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           {{- if .Values.passwordUpdateJob.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.passwordUpdateJob.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -165,17 +184,6 @@ spec:
           {{- end }}
           {{- if .Values.passwordUpdateJob.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customStartupProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if or .Values.passwordUpdateJob.extraEnvVarsCM .Values.passwordUpdateJob.extraEnvVarsSecret }}
-          envFrom:
-            {{- if .Values.passwordUpdateJob.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ .Values.passwordUpdateJob.extraEnvVarsCM }}
-            {{- end }}
-            {{- if .Values.passwordUpdateJob.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ .Values.passwordUpdateJob.extraEnvVarsSecret }}
-            {{- end }}
           {{- end }}
           volumeMounts:
             - name: empty-dir

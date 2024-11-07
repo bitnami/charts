@@ -117,7 +117,7 @@ Return the secret with MariaDB credentials
     {{- if .Values.auth.existingSecret -}}
         {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
     {{- else -}}
-        {{- printf "%s" (include "common.names.fullname" .) -}}
+        {{- include "common.names.fullname" . -}}
     {{- end -}}
 {{- end -}}
 
@@ -130,10 +130,10 @@ Return the secret with previous MariaDB credentials
         {{- tpl .Values.passwordUpdateJob.previousPasswords.existingSecret $ -}}
     {{- else if .Values.passwordUpdateJob.previousPasswords.rootPassword -}}
         {{- /* The new secret is managed externally */ -}}
-        {{- printf "%s-previous-secret" (include "common.names.fullname" .) -}}
+        {{- printf "%s-previous-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
         {{- /* The new secret managed by the helm chart. We use the current secret name as it has the old password */ -}}
-        {{- printf "%s" (include "common.names.fullname" .) -}}
+        {{- include "common.names.fullname" . -}}
     {{- end -}}
 {{- end -}}
 
@@ -143,7 +143,7 @@ Return the secret with previous MariaDB credentials
 {{- define "mariadb.update-job.newSecretName" -}}
     {{- if and (not .Values.passwordUpdateJob.previousPasswords.existingSecret) (not .Values.passwordUpdateJob.previousPasswords.rootPassword) -}}
         {{- /* The new secret managed by the helm chart. We create a new secret as the current one has the old password */ -}}
-        {{- printf "%s-new-secret" (include "common.names.fullname" .) -}}
+        {{- printf "%s-new-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
         {{- /* The new secret is managed externally */ -}}
         {{- include "mariadb.secretName" . -}}
