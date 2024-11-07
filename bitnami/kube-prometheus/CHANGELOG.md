@@ -1,8 +1,12 @@
 # Changelog
 
+## 10.0.1 (2024-11-07)
+
+* [bitnami/kube-prometheus] Release 10.0.1 ([#30252](https://github.com/bitnami/charts/pull/30252))
+
 ## 10.0.0 (2024-11-06)
 
-* [bitnami/kube-prometheus] feat!: :boom: Update prometheus-operator to 0.78.0 and move CRDs to subchart ([#30142](https://github.com/bitnami/charts/pull/30142))
+* [bitnami/kube-prometheus] feat!: :boom: Update prometheus-operator to 0.78.0 and move CRDs to subcha ([a6731f1](https://github.com/bitnami/charts/commit/a6731f1b291c38c067023db24ef6005543e7a99e)), closes [#30142](https://github.com/bitnami/charts/issues/30142)
 
 ## <small>9.6.5 (2024-10-30)</small>
 
