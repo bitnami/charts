@@ -1,8 +1,12 @@
 # Changelog
 
+## 8.5.1 (2024-11-07)
+
+* [bitnami/external-dns] Release 8.5.1 ([#30262](https://github.com/bitnami/charts/pull/30262))
+
 ## 8.5.0 (2024-11-05)
 
-* [bitnami/external-dns] Add targetLabels option to ServiceMonitor ([#29828](https://github.com/bitnami/charts/pull/29828))
+* [bitnami/external-dns] Add targetLabels option to ServiceMonitor (#29828) ([bba5754](https://github.com/bitnami/charts/commit/bba5754878b88d7ec1ff4326e558cbb24e5c9331)), closes [#29828](https://github.com/bitnami/charts/issues/29828) [#29332](https://github.com/bitnami/charts/issues/29332)
 
 ## 8.4.0 (2024-11-05)
 
