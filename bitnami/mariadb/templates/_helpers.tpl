@@ -138,7 +138,7 @@ Return the secret with previous MariaDB credentials
 {{- end -}}
 
 {{/*
-Return the secret with previous MariaDB credentials
+Return the secret with new MariaDB credentials
 */}}
 {{- define "mariadb.update-job.newSecretName" -}}
     {{- if and (not .Values.passwordUpdateJob.previousPasswords.existingSecret) (not .Values.passwordUpdateJob.previousPasswords.rootPassword) -}}
