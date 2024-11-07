@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.0 (2024-11-05)
+## 24.2.0 (2024-11-07)
 
-* [bitnami/keycloak] switches keycloak-metrics service to point to new port ([#30095](https://github.com/bitnami/charts/pull/30095))
+* [bitnami/keycloak] Fix metrics ports and servicemonitor ([#30303](https://github.com/bitnami/charts/pull/30303))
+
+## 24.1.0 (2024-11-06)
+
+* [bitnami/keycloak] switches keycloak-metrics service to point to new port (#30095) ([8ca86ae](https://github.com/bitnami/charts/commit/8ca86ae9ecb2b375735787001188e5c7757d181b)), closes [#30095](https://github.com/bitnami/charts/issues/30095)
 
 ## <small>24.0.5 (2024-11-04)</small>
 
