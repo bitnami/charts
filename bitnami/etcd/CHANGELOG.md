@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.5.1 (2024-11-06)
+## 10.5.2 (2024-11-07)
 
-* [bitnami/etcd]: Fix volume indentation for defrag cronjob ([#30192](https://github.com/bitnami/charts/pull/30192))
+* [bitnami/etcd] Release 10.5.2 ([#30261](https://github.com/bitnami/charts/pull/30261))
+
+## <small>10.5.1 (2024-11-06)</small>
+
+* [bitnami/etcd]: Fix volume indentation for defrag cronjob (#30192) ([5ef34f9](https://github.com/bitnami/charts/commit/5ef34f968b33e72a065ac6ad1249a1828a5744fd)), closes [#30192](https://github.com/bitnami/charts/issues/30192)
 
 ## 10.5.0 (2024-11-05)
 
