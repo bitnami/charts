@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.8.3 (2024-11-05)
+## 14.8.4 (2024-11-07)
 
-* [bitnami/minio] Fix invalid sts template in distributed mode ([#30187](https://github.com/bitnami/charts/pull/30187))
+* [bitnami/minio] Release 14.8.4 ([#30283](https://github.com/bitnami/charts/pull/30283))
+
+## <small>14.8.3 (2024-11-06)</small>
+
+* [bitnami/minio] Fix invalid sts template in distributed mode (#30187) ([736b6f2](https://github.com/bitnami/charts/commit/736b6f26ea6bc2920891c066a48d63558fa56ea0)), closes [#30187](https://github.com/bitnami/charts/issues/30187)
 
 ## <small>14.8.2 (2024-11-04)</small>
 
