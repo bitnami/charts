@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.1.1 (2024-10-31)
+## 16.1.2 (2024-11-06)
 
-* [bitnami/postgresql] metrics.collectors applies to read replicas ([#30133](https://github.com/bitnami/charts/pull/30133))
+* [bitnami/postgresql] Release 16.1.2 ([#30250](https://github.com/bitnami/charts/pull/30250))
+
+## <small>16.1.1 (2024-11-04)</small>
+
+* [bitnami/postgresql] metrics.collectors applies to read replicas (#30133) ([696f113](https://github.com/bitnami/charts/commit/696f113b68a7f541de7f073cf3efec5b25ccf10b)), closes [#30133](https://github.com/bitnami/charts/issues/30133)
 
 ## 16.1.0 (2024-10-30)
 

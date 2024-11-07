@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
-# Version: 0.77.2
+# Version: 0.78.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
-    operator.prometheus.io/version: 0.77.2
+    controller-gen.kubebuilder.io/version: v0.16.4
+    operator.prometheus.io/version: 0.78.0
   name: scrapeconfigs.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -8654,6 +8654,23 @@ spec:
                   Prometheus uses the default value (e.g. /metrics).
                 minLength: 1
                 type: string
+              nativeHistogramBucketLimit:
+                description: |-
+                  If there are more than this many buckets in a native histogram,
+                  buckets will be merged to stay within the limit.
+                  It requires Prometheus >= v2.45.0.
+                format: int64
+                type: integer
+              nativeHistogramMinBucketFactor:
+                anyOf:
+                - type: integer
+                - type: string
+                description: |-
+                  If the growth factor of one bucket to the next is smaller than this,
+                  buckets will be merged to increase the factor sufficiently.
+                  It requires Prometheus >= v2.50.0.
+                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                x-kubernetes-int-or-string: true
               noProxy:
                 description: |-
                   `noProxy` is a comma-separated string that can contain IPs, CIDR notation, domain names
@@ -11205,6 +11222,11 @@ spec:
                 description: The scrape class to apply.
                 minLength: 1
                 type: string
+              scrapeClassicHistograms:
+                description: |-
+                  Whether to scrape a classic histogram that is also exposed as a native histogram.
+                  It requires Prometheus >= v2.45.0.
+                type: boolean
               scrapeInterval:
                 description: ScrapeInterval is the interval between consecutive scrapes.
                 pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
@@ -11257,10 +11279,15 @@ spec:
                     targets:
                       description: List of targets for this static configuration.
                       items:
-                        description: Target represents a target for Prometheus to
-                          scrape
+                        description: |-
+                          Target represents a target for Prometheus to scrape
+                          kubebuilder:validation:MinLength:=1
                         type: string
+                      minItems: 1
                       type: array
+                      x-kubernetes-list-type: set
+                  required:
+                  - targets
                   type: object
                 type: array
               targetLimit:

@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.14 (2024-10-02)
+## 4.2.15 (2024-11-07)
 
-* [bitnami/kube-state-metrics] Release 4.2.14 ([#29702](https://github.com/bitnami/charts/pull/29702))
+* [bitnami/kube-state-metrics] Release 4.2.15 ([#30277](https://github.com/bitnami/charts/pull/30277))
+
+## <small>4.2.14 (2024-10-02)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.14 (#29702) ([ae112cf](https://github.com/bitnami/charts/commit/ae112cfdf05f6648bdbc0725e7d75ec26a1abd55)), closes [#29702](https://github.com/bitnami/charts/issues/29702)
 
 ## <small>4.2.13 (2024-09-06)</small>
 
