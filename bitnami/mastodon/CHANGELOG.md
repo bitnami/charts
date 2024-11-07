@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.1 (2024-10-21)
+## 9.0.2 (2024-11-01)
 
-* [bitnami/mastodon] Release 9.0.1 ([#30019](https://github.com/bitnami/charts/pull/30019))
+* [bitnami/mastodon] Mastodon initjob always tries to create admin on upgrade ([#30171](https://github.com/bitnami/charts/pull/30171))
+
+## <small>9.0.1 (2024-10-21)</small>
+
+* [bitnami/mastodon] Release 9.0.1 (#30019) ([3ab0d63](https://github.com/bitnami/charts/commit/3ab0d63af56499b5072e7d82c168ce42b3e55c84)), closes [#30019](https://github.com/bitnami/charts/issues/30019)
 
 ## 9.0.0 (2024-10-17)
 

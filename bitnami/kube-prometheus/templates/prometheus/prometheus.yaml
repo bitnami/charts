@@ -237,7 +237,7 @@ spec:
     {{- if .Values.prometheus.volumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.prometheus.additionalScrapeConfigs.enabled .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
+  {{- if .Values.prometheus.additionalScrapeConfigs.enabled }}
   additionalScrapeConfigs:
     {{- if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "external") }}
     name: {{ .Values.prometheus.additionalScrapeConfigs.external.name }}
@@ -245,9 +245,6 @@ spec:
     {{- else if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "internal") }}
     name: additional-scrape-jobs-{{ template "kube-prometheus.prometheus.fullname" . }}
     key: scrape-jobs.yaml
-    {{- else if and (not .Values.prometheus.additionalScrapeConfigs.enabled) .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
-    name: {{ .Values.prometheus.additionalScrapeConfigsExternal.name }}
-    key: {{ .Values.prometheus.additionalScrapeConfigsExternal.key }}
     {{- end }}
   {{- end }}
   {{- if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
@@ -294,6 +291,7 @@ spec:
         {{- if .Values.prometheus.thanos.extraEnvVars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVars "context" $) | nindent 8 }}
         {{- end }}
+      {{- if or .Values.prometheus.thanos.extraEnvVarsCM .Values.prometheus.thanos.extraEnvVarsSecret }}
       envFrom:
         {{- if .Values.prometheus.thanos.extraEnvVarsCM }}
         - configMapRef:
@@ -303,6 +301,7 @@ spec:
         - secretRef:
             name: {{ include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVarsSecret "context" $) }}
         {{- end }}
+      {{- end}}
       {{- if .Values.prometheus.thanos.resources }}
       resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
       {{- else if ne .Values.prometheus.thanos.resourcesPreset "none" }}

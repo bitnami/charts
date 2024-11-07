@@ -1,8 +1,16 @@
 # Changelog
 
+## 2.27.0 (2024-11-06)
+
+* [bitnami/common] feat: :sparkles: Add honorProvidedValues in common.secrets.manage ([#30243](https://github.com/bitnami/charts/pull/30243))
+
 ## 2.26.0 (2024-10-14)
 
-* [bitnami/common] Drop unused custom empty password validators ([#29432](https://github.com/bitnami/charts/pull/29432))
+* [bitnami/common] Drop unused custom empty password validators (#29432) ([5fb0e97](https://github.com/bitnami/charts/commit/5fb0e97d9336d40d86c3295637d4233218b8afea)), closes [#29432](https://github.com/bitnami/charts/issues/29432)
+
+## 2.25.0 (2024-10-11)
+
+* [bitnami/common] Add the ability to specify namespaces for affinity (#29479) ([005e0d6](https://github.com/bitnami/charts/commit/005e0d696004dd972915f290b7caffb2bc332400)), closes [#29479](https://github.com/bitnami/charts/issues/29479)
 
 ## 2.24.0 (2024-10-03)
 

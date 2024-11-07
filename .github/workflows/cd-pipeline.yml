@@ -34,7 +34,7 @@ jobs:
           charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
           # Using grep -c as a better alternative to wc -l when dealing with empty strings."
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
-          num_version_bumps="$(echo "$files_changed" | grep Chart.yaml | xargs git show | grep -c "+version" || true)"
+          num_version_bumps="$(echo "$files_changed" | grep  "bitnami/[^/]*/Chart.yaml" | xargs git show | grep -c "+version" || true)"
 
           if [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
             # Changes done in charts but version not bumped -> ERROR

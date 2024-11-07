@@ -81,7 +81,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.16-debian-12-r2
+  tag: 3.5.16-debian-12-r4
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -672,7 +672,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r32
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -878,6 +878,46 @@ disasterRecovery:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
+    ## K8s Security Context for Snapshotter cronjob pods
+    ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ## @param disasterRecovery.cronjob.podSecurityContext.enabled Enable security context for Snapshotter pods
+    ## @param disasterRecovery.cronjob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param disasterRecovery.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param disasterRecovery.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param disasterRecovery.cronjob.podSecurityContext.fsGroup Group ID for the Snapshotter filesystem
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
+    ## Configure container security context for Snapshotter cronjob containers
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param disasterRecovery.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param disasterRecovery.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param disasterRecovery.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param disasterRecovery.cronjob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param disasterRecovery.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param disasterRecovery.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param disasterRecovery.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param disasterRecovery.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param disasterRecovery.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param disasterRecovery.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## Configure resource requests and limits for snapshotter containers
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1017,7 +1057,7 @@ defrag:
       sysctls: []
       supplementalGroups: []
       fsGroup: 1001
-    ## Configure container security context for Defrag cronjob pods
+    ## Configure container security context for Defrag cronjob containers
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param defrag.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param defrag.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container

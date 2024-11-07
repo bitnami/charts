@@ -84,7 +84,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/scylladb
-  tag: 6.1.2-debian-12-r2
+  tag: 6.2.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -493,11 +493,11 @@ hostPorts:
   metrics: ""
 
 ## @section JMX Proxy Deployment Parameters
-##
+## DEPRECATED: scylla-jmx becomes optional package from ScyllaDB 6.2, not installed by default.
 jmxProxy:
   ## @param jmxProxy.enabled Enable JMX Proxy sidecar
   ##
-  enabled: true
+  enabled: false
   ## @param jmxProxy.extraEnvVars Array with extra environment variables to add to JMX Proxy sidecar
   ## e.g:
   ## extraEnvVars:
@@ -930,7 +930,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r32
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1095,7 +1095,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r32
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

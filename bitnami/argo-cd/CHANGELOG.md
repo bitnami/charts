@@ -1,8 +1,17 @@
 # Changelog
 
-## 7.0.20 (2024-10-18)
+## 7.0.22 (2024-11-07)
 
-* [bitnami/argo-cd] Release 7.0.20 ([#29997](https://github.com/bitnami/charts/pull/29997))
+* [bitnami/argo-cd] Release 7.0.22 ([#30253](https://github.com/bitnami/charts/pull/30253))
+
+## <small>7.0.21 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/argo-cd] Release 7.0.21 (#30196) ([f6e62be](https://github.com/bitnami/charts/commit/f6e62be0823be6af54b6cad537adf03a91630e0d)), closes [#30196](https://github.com/bitnami/charts/issues/30196)
+
+## <small>7.0.20 (2024-10-18)</small>
+
+* [bitnami/argo-cd] Release 7.0.20 (#29997) ([668f286](https://github.com/bitnami/charts/commit/668f286b78912244294a66ca4d081a07e79634a8)), closes [#29997](https://github.com/bitnami/charts/issues/29997)
 
 ## <small>7.0.19 (2024-10-17)</small>
 

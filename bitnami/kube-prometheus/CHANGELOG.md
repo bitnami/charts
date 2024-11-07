@@ -1,8 +1,18 @@
 # Changelog
 
-## 9.6.4 (2024-10-24)
+## 10.0.0 (2024-11-06)
 
-* [bitnami/kube-prometheus] Release 9.6.4 ([#30073](https://github.com/bitnami/charts/pull/30073))
+* [bitnami/kube-prometheus] feat!: :boom: Update prometheus-operator to 0.78.0 and move CRDs to subchart ([#30142](https://github.com/bitnami/charts/pull/30142))
+
+## <small>9.6.5 (2024-10-30)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kube-prometheus] Fix spec for thanos sidecar if no extraEnv is provided (#30127) ([74cd002](https://github.com/bitnami/charts/commit/74cd00208c7e9d093e8abd6e603547103b40d39c)), closes [#30127](https://github.com/bitnami/charts/issues/30127)
+
+## <small>9.6.4 (2024-10-24)</small>
+
+* [bitnami/kube-prometheus] Release 9.6.4 (#30073) ([d809c39](https://github.com/bitnami/charts/commit/d809c39849c5a04fb5928f37c5d9cf9da310f2bc)), closes [#30073](https://github.com/bitnami/charts/issues/30073)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>9.6.3 (2024-10-02)</small>
 

@@ -1,8 +1,18 @@
 # Changelog
 
-## 8.4.5 (2024-10-17)
+## 8.4.7 (2024-11-07)
 
-* [bitnami/nats] Release 8.4.5 ([#29975](https://github.com/bitnami/charts/pull/29975))
+* [bitnami/nats] Release 8.4.7 ([#30285](https://github.com/bitnami/charts/pull/30285))
+
+## <small>8.4.6 (2024-11-06)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/nats] Expose `podManagementPolicy` in Statefulset (#30218) ([829a6f7](https://github.com/bitnami/charts/commit/829a6f75a5f7cb3fcf972abba387296a8683e221)), closes [#30218](https://github.com/bitnami/charts/issues/30218)
+
+## <small>8.4.5 (2024-10-17)</small>
+
+* [bitnami/nats] Release 8.4.5 (#29975) ([e87d9ae](https://github.com/bitnami/charts/commit/e87d9ae42ca5df4c4429bbb8eb72e7e25fdcb97c)), closes [#29975](https://github.com/bitnami/charts/issues/29975)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>8.4.4 (2024-10-02)</small>
 

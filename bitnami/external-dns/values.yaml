@@ -69,7 +69,7 @@ watchReleaseNamespace: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.15.0-debian-12-r2
+  tag: 0.15.0-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -677,9 +677,13 @@ rfc2136:
   ## @param rfc2136.port When using the rfc2136 provider, specify the RFC2136 port (optional)
   ##
   port: 53
-  ## @param rfc2136.zone When using the rfc2136 provider, specify the zone (required when provider=rfc2136)
+  ## @param rfc2136.zone DEPRECATED: use rfc2136.zones instead.
+  ## Currently, the contents of rfc2136.zone and rfc2136.zones will be merged and deduplicated, in a future release this value will be removed in favor of `rfc2136.zones`.
   ##
   zone: ""
+  ## @param rfc2136.zones When using the rfc2136 provider, specify the zones (required when provider=rfc2136 and `rfc2136.zone` is not provided.)
+  ##
+  zones: []
   ## @param rfc2136.tsigSecret When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)
   ##
   tsigSecret: ""
@@ -1275,6 +1279,10 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     labels: {}
+    ## @param metrics.serviceMonitor.targetLabels Labels from the Kubernetes service to be transferred to the created metrics
+    targetLabels: []
+    ## @param metrics.serviceMonitor.podTargetLabels Labels from the Kubernetes pod to be transferred to the created metrics
+    podTargetLabels: []
     ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
     ##
     annotations: {}

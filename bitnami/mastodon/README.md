@@ -84,7 +84,7 @@ externalRedis.port=6379
 
 ### External elasticsearch support
 
-You may want to have mastodon connect to an external elasticsearch rather than installing one inside your cluster. Typical reasons for this are to use a managed elasticsearch service, or to share a common elasticsearch server for all your applications. To achieve this, the chart allows you to specify credentials for an external elasticsearch with the [`externalElasticsearch` parameter](#parameters). You should also disable the Redis installation with the `elasticsearch.enabled` option. Here is an example:
+You may want to have mastodon connect to an external elasticsearch rather than installing one inside your cluster. Typical reasons for this are to use a managed elasticsearch service, or to share a common elasticsearch server for all your applications. To achieve this, the chart allows you to specify credentials for an external elasticsearch with the [`externalElasticsearch` parameter](#parameters). You should also disable the Elasticsearch installation with the `elasticsearch.enabled` option. Here is an example:
 
 ```console
 elasticsearch.enabled=false

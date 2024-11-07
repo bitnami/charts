@@ -1,8 +1,26 @@
 # Changelog
 
-## 14.8.0 (2024-10-16)
+## 14.8.4 (2024-11-07)
 
-* [bitnami/minio] Support selector for `volumeClaimTemplates` ([#29897](https://github.com/bitnami/charts/pull/29897))
+* [bitnami/minio] Release 14.8.4 ([#30283](https://github.com/bitnami/charts/pull/30283))
+
+## <small>14.8.3 (2024-11-06)</small>
+
+* [bitnami/minio] Fix invalid sts template in distributed mode (#30187) ([736b6f2](https://github.com/bitnami/charts/commit/736b6f26ea6bc2920891c066a48d63558fa56ea0)), closes [#30187](https://github.com/bitnami/charts/issues/30187)
+
+## <small>14.8.2 (2024-11-04)</small>
+
+* [bitnami/minio] fix secret creation check (#30135) ([5a9163e](https://github.com/bitnami/charts/commit/5a9163eef82540b6a5136f7c475dac2acffae21c)), closes [#30135](https://github.com/bitnami/charts/issues/30135)
+
+## <small>14.8.1 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/minio] Release 14.8.1 (#30140) ([baef6e7](https://github.com/bitnami/charts/commit/baef6e77282c85b2689cc72415669b7db6666e63)), closes [#30140](https://github.com/bitnami/charts/issues/30140)
+
+## 14.8.0 (2024-10-18)
+
+* [bitnami/minio] Support selector for `volumeClaimTemplates` (#29897) ([ad52d63](https://github.com/bitnami/charts/commit/ad52d63ab0789ba6d093c8de5b4773f596ff3497)), closes [#29897](https://github.com/bitnami/charts/issues/29897)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>14.7.16 (2024-10-16)</small>
 
