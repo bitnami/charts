@@ -1,12 +1,13 @@
 # Changelog
 
-## 1.4.0 (2024-10-31)
+## 1.4.0 (2024-11-07)
 
 * [bitnami/opensearch] Enable automated setup of snapshot policies ([#29796](https://github.com/bitnami/charts/pull/29796))
 
 ## <small>1.3.13 (2024-11-06)</small>
 
-* [bitnami/opensearch] Release 1.3.13 ([#30232](https://github.com/bitnami/charts/pull/30232))
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/opensearch] Release 1.3.13 (#30232) ([7597498](https://github.com/bitnami/charts/commit/75974989d052bcccc258dba5f7211227716c94ec)), closes [#30232](https://github.com/bitnami/charts/issues/30232)
 
 ## <small>1.3.12 (2024-10-17)</small>
 
