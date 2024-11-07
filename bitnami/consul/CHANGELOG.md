@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.3.19 (2024-10-31)
+## 11.3.20 (2024-11-07)
 
-* [bitnami/consul] Release 11.3.19 ([#30141](https://github.com/bitnami/charts/pull/30141))
+* [bitnami/consul] Release 11.3.20 ([#30259](https://github.com/bitnami/charts/pull/30259))
+
+## <small>11.3.19 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/consul] Release 11.3.19 (#30141) ([f02726a](https://github.com/bitnami/charts/commit/f02726aadc0452fec60f9487f48f363f3e74af04)), closes [#30141](https://github.com/bitnami/charts/issues/30141)
 
 ## <small>11.3.18 (2024-10-22)</small>
 
