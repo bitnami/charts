@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.11 (2024-11-06)
+## 9.0.12 (2024-11-07)
 
-* [bitnami/milvus] Release 9.0.10 ([#30214](https://github.com/bitnami/charts/pull/30214))
+* [bitnami/milvus] Release 9.0.12 ([#30282](https://github.com/bitnami/charts/pull/30282))
+
+## <small>9.0.11 (2024-11-06)</small>
+
+* [bitnami/milvus] Release 9.0.10 (#30214) ([27f46e0](https://github.com/bitnami/charts/commit/27f46e0491ef08712909c825585a57fe5e39967c)), closes [#30214](https://github.com/bitnami/charts/issues/30214)
 
 ## <small>9.0.10 (2024-11-05)</small>
 
