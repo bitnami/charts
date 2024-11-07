@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.6 (2024-11-06)
+## 3.0.7 (2024-11-07)
 
-* [bitnami/seaweedfs] Mount security.toml regardless security enhancements are enabled ([#30235](https://github.com/bitnami/charts/pull/30235))
+* [bitnami/seaweedfs] Release 3.0.7 ([#30292](https://github.com/bitnami/charts/pull/30292))
+
+## <small>3.0.6 (2024-11-06)</small>
+
+* [bitnami/seaweedfs] Mount security.toml regardless security enhancements are enabled (#30235) ([2ec7ec9](https://github.com/bitnami/charts/commit/2ec7ec965a444558f5e74edba80d12b8c9420f5a)), closes [#30235](https://github.com/bitnami/charts/issues/30235)
 
 ## <small>3.0.5 (2024-10-31)</small>
 
