@@ -1,8 +1,13 @@
 # Changelog
 
+## 21.5.1 (2024-11-07)
+
+* [bitnami/airflow] Release 21.5.1 ([#30306](https://github.com/bitnami/charts/pull/30306))
+
 ## 21.5.0 (2024-11-07)
 
-* [bitnami/airflow] feat: add init container to wait for db migrations ([#30246](https://github.com/bitnami/charts/pull/30246))
+* [bitnami/airflow] docs: :memo: Add "Prometheus metrics" section (#30238) ([3d54bb6](https://github.com/bitnami/charts/commit/3d54bb6c7ee1b0076e1e40815707b03efa93a71a)), closes [#30238](https://github.com/bitnami/charts/issues/30238)
+* [bitnami/airflow] feat: add init container to wait for db migrations (#30246) ([df5f34d](https://github.com/bitnami/charts/commit/df5f34d09a825c8173d89347883e3f7f97721956)), closes [#30246](https://github.com/bitnami/charts/issues/30246)
 
 ## <small>21.4.1 (2024-11-05)</small>
 
