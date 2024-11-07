@@ -1,8 +1,8 @@
 # Changelog
 
-## 4.8.0 (2024-11-06)
+## 4.7.6 (2024-11-07)
 
-* [bitnami/grafana-operator]: Add podAnnotations for Grafana pod ([#30240](https://github.com/bitnami/charts/pull/30240))
+* [bitnami/grafana-operator] Release 4.7.6 ([#30268](https://github.com/bitnami/charts/pull/30268))
 
 ## <small>4.7.5 (2024-11-04)</small>
 
