@@ -2,7 +2,7 @@
 
 ## 20.0.0 (2024-11-07)
 
-* [bitnami/mariadb] fix!: :bug: :boom: Set correct serviceName and add Password Update Job ([#30300](https://github.com/bitnami/charts/pull/30300))
+* [bitnami/mariadb] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job ([#30300](https://github.com/bitnami/charts/pull/30300))
 
 ## <small>19.1.2 (2024-11-04)</small>
 
