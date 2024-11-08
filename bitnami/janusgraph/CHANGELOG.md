@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.3.24 (2024-11-08)
+## 0.3.25 (2024-11-08)
 
-* [bitnami/janusgraph] Unify seLinuxOptions default value ([#30342](https://github.com/bitnami/charts/pull/30342))
+* [bitnami/janusgraph] Release 0.3.25 ([#30362](https://github.com/bitnami/charts/pull/30362))
+
+## <small>0.3.24 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/janusgraph] Unify seLinuxOptions default value (#30342) ([756e580](https://github.com/bitnami/charts/commit/756e580b2ae6e14fe59774583e3e8e87d1984684)), closes [#30342](https://github.com/bitnami/charts/issues/30342)
 
 ## <small>0.3.23 (2024-10-18)</small>
 
