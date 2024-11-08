@@ -1145,50 +1145,6 @@ passwordUpdateJob:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Configure extra options for Data Coordinator containers' liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param passwordUpdateJob.livenessProbe.enabled Enable livenessProbe on init job
-  ## @param passwordUpdateJob.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param passwordUpdateJob.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param passwordUpdateJob.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param passwordUpdateJob.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param passwordUpdateJob.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param passwordUpdateJob.readinessProbe.enabled Enable readinessProbe on init job
-  ## @param passwordUpdateJob.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param passwordUpdateJob.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param passwordUpdateJob.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param passwordUpdateJob.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param passwordUpdateJob.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param passwordUpdateJob.startupProbe.enabled Enable startupProbe on Data Coordinator containers
-  ## @param passwordUpdateJob.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param passwordUpdateJob.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param passwordUpdateJob.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param passwordUpdateJob.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param passwordUpdateJob.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
   ## @param passwordUpdateJob.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
