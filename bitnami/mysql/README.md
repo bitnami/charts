@@ -657,7 +657,7 @@ kubectl delete sts RELEASE_NAME-secondary --cascade=false
 
 Then execute `helm upgrade` as usual.
 
-Additionally, this new major provides a new, optional, password update job for automating this second-day operation in the chart. See the [Update credential](#password-update-job) for detailed instructions.
+Additionally, this new major provides a new, optional, password update job for automating this second-day operation in the chart. See the [Update credential](#automated-update-using-a-password-update-job) for detailed instructions.
 
 ### To 11.0.0
 
