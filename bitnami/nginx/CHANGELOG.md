@@ -1,8 +1,13 @@
 # Changelog
 
-## 18.2.4 (2024-10-21)
+## 18.2.5 (2024-11-08)
 
-* [bitnami/nginx] Release 18.2.4 ([#30017](https://github.com/bitnami/charts/pull/30017))
+* [bitnami/nginx] Unify seLinuxOptions default value ([#30337](https://github.com/bitnami/charts/pull/30337))
+
+## <small>18.2.4 (2024-10-21)</small>
+
+* [bitnami/nginx] Release 18.2.4 (#30017) ([c14b4ab](https://github.com/bitnami/charts/commit/c14b4ab38bf552b35713943432e4f96284ab8bdb)), closes [#30017](https://github.com/bitnami/charts/issues/30017)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>18.2.3 (2024-10-14)</small>
 
