@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.5.1 (2024-11-07)
+## 21.6.0 (2024-11-08)
 
-* [bitnami/airflow] Release 21.5.1 ([#30306](https://github.com/bitnami/charts/pull/30306))
+* [bitnami/airflow] Consistency on Airflow configuration & init improvements ([#30349](https://github.com/bitnami/charts/pull/30349))
+
+## <small>21.5.1 (2024-11-07)</small>
+
+* [bitnami/airflow] Release 21.5.1 (#30306) ([ac89917](https://github.com/bitnami/charts/commit/ac89917b636f342db76e10496306ce03fe6a19ae)), closes [#30306](https://github.com/bitnami/charts/issues/30306)
 
 ## 21.5.0 (2024-11-07)
 
