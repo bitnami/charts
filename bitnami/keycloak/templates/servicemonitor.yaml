@@ -20,7 +20,7 @@ spec:
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
   endpoints:
-    {{- $defaultEndpoint := pick .Values.metrics.serviceMonitor "port" "interval" "scrapeTimeout" "relabelings" "metricRelabelings" "honorLabels" }}
+    {{- $defaultEndpoint := pick .Values.metrics.serviceMonitor "interval" "scrapeTimeout" "relabelings" "metricRelabelings" "honorLabels" }}
     {{- $endpoints := ternary (.Values.metrics.serviceMonitor.endpoints) (list (dict "path" .Values.metrics.serviceMonitor.path)) (empty .Values.metrics.serviceMonitor.path) }}
     {{- range $endpoints }}
     {{- $endpoint := merge . $defaultEndpoint }}
