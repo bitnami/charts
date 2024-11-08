@@ -1,8 +1,13 @@
 # Changelog
 
-## 23.1.28 (2024-11-06)
+## 24.0.0 (2024-11-08)
 
-* [bitnami/wordpress] Release 23.1.28 ([#30248](https://github.com/bitnami/charts/pull/30248))
+* [bitnami/wordpress] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30360](https://github.com/bitnami/charts/pull/30360))
+
+## <small>23.1.28 (2024-11-06)</small>
+
+* [bitnami/wordpress] Release 23.1.27 (#30247) ([853f100](https://github.com/bitnami/charts/commit/853f10042bad20ab1350b0c42cef59a5223218fb)), closes [#30247](https://github.com/bitnami/charts/issues/30247)
+* [bitnami/wordpress] Release 23.1.28 (#30248) ([0038884](https://github.com/bitnami/charts/commit/003888458b9cde73a9616354ba1ccc0a70b93405)), closes [#30248](https://github.com/bitnami/charts/issues/30248)
 
 ## <small>23.1.26 (2024-11-04)</small>
 
