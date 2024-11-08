@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.3.26 (2024-11-07)
+## 4.3.27 (2024-11-08)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.3.26 ([#30290](https://github.com/bitnami/charts/pull/30290))
+* [bitnami/rabbitmq-cluster-operator] Unify seLinuxOptions default value ([#30332](https://github.com/bitnami/charts/pull/30332))
+
+## <small>4.3.26 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.26 (#30290) ([81bfadb](https://github.com/bitnami/charts/commit/81bfadb9a63f11087c0f20b458d84d1654bcc562)), closes [#30290](https://github.com/bitnami/charts/issues/30290)
 
 ## <small>4.3.25 (2024-10-16)</small>
 
