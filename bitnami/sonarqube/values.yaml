@@ -1016,7 +1016,7 @@ sysctl:
     enabled: true
     privileged: true
     runAsUser: 0
-    seLinuxOptions: null
+    seLinuxOptions: {}
 ## @section Other Parameters
 ##
 
