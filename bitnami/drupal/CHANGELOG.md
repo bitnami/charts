@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.0.13 (2024-10-31)
+## 21.0.0 (2024-11-08)
 
-* [bitnami/drupal] Release 20.0.13 ([#30165](https://github.com/bitnami/charts/pull/30165))
+* [bitnami/drupal] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30352](https://github.com/bitnami/charts/pull/30352))
+
+## <small>20.0.13 (2024-10-31)</small>
+
+* [bitnami/drupal] Release 20.0.13 (#30165) ([356941d](https://github.com/bitnami/charts/commit/356941ddb5c6ebbd08867aae2b07dfa21ff0e394)), closes [#30165](https://github.com/bitnami/charts/issues/30165)
 
 ## <small>20.0.12 (2024-10-31)</small>
 
