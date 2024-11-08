@@ -254,7 +254,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 0
   runAsGroup: 0
   runAsNonRoot: false
