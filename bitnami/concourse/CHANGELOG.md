@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.6 (2024-11-08)
+## 5.0.7 (2024-11-08)
 
-* [bitnami/concourse] Release 5.0.6 ([#30311](https://github.com/bitnami/charts/pull/30311))
+* [bitnami/concourse] Unify seLinuxOptions default value ([#30348](https://github.com/bitnami/charts/pull/30348))
+
+## <small>5.0.6 (2024-11-08)</small>
+
+* [bitnami/concourse] Release 5.0.6 (#30311) ([f324d80](https://github.com/bitnami/charts/commit/f324d806010b0abc2154d1dca23b1bf76f4a523a)), closes [#30311](https://github.com/bitnami/charts/issues/30311)
 
 ## <small>5.0.5 (2024-11-07)</small>
 
