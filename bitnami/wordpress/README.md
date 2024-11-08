@@ -636,6 +636,16 @@ To enable the new features, it is not possible to do it by upgrading an existing
 
 ## Upgrading
 
+### To 24.0.0
+
+This major bump updates the MariaDB subchart to version 20.0.0. This subchart updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+kubectl delete sts RELEASE_NAME-mariadb --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
 ### To 23.0.0
 
 This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
