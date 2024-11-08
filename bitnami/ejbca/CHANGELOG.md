@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.7 (2024-10-07)
+## 15.0.8 (2024-11-08)
 
-* [bitnami/ejbca] Release 15.0.7 ([#29797](https://github.com/bitnami/charts/pull/29797))
+* [bitnami/ejbca] Unify seLinuxOptions default value ([#30345](https://github.com/bitnami/charts/pull/30345))
+
+## <small>15.0.7 (2024-10-07)</small>
+
+* [bitnami/ejbca] Release 15.0.7 (#29797) ([aa5c97b](https://github.com/bitnami/charts/commit/aa5c97b569178b60e2c792fa047b24b64a132d67)), closes [#29797](https://github.com/bitnami/charts/issues/29797)
 
 ## <small>15.0.6 (2024-09-02)</small>
 
