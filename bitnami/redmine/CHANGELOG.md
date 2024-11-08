@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.0.2 (2024-11-04)
+## 30.0.3 (2024-11-08)
 
-* [bitnami/redmine] Release 30.0.2 ([#30183](https://github.com/bitnami/charts/pull/30183))
+* [bitnami/redmine] Unify seLinuxOptions default value ([#30329](https://github.com/bitnami/charts/pull/30329))
+
+## <small>30.0.2 (2024-11-04)</small>
+
+* [bitnami/redmine] Release 30.0.2 (#30183) ([f5b7139](https://github.com/bitnami/charts/commit/f5b7139c7809e68c5e2ada3eb8f36d3ea02d69da)), closes [#30183](https://github.com/bitnami/charts/issues/30183)
 
 ## <small>30.0.1 (2024-10-29)</small>
 
