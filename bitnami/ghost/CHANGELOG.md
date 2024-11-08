@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.49 (2024-11-08)
+## 21.1.50 (2024-11-08)
 
-* [bitnami/ghost] Release 21.1.49 ([#30313](https://github.com/bitnami/charts/pull/30313))
+* [bitnami/ghost] Unify seLinuxOptions default value ([#30346](https://github.com/bitnami/charts/pull/30346))
+
+## <small>21.1.49 (2024-11-08)</small>
+
+* [bitnami/ghost] Release 21.1.49 (#30313) ([a4f246e](https://github.com/bitnami/charts/commit/a4f246ec4cacd109e9eab79ba0c2cc4c491ea69e)), closes [#30313](https://github.com/bitnami/charts/issues/30313)
 
 ## <small>21.1.48 (2024-11-07)</small>
 
