@@ -179,7 +179,7 @@ javaOptions: ""
 image:
   registry: docker.io
   repository: bitnami/janusgraph
-  tag: 1.0.0-debian-12-r17
+  tag: 1.0.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -636,7 +636,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/jmx-exporter
-    tag: 1.0.1-debian-12-r7
+    tag: 1.0.1-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -838,7 +838,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r31
+    tag: 12-debian-12-r32
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -951,7 +951,7 @@ cassandra:
   image:
     registry: docker.io
     repository: bitnami/cassandra
-    tag: 4.1.7-debian-12-r0
+    tag: 4.1.7-debian-12-r1
     digest: ""
   ## @param cassandra.keyspace Name for cassandra's janusgraph keyspace
   ##
