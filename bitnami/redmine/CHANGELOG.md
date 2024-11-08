@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.0.3 (2024-11-08)
+## 31.0.0 (2024-11-08)
 
-* [bitnami/redmine] Unify seLinuxOptions default value ([#30329](https://github.com/bitnami/charts/pull/30329))
+* [bitnami/redmine] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30357](https://github.com/bitnami/charts/pull/30357))
+
+## <small>30.0.3 (2024-11-08)</small>
+
+* [bitnami/redmine] Unify seLinuxOptions default value (#30329) ([e6ad759](https://github.com/bitnami/charts/commit/e6ad7591f8c63f6da36a4ed5a5090ce88a1c7786)), closes [#30329](https://github.com/bitnami/charts/issues/30329)
 
 ## <small>30.0.2 (2024-11-04)</small>
 
