@@ -635,7 +635,7 @@ volumePermissions:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
 ## @section RBAC Parameters
 
@@ -867,7 +867,7 @@ mailReceiver:
   ##
   containerSecurityContext:
     enabled: false
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
   ## @param mailReceiver.podAnnotations Additional pod annotations
