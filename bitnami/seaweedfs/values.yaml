@@ -317,6 +317,9 @@ master:
   ## @param master.bindAddress Master Server bind address
   ##
   bindAddress: 0.0.0.0
+  ## @param master.volumeSizeLimitMB Limit (in MB) to stop directing writes to oversized volumes
+  ##
+  volumeSizeLimitMB: 1000
   ## @param master.config Master Server configuration
   ## Specify content for master.yml
   ##

@@ -143,6 +143,7 @@ spec:
             {{- if .Values.master.metrics.enabled }}
             - -metricsPort={{ .Values.master.containerPorts.metrics }}
             {{- end }}
+            - -volumeSizeLimitMB={{ .Values.master.volumeSizeLimitMB }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
