@@ -112,6 +112,55 @@ initContainers:
         containerPort: 1234
 ```
 
+### Update credentials
+
+Bitnami charts, with its default settings, configure credentials at first boot. Any further change in the secrets or credentials can be done using one of the following methods:
+
+### Manual update of the passwords and secrets
+
+- Update the user password following [the upstream documentation](https://milvus.io/docs/authenticate.md#Update-user-password)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and ROOT_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --from-literal=root-password=ROOT_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Automated update using a password update job
+
+The Bitnami MariaDB provides a password update job that will automatically change the MariaDB passwords when running helm upgrade. To enable the job set `passwordUpdateJob.enabled=true`. This job requires:
+
+- The new passwords: this is configured using either `auth.rootPassword`, `auth.password` and `auth.replicationPassword` (if applicable) or setting `auth.existingSecret`.
+- The previous passwords: This value is taken automatically from already deployed secret object. If you are using `auth.existingSecret` or `helm template` instead of `helm upgrade`, then set either `passwordUpdate.job.previousPasswords.rootPassword`, `passwordUpdate.job.previousPasswords.password`, `passwordUpdate.job.previousPasswords.replicationPassword` (when applicable), setting `auth.existingSecret`.
+
+In the following example we update the password via values.yaml in a mariadb installation with replication
+
+```yaml
+architecture: "replication"
+
+auth:
+  user: "user"
+  rootPassword: "newRootPassword123"
+  password: "newUserPassword123"
+  replicationPassword: "newReplicationPassword123"
+
+passwordUpdateJob:
+  enabled: true
+```
+
+In this example we use two existing secrets (`new-password-secret` and `previous-password-secret`) to update the passwords:
+
+```yaml
+auth:
+  existingSecret: new-password-secret
+
+passwordUpdateJob:
+  enabled: true
+  previousPasswords:
+    existingSecret: previous-password-secret
+```
+
+You can add extra update commands using the `passwordUpdateJob.extraCommands` value.
+
 ### Network Policy config
 
 To enable network policy for MySQL, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
@@ -546,6 +595,24 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mysql --set auth.roo
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
+
+### To 12.0.0
+
+This major bump updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+
+# If architecture = "standalone"
+kubectl delete sts RELEASE_NAME --cascade=false
+
+# If architecture = "replication"
+kubectl delete sts RELEASE_NAME-primary --cascade=false
+kubectl delete sts RELEASE_NAME-secondary --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
+Additionally, this new major provides a new, optional, password update job for automating this second-day operation in the chart. See the [Update credential](#password-update-job) for detailed instructions.
 
 ### To 11.0.0
 

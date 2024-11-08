@@ -1134,6 +1134,141 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
+
+## @section Password update job
+##
+passwordUpdateJob:
+  ## @param passwordUpdateJob.enabled Enable password update job
+  ##
+  enabled: false
+  ## @param passwordUpdateJob.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param passwordUpdateJob.command Override default container command on MariaDB Primary container(s) (useful when using custom images)
+  ##
+  command: []
+  ## @param passwordUpdateJob.args Override default container args on MariaDB Primary container(s) (useful when using custom images)
+  ##
+  args: []
+  ## @param passwordUpdateJob.extraCommands Extra commands to pass to the generation job
+  ##
+  extraCommands: ""
+  ## @param passwordUpdateJob.previousPasswords.rootPassword Previous root password (set if the password secret was already changed)
+  ## @param passwordUpdateJob.previousPasswords.password Previous password (set if the password secret was already changed)
+  ## @param passwordUpdateJob.previousPasswords.replicationPassword Previous replication password (set if the password secret was already changed)
+  ## @param passwordUpdateJob.previousPasswords.existingSecret Name of a secret containing the previous passwords (set if the password secret was already changed)
+  previousPasswords:
+    rootPassword: ""
+    password: ""
+    replicationPassword: ""
+    existingSecret: ""
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param passwordUpdateJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param passwordUpdateJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param passwordUpdateJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param passwordUpdateJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param passwordUpdateJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param passwordUpdateJob.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param passwordUpdateJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param passwordUpdateJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param passwordUpdateJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param passwordUpdateJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param passwordUpdateJob.podSecurityContext.enabled Enabled credential init job pods' Security Context
+  ## @param passwordUpdateJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param passwordUpdateJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param passwordUpdateJob.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param passwordUpdateJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param passwordUpdateJob.extraEnvVars Array containing extra env vars to configure the credential init job
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: GF_DEFAULT_INSTANCE_NAME
+  ##    value: my-instance
+  ##
+  extraEnvVars: []
+  ## @param passwordUpdateJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the credential init job
+  ##
+  extraEnvVarsCM: ""
+  ## @param passwordUpdateJob.extraEnvVarsSecret Secret containing extra env vars to configure the credential init job (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param passwordUpdateJob.extraVolumes Optionally specify extra list of additional volumes for the credential init job
+  ##
+  extraVolumes: []
+  ## @param passwordUpdateJob.extraVolumeMounts Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.
+  ##
+  extraVolumeMounts: []
+  ## @param passwordUpdateJob.initContainers Add additional init containers for the MariaDB Primary pod(s)
+  ##
+  initContainers: []
+  ## Container resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param passwordUpdateJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param passwordUpdateJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param passwordUpdateJob.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param passwordUpdateJob.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param passwordUpdateJob.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param passwordUpdateJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param passwordUpdateJob.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param passwordUpdateJob.annotations [object] Add annotations to the job
+  ##
+  annotations: {}
+  ## @param passwordUpdateJob.podLabels Additional pod labels
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param passwordUpdateJob.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
 ## @section Volume Permissions parameters
 ##
 
