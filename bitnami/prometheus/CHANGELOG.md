@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.3.26 (2024-11-07)
+## 1.3.27 (2024-11-08)
 
-* [bitnami/prometheus] Release 1.3.26 ([#30289](https://github.com/bitnami/charts/pull/30289))
+* [bitnami/prometheus] Unify seLinuxOptions default value ([#30330](https://github.com/bitnami/charts/pull/30330))
+
+## <small>1.3.26 (2024-11-07)</small>
+
+* [bitnami/mastodon][bitnami/prometheus] Fix README.md files typos (#30194) ([0ef19fb](https://github.com/bitnami/charts/commit/0ef19fb4ac61547d519c9cc029f39b7026ab70e2)), closes [#30194](https://github.com/bitnami/charts/issues/30194)
+* [bitnami/prometheus] Release 1.3.26 (#30289) ([ab4ecb0](https://github.com/bitnami/charts/commit/ab4ecb03466c1be4498052b9b7a3fbb1e743e36d)), closes [#30289](https://github.com/bitnami/charts/issues/30289)
 
 ## <small>1.3.25 (2024-11-06)</small>
 
