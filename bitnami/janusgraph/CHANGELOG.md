@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.23 (2024-10-18)
+## 0.3.24 (2024-11-08)
 
-* [bitnami/janusgraph] Remove wrong entries from image verification ([#29914](https://github.com/bitnami/charts/pull/29914))
+* [bitnami/janusgraph] Unify seLinuxOptions default value ([#30342](https://github.com/bitnami/charts/pull/30342))
+
+## <small>0.3.23 (2024-10-18)</small>
+
+* [bitnami/janusgraph] Remove wrong entries from image verification (#29914) ([be16cbf](https://github.com/bitnami/charts/commit/be16cbf0564756887e50ad9a54ceb408a672460f)), closes [#29914](https://github.com/bitnami/charts/issues/29914)
 
 ## <small>0.3.22 (2024-10-16)</small>
 

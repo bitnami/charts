@@ -243,7 +243,7 @@ containerSecurityContext:
     drop: ["ALL"]
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   seccompProfile:

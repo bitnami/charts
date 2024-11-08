@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.0.0 (2024-10-02)
+## 6.0.1 (2024-11-08)
 
-* [bitnami/sonarqube] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29745](https://github.com/bitnami/charts/pull/29745))
+* [bitnami/sonarqube] Unify seLinuxOptions default value ([#30325](https://github.com/bitnami/charts/pull/30325))
+
+## 6.0.0 (2024-10-03)
+
+* [bitnami/sonarqube] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29745) ([e60b387](https://github.com/bitnami/charts/commit/e60b3875153fc37fee4c794e1316886968ce045f)), closes [#29745](https://github.com/bitnami/charts/issues/29745)
 
 ## <small>5.2.15 (2024-10-02)</small>
 

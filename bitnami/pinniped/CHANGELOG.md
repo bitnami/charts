@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.3.4 (2024-11-07)
+## 2.3.5 (2024-11-08)
 
-* [bitnami/pinniped] Release 2.3.4 ([#30304](https://github.com/bitnami/charts/pull/30304))
+* [bitnami/pinniped] Unify seLinuxOptions default value ([#30334](https://github.com/bitnami/charts/pull/30334))
+
+## <small>2.3.4 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/pinniped] Release 2.3.4 (#30304) ([d4ac7f8](https://github.com/bitnami/charts/commit/d4ac7f87d05deba5be151dbacb4df8aff62c17b3)), closes [#30304](https://github.com/bitnami/charts/issues/30304)
 
 ## <small>2.3.3 (2024-10-17)</small>
 

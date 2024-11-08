@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.6 (2024-10-02)
+## 11.0.7 (2024-11-08)
 
-* [bitnami/redis-cluster] Release 11.0.6 ([#29755](https://github.com/bitnami/charts/pull/29755))
+* [bitnami/redis-cluster] Unify seLinuxOptions default value ([#30328](https://github.com/bitnami/charts/pull/30328))
+
+## <small>11.0.6 (2024-10-02)</small>
+
+* [bitnami/redis-cluster] Release 11.0.6 (#29755) ([c99aea9](https://github.com/bitnami/charts/commit/c99aea94ae614acd9e15b3333496da5d7e29de01)), closes [#29755](https://github.com/bitnami/charts/issues/29755)
 
 ## <small>11.0.5 (2024-09-30)</small>
 
