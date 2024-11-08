@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.0 (2024-10-02)
+## 1.0.1 (2024-11-08)
 
-* [bitnami/nessie] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29741](https://github.com/bitnami/charts/pull/29741))
+* [bitnami/nessie] Unify seLinuxOptions default value ([#30341](https://github.com/bitnami/charts/pull/30341))
+
+## 1.0.0 (2024-10-03)
+
+* [bitnami/nessie] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29741) ([c62b315](https://github.com/bitnami/charts/commit/c62b31550a99d32365ded549c1c84cbf733661ab)), closes [#29741](https://github.com/bitnami/charts/issues/29741)
 
 ## <small>0.1.34 (2024-10-01)</small>
 
