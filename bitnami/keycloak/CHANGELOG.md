@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.0 (2024-11-05)
+## 24.1.1 (2024-11-08)
 
-* [bitnami/keycloak] switches keycloak-metrics service to point to new port ([#30095](https://github.com/bitnami/charts/pull/30095))
+* [bitnami/keycloak] KEYCLOAK_HOSTNAME present even if KEYCLOAK_PROXY_HEADERS is set ([#30368](https://github.com/bitnami/charts/pull/30368))
+
+## 24.1.0 (2024-11-06)
+
+* [bitnami/keycloak] switches keycloak-metrics service to point to new port (#30095) ([8ca86ae](https://github.com/bitnami/charts/commit/8ca86ae9ecb2b375735787001188e5c7757d181b)), closes [#30095](https://github.com/bitnami/charts/issues/30095)
 
 ## <small>24.0.5 (2024-11-04)</small>
 
