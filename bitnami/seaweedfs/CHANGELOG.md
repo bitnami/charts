@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.0.0 (2024-11-08)
+
+* [bitnami/seaweedfs] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30358](https://github.com/bitnami/charts/pull/30358))
+
 ## 3.2.0 (2024-11-08)
 
-* [bitnami/seaweedfs] Support configuring volume size limit on Master ([#30315](https://github.com/bitnami/charts/pull/30315))
+* [bitnami/seaweedfs] Support configuring volume size limit on Master (#30315) ([0dc86e0](https://github.com/bitnami/charts/commit/0dc86e09237ecaabf57d6c7b66d53dd461256e69)), closes [#30315](https://github.com/bitnami/charts/issues/30315)
 
 ## 3.1.0 (2024-11-07)
 
