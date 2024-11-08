@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.10 (2024-11-07)
+## 2.4.11 (2024-11-08)
 
-* [bitnami/sealed-secrets] Release 2.4.10 ([#30291](https://github.com/bitnami/charts/pull/30291))
+* [bitnami/sealed-secrets] Unify seLinuxOptions default value ([#30324](https://github.com/bitnami/charts/pull/30324))
+
+## <small>2.4.10 (2024-11-07)</small>
+
+* [bitnami/sealed-secrets] Release 2.4.10 (#30291) ([92a9dea](https://github.com/bitnami/charts/commit/92a9deaf61af1a32d6b89c20a92770925e5c7706)), closes [#30291](https://github.com/bitnami/charts/issues/30291)
 
 ## <small>2.4.9 (2024-11-04)</small>
 
