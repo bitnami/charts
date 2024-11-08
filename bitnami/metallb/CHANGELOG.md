@@ -1,8 +1,14 @@
 # Changelog
 
-## 6.3.14 (2024-11-07)
+## 6.3.15 (2024-11-08)
 
-* [bitnami/metallb] Release 6.3.14 ([#30280](https://github.com/bitnami/charts/pull/30280))
+* [bitnami/metallb] Unify seLinuxOptions default value ([#30339](https://github.com/bitnami/charts/pull/30339))
+
+## <small>6.3.14 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/metallb] Release 6.3.14 (#30280) ([7c02be0](https://github.com/bitnami/charts/commit/7c02be08858db99911a0a4a30edbec071d1def1a)), closes [#30280](https://github.com/bitnami/charts/issues/30280)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>6.3.13 (2024-10-02)</small>
 
