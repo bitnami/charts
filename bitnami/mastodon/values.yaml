@@ -347,7 +347,7 @@ web:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -706,7 +706,7 @@ sidekiq:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1016,7 +1016,7 @@ streaming:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1414,7 +1414,7 @@ initJob:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsGroup: 1001
       runAsNonRoot: true
@@ -1483,7 +1483,7 @@ initJob:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsGroup: 1001
       runAsNonRoot: true
@@ -1792,7 +1792,7 @@ defaultInitContainers:
     ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
     ##
     containerSecurityContext:
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 0
 
 ## @section Other Parameters
