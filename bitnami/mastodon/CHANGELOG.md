@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.0.2 (2024-11-01)
+## 9.0.3 (2024-11-08)
 
-* [bitnami/mastodon] Mastodon initjob always tries to create admin on upgrade ([#30171](https://github.com/bitnami/charts/pull/30171))
+* [bitnami/mastodon] Unify seLinuxOptions default value ([#30344](https://github.com/bitnami/charts/pull/30344))
+
+## <small>9.0.2 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mastodon] Mastodon initjob always tries to create admin on upgrade (#30171) ([14072e2](https://github.com/bitnami/charts/commit/14072e239862772aee311a73fb81538e0e02a377)), closes [#30171](https://github.com/bitnami/charts/issues/30171)
 
 ## <small>9.0.1 (2024-10-21)</small>
 
