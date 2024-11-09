@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.0.3 (2024-11-08)
+## 9.0.4 (2024-11-09)
 
-* [bitnami/mastodon] Unify seLinuxOptions default value ([#30344](https://github.com/bitnami/charts/pull/30344))
+* [bitnami/mastodon] Release 9.0.4 ([#30383](https://github.com/bitnami/charts/pull/30383))
+
+## <small>9.0.3 (2024-11-08)</small>
+
+* [bitnami/mastodon] Unify seLinuxOptions default value (#30344) ([8bdf86a](https://github.com/bitnami/charts/commit/8bdf86acdaef7ebbf4f2f4e5dcac161f24f0209b)), closes [#30344](https://github.com/bitnami/charts/issues/30344)
+* [bitnami/mastodon][bitnami/prometheus] Fix README.md files typos (#30194) ([0ef19fb](https://github.com/bitnami/charts/commit/0ef19fb4ac61547d519c9cc029f39b7026ab70e2)), closes [#30194](https://github.com/bitnami/charts/issues/30194)
 
 ## <small>9.0.2 (2024-11-04)</small>
 
