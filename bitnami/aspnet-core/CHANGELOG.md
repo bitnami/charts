@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.2.18 (2024-11-09)
+## 6.2.19 (2024-11-09)
 
-* [bitnami/aspnet-core] Release 6.2.18 ([#30378](https://github.com/bitnami/charts/pull/30378))
+* [bitnami/aspnet-core] Release 6.2.19 ([#30379](https://github.com/bitnami/charts/pull/30379))
+
+## <small>6.2.18 (2024-11-09)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/aspnet-core] Release 6.2.18 (#30378) ([e9f2836](https://github.com/bitnami/charts/commit/e9f28365f922b2cd01f7cc600cd559abc7358aca)), closes [#30378](https://github.com/bitnami/charts/issues/30378)
 
 ## <small>6.2.17 (2024-10-18)</small>
 
