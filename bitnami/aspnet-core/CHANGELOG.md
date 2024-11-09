@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.2.17 (2024-10-16)
+## 6.2.18 (2024-11-09)
 
-* [bitnami/aspnet-core] Remove wrong entries from image verification ([#29912](https://github.com/bitnami/charts/pull/29912))
+* [bitnami/aspnet-core] Release 6.2.18 ([#30378](https://github.com/bitnami/charts/pull/30378))
+
+## <small>6.2.17 (2024-10-18)</small>
+
+* [bitnami/aspnet-core] Remove wrong entries from image verification (#29912) ([a4750e4](https://github.com/bitnami/charts/commit/a4750e497887c5a1e52b0b7ccc933087d68492a1)), closes [#29912](https://github.com/bitnami/charts/issues/29912)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>6.2.16 (2024-10-08)</small>
 
