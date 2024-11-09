@@ -1,6 +1,6 @@
 # Changelog
 
-## 23.1.29 (2024-11-08)
+## 23.1.29 (2024-11-09)
 
 * [bitnami/wordpress] Release 23.1.29 ([#30310](https://github.com/bitnami/charts/pull/30310))
 
