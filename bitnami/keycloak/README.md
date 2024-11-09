@@ -540,29 +540,30 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                               | Value   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `metrics.enabled`                          | Enable exposing Keycloak statistics                                                                                       | `false` |
-| `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                 | `9000`  |
-| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`    |
-| `metrics.service.extraPorts`               | Add additional ports to the keycloak metrics service (i.e. admin port 9000)                                               | `[]`    |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false` |
-| `metrics.serviceMonitor.port`              | Metrics service HTTP port                                                                                                 | `http`  |
-| `metrics.serviceMonitor.endpoints`         | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`    |
-| `metrics.serviceMonitor.path`              | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                | `""`    |
-| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                               | `30s`   |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                                       | `""`    |
-| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                     | `{}`    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                       | `{}`    |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                        | `[]`    |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                 | `[]`    |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                  | `false` |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                         | `""`    |
-| `metrics.prometheusRule.enabled`           | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                              | `false` |
-| `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
-| `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`    |
-| `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                       | `[]`    |
+| Name                                       | Description                                                                                                                                                | Value   |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `metrics.enabled`                          | Enable exposing Keycloak statistics                                                                                                                        | `false` |
+| `metrics.service.ports.http`               | Metrics service ports                                                                                                                                      | `8080`  |
+| `metrics.service.ports.metrics`            | Metrics service HTTP port for Keycloak instance metrics                                                                                                    | `9000`  |
+| `metrics.service.ports.http`               | Metrics service HTTP port for realm metrics                                                                                                                | `8080`  |
+| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                                                        | `{}`    |
+| `metrics.service.extraPorts`               | Add additional ports to the keycloak metrics service (i.e. admin port 9000)                                                                                | `[]`    |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                                               | `false` |
+| `metrics.serviceMonitor.endpoints`         | The endpoint and corresponding port configuration of the ServiceMonitor. Path and port are mandatory. Interval, timeout and labellings can be overwritten. | `[]`    |
+| `metrics.serviceMonitor.path`              | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                                                 | `""`    |
+| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                                                                                   | `""`    |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                                                                | `30s`   |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                                                                        | `""`    |
+| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                                      | `{}`    |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                                        | `{}`    |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                                         | `[]`    |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                                  | `[]`    |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                                                   | `false` |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                                                          | `""`    |
+| `metrics.prometheusRule.enabled`           | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                                                               | `false` |
+| `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                                                                                                   | `""`    |
+| `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                                      | `{}`    |
+| `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                                                        | `[]`    |
 
 ### keycloak-config-cli parameters
 
