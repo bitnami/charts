@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.1.1 (2024-11-08)
+## 24.1.1 (2024-11-09)
 
 * [bitnami/keycloak] KEYCLOAK_HOSTNAME present even if KEYCLOAK_PROXY_HEADERS is set ([#30368](https://github.com/bitnami/charts/pull/30368))
 
