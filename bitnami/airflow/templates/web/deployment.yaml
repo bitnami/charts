@@ -144,7 +144,7 @@ spec:
             - name: AIRFLOW_LDAP_ROLES_SYNC_AT_LOGIN
               value: {{ .Values.ldap.rolesSyncAtLogin | quote }}
             - name: AIRFLOW_LDAP_USE_TLS
-              value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
+              value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
               value: {{ ternary "True" "False" .Values.ldap.tls.allowSelfSigned | quote }}

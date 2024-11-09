@@ -2321,7 +2321,7 @@ worker:
 ## @param ldap.binddn DN of the account used to search in the LDAP server.
 ## @param ldap.bindpw Bind Password
 ## @param ldap.existingSecret Name of an existing secret containing the LDAP bind password
-## @param ldap.userRegistration Set to True to enable user self registration
+## @param ldap.userRegistration Set to yes to enable user self registration
 ## @param ldap.userRegistrationRole Set role name to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration
 ## @param ldap.rolesMapping mapping from LDAP DN to a list of roles
 ## @param ldap.rolesSyncAtLogin replace ALL the user's roles each login, or only on registration
@@ -2334,10 +2334,10 @@ ldap:
   binddn: "cn=admin,dc=example,dc=org"
   bindpw: ""
   existingSecret: ""
-  userRegistration: 'True'
+  userRegistration: "yes"
   userRegistrationRole: "Public"
   rolesMapping: '{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }'
-  rolesSyncAtLogin: 'True'
+  rolesSyncAtLogin: "yes"
   ## SSL/TLS parameters for LDAP
   ## @param ldap.tls.enabled Enabled TLS/SSL for LDAP, you must include the CA file.
   ## @param ldap.tls.allowSelfSigned Allow to use self signed certificates
