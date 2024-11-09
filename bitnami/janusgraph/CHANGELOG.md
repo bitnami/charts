@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.25 (2024-11-08)
+## 0.3.26 (2024-11-09)
 
-* [bitnami/janusgraph] Release 0.3.25 ([#30362](https://github.com/bitnami/charts/pull/30362))
+* [bitnami/janusgraph] Release 0.3.26 ([#30371](https://github.com/bitnami/charts/pull/30371))
+
+## <small>0.3.25 (2024-11-08)</small>
+
+* [bitnami/janusgraph] Release 0.3.25 (#30362) ([f68a5da](https://github.com/bitnami/charts/commit/f68a5da959de807b537f653f42bd1132c59d6bf7)), closes [#30362](https://github.com/bitnami/charts/issues/30362)
 
 ## <small>0.3.24 (2024-11-08)</small>
 
