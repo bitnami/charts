@@ -1008,10 +1008,14 @@ metrics:
   ## Keycloak metrics service parameters
   ##
   service:
-    ## @param metrics.service.ports.http Metrics service HTTP port
+    ## @param metrics.service.ports.http Metrics service ports
     ##
     ports:
+      ## @param metrics.service.ports.metrics Metrics service HTTP port for Keycloak instance metrics
+      ##
       metrics: 9000
+      ## @param metrics.service.ports.http Metrics service HTTP port for realm metrics
+      ##
       http: 8080
     ## @param metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints
     ##
@@ -1027,7 +1031,7 @@ metrics:
     ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
     ##
     enabled: false
-    ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten.
+    ## @param metrics.serviceMonitor.endpoints [array] The endpoint and corresponding port configuration of the ServiceMonitor. Path and port are mandatory. Interval, timeout and labellings can be overwritten.
     ##
     endpoints:
       - path: '{{ include "keycloak.httpPath" . }}metrics'
