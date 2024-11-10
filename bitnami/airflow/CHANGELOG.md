@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.5.2 (2024-11-09)
+## 21.5.2 (2024-11-10)
 
 * [bitnami/airflow]:  Issue with LDAP variables ([#30382](https://github.com/bitnami/charts/pull/30382))
 
