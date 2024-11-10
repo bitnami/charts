@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.1.1 (2024-11-09)
+## 24.1.1 (2024-11-10)
 
 * [bitnami/keycloak] Issue with metrics into ServiceMonitor ([#30370](https://github.com/bitnami/charts/pull/30370))
 
