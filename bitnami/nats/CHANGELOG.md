@@ -2,7 +2,7 @@
 
 ## 8.4.9 (2024-11-11)
 
-* [bitnami/nats] Expose `publishNotReadyAddresses` headless service ([#30393](https://github.com/bitnami/charts/pull/30393))
+* [bitnami/nats] Expose `publishNotReadyAddresses` on headless service ([#30393](https://github.com/bitnami/charts/pull/30393))
 
 ## <small>8.4.8 (2024-11-08)</small>
 
