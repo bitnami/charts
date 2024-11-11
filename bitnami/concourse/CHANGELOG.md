@@ -1,8 +1,34 @@
 # Changelog
 
-## 5.0.1 (2024-10-09)
+## 5.0.7 (2024-11-08)
 
-* [bitnami/concourse] Release 5.0.1 ([#29848](https://github.com/bitnami/charts/pull/29848))
+* [bitnami/concourse] Unify seLinuxOptions default value ([#30348](https://github.com/bitnami/charts/pull/30348))
+
+## <small>5.0.6 (2024-11-08)</small>
+
+* [bitnami/concourse] Release 5.0.6 (#30311) ([f324d80](https://github.com/bitnami/charts/commit/f324d806010b0abc2154d1dca23b1bf76f4a523a)), closes [#30311](https://github.com/bitnami/charts/issues/30311)
+
+## <small>5.0.5 (2024-11-07)</small>
+
+* [bitnami/concourse] Release 5.0.5 (#30258) ([cd032b9](https://github.com/bitnami/charts/commit/cd032b9252556a477e3ff5d55d0b0460156bb593)), closes [#30258](https://github.com/bitnami/charts/issues/30258)
+
+## <small>5.0.4 (2024-11-02)</small>
+
+* [bitnami/concourse] Release 5.0.4 (#30175) ([69e0319](https://github.com/bitnami/charts/commit/69e03191ca3ead2a3915bbaf022fc9ea81ca1df6)), closes [#30175](https://github.com/bitnami/charts/issues/30175)
+
+## <small>5.0.3 (2024-10-31)</small>
+
+* [bitnami/concourse] Release 5.0.3 (#30144) ([446f4b5](https://github.com/bitnami/charts/commit/446f4b570014f85d7a3904a2ce2a1cdff2ef2936)), closes [#30144](https://github.com/bitnami/charts/issues/30144)
+
+## <small>5.0.2 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/concourse] Release 5.0.2 (#30130) ([4fb2295](https://github.com/bitnami/charts/commit/4fb2295fc9638907b1b58498c9776b74b7f722d3)), closes [#30130](https://github.com/bitnami/charts/issues/30130)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>5.0.1 (2024-10-09)</small>
+
+* [bitnami/concourse] Release 5.0.1 (#29848) ([82bba13](https://github.com/bitnami/charts/commit/82bba13bec3bf461f54e2ceda875c1c796244685)), closes [#29848](https://github.com/bitnami/charts/issues/29848)
 
 ## 5.0.0 (2024-10-03)
 

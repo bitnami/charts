@@ -1,8 +1,18 @@
 # Changelog
 
-## 17.0.1 (2024-10-14)
+## 17.0.3 (2024-11-08)
 
-* [bitnami/kubeapps] Release 17.0.1 ([#29886](https://github.com/bitnami/charts/pull/29886))
+* [bitnami/kubeapps] Unify seLinuxOptions default value ([#30343](https://github.com/bitnami/charts/pull/30343))
+
+## <small>17.0.2 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kubeapps] Release 17.0.2 (#30164) ([be30b31](https://github.com/bitnami/charts/commit/be30b315457e24fedb63ba336c73929fa8294c55)), closes [#30164](https://github.com/bitnami/charts/issues/30164)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>17.0.1 (2024-10-14)</small>
+
+* [bitnami/kubeapps] Release 17.0.1 (#29886) ([a1f4eb7](https://github.com/bitnami/charts/commit/a1f4eb71c2190feed6e047d7e28ba18e0e491e86)), closes [#29886](https://github.com/bitnami/charts/issues/29886)
 
 ## 17.0.0 (2024-10-03)
 

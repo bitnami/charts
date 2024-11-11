@@ -81,9 +81,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.10-debian-12-r5
+  tag: 2.7.10-debian-12-r7
   digest: ""
-  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -897,9 +896,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r32
     digest: ""
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1106,9 +1104,8 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.495.0-debian-12-r0
+        tag: 0.500.0-debian-12-r0
         digest: ""
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
@@ -1160,9 +1157,8 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.64.0-debian-12-r1
+        tag: 2.65.0-debian-12-r1
         digest: ""
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
@@ -1216,9 +1212,8 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.17.60-debian-12-r0
+        tag: 2.19.0-debian-12-r0
         digest: ""
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent

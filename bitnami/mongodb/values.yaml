@@ -131,7 +131,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 8.0.1-debian-12-r0
+  tag: 8.0.3-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -257,7 +257,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.27.2-debian-12-r0
+    tag: 1.27.2-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -845,10 +845,9 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.31.1-debian-12-r3
+      tag: 1.31.2-debian-12-r3
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -895,10 +894,9 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/os-shell
-      tag: 12-debian-12-r31
+      tag: 12-debian-12-r32
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -1488,10 +1486,9 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r31
+    tag: 12-debian-12-r32
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -2249,6 +2246,9 @@ hidden:
       ##
       dataSource: {}
   service:
+    ## @param hidden.service.nameOverride The hidden service name
+    ##
+    nameOverride: ""
     ## @param hidden.service.portName MongoDB(&reg;) service port name
     ##
     portName: "mongodb"
@@ -2286,7 +2286,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.41.1-debian-12-r1
+    tag: 0.41.2-debian-12-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

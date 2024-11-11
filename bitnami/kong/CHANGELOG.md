@@ -1,8 +1,22 @@
 # Changelog
 
-## 14.0.2 (2024-10-16)
+## 14.0.5 (2024-11-09)
 
-* [bitnami/kong] Release 14.0.2 ([#29926](https://github.com/bitnami/charts/pull/29926))
+* [bitnami/kong] Release 14.0.5 ([#30381](https://github.com/bitnami/charts/pull/30381))
+
+## <small>14.0.4 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kong] Release 14.0.4 (#30276) ([5d37187](https://github.com/bitnami/charts/commit/5d37187597f35f33ea254f333e740d8a2963a440)), closes [#30276](https://github.com/bitnami/charts/issues/30276)
+
+## <small>14.0.3 (2024-10-28)</small>
+
+* [bitnami/kong] Release 14.0.3 (#30102) ([4f414b2](https://github.com/bitnami/charts/commit/4f414b270d913db9477efb273786d543b96fb408)), closes [#30102](https://github.com/bitnami/charts/issues/30102)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>14.0.2 (2024-10-16)</small>
+
+* [bitnami/kong] Release 14.0.2 (#29926) ([33bd511](https://github.com/bitnami/charts/commit/33bd5119767d11ee76a34dd137380558a7d4a584)), closes [#29926](https://github.com/bitnami/charts/issues/29926)
 
 ## <small>14.0.1 (2024-10-16)</small>
 

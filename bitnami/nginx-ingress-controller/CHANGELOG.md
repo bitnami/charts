@@ -1,8 +1,21 @@
 # Changelog
 
-## 11.5.1 (2024-10-22)
+## 11.5.4 (2024-11-08)
 
-* [bitnami/nginx-ingress-controller] Release 11.5.1 ([#30042](https://github.com/bitnami/charts/pull/30042))
+* [bitnami/nginx-ingress-controller] Unify seLinuxOptions default value ([#30338](https://github.com/bitnami/charts/pull/30338))
+
+## <small>11.5.3 (2024-11-07)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.5.3 (#30286) ([1f4f361](https://github.com/bitnami/charts/commit/1f4f36140e04270e6633209574f52f647441ab78)), closes [#30286](https://github.com/bitnami/charts/issues/30286)
+
+## <small>11.5.2 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/nginx-ingress-controller] Release 11.5.2 (#30202) ([e775a70](https://github.com/bitnami/charts/commit/e775a70c8338b3bf3f521cf13654ea9453e75dad)), closes [#30202](https://github.com/bitnami/charts/issues/30202)
+
+## <small>11.5.1 (2024-10-22)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.5.1 (#30042) ([43badcf](https://github.com/bitnami/charts/commit/43badcf10a7a62803d3369dad93b73b266fe50ef)), closes [#30042](https://github.com/bitnami/charts/issues/30042)
 
 ## 11.5.0 (2024-10-21)
 

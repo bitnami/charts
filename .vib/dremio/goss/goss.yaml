@@ -37,7 +37,7 @@ http:
     status: 200
     timeout: 30000
     body:
-      - /metrics_com_dremio/
+      - /metrics_dremio/
   {{- /* Not testing the body output because it is causing a CancelTimeoutError from time to time (probably because of the resource preset we are using) */}}
   http://dremio-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
     status: 200

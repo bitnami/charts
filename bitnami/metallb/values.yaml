@@ -155,10 +155,9 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.14.8-debian-12-r7
+    tag: 0.14.8-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -321,7 +320,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -564,10 +563,9 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.14.8-debian-12-r8
+    tag: 0.14.8-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -772,7 +770,7 @@ speaker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
     runAsGroup: 0
     allowPrivilegeEscalation: false
@@ -941,7 +939,7 @@ speaker:
       ##
       registry: docker.io
       repository: bitnami/metallb-speaker
-      tag: 0.14.8-debian-12-r8
+      tag: 0.14.8-debian-12-r11
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []

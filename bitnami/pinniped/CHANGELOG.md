@@ -1,8 +1,18 @@
 # Changelog
 
-## 2.3.3 (2024-10-17)
+## 2.3.5 (2024-11-08)
 
-* [bitnami/pinniped] Release 2.3.3 ([#29959](https://github.com/bitnami/charts/pull/29959))
+* [bitnami/pinniped] Unify seLinuxOptions default value ([#30334](https://github.com/bitnami/charts/pull/30334))
+
+## <small>2.3.4 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/pinniped] Release 2.3.4 (#30304) ([d4ac7f8](https://github.com/bitnami/charts/commit/d4ac7f87d05deba5be151dbacb4df8aff62c17b3)), closes [#30304](https://github.com/bitnami/charts/issues/30304)
+
+## <small>2.3.3 (2024-10-17)</small>
+
+* [bitnami/pinniped] Release 2.3.3 (#29959) ([d7c67b9](https://github.com/bitnami/charts/commit/d7c67b926bf3546097193e79677d5601692eb461)), closes [#29959](https://github.com/bitnami/charts/issues/29959)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>2.3.2 (2024-10-02)</small>
 

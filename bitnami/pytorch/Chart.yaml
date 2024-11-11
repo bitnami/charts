@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: git
-      image: docker.io/bitnami/git:2.46.1-debian-12-r1
+      image: docker.io/bitnami/git:2.47.0-debian-12-r1
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r30
+      image: docker.io/bitnami/os-shell:12-debian-12-r32
     - name: pytorch
-      image: docker.io/bitnami/pytorch:2.4.1-debian-12-r0
+      image: docker.io/bitnami/pytorch:2.5.1-debian-12-r0
 apiVersion: v2
-appVersion: 2.4.1
+appVersion: 2.5.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -33,4 +33,4 @@ maintainers:
 name: pytorch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/pytorch
-version: 4.2.19
+version: 4.2.22

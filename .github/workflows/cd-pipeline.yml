@@ -21,7 +21,7 @@ jobs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
     steps:
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           path: charts
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
@@ -34,7 +34,7 @@ jobs:
           charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
           # Using grep -c as a better alternative to wc -l when dealing with empty strings."
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
-          num_version_bumps="$(echo "$files_changed" | grep Chart.yaml | xargs git show | grep -c "+version" || true)"
+          num_version_bumps="$(echo "$files_changed" | grep  "bitnami/[^/]*/Chart.yaml" | xargs git show | grep -c "+version" || true)"
 
           if [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
             # Changes done in charts but version not bumped -> ERROR
@@ -71,7 +71,7 @@ jobs:
       CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
       VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
     steps:
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         name: Checkout Repository
         with:
           path: charts
@@ -95,7 +95,7 @@ jobs:
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: 'index'
           path: index
@@ -175,7 +175,7 @@ jobs:
     name: Push tag
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
     steps:
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           path: charts
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
@@ -203,7 +203,7 @@ jobs:
     name: Push Promotion files
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
     steps:
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           path: charts
       - name: Install helm

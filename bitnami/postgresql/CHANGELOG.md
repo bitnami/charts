@@ -1,8 +1,17 @@
 # Changelog
 
-## 16.0.7 (2024-10-25)
+## 16.1.2 (2024-11-06)
 
-* [bitnami/postgresql] Make seLinuxOptions null to remove validation issue with openshift for postgresql volume permissions init container ([#30029](https://github.com/bitnami/charts/pull/30029))
+* [bitnami/postgresql] Release 16.1.2 ([#30250](https://github.com/bitnami/charts/pull/30250))
+
+## <small>16.1.1 (2024-11-04)</small>
+
+* [bitnami/postgresql] metrics.collectors applies to read replicas (#30133) ([696f113](https://github.com/bitnami/charts/commit/696f113b68a7f541de7f073cf3efec5b25ccf10b)), closes [#30133](https://github.com/bitnami/charts/issues/30133)
+
+## 16.1.0 (2024-10-30)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/postgresql] Added support for `namespaceOverride` (#30113) ([4253372](https://github.com/bitnami/charts/commit/4253372e0b770e941c4894cdd7a904d3fdabeb19)), closes [#30113](https://github.com/bitnami/charts/issues/30113)
 
 ## <small>16.0.6 (2024-10-24)</small>
 

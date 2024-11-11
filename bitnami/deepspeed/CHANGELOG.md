@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.2.23 (2024-10-23)
+## 2.2.25 (2024-11-10)
 
-* [bitnami/deepspeed] Release 2.2.23 ([#30050](https://github.com/bitnami/charts/pull/30050))
+* [bitnami/deepspeed] Release 2.2.25 ([#30385](https://github.com/bitnami/charts/pull/30385))
+
+## <small>2.2.24 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/deepspeed] chore: increase client memory (#30126) ([36caa83](https://github.com/bitnami/charts/commit/36caa831851b7e49b77831fe80863078caba2e9c)), closes [#30126](https://github.com/bitnami/charts/issues/30126)
+
+## <small>2.2.23 (2024-10-23)</small>
+
+* [bitnami/deepspeed] Release 2.2.23 (#30050) ([3ff6f15](https://github.com/bitnami/charts/commit/3ff6f151a462020c7f88f7c5dc8c6c50df3a4038)), closes [#30050](https://github.com/bitnami/charts/issues/30050)
 
 ## <small>2.2.22 (2024-10-21)</small>
 

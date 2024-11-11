@@ -1,8 +1,17 @@
 # Changelog
 
+## 6.3.2 (2024-11-08)
+
+* [bitnami/clickhouse] Release 6.3.2 ([#30363](https://github.com/bitnami/charts/pull/30363))
+
+## <small>6.3.1 (2024-11-01)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/clickhouse] Release 6.3.1 (#30168) ([dd9b518](https://github.com/bitnami/charts/commit/dd9b5189ead3d1218014ba764727658b2da137c6)), closes [#30168](https://github.com/bitnami/charts/issues/30168)
+
 ## 6.3.0 (2024-10-18)
 
-* [bitnami/clickhouse] Allow change ClickHouse cluster name ([#29939](https://github.com/bitnami/charts/pull/29939))
+* [bitnami/clickhouse] Allow change ClickHouse cluster name (#29939) ([f291ab7](https://github.com/bitnami/charts/commit/f291ab719d4daa2112058b23277d8eab02f2d9b1)), closes [#29939](https://github.com/bitnami/charts/issues/29939)
 
 ## <small>6.2.29 (2024-10-18)</small>
 

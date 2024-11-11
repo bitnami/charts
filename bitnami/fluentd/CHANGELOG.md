@@ -1,8 +1,18 @@
 # Changelog
 
+## 7.0.2 (2024-11-09)
+
+* [bitnami/fluentd] Release 7.0.2 ([#30376](https://github.com/bitnami/charts/pull/30376))
+
+## <small>7.0.1 (2024-11-05)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/fluentd] Release 7.0.1 (#30212) ([f6e469a](https://github.com/bitnami/charts/commit/f6e469a3894493edc1276df342e339c1146f6c49)), closes [#30212](https://github.com/bitnami/charts/issues/30212)
+
 ## 7.0.0 (2024-10-22)
 
-* [bitnami/fluentd] Major release 7.x.x ([#30031](https://github.com/bitnami/charts/pull/30031))
+* [bitnami/fluentd] Major release 7.x.x (#30031) ([d1b9a1f](https://github.com/bitnami/charts/commit/d1b9a1f3e9eb822b16643667316db02d1eeb5308)), closes [#30031](https://github.com/bitnami/charts/issues/30031)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>6.5.13 (2024-09-26)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 14.3.4 (2024-10-23)
+## 14.3.7 (2024-11-08)
 
-* [bitnami/postgresql-ha] Fix pgpool default readinessProbe ([#30028](https://github.com/bitnami/charts/pull/30028))
+* [bitnami/postgresql-ha] Unify seLinuxOptions default value ([#30335](https://github.com/bitnami/charts/pull/30335))
+
+## <small>14.3.6 (2024-11-05)</small>
+
+* [bitnami/postgresql-ha] Fix pgpool deployment init container security context (#29857) ([90f4502](https://github.com/bitnami/charts/commit/90f4502f53cecbd2622612b1271af7d8b3e57e07)), closes [#29857](https://github.com/bitnami/charts/issues/29857)
+
+## <small>14.3.5 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/postgresql-ha] Cloning huge data from primary node fails due to livenessProbe (#29948) ([16bd148](https://github.com/bitnami/charts/commit/16bd1481b05a3a48f4637ea946faf75d3d5686bb)), closes [#29948](https://github.com/bitnami/charts/issues/29948)
+
+## <small>14.3.4 (2024-10-23)</small>
+
+* [bitnami/postgresql-ha] Fix pgpool default readinessProbe (#30028) ([49ad0af](https://github.com/bitnami/charts/commit/49ad0af9b7975aaa956f694455931a14ed7f20c8)), closes [#30028](https://github.com/bitnami/charts/issues/30028)
 
 ## <small>14.3.3 (2024-10-22)</small>
 

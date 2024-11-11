@@ -84,7 +84,6 @@ image:
   tag: 8.15.3-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -707,6 +706,7 @@ pdb:
 configuration:
   server:
     basePath: ""
+    host: "0.0.0.0"
     publicBaseUrl: ""
     rewriteBasePath: false
 ## Prometheus metrics (requires the kibana-prometheus-exporter plugin)

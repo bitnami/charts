@@ -1,8 +1,17 @@
 # Changelog
 
+## 22.0.2 (2024-11-08)
+
+* [bitnami/wildfly] Unify seLinuxOptions default value ([#30319](https://github.com/bitnami/charts/pull/30319))
+
+## <small>22.0.1 (2024-10-26)</small>
+
+* [bitnami/wildfly] Release 22.0.1 (#30093) ([80d2f2f](https://github.com/bitnami/charts/commit/80d2f2f0d47ed1f0a0eeaef393f3b2ac56866ace)), closes [#30093](https://github.com/bitnami/charts/issues/30093)
+
 ## 22.0.0 (2024-10-24)
 
-* [bitnami/wildfly] Release 22.0.0 ([#30071](https://github.com/bitnami/charts/pull/30071))
+* [bitnami/wildfly] Release 22.0.0 (#30071) ([e8c8adb](https://github.com/bitnami/charts/commit/e8c8adb0f5a3dc42e60fab1562cac3142bfc1a52)), closes [#30071](https://github.com/bitnami/charts/issues/30071)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>21.0.6 (2024-10-10)</small>
 

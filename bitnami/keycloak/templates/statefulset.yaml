@@ -107,6 +107,7 @@ spec:
               # directories writable, so we need to copy it to an empty dir volume
               cp -r --preserve=mode /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
               cp -r --preserve=mode /opt/bitnami/keycloak/data /emptydir/app-data-dir
+              cp -r --preserve=mode /opt/bitnami/keycloak/providers /emptydir/app-providers-dir
               info "Copy operation completed"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
@@ -249,6 +250,11 @@ spec:
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
             {{- end }}
+            {{- if and (.Values.metrics.enabled) (not (eq (.Values.containerPorts.http | int) (.Values.containerPorts.metrics | int) )) }}
+            - name: metrics
+              containerPort: {{ .Values.containerPorts.metrics }}
+              protocol: TCP
+            {{- end}}
             {{- /* Constant in code: https://github.com/keycloak/keycloak/blob/ce8e925c1ad9bf7a3180d1496e181aeea0ab5f8a/operator/src/main/java/org/keycloak/operator/Constants.java#L60 */}}
             - name: discovery
               containerPort: 7800
@@ -296,6 +302,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/keycloak/data
               subPath: app-data-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/providers
+              subPath: app-providers-dir
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: keycloak-config
               mountPath: /bitnami/keycloak/conf/keycloak.conf

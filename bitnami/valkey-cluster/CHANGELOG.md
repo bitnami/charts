@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.0.1 (2024-11-08)
+
+* [bitnami/valkey-cluster] Unify seLinuxOptions default value ([#30322](https://github.com/bitnami/charts/pull/30322))
+
 ## 2.0.0 (2024-10-23)
 
-* [bitnami/valkey-cluster] Update all the references from  to master/slave to primary/replica ([#30025](https://github.com/bitnami/charts/pull/30025))
+* [bitnami/valkey-cluster] Update all the references from  to master/slave to primary/replica (#30025) ([e273ef7](https://github.com/bitnami/charts/commit/e273ef7b416321d485e586b9f69ddf12f5964fcb)), closes [#30025](https://github.com/bitnami/charts/issues/30025)
 
 ## <small>1.0.3 (2024-10-22)</small>
 

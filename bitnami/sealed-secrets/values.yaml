@@ -69,10 +69,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/sealed-secrets-controller
-  tag: 0.27.1-debian-12-r5
+  tag: 0.27.2-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -244,7 +243,7 @@ containerSecurityContext:
     drop: ["ALL"]
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   seccompProfile:
