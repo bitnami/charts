@@ -16,7 +16,7 @@ metadata:
 data:
   webserver_config.py: |-
   {{- if .Values.web.configuration }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.web.configuration "context" .) }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.web.configuration "context" .) | indent 4 }}
   {{- else }}
     """Configuration for the Airflow webserver"""
 
