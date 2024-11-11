@@ -3,41 +3,32 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
-apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
-kind: StatefulSet
+{{- $kube := (contains "KubernetesExecutor" .Values.executor) -}}
+{{- if $kube }}
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: {{ template "airflow.worker.fullname" . }}
+  name: {{ printf "%s-pod-template" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: worker
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
-spec:
-  {{- if .Values.worker.podManagementPolicy }}
-  podManagementPolicy: {{ .Values.worker.podManagementPolicy | quote }}
-  {{- end }}
-  {{- if not (coalesce .Values.worker.autoscaling.hpa.enabled .Values.worker.autoscaling.enabled) }}
-  replicas: {{ .Values.worker.replicaCount }}
-  {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
-  selector:
-    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: worker
-  serviceName: {{ printf "%s-hl" (include "airflow.worker.fullname" .) | trunc 63 | trimSuffix "-" }}
-  {{- if .Values.worker.updateStrategy }}
-  updateStrategy: {{- toYaml .Values.worker.updateStrategy | nindent 4 }}
-  {{- end }}
-  template:
+data:
+  pod_template.yaml: |-
+  {{- if .Values.worker.podTemplate }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.worker.podTemplate "context" $) | nindent 4 }}
+  {{- else }}
+    apiVersion: v1
+    kind: Pod
     metadata:
-      annotations:
-        checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
-        {{- if .Values.worker.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
-      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+      name: k8s-executor-pod
+      {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: worker
+      {{- if .Values.worker.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.worker.automountServiceAccountToken }}
@@ -48,15 +39,12 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAffinityPreset "component" "worker" "customLabels" $podLabels "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAntiAffinityPreset "component" "worker" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAffinityPreset "component" "worker" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAntiAffinityPreset "component" "worker" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.worker.nodeAffinityPreset.type "key" .Values.worker.nodeAffinityPreset.key "values" .Values.worker.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.worker.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.worker.terminationGracePeriodSeconds }}
-      terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.worker.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}
@@ -67,6 +55,7 @@ spec:
       {{- if .Values.worker.priorityClassName }}
       priorityClassName: {{ .Values.worker.priorityClassName | quote }}
       {{- end }}
+      restartPolicy: Never
       {{- if .Values.worker.schedulerName }}
       schedulerName: {{ .Values.worker.schedulerName }}
       {{- end }}
@@ -76,14 +65,12 @@ spec:
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
-        {{- include "airflow.defaultInitContainers.prepareWebConfig" . | nindent 8 }}
         {{- if .Values.dags.enabled }}
         {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
         {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
         {{- end }}
-        {{- include "airflow.defaultInitContainers.waitForDBMigrations" . | nindent 8 }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
@@ -93,7 +80,7 @@ spec:
       containers:
         - name: airflow-worker
           image: {{ include "airflow.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -111,6 +98,8 @@ spec:
             {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
             - name: AIRFLOW_COMPONENT_TYPE
               value: "worker"
+            - name: AIRFLOW__CORE__EXECUTOR
+              value: LocalExecutor
             - name: AIRFLOW_EXECUTOR
               value: {{ include "airflow.worker.executor" . }}
             {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
@@ -159,6 +148,11 @@ spec:
           ports:
             - name: worker
               containerPort: {{ .Values.worker.containerPorts.http }}
+          {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- else if ne .Values.worker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.worker.resourcesPreset) | nindent 12 }}
+          {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.worker.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customStartupProbe "context" $) | nindent 12 }}
@@ -171,13 +165,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.worker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - sh
-                - -c
-                - |
-                  . /opt/bitnami/airflow/venv/bin/activate && \
-                  CONNECTION_CHECK_MAX_COUNT=0 python -m celery --app airflow.providers.celery.executors.celery_executor.app inspect ping -d celery@$(hostname)
+            tcpSocket:
+              port: worker
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | nindent 12 }}
@@ -186,14 +175,6 @@ spec:
             tcpSocket:
               port: worker
           {{- end }}
-          {{- end }}
-          {{- if .Values.worker.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.worker.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.worker.resources }}
-          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
-          {{- else if ne .Values.worker.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.worker.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
@@ -214,9 +195,6 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: app-base-dir/airflow.cfg
-            - name: empty-dir
-              mountPath: /opt/bitnami/airflow/webserver_config.py
-              subPath: app-base-dir/webserver_config.py
             {{- if .Values.dags.enabled }}
             {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
             {{- end }}
@@ -247,9 +225,6 @@ spec:
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
-        - name: webserver-configuration
-          configMap:
-            name: {{ include "airflow.web.configMapName" . }}
         {{- if .Values.dags.enabled }}
         {{- include "airflow.dags.volumes" . | nindent 8 }}
         {{- end }}
@@ -262,7 +237,5 @@ spec:
         {{- if .Values.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if .Values.worker.extraVolumeClaimTemplates }}
-  volumeClaimTemplates: {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeClaimTemplates "context" $) | nindent 8 }}
   {{- end }}
 {{- end }}
