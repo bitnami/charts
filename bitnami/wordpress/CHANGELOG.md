@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.1.29 (2024-11-10)
+## 23.1.30 (2024-11-11)
 
-* [bitnami/wordpress] Release 23.1.29 ([#30310](https://github.com/bitnami/charts/pull/30310))
+* [bitnami/wordpress] Bump version due to errors in the release process ([#30399](https://github.com/bitnami/charts/pull/30399))
+
+## <small>23.1.29 (2024-11-11)</small>
+
+* [bitnami/wordpress] Release 23.1.29 (#30310) ([bab05f7](https://github.com/bitnami/charts/commit/bab05f726f165eb2c21946b15747c8ff6f35d446)), closes [#30310](https://github.com/bitnami/charts/issues/30310)
 
 ## <small>23.1.28 (2024-11-06)</small>
 
