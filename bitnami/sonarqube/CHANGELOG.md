@@ -1,8 +1,18 @@
 # Changelog
 
-## 6.0.0 (2024-10-02)
+## 6.0.2 (2024-11-09)
 
-* [bitnami/sonarqube] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29745](https://github.com/bitnami/charts/pull/29745))
+* [bitnami/sonarqube] Release 6.0.2 ([#30375](https://github.com/bitnami/charts/pull/30375))
+
+## <small>6.0.1 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/sonarqube] Unify seLinuxOptions default value (#30325) ([7dee7da](https://github.com/bitnami/charts/commit/7dee7dab2ed0e923d60cf0e90cf57b922769f4de)), closes [#30325](https://github.com/bitnami/charts/issues/30325)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 6.0.0 (2024-10-03)
+
+* [bitnami/sonarqube] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29745) ([e60b387](https://github.com/bitnami/charts/commit/e60b3875153fc37fee4c794e1316886968ce045f)), closes [#29745](https://github.com/bitnami/charts/issues/29745)
 
 ## <small>5.2.15 (2024-10-02)</small>
 

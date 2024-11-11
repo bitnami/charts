@@ -81,7 +81,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 5.99.0-debian-12-r0
+  tag: 5.100.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -676,7 +676,7 @@ volumePermissions:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   securityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
 ## @section Database Parameters
 

@@ -83,7 +83,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 2.10.3-debian-12-r0
+  tag: 2.10.3-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -196,23 +196,23 @@ plugins:
 ## Default init Containers
 ##
 defaultInitContainers:
-  ## Airflow "create-default-config" init container
-  ## Used to copy the default configuration files so they are writable
+  ## Airflow "prepare-config" init container
+  ## Used to prepare the Airflow configuration files for main containers to use them
   ##
-  createDefaultConfig:
-    ## Configure "create-default-config" init-container Security Context
+  prepareConfig:
+    ## Configure "prepare-config" init-container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.enabled Enabled "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "create-default-config" init-containers
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.runAsUser Set runAsUser in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.runAsGroup Set runAsUser in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.privileged Set privileged in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.capabilities.add List of capabilities to be added in "create-default-config" init-containers
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "create-default-config" init-containers
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.seccompProfile.type Set seccomp profile in "create-default-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.enabled Enabled "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "prepare-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.runAsUser Set runAsUser in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.runAsGroup Set runAsUser in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.privileged Set privileged in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.capabilities.add List of capabilities to be added in "prepare-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "prepare-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.seccompProfile.type Set seccomp profile in "prepare-config" init-containers
     ##
     containerSecurityContext:
       enabled: true
@@ -228,13 +228,62 @@ defaultInitContainers:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-    ## Airflow "create-default-config" init container resource requests and limits
+    ## Airflow "prepare-config" init container resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param defaultInitContainers.createDefaultConfig.resourcesPreset Set Airflow "create-default-config" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.createDefaultConfig.resources is set (defaultInitContainers.createDefaultConfig.resources is recommended for production).
+    ## @param defaultInitContainers.prepareConfig.resourcesPreset Set Airflow "prepare-config" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.prepareConfig.resources is set (defaultInitContainers.prepareConfig.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
-    ## @param defaultInitContainers.createDefaultConfig.resources Set Airflow "create-default-config" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param defaultInitContainers.prepareConfig.resources Set Airflow "prepare-config" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## E.g:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+  ## Airflow "wait-for-db-migrations" init container
+  ## Used to wait for db migrations to be ready
+  ##
+  waitForDBMigrations:
+    ## Configure "wait-for-db-migrations" init-container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.enabled Enabled "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "wait-for-db-migrations" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.runAsUser Set runAsUser in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.runAsGroup Set runAsUser in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.privileged Set privileged in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.capabilities.add List of capabilities to be added in "wait-for-db-migrations" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "wait-for-db-migrations" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.seccompProfile.type Set seccomp profile in "wait-for-db-migrations" init-containers
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        add: []
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## Airflow "wait-for-db-migrations" init container resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.waitForDBMigrations.resourcesPreset Set Airflow "wait-for-db-migrations" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.waitForDBMigrations.resources is set (defaultInitContainers.waitForDBMigrations.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param defaultInitContainers.waitForDBMigrations.resources Set Airflow "wait-for-db-migrations" init container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## E.g:
     ## resources:
     ##   requests:
@@ -419,6 +468,9 @@ web:
   ## @param web.baseUrl URL used to access to Airflow web ui
   ##
   baseUrl: ""
+  ## @param web.configuration Specify content for webserver_config.py (auto-generated based on other env. vars otherwise)
+  ##
+  configuration: ""
   ## @param web.existingConfigmap Name of an existing config map containing the Airflow web config file
   ##
   existingConfigmap: ""
@@ -2516,7 +2568,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-12-r50
+    tag: 0.20220314.0-debian-12-r51
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

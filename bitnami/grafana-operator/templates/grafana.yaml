@@ -80,6 +80,9 @@ spec:
         metadata:
           labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: grafana
+          {{- if .Values.grafana.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.podAnnotations "context" $ ) | nindent 12 }}
+          {{- end }}
         spec:
           {{- include "common.images.pullSecrets" (dict "images" (list .Values.grafana.image) "global" .Values.global) | nindent 10 }}
           {{- if .Values.grafana.affinity }}

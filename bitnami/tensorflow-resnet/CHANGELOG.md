@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.14 (2024-11-01)
+## 4.2.15 (2024-11-08)
 
-* [bitnami/tensorflow-resnet] Release 4.2.14 ([#30170](https://github.com/bitnami/charts/pull/30170))
+* [bitnami/tensorflow-resnet] Unify seLinuxOptions default value ([#30321](https://github.com/bitnami/charts/pull/30321))
+
+## <small>4.2.14 (2024-11-01)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.14 (#30170) ([778d287](https://github.com/bitnami/charts/commit/778d2876bed3ce6b9ced8ae4e6666df2f45efa5f)), closes [#30170](https://github.com/bitnami/charts/issues/30170)
 
 ## <small>4.2.13 (2024-10-31)</small>
 

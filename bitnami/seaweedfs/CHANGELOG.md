@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.0.7 (2024-11-07)
+## 3.2.0 (2024-11-08)
 
-* [bitnami/seaweedfs] Release 3.0.7 ([#30292](https://github.com/bitnami/charts/pull/30292))
+* [bitnami/seaweedfs] Support configuring volume size limit on Master ([#30315](https://github.com/bitnami/charts/pull/30315))
+
+## 3.1.0 (2024-11-07)
+
+* [bitnami/seaweedfs] Support configuring max number of volumes per disk (#30294) ([c87c282](https://github.com/bitnami/charts/commit/c87c2825e8c1c4e4f1f6ee0ae678f999f76890e1)), closes [#30294](https://github.com/bitnami/charts/issues/30294)
+
+## <small>3.0.7 (2024-11-07)</small>
+
+* [bitnami/seaweedfs] Release 3.0.7 (#30292) ([cc3cbf6](https://github.com/bitnami/charts/commit/cc3cbf69cc6523de1b28de138cbe38afda75a00f)), closes [#30292](https://github.com/bitnami/charts/issues/30292)
 
 ## <small>3.0.6 (2024-11-06)</small>
 

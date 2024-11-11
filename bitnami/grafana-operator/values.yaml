@@ -543,6 +543,10 @@ grafana:
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
+  ## @param grafana.podAnnotations Additional pod annotations to pods in the grafana deployment
+  ## Ref https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param grafana.podSecurityContext.enabled Enable pods security context

@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.3.6 (2024-11-05)
+## 14.3.7 (2024-11-08)
 
-* [bitnami/postgresql-ha] Fix pgpool deployment init container security context ([#29857](https://github.com/bitnami/charts/pull/29857))
+* [bitnami/postgresql-ha] Unify seLinuxOptions default value ([#30335](https://github.com/bitnami/charts/pull/30335))
+
+## <small>14.3.6 (2024-11-05)</small>
+
+* [bitnami/postgresql-ha] Fix pgpool deployment init container security context (#29857) ([90f4502](https://github.com/bitnami/charts/commit/90f4502f53cecbd2622612b1271af7d8b3e57e07)), closes [#29857](https://github.com/bitnami/charts/issues/29857)
 
 ## <small>14.3.5 (2024-10-29)</small>
 

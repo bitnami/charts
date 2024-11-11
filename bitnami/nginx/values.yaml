@@ -295,7 +295,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true
@@ -986,7 +986,7 @@ metrics:
   ##
   securityContext:
     enabled: false
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
   ## Prometheus exporter service parameters
   ##

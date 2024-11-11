@@ -1,8 +1,13 @@
 # Changelog
 
-## 17.0.8 (2024-10-29)
+## 17.0.9 (2024-11-08)
 
-* [bitnami/phpmyadmin] Release 17.0.8 ([#30121](https://github.com/bitnami/charts/pull/30121))
+* [bitnami/phpmyadmin] Unify seLinuxOptions default value ([#30333](https://github.com/bitnami/charts/pull/30333))
+
+## <small>17.0.8 (2024-10-29)</small>
+
+* [bitnami/phpmyadmin] Release 17.0.8 (#30121) ([b558073](https://github.com/bitnami/charts/commit/b558073849edc86755907155ab62765eb7102923)), closes [#30121](https://github.com/bitnami/charts/issues/30121)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>17.0.7 (2024-09-19)</small>
 

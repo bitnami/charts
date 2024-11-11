@@ -2,7 +2,7 @@
 
 ## 10.0.2 (2024-11-11)
 
-* [bitnami/kube-prometheus] Release 10.0.2 ([#30295](https://github.com/bitnami/charts/pull/30295))
+* [bitnami/kube-prometheus] Add dummy values.yaml to CRDs subchart ([#30397](https://github.com/bitnami/charts/pull/30397))
 
 ## <small>10.0.1 (2024-11-07)</small>
 

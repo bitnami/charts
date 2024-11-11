@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 5.1.4-debian-12-r0
+  tag: 5.1.4-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -635,7 +635,7 @@ volumePermissions:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
 ## @section RBAC Parameters
 
@@ -867,7 +867,7 @@ mailReceiver:
   ##
   containerSecurityContext:
     enabled: false
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
   ## @param mailReceiver.podAnnotations Additional pod annotations
@@ -995,7 +995,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r32
+    tag: 12-debian-12-r33
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

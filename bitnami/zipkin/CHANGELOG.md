@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.2 (2024-10-08)
+## 1.0.3 (2024-11-08)
 
-* [bitnami/zipkin] Release 1.0.2 ([#29822](https://github.com/bitnami/charts/pull/29822))
+* [bitnami/zipkin] Unify seLinuxOptions default value ([#30320](https://github.com/bitnami/charts/pull/30320))
+
+## <small>1.0.2 (2024-10-08)</small>
+
+* [bitnami/zipkin] Release 1.0.2 (#29822) ([dc16f02](https://github.com/bitnami/charts/commit/dc16f02ab729be3882ecb498f69a73c708afcca3)), closes [#29822](https://github.com/bitnami/charts/issues/29822)
 
 ## <small>1.0.1 (2024-10-01)</small>
 
