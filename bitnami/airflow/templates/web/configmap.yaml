@@ -32,8 +32,6 @@ data:
     AUTH_LDAP_SEARCH = {{ .Values.ldap.basedn }}
     AUTH_LDAP_UID_FIELD = {{ .Values.ldap.searchAttribute }}
     AUTH_LDAP_BIND_USER = {{ .Values.ldap.binddn | squote }}
-    # TODO: FIX THIS
-    AUTH_LDAP_BIND_PASSWORD = {{ .Values.ldap.bindpw | squote }} 
     AUTH_USER_REGISTRATION = {{ .Values.ldap.userRegistration }}
     AUTH_USER_REGISTRATION_ROLE = {{ .Values.ldap.userRegistrationRole | squote }}
     AUTH_ROLES_MAPPING = {{ .Values.ldap.rolesMapping }}

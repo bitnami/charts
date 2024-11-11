@@ -76,6 +76,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareWebConfig" . | nindent 8 }}
         {{- if .Values.dags.enabled }}
         {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
         {{- end }}
@@ -213,6 +214,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/webserver_config.py
+              subPath: app-base-dir/webserver_config.py
             {{- if .Values.dags.enabled }}
             {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
             {{- end }}
@@ -243,6 +247,9 @@ spec:
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
+        - name: webserver-configuration
+          configMap:
+            name: {{ include "airflow.web.configMapName" . }}
         {{- if .Values.dags.enabled }}
         {{- include "airflow.dags.volumes" . | nindent 8 }}
         {{- end }}
