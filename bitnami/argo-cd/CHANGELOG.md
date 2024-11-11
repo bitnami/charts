@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.22 (2024-11-07)
+## 7.0.23 (2024-11-11)
 
-* [bitnami/argo-cd] Release 7.0.22 ([#30253](https://github.com/bitnami/charts/pull/30253))
+* [bitnami/argo-cd] Fix repo-server PDB label selector ([#30391](https://github.com/bitnami/charts/pull/30391))
+
+## <small>7.0.22 (2024-11-07)</small>
+
+* [bitnami/argo-cd] Release 7.0.22 (#30253) ([981c935](https://github.com/bitnami/charts/commit/981c9350763c152831eaa8dc310b3abd585fd705)), closes [#30253](https://github.com/bitnami/charts/issues/30253)
 
 ## <small>7.0.21 (2024-11-04)</small>
 
