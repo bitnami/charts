@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.6.0 (2024-11-08)
+## 21.6.0 (2024-11-11)
 
 * [bitnami/airflow] Consistency on Airflow configuration & init improvements ([#30349](https://github.com/bitnami/charts/pull/30349))
 
