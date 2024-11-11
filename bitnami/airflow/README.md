@@ -243,9 +243,9 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### HTTPS for Webserver
+### HTTPS for Web server
 
-By default, this chart assumes TLS is managed by the Ingress Controller and terminates the TLS connection in the Ingress Controller. This can be done by setting `ingress.enabled` and `ingress.tls` parameters to `true` as explained in the section above. However, it is possible to configure TLS encryption for the Airflow Webserver directly by setting the `web.tls.enabled` parameter to `true`.
+By default, this chart assumes TLS is managed by the Ingress Controller and terminates the TLS connection in the Ingress Controller. This can be done by setting `ingress.enabled` and `ingress.tls` parameters to `true` as explained in the section above. However, it is possible to configure TLS encryption for the Airflow Web server directly by setting the `web.tls.enabled` parameter to `true`.
 
 It is necessary to create a secret containing the TLS certificates and pass it to the chart via the `web.tls.existingSecret` parameter. The secret should contain a `tls.crt` and `tls.key` keys including the certificate and key files respectively. For example:
 
