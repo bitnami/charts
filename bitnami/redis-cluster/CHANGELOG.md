@@ -1,8 +1,14 @@
 # Changelog
 
-## 11.0.7 (2024-11-08)
+## 11.0.8 (2024-11-11)
 
-* [bitnami/redis-cluster] Unify seLinuxOptions default value ([#30328](https://github.com/bitnami/charts/pull/30328))
+* [bitnami/redis-cluster] Release 11.0.8 ([#30406](https://github.com/bitnami/charts/pull/30406))
+
+## <small>11.0.7 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/redis-cluster] Unify seLinuxOptions default value (#30328) ([0743b55](https://github.com/bitnami/charts/commit/0743b55625dd5ccc2dc78de04c6536254ac40239)), closes [#30328](https://github.com/bitnami/charts/issues/30328)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>11.0.6 (2024-10-02)</small>
 
