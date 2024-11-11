@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.7 (2024-11-08)
+## 1.2.7 (2024-11-11)
 
 * [bitnami/cilium] Fix typos with clusterName and certificates ([#30316](https://github.com/bitnami/charts/pull/30316))
 
