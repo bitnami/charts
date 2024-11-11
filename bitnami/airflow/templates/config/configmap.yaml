@@ -35,6 +35,10 @@ data:
     base_url={{ include "airflow.baseUrl" . }}
     enable_proxy_fix={{ ternary "True" "False" (and .Values.ingress.enabled .Values.ingress.tls) }}
     web_server_port={{ .Values.web.containerPorts.http}}
+  {{- if .Values.web.tls.enabled }}
+    web_server_ssl_cert="/opt/bitnami/airflow/certs/tls.crt"
+    web_server_ssl_key="/opt/bitnami/airflow/certs/tls.key"
+  {{- end }}
 
   {{- if contains "KubernetesExecutor" .Values.executor }}
     [kubernetes_executor]
