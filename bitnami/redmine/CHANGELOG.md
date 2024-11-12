@@ -1,6 +1,6 @@
 # Changelog
 
-## 31.0.0 (2024-11-08)
+## 31.0.0 (2024-11-12)
 
 * [bitnami/redmine] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30357](https://github.com/bitnami/charts/pull/30357))
 
