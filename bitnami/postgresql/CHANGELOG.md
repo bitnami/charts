@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.1.3 (2024-11-11)
+## 16.1.3 (2024-11-12)
 
 * [bitnami/postgresql] Make seLinuxOptions null to remove validation issue with openshift for postgresql volume permissions init container ([#30029](https://github.com/bitnami/charts/pull/30029))
 
