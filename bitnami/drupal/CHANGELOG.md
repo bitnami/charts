@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.0.0 (2024-11-08)
+## 21.0.0 (2024-11-12)
 
 * [bitnami/drupal] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30352](https://github.com/bitnami/charts/pull/30352))
 
