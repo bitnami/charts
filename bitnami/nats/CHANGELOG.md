@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.4.8 (2024-11-08)
+## 8.4.9 (2024-11-11)
 
-* [bitnami/nats] Unify seLinuxOptions default value ([#30340](https://github.com/bitnami/charts/pull/30340))
+* [bitnami/nats] Expose `publishNotReadyAddresses` on headless service ([#30393](https://github.com/bitnami/charts/pull/30393))
+
+## <small>8.4.8 (2024-11-08)</small>
+
+* [bitnami/nats] Unify seLinuxOptions default value (#30340) ([697dc7b](https://github.com/bitnami/charts/commit/697dc7bf0d5d8f8059fb1c32207fb81e712ab6a9)), closes [#30340](https://github.com/bitnami/charts/issues/30340)
 
 ## <small>8.4.7 (2024-11-07)</small>
 
