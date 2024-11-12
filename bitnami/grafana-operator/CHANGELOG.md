@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.7.5 (2024-11-04)
+## 4.8.0 (2024-11-07)
 
-* [bitnami/grafana-operator] Release 4.7.5 ([#30195](https://github.com/bitnami/charts/pull/30195))
+* [bitnami/grafana-operator]: Add podAnnotations for Grafana pod ([#30240](https://github.com/bitnami/charts/pull/30240))
+
+## <small>4.7.6 (2024-11-07)</small>
+
+* [bitnami/grafana-operator] Release 4.7.6 (#30268) ([b218999](https://github.com/bitnami/charts/commit/b218999326e7d74d2014fab6f35adb656baf83f7)), closes [#30268](https://github.com/bitnami/charts/issues/30268)
+
+## <small>4.7.5 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-operator] Release 4.7.5 (#30195) ([ff0cafd](https://github.com/bitnami/charts/commit/ff0cafd4ac7651aea8bbf9b08e690a1d58482788)), closes [#30195](https://github.com/bitnami/charts/issues/30195)
 
 ## <small>4.7.4 (2024-10-18)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 8.4.6 (2024-11-05)
+## 8.4.9 (2024-11-11)
 
-* [bitnami/nats] Expose `podManagementPolicy` in NATS Statefulset ([#30218](https://github.com/bitnami/charts/pull/30218))
+* [bitnami/nats] Expose `publishNotReadyAddresses` on headless service ([#30393](https://github.com/bitnami/charts/pull/30393))
+
+## <small>8.4.8 (2024-11-08)</small>
+
+* [bitnami/nats] Unify seLinuxOptions default value (#30340) ([697dc7b](https://github.com/bitnami/charts/commit/697dc7bf0d5d8f8059fb1c32207fb81e712ab6a9)), closes [#30340](https://github.com/bitnami/charts/issues/30340)
+
+## <small>8.4.7 (2024-11-07)</small>
+
+* [bitnami/nats] Release 8.4.7 (#30285) ([3fcd2f9](https://github.com/bitnami/charts/commit/3fcd2f99944900b3bfd06f759a406c3192d9778f)), closes [#30285](https://github.com/bitnami/charts/issues/30285)
+
+## <small>8.4.6 (2024-11-06)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/nats] Expose `podManagementPolicy` in Statefulset (#30218) ([829a6f7](https://github.com/bitnami/charts/commit/829a6f75a5f7cb3fcf972abba387296a8683e221)), closes [#30218](https://github.com/bitnami/charts/issues/30218)
 
 ## <small>8.4.5 (2024-10-17)</small>
 

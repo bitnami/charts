@@ -1,8 +1,17 @@
 # Changelog
 
-## 32.0.2 (2024-10-29)
+## 34.0.0 (2024-11-12)
 
-* [bitnami/spring-cloud-dataflow] Release 32.0.2 ([#30122](https://github.com/bitnami/charts/pull/30122))
+* [bitnami/spring-cloud-dataflow] Update kafka subchart to 31.0.0 ([#30426](https://github.com/bitnami/charts/pull/30426))
+
+## 33.0.0 (2024-11-12)
+
+* [bitnami/spring-cloud-dataflow] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30359) ([1369cbf](https://github.com/bitnami/charts/commit/1369cbfd07e26350d2b4fa91eeeb7c908fd49cca)), closes [#30359](https://github.com/bitnami/charts/issues/30359)
+
+## <small>32.0.2 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/spring-cloud-dataflow] Release 32.0.2 (#30122) ([6349db0](https://github.com/bitnami/charts/commit/6349db02cff375314e0278cc3618b33ffb4eafd1)), closes [#30122](https://github.com/bitnami/charts/issues/30122)
 
 ## <small>32.0.1 (2024-10-22)</small>
 

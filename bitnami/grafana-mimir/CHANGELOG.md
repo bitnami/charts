@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.2.20 (2024-11-01)
+## 1.2.21 (2024-11-07)
 
-* [bitnami/grafana-mimir] Release 1.2.20 ([#30174](https://github.com/bitnami/charts/pull/30174))
+* [bitnami/grafana-mimir] Release 1.2.21 ([#30266](https://github.com/bitnami/charts/pull/30266))
+
+## <small>1.2.20 (2024-11-01)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-mimir] Release 1.2.20 (#30174) ([393e256](https://github.com/bitnami/charts/commit/393e256348e094d46c2efd1e3bbe85feb98dfc1d)), closes [#30174](https://github.com/bitnami/charts/issues/30174)
 
 ## <small>1.2.19 (2024-10-21)</small>
 

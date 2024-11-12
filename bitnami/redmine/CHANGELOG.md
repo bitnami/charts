@@ -1,8 +1,20 @@
 # Changelog
 
-## 30.0.2 (2024-11-04)
+## 31.0.0 (2024-11-12)
 
-* [bitnami/redmine] Release 30.0.2 ([#30183](https://github.com/bitnami/charts/pull/30183))
+* [bitnami/redmine] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30357](https://github.com/bitnami/charts/pull/30357))
+
+## <small>30.0.4 (2024-11-10)</small>
+
+* [bitnami/redmine] Release 30.0.4 (#30384) ([0571e4a](https://github.com/bitnami/charts/commit/0571e4ad81a91503e6783435ed473c711942418c)), closes [#30384](https://github.com/bitnami/charts/issues/30384)
+
+## <small>30.0.3 (2024-11-08)</small>
+
+* [bitnami/redmine] Unify seLinuxOptions default value (#30329) ([e6ad759](https://github.com/bitnami/charts/commit/e6ad7591f8c63f6da36a4ed5a5090ce88a1c7786)), closes [#30329](https://github.com/bitnami/charts/issues/30329)
+
+## <small>30.0.2 (2024-11-04)</small>
+
+* [bitnami/redmine] Release 30.0.2 (#30183) ([f5b7139](https://github.com/bitnami/charts/commit/f5b7139c7809e68c5e2ada3eb8f36d3ea02d69da)), closes [#30183](https://github.com/bitnami/charts/issues/30183)
 
 ## <small>30.0.1 (2024-10-29)</small>
 

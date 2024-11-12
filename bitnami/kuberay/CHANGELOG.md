@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.18 (2024-10-02)
+## 1.2.19 (2024-11-07)
 
-* [bitnami/kuberay] Release 1.2.18 ([#29703](https://github.com/bitnami/charts/pull/29703))
+* [bitnami/kuberay] Release 1.2.19 ([#30278](https://github.com/bitnami/charts/pull/30278))
+
+## <small>1.2.18 (2024-10-02)</small>
+
+* [bitnami/kuberay] Release 1.2.18 (#29703) ([b971616](https://github.com/bitnami/charts/commit/b971616dbd1cb98e5319f2370c4d16cb18a7aeb2)), closes [#29703](https://github.com/bitnami/charts/issues/29703)
 
 ## <small>1.2.17 (2024-09-29)</small>
 

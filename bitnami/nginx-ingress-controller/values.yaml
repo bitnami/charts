@@ -65,7 +65,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.11.3-debian-12-r3
+  tag: 1.11.3-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -287,7 +287,7 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   allowPrivilegeEscalation: false
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   readOnlyRootFilesystem: true
@@ -595,7 +595,7 @@ defaultBackend:
   containerSecurityContext:
     enabled: true
     allowPrivilegeEscalation: false
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     readOnlyRootFilesystem: true

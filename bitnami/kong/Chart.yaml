@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kong
-      image: docker.io/bitnami/kong:3.8.0-debian-12-r8
+      image: docker.io/bitnami/kong:3.8.0-debian-12-r10
     - name: kong-ingress-controller
-      image: docker.io/bitnami/kong-ingress-controller:3.3.1-debian-12-r5
+      image: docker.io/bitnami/kong-ingress-controller:3.3.1-debian-12-r7
     - name: postgresql
-      image: docker.io/bitnami/postgresql:14.13.0-debian-12-r19
+      image: docker.io/bitnami/postgresql:14.13.0-debian-12-r21
 apiVersion: v2
 appVersion: 3.8.0
 dependencies:
@@ -45,4 +45,4 @@ maintainers:
 name: kong
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kong
-version: 14.0.3
+version: 14.0.5

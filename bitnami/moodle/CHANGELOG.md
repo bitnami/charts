@@ -1,8 +1,12 @@
 # Changelog
 
+## 25.0.0 (2024-11-12)
+
+* [bitnami/moodle] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30355](https://github.com/bitnami/charts/pull/30355))
+
 ## 24.0.0 (2024-10-08)
 
-* [bitnami/moodle] Release 24.0.0 ([#29813](https://github.com/bitnami/charts/pull/29813))
+* [bitnami/moodle] Release 24.0.0 (#29813) ([336d3e5](https://github.com/bitnami/charts/commit/336d3e548b56380fc01db55c94dca689e61d387a)), closes [#29813](https://github.com/bitnami/charts/issues/29813)
 
 ## <small>23.0.8 (2024-10-07)</small>
 

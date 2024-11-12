@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.14 (2024-10-07)
+## 3.2.15 (2024-11-07)
 
-* [bitnami/kubernetes-event-exporter] Add  to leader election RoleBinding ([#29804](https://github.com/bitnami/charts/pull/29804))
+* [bitnami/kubernetes-event-exporter] Release 3.2.15 ([#30279](https://github.com/bitnami/charts/pull/30279))
+
+## <small>3.2.14 (2024-10-08)</small>
+
+* [bitnami/kubernetes-event-exporter] Add  to leader election RoleBinding (#29804) ([cf29d5f](https://github.com/bitnami/charts/commit/cf29d5fdff96884c7c94ad19875745f7ad664679)), closes [#29804](https://github.com/bitnami/charts/issues/29804)
 
 ## <small>3.2.13 (2024-10-02)</small>
 

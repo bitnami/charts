@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.8.0 (2024-10-15)
+## 15.8.1 (2024-11-07)
 
-* [bitnami/thanos] Add compactor dataDir setting ([#29856](https://github.com/bitnami/charts/pull/29856))
+* [bitnami/thanos] Release 15.8.1 ([#30293](https://github.com/bitnami/charts/pull/30293))
+
+## 15.8.0 (2024-10-24)
+
+* [bitnami/thanos] Add compactor dataDir setting (#29856) ([e8c23ba](https://github.com/bitnami/charts/commit/e8c23ba5762e188c23986a41c6910bda330c21bb)), closes [#29856](https://github.com/bitnami/charts/issues/29856)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>15.7.29 (2024-10-14)</small>
 

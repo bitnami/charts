@@ -1,8 +1,18 @@
 # Changelog
 
-## 2.1.8 (2024-10-16)
+## 2.1.10 (2024-11-07)
 
-* [bitnami/haproxy] Release 2.1.8 ([#29924](https://github.com/bitnami/charts/pull/29924))
+* [bitnami/haproxy] Release 2.1.10 ([#30308](https://github.com/bitnami/charts/pull/30308))
+
+## <small>2.1.9 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/haproxy] Release 2.1.9 (#30271) ([254fe9d](https://github.com/bitnami/charts/commit/254fe9d19425834baf2fc3f8200435f98c7f9dbb)), closes [#30271](https://github.com/bitnami/charts/issues/30271)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.1.8 (2024-10-16)</small>
+
+* [bitnami/haproxy] Release 2.1.8 (#29924) ([788bb4a](https://github.com/bitnami/charts/commit/788bb4a7ba51e14a1a08abac4300332b21688936)), closes [#29924](https://github.com/bitnami/charts/issues/29924)
 
 ## <small>2.1.7 (2024-10-02)</small>
 

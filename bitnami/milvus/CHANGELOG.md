@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.0.11 (2024-11-06)
+## 10.0.0 (2024-11-12)
 
-* [bitnami/milvus] Release 9.0.10 ([#30214](https://github.com/bitnami/charts/pull/30214))
+* [bitnami/milvus] Update kafka subchart to 31.0.0 ([#30428](https://github.com/bitnami/charts/pull/30428))
+
+## <small>9.0.12 (2024-11-07)</small>
+
+* [bitnami/milvus] Release 9.0.12 (#30282) ([f175ffc](https://github.com/bitnami/charts/commit/f175ffc8b28e02cc24dc6b60d447facd550a2cea)), closes [#30282](https://github.com/bitnami/charts/issues/30282)
+
+## <small>9.0.11 (2024-11-06)</small>
+
+* [bitnami/milvus] Release 9.0.10 (#30214) ([27f46e0](https://github.com/bitnami/charts/commit/27f46e0491ef08712909c825585a57fe5e39967c)), closes [#30214](https://github.com/bitnami/charts/issues/30214)
 
 ## <small>9.0.10 (2024-11-05)</small>
 
