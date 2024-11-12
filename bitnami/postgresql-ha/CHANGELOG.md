@@ -1,12 +1,12 @@
 # Changelog
 
-## 14.3.8 (2024-11-06)
+## 14.3.8 (2024-11-12)
 
-* [bitnami/postgresql-ha] Release 14.3.7 ([#30249](https://github.com/bitnami/charts/pull/30249))
+* [bitnami/postgresql-ha] Release 14.3.8 ([#30249](https://github.com/bitnami/charts/pull/30249))
 
-## 14.3.7 (2024-11-08)
+## <small>14.3.7 (2024-11-08)</small>
 
-* [bitnami/postgresql-ha] Unify seLinuxOptions default value ([#30335](https://github.com/bitnami/charts/pull/30335))
+* [bitnami/postgresql-ha] Unify seLinuxOptions default value (#30335) ([93d456d](https://github.com/bitnami/charts/commit/93d456d3100b0dee72f3b78c2ecfaf3c4a44e8e9)), closes [#30335](https://github.com/bitnami/charts/issues/30335)
 
 ## <small>14.3.6 (2024-11-05)</small>
 
