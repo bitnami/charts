@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.50 (2024-11-08)
+## 22.0.0 (2024-11-12)
 
-* [bitnami/ghost] Unify seLinuxOptions default value ([#30346](https://github.com/bitnami/charts/pull/30346))
+* [bitnami/ghost] chore!: :arrow_up: :boom: Bump MySQL subchart to 12 ([#30429](https://github.com/bitnami/charts/pull/30429))
+
+## <small>21.1.50 (2024-11-08)</small>
+
+* [bitnami/ghost] Unify seLinuxOptions default value (#30346) ([140b936](https://github.com/bitnami/charts/commit/140b936b9730d3d4c6a43e982a99f9b3075ade56)), closes [#30346](https://github.com/bitnami/charts/issues/30346)
 
 ## <small>21.1.49 (2024-11-08)</small>
 
