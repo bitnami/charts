@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.0.1 (2024-11-05)
+## 7.0.2 (2024-11-09)
 
-* [bitnami/fluentd] Release 7.0.1 ([#30212](https://github.com/bitnami/charts/pull/30212))
+* [bitnami/fluentd] Release 7.0.2 ([#30376](https://github.com/bitnami/charts/pull/30376))
+
+## <small>7.0.1 (2024-11-05)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/fluentd] Release 7.0.1 (#30212) ([f6e469a](https://github.com/bitnami/charts/commit/f6e469a3894493edc1276df342e339c1146f6c49)), closes [#30212](https://github.com/bitnami/charts/issues/30212)
 
 ## 7.0.0 (2024-10-22)
 

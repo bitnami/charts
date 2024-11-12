@@ -1,8 +1,14 @@
 # Changelog
 
-## 1.0.1 (2024-11-08)
+## 1.0.2 (2024-11-10)
 
-* [bitnami/nessie] Unify seLinuxOptions default value ([#30341](https://github.com/bitnami/charts/pull/30341))
+* [bitnami/nessie] Release 1.0.2 ([#30386](https://github.com/bitnami/charts/pull/30386))
+
+## <small>1.0.1 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/nessie] Unify seLinuxOptions default value (#30341) ([6461b44](https://github.com/bitnami/charts/commit/6461b44f25b3fd57cd50faea7532956474632127)), closes [#30341](https://github.com/bitnami/charts/issues/30341)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 1.0.0 (2024-10-03)
 

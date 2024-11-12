@@ -30,6 +30,7 @@ spec:
         app.kubernetes.io/component: web
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+        checksum/webserver-configmap: {{ include (print $.Template.BasePath "/web/configmap.yaml") . | sha256sum }}
         {{- if .Values.web.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -70,7 +71,8 @@ spec:
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- include "airflow.defaultInitContainers.createDefaultConfig" . | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareWebConfig" . | nindent 8 }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
         {{- end }}
@@ -99,15 +101,6 @@ spec:
           {{- end }}
           env:
             {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
-            {{- include "airflow.configure.database" . | nindent 12 }}
-            {{- include "airflow.configure.redis" . | nindent 12 }}
-            {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
-            - name: AIRFLOW_EXECUTOR
-              value: {{ .Values.executor }}
-            - name: AIRFLOW_WEBSERVER_HOST
-              value: '0.0.0.0'
-            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.web.containerPorts.http | quote }}
             - name: AIRFLOW_USERNAME
               value: {{ .Values.auth.username }}
             - name: AIRFLOW_PASSWORD
@@ -115,43 +108,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "airflow.secretName" . }}
                   key: airflow-password
-            {{- if include "airflow.baseUrl" . }}
-            - name: AIRFLOW_BASE_URL
-              value: {{ include "airflow.baseUrl" . | quote }}
-            {{- end }}
-            - name: AIRFLOW_LDAP_ENABLE
-              value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
-            {{- if .Values.ldap.enabled }}
-            - name: AIRFLOW_LDAP_URI
-              value: {{ .Values.ldap.uri | quote }}
-            - name: AIRFLOW_LDAP_SEARCH
-              value: {{ .Values.ldap.basedn | quote }}
-            - name: AIRFLOW_LDAP_UID_FIELD
-              value: {{ .Values.ldap.searchAttribute | quote }}
-            - name: AIRFLOW_LDAP_BIND_USER
-              value: {{ .Values.ldap.binddn | quote }}
-            - name: AIRFLOW_LDAP_BIND_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "airflow.ldap.secretName" . }}
-                  key: bind-password
-            - name: AIRFLOW_LDAP_USER_REGISTRATION
-              value: {{ .Values.ldap.userRegistration | quote }}
-            - name: AIRFLOW_LDAP_USER_REGISTRATION_ROLE
-              value: {{ .Values.ldap.userRegistrationRole | quote }}
-            - name: AIRFLOW_LDAP_ROLES_MAPPING
-              value: {{ .Values.ldap.rolesMapping | quote }}
-            - name: AIRFLOW_LDAP_ROLES_SYNC_AT_LOGIN
-              value: {{ .Values.ldap.rolesSyncAtLogin | quote }}
-            - name: AIRFLOW_LDAP_USE_TLS
-              value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
-            {{- if .Values.ldap.tls.enabled }}
-            - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
-              value: {{ ternary "True" "False" .Values.ldap.tls.allowSelfSigned | quote }}
-            - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
-              value: {{ printf "%s/%s" .Values.ldap.tls.certificatesMountPath .Values.ldap.tls.CAFilename | quote }}
-            {{- end }}
-            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -243,30 +199,18 @@ spec:
               mountPath: /opt/bitnami/airflow/logs
               subPath: app-logs-dir
             - name: empty-dir
-              mountPath: /opt/bitnami/airflow/airflow.db
-              subPath: app-default-conf-dir/airflow.db
-            - name: empty-dir
               mountPath: /opt/bitnami/airflow/tmp
               subPath: app-tmp-dir
-            {{- if or .Values.configuration .Values.existingConfigmap }}
-            - name: custom-configuration-file
-              mountPath: /opt/bitnami/airflow/airflow.cfg
-              subPath: airflow.cfg
-            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.db
+              subPath: app-base-dir/airflow.db
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
-              subPath: app-default-conf-dir/airflow.cfg
-            {{- end }}
-            {{- if .Values.web.existingConfigmap }}
-            - name: custom-webserver-configuration-file
-              mountPath: /opt/bitnami/airflow/webserver_config.py
-              subPath: webserver_config.py
-            {{- else }}
+              subPath: app-base-dir/airflow.cfg
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
-              subPath: app-default-conf-dir/webserver_config.py
-            {{- end }}
-            {{- if .Values.ldap.tls.enabled }}
+              subPath: app-base-dir/webserver_config.py
+            {{- if and .Values.ldap.enabled .Values.ldap.tls.enabled }}
             - name: airflow-ldap-ca-certificate
               mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
               readOnly: true
@@ -292,20 +236,16 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: configuration
+          configMap:
+            name: {{ include "airflow.configMapName"  . }}
+        - name: webserver-configuration
+          configMap:
+            name: {{ include "airflow.web.configMapName" . }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.plugins.volumes" . | nindent 8 }}
         {{- end }}
-        {{- if or .Values.configuration .Values.existingConfigmap }}
-        - name: custom-configuration-file
-          configMap:
-            name: {{ include "airflow.configMapName"  . }}
-        {{- end }}
-        {{- if .Values.web.existingConfigmap }}
-        - name: custom-webserver-configuration-file
-          configMap:
-            name: {{ tpl .Values.web.existingConfigmap $ }}
-        {{- end }}
-        {{- if .Values.ldap.tls.enabled }}
+        {{- if and .Values.ldap.enabled .Values.ldap.tls.enabled }}
         - name: airflow-ldap-ca-certificate
           secret:
             secretName: {{ required "A secret containing the LDAP CA certificate. It is required when SSL in enabled" .Values.ldap.tls.certificatesSecret }}

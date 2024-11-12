@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.0.0 (2024-10-02)
+## 8.0.1 (2024-11-09)
 
-* [bitnami/jupyterhub] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x ([#29734](https://github.com/bitnami/charts/pull/29734))
+* [bitnami/jupyterhub] Release 8.0.1 ([#30372](https://github.com/bitnami/charts/pull/30372))
+
+## 8.0.0 (2024-10-03)
+
+* [bitnami/jupyterhub] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29734) ([35c8281](https://github.com/bitnami/charts/commit/35c8281022485fa8e2c4debd1ccdf9ea07f2c76c)), closes [#29734](https://github.com/bitnami/charts/issues/29734)
 
 ## <small>7.2.18 (2024-09-30)</small>
 
