@@ -469,6 +469,16 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 22.0.0
+
+This major bump updates the MySQL subchart to version 12.0.0. This subchart updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+kubectl delete sts RELEASE_NAME-mysql --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
 ### To 21.0.0
 
 This major updates the MySQL subchart to its newest major, 11.0.0. For more information on this subchart's major, please refer to [Mysql upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1100).
