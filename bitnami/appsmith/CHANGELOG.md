@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.8 (2024-11-12)
+## 5.0.9 (2024-11-12)
 
-* [bitnami/appsmith] Release 5.0.8 ([#30419](https://github.com/bitnami/charts/pull/30419))
+* [bitnami/appsmith] Release 5.0.9 ([#30431](https://github.com/bitnami/charts/pull/30431))
+
+## <small>5.0.8 (2024-11-12)</small>
+
+* [bitnami/appsmith] Release 5.0.8 (#30419) ([1f3fb46](https://github.com/bitnami/charts/commit/1f3fb468d9c063c205b2c8a8c1feeda18c105211)), closes [#30419](https://github.com/bitnami/charts/issues/30419)
 
 ## <small>5.0.7 (2024-11-11)</small>
 
