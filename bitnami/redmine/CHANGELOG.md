@@ -1,8 +1,12 @@
 # Changelog
 
-## 30.0.4 (2024-11-10)
+## 31.0.0 (2024-11-12)
 
-* [bitnami/redmine] Release 30.0.4 ([#30384](https://github.com/bitnami/charts/pull/30384))
+* [bitnami/redmine] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30357](https://github.com/bitnami/charts/pull/30357))
+
+## <small>30.0.4 (2024-11-10)</small>
+
+* [bitnami/redmine] Release 30.0.4 (#30384) ([0571e4a](https://github.com/bitnami/charts/commit/0571e4ad81a91503e6783435ed473c711942418c)), closes [#30384](https://github.com/bitnami/charts/issues/30384)
 
 ## <small>30.0.3 (2024-11-08)</small>
 
