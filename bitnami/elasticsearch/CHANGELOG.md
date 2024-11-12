@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.3.22 (2024-10-17)
+## 21.3.23 (2024-11-09)
 
-* [bitnami/elasticsearch] Release 21.3.22 ([#29972](https://github.com/bitnami/charts/pull/29972))
+* [bitnami/elasticsearch] Release 21.3.23 ([#30377](https://github.com/bitnami/charts/pull/30377))
+
+## <small>21.3.22 (2024-10-17)</small>
+
+* [bitnami/elasticsearch] Release 21.3.22 (#29972) ([bdbf734](https://github.com/bitnami/charts/commit/bdbf7345d2c20043ae663b107901f8fdad79f704)), closes [#29972](https://github.com/bitnami/charts/issues/29972)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>21.3.21 (2024-10-08)</small>
 

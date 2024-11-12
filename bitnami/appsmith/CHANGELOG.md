@@ -1,8 +1,21 @@
 # Changelog
 
-## 5.0.4 (2024-10-23)
+## 5.0.7 (2024-11-11)
 
-* [bitnami/appsmith] Release 5.0.4 ([#30055](https://github.com/bitnami/charts/pull/30055))
+* [bitnami/appsmith] Release 5.0.7 ([#30408](https://github.com/bitnami/charts/pull/30408))
+
+## <small>5.0.6 (2024-11-11)</small>
+
+* [bitnami/appsmith] Release 5.0.6 (#30405) ([528298e](https://github.com/bitnami/charts/commit/528298e5b7a2badaca71caa14d46961147c75f8d)), closes [#30405](https://github.com/bitnami/charts/issues/30405)
+
+## <small>5.0.5 (2024-11-11)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/appsmith] Release 5.0.5 (#30396) ([9629787](https://github.com/bitnami/charts/commit/962978785c8181bc20fecac413c9003ca17043ac)), closes [#30396](https://github.com/bitnami/charts/issues/30396)
+
+## <small>5.0.4 (2024-10-23)</small>
+
+* [bitnami/appsmith] Release 5.0.4 (#30055) ([255c0e6](https://github.com/bitnami/charts/commit/255c0e6776c4e8eddf8141fec56685b55016a3dc)), closes [#30055](https://github.com/bitnami/charts/issues/30055)
 
 ## <small>5.0.3 (2024-10-18)</small>
 

@@ -91,7 +91,7 @@ jobs:
       - vib-publish
     name: Update charts index
     steps:
-      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
@@ -159,6 +159,86 @@ jobs:
             # Push changes
             git add bitnami/index.yaml && git commit --signoff --amend --no-edit
             git push origin index --force-with-lease=index:${current_commit_id} && is_index_updated=1 || echo "Failed to push during attempt $attempts"
+          done
+
+          if [[ $is_index_updated -ne 1 ]]; then
+            echo "Could not update the index after $max_attempts attempts"
+            exit 1
+          fi
+  update-deprecated-index:
+    runs-on: ubuntu-latest
+    needs:
+      - vib-publish
+    name: Update branch deprecated-index
+    steps:
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        with:
+          path: ~/artifacts
+      # If we perform a checkout of the main branch, we will find conflicts with the submodules
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 'deprecated-index'
+          path: 'deprecated-index'
+          # The token is persisted in the local git config and enables scripts to run authenticated git commands.
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+      - name: Install helm
+        run: |
+          HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
+          curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
+          # Install file plugin
+          helm plugin add https://github.com/zoobab/helm_file_repo
+      - id: update-deprecated-index
+        name: Fetch chart and update depreacted-index
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
+          AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
+          AWS_MAX_ATTEMPTS: 3
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          # Configure AWS account
+          export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn ${AWS_ASSUME_ROLE_ARN} --role-session-name GitHubCharts --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
+          # Extract chart release metadata from the publish report file
+          vib_publish_report_file=$(find ~/artifacts -name "report.json" -print -quit)
+          chart_name=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.name' $vib_publish_report_file)
+          chart_version=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.version' $vib_publish_report_file)
+          # Download published asset
+          mkdir download
+          aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart_name}-${chart_version}.tgz download/
+
+          cd deprecated-index
+          git config user.name "Bitnami Containers"
+          git config user.email "bitnami-bot@vmware.com"
+
+          attempts=0
+          max_attempts=5
+          is_index_updated=0
+          while [[ $attempts -lt $max_attempts && $is_index_updated -eq 0 ]]; do
+            attempts=$((attempts + 1))
+
+            # Pull changes from remote
+            git fetch origin deprecated-index
+            current_commit_id=$(git rev-parse origin/deprecated-index)
+            git reset --hard $(git commit-tree origin/deprecated-index^{tree} -m "Update index.yaml")
+
+            # Rebuild index
+            helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
+            # Compare size of files
+            if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
+              echo "New index.yaml file is shorter than the current one"
+              exit 1
+            fi
+            # Adding tmp file as a helm repo
+            if ! helm repo add cache file://../download/ ; then
+              echo "New index.yaml file can't be indexed"
+              exit 1
+            fi
+
+            cp ../download/index.yaml bitnami/index.yaml
+
+            # Push changes
+            git add bitnami/index.yaml && git commit --signoff --amend --no-edit
+            git push origin deprecated-index --force-with-lease=deprecated-index:${current_commit_id} && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
           if [[ $is_index_updated -ne 1 ]]; then

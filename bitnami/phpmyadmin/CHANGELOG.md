@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.9 (2024-11-08)
+## 18.0.0 (2024-11-08)
 
-* [bitnami/phpmyadmin] Unify seLinuxOptions default value ([#30333](https://github.com/bitnami/charts/pull/30333))
+* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30356](https://github.com/bitnami/charts/pull/30356))
+
+## <small>17.0.9 (2024-11-08)</small>
+
+* [bitnami/phpmyadmin] Unify seLinuxOptions default value (#30333) ([55cdce0](https://github.com/bitnami/charts/commit/55cdce05b2217870b5db25ff18dc755dad1a0f95)), closes [#30333](https://github.com/bitnami/charts/issues/30333)
 
 ## <small>17.0.8 (2024-10-29)</small>
 

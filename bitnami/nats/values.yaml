@@ -621,6 +621,9 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
+    ## @param service.headless.publishNotReadyAddresses Publishes the addresses of not ready Pods
+    ##
+    publishNotReadyAddresses: false
 ## NATS ingress parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
