@@ -2913,13 +2913,15 @@ postgresql:
     resources: {}
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
-## @param externalDatabase.host Database host
-## @param externalDatabase.port Database port number
-## @param externalDatabase.user Non-root username for Airflow
-## @param externalDatabase.password Password for the non-root username for Airflow
-## @param externalDatabase.database Airflow database name
+## @param externalDatabase.host Database host (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.port Database port number (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.user Non-root username for Airflow (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.password Password for the non-root username for Airflow (ignored if externalDatabase.sqlConnection or externalDatabase.existingSecret are set)
+## @param externalDatabase.database Airflow database name (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.sqlConnection SQL connection string
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
-## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials (ignored if externalDatabase.existingSecretSqlConnectionKey is set)
+## @param externalDatabase.existingSecretSqlConnectionKey Name of an existing secret key containing the SQL connection string
 ##
 externalDatabase:
   host: localhost
@@ -2927,8 +2929,10 @@ externalDatabase:
   user: bn_airflow
   database: bitnami_airflow
   password: ""
+  sqlConnection: ""
   existingSecret: ""
   existingSecretPasswordKey: ""
+  existingSecretSqlConnectionKey: ""
 ## Redis&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
 ## @param redis.enabled Switch to enable or disable the Redis&reg; helm

@@ -199,6 +199,23 @@ data:
 
 This is useful if you plan on using [Bitnami's sealed secrets](https://github.com/bitnami-labs/sealed-secrets) to manage your passwords.
 
+Alternatively, you can also use a SQL connection string to connect to an external database. This can be done by:
+
+- Setting the `externalDatabase.sqlConnection` parameter:
+
+```console
+postgresql.enabled=false
+externalDatabase.sqlConnection=postgresql://user:password@host:port/dbname
+```
+
+- Or via the `externalDatabase.existingSecret` and `externalDatabase.existingSecretSqlConnectionKey` parameters:
+
+```console
+postgresql.enabled=false
+externalDatabase.existingSecret=db-secret
+externalDatabase.existingSecretSqlConnectionKey=sql-connection
+```
+
 ### Resource requests and limits
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.

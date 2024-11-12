@@ -223,6 +223,16 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Return true if a SQL connection string is used to connect to the database
+*/}}
+{{- define "airflow.database.useSqlConnection" -}}
+{{- if and (not .Values.postgresql.enabled) (or .Values.externalDatabase.sqlConnection (and .Values.externalDatabase.existingSecret .Values.externalDatabase.existingSecretSqlConnectionKey)) -}}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Add environment variables to configure database values
 */}}
 {{- define "airflow.database.host" -}}
@@ -274,18 +284,16 @@ Add environment variables to configure database values
 {{/*
 Add environment variables to configure database values
 */}}
-{{- define "airflow.database.existingsecret.key" -}}
+{{- define "airflow.database.secretKey" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- printf "%s" "password" -}}
+    {{- print "password" -}}
 {{- else -}}
-    {{- if .Values.externalDatabase.existingSecret -}}
-        {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
-            {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
-        {{- else -}}
-            {{- printf "%s" "password" -}}
-        {{- end -}}
+    {{- if and .Values.externalDatabase.existingSecret .Values.externalDatabase.existingSecretSqlConnectionKey -}}
+        {{- print (tpl .Values.externalDatabase.existingSecretSqlConnectionKey .) -}}
+    {{- else if .Values.externalDatabase.existingSecret -}}
+        {{- default "password" (tpl .Values.externalDatabase.existingSecretPasswordKey .) -}}
     {{- else -}}
-        {{- printf "%s" "password" -}}
+        {{- ternary "password" "sql-connection" (empty .Values.externalDatabase.sqlConnection) -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -376,6 +384,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "airflow.validateValues.plugins.repositories" .) -}}
 {{- $messages := append $messages (include "airflow.validateValues.plugins.repository_details" .) -}}
 {{- $messages := append $messages (include "airflow.validateValues.triggerer.replicaCount" .) -}}
+{{- $messages := append $messages (include "airflow.validateValues.metrics" . ) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -456,12 +465,22 @@ Validate values of Airflow - number of Triggerer replicas
 {{- define "airflow.validateValues.triggerer.replicaCount" -}}
 {{- $replicaCount := int .Values.triggerer.replicaCount }}
 {{- if and .Values.triggerer.enabled .Values.triggerer.persistence.enabled .Values.triggerer.persistence.existingClaim (or (gt $replicaCount 1) .Values.triggerer.autoscaling.hpa.enabled) -}}
-triggerer.replicaCount
+airflow: triggerer.replicaCount
     A single existing PVC cannot be shared between multiple replicas.
     Please set a valid number of replicas (--set triggerer.replicaCount=1),
     disable HPA (--set triggerer.autoscaling.hpa.enabled=false), disable persistence
     (--set triggerer.persistence.enabled=false) or rely on dynamic provisioning via Persistent
     Volume Claims (--set triggerer.persistence.existingClaim="").
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Airflow - metrics
+*/}}
+{{- define "airflow.validateValues.metrics" -}}
+{{- if and .Values.metrics.enabled (include "airflow.database.useSqlConnection" .) }}
+airflow: metrics
+    The metrics feature is currently not supported when using an SQL connection string to connect to the database.
 {{- end -}}
 {{- end -}}
 
