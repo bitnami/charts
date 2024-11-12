@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.7.0 (2024-11-11)
+
+* [bitnami/airflow] feat: Add support for HTTPS on Airflow Webserver ([#30400](https://github.com/bitnami/charts/pull/30400))
+
 ## 21.6.0 (2024-11-11)
 
-* [bitnami/airflow] Consistency on Airflow configuration & init improvements ([#30349](https://github.com/bitnami/charts/pull/30349))
+* [bitnami/airflow] Consistency on Airflow configuration & init improvements (#30349) ([6074846](https://github.com/bitnami/charts/commit/6074846d3e528c1db5cbf6f9480ba13fdcb28515)), closes [#30349](https://github.com/bitnami/charts/issues/30349)
 
 ## <small>21.5.1 (2024-11-07)</small>
 
