@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.0 (2024-11-08)
+## 4.0.0 (2024-11-12)
 
 * [bitnami/seaweedfs] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30358](https://github.com/bitnami/charts/pull/30358))
 
