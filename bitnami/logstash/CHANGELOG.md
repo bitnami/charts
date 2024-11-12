@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.3.7 (2024-11-12)
+## 6.3.8 (2024-11-12)
 
-* [bitnami/logstash] Release 6.3.7 ([#30420](https://github.com/bitnami/charts/pull/30420))
+* [bitnami/logstash] Release 6.3.8 ([#30433](https://github.com/bitnami/charts/pull/30433))
+
+## <small>6.3.7 (2024-11-12)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/logstash] Release 6.3.7 (#30420) ([2324895](https://github.com/bitnami/charts/commit/232489503324b0cc7e1fa60cc334da2fffb6de02)), closes [#30420](https://github.com/bitnami/charts/issues/30420)
 
 ## <small>6.3.6 (2024-10-17)</small>
 
