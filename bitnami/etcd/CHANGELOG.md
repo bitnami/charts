@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.5.2 (2024-11-07)
+## 10.5.3 (2024-11-12)
 
-* [bitnami/etcd] Release 10.5.2 ([#30261](https://github.com/bitnami/charts/pull/30261))
+* [bitnami/etcd] Release 10.5.3 ([#30432](https://github.com/bitnami/charts/pull/30432))
+
+## <small>10.5.2 (2024-11-07)</small>
+
+* [bitnami/etcd] Release 10.5.2 (#30261) ([6944f1e](https://github.com/bitnami/charts/commit/6944f1e3dc10cfaba00e5fd7845a7ed8ae3ad9a5)), closes [#30261](https://github.com/bitnami/charts/issues/30261)
 
 ## <small>10.5.1 (2024-11-06)</small>
 
