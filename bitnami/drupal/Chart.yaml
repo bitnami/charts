@@ -17,7 +17,7 @@ dependencies:
 - condition: mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 19.x.x
+  version: 20.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -40,4 +40,4 @@ maintainers:
 name: drupal
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/drupal
-version: 20.0.13
+version: 21.0.0
