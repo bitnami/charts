@@ -1144,10 +1144,10 @@ passwordUpdateJob:
   ## @param passwordUpdateJob.backoffLimit set backoff limit of the job
   ##
   backoffLimit: 10
-  ## @param passwordUpdateJob.command Override default container command on MariaDB Primary container(s) (useful when using custom images)
+  ## @param passwordUpdateJob.command Override default container command on mysql Primary container(s) (useful when using custom images)
   ##
   command: []
-  ## @param passwordUpdateJob.args Override default container args on MariaDB Primary container(s) (useful when using custom images)
+  ## @param passwordUpdateJob.args Override default container args on mysql Primary container(s) (useful when using custom images)
   ##
   args: []
   ## @param passwordUpdateJob.extraCommands Extra commands to pass to the generation job
@@ -1221,7 +1221,7 @@ passwordUpdateJob:
   ## @param passwordUpdateJob.extraVolumeMounts Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-  ## @param passwordUpdateJob.initContainers Add additional init containers for the MariaDB Primary pod(s)
+  ## @param passwordUpdateJob.initContainers Add additional init containers for the mysql Primary pod(s)
   ##
   initContainers: []
   ## Container resource requests and limits
@@ -1547,9 +1547,9 @@ metrics:
     ##    for: 5m
     ##    labels:
     ##      severity: warning
-    ##      service: mariadb
+    ##      service: mysql
     ##    annotations:
-    ##      message: 'MariaDB instance {{`{{`}} $labels.instance {{`}}`}}  is down'
-    ##      summary: MariaDB instance is down
+    ##      message: 'mysql instance {{`{{`}} $labels.instance {{`}}`}}  is down'
+    ##      summary: mysql instance is down
     ##
     rules: []

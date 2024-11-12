@@ -176,7 +176,7 @@ Return the secret with new MySQL credentials
         {{- printf "%s-new-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
         {{- /* The secret with the new password is managed externally */ -}}
-        {{- include "mariadb.secretName" . -}}
+        {{- include "mysql.secretName" . -}}
     {{- end -}}
 {{- end -}}
 
