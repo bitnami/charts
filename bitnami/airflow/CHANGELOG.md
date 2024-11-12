@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.7.0 (2024-11-11)
+## 21.8.0 (2024-11-12)
 
-* [bitnami/airflow] feat: Add support for HTTPS on Airflow Webserver ([#30400](https://github.com/bitnami/charts/pull/30400))
+* [bitnami/airflow] Add support for setting a SQL connection string with exiting databases ([#30417](https://github.com/bitnami/charts/pull/30417))
+
+## 21.7.0 (2024-11-12)
+
+* [bitnami/airflow] feat: Add support for HTTPS on Airflow Webserver (#30400) ([636cfb3](https://github.com/bitnami/charts/commit/636cfb385cb0d404c56859dec4c289ec51b642b9)), closes [#30400](https://github.com/bitnami/charts/issues/30400)
 
 ## 21.6.0 (2024-11-11)
 
