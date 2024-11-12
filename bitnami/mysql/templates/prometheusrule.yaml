@@ -10,6 +10,7 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
     app.kubernetes.io/component: metrics
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $ ) | nindent 4 }}

@@ -9,6 +9,7 @@ metadata:
   name: {{ include "mysql.primary.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
     app.kubernetes.io/component: primary
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -19,8 +20,9 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mysql
       app.kubernetes.io/component: primary
-  serviceName: {{ include "mysql.primary.fullname" . }}
+  serviceName: {{ printf "%s-headless" (include "mysql.primary.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.primary.updateStrategy }}
   updateStrategy: {{- toYaml .Values.primary.updateStrategy | nindent 4 }}
   {{- end }}
@@ -30,10 +32,14 @@ spec:
         {{- if (include "mysql.primary.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/primary/configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
+        {{- end }}
         {{- if .Values.primary.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mysql
         app.kubernetes.io/component: primary
     spec:
       {{- if .Values.primary.extraPodSpec }}
