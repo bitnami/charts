@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.0.0 (2024-11-08)
+## 9.0.0 (2024-11-12)
 
 * [bitnami/matomo] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30354](https://github.com/bitnami/charts/pull/30354))
 
