@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.2.1 (2024-10-29)
+## 16.2.2 (2024-11-12)
 
-* [bitnami/mongodb] Fix render values of resources on log dir init container ([#30115](https://github.com/bitnami/charts/pull/30115))
+* [bitnami/mongodb] allow setting the timezone for backup cronjob ([#30421](https://github.com/bitnami/charts/pull/30421))
+
+## <small>16.2.1 (2024-10-30)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mongodb] Fix render values of resources on init container (#30115) ([7722763](https://github.com/bitnami/charts/commit/77227635ce659923da314f1a3268574697ef63f9)), closes [#30115](https://github.com/bitnami/charts/issues/30115)
 
 ## 16.2.0 (2024-10-28)
 
