@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.6 (2024-11-08)
+## 3.0.7 (2024-11-13)
 
-* [bitnami/jaeger] Unify seLinuxOptions default value ([#30347](https://github.com/bitnami/charts/pull/30347))
+* [bitnami/jaeger] Release 3.0.7 ([#30439](https://github.com/bitnami/charts/pull/30439))
+
+## <small>3.0.6 (2024-11-08)</small>
+
+* [bitnami/jaeger] Unify seLinuxOptions default value (#30347) ([31165b2](https://github.com/bitnami/charts/commit/31165b20a0d9d22744787b4379ae4f4eb5ec8860)), closes [#30347](https://github.com/bitnami/charts/issues/30347)
 
 ## <small>3.0.5 (2024-11-07)</small>
 
