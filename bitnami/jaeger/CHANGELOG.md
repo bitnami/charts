@@ -1,8 +1,8 @@
 # Changelog
 
-## 3.0.7 (2024-11-13)
+## 4.0.0 (2024-11-13)
 
-* [bitnami/jaeger] Release 3.0.7 ([#30439](https://github.com/bitnami/charts/pull/30439))
+* [bitnami/jaeger] chore!: :arrow_up: :fire: :boom: Update Jaeger to 1.63.0 and deprecate jaeger-agent ([#30439](https://github.com/bitnami/charts/pull/30439))
 
 ## <small>3.0.6 (2024-11-08)</small>
 
