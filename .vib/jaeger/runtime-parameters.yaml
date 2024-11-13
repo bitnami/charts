@@ -46,6 +46,8 @@ collector:
   service:
     ports:
       admin: 14270
+  containerPorts:
+    admin: 14771
   podSecurityContext:
     enabled: true
     fsGroup: 1002
