@@ -106,6 +106,15 @@ spec:
             {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
             - name: AIRFLOW_SKIP_DB_SETUP
               value: {{ ternary "yes" "no" .Values.setupDBJob.enabled | quote }}
+            {{- if not .Values.setupDBJob.enabled }}
+            - name: AIRFLOW_USERNAME
+              value: {{ .Values.auth.username }}
+            - name: AIRFLOW_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "airflow.secretName" . }}
+                  key: airflow-password
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
