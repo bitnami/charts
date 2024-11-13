@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.21 (2024-10-31)
+## 4.2.22 (2024-11-08)
 
-* [bitnami/pytorch] Release 4.2.21 ([#30158](https://github.com/bitnami/charts/pull/30158))
+* [bitnami/pytorch] Unify seLinuxOptions default value ([#30331](https://github.com/bitnami/charts/pull/30331))
+
+## <small>4.2.21 (2024-10-31)</small>
+
+* [bitnami/pytorch] Release 4.2.21 (#30158) ([68b3f32](https://github.com/bitnami/charts/commit/68b3f324b6b96947cf232b9f127677dbbb264c07)), closes [#30158](https://github.com/bitnami/charts/issues/30158)
 
 ## <small>4.2.20 (2024-10-29)</small>
 

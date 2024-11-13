@@ -21,5 +21,5 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.resources" (dict "sections" (list "agent" "collector" "migration" "query") "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "collector" "migration" "query") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.cqlshImage) "context" $) }}

@@ -21,7 +21,7 @@ dependencies:
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - seaweedfs-database
-  version: 19.x.x
+  version: 20.x.x
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -50,4 +50,4 @@ name: seaweedfs
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/seawwedfs
 - https://github.com/bitnami/containers/tree/main/bitnami/seaweedfs
-version: 3.1.0
+version: 4.0.0

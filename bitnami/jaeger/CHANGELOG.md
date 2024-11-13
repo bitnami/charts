@@ -1,8 +1,18 @@
 # Changelog
 
-## 3.0.5 (2024-11-07)
+## 4.0.0 (2024-11-13)
 
-* [bitnami/jaeger] Release 3.0.5 ([#30273](https://github.com/bitnami/charts/pull/30273))
+* [bitnami/jaeger] chore!: :arrow_up: :fire: :boom: Update Jaeger to 1.63.0 and deprecate jaeger-agent ([#30439](https://github.com/bitnami/charts/pull/30439))
+
+## <small>3.0.6 (2024-11-08)</small>
+
+* [bitnami/jaeger] Unify seLinuxOptions default value (#30347) ([31165b2](https://github.com/bitnami/charts/commit/31165b20a0d9d22744787b4379ae4f4eb5ec8860)), closes [#30347](https://github.com/bitnami/charts/issues/30347)
+
+## <small>3.0.5 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/jaeger] Release 3.0.5 (#30273) ([235579d](https://github.com/bitnami/charts/commit/235579d5e1bcef5c2e192d9e734b29b724b6d8dc)), closes [#30273](https://github.com/bitnami/charts/issues/30273)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.0.4 (2024-10-10)</small>
 

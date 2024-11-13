@@ -214,7 +214,6 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -318,6 +317,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `master.containerSecurityContext.seccompProfile.type`      | Set seccomp profile in Master Server container                                                                                                                                                                                         | `RuntimeDefault` |
 | `master.logLevel`                                          | Master Server log level [0|1|2|3|4]                                                                                                                                                                                                    | `1`              |
 | `master.bindAddress`                                       | Master Server bind address                                                                                                                                                                                                             | `0.0.0.0`        |
+| `master.volumeSizeLimitMB`                                 | Limit (in MB) to stop directing writes to oversized volumes                                                                                                                                                                            | `1000`           |
 | `master.config`                                            | Master Server configuration                                                                                                                                                                                                            | `""`             |
 | `master.existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for Master Server                                                                                                                                                     | `""`             |
 | `master.command`                                           | Override default Master Server container command (useful when using custom images)                                                                                                                                                     | `[]`             |
@@ -1159,6 +1159,16 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/seawe
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/template/seaweedfs/values.yaml)
 
 ## Upgrading
+
+### To 4.0.0
+
+This major bump updates the MariaDB subchart to version 20.0.0. This subchart updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+kubectl delete sts RELEASE_NAME-mariadb --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
 
 ### To 3.0.0
 

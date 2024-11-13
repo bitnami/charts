@@ -239,7 +239,6 @@ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistenc
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -403,7 +402,7 @@ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistenc
 | `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`  |
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`    |
 | `volumePermissions.containerSecurityContext.enabled`        | Enable init container's Security Context                                                                                                                                                                                                              | `true`  |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `nil`   |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `{}`    |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                                                                                                                                                       | `0`     |
 
 ### RBAC Parameters
@@ -493,7 +492,7 @@ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistenc
 | `mailReceiver.podSecurityContext.supplementalGroups`   | Set filesystem extra groups                                                                                                                   | `[]`          |
 | `mailReceiver.podSecurityContext.fsGroup`              | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`        |
 | `mailReceiver.containerSecurityContext.enabled`        | mailReceiver Container securityContext                                                                                                        | `false`       |
-| `mailReceiver.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                              | `nil`         |
+| `mailReceiver.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                              | `{}`          |
 | `mailReceiver.containerSecurityContext.runAsUser`      | User ID for the mailReceiver container                                                                                                        | `1001`        |
 | `mailReceiver.containerSecurityContext.runAsNonRoot`   | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`        |
 | `mailReceiver.podAnnotations`                          | Additional pod annotations                                                                                                                    | `{}`          |
@@ -572,6 +571,16 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redmi
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 31.0.0
+
+This major bump updates the MariaDB subchart to version 20.0.0. This subchart updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+kubectl delete sts RELEASE_NAME-mariadb --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
 
 ### To 30.0.0
 

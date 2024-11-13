@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.1 (2024-10-15)
+## 20.2.2 (2024-11-11)
 
-* [bitnami/redis] Fix preExecCmds parameter ([#29898](https://github.com/bitnami/charts/pull/29898))
+* [bitnami/redis] Release 20.2.2 ([#30407](https://github.com/bitnami/charts/pull/30407))
+
+## <small>20.2.1 (2024-10-15)</small>
+
+* [bitnami/redis] Fix preExecCmds parameter (#29898) ([6db8a2e](https://github.com/bitnami/charts/commit/6db8a2e736e2a60be2d3848d85f49d236a43136c)), closes [#29898](https://github.com/bitnami/charts/issues/29898)
 
 ## 20.2.0 (2024-10-09)
 

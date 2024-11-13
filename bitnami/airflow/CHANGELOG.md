@@ -1,8 +1,25 @@
 # Changelog
 
+## 21.8.0 (2024-11-13)
+
+* [bitnami/airflow] Add support for setting a SQL connection string with exiting databases ([#30417](https://github.com/bitnami/charts/pull/30417))
+
+## 21.7.0 (2024-11-12)
+
+* [bitnami/airflow] feat: Add support for HTTPS on Airflow Webserver (#30400) ([636cfb3](https://github.com/bitnami/charts/commit/636cfb385cb0d404c56859dec4c289ec51b642b9)), closes [#30400](https://github.com/bitnami/charts/issues/30400)
+
+## 21.6.0 (2024-11-11)
+
+* [bitnami/airflow] Consistency on Airflow configuration & init improvements (#30349) ([6074846](https://github.com/bitnami/charts/commit/6074846d3e528c1db5cbf6f9480ba13fdcb28515)), closes [#30349](https://github.com/bitnami/charts/issues/30349)
+
+## <small>21.5.1 (2024-11-07)</small>
+
+* [bitnami/airflow] Release 21.5.1 (#30306) ([ac89917](https://github.com/bitnami/charts/commit/ac89917b636f342db76e10496306ce03fe6a19ae)), closes [#30306](https://github.com/bitnami/charts/issues/30306)
+
 ## 21.5.0 (2024-11-07)
 
-* [bitnami/airflow] feat: add init container to wait for db migrations ([#30246](https://github.com/bitnami/charts/pull/30246))
+* [bitnami/airflow] docs: :memo: Add "Prometheus metrics" section (#30238) ([3d54bb6](https://github.com/bitnami/charts/commit/3d54bb6c7ee1b0076e1e40815707b03efa93a71a)), closes [#30238](https://github.com/bitnami/charts/issues/30238)
+* [bitnami/airflow] feat: add init container to wait for db migrations (#30246) ([df5f34d](https://github.com/bitnami/charts/commit/df5f34d09a825c8173d89347883e3f7f97721956)), closes [#30246](https://github.com/bitnami/charts/issues/30246)
 
 ## <small>21.4.1 (2024-11-05)</small>
 

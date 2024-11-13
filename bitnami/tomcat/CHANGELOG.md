@@ -1,8 +1,13 @@
 # Changelog
 
+## 11.3.1 (2024-11-12)
+
+* [bitnami/tomcat] Release 11.3.1 ([#30409](https://github.com/bitnami/charts/pull/30409))
+
 ## 11.3.0 (2024-10-30)
 
-* [bitnami/tomcat] Make existing secret key names choosable. Allow tomcat username to be set from secret ([#30080](https://github.com/bitnami/charts/pull/30080))
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/tomcat] Make existing secret key names choosable. Allow tomcat username to be set from secr ([bd8163c](https://github.com/bitnami/charts/commit/bd8163ca1540450b86c6efd7d37772ea48d2174c)), closes [#30080](https://github.com/bitnami/charts/issues/30080)
 
 ## <small>11.2.24 (2024-10-26)</small>
 

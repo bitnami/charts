@@ -4,6 +4,10 @@
 
 * [bitnami/opensearch] Enable automated setup of snapshot policies ([#29796](https://github.com/bitnami/charts/pull/29796))
 
+## <small>1.3.14 (2024-11-08)</small>
+
+* [bitnami/opensearch] Unify seLinuxOptions default value ([#30336](https://github.com/bitnami/charts/pull/30336))
+
 ## <small>1.3.13 (2024-11-06)</small>
 
 * [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
