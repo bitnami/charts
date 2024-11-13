@@ -88,7 +88,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.database.secretName" . }}
-                  key: {{ include "airflow.database.existingsecret.key" . }}
+                  key: {{ include "airflow.database.secretKey" . }}
             {{- else }}
             - name: ALLOW_EMPTY_PASSWORD
               value: "true"
