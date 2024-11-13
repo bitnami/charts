@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.8.0 (2024-11-12)
+## 21.8.0 (2024-11-13)
 
 * [bitnami/airflow] Add support for setting a SQL connection string with exiting databases ([#30417](https://github.com/bitnami/charts/pull/30417))
 
