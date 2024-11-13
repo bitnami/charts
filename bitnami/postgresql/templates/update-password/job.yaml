@@ -72,13 +72,13 @@ spec:
 
               primary_host={{ include "postgresql.v1.primary.fullname" . }}-0.{{ include "postgresql.v1.primary.svc.headless" . }}
               info "Starting password update job"
-              {{- if and .Values.auth.enablePostgresUser (or (eq $customUser "postgres") (empty $customUser)) }}
+              {{- if .Values.auth.enablePostgresUser }}
               if [[ -f /job-status/postgres-password-changed ]]; then
                   info "Postgres password already updated. Skipping"
               else
                   info "Updating postgres password"
                   echo "ALTER USER postgres WITH PASSWORD '$POSTGRESQL_NEW_POSTGRES_PASSWORD';" | postgresql_remote_execute $primary_host {{ .Values.containerPorts.postgresql }} "" postgres $POSTGRESQL_PREVIOUS_POSTGRES_PASSWORD
-                  touch /job-status/root-password-changed
+                  touch /job-status/postgres-password-changed
                   info "Postgres password successfully updated"
               fi
               {{- end }}
@@ -87,7 +87,7 @@ spec:
                   info "User password already updated. Skipping"
               else
                   info "Updating user password"
-                  echo "ALTER USER {{ $customUser }} WITH PASSWORD '$POSTGRESQL_NEW_PASSWORD';" | postgresql_remote_execute $primary_host {{ .Values.containerPorts.postgresql }} "" $POSTGRESQL_USER $POSTGRESQL_PREVIOUS_PASSWORD
+                  echo "ALTER USER {{ $customUser }} WITH PASSWORD '$POSTGRESQL_NEW_PASSWORD';" | postgresql_remote_execute $primary_host {{ .Values.containerPorts.postgresql }} "postgres" $POSTGRESQL_USER $POSTGRESQL_PREVIOUS_PASSWORD
                   touch /job-status/password-changed
                   info "User password successfully updated"
               fi
@@ -97,7 +97,7 @@ spec:
                   info "Replication password already updated. Skipping"
               else
                   info "Updating replication password"
-                  echo "ALTER USER $POSTGRESQL_REPLICATION_USER WITH PASSWORD '$POSTGRESQL_NEW_REPLICATION_PASSWORD';" | postgresql_remote_execute $primary_host {{ .Values.containerPorts.postgresql }} "" $POSTGRESQL_REPLICATION_USER  $POSTGRESQL_PREVIOUS_REPLICATION_PASSWORD
+                  echo "ALTER USER $POSTGRESQL_REPLICATION_USER WITH PASSWORD '$POSTGRESQL_NEW_REPLICATION_PASSWORD';" | postgresql_remote_execute $primary_host {{ .Values.containerPorts.postgresql }} "postgres" $POSTGRESQL_REPLICATION_USER  $POSTGRESQL_PREVIOUS_REPLICATION_PASSWORD
                   touch /job-status/replication-password-changed
                   info "Replication password successfully updated"
               fi
@@ -116,12 +116,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "postgresql.v1.update-job.previousSecretName" . }}
-                  key: postgresql-root-password
+                  key: {{ include "postgresql.v1.adminPasswordKey" . }}
             - name: POSTGRESQL_NEW_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "postgresql.v1.update-job.newSecretName" . }}
-                  key: postgresql-root-password
+                  key: {{ include "postgresql.v1.adminPasswordKey" . }}
             {{- end }}
             {{- if not (empty .Values.auth.username) }}
             - name: POSTGRESQL_USER
@@ -131,28 +131,28 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "postgresql.v1.update-job.previousSecretName" . }}
-                  key: postgresql-password
+                  key: {{ include "postgresql.v1.userPasswordKey" . }}
             - name: POSTGRESQL_NEW_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "postgresql.v1.update-job.newSecretName" . }}
-                  key: postgresql-password
+                  key: {{ include "postgresql.v1.userPasswordKey" . }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.architecture "replication" }}
             - name: POSTGRESQL_REPLICATION_USER
-              value: {{ .Values.auth.replicationUser | quote }}
+              value: {{ .Values.auth.replicationUsername | quote }}
             {{- if not .Values.auth.usePasswordFiles }}
             - name: POSTGRESQL_PREVIOUS_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "postgresql.v1.update-job.previousSecretName" . }}
-                  key: postgresql-replication-password
+                  key: {{ include "postgresql.v1.replicationPasswordKey" . }}
             - name: POSTGRESQL_NEW_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "postgresql.v1.update-job.newSecretName" . }}
-                  key: postgresql-replication-password
+                  key: {{ include "postgresql.v1.replicationPasswordKey" . }}
             {{- end }}
             {{- end }}
             {{- if .Values.passwordUpdateJob.extraEnvVars }}

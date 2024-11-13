@@ -210,7 +210,6 @@ audit:
   logTimezone: ""
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
-## DEPRECATED ldap.url It will removed in a future, please use 'ldap.uri' instead
 ## @param ldap.server IP address or name of the LDAP server.
 ## @param ldap.port Port number on the LDAP server to connect to
 ## @param ldap.prefix String to prepend to the user name when forming the DN to bind
