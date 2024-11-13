@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.3.23 (2024-11-09)
+## 21.3.24 (2024-11-12)
 
-* [bitnami/elasticsearch] Release 21.3.23 ([#30377](https://github.com/bitnami/charts/pull/30377))
+* [bitnami/elasticsearch] Release 21.3.24 ([#30423](https://github.com/bitnami/charts/pull/30423))
+
+## <small>21.3.23 (2024-11-09)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/elasticsearch] Release 21.3.23 (#30377) ([7a1e13f](https://github.com/bitnami/charts/commit/7a1e13f1bd3fc976dfc74da013d868332e5948dc)), closes [#30377](https://github.com/bitnami/charts/issues/30377)
 
 ## <small>21.3.22 (2024-10-17)</small>
 
