@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.3.8 (2024-11-12)
+## 14.3.8 (2024-11-13)
 
 * [bitnami/postgresql-ha] Release 14.3.8 ([#30249](https://github.com/bitnami/charts/pull/30249))
 
