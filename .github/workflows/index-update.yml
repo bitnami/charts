@@ -2,20 +2,24 @@ name: '[Index] Sync index.yaml with OCI releases'
 on:
   schedule:
     - cron: "*/30 * * * *"
+# Remove all permissions by default.
+permissions: {}
 jobs:
   find-new-releases:
     runs-on: ubuntu-latest
     name: Find new releases
     outputs:
       new-releases: ${{ steps.get-new-releases.outputs.new-releases }}
+    permissions:
+      contents: read
     steps:
       - id: checkout-repo
         name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: index
           path: index
-      - uses: oras-project/setup-oras@v1
+      - uses: oras-project/setup-oras@9c92598691bfef1424de2f8fae81941568f5889c
       - id: get-oci-index
         name: Get OCI index
         run: |
