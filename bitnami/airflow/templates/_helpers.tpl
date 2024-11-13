@@ -228,7 +228,6 @@ Return true if a SQL connection string is used to connect to the database
 {{- define "airflow.database.useSqlConnection" -}}
 {{- if and (not .Values.postgresql.enabled) (or .Values.externalDatabase.sqlConnection (and .Values.externalDatabase.existingSecret .Values.externalDatabase.existingSecretSqlConnectionKey)) -}}
     {{- true -}}
-{{- else -}}
 {{- end -}}
 {{- end -}}
 
