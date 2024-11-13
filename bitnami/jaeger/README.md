@@ -79,15 +79,10 @@ externalDatabase.port=9042
 
 ### Additional environment variables
 
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `collector`, `agent`, `query`.
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `collector`, `query`.
 
 ```yaml
 collector:
-  extraEnvVars:
-    - name: ENV_VAR_NAME
-      value: ENV_VAR_VALUE
-
-agent:
   extraEnvVars:
     - name: ENV_VAR_NAME
       value: ENV_VAR_VALUE
@@ -102,7 +97,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as jaeger (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `collector`, `agent`, `query` .
+If additional containers are needed in the same pod as jaeger (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `collector`, `query` .
 
 ```yaml
 sidecars:
@@ -586,6 +581,10 @@ The [Bitnami jaeger](https://github.com/bitnami/containers/tree/main/bitnami/jae
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major updates Jaeger to version 1.63.0, which fully deprecates the [jaeger-agent component](https://github.com/jaegertracing/jaeger/issues/4739). When upgrading, all the jaeger-agent components will be fully removed. Check the [upstream documentation](https://www.jaegertracing.io/docs/1.62/architecture/) for alternatives.
 
 ### To 3.0.0
 

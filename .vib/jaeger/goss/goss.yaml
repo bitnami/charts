@@ -1,14 +1,7 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
-addr:
-  tcp://localhost:{{ .Vars.agent.containerPorts.config }}:
-    reachable: true
 http:
-  http://jaeger--agent:{{ .Vars.agent.service.ports.admin }}/:
-    status: 200
-    body:
-      - Server available
   http://jaeger-collector:{{ .Vars.collector.service.ports.admin }}/:
     status: 200
     body:
