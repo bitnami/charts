@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.4 (2024-10-21)
+## 15.0.5 (2024-11-14)
 
-* [bitnami/discourse] include discourse.extraEnvVars in the "install-plugins" init-container ([#30026](https://github.com/bitnami/charts/pull/30026))
+* [bitnami/discourse] Release 15.0.5 ([#30451](https://github.com/bitnami/charts/pull/30451))
+
+## <small>15.0.4 (2024-10-22)</small>
+
+* [bitnami/discourse] include discourse.extraEnvVars in the "install-plugins" init-container (#30026) ([3c92104](https://github.com/bitnami/charts/commit/3c9210499341e217733db49192a7927b9e048105)), closes [#30026](https://github.com/bitnami/charts/issues/30026)
 
 ## <small>15.0.3 (2024-10-21)</small>
 
