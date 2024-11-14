@@ -230,7 +230,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` true. This will deploy a sidecar container with [airflow-exporter](https://github.com/PBWebMedia/airflow-prometheus-exporter) in all Airflow pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will be have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `metrics.enabled` true. This will configure Airflow components to send StatsD metrics to the StatsD exporter that transform them into Prometheus metrics. The StatsD exporter is deployed as a standalone deployment and service in the same namespace as the Airflow deployment.
 
 #### Prometheus requirements
 
@@ -1218,6 +1218,12 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/airfl
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 22.0.0
+
+This major version replaces exposing Prometheus metrics using the [Airflow prometheus exporter](https://github.com/PBWebMedia/airflow-prometheus-exporter), that exposes metrics based on the data retrieved from the database, by configuring Airflow components to send StatsD metrics to the [StatsD exporter](https://github.com/prometheus/statsd_exporter) that transforms them into Prometheus metrics. Find more information about this approach in the [Apache Airflow official documentation](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/metrics.html#setup-statsd).
+
+No upgrades issues are expected when upgrading from `21.x.x` but existing dashboards and alerts based on the previous metrics should be adapted to the new ones.
 
 ### To 21.0.0
 

@@ -16,3 +16,6 @@ dags:
       branch: main
       name: toys
       path: dags/toys
+metrics:
+  enabled:
+    true
