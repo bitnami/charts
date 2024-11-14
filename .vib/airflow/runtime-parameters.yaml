@@ -17,5 +17,7 @@ dags:
       name: toys
       path: dags/toys
 metrics:
-  enabled:
-    true
+  enabled: true
+  service:
+    ports:
+      metrics: 9102
