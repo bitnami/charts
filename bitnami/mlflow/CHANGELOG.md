@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.1.1 (2024-11-05)
+## 2.2.0 (2024-11-14)
 
 * [bitnami/mlflow] Adding missing Azure Storage configuration in the Helm Chart ([#29626](https://github.com/bitnami/charts/pull/29626))
 
