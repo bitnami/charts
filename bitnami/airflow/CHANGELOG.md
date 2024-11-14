@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.0.0 (2024-11-14)
+
+* [bitnami/airflow] Metrics based on StatsD ([#30459](https://github.com/bitnami/charts/pull/30459))
+
 ## 21.9.0 (2024-11-14)
 
-* [bitnami/airflow] Add support to setup db on k8s job ([#30440](https://github.com/bitnami/charts/pull/30440))
+* [bitnami/airflow] Add support to setup db on k8s job (#30440) ([1a7d623](https://github.com/bitnami/charts/commit/1a7d623709ba680e7d049e81bddc44d9115f5f1f)), closes [#30440](https://github.com/bitnami/charts/issues/30440)
 
 ## 21.8.0 (2024-11-13)
 
