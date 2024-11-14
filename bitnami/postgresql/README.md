@@ -98,6 +98,55 @@ Next, login to the PostgreSQL server using the `psql` client and add the PAM aut
 
 > Note: Parameters including commas must be escaped as shown in the above example.
 
+### Update credentials
+
+Bitnami charts, with its default settings, configure credentials at first boot. Any further change in the secrets or credentials can be done using one of the following methods:
+
+### Manual update of the passwords and secrets
+
+- Update the user password following [the upstream documentation](https://www.postgresql.org/docs/current/sql-alteruser.html)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and POSTGRES_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --from-literal=postgres-password=POSTGRES_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Automated update using a password update job
+
+The Bitnami PostgreSQL provides a password update job that will automatically change the PostgreSQL passwords when running helm upgrade. To enable the job set `passwordUpdateJob.enabled=true`. This job requires:
+
+- The new passwords: this is configured using either `auth.postgresPassword`, `auth.password` and `auth.replicationPassword` (if applicable) or setting `auth.existingSecret`.
+- The previous passwords: This value is taken automatically from already deployed secret object. If you are using `auth.existingSecret` or `helm template` instead of `helm upgrade`, then set either `passwordUpdate.job.previousPasswords.postgresPassword`, `passwordUpdate.job.previousPasswords.password`, `passwordUpdate.job.previousPasswords.replicationPassword` (when applicable), or setting `passwordUpdateJob,previousPasswords.existingSecret`.
+
+In the following example we update the password via values.yaml in a PostgreSQL installation with replication
+
+```yaml
+architecture: "replication"
+
+auth:
+  user: "user"
+  postgresPassword: "newPostgresPassword123"
+  password: "newUserPassword123"
+  replicationPassword: "newReplicationPassword123"
+
+passwordUpdateJob:
+  enabled: true
+```
+
+In this example we use two existing secrets (`new-password-secret` and `previous-password-secret`) to update the passwords:
+
+```yaml
+auth:
+  existingSecret: new-password-secret
+
+passwordUpdateJob:
+  enabled: true
+  previousPasswords:
+    existingSecret: previous-password-secret
+```
+
+You can add extra update commands using the `passwordUpdateJob.extraCommands` value.
+
 ### postgresql.conf / pg_hba.conf files as configMap
 
 This helm chart also supports to customize the PostgreSQL configuration file. You can add additional PostgreSQL configuration parameters using the `primary.extendedConfiguration`/`readReplicas.extendedConfiguration` parameters as a string. Alternatively, to replace the entire default configuration use `primary.configuration`.
@@ -666,6 +715,51 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `backup.cronjob.storage.volumeClaimTemplates.selector`             | A label query over volumes to consider for binding (e.g. when using local volumes)                                                                                                                                                              | `{}`                                                                                                                                                                                 |
 | `backup.cronjob.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the backup container                                                                                                                                                               | `[]`                                                                                                                                                                                 |
 | `backup.cronjob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the backup container                                                                                                                                                                    | `[]`                                                                                                                                                                                 |
+
+### Password update job
+
+| Name                                                                  | Description                                                                                                                                                                                                                                           | Value            |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `passwordUpdateJob.enabled`                                           | Enable password update job                                                                                                                                                                                                                            | `false`          |
+| `passwordUpdateJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                                                                                                                          | `10`             |
+| `passwordUpdateJob.command`                                           | Override default container command on mysql Primary container(s) (useful when using custom images)                                                                                                                                                    | `[]`             |
+| `passwordUpdateJob.args`                                              | Override default container args on mysql Primary container(s) (useful when using custom images)                                                                                                                                                       | `[]`             |
+| `passwordUpdateJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                                                                                                                          | `""`             |
+| `passwordUpdateJob.previousPasswords.postgresPassword`                | Previous postgres password (set if the password secret was already changed)                                                                                                                                                                           | `""`             |
+| `passwordUpdateJob.previousPasswords.password`                        | Previous password (set if the password secret was already changed)                                                                                                                                                                                    | `""`             |
+| `passwordUpdateJob.previousPasswords.replicationPassword`             | Previous replication password (set if the password secret was already changed)                                                                                                                                                                        | `""`             |
+| `passwordUpdateJob.previousPasswords.existingSecret`                  | Name of a secret containing the previous passwords (set if the password secret was already changed)                                                                                                                                                   | `""`             |
+| `passwordUpdateJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                  | `true`           |
+| `passwordUpdateJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                      | `{}`             |
+| `passwordUpdateJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                            | `1001`           |
+| `passwordUpdateJob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                           | `1001`           |
+| `passwordUpdateJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                         | `true`           |
+| `passwordUpdateJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                           | `false`          |
+| `passwordUpdateJob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                               | `true`           |
+| `passwordUpdateJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                             | `false`          |
+| `passwordUpdateJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                                    | `["ALL"]`        |
+| `passwordUpdateJob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                      | `RuntimeDefault` |
+| `passwordUpdateJob.podSecurityContext.enabled`                        | Enabled credential init job pods' Security Context                                                                                                                                                                                                    | `true`           |
+| `passwordUpdateJob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                    | `Always`         |
+| `passwordUpdateJob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                                        | `[]`             |
+| `passwordUpdateJob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.podSecurityContext.fsGroup`                        | Set credential init job pod's Security Context fsGroup                                                                                                                                                                                                | `1001`           |
+| `passwordUpdateJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                                                                                                                                                  | `[]`             |
+| `passwordUpdateJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                                                                                                                                              | `""`             |
+| `passwordUpdateJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                                                                                                                                                     | `""`             |
+| `passwordUpdateJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                                                                                                                       | `[]`             |
+| `passwordUpdateJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                                                                                                                             | `[]`             |
+| `passwordUpdateJob.initContainers`                                    | Add additional init containers for the mysql Primary pod(s)                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production). | `micro`          |
+| `passwordUpdateJob.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`             |
+| `passwordUpdateJob.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                                   | `{}`             |
+| `passwordUpdateJob.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                                  | `{}`             |
+| `passwordUpdateJob.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                                    | `{}`             |
+| `passwordUpdateJob.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                                    | `false`          |
+| `passwordUpdateJob.hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.annotations`                                       | Add annotations to the job                                                                                                                                                                                                                            | `{}`             |
+| `passwordUpdateJob.podLabels`                                         | Additional pod labels                                                                                                                                                                                                                                 | `{}`             |
+| `passwordUpdateJob.podAnnotations`                                    | Additional pod annotations                                                                                                                                                                                                                            | `{}`             |
 
 ### Volume Permissions parameters
 
