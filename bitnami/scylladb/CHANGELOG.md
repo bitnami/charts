@@ -1,8 +1,14 @@
 # Changelog
 
+## 3.0.1 (2024-11-14)
+
+* [bitnami/scylladb] Release 3.0.1 ([#30448](https://github.com/bitnami/charts/pull/30448))
+
 ## 3.0.0 (2024-10-29)
 
-* [bitnami/scylladb] Release 3.0.0 ([#30111](https://github.com/bitnami/charts/pull/30111))
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/scylladb] Release 3.0.0 (#30111) ([6646a0b](https://github.com/bitnami/charts/commit/6646a0bd42f871ea68eef66153037a036b0cbb0f)), closes [#30111](https://github.com/bitnami/charts/issues/30111)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>2.0.5 (2024-10-01)</small>
 
