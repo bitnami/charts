@@ -1,8 +1,14 @@
 # Changelog
 
-## 20.2.2 (2024-11-11)
+## 20.3.0 (2024-11-14)
 
-* [bitnami/redis] Release 20.2.2 ([#30407](https://github.com/bitnami/charts/pull/30407))
+* [bitnami/redis] feat: :sparkles: Allow updating credentials via values.yaml ([#30452](https://github.com/bitnami/charts/pull/30452))
+
+## <small>20.2.2 (2024-11-11)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/redis] Release 20.2.2 (#30407) ([ae54e98](https://github.com/bitnami/charts/commit/ae54e980494b5431d98d72a672532fc36b7a21c4)), closes [#30407](https://github.com/bitnami/charts/issues/30407)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>20.2.1 (2024-10-15)</small>
 
