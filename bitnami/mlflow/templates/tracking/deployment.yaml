@@ -196,7 +196,6 @@ spec:
                   key: {{ include "mlflow.v0.s3.secretAccessKeyKey" . | quote }}
             {{- end }}
             {{- end }}
-
             {{- if (include "mlflow.v0.s3.enabled" .) }}
             - name: MLFLOW_S3_ENDPOINT_URL
               value: {{ printf "%s://%s:%v" (include "mlflow.v0.s3.protocol" .) (include "mlflow.v0.s3.host" .) (include "mlflow.v0.s3.port" .) | quote }}
