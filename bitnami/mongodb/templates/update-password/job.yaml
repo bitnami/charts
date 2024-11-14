@@ -15,7 +15,7 @@ metadata:
     app.kubernetes.io/part-of: mongodb
     app.kubernetes.io/component: update-job
   {{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "hook-succeeded" }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations $defaultAnnotations .Values.passwordUpdateJob.annotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
 spec:
   backoffLimit: {{ .Values.passwordUpdateJob.backoffLimit }}
@@ -191,7 +191,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.passwordUpdateJob.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.cusatomReadinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.passwordUpdateJob.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.passwordUpdateJob.customStartupProbe "context" $) | nindent 12 }}
