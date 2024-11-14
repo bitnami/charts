@@ -1,8 +1,12 @@
 # Changelog
 
+## 32.0.1 (2024-11-14)
+
+* [bitnami/redmine] Release 32.0.1 ([#30466](https://github.com/bitnami/charts/pull/30466))
+
 ## 32.0.0 (2024-11-14)
 
-* [bitnami/redmine] Release 32.0.0 ([#30457](https://github.com/bitnami/charts/pull/30457))
+* [bitnami/redmine] Release 32.0.0 (#30457) ([0c71f6a](https://github.com/bitnami/charts/commit/0c71f6a443a11358ee40aba45cf980a885c476b7)), closes [#30457](https://github.com/bitnami/charts/issues/30457)
 
 ## 31.0.0 (2024-11-12)
 
