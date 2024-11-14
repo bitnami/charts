@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.3.1 (2024-11-07)
+## 19.4.0 (2024-11-14)
 
-* [bitnami/contour] Release 19.3.1 ([#30260](https://github.com/bitnami/charts/pull/30260))
+* [bitnami/contour] Add support for deploying GatewayClass and Gateway ([#30455](https://github.com/bitnami/charts/pull/30455))
+
+## <small>19.3.1 (2024-11-07)</small>
+
+* [bitnami/contour] Release 19.3.1 (#30260) ([4910a21](https://github.com/bitnami/charts/commit/4910a21b12108eec0195cf6388334d09ad3c81c0)), closes [#30260](https://github.com/bitnami/charts/issues/30260)
 
 ## 19.3.0 (2024-11-06)
 
