@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.0.3 (2024-11-11)
+## 10.0.4 (2024-11-12)
 
-* [bitnami/kube-prometheus] Release 10.0.3 ([#30295](https://github.com/bitnami/charts/pull/30295))
+* [bitnami/kube-prometheus] Fix update-crds CI job ([#30413](https://github.com/bitnami/charts/pull/30413))
+
+## <small>10.0.3 (2024-11-11)</small>
+
+* [bitnami/kube-prometheus] Release 10.0.3 (#30295) ([36a5b01](https://github.com/bitnami/charts/commit/36a5b01ed167623695583a36a8b403c889cbf217)), closes [#30295](https://github.com/bitnami/charts/issues/30295)
 
 ## <small>10.0.2 (2024-11-11)</small>
 

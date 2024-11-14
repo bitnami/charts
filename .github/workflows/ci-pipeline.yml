@@ -285,9 +285,9 @@ jobs:
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
-          # Updating CRDs stored at 'bitnami/$CHART/crds' and 'bitnami/$CHART/templates/crds'
+          # Updating CRDs stored at 'bitnami/$CHART/crds', 'bitnami/$CHART/templates/crds', and "bitnami/${CHART}/charts/${CHART}-crds/crds"
           cd $GITHUB_WORKSPACE/charts
-          mapfile -t crd_files < <(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
+          mapfile -t crd_files < <(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" "bitnami/${CHART}/charts/${CHART}-crds/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
           for file in "${crd_files[@]}"; do
             # Automatically update CRDs that use the '# Source' header
             source_url_tpl="$(head -n 1 $file | grep -E "^# ?Source: ?" | sed -E 's|^# ?Source: ?||' || true)"
