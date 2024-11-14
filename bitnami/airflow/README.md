@@ -218,7 +218,7 @@ externalDatabase.existingSecretSqlConnectionKey=sql-connection
 
 ### Database setup
 
-By default, this chart setups the database (init or migrate the schema) and creates the admin user using a K8s job that is created when the chart release is installed or upgraded, and deleted once it success. This job uses [Chart hooks](https://helm.sh/docs/topics/charts_hooks), so it won't be deleted if you're using Helm exclusively for its rendering capabilities (e.g. when using ArgoCD or FluxCD).
+By default, this chart setups the database (init or migrate the schema) and creates the admin user using a K8s job that is created when the chart release is installed or upgraded, and deleted once it succeeds. This job uses [Chart hooks](https://helm.sh/docs/topics/charts_hooks), so it won't be deleted if you're using Helm exclusively for its rendering capabilities (e.g. when using ArgoCD or FluxCD).
 
 Alternatively, you can disable this behavior by setting the `setupDBJob.enabled` parameter to `false`. In this case, the database setup and admin user creation will be done during the Webserver startup.
 
