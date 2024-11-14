@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.9.0 (2024-11-14)
+
+* [bitnami/airflow] Add support to setup db on k8s job ([#30440](https://github.com/bitnami/charts/pull/30440))
+
 ## 21.8.0 (2024-11-13)
 
-* [bitnami/airflow] Add support for setting a SQL connection string with exiting databases ([#30417](https://github.com/bitnami/charts/pull/30417))
+* [bitnami/airflow] Add support for setting a SQL connection string with exiting databases (#30417) ([6d994bd](https://github.com/bitnami/charts/commit/6d994bda41a369b340eabc8b170db30ff8f130c8)), closes [#30417](https://github.com/bitnami/charts/issues/30417)
 
 ## 21.7.0 (2024-11-12)
 

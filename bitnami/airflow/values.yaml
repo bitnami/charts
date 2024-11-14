@@ -83,7 +83,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 2.10.3-debian-12-r3
+  tag: 2.10.3-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2344,6 +2344,108 @@ worker:
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
 
+## @section Airflow "setup-db" K8s Job parameters
+##
+setupDBJob:
+  ## @param setupDBJob.enabled Enable setting up the Airflow database using a K8s job (otherwise it's done by the Webserver on startup)
+  ##
+  enabled: true
+  ## @param setupDBJob.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param setupDBJob.command Override default container command on "setup-db" job's containers
+  ##
+  command: []
+  ## @param setupDBJob.args Override default container args on "setup-db" job's containers
+  ##
+  args: []
+  ## Configure "setup-db" job's container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param setupDBJob.containerSecurityContext.enabled Enabled "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "setup-db" job's containers
+  ## @param setupDBJob.containerSecurityContext.runAsUser Set runAsUser in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.runAsGroup Set runAsUser in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.privileged Set privileged in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.capabilities.add List of capabilities to be added in "setup-db" job's containers
+  ## @param setupDBJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "setup-db" job's containers
+  ## @param setupDBJob.containerSecurityContext.seccompProfile.type Set seccomp profile in "setup-db" job's containers
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      add: []
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure "setup-db" job's pod Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param setupDBJob.podSecurityContext.enabled Enabled "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.fsGroupChangePolicy Set fsGroupChangePolicy in "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.sysctls List of sysctls to allow in "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.supplementalGroups List of supplemental groups to add to "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.fsGroup Set fsGroup in "setup-db" job's pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param setupDBJob.extraEnvVars Array containing extra env vars to configure the Airflow "setup-db" job's container
+  ##
+  extraEnvVars: []
+  ## @param setupDBJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the Airflow "setup-db" job's container
+  ##
+  extraEnvVarsCM: ""
+  ## @param setupDBJob.extraEnvVarsSecret Secret containing extra env vars to configure the Airflow "setup-db" job's container (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## Airflow "setup-db" job's container resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param setupDBJob.resourcesPreset Set Airflow "setup-db" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if setupDBJob.resources is set (setupDBJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param setupDBJob.resources Set Airflow "setup-db" job's container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## E.g:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param setupDBJob.automountServiceAccountToken Mount Service Account token in Airflow "setup-db" job's pods
+  ##
+  automountServiceAccountToken: false
+  ## @param setupDBJob.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param setupDBJob.annotations [object] Add annotations to the Airflow "setup-db" job
+  ##
+  annotations: {}
+  ## @param setupDBJob.podLabels Additional pod labels for Airflow "setup-db" job
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param setupDBJob.podAnnotations Additional pod annotations for Airflow "setup-db" job
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
 ## @section Airflow ldap parameters
 
 ## LDAP configuration
@@ -2543,6 +2645,7 @@ ingress:
   ##             name: http
   ##
   extraRules: []
+
 ## @section Other Parameters
 
 ## Service account for Airflow pods to use.

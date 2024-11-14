@@ -57,6 +57,8 @@ Returns an init-container that prepares the Airflow configuration files for main
       # application root
       touch /emptydir/app-base-dir/airflow.db
   env:
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
     {{- if (include "airflow.database.useSqlConnection" .) }}
     - name: AIRFLOW_DATABASE_SQL_CONN
       valueFrom:
@@ -130,14 +132,16 @@ Returns an init-container that prepares the Airflow Webserver configuration file
       airflow_webserver_conf_set "AUTH_LDAP_BIND_PASSWORD" "$AIRFLOW_LDAP_BIND_PASSWORD" "yes"
     {{- end }}
       info "Airflow webserver configuration ready"
-  {{- if .Values.ldap.enabled }}
   env:
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+    {{- if .Values.ldap.enabled }}
     - name: AIRFLOW_LDAP_BIND_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "airflow.ldap.secretName" . }}
           key: bind-password
-  {{- end }}
+    {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /emptydir
@@ -147,8 +151,7 @@ Returns an init-container that prepares the Airflow Webserver configuration file
 {{- end -}}
 
 {{/*
-Returns an init-container that waits for web server to be ready
-The web server runs the database migrations so once it is ready the database is ready
+Returns an init-container that waits for db migrations to be ready
 */}}
 {{- define "airflow.defaultInitContainers.waitForDBMigrations" -}}
 - name: wait-for-db-migrations
@@ -172,6 +175,9 @@ The web server runs the database migrations so once it is ready the database is 
 
       info "Waiting for db migrations to be completed"
       airflow_wait_for_db_migrations
+  env:
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp
