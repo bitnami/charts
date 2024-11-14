@@ -182,7 +182,6 @@ spec:
                   name: {{ include "mlflow.v0.database.secretName" . }}
                   key: {{ include "mlflow.v0.database.passwordKey" . | quote }}
             {{- end }}
-
             {{- if (include "mlflow.v0.s3.enabled" .) }}
             {{- if .Values.externalS3.useCredentialsInSecret }}
             - name: AWS_ACCESS_KEY_ID
