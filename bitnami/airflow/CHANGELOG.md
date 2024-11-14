@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.9.0 (2024-11-13)
+## 21.9.0 (2024-11-14)
 
 * [bitnami/airflow] Add support to setup db on k8s job ([#30440](https://github.com/bitnami/charts/pull/30440))
 
