@@ -201,7 +201,6 @@ spec:
               value: {{ printf "%s://%s:%v" (include "mlflow.v0.s3.protocol" .) (include "mlflow.v0.s3.host" .) (include "mlflow.v0.s3.port" .) | quote }}
             {{- end }}
             {{- if (include "mlflow.v0.gcs.enabled" .) }}
-
             {{- if .Values.externalGCS.useCredentialsInSecret }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /bitnami/gcs/key.json
