@@ -306,7 +306,6 @@ The Bitnami MongoDB provides a password update job that will automatically chang
 - The new passwords: this is configured using either `auth.rootPassword`, `auth.passwords` and `metrics.passwords` (if applicable) or setting `auth.existingSecret`.
 - The previous root password: This value is taken automatically from already deployed secret object. If you are using `auth.existingSecret` or `helm template` instead of `helm upgrade`, then set either `passwordUpdateJob.previousPasswords.rootPassword` or  setting `passwordUpdateJob.previousPasswords.existingSecret`.
 
-
 In the following example we update only the root password via values.yaml in a MongoDB installation:
 
 ```yaml
