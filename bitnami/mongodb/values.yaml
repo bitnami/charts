@@ -1251,6 +1251,9 @@ backup:
     ## @param backup.cronjob.schedule Set the cronjob parameter schedule
     ##
     schedule: "@daily"
+    ## @param backup.cronjob.timeZone Set the cronjob parameter timeZone
+    ##
+    timeZone: ""
     ## @param backup.cronjob.concurrencyPolicy Set the cronjob parameter concurrencyPolicy
     ##
     concurrencyPolicy: Allow

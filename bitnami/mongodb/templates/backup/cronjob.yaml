@@ -28,6 +28,9 @@ metadata:
   {{- end }}
 spec:
   schedule: {{ quote .Values.backup.cronjob.schedule }}
+  {{- if .Values.backup.cronjob.timezone }}
+  timeZone: {{ .Values.backup.cronjob.timezone | quote }}
+  {{- end }}
   concurrencyPolicy: {{ .Values.backup.cronjob.concurrencyPolicy }}
   failedJobsHistoryLimit: {{ .Values.backup.cronjob.failedJobsHistoryLimit }}
   successfulJobsHistoryLimit: {{ .Values.backup.cronjob.successfulJobsHistoryLimit }}
