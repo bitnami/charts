@@ -524,9 +524,14 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Gateway API parameters
 
-| Name                    | Description                                                    | Value   |
-| ----------------------- | -------------------------------------------------------------- | ------- |
-| `gatewayAPI.manageCRDs` | Manage the creation, upgrade and deletion of Gateway API CRDs. | `false` |
+| Name                              | Description                                                                                                                                    | Value     |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `gatewayAPI.manageCRDs`           | Manage the creation, upgrade and deletion of Gateway API CRDs.                                                                                 | `false`   |
+| `gatewayAPI.gatewayClass.enabled` | Deploy a GatewayClass                                                                                                                          | `false`   |
+| `gatewayAPI.gatewayClass.name`    | Name of the deployed GatewayClass                                                                                                              | `contour` |
+| `gatewayAPI.gateway.enabled`      | Deploy a Gateway and if configInline is used, this will also add gatewayRef to the config. Ignored if gatewayAPI.gatewayClass.enabled is false | `false`   |
+| `gatewayAPI.gateway.name`         | Name of the deployed Gateway                                                                                                                   | `contour` |
+| `gatewayAPI.gateway.listeners`    | List of Gateway listeners                                                                                                                      | `[]`      |
 
 ### Default backend parameters
 

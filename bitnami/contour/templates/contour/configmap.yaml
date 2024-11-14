@@ -19,4 +19,10 @@ metadata:
 data:
   contour.yaml: |-
     {{- include "common.tplvalues.render" ( dict "value" .Values.configInline "context" $) | nindent 4 }}
+    {{- if and .Values.gatewayAPI.gatewayClass.enabled .Values.gatewayAPI.gateway.enabled (not (hasKey .Values.configInline "gateway")) }}
+    gateway:
+      gatewayRef:
+        name: {{ .Values.gatewayAPI.gateway.name }}
+        namespace: {{ include "common.names.namespace" . }}
+    {{- end }}
 {{- end }}
