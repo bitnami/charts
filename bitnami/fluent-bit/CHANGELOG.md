@@ -1,8 +1,14 @@
 # Changelog
 
-## 2.3.22 (2024-11-05)
+## 2.3.23 (2024-11-15)
 
-* [bitnami/fluent-bit] Release 2.3.22 ([#30209](https://github.com/bitnami/charts/pull/30209))
+* [bitnami/fluent-bit] Release 2.3.23 ([#30475](https://github.com/bitnami/charts/pull/30475))
+
+## <small>2.3.22 (2024-11-05)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/fluent-bit] Release 2.3.22 (#30209) ([ed02c36](https://github.com/bitnami/charts/commit/ed02c36c58d089da94873026bea10f81fecea69b)), closes [#30209](https://github.com/bitnami/charts/issues/30209)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>2.3.21 (2024-09-27)</small>
 
