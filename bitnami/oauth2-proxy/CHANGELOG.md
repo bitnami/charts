@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.1.0 (2024-11-14)
+## 6.1.0 (2024-11-15)
 
 * [bitnami/oauth2-proxy] add useApplicationDefaultCredentials google ([#30309](https://github.com/bitnami/charts/pull/30309))
 
