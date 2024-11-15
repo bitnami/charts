@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.0.0 (2024-11-14)
+## 22.0.0 (2024-11-15)
 
 * [bitnami/airflow] Metrics based on StatsD ([#30459](https://github.com/bitnami/charts/pull/30459))
 
