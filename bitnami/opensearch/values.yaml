@@ -3481,6 +3481,9 @@ snapshots:
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
+    ## @param snapshots.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: false
     ## @param snapshots.persistence.accessModes Persistent Volume Access Modes
     ##
     accessModes:
@@ -3491,9 +3494,6 @@ snapshots:
     ## @param snapshots.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
-    ## @param snapshots.persistence.enabled Enable persistence using Persistent Volume Claims
-    ##
-    enabled: false
     ## @param snapshots.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
