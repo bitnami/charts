@@ -1441,3 +1441,35 @@ externalGCS:
   existingSecret: ""
   existingSecretKey: ""
   serveArtifacts: true
+
+## @section External Azure Blob Storage parameters
+## All of these values are only used when minio.enabled is set to false and externalS3 is not configured (host is empty)
+## and externalGCS is not configured (bucket is empty).
+## @param externalAzureBlob.storageAccount Azure Blob Storage account name. Activate azure artifact storage if set,
+## @param externalAzureBlob.accessKey Azure Blob Storage access key. Optional if connectionString is set
+## @param externalAzureBlob.connectionString Azure Blob Storage connection string. Optional if accessKey is set.
+## @param externalAzureBlob.containerName Azure Blob Storage container name
+## @param externalAzureBlob.clientId Azure Blob Storage client ID
+## @param externalAzureBlob.tenantId Azure Blob Storage tenant ID
+## @param externalAzureBlob.clientSecret Azure Blob Storage client secret
+## @param externalAzureBlob.useCredentialsInSecret Whether to read the Azure Blob Storage credentials from a secret
+## @param externalAzureBlob.existingSecret Name of an existing secret key containing the Azure Blob Storage credentials (required when useCredentialsInSecret is true)
+## @param externalAzureBlob.existingAccessKeyKey Key in the existing secret containing the Azure Blob Storage access key (required when useCredentialsInSecret is true)
+## @param externalAzureBlob.existingConnectionStringKey Key in the existing secret containing the Azure Blob Storage connection string (required when useCredentialsInSecret is true)
+## @param externalAzureBlob.clientSecretKey Key in the existing secret containing the Azure Blob Storage client secret (required when useCredentialsInSecret is true)
+## @param externalAzureBlob.serveArtifacts Whether artifact serving is enabled
+##
+externalAzureBlob:
+  storageAccount: ""
+  accessKey: ""
+  connectionString: ""
+  containerName: "mlflow"
+  clientId: ""
+  tenantId: ""
+  clientSecret: ""
+  useCredentialsInSecret: false
+  existingSecret: ""
+  existingAccessKeyKey: ""
+  existingConnectionStringKey: ""
+  clientSecretKey: ""
+  serveArtifacts: true

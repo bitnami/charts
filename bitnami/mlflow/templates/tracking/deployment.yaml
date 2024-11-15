@@ -143,6 +143,8 @@ spec:
             - --artifacts-destination=s3://{{ include "mlflow.v0.s3.bucket" . }}
             {{- else if (include "mlflow.v0.gcs.enabled" .) }}
             - --artifacts-destination=gs://{{ .Values.externalGCS.bucket }}
+            {{- else if (include "mlflow.v0.azureBlob.enabled" .) }}
+            - --artifacts-destination=wasbs://{{ .Values.externalAzureBlob.containerName }}@{{ .Values.externalAzureBlob.storageAccount }}.blob.core.windows.net
             {{- else }}
             - --artifacts-destination={{ .Values.tracking.persistence.mountPath }}/mlartifacts
             {{- end }}
@@ -151,6 +153,9 @@ spec:
             - --no-serve-artifacts
             {{- else if and (not .Values.externalGCS.serveArtifacts) (include "mlflow.v0.gcs.enabled" .) }}
             - --default-artifact-root=gs://{{ .Values.externalGCS.bucket }}
+            - --no-serve-artifacts
+            {{- else if and (not .Values.externalAzureBlob.serveArtifacts) (include "mlflow.v0.azureBlob.enabled" .) }}
+            - --default-artifact-root=wasbs://{{ .Values.externalAzureBlob.containerName }}@{{ .Values.externalAzureBlob.storageAccount }}.blob.core.windows.net
             - --no-serve-artifacts
             {{ else }}
             - --serve-artifacts
@@ -200,11 +205,54 @@ spec:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /bitnami/gcs/key.json
             {{- end }}
+            {{- end }}
+
+            {{- if (include "mlflow.v0.azureBlob.enabled" .) }}
+            {{- if .Values.externalAzureBlob.useCredentialsInSecret }}
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalAzureBlob.existingSecret }}
+                  key: {{ .Values.externalAzureBlob.existingConnectionStringKey }}
+            - name: AZURE_STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalAzureBlob.existingSecret }}
+                  key: {{ .Values.externalAzureBlob.existingAccessKeyKey }}
+            - name: AZURE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalAzureBlob.existingSecret }}
+                  key: {{ .Values.externalAzureBlob.clientSecretKey }}
+            {{- else }}
+            {{- if .Values.externalAzureBlob.connectionString }}
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              value: {{ .Values.externalAzureBlob.connectionString }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.accessKey }}
+            - name: AZURE_STORAGE_ACCESS_KEY
+              value: {{ .Values.externalAzureBlob.accessKey }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.clientId }}
+            - name: AZURE_CLIENT_ID
+              value: {{ .Values.externalAzureBlob.clientId }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.tenantId }}
+            - name: AZURE_TENANT_ID
+              value: {{ .Values.externalAzureBlob.tenantId }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.clientSecret }}
+            - name: AZURE_CLIENT_SECRET
+              value: {{ .Values.externalAzureBlob.clientSecret }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+
             {{- if .Values.externalGCS.googleCloudProject }}
             - name: GOOGLE_CLOUD_PROJECT
               value: {{ .Values.externalGCS.googleCloudProject }}
             {{- end }}
-            {{- end }}
+
             {{- if .Values.tracking.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
