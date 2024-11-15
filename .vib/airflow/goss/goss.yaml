@@ -14,3 +14,9 @@ file:
   /opt/bitnami/airflow/dags:
     filetype: directory
     exists: true
+{{- if .Vars.metrics.enabled }}
+http:
+  http://airflow-statsd-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
+    status: 200
+    timeout: 30000
+{{- end }}

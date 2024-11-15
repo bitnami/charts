@@ -2684,24 +2684,26 @@ rbac:
   ##       - list
   ##
   rules: []
-## @section Airflow metrics parameters
+
+## @section StatsD metrics parameters
+##
 metrics:
-  ## @param metrics.enabled Whether or not to create a standalone Airflow exporter to expose Airflow metrics
+  ## @param metrics.enabled Enable a StatsD exporter that collects StatsD metrics from Airflow components and expose them as Prometheus metrics
   ##
   enabled: false
-  ## Bitnami Airflow exporter image
-  ## ref: https://hub.docker.com/r/bitnami/airflow-exporter/tags/
-  ## @param metrics.image.registry [default: REGISTRY_NAME] Airflow exporter image registry
-  ## @param metrics.image.repository [default: REPOSITORY_NAME/airflow-exporter] Airflow exporter image repository
-  ## @skip metrics.image.tag Airflow exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.digest Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param metrics.image.pullPolicy Airflow exporter image pull policy
-  ## @param metrics.image.pullSecrets Airflow exporter image pull secrets
+  ## Bitnami StatsD exporter image
+  ## ref: https://hub.docker.com/r/bitnami/statsd-exporter/tags/
+  ## @param metrics.image.registry [default: REGISTRY_NAME] StatsD exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/statsd-exporter] StatsD exporter image repository
+  ## @skip metrics.image.tag StatsD exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest StatsD exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy StatsD exporter image pull policy
+  ## @param metrics.image.pullSecrets StatsD exporter image pull secrets
   ##
   image:
     registry: docker.io
-    repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-12-r51
+    repository: bitnami/statsd-exporter
+    tag: 0.28.0-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2712,20 +2714,19 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.extraEnvVars Array with extra environment variables to add Airflow exporter pods
+  ## @param metrics.configuration Specify content for StatsD exporter's mappings.yml
   ##
-  extraEnvVars: []
-  ## @param metrics.extraEnvVarsCM ConfigMap containing extra environment variables for Airflow exporter pods
+  configuration: ""
+  ## @param metrics.existingConfigmap Name of an existing config map containing the StatsD exporter's mappings.yml
   ##
-  extraEnvVarsCM: ""
-  ## @param metrics.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow exporter pods
-  ##
-  extraEnvVarsSecret: ""
-  ## @param metrics.containerPorts.http Airflow exporter metrics container port
+  existingConfigmap: ""
+  ## @param metrics.containerPorts.ingest StatsD exporter ingest container port (used for the metrics ingestion from Airflow components)
+  ## @param metrics.containerPorts.metrics StatsD exporter metrics container port (used to expose Prometheus metrics)
   ##
   containerPorts:
-    http: 9112
-  ## Airflow exporter resource requests and limits
+    ingest: 9125
+    metrics: 9102
+  ## StatsD exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -2742,13 +2743,13 @@ metrics:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Airflow exporter pods' Security Context
+  ## StatsD exporter pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.podSecurityContext.enabled Enable security context for the pods
   ## @param metrics.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param metrics.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param metrics.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param metrics.podSecurityContext.fsGroup Set Airflow exporter pod's Security Context fsGroup
+  ## @param metrics.podSecurityContext.fsGroup Set StatsD exporter pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -2756,18 +2757,18 @@ metrics:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-  ## Airflow exporter containers' Security Context
+  ## StatsD exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param metrics.containerSecurityContext.enabled Enable Airflow exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.enabled Enable StatsD exporter containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param metrics.containerSecurityContext.runAsUser Set Airflow exporter containers' Security Context runAsUser
-  ## @param metrics.containerSecurityContext.runAsGroup Set Airflow exporter containers' Security Context runAsGroup
-  ## @param metrics.containerSecurityContext.runAsNonRoot Set Airflow exporter containers' Security Context runAsNonRoot
-  ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
-  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
-  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set metrics container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.runAsUser Set StatsD exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set StatsD exporter containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set StatsD exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set StatsD exporter containers' Security Context privileged
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set StatsD exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set StatsD exporter containers' Security Context readOnlyRootFilesystem
   ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set containers' Security Context seccomp profile
   ## e.g:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -2788,21 +2789,74 @@ metrics:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param metrics.lifecycleHooks for the Airflow exporter container(s) to automate configuration before or after startup
+  ## Configure extra options for StatsD exporter containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on StatsD exporter containers
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on StatsD exporter containers
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param metrics.startupProbe.enabled Enable startupProbe on StatsD exporter containers
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param metrics.lifecycleHooks for the StatsD exporter containers' to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param metrics.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
-  ## @param metrics.hostAliases Airflow exporter pods host aliases
+  ## @param metrics.hostAliases StatsD exporter pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param metrics.podLabels Extra labels for Airflow exporter pods
+  ## @param metrics.podLabels Extra labels for StatsD exporter pods
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param metrics.podAnnotations Extra annotations for Airflow exporter pods
+  ## @param metrics.podAnnotations Extra annotations for StatsD exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -2833,16 +2887,16 @@ metrics:
     ##   - e2e-az2
     ##
     values: []
-  ## @param metrics.affinity Affinity for pod assignment
+  ## @param metrics.affinity Affinity for StatsD exporter pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: metrics.podAffinityPreset, metrics.podAntiAffinityPreset, and metrics.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## @param metrics.nodeSelector Node labels for pod assignment
+  ## @param metrics.nodeSelector Node labels for StatsD exporter pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
-  ## @param metrics.priorityClassName Airflow exporter pods' priorityClassName
+  ## @param metrics.priorityClassName StatsD exporter pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param metrics.tolerations Tolerations for pod assignment
@@ -2853,23 +2907,29 @@ metrics:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param metrics.schedulerName Name of the k8s scheduler (other than default) for Airflow exporter
+  ## @param metrics.schedulerName Name of the k8s scheduler (other than default) for StatsD exporter
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Airflow exporter pods
+  ## @param metrics.terminationGracePeriodSeconds Seconds StatsD exporter pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the StatsD exporter pods
   ##
   extraVolumes: []
-  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow exporter containers
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the StatsD exporter containers
   ##
   extraVolumeMounts: []
-  ## Airflow exporter service configuration
+  ## StatsD metrics service configuration
   ##
   service:
-    ## @param metrics.service.ports.http Airflow exporter metrics service port
+    ## @param metrics.service.ports.ingest StatsD exporter ingest service port (used for the metrics ingestion from Airflow components)
+    ## @param metrics.service.ports.metrics StatsD exporter metrics service port (used to expose Prometheus metrics)
     ##
     ports:
-      http: 9112
+      ingest: 9125
+      metrics: 9102
     ## @param metrics.service.clusterIP Static clusterIP or None for headless services
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
     ##
@@ -2879,11 +2939,11 @@ metrics:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
-    ## @param metrics.service.annotations [object] Annotations for the Airflow exporter service
+    ## @param metrics.service.annotations [object] Annotations for the StatsD metrics service
     ##
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.ports.http }}"
+      prometheus.io/port: "{{ .Values.metrics.service.ports.metrics }}"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -2975,6 +3035,7 @@ metrics:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+
 ## @section Airflow database parameters
 
 ## PostgreSQL chart configuration

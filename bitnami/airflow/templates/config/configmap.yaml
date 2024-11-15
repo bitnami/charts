@@ -25,6 +25,12 @@ data:
     [logging]
     colored_console_log=False
 
+    [metrics]
+    statsd_on={{ ternary "True" "False" (.Values.metrics.enabled) }}
+    statsd_port={{ .Values.metrics.service.ports.ingest }}
+    statsd_prefix=airflow
+    statsd_host={{ include "airflow.metrics.fullname" . }}
+
     [scheduler]
     standalone_dag_processor={{ ternary "True" "False" .Values.dagProcessor.enabled }}
 
@@ -34,7 +40,7 @@ data:
     [webserver]
     base_url={{ include "airflow.baseUrl" . }}
     enable_proxy_fix={{ ternary "True" "False" (and .Values.ingress.enabled .Values.ingress.tls) }}
-    web_server_port={{ .Values.web.containerPorts.http}}
+    web_server_port={{ .Values.web.containerPorts.http }}
   {{- if .Values.web.tls.enabled }}
     web_server_ssl_cert="/opt/bitnami/airflow/certs/tls.crt"
     web_server_ssl_key="/opt/bitnami/airflow/certs/tls.key"
