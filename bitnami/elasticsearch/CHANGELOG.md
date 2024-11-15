@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.3.24 (2024-11-12)
+## 21.3.25 (2024-11-15)
 
-* [bitnami/elasticsearch] Release 21.3.24 ([#30423](https://github.com/bitnami/charts/pull/30423))
+* [bitnami/elasticsearch] Release 21.3.25 ([#30476](https://github.com/bitnami/charts/pull/30476))
+
+## <small>21.3.24 (2024-11-12)</small>
+
+* [bitnami/elasticsearch] Release 21.3.24 (#30423) ([9ab2b81](https://github.com/bitnami/charts/commit/9ab2b8116b9a2084182c7af6f23912169e2cf41e)), closes [#30423](https://github.com/bitnami/charts/issues/30423)
 
 ## <small>21.3.23 (2024-11-09)</small>
 
