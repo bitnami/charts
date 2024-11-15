@@ -3408,6 +3408,9 @@ dashboards:
 
 ## @section OpenSearch Snapshots Parameters
 snapshots:
+  ## @param snapshots.enabled Enable automatic setup of repositories and snapshot policies
+  ##
+  enabled: false
   ## @param snapshots.command Override default container command (useful when using custom images)
   ##
   command:
@@ -3438,9 +3441,6 @@ snapshots:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param snapshots.enabled Enable automatic setup of repositories and snapshot policies
-  ##
-  enabled: false
   ## @param snapshots.fullnameOverride String to fully override opensearch.snapshots.fullname
   ##
   fullnameOverride: ""
