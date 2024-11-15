@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.0.1 (2024-11-15)
+
+* [bitnami/ghost] Release 22.0.1 ([#30479](https://github.com/bitnami/charts/pull/30479))
+
 ## 22.0.0 (2024-11-12)
 
-* [bitnami/ghost] chore!: :arrow_up: :boom: Bump MySQL subchart to 12 ([#30429](https://github.com/bitnami/charts/pull/30429))
+* [bitnami/ghost] chore!: :arrow_up: :boom: Bump MySQL subchart to 12 (#30429) ([8296f63](https://github.com/bitnami/charts/commit/8296f63fa9733a07b782afb6ab559b73e3a0f554)), closes [#30429](https://github.com/bitnami/charts/issues/30429)
 
 ## <small>21.1.50 (2024-11-08)</small>
 
