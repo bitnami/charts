@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.0 (2024-11-13)
+## 16.2.1 (2024-11-14)
 
-* [bitnami/postgresql] feat: :sparkles: Add password update job ([#30444](https://github.com/bitnami/charts/pull/30444))
+* [bitnami/postgresql] Release 16.2.1 ([#30463](https://github.com/bitnami/charts/pull/30463))
+
+## 16.2.0 (2024-11-14)
+
+* [bitnami/postgresql] feat: :sparkles: Add password update job (#30444) ([ea896db](https://github.com/bitnami/charts/commit/ea896dbfbfaf7d386ca40c4072a61aa958cb7fb1)), closes [#30444](https://github.com/bitnami/charts/issues/30444)
 
 ## <small>16.1.2 (2024-11-06)</small>
 
