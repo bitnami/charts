@@ -1,8 +1,14 @@
 # Changelog
 
-## 1.0.3 (2024-11-08)
+## 1.0.4 (2024-11-17)
 
-* [bitnami/zipkin] Unify seLinuxOptions default value ([#30320](https://github.com/bitnami/charts/pull/30320))
+* [bitnami/zipkin] Release 1.0.4 ([#30490](https://github.com/bitnami/charts/pull/30490))
+
+## <small>1.0.3 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/zipkin] Unify seLinuxOptions default value (#30320) ([3e3ea49](https://github.com/bitnami/charts/commit/3e3ea494d53df88393257d941802ecf6eb9ec49b)), closes [#30320](https://github.com/bitnami/charts/issues/30320)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>1.0.2 (2024-10-08)</small>
 
