@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.23 (2024-11-15)
+## 2.3.24 (2024-11-17)
 
-* [bitnami/fluent-bit] Release 2.3.23 ([#30475](https://github.com/bitnami/charts/pull/30475))
+* [bitnami/fluent-bit] Release 2.3.24 ([#30487](https://github.com/bitnami/charts/pull/30487))
+
+## <small>2.3.23 (2024-11-15)</small>
+
+* [bitnami/fluent-bit] Release 2.3.23 (#30475) ([0d5b4b8](https://github.com/bitnami/charts/commit/0d5b4b8dac85dca9031cbbc35e4ea400c9eb5b75)), closes [#30475](https://github.com/bitnami/charts/issues/30475)
 
 ## <small>2.3.22 (2024-11-05)</small>
 
