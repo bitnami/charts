@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.3.1 (2024-11-18)
+
+* [bitnami/mongodb] fix: Modify access modes to match YAML 1.2 schema ([#30508](https://github.com/bitnami/charts/pull/30508))
+
 ## 16.3.0 (2024-11-14)
 
-* [bitnami/mongodb] feat: :sparkles: Add password update job ([#30460](https://github.com/bitnami/charts/pull/30460))
+* [bitnami/mongodb] feat: :sparkles: Add password update job (#30460) ([a4d8d5b](https://github.com/bitnami/charts/commit/a4d8d5b3c164f946901b91651a7bd5cc338a11c0)), closes [#30460](https://github.com/bitnami/charts/issues/30460)
 
 ## <small>16.2.2 (2024-11-13)</small>
 
