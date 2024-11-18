@@ -1,8 +1,8 @@
 # Changelog
 
-## 22.0.0 (2024-11-15)
+## 22.0.1 (2024-11-18)
 
-* [bitnami/airflow] Metrics based on StatsD ([#30459](https://github.com/bitnami/charts/pull/30459))
+* [bitnami/airflow] Improve Goss tests ([#30492](https://github.com/bitnami/charts/pull/30492))
 
 ## 21.9.0 (2024-11-14)
 
