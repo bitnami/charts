@@ -1,21 +1,22 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.bucketweb.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-bucketweb
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.bucketweb.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.bucketweb.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: bucketweb
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.bucketweb.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
+    {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
+  {{- if or .Values.bucketweb.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.bucketweb.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.bucketweb.service.type }}
   {{- if and .Values.bucketweb.service.clusterIP (eq .Values.bucketweb.service.type "ClusterIP") }}
@@ -31,7 +32,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.bucketweb.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ if .Values.bucketweb.service.http }}{{ coalesce .Values.bucketweb.service.ports.http .Values.bucketweb.service.http.port }}{{ else }}{{ .Values.bucketweb.service.ports.http }}{{ end }}
+    - port: {{ .Values.bucketweb.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http
@@ -47,7 +48,8 @@ spec:
     {{- if .Values.bucketweb.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.bucketweb.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: bucketweb
     {{- end }}
 {{- end }}

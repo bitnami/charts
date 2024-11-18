@@ -1,0 +1,197 @@
+supervisor:
+  enabled: true
+  rbac:
+    create: true
+  extraVolumes:
+  - name: tls
+    secret:
+      secretName: pinniped-supervisor-default-tls-certificate
+  service:
+    public:
+      type: LoadBalancer
+      ports:
+        https: 443
+concierge:
+  enabled: true
+  rbac:
+    create: true
+  credentialIssuerConfig: |
+    impersonationProxy:
+      mode: enabled
+      service:
+        type: LoadBalancer
+        annotations:
+          service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "4000"
+extraDeploy:
+- |
+  {{- $ca := genCA "pinniped-ca" 365 }}
+  {{- $pinniped_hostname := include "pinniped.supervisor.fullname" . }}
+  {{- $pinniped_cert := genSignedCert $pinniped_hostname nil (list $pinniped_hostname) 365 $ca }}
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: {{ printf "%s-%s" (include "pinniped.supervisor.fullname" .) "default-tls-certificate" | trunc 63 | trimSuffix "-" }}
+    namespace: {{ include "common.names.namespace" $ | quote }}
+  type: kubernetes.io/tls
+  data:
+    tls.crt: {{ $pinniped_cert.Cert | b64enc | quote }}
+    tls.key: {{ $pinniped_cert.Key | b64enc | quote }}
+    ca.crt: {{ $ca.Cert | b64enc | quote }}
+  ---
+  {{- $openldap_hostname := (printf "openldap.%s.svc.cluster.local" .Release.Namespace) }}
+  {{- $openldap_cert := genSignedCert $openldap_hostname nil (list $openldap_hostname) 365 $ca }}
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: openldap-certs
+    namespace: {{ include "common.names.namespace" $ | quote }}
+  type: kubernetes.io/tls
+  data:
+    tls.crt: {{ $openldap_cert.Cert | b64enc | quote }}
+    tls.key: {{ $openldap_cert.Key | b64enc | quote }}
+    ca.crt: {{ $ca.Cert | b64enc | quote }}
+  ---
+  # Resource templates obtained from pinniped doc
+  # Ref: https://pinniped.dev/docs/howto/configure-supervisor-with-openldap/
+  apiVersion: config.supervisor.pinniped.dev/v1alpha1
+  kind: FederationDomain
+  metadata:
+    name: my-provider
+    namespace: {{ include "common.names.namespace" $ | quote }}
+  spec:
+    issuer: {{ printf "https://%s/demo-issuer" ( include "pinniped.supervisor.fullname" . ) }}
+  ---
+  ## Ref: https://pinniped.dev/docs/howto/configure-supervisor-with-openldap/
+  ##
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: openldap
+    labels:
+      app: openldap
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: openldap
+    template:
+      metadata:
+        labels:
+          app: openldap
+      spec:
+        containers:
+          - name: openldap
+            image: docker.io/bitnami/openldap
+            imagePullPolicy: Always
+            ports:
+              - name: openldap
+                containerPort: 1389
+              - name: openldaps
+                containerPort: 1636
+            readinessProbe:
+              tcpSocket:
+                port: openldap
+              initialDelaySeconds: 2
+              timeoutSeconds: 90
+              periodSeconds: 2
+              failureThreshold: 9
+            securityContext:
+              runAsNonRoot: true
+              privileged: false
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+                add: ["NET_BIND_SERVICE"]
+              seccompProfile:
+                type: "RuntimeDefault"
+            env:
+              - name: LDAP_ADMIN_USERNAME
+                value: "admin"
+              - name: LDAP_ADMIN_PASSWORD
+                value: "admin123"
+              - name: LDAP_ROOT
+                value: {{ printf "dc=%s" (include "pinniped.supervisor.fullname" . ) }}
+              - name: LDAP_USER_DC
+                value: "users"
+              - name: LDAP_USERS
+                value: "vibuser"
+              - name: LDAP_PASSWORDS
+                value: "vibUser123"
+              - name: LDAP_GROUP
+                value: "users"
+              - name: LDAP_ENABLE_TLS
+                value: "yes"
+              - name: LDAP_TLS_CERT_FILE
+                value: "/var/certs/tls.crt"
+              - name: LDAP_TLS_KEY_FILE
+                value: "/var/certs/tls.key"
+              - name: LDAP_TLS_CA_FILE
+                value: "/var/certs/ca.crt"
+            volumeMounts:
+              - name: certs
+                mountPath: /var/certs
+                readOnly: true
+        volumes:
+          - name: certs
+            secret:
+              secretName: openldap-certs
+  ---
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: openldap
+    labels:
+      app: openldap
+  spec:
+    type: ClusterIP
+    selector:
+      app: openldap
+    ports:
+      - protocol: TCP
+        port: 636
+        targetPort: 1636
+        name: openldaps
+  ---
+  apiVersion: idp.supervisor.pinniped.dev/v1alpha1
+  kind: LDAPIdentityProvider
+  metadata:
+    name: openldap
+  spec:
+    host: "openldap.{{ .Release.Namespace }}.svc.cluster.local"
+    tls:
+      certificateAuthorityData: {{ $ca.Cert | b64enc | quote }}
+    userSearch:
+      base: "ou=users,dc=pinniped-supervisor"
+      filter: "&(objectClass=inetOrgPerson)(uid={})"
+      attributes:
+        username: "uid"
+        uid: "uidNumber"
+    groupSearch:
+      base: "ou=users,dc=pinniped-supervisor"
+      filter: "&(objectClass=groupOfNames)(member={})"
+      attributes:
+        groupName: "cn"
+    bind:
+      secretName: openldap-bind-account
+  ---
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: openldap-bind-account
+  type: kubernetes.io/basic-auth
+  stringData:
+    username: "cn=admin,dc=pinniped-supervisor"
+    password: "admin123"
+  ---
+  ## Ref: https://pinniped.dev/docs/howto/configure-concierge-jwt/
+  ##
+  apiVersion: authentication.concierge.pinniped.dev/v1alpha1
+  kind: JWTAuthenticator
+  metadata:
+    name: supervisor-jwt-authenticator
+    namespace: {{ include "common.names.namespace" $ | quote }}
+  spec:
+    issuer: {{ printf "https://%s/demo-issuer" ( include "pinniped.supervisor.fullname" . ) }}
+    audience: vib-ed9de33c370981f61e9c
+    tls:
+      certificateAuthorityData: {{ $ca.Cert | b64enc | quote }}

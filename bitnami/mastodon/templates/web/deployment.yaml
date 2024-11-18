@@ -1,0 +1,297 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (include "mastodon.web.domain" .) (or .Values.enableS3 .Values.persistence.enabled) }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "mastodon.web.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mastodon
+    app.kubernetes.io/component: web
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.web.replicaCount }}
+  {{- if .Values.web.updateStrategy }}
+  strategy: {{- toYaml .Values.web.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: web
+  template:
+    metadata:
+      {{- if .Values.web.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.web.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: web
+    spec:
+      serviceAccountName: {{ template "mastodon.serviceAccountName" . }}
+      {{- include "mastodon.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.web.automountServiceAccountToken }}
+      {{- if .Values.web.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.web.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.web.podAffinityPreset "component" "web" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.web.podAntiAffinityPreset "component" "web" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.web.nodeAffinityPreset.type "key" .Values.web.nodeAffinityPreset.key "values" .Values.web.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.web.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.web.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.web.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.priorityClassName }}
+      priorityClassName: {{ .Values.web.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.web.schedulerName }}
+      schedulerName: {{ .Values.web.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.web.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.web.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.web.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.defaultInitContainers.prepareDirs.enabled }}
+        - name: prepare-tmp-dir
+          image: {{ template "mastodon.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.defaultInitContainers.prepareDirs.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              # HACK: Mastodon does not allow having a /tmp directory world-writable, so we need to create a /tmp dir
+              # with more restricted permissions
+              mkdir /tmp/tmp-dir
+          {{- if .Values.defaultInitContainers.prepareDirs.resources }}
+          resources: {{- toYaml .Values.defaultInitContainers.prepareDirs.resources | nindent 12 }}
+          {{- else if ne .Values.defaultInitContainers.prepareDirs.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.prepareDirs.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+        {{- end }}
+        {{- if not .Values.diagnosticMode.enabled }}
+        {{- if and (not .Values.enableS3) .Values.defaultInitContainers.volumePermissions.enabled .Values.web.containerSecurityContext.enabled }}
+        - name: volume-permissions
+          image: {{ include "mastodon.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.defaultInitContainers.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p {{ .Values.persistence.mountPath }}
+              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs --no-run-if-empty chown -R {{ .Values.web.containerSecurityContext.runAsUser }}:{{ .Values.web.podSecurityContext.fsGroup }}
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.defaultInitContainers.volumePermissions.resources }}
+          resources: {{- toYaml .Values.defaultInitContainers.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.defaultInitContainers.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+              subPath: {{ .Values.persistence.subPath }}
+        {{- end }}
+        {{- if .Values.defaultInitContainers.waitForBackends.enabled }}
+        {{- include "mastodon.waitForDBInitContainer" . | nindent 8 }}
+        {{- include "mastodon.waitForRedisInitContainer" . | nindent 8 }}
+        {{- if .Values.enableSearches }}
+        {{- include "mastodon.waitForElasticsearchInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.enableS3 }}
+        {{- include "mastodon.waitForS3InitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.web.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: mastodon
+          image: {{ template "mastodon.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.web.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.web.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.web.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /opt/bitnami/scripts/mastodon/run.sh
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.web.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.web.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: MASTODON_MODE
+              value: "web"
+            - name: MASTODON_WEB_PORT_NUMBER
+              value: {{ .Values.web.containerPorts.http | quote }}
+            - name: MASTODON_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.database.secretName" . }}
+                  key: {{ include "mastodon.database.passwordKey" . | quote }}
+            {{- if (include "mastodon.redis.auth.enabled" .) }}
+            - name: MASTODON_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.redis.secretName" . }}
+                  key: {{ include "mastodon.redis.passwordKey" . | quote }}
+            {{- end }}
+            {{- if .Values.enableS3 }}
+            - name: MASTODON_AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.s3.secretName" . }}
+                  key: {{ include "mastodon.s3.accessKeyIDKey" . | quote }}
+            - name: MASTODON_AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.s3.secretName" . }}
+                  key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
+            {{- end }}
+            {{- if and .Values.enableSearches (include "mastodon.elasticsearch.auth.enabled" .) }}
+            - name: MASTODON_ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.elasticsearch.secretName" . }}
+                  key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
+            {{- end }}
+            {{- if ne .Values.smtp.auth_method "none" }}
+            - name: SMTP_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.serverKey" . | quote }}
+            - name: SMTP_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.loginKey" . | quote }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.passwordKey" . | quote }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "mastodon.defaultConfigmapName" . }}
+            - secretRef:
+                name: {{ include "mastodon.defaultSecretName" . }}
+            {{- if or .Values.extraConfig .Values.extraConfigExistingConfigmap }}
+            - configMapRef:
+                name: {{ include "mastodon.extraConfigmapName" . }}
+            {{- end }}
+            {{- if or .Values.extraSecretConfig .Values.extraConfigExistingSecret }}
+            - secretRef:
+                name: {{ include "mastodon.extraSecretName" . }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.web.resources }}
+          resources: {{- toYaml .Values.web.resources | nindent 12 }}
+          {{- else if ne .Values.web.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.web.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.web.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.web.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.web.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.web.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.web.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.web.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if not .Values.enableS3 }}
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+          {{- end }}
+          {{- if .Values.web.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.web.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.web.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+          - name: empty-dir
+            emptyDir: {}
+        {{- if not .Values.enableS3 }}
+          - name: data
+            {{- if .Values.persistence.enabled }}
+            persistentVolumeClaim:
+              claimName: {{ include "mastodon.pvc" . }}
+            {{- else }}
+            emptyDir: {}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.web.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 10 }}
+        {{- end }}
+{{- end }}

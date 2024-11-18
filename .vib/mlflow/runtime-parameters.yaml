@@ -1,0 +1,64 @@
+tracking:
+  enabled: true
+  auth:
+    enabled: true
+    username: vib-user
+    password: "ComplicatedPassword123!4"
+    extraOverrides:
+      default_permission: WRITE
+  containerPorts:
+    http: 8100
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+  serviceAccount:
+    create: true
+  automountServiceAccountToken: true
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    runAsGroup: 1002
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  persistence:
+    enabled: true
+    mountPath: /vib-mlflow/test
+  metrics:
+    enabled: true
+
+run:
+  enabled: true
+  useJob: true
+  source:
+    launchCommand: "python vib_test.py"
+    configMap:
+      # Example taken from the MLFlow UI
+      vib_test.py: |
+          import mlflow
+          from sklearn.model_selection import train_test_split
+          from sklearn.datasets import load_diabetes
+          import sklearn.ensemble
+
+          # set the experiment id
+          mlflow.set_experiment(experiment_id="0")
+
+          mlflow.autolog()
+          db = load_diabetes()
+
+          X_train, X_test, y_train, y_test = train_test_split(db.data, db.target)
+
+          # Create and train models.
+          rf = sklearn.ensemble.RandomForestRegressor(n_estimators=100, max_depth=6, max_features=3)
+          rf.fit(X_train, y_train)
+
+          # Use the model to make predictions on the test dataset.
+          predictions = rf.predict(X_test)

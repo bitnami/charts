@@ -1,31 +1,35 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: %%CHOOSE_ONE_FROM_CHART_CATEGORIES_FILE%%
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: %%UPSTREAM_PROJECT_VERSION%%
 dependencies:
   - condition: SUBCHART_NAME.enabled
     name: SUBCHART_NAME
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: %%MAJOR_SUBCHART_VERSION_(A.X.X)%%
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: %%DESCRIPTION%%
-engine: gotpl
-home: %%UPSTREAM_PROJECT_URL%%
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-220x234.png
 keywords:
   - %%UPSTREAM_PROJECT_KEYWORD%%
   - %%UPSTREAM_PROJECT_KEYWORD%%
   - ...
 maintainers:
-  - name: Bitnami
+  - name: Broadcom, Inc. All Rights Reserved.
     url: https://github.com/bitnami/charts
 name: %%CHART_NAME%%
 sources:
-  - https://github.com/bitnami/bitnami-docker-%%IMAGE_NAME%%
+  - https://github.com/bitnami/charts/tree/main/bitnami/%%IMAGE_NAME%%
+  - https://github.com/bitnami/containers/tree/main/bitnami/%%IMAGE_NAME%%
   - %%UPSTREAM_PROJECT_SOURCE_CODE_URL%%
   - ...
 version: 0.1.0

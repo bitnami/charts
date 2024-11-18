@@ -1,0 +1,389 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.tracking.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "mlflow.v0.tracking.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mlflow
+    app.kubernetes.io/component: tracking
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.tracking.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.tracking.replicaCount }}
+  {{- end }}
+  {{- if .Values.tracking.updateStrategy }}
+  strategy: {{- toYaml .Values.tracking.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.tracking.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mlflow
+      app.kubernetes.io/component: tracking
+  template:
+    metadata:
+      {{- if or .Values.tracking.podAnnotations .Values.tracking.auth.enabled }}
+      annotations:
+        {{- if .Values.tracking.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.tracking.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.tracking.auth.enabled }}
+        checksum/auth: {{ include (print $.Template.BasePath "/tracking/configmap-overrides.yaml") . | sha256sum }}
+        {{- end }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mlflow
+        app.kubernetes.io/component: tracking
+    spec:
+      serviceAccountName: {{ include "mlflow.v0.tracking.serviceAccountName" . }}
+      {{- include "mlflow.v0.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.tracking.automountServiceAccountToken }}
+      {{- if .Values.tracking.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tracking.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.tracking.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.tracking.podAffinityPreset "component" "mlflow" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.tracking.podAntiAffinityPreset "component" "mlflow" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.tracking.nodeAffinityPreset.type "key" .Values.tracking.nodeAffinityPreset.key "values" .Values.tracking.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.tracking.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.tracking.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tracking.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tracking.priorityClassName }}
+      priorityClassName: {{ .Values.tracking.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.tracking.schedulerName }}
+      schedulerName: {{ .Values.tracking.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.tracking.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tracking.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tracking.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.tracking.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.tracking.enableDefaultInitContainers }}
+        {{- if .Values.tracking.tls.enabled }}
+        {{- include "mlflow.v0.tracking.copyCertsInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- if and (include "mlflow.v0.database.enabled" .) }}
+        # Init container for PostgreSQL
+        {{- include "mlflow.v0.waitForServiceInitContainer" (dict "target" "database" "host" (include "mlflow.v0.database.host" .) "port" (include "mlflow.v0.database.port" .) "context" $) | nindent 8 }}
+        {{- if .Values.tracking.runUpgradeDB }}
+        # Perform upgrade of the Database
+        {{- include "mlflow.v0.tracking.upgradeDBInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.tracking.auth.enabled }}
+        # Render basic auth configuration
+        {{- include "mlflow.v0.tracking.renderAuthConfInitContainer" . | nindent 8 }}
+        # Perform upgrade of the Auth Database
+        {{- include "mlflow.v0.tracking.upgradeDBAuthInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- if (include "mlflow.v0.s3.enabled" .) }}
+        # Wait for S3 backend to be ready
+        {{- include "mlflow.v0.waitForServiceInitContainer" (dict "target" "s3" "host" (include "mlflow.v0.s3.host" .) "port" (include "mlflow.v0.s3.port" .) "context" $) | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.tracking.persistence.enabled }}
+        # Adjust volume permissions
+        {{- include "mlflow.v0.volumePermissionsInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.tracking.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.tracking.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: mlflow
+          image: {{ include "mlflow.v0.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.tracking.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.tracking.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - mlflow
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.tracking.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - server
+            {{- if .Values.tracking.tls.enabled }}
+            - --gunicorn-opts
+            - --certfile {{ include "mlflow.v0.tracking.tlsCert" . }} --keyfile {{ include "mlflow.v0.tracking.tlsCertKey" . }} {{- if (include "mlflow.v0.tracking.tlsCACert" .)}} --ca-certs {{ include "mlflow.v0.tracking.tlsCACert" . }}{{- end }}
+            {{- end }}
+            {{- if (include "mlflow.v0.database.enabled" .) }}
+            - --backend-store-uri={{ include "mlflow.v0.database.uri" . }}
+            {{- else }}
+            - --backend-store-uri={{ .Values.tracking.persistence.mountPath }}/mlruns
+            {{- end }}
+            {{- if (include "mlflow.v0.s3.enabled" .) }}
+            - --artifacts-destination=s3://{{ include "mlflow.v0.s3.bucket" . }}
+            {{- else if (include "mlflow.v0.gcs.enabled" .) }}
+            - --artifacts-destination=gs://{{ .Values.externalGCS.bucket }}
+            {{- else if (include "mlflow.v0.azureBlob.enabled" .) }}
+            - --artifacts-destination=wasbs://{{ .Values.externalAzureBlob.containerName }}@{{ .Values.externalAzureBlob.storageAccount }}.blob.core.windows.net
+            {{- else }}
+            - --artifacts-destination={{ .Values.tracking.persistence.mountPath }}/mlartifacts
+            {{- end }}
+            {{- if and (not (include "mlflow.v0.s3.serveArtifacts" .)) (include "mlflow.v0.s3.enabled" .) }}
+            - --default-artifact-root=s3://{{ include "mlflow.v0.s3.bucket" . }}
+            - --no-serve-artifacts
+            {{- else if and (not .Values.externalGCS.serveArtifacts) (include "mlflow.v0.gcs.enabled" .) }}
+            - --default-artifact-root=gs://{{ .Values.externalGCS.bucket }}
+            - --no-serve-artifacts
+            {{- else if and (not .Values.externalAzureBlob.serveArtifacts) (include "mlflow.v0.azureBlob.enabled" .) }}
+            - --default-artifact-root=wasbs://{{ .Values.externalAzureBlob.containerName }}@{{ .Values.externalAzureBlob.storageAccount }}.blob.core.windows.net
+            - --no-serve-artifacts
+            {{ else }}
+            - --serve-artifacts
+            {{- end }}
+            - --host={{ .Values.tracking.host }}
+            - --port={{ .Values.tracking.containerPorts.http }}
+            {{- if .Values.tracking.metrics.enabled }}
+            - --expose-prometheus={{ .Values.tracking.persistence.mountPath }}/metrics
+            {{- end }}
+            {{- if .Values.tracking.auth.enabled }}
+            - --app-name=basic-auth
+            {{- end }}
+            {{- if .Values.tracking.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if (include "mlflow.v0.database.enabled" .) }}
+            - name: MLFLOW_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.v0.database.secretName" . }}
+                  key: {{ include "mlflow.v0.database.passwordKey" . | quote }}
+            {{- end }}
+            {{- if (include "mlflow.v0.s3.enabled" .) }}
+            {{- if .Values.externalS3.useCredentialsInSecret }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.v0.s3.secretName" . }}
+                  key: {{ include "mlflow.v0.s3.accessKeyIDKey" . | quote }}
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.v0.s3.secretName" . }}
+                  key: {{ include "mlflow.v0.s3.secretAccessKeyKey" . | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if (include "mlflow.v0.s3.enabled" .) }}
+            - name: MLFLOW_S3_ENDPOINT_URL
+              value: {{ printf "%s://%s:%v" (include "mlflow.v0.s3.protocol" .) (include "mlflow.v0.s3.host" .) (include "mlflow.v0.s3.port" .) | quote }}
+            {{- end }}
+            {{- if (include "mlflow.v0.gcs.enabled" .) }}
+            {{- if .Values.externalGCS.useCredentialsInSecret }}
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /bitnami/gcs/key.json
+            {{- end }}
+            {{- end }}
+
+            {{- if (include "mlflow.v0.azureBlob.enabled" .) }}
+            {{- if .Values.externalAzureBlob.useCredentialsInSecret }}
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalAzureBlob.existingSecret }}
+                  key: {{ .Values.externalAzureBlob.existingConnectionStringKey }}
+            - name: AZURE_STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalAzureBlob.existingSecret }}
+                  key: {{ .Values.externalAzureBlob.existingAccessKeyKey }}
+            - name: AZURE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalAzureBlob.existingSecret }}
+                  key: {{ .Values.externalAzureBlob.clientSecretKey }}
+            {{- else }}
+            {{- if .Values.externalAzureBlob.connectionString }}
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              value: {{ .Values.externalAzureBlob.connectionString }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.accessKey }}
+            - name: AZURE_STORAGE_ACCESS_KEY
+              value: {{ .Values.externalAzureBlob.accessKey }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.clientId }}
+            - name: AZURE_CLIENT_ID
+              value: {{ .Values.externalAzureBlob.clientId }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.tenantId }}
+            - name: AZURE_TENANT_ID
+              value: {{ .Values.externalAzureBlob.tenantId }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.clientSecret }}
+            - name: AZURE_CLIENT_SECRET
+              value: {{ .Values.externalAzureBlob.clientSecret }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+
+            {{- if .Values.externalGCS.googleCloudProject }}
+            - name: GOOGLE_CLOUD_PROJECT
+              value: {{ .Values.externalGCS.googleCloudProject }}
+            {{- end }}
+
+            {{- if .Values.tracking.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.tracking.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.tracking.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.tracking.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.tracking.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.tracking.resources }}
+          resources: {{- toYaml .Values.tracking.resources | nindent 12 }}
+          {{- else if ne .Values.tracking.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.tracking.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: {{ include "mlflow.v0.tracking.portName" . }}
+              containerPort: {{ .Values.tracking.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.tracking.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.tracking.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - mlflow.server
+          {{- end }}
+          {{- if .Values.tracking.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.tracking.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.readinessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if .Values.tracking.auth.enabled }}
+            tcpSocket:
+              port: {{ include "mlflow.v0.tracking.portName" . }}
+            {{- else }}
+            httpGet:
+              path: /
+              port: {{ include "mlflow.v0.tracking.portName" . }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.tracking.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.tracking.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.startupProbe "enabled") "context" $) | nindent 12 }}
+            {{- if .Values.tracking.auth.enabled }}
+            tcpSocket:
+              port: {{ include "mlflow.v0.tracking.portName" . }}
+            {{- else }}
+            httpGet:
+              path: /
+              port: {{ include "mlflow.v0.tracking.portName" . }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.tracking.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: mlruns
+              mountPath: /app/mlruns
+            - name: mlartifacts
+              mountPath: /app/mlartifacts
+            {{- if  .Values.tracking.tls.enabled }}
+            - name: mlflow-certificates
+              mountPath: /bitnami/mlflow/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.tracking.auth.enabled }}
+            - name: rendered-basic-auth
+              mountPath: /bitnami/mlflow-basic-auth/basic_auth.ini
+              subPath: basic_auth.ini
+            {{- end }}
+            - name: data
+              mountPath: {{ .Values.tracking.persistence.mountPath }}
+              {{- if .Values.tracking.persistence.subPath }}
+              subPath: {{ .Values.tracking.persistence.subPath }}
+              {{- end }}
+            {{- if and (include "mlflow.v0.gcs.enabled" .) .Values.externalGCS.useCredentialsInSecret }}
+            - name: gcs-key
+              mountPath: /bitnami/gcs/key.json
+              subPath: key.json
+            {{- end }}
+          {{- if .Values.tracking.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.tracking.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.tracking.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: mlruns
+          emptyDir: {}
+        - name: mlartifacts
+          emptyDir: {}
+        {{- if  .Values.tracking.tls.enabled }}
+        - name: raw-certificates
+          secret:
+            secretName: {{ include "mlflow.v0.tracking.tlsSecretName" . }}
+        - name: mlflow-certificates
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.tracking.auth.enabled }}
+        - name: basic-auth-overrides
+          configMap:
+            name: {{ include "mlflow.v0.tracking.auth.overridesConfigMapName" . }}
+        - name: rendered-basic-auth
+          emptyDir: {}
+        {{- end }}
+        - name: data
+          {{- if .Values.tracking.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.tracking.persistence.existingClaim | default (include "mlflow.v0.tracking.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- if .Values.tracking.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and (include "mlflow.v0.gcs.enabled" .) .Values.externalGCS.useCredentialsInSecret }}
+        - name: gcs-key
+          secret:
+            secretName: {{ .Values.externalGCS.existingSecret }}
+            items:
+              - key: {{ .Values.externalGCS.existingSecretKey }}
+                path: key.json
+        {{- end }}
+{{- end }}

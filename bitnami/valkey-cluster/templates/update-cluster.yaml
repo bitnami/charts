@@ -1,0 +1,266 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.cluster.update.addNodes ( or (and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP) ( not .Values.cluster.externalAccess.enabled )) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "common.names.fullname" . }}-cluster-update
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  annotations:
+    "helm.sh/hook": {{ .Values.updateJob.helmHook }}
+    {{- if or .Values.updateJob.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.updateJob.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  activeDeadlineSeconds: {{ .Values.updateJob.activeDeadlineSeconds }}
+  template:
+    metadata:
+      {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.updateJob.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 8 }}
+      {{- if or .Values.updateJob.podAnnotations .Values.commonAnnotations }}
+      {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.updateJob.annotations .Values.commonAnnotations ) "context" . ) }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "valkey-cluster.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.updateJob.automountServiceAccountToken }}
+      {{- if .Values.updateJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.updateJob.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.updateJob.podAffinityPreset "customLabels" $labels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.updateJob.podAntiAffinityPreset "customLabels" $labels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.updateJob.nodeAffinityPreset.type "key" .Values.updateJob.nodeAffinityPreset.key "values" .Values.updateJob.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.updateJob.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.updateJob.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.updateJob.priorityClassName }}
+      priorityClassName: {{ .Values.updateJob.priorityClassName }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "valkey-cluster.serviceAccountName" . }}
+      {{- if .Values.updateJob.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: trigger
+          image: {{ include "valkey-cluster.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.updateJob.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.command "context" $) | nindent 12 }}
+          {{- else }}
+          command: ['/bin/bash', '-c']
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.updateJob.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - |
+              . /opt/bitnami/scripts/libnet.sh
+              . /opt/bitnami/scripts/libos.sh
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/valkey/etc/valkey.conf ]]; then
+                  cp /opt/bitnami/valkey/etc/valkey-default.conf /opt/bitnami/valkey/etc/valkey.conf
+              fi
+              firstNodeIP=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
+              {{- if .Values.cluster.externalAccess.enabled }}
+              newNodeCounter=0
+              for nodeIP in $(echo "{{ .Values.cluster.update.newExternalIPs }}" | cut -d [ -f2 | cut -d ] -f 1 ); do
+                {{- if .Values.tls.enabled }}
+                while [[ $(valkey-cli -h "$nodeIP" -p "$VALKEY_TLS_PORT_NUMBER" --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} ping) != 'PONG' ]]; do
+                {{- else }}
+                while [[ $(valkey-cli -h "$nodeIP" -p "$VALKEY_PORT_NUMBER" ping) != 'PONG' ]]; do
+                {{- end }}
+                  echo "Node $nodeIP not ready, waiting for all the nodes to be ready..."
+                  sleep 5
+                done
+                replica=()
+                if (( $VALKEY_CLUSTER_REPLICAS >= 1 )) && (( newNodeCounter % (( $VALKEY_CLUSTER_REPLICAS + 1 )) )); then
+                  replica+=("--cluster-slave")
+                fi
+                {{- if .Values.tls.enabled }}
+                while ! valkey-cli --cluster --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} add-node "${nodeIP}:${VALKEY_TLS_PORT_NUMBER}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_TLS_PORT_NUMBER}" ${replica[@]}; do
+                {{- else }}
+                while ! valkey-cli --cluster add-node "${nodeIP}:${VALKEY_PORT_NUMBER}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_PORT_NUMBER}" ${replica[@]}; do
+                {{- end }}
+                  echo "Add-node ${newNodeIndex} ${newNodeIP} failed, retrying"
+                  sleep 5
+                done
+                ((newNodeCounter += 1))
+              done
+
+              {{- if .Values.tls.enabled }}
+              while ! valkey-cli --cluster rebalance --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_TLS_PORT_NUMBER}" --cluster-use-empty-masters; do
+              {{- else }}
+              while ! valkey-cli --cluster rebalance "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_PORT_NUMBER}" --cluster-use-empty-masters; do
+              {{- end }}
+                echo "Rebalance failed, retrying"
+                sleep 5
+                {{- if .Values.tls.enabled }}
+                valkey-cli --cluster fix --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_TLS_PORT_NUMBER}"
+                {{- else }}
+                valkey-cli --cluster fix "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${VALKEY_PORT_NUMBER}"
+                {{- end }}
+              done
+
+              {{- else }}
+              # number of currently deployed valkey primary nodes
+              currentPrimaryNodesNum="$(( {{ .Values.cluster.update.currentNumberOfNodes }} / (( {{ .Values.cluster.update.currentNumberOfReplicas }} + 1 )) ))"
+              # end postion of new replicas that should be assigned to original valkey primary nodes
+              replicaNodesEndPos="$(( {{ .Values.cluster.update.currentNumberOfNodes }} + (($VALKEY_CLUSTER_REPLICAS - {{ .Values.cluster.update.currentNumberOfReplicas }})) * $currentPrimaryNodesNum ))"
+              for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
+                newNodeIndex="$(($node - 1))"
+                newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
+                {{- if .Values.tls.enabled }}
+                while [[ $(valkey-cli -h "$newNodeIP" -p "$VALKEY_TLS_PORT_NUMBER" --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} ping) != 'PONG' ]]; do
+                {{- else }}
+                while [[ $(valkey-cli -h "$newNodeIP" -p "$VALKEY_PORT_NUMBER" ping) != 'PONG' ]]; do
+                {{- end }}
+                  echo "Node $newNodeIP not ready, waiting for all the nodes to be ready..."
+                  newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
+                  sleep 5
+                done
+                replica=()
+                # when the index of the new node is less than `replicaNodesEndPos`，the added node is a replica that assigned to original valkey primary node
+                # when the index of the new node is greater than or equal to `replicaNodesEndPos`，and it is not a multiple of `$VALKEY_CLUSTER_REPLICAS + 1`, the added node is a replica that assigned to newly added primary node
+                if (( $VALKEY_CLUSTER_REPLICAS >= 1 )) && (( (( $newNodeIndex < $replicaNodesEndPos )) || (( (( $newNodeIndex >= $replicaNodesEndPos )) && (( $newNodeIndex % (( $VALKEY_CLUSTER_REPLICAS + 1 )) )) )) )); then
+                  replica+=("--cluster-slave")
+                fi
+                {{- if .Values.tls.enabled }}
+                while ! valkey-cli --cluster add-node --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} "${newNodeIP}:${VALKEY_TLS_PORT_NUMBER}" "${firstNodeIP}:${VALKEY_TLS_PORT_NUMBER}" ${replica[@]}; do
+                {{- else }}
+                while ! valkey-cli --cluster add-node "${newNodeIP}:${VALKEY_PORT_NUMBER}" "${firstNodeIP}:${VALKEY_PORT_NUMBER}" ${replica[@]}; do
+                {{- end }}
+                  echo "Add-node ${newNodeIndex} ${newNodeIP} failed, retrying"
+                  sleep 5
+                  firstNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless" 120 5)
+                  newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
+                done
+              done
+
+              {{- if .Values.tls.enabled }}
+              while ! valkey-cli --cluster rebalance --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} "${firstNodeIP}:${VALKEY_TLS_PORT_NUMBER}" --cluster-use-empty-masters; do
+              {{- else }}
+              while ! valkey-cli --cluster rebalance "${firstNodeIP}:${VALKEY_PORT_NUMBER}" --cluster-use-empty-masters; do
+              {{- end }}
+                echo "Rebalance failed, retrying"
+                sleep 5
+                firstNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless" 120 5)
+                {{- if .Values.tls.enabled }}
+                valkey-cli --cluster fix --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} "${firstNodeIP}:${VALKEY_TLS_PORT_NUMBER}"
+                {{- else }}
+                valkey-cli --cluster fix "${firstNodeIP}:${VALKEY_PORT_NUMBER}"
+                {{- end }}
+              done
+
+              {{- end }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.cluster.externalAccess.enabled }}
+            {{- if .Values.tls.enabled }}
+            - name:  VALKEY_TLS_CERT_FILE
+              value: {{ template "valkey-cluster.tlsCert" . }}
+            - name:  VALKEY_TLS_KEY_FILE
+              value: {{ template "valkey-cluster.tlsCertKey" . }}
+            - name:  VALKEY_TLS_CA_FILE
+              value: {{ template "valkey-cluster.tlsCACert" . }}
+            - name: VALKEY_TLS_PORT_NUMBER
+            {{- else }}
+            - name: VALKEY_PORT_NUMBER
+            {{- end }}
+              value: {{ .Values.cluster.externalAccess.service.port | quote }}
+            {{- else }}
+            {{- if .Values.tls.enabled }}
+            - name:  VALKEY_TLS_CERT_FILE
+              value: {{ template "valkey-cluster.tlsCert" . }}
+            - name:  VALKEY_TLS_KEY_FILE
+              value: {{ template "valkey-cluster.tlsCertKey" . }}
+            - name:  VALKEY_TLS_CA_FILE
+              value: {{ template "valkey-cluster.tlsCACert" . }}
+            - name: VALKEY_TLS_PORT_NUMBER
+            {{- else }}
+            - name: VALKEY_PORT_NUMBER
+            {{- end }}
+              value: {{ .Values.valkey.containerPorts.valkey | quote }}
+            {{- end }}
+            - name: VALKEY_CLUSTER_REPLICAS
+              value: {{ .Values.cluster.replicas | quote }}
+            {{- if .Values.usePassword }}
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "valkey-cluster.secretName" . }}
+                  key: {{ template "valkey-cluster.secretPasswordKey" . }}
+            {{- end }}
+            {{- if .Values.updateJob.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.updateJob.extraEnvVarsCM .Values.updateJob.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.updateJob.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.updateJob.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.updateJob.resources }}
+          resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
+          {{- else if ne .Values.updateJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.updateJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.tls.enabled .Values.updateJob.extraVolumeMounts }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.tls.enabled }}
+            - name: valkey-certificates
+              mountPath: /opt/bitnami/valkey/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.updateJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+      restartPolicy: OnFailure
+      {{- if or .Values.tls.enabled .Values.updateJob.extraVolumes }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+      {{- if .Values.tls.enabled }}
+        - name: valkey-certificates
+          secret:
+            secretName: {{ include "common.tplvalues.render" (dict "value" .Values.tls.certificatesSecret "context" $) }}
+      {{- end }}
+      {{- if .Values.updateJob.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
+      {{- end }}
+{{- end }}
+

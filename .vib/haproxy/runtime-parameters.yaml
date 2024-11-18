@@ -1,0 +1,50 @@
+configuration: |
+  global
+    log stdout format raw local0
+    maxconn 1024
+  defaults
+    log global
+    timeout client 60s
+    timeout connect 60s
+    timeout server 60s
+  frontend fe_main
+    bind :8081
+    default_backend be_main
+  backend be_main
+    server web1 127.0.0.1:8080 check
+containerPorts:
+  - name: http
+    containerPort: 8081
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+service:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http
+sidecars:
+  - name: nginx
+    image: docker.io/bitnami/nginx:1.25.2-debian-11-r5
+    imagePullPolicy: Always
+    ports:
+      - name: web
+        containerPort: 8080
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"

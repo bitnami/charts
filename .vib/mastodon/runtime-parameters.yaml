@@ -1,0 +1,63 @@
+adminEmail: vib-user@changeme.com
+adminPassword: bitnami!1234
+
+webDomain: bitnami-mastodon.my
+
+serviceAccount:
+  create: true
+
+web:
+  containerPorts:
+    http: 8123
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    capabilities:
+      drop: [ALL]
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  service:
+    ports:
+      http: 8500
+  automountServiceAccountToken: true
+
+streaming:
+  service:
+    ports:
+      http: 8600
+
+apache:
+  enabled: true
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+
+postgresql:
+  enabled: true
+  primary:
+    service:
+      ports:
+        postgresql: 9393
+
+minio:
+  enabled: true
+  service:
+    ports:
+      api: 8011
+
+redis:
+  enabled: true
+  master:
+    service:
+      ports:
+        redis: 6800
+
+elasticsearch:
+  enabled: true
+  service:
+    ports:
+      restAPI: 7777

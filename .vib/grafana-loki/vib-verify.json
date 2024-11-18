@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/grafana-loki"
         },
-        "runtime_parameters": "Z2F0ZXdheToKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,27 +31,17 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-grafana-loki-gateway-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/grafana-loki/goss/gateway"
+              "path": "/.vib"
             },
+            "tests_file": "grafana-loki/goss/promtail/goss.yaml",
+            "vars_file": "grafana-loki/runtime-parameters.yaml",
             "remote": {
-              "workload": "deploy-grafana-loki-gateway"
+              "pod": {
+                "workload": "ds-grafana-loki-promtail"
+              }
             }
           }
         },
@@ -60,10 +49,14 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/grafana-loki/goss/querier"
+              "path": "/.vib"
             },
+            "tests_file": "grafana-loki/goss/querier/goss.yaml",
+            "vars_file": "grafana-loki/runtime-parameters.yaml",
             "remote": {
-              "workload": "sts-grafana-loki-querier"
+              "pod": {
+                "workload": "sts-grafana-loki-querier"
+              }
             }
           }
         },
@@ -75,6 +68,12 @@
             },
             "endpoint": "lb-grafana-loki-gateway-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

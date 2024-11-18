@@ -1,0 +1,198 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if (include "milvus.init-job.create" .) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-init
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.initJob.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: init
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.initJob.annotations "context" $ ) | nindent 4 }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  backoffLimit: {{ .Values.initJob.backoffLimit }}
+  template:
+    metadata:
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.initJob.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: milvus
+        app.kubernetes.io/component: init
+      {{- if .Values.initJob.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      {{- if .Values.initJob.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.initJob.automountServiceAccountToken }}
+      {{- if .Values.initJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.initJob.enableDefaultInitContainers }}
+        {{- include "milvus.waitForProxyInitContainer" . | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: update-credentials
+          image: {{ template "milvus.init-job.image" . }}
+          imagePullPolicy: {{ .Values.initJob.image.pullPolicy }}
+          command:
+            - /bin/bash
+            - -ec
+          args:
+            - |
+              #!/bin/bash
+              {{- if .Values.milvus.auth.enabled }}
+              echo "Updating credentials"
+              # Taken from https://milvus.io/docs/authenticate.md
+              python - <<EOF
+              # Import libraries
+              import os
+              from pymilvus import connections
+              from pymilvus import utility
+              # Authenticate using default root user credentials
+              {{- if eq (int .Values.proxy.tls.mode) 0}}
+              connections.connect(
+                  alias='default',
+                  host='{{ include "milvus.proxy.fullname" . }}',
+                  port='{{ .Values.proxy.service.ports.grpc }}',
+                  password='Milvus',
+                  user='root',
+                  server_name='localhost')
+              {{- else if eq (int .Values.proxy.tls.mode) 1}}
+              connections.connect(
+                  alias='default',
+                  host='{{ include "milvus.proxy.fullname" . }}',
+                  port='{{ .Values.proxy.service.ports.grpc }}',
+                  secure=True,
+                  server_pem_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.cert }}',
+                  password='Milvus',
+                  user='root',
+                  server_name='localhost')
+              {{- else }}
+              connections.connect(
+                  alias='default',
+                  host='{{ include "milvus.proxy.fullname" . }}',
+                  port='{{ .Values.proxy.service.ports.grpc }}',
+                  secure=True,
+                  client_pem_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.cert }}',
+                  client_key_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.key }}',
+                  ca_pem_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.caCert }}',
+                  password='Milvus',
+                  user='root',
+                  server_name='localhost')
+              {{- end }}
+              # Reset root password
+              utility.reset_password('root', 'Milvus', os.environ['MILVUS_ROOT_PASSWORD'], using='default')
+              utility.create_user('{{ .Values.milvus.auth.username }}', os.environ['MILVUS_PASSWORD'], using='default')
+              EOF
+              echo "Credentials updated"
+              {{- end }}
+              {{- if .Values.initJob.extraCommands }}
+              {{- include "common.tplValues.render" (dict "value" .Values.initJob.extraCommands "context" $) | nindent 14 }}
+              {{- end }}
+          env:
+            {{- if .Values.milvus.auth.enabled }}
+            - name: MILVUS_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "milvus.secretName" . }}
+                  key: {{ include "milvus.secretRootPasswordKey" . }}
+            - name: MILVUS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "milvus.secretName" . }}
+                  key: {{ include "milvus.secretPasswordKey" . }}
+            {{- end }}
+          {{- if .Values.initJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.initJob.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.initJob.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - python
+            initialDelaySeconds: {{ .Values.initJob.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.initJob.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.initJob.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.initJob.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.initJob.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.initJob.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.initJob.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - pgrep
+                - python
+            initialDelaySeconds: {{ .Values.initJob.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.initJob.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.initJob.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.initJob.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.initJob.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.initJob.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.initJob.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.initJob.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - python
+          {{- end }}
+          {{- if or .Values.initJob.extraEnvVarsCM .Values.initJob.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.initJob.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.initJob.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.initJob.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.initJob.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
+            - name: milvus-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/milvus/client
+              readOnly: true
+            {{- end }}
+          {{- if .Values.initJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.initJob.resources }}
+          resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
+        - name: milvus-client-certs
+          secret:
+            secretName: {{ .Values.initJob.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+      {{- if .Values.initJob.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}

@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 {{- if .Values.useDaemonset }}
 kind: DaemonSet
@@ -7,11 +12,8 @@ kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -19,8 +21,9 @@ spec:
   {{- if not .Values.useDaemonset }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: server
   {{- if .Values.updateStrategy }}
   {{- if .Values.useDaemonset }}
@@ -31,11 +34,8 @@ spec:
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: server
-        {{- if .Values.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       annotations:
         {{- if (include "kong.createExternalDBSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/external-database-secret.yaml") . | sha256sum }}
@@ -49,6 +49,7 @@ spec:
         {{- end }}
     spec:
       {{- include "kong.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -59,8 +60,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "server" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "server" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "server" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "server" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
@@ -79,7 +80,7 @@ spec:
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -92,7 +93,7 @@ spec:
           image: {{ template "kong.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -105,6 +106,8 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.kong.args "context" $) | nindent 12 }}
           {{- end }}
           env:
+            - name: KONG_PREFIX
+              value: /opt/bitnami/kong/server
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.service.exposeAdmin }}
@@ -112,7 +115,7 @@ spec:
               value: "0.0.0.0"
             {{- end }}
             - name: KONG_DATABASE
-              value: {{ ternary "postgres" "cassandra" (eq .Values.database "postgresql") | quote }}
+              value: {{ include "kong.database" . | quote }}
             {{- if (eq .Values.database "postgresql") }}
             {{- if .Values.postgresql.auth.usePasswordFiles }}
             - name: KONG_POSTGRESQL_PASSWORD_FILE
@@ -153,6 +156,10 @@ spec:
             - name: KONG_NGINX_HTTP_INCLUDE
               value: "/bitnami/kong/metrics-exporter/exporter.conf"
             {{- end }}
+            {{- if (include "kong.declarativeConfigMap" .) }}
+            - name: KONG_DECLARATIVE_CONFIG
+              value: "/bitnami/kong/declarative-conf/kong.yml"
+            {{- end }}
             {{- if .Values.kong.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.kong.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -186,32 +193,32 @@ spec:
               protocol: TCP
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.kong.startupProbe.enabled }}
+          {{- if .Values.kong.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kong.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kong.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http-proxy
-          {{- else if .Values.kong.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kong.livenessProbe.enabled }}
+          {{- if .Values.kong.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kong.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kong.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/bash
-                - -ec
-                - /health/kong-container-health.sh
-          {{- else if .Values.kong.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customLivenessProbe "context" $) | nindent 12 }}
+                - pgrep
+                - -f
+                - 'kong start'
           {{- end }}
-          {{- if .Values.kong.readinessProbe.enabled }}
+          {{- if .Values.kong.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kong.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kong.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - /health/kong-container-health.sh
-          {{- else if .Values.kong.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if not .Values.kong.lifecycleHooks }}
           lifecycle:
@@ -227,8 +234,16 @@ spec:
           {{- end }}
           {{- if .Values.kong.resources }}
           resources: {{- toYaml .Values.kong.resources | nindent 12 }}
+          {{- else if ne .Values.kong.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.kong.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/kong/server
+              subPath: app-server-dir
             - name: health
               mountPath: /health
             {{- if .Values.metrics.enabled }}
@@ -245,6 +260,10 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
+            {{- if (include "kong.declarativeConfigMap" .) }}
+            - name: kong-declarative-conf
+              mountPath: /bitnami/kong/declarative-conf/
+            {{- end }}
             {{- if .Values.kong.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.kong.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -253,7 +272,7 @@ spec:
           image: {{ template "kong.ingress-controller.image" . }}
           imagePullPolicy: {{ .Values.ingressController.image.pullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -306,30 +325,28 @@ spec:
               containerPort: {{ .Values.ingressController.containerPorts.health }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.ingressController.startupProbe.enabled }}
+          {{- if .Values.ingressController.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingressController.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressController.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http-health
-          {{- else if .Values.ingressController.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingressController.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressController.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: "/healthz"
-              port: http-health
-              scheme: HTTP
-          {{- else if .Values.ingressController.customLivenessProbe }}
+          {{- if .Values.ingressController.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingressController.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressController.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-health
           {{- end }}
-          {{- if .Values.ingressController.readinessProbe.enabled }}
+          {{- if .Values.ingressController.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingressController.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressController.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: "/healthz"
               port: http-health
               scheme: HTTP
-          {{- else if .Values.ingressController.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.ingressController.lifecycleHooks }}
@@ -337,10 +354,15 @@ spec:
           {{- end }}
           {{- if .Values.ingressController.resources }}
           resources: {{- toYaml .Values.ingressController.resources | nindent 12 }}
+          {{- else if ne .Values.ingressController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ingressController.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: health
               mountPath: /health
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.ingressController.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -349,6 +371,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: health
           configMap:
             name: {{ template "common.names.fullname" . }}-scripts
@@ -365,14 +389,19 @@ spec:
         {{- if .Values.kong.initScriptsCM }}
         - name: custom-init-scripts-cm
           configMap:
-            name: {{ .Values.kong.initScriptsCM }}
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.kong.initScriptsCM "context" $) }}
             defaultMode: 0755
         {{- end }}
         {{- if .Values.kong.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            secretName: {{ .Values.kong.initScriptsSecret }}
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.kong.initScriptsSecret "context" $) }}
             defaultMode: 0755
+        {{- end }}
+        {{- if (include "kong.declarativeConfigMap" .) }}
+        - name: kong-declarative-conf
+          configMap:
+            name: {{ include "kong.declarativeConfigMap" . | quote }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

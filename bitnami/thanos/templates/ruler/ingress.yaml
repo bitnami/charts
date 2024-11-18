@@ -1,28 +1,27 @@
-{{- if .Values.ruler.ingress.enabled -}}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.ruler.enabled .Values.ruler.ingress.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}-ruler
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.ruler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ruler
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.ruler.ingress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.ruler.ingress.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.ruler.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ruler.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.ruler.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.ruler.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
     {{- if .Values.ruler.ingress.hostname }}
-    - host: {{ .Values.ruler.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.ruler.ingress.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.ruler.ingress.path }}
@@ -52,7 +51,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.ruler.ingress.hostname }}
     {{- end }}
     {{- if .Values.ruler.ingress.extraTls }}
-    {{- toYaml .Values.ruler.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ruler.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

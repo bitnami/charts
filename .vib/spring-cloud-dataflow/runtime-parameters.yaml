@@ -1,0 +1,51 @@
+waitForBackends:
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+server:
+  containerPorts: 
+    http: 8081
+  configuration:
+    batchEnabled: true
+    accountName: test_default
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+skipper:
+  enabled: true
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  service:
+    type: ClusterIP
+    ports: 
+      http: 80
+deployer:
+  podSecurityContext:
+    enabled: true
+    runAsUser: 1002
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+mariadb:
+  enabled: true
+  auth:
+    username: user_dataflow
+    password: ComplicatedPassword123!4
+    database: test_dataflow
+  initdbScripts:
+    create_databases.sql: |
+      CREATE OR REPLACE USER 'skipper'@'%' identified by 'ComplicatedPassword123!4';
+      CREATE DATABASE IF NOT EXISTS `skipper`;
+      GRANT ALL ON skipper.* to 'skipper'@'%';
+      FLUSH PRIVILEGES;

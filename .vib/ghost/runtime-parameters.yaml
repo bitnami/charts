@@ -1,0 +1,26 @@
+ghostUsername: bitnamiTest
+ghostPassword: Complicated123!4
+ghostEmail: vim-tests@example.com
+ghostHost: vmware-ghost.my
+ghostSkipInstall: false
+containerPorts:
+  http: 2369
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+mysql:
+  enabled: true
+  auth:
+    database: bitnami_test_ghost
+    username: bn_test_ghost
+    password: bitnami_test_password
+serviceAccount:
+  create: true
+automountServiceAccountToken: true

@@ -1,18 +1,36 @@
-{{- if .Values.msgTopologyOperator.rbac.create }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.msgTopologyOperator.enabled .Values.msgTopologyOperator.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  name: {{ template "rmqco.msgTopologyOperator.fullname" . }}
+  name: {{ template "rmqco.msgTopologyOperator.fullname.namespace" . }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  {{- if .Values.msgTopologyOperator.rbac.clusterRole.customRules }}
+  {{- range .Values.msgTopologyOperator.rbac.clusterRole.customRules }}
+  - apiGroups: {{ .apiGroups | toYaml | nindent 6 }}
+    resources: {{ .resources | toYaml | nindent 6 }}
+    verbs: {{ .verbs | toYaml | nindent 6 }}
+  {{- end }}
+  {{- else }}
+  {{- if .Values.msgTopologyOperator.rbac.clusterRole.extraRules }}
+  {{- range .Values.msgTopologyOperator.rbac.clusterRole.extraRules }}
+  - apiGroups: {{ .apiGroups | toYaml | nindent 6 }}
+    resources: {{ .resources | toYaml | nindent 6 }}
+    verbs: {{ .verbs | toYaml | nindent 6 }}
+  {{- end }}
+  {{- end }}
   - apiGroups:
       - ""
     resources:
@@ -29,6 +47,8 @@ rules:
       - create
       - get
       - list
+      - patch
+      - update
       - watch
   - apiGroups:
       - ""
@@ -61,6 +81,12 @@ rules:
   - apiGroups:
       - rabbitmq.com
     resources:
+      - bindings/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
       - exchanges
     verbs:
       - create
@@ -77,6 +103,12 @@ rules:
     verbs:
       - get
       - patch
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - exchanges/finalizers
+    verbs:
       - update
   - apiGroups:
       - rabbitmq.com
@@ -101,6 +133,12 @@ rules:
   - apiGroups:
       - rabbitmq.com
     resources:
+      - federations/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
       - permissions
     verbs:
       - create
@@ -117,6 +155,12 @@ rules:
     verbs:
       - get
       - patch
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - permissions/finalizers
+    verbs:
       - update
   - apiGroups:
       - rabbitmq.com
@@ -141,6 +185,12 @@ rules:
   - apiGroups:
       - rabbitmq.com
     resources:
+      - policies/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
       - queues
     verbs:
       - create
@@ -157,6 +207,12 @@ rules:
     verbs:
       - get
       - patch
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - queues/finalizers
+    verbs:
       - update
   - apiGroups:
       - rabbitmq.com
@@ -195,6 +251,12 @@ rules:
   - apiGroups:
       - rabbitmq.com
     resources:
+      - schemareplications/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
       - shovels
     verbs:
       - create
@@ -211,6 +273,12 @@ rules:
     verbs:
       - get
       - patch
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - shovels/finalizers
+    verbs:
       - update
   - apiGroups:
       - rabbitmq.com
@@ -235,6 +303,12 @@ rules:
   - apiGroups:
       - rabbitmq.com
     resources:
+      - superstreams/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
       - users
     verbs:
       - create
@@ -251,6 +325,12 @@ rules:
     verbs:
       - get
       - patch
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - users/finalizers
+    verbs:
       - update
   - apiGroups:
       - rabbitmq.com
@@ -272,4 +352,63 @@ rules:
       - get
       - patch
       - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - vhosts/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - topicpermissions
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - topicpermissions/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - topicpermissions/finalizers
+    verbs:
+      - update
+  - apiGroups:
+    - rabbitmq.com
+    resources:
+    - operatorpolicies
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - rabbitmq.com
+    resources:
+    - operatorpolicies/status
+    verbs:
+    - get
+    - patch
+    - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - operatorpolicies/finalizers
+    verbs:
+      - update
+  {{- end }}
 {{- end }}

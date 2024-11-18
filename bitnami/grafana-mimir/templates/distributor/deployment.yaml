@@ -1,0 +1,189 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "grafana-mimir.distributor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: distributor
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.distributor.replicaCount }}
+  {{- if .Values.distributor.updateStrategy }}
+  strategy: {{- toYaml .Values.distributor.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.distributor.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: grafana-mimir
+      app.kubernetes.io/component: distributor
+  template:
+    metadata:
+      {{- if .Values.distributor.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: grafana-mimir
+        app.kubernetes.io/component: distributor
+        mimir-gossip-member: "true"
+    spec:
+      serviceAccountName: {{ template "grafana-mimir.serviceAccountName" . }}
+      {{- include "grafana-mimir.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.distributor.automountServiceAccountToken }}
+      {{- if .Values.distributor.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.distributor.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAffinityPreset "component" "distributor" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAntiAffinityPreset "component" "distributor" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.distributor.nodeAffinityPreset.type "key" .Values.distributor.nodeAffinityPreset.key "values" .Values.distributor.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.distributor.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.distributor.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.distributor.priorityClassName }}
+      priorityClassName: {{ .Values.distributor.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.distributor.schedulerName }}
+      schedulerName: {{ .Values.distributor.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.distributor.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.distributor.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.distributor.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.distributor.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.distributor.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.distributor.initContainers }}
+      initContainers:
+        {{- include "common.tplvalues.render" (dict "value" .Values.distributor.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: grafana-mimir-distributor
+          image: {{ template "grafana-mimir.image" . }}
+          imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
+          {{- if .Values.distributor.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.distributor.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -target=distributor
+            - "-config.expand-env=true"
+            - -config.file={{ .Values.mimir.dataDir }}/conf/mimir.yaml
+            {{- if .Values.distributor.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.minio.enabled }}
+            - name: MIMIR_MINIO_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.accessKeyIDKey" . }}
+            - name: MIMIR_MINIO_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.secretAccessKeyKey" . }}
+            {{- end }}
+            {{- if .Values.compactor.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.distributor.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.distributor.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.distributor.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.distributor.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.distributor.resources }}
+          resources: {{- toYaml .Values.distributor.resources | nindent 12 }}
+          {{- else if ne .Values.distributor.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.distributor.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.mimir.containerPorts.http }}
+              name: http
+            - containerPort: {{ .Values.mimir.containerPorts.gossipRing }}
+              name: http-memberlist
+            - containerPort: {{ .Values.mimir.containerPorts.grpc }}
+              name: grpc
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.distributor.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.distributor.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
+          {{- end }}
+          {{- if .Values.distributor.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.distributor.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: mimir-config
+              mountPath: {{ .Values.mimir.dataDir }}/conf
+            - name: data
+              mountPath: {{ .Values.mimir.dataDir }}
+          {{- if .Values.distributor.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.distributor.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: data
+          emptyDir: {}
+        - name: mimir-config
+          configMap:
+            name: {{ template "grafana-mimir.mimir.configmapName" . }}
+        {{- if .Values.distributor.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

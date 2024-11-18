@@ -1,0 +1,11 @@
+odooEmail: user@example.com
+odooPassword: ComplicatedPassword123!4
+postgresql:
+  auth:
+    username: bn_odoo
+    password: 7dMxLfcqxN
+service:
+  port: 80
+  type: LoadBalancer
+containerPorts:
+  http: 8069

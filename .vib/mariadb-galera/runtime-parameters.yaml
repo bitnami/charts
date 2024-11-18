@@ -1,0 +1,26 @@
+replicaCount: 3
+service:
+  type: LoadBalancer
+  ports:
+    mysql: 80
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+  runAsUser: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+rootUser:
+  user: bitnamiroot
+  password: ComplicatedPassword123!4
+db:
+  user: bitnamiuser
+  password: BitnamiPassw0rd
+  name: awesome_zoo_db
+galera:
+  name: bitnamigalera
+containerPorts:
+  mysql: 3306
+  galera: 4567
+  ist: 4568
+  sst: 4444

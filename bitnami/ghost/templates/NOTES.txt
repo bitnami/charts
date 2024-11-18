@@ -41,14 +41,14 @@ host. To configure Ghost with the URL of your service:
 
 {{- if .Values.mysql.enabled }}
 
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
     --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$GHOST_PASSWORD,mysql.auth.rootPassword=$MYSQL_ROOT_PASSWORD,mysql.auth.password=$MYSQL_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 
 {{- else }}
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
     --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$APP_PASSWORD,{{- if contains "NodePort" .Values.service.type }}service.nodePort=$APP_PORT,{{- end }}mysql.enabled=false{{- if not (empty .Values.externalDatabase.host) }},externalDatabase.host={{ .Values.externalDatabase.host }}{{- end }}{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }}
 
 {{- end }}
@@ -128,7 +128,7 @@ host. To configure Ghost to use and external database host:
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
     --set ghostPassword=$APP_PASSWORD,ghostHost=$APP_HOST,service.type={{ .Values.service.type }},mysql.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST
 {{- end }}
 
@@ -142,8 +142,6 @@ host. To configure Ghost to use and external database host:
   {{- $requiredGhostPasswordError := include "common.validations.values.single.empty" $requiredGhostPassword -}}
   {{- $passwordValidationErrors =  append $passwordValidationErrors $requiredGhostPasswordError -}}
 {{- end -}}
-{{- if .Values.mysql.enabled }}
-    {{- $mysqlPasswordValidationErrors := include "common.validations.values.mysql.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors $mysqlPasswordValidationErrors -}}
-{{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

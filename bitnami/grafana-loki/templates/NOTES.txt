@@ -102,3 +102,5 @@ Installed components:
 
 {{- include "grafana-loki.checkRollingTags" . }}
 {{- include "grafana-loki.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "compactor" "distributor" "gateway" "indexGateway" "ingester" "promtail" "querier" "queryFrontend" "queryScheduler" "ruler" "tableManager" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.loki.image .Values.gateway.image .Values.promtail.image .Values.volumePermissions.image) "context" $) }}

@@ -1,0 +1,30 @@
+sonarqubeUsername: test_user
+sonarqubePassword: ComplicatedPassword123!4
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    elastic: 9091
+containerPorts:
+  http: 9090
+  elastic: 9091
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+postgresql:
+  enabled: true
+  service:
+    ports:
+      postgresql: 5432
+  auth:
+    password: test_db_password
+    username: test_db_user
+    database: test_db_database
+sysctl:
+  enabled: true

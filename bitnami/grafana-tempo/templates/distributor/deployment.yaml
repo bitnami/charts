@@ -1,13 +1,15 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "grafana-tempo.distributor.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: distributor
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -16,8 +18,9 @@ spec:
   {{- if .Values.distributor.updateStrategy }}
   strategy: {{- toYaml .Values.distributor.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.distributor.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: distributor
   template:
     metadata:
@@ -26,15 +29,13 @@ spec:
         {{- if .Values.distributor.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.distributor.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: distributor
         tempo-gossip-member: "true"
-        {{- if .Values.distributor.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.distributor.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.distributor.automountServiceAccountToken }}
       {{- if .Values.distributor.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -42,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAffinityPreset "component" "distributor" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAntiAffinityPreset "component" "distributor" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAffinityPreset "component" "distributor" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAntiAffinityPreset "component" "distributor" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.distributor.nodeAffinityPreset.type "key" .Values.distributor.nodeAffinityPreset.key "values" .Values.distributor.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.distributor.nodeSelector }}
@@ -62,8 +63,9 @@ spec:
       schedulerName: {{ .Values.distributor.schedulerName }}
       {{- end }}
       {{- if .Values.distributor.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.distributor.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.distributor.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.distributor.enableServiceLinks }}
       initContainers:
         {{- if .Values.distributor.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.distributor.initContainers "context" $) | nindent 8 }}
@@ -73,7 +75,7 @@ spec:
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
           {{- if .Values.distributor.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.distributor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.distributor.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -135,7 +137,7 @@ spec:
               protocol: TCP
             {{- end }}
             {{- if .Values.tempo.traces.otlp.http }}
-            - containerPort: 55681
+            - containerPort: 4318
               name: otlp-http
               protocol: TCP
             {{- end }}
@@ -150,37 +152,44 @@ spec:
               protocol: TCP
             {{- end }}
           {{- if .Values.distributor.resources }}
-          resources: {{- toYaml .Values.distributor.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.distributor.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.distributor.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.distributor.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
-              port: {{ .Values.tempo.containerPorts.web }}
-          {{- else if .Values.distributor.customLivenessProbe }}
+          {{- if .Values.distributor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
-          {{- if .Values.distributor.readinessProbe.enabled }}
+          {{- if .Values.distributor.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: {{ .Values.tempo.containerPorts.web }}
-          {{- else if .Values.distributor.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.distributor.startupProbe.enabled }}
+          {{- if .Values.distributor.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.distributor.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.distributor.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+            # NOTE: The upstream chart does not create a PVC for this, we assume that it is just for tmp data
+            - name: empty-dir
+              mountPath: /bitnami/grafana-tempo/data
+              subPath: app-data-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
@@ -194,6 +203,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: tempo-config
           configMap:
             name: {{ template "grafana-tempo.tempoConfigmapName" . }}

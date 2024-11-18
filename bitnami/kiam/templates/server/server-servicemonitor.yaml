@@ -1,31 +1,25 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.server.enabled .Values.server.metrics.enabled .Values.server.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}-server
-  {{- if .Values.server.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.server.metrics.serviceMonitor.namespace | quote }}
-  {{- else }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ default .Release.Namespace .Values.server.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.server.metrics.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.server.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   jobLabel: {{ .Values.server.metrics.serviceMonitor.jobLabel | quote }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      {{- if .Values.server.metrics.serviceMonitor.selector }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.server.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
-      {{- end }}
+    {{- $svcLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.metrics.serviceMonitor.selector .Values.commonLabels ) "context" . ) }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $svcLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: server
   endpoints:
     - port: metrics

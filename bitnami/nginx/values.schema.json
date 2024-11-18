@@ -49,6 +49,50 @@
       "title": "Custom server block",
       "description": "Custom server block to be added to NGINX configuration"
     },
+    "streamServerBlock": {
+      "type": "string",
+      "form": true,
+      "title": "Custom stream server block",
+      "description": "Custom stream server block to be added to NGINX configuration"
+    },
+    "containerSecurityContext": {
+      "type": "object",
+      "form": true,
+      "title": "NGINX containers' Security Context",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable Security Context",
+          "description": "Whether to enable NGINX containers' Security Context"
+        },
+        "runAsUser": {
+          "type": "integer",
+          "form": true,
+          "title": "ID of the user",
+          "description": "The UID of the user NGINX containers will run as"
+        }
+      }
+    },
+    "podSecurityContext": {
+      "type": "object",
+      "form": true,
+      "title": "NGINX pods' Security Context",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable Security Context",
+          "description": "Whether to enable NGINX pods' Security Context"
+        },
+        "fsGroup": {
+          "type": "integer",
+          "form": true,
+          "title": "ID of the group",
+          "description": "The GID of the group NGINX pods will run as"
+        }
+      }
+    },
     "metrics": {
       "type": "object",
       "form": true,
@@ -74,20 +118,6 @@
               }
             }
           }
-        }
-      }
-    },
-    "pdb": {
-      "type": "object",
-      "properties": {
-        "create": {
-          "type": "boolean"
-        },
-        "minAvailable": {
-          "type": "integer"
-        },
-        "maxUnavailable": {
-          "type": "integer"
         }
       }
     }

@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/ghost"
         },
-        "runtime_parameters": "Z2hvc3RVc2VybmFtZTogdXNlcgpnaG9zdFBhc3N3b3JkOiBDb21wbGljYXRlZDEyMyE0Cmdob3N0RW1haWw6IHVzZXJAZXhhbXBsZS5jb20KZ2hvc3RIb3N0OiBiaXRuYW1pLWdob3N0Lm15CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,27 +31,17 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-ghost-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/ghost/goss"
+              "path": "/.vib"
             },
+            "tests_file": "ghost/goss/goss.yaml",
+            "vars_file": "ghost/runtime-parameters.yaml",
             "remote": {
-              "workload": "deploy-ghost"
+              "pod": {
+                "workload": "deploy-ghost"
+              }
             }
           }
         },
@@ -65,9 +54,16 @@
             "endpoint": "lb-ghost-http",
             "app_protocol": "HTTP",
             "env": {
-              "email": "user@example.com",
+              "email": "vim-tests@example.com",
+              "username": "bitnamiTest",
               "password": "Complicated123!4"
             }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

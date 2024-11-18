@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.blackboxExporter.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
@@ -5,9 +10,6 @@ metadata:
   name: {{ template "kube-prometheus.blackboxExporter.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.blackboxExporter.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,8 +19,7 @@ spec:
   strategy: {{- toYaml .Values.blackboxExporter.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: blackbox-exporter
+    matchLabels: {{- include "kube-prometheus.blackboxExporter.matchLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -26,14 +27,11 @@ spec:
         {{- if .Values.blackboxExporter.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: blackbox-exporter
-        {{- if .Values.blackboxExporter.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "kube-prometheus.blackboxExporter.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ template "kube-prometheus.blackboxExporter.serviceAccountName" . }}
       {{- include "kube-prometheus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.blackboxExporter.automountServiceAccountToken }}
       {{- if .Values.blackboxExporter.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -41,8 +39,9 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.blackboxExporter.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.blackboxExporter.podAffinityPreset "component" "blackbox-exporter" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.blackboxExporter.podAntiAffinityPreset "component" "blackbox-exporter" "context" $) | nindent 10 }}
+        {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.blackboxExporter.podLabels .Values.commonLabels ) "context" . ) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.blackboxExporter.podAffinityPreset "component" "blackbox-exporter" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.blackboxExporter.podAntiAffinityPreset "component" "blackbox-exporter" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.blackboxExporter.nodeAffinityPreset.type "key" .Values.blackboxExporter.nodeAffinityPreset.key "values" .Values.blackboxExporter.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.blackboxExporter.nodeSelector }}
@@ -61,7 +60,7 @@ spec:
       schedulerName: {{ .Values.blackboxExporter.schedulerName }}
       {{- end }}
       {{- if .Values.blackboxExporter.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.blackboxExporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.blackboxExporter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.blackboxExporter.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.blackboxExporter.terminationGracePeriodSeconds }}
@@ -75,7 +74,7 @@ spec:
           image: {{ template "kube-prometheus.blackboxExporter.image" . }}
           imagePullPolicy: {{ .Values.blackboxExporter.image.pullPolicy }}
           {{- if .Values.blackboxExporter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.blackboxExporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.blackboxExporter.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.blackboxExporter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.command "context" $) | nindent 12 }}
@@ -104,27 +103,29 @@ spec:
               name: http
           {{- if .Values.blackboxExporter.resources }}
           resources: {{- toYaml .Values.blackboxExporter.resources | nindent 12 }}
+          {{- else if ne .Values.blackboxExporter.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.blackboxExporter.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if .Values.blackboxExporter.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.blackboxExporter.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              port: http
-          {{- else if .Values.blackboxExporter.customLivenessProbe }}
+          {{- if .Values.blackboxExporter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.blackboxExporter.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.blackboxExporter.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
           {{- end }}
-          {{- if .Values.blackboxExporter.readinessProbe.enabled }}
+          {{- if .Values.blackboxExporter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.blackboxExporter.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.blackboxExporter.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               port: http
-          {{- else if .Values.blackboxExporter.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.blackboxExporter.startupProbe.enabled }}
+          {{- if .Values.blackboxExporter.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.blackboxExporter.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.blackboxExporter.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               port: http
-          {{- else if .Values.blackboxExporter.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.blackboxExporter.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.lifecycleHooks "context" $) | nindent 12 }}
@@ -132,6 +133,9 @@ spec:
           volumeMounts:
             - name: blackbox-exporter-config
               mountPath: /bitnami/blackbox-exporter/conf
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.blackboxExporter.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -139,6 +143,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.blackboxExporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: blackbox-exporter-config
           configMap:
             name: {{ template "kube-prometheus.blackboxExporter.configmapName" . }}

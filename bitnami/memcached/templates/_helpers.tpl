@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -102,4 +107,15 @@ memcached: containerSecurityContext.readOnlyRootFilesystem
     Enabling authentication is not compatible with using a read-only filesystem.
     Please disable it (--set containerSecurityContext.readOnlyRootFilesystem=false)
 {{- end -}}
+{{- end -}}
+
+{{/*
+Get the password secret.
+*/}}
+{{- define "memcached.secretPasswordName" -}}
+    {{- if .Values.auth.existingPasswordSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- end -}}
 {{- end -}}

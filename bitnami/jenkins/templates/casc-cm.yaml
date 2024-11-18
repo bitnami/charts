@@ -1,0 +1,113 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.configAsCode.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-casc" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  config-as-code-default.yaml: |-
+    jenkins:
+      {{- if .Values.configAsCode.authorizationStrategy }}
+      authorizationStrategy: {{ include "common.tplvalues.render" ( dict "value" .Values.configAsCode.authorizationStrategy "context" $ ) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.configAsCode.securityRealm }}
+      securityRealm: {{ include "common.tplvalues.render" ( dict "value" .Values.configAsCode.securityRealm "context" $ ) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.enabled }}
+      slaveAgentPort: {{ .Values.agentListenerService.ports.agentListener | int }}
+      clouds:
+        - kubernetes:
+            name: "kubernetes"
+            namespace: "{{ template "common.names.namespace" . }}"
+            serverUrl: "https://kubernetes.default"
+            jenkinsUrl: {{ printf "http://%s.%s.svc.%s:%d" (include "common.names.fullname" .) (include "common.names.namespace" .)  .Values.clusterDomain (.Values.service.ports.http | int) }}
+            jenkinsTunnel: {{ printf "%s-agent-listener.%s.svc.%s:%d" (include "common.names.fullname" .) (include "common.names.namespace" .)  .Values.clusterDomain (.Values.agentListenerService.ports.agentListener | int) }}
+            podLabels:
+              - key: "app.kubernetes.io/component"
+                value: "jenkins-agent"
+              {{- $podLabels := (include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | fromYaml) }}
+              {{- if .Values.agent.podLabels }}
+              {{- $podLabels = merge $podLabels .Values.agent.podLabels }}
+              {{- end }}
+              {{- range $key, $val := $podLabels }}
+              - key: {{ $key | quote }}
+                value: {{ $val | quote }}
+              {{- end }}
+            templates:
+              - name: {{ printf "%s-agent" (include "common.names.fullname" .) }}
+                label: {{ .Values.agent.templateLabel | quote }}
+                namespace: {{ template "common.names.namespace" . }}
+                id: "agent-template"
+                {{- if or .Values.agent.annotations }}
+                annotations:
+                  {{- range $key, $value := .Values.commonAnnotations }}
+                  - key: {{ $key }}
+                    value: {{ $value | quote }}
+                  {{- end }}
+                  {{- range $key, $value := .Values.agent.annotations }}
+                  - key: {{ $key }}
+                    value: {{ $value | quote }}
+                  {{- end }}
+                {{- end }}
+                containers:
+                  - name: jnlp
+                    alwaysPullImage: {{ ternary "true" "false" (eq .Values.image.pullPolicy "Always") }}
+                    {{- if .Values.agent.command }}
+                    command: {{- include "common.tplvalues.render" (dict "value" .Values.agent.command "context" $) | nindent 20 }}
+                    {{- end }}
+                    {{- if .Values.agent.args }}
+                    args: {{- include "common.tplvalues.render" (dict "value" .Values.agent.args "context" $) | nindent 20 }}
+                    {{- end }}
+                    {{- if .Values.agent.containerExtraEnvVars }}
+                    envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.containerExtraEnvVars "context" $) | nindent 22 }}
+                    {{- end }}
+                    image: {{ include "jenkins.agent.image" . }}
+                    {{- if or .Values.agent.resources (ne .Values.agent.resourcesPreset "none") }}
+                    {{- include "jenkins.agent.resources" . | nindent 16 }}
+                    {{- end }}
+                    {{- if .Values.agent.containerSecurityContext.enabled }}
+                    privileged: {{ .Values.agent.containerSecurityContext.privileged }}
+                    {{- if not (or (eq .Values.global.compatibility.openshift.adaptSecurityContext "force") (and (eq .Values.global.compatibility.openshift.adaptSecurityContext "auto") (include "common.compatibility.isOpenshift" .))) }}
+                    runAsUser: {{ .Values.agent.containerSecurityContext.runAsUser }}
+                    runAsGroup: {{ .Values.agent.containerSecurityContext.runAsGroup }}
+                    {{- end }}
+                    {{- end }}
+                  {{- if .Values.agent.sidecars }}
+                  {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 18 }}
+                  {{- end }}
+                {{- if .Values.agent.podExtraEnvVars }}
+                envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.podExtraEnvVars "context" $) | nindent 18 }}
+                {{- end }}
+                {{- include "jenkins.imagePullSecrets" . | nindent 16 }}
+                {{- if .Values.agent.extraAgentTemplate }}
+                {{- include "common.tplvalues.render" ( dict "value" .Values.agent.extraAgentTemplate "context" $) | nindent 16 }}
+                {{- end }}
+              {{- if .Values.agent.extraTemplates }}
+              {{- include "common.tplvalues.render" ( dict "value" .Values.agent.extraTemplates "context" $ ) | nindent 14 }}
+              {{- end }}
+            {{- if .Values.configAsCode.extraKubernetes }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.configAsCode.extraKubernetes "context" $ ) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.configAsCode.extraClouds }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.configAsCode.extraClouds "context" $ ) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- if  .Values.configAsCode.extraJenkins }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.configAsCode.extraJenkins "context" $ ) | nindent 6 }}
+      {{- end }}
+    {{- if .Values.configAsCode.security }}
+    security: {{ include "common.tplvalues.render" ( dict "value" .Values.configAsCode.security "context" $ ) | nindent 6 }}
+    {{- end }}
+    {{- if  .Values.configAsCode.extraConfig }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.configAsCode.extraConfig "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,19 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /bitnami/odoo:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: odoo
+    group: root
+  /opt/bitnami/odoo/conf/odoo.conf:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+    group: root
+    contents:
+     - "db_user = {{ .Vars.postgresql.auth.username }}"
+     - "http_port = {{ .Vars.containerPorts.http }}"

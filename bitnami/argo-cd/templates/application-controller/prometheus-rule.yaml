@@ -1,16 +1,15 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.controller.metrics.enabled .Values.controller.metrics.rules.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ include "argocd.application-controller" . }}
-  {{- if .Values.controller.metrics.rules.namespace }}
-  namespace: {{ .Values.controller.metrics.rules.namespace }}
-  {{- end }}
-  labels:
-    {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  namespace: {{ default ( include "common.names.namespace" . ) .Values.controller.metrics.rules.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.controller.metrics.rules.selector }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.controller.metrics.rules.selector "context" $ ) | nindent 4 }}
     {{- end }}

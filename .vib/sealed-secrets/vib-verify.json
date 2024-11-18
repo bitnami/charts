@@ -17,12 +17,45 @@
       ]
     },
     "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/sealed-secrets"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "cypress",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib/sealed-secrets/cypress"
+            },
+            "endpoint": "lb-sealed-secrets-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/sealed-secrets/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

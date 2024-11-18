@@ -1,25 +1,25 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.aggregator.enabled .Values.aggregator.ingress.enabled }}
-{{- $serviceName := printf "%s-aggregator" (include "common.names.fullname" .) -}}
+{{- $serviceName := printf "%s-aggregator" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}-aggregator
+  name: {{ printf "%s-aggregator" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: aggregator
     app: aggregator
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   annotations:
     {{- if .Values.aggregator.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
-    {{- if .Values.aggregator.ingress.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.ingress.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if or .Values.aggregator.ingress.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
   {{- if and .Values.aggregator.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
@@ -60,7 +60,7 @@ spec:
         {{- range .Values.aggregator.ingress.extraHosts }}
         - {{ .name }}
         {{- end }}
-      secretName: {{ printf "%s-tls" .Values.aggregator.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.aggregator.ingress.hostname | trunc 63 | trimSuffix "-" }}
     {{- end }}
     {{- if .Values.aggregator.ingress.extraTls }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.ingress.extraTls "context" $ ) | nindent 4 }}

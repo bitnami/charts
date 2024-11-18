@@ -1,28 +1,28 @@
-apiVersion: apps/v1
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  serviceName: {{ include "common.names.fullname" . }}-headless
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-      {{- if .Values.podLabels }}
-      {{- toYaml .Values.podLabels | nindent 8 }}
-      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
       annotations:
         {{- if .Values.podAnnotations }}
@@ -34,6 +34,7 @@ spec:
       {{- end }}
     spec:
       {{- include "cassandra.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -42,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
@@ -59,7 +60,7 @@ spec:
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -123,10 +124,15 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.persistence.commitLogMountPath }}
             - name: commitlog
               mountPath: {{ .Values.persistence.commitLogMountPath }}
@@ -137,7 +143,7 @@ spec:
           image: {{ include "cassandra.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
           - /bin/bash
@@ -153,7 +159,8 @@ spec:
                   -srcstoretype PKCS12 \
                   -srcstorepass "${CASSANDRA_KEYSTORE_PASSWORD}" \
                   -deststorepass "${CASSANDRA_KEYSTORE_PASSWORD}" \
-                  -destkeystore "/opt/bitnami/cassandra/certs/keystore"
+                  -destkeystore "/opt/bitnami/cassandra/certs/keystore" \
+                  -noprompt
               rm "/tmp/keystore.p12"
               keytool -import -file "/certs/ca.crt" \
                       -keystore "/opt/bitnami/cassandra/certs/truststore" \
@@ -194,12 +201,17 @@ spec:
             {{- end }}
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          {{- else if ne .Values.tls.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          - name: certs
-            mountPath: /certs
-          - name: certs-shared
-            mountPath: /opt/bitnami/cassandra/certs
+            - name: certs
+              mountPath: /certs
+            - name: certs-shared
+              mountPath: /opt/bitnami/cassandra/certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -236,7 +248,7 @@ spec:
           image: {{ include "cassandra.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -294,13 +306,13 @@ spec:
             {{- end }}
             - name: CASSANDRA_RACK
               value: {{ .Values.cluster.rack }}
-            {{- if .Values.jvm.maxHeapSize }}
+            {{- if or .Values.jvm.maxHeapSize (include "cassandra.memory.getLimitInM" .) }}
             - name: MAX_HEAP_SIZE
-              value: {{ .Values.jvm.maxHeapSize | quote }}
+              value: {{ include "cassandra.memory.calculateMaxHeapSize" . | quote }}
             {{- end }}
-            {{- if .Values.jvm.newHeapSize }}
+            {{- if or .Values.jvm.newHeapSize (include "cassandra.memory.getLimitInM" .) }}
             - name: HEAP_NEWSIZE
-              value: {{ .Values.jvm.newHeapSize | quote }}
+              value: {{ include "cassandra.memory.calculateNewHeapSize" . | quote }}
             {{- end }}
             {{- if .Values.jvm.extraOpts }}
             - name: JVM_EXTRA_OPTS
@@ -339,7 +351,9 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.livenessProbe.enabled }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
               command:
@@ -352,10 +366,10 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          {{- else if .Values.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
+          {{- if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
           readinessProbe:
             exec:
               command:
@@ -368,10 +382,10 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-          {{- else if .Values.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.startupProbe.enabled }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
           startupProbe:
             exec:
               command:
@@ -384,8 +398,6 @@ spec:
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
-          {{- else if .Values.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if not .Values.lifecycleHooks }}
           lifecycle:
@@ -408,24 +420,36 @@ spec:
               containerPort: {{ .Values.containerPorts.intra | default "7000" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.intra }}
+              {{- else if .Values.hostPorts.intra }}
+              hostPort: {{ .Values.hostPorts.intra }}
               {{- end }}
+            {{- if (ne (include "cassandra.internode.tlsEncryption" .) "none") }}
             - name: tls
               containerPort: {{ .Values.containerPorts.tls | default "7001" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.tls }}
+              {{- else if .Values.hostPorts.tls }}
+              hostPort: {{ .Values.hostPorts.tls }}
               {{- end }}
+            {{- end }}
             - name: jmx
               containerPort: {{ .Values.containerPorts.jmx | default "7199" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.jmx }}
+              {{- else if .Values.hostPorts.jmx }}
+              hostPort: {{ .Values.hostPorts.jmx }}
               {{- end }}
             - name: cql
               containerPort: {{ .Values.containerPorts.cql | default "9042" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.cql }}
+              {{- else if .Values.hostPorts.cql }}
+              hostPort: {{ .Values.hostPorts.cql }}
               {{- end }}
           {{- if .Values.resources }}
           resources: {{ toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -438,7 +462,7 @@ spec:
             - name: certs-shared
               mountPath: /opt/bitnami/cassandra/certs
             {{- end }}
-            {{- if .Values.initDBConfigMap }}
+            {{- if or .Values.initDBConfigMap .Values.initDB }}
             - name: init-db-cm
               mountPath: /docker-entrypoint-initdb.d/configmap
             {{- end }}
@@ -450,6 +474,18 @@ spec:
             - name: configurations
               mountPath: {{ .Values.persistence.mountPath }}/conf
             {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cassandra/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cassandra/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cassandra/logs
+              subPath: app-logs-dir
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -461,27 +497,26 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.hostNetwork }}
-          env:
-            - name: CASSANDRA_EXPORTER_CONFIG_listenPort
-              value: {{ .Values.metrics.containerPorts.http | quote }}
-            - name:  CASSANDRA_EXPORTER_CONFIG_host
-              value: localhost:{{ .Values.containerPorts.jmx }}
-          {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPorts.http | default "8080" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.metrics.containerPorts.http }}
+              {{- else if .Values.metrics.hostPorts.http }}
+              hostPort: {{ .Values.metrics.hostPorts.http }}
               {{- end }}
               protocol: TCP
             - name: jmx
               containerPort: {{ .Values.metrics.containerPorts.jmx | default "5555" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.metrics.containerPorts.jmx }}
+              {{- else if .Values.metrics.hostPorts.jmx }}
+              hostPort: {{ .Values.metrics.hostPorts.jmx }}
               {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           livenessProbe:
@@ -491,31 +526,50 @@ spec:
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 20
-            timeoutSeconds: 45
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
+          volumeMounts:
+            - name: metrics-conf
+              mountPath: /opt/bitnami/cassandra-exporter/config.yml
+              subPath: config.yml
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: metrics-conf
+          configMap:
+            name: {{ include "cassandra.metricsConfConfigMap" . }}
         {{- if (include "cassandra.tlsEncryption" . ) }}
         - name: certs
           secret:
             secretName: {{ include "cassandra.tlsSecretName" . }}
             defaultMode: 256
         - name: certs-shared
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: 500Mi
         {{- end }}
         {{- if .Values.existingConfiguration }}
         - name: configurations
           configMap:
             name: {{ tpl .Values.existingConfiguration $ }}
         {{- end }}
-        {{- if .Values.initDBConfigMap }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- if or .Values.initDB .Values.initDBConfigMap }}
         - name: init-db-cm
           configMap:
-            name: {{ tpl .Values.initDBConfigMap $ }}
+            name: {{ ternary (printf "%s-init-scripts" (include "common.names.fullname" .)) (tpl .Values.initDBConfigMap $) (empty .Values.initDBConfigMap) }}
         {{- end }}
         {{- if .Values.initDBSecret }}
         - name: init-db-secret
@@ -525,14 +579,20 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.persistence.enabled }}
+  {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.persistence.existingClaim $ }}
+  {{- else if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
-        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
         {{- if .Values.persistence.annotations }}
         annotations: {{- toYaml .Values.persistence.annotations | nindent 10 }}
         {{- end }}
@@ -548,7 +608,7 @@ spec:
     {{- if .Values.persistence.commitLogMountPath }}
     - metadata:
         name: commitlog
-        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
         {{- if .Values.persistence.annotations }}
         annotations: {{- toYaml .Values.persistence.annotations | nindent 10 }}
       {{- end }}

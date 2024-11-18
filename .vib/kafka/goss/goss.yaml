@@ -1,27 +1,39 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  {{ .Vars.controller.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  {{ .Vars.controller.logPersistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /opt/bitnami/kafka/config/server.properties:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contents:
+      - "listeners=CLIENT://:{{ .Vars.listeners.client.containerPort }},INTERNAL://:{{ .Vars.listeners.interbroker.containerPort }},EXTERNAL://:{{ .Vars.listeners.external.containerPort }},CONTROLLER://:{{ .Vars.listeners.controller.containerPort }}"
 command:
   create-kafka-topic:
-    exec: kafka-topics.sh --create --topic quickstart-events$RANDOM --bootstrap-server localhost:9092
+    exec: kafka-topics.sh --create --topic quickstart-events{{randAlpha 5}} --bootstrap-server kafka:{{ .Vars.service.ports.client }}
     exit-status: 0
-    stderr: [ ]
-    stdout: 
-      - Created topic quickstart-events
     timeout: 20000
-  list-kafka-topics:
-    exec: kafka-topics.sh --bootstrap-server localhost:9092 --list
+  {{- $uid := .Vars.controller.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.controller.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-    stderr: [ ]
-    timeout: 20000
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+  {{ if .Vars.controller.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0
-    stdout: []
-    stderr: []
-file:
-  /var/run/secrets/kubernetes.io/serviceaccount:
-    mode: "3777"
-    filetype: directory
-    exists: true
-  /opt/bitnami/kafka/logs:
-    mode: "2777"
-    filetype: directory
-    exists: true
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

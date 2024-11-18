@@ -1,0 +1,32 @@
+auth:
+  enabled: true
+  admin:
+    username: influxAdmin
+    password: RootP4ssw0rd
+    token: 4dm1nT0k3n
+    org: primary
+    bucket: primary
+  createUserToken: true
+  user:
+    username: testUser
+    password: ComplicatedPassword123!4
+    org: testOrganization
+    bucket: testBucket
+influxdb:
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+      rpc: 8089
+  containerPorts:
+    http: 8086
+    rpc: 8089
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true

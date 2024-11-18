@@ -1,7 +1,6 @@
 {
   "freestyleProject": {
-    "name": "GitProjectTest",
-    "type": "Freestyle project",
-    "repositoryURL": "https://github.com/bitnami/charts"
+    "name": "ProjectTest",
+    "type": "Freestyle project"
   }
 }

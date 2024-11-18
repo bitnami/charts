@@ -1,38 +1,45 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: argo-workflow-cli
+      image: docker.io/bitnami/argo-workflow-cli:3.6.0-debian-12-r0
+    - name: argo-workflow-controller
+      image: docker.io/bitnami/argo-workflow-controller:3.6.0-debian-12-r0
+    - name: argo-workflow-exec
+      image: docker.io/bitnami/argo-workflow-exec:3.6.0-debian-12-r0
 apiVersion: v2
-appVersion: 3.3.7
+appVersion: 3.6.0
 dependencies:
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
-  - condition: mysql.enabled
-    name: mysql
-    repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 16.x.x
+- condition: mysql.enabled
+  name: mysql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 12.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG and step-based workflows
-engine: gotpl
-home: https://argoproj.github.io/workflows/
-icon: https://bitnami.com/assets/stacks/argo-workflow-cli/img/argo-workflow-cli-stack-220x234.png
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/argo-workflows/img/argo-workflows-stack-220x234.png
 keywords:
-  - Devops
-  - Kubernetes
-  - Jobs
-  - Continuous delivery
-  - Continous deployment
+- Devops
+- Kubernetes
+- Jobs
+- Continuous delivery
+- Continous deployment
 maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: argo-workflows
 sources:
-  - https://github.com/bitnami/bitnami-docker-argo-workflow-cli
-  - https://github.com/bitnami/bitnami-docker-argo-workflow-controller
-  - https://github.com/bitnami/bitnami-docker-argo-workflow-exec
-  - https://argoproj.github.io/workflows/
-version: 2.3.3
+- https://github.com/bitnami/charts/tree/main/bitnami/argo-workflows
+version: 11.0.1

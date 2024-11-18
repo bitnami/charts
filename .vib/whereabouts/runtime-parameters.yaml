@@ -1,0 +1,10 @@
+hostCNIBinDir: /home/kubernetes/bin
+CNIMountPath: /bitnami/whereabouts/host
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+containerSecurityContext:
+  enabled: true
+  runAsUser: 0
+rbac:
+  create: true

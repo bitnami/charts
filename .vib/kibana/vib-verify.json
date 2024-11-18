@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/kibana"
         },
-        "runtime_parameters": "ZXh0cmFDb25maWd1cmF0aW9uOgogIGNzcC5zdHJpY3Q6IGZhbHNlCnNlcnZpY2U6CiAgcG9ydHM6IAogICAgaHR0cDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIKZWxhc3RpY3NlYXJjaDoKICBob3N0czoKICAgIC0gbG9jYWxob3N0CiAgcG9ydDogOTIwMApzaWRlY2FyczogCiAtIG5hbWU6IGVsYXN0aWNzZWFyY2gKICAgaW1hZ2U6IGJpdG5hbWkvZWxhc3RpY3NlYXJjaDpsYXRlc3QKICAgaW1hZ2VQdWxsUG9saWN5OiBJZk5vdFByZXNlbnQKICAgcG9ydHM6CiAgICAgLSBuYW1lOiBodHRwCiAgICAgICBjb250YWluZXJQb3J0OiA5MjAwCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,27 +31,17 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-kibana-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/kibana/goss"
+              "path": "/.vib"
             },
+            "tests_file": "kibana/goss/goss.yaml",
+            "vars_file": "kibana/runtime-parameters.yaml",
             "remote": {
-              "workload": "deploy-kibana"
+              "pod": {
+                "workload": "deploy-kibana"
+              }
             }
           }
         },
@@ -63,11 +52,13 @@
               "path": "/.vib/kibana/cypress"
             },
             "endpoint": "lb-kibana-http",
-            "app_protocol": "HTTP",
-            "env": {
-              "username": "test_admin",
-              "password": "ComplicatedPassword123!4"
-            }
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

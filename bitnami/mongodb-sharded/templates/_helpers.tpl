@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -10,7 +15,7 @@ Usage:
 {{- if .value.create }}
     {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component) .value.name | quote }}
 {{- else if .context.Values.common.serviceAccount.create }}
-    {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component).context.Values.common.serviceAccount.name | quote }}
+    {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component) .context.Values.common.serviceAccount.name | quote }}
 {{- else -}}
     {{- default "default" .value.name | quote }}
 {{- end }}
@@ -18,7 +23,7 @@ Usage:
 
 {{- define "mongodb-sharded.secret" -}}
   {{- if .Values.auth.existingSecret -}}
-    {{- .Values.auth.existingSecret -}}
+    {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
   {{- else }}
     {{- include "common.names.fullname" . -}}
   {{- end }}
@@ -28,7 +33,7 @@ Usage:
   {{- if .Values.configsvr.external.host -}}
   {{- .Values.configsvr.external.host }}
   {{- else -}}
-  {{- printf "%s-configsvr-0.%s-headless.%s.svc.%s" (include "common.names.fullname" . ) (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain -}}
+  {{- printf "%s-configsvr-0.%s-headless.%s.svc.%s" (include "common.names.fullname" . ) (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain -}}
   {{- end -}}
 {{- end -}}
 

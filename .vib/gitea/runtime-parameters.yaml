@@ -1,0 +1,28 @@
+adminEmail: vib-user@example.com
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    ssh: 2500
+containerPorts:
+  http: 8123
+  ssh: 2321
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+adminPassword: bitnami!1234
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+postgresql:
+  enabled: true
+  auth:
+    username: bn_vib_gitea
+    database: bitnami_vib_gitea
+  primary:
+    service:
+      ports:
+        postgresql: 9393

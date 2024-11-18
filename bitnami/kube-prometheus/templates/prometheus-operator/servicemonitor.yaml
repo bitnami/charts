@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.operator.enabled .Values.operator.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -8,16 +13,10 @@ metadata:
     {{- if .Values.operator.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.operator.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.operator.serviceMonitor.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.operator.serviceMonitor.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.operator.serviceMonitor.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.operator.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   endpoints:
     - port: http
@@ -34,6 +33,10 @@ spec:
       {{- if .Values.operator.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.operator.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.operator.serviceMonitor.extraParameters }}
+      {{- toYaml .Values.operator.serviceMonitor.extraParameters | nindent 6 }}
+      {{- end }}
+  jobLabel: {{ .Values.operator.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "kube-prometheus.operator.matchLabels" . | nindent 6 }}
   namespaceSelector:

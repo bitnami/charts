@@ -1,12 +1,14 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-  {{- if .Values.commonLabels }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-  {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -43,7 +45,6 @@ data:
   {{- else }}
   POSTGRESQL_CLIENT_POSTGRES_USER: {{ .Values.externalDatabase.postgresUser | quote }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME: {{ .Values.externalDatabase.user | quote }}
-  POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD: {{ .Values.externalDatabase.password | quote }}
   {{- end }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_NAME: {{ include "discourse.database.name" . }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_EXTENSIONS: "hstore,pg_trgm"

@@ -22,27 +22,56 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/elasticsearch"
         },
-        "runtime_parameters": "Imdsb2JhbCI6CiAgImtpYmFuYUVuYWJsZWQiOiB0cnVlCiJtYXN0ZXIiOgogICJyZXBsaWNhQ291bnQiOiAiMSIKImNvb3JkaW5hdGluZyI6CiAgInJlcGxpY2FDb3VudCI6ICIxIgoiZGF0YSI6CiAgInJlcGxpY2FDb3VudCI6ICIxIgoiaW5nZXN0IjoKICAicmVwbGljYUNvdW50IjogIjEiCiJraWJhbmEiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKInN5c2N0bEltYWdlIjoKICAiZW5hYmxlZCI6IHRydWUK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "L4"
           }
         }
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "elasticsearch/goss/goss.yaml",
+            "vars_file": "elasticsearch/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "sts-elasticsearch-master"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
-            "endpoint": "lb-elasticsearch-kibana-http",
+            "resources": {
+              "path": "/.vib/elasticsearch/cypress"
+            },
+            "endpoint": "lb-elasticsearch-tcp-rest-api",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/elasticsearch/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "elasticsearch"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

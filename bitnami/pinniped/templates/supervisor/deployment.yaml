@@ -1,15 +1,17 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.supervisor.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "pinniped.supervisor.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: supervisor
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -18,8 +20,9 @@ spec:
   {{- if .Values.supervisor.updateStrategy }}
   strategy: {{- toYaml .Values.supervisor.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.supervisor.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: supervisor
   template:
     metadata:
@@ -27,14 +30,13 @@ spec:
         {{- if .Values.supervisor.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: supervisor
-        {{- if .Values.supervisor.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+        app.kubernetes.io/part-of: pinniped
     spec:
       serviceAccountName: {{ template "pinniped.supervisor.serviceAccountName" . }}
       {{- include "pinniped.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.supervisor.automountServiceAccountToken }}
       {{- if .Values.supervisor.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -42,8 +44,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.supervisor.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.supervisor.podAffinityPreset "component" "supervisor" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.supervisor.podAntiAffinityPreset "component" "supervisor" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.supervisor.podAffinityPreset "component" "supervisor" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.supervisor.podAntiAffinityPreset "component" "supervisor" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.supervisor.nodeAffinityPreset.type "key" .Values.supervisor.nodeAffinityPreset.key "values" .Values.supervisor.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.supervisor.nodeSelector }}
@@ -62,7 +64,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.supervisor.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.supervisor.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.supervisor.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.supervisor.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.supervisor.terminationGracePeriodSeconds }}
@@ -76,7 +78,7 @@ spec:
           image: {{ template "pinniped.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.supervisor.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.supervisor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.supervisor.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.supervisor.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.command "context" $) | nindent 12 }}
@@ -106,42 +108,44 @@ spec:
             {{- end }}
           {{- if .Values.supervisor.resources }}
           resources: {{- toYaml .Values.supervisor.resources | nindent 12 }}
+          {{- else if ne .Values.supervisor.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.supervisor.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: https
               containerPort: {{ .Values.supervisor.containerPorts.https }}
-          {{- if .Values.supervisor.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.supervisor.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
-              port: https
-              scheme: HTTPS
-          {{- else if .Values.supervisor.customLivenessProbe }}
+            - name: https-api
+              containerPort: {{ .Values.supervisor.containerPorts.api }}
+          {{- if .Values.supervisor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.supervisor.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.supervisor.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: https
           {{- end }}
-          {{- if .Values.supervisor.readinessProbe.enabled }}
+          {{- if .Values.supervisor.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.supervisor.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.supervisor.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https
               scheme: HTTPS
-          {{- else if .Values.supervisor.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.supervisor.startupProbe.enabled }}
+          {{- if .Values.supervisor.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.supervisor.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.supervisor.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https
               scheme: HTTPS
-          {{- else if .Values.supervisor.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.supervisor.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
             - name: config-volume
               mountPath: /bitnami/pinniped/conf
@@ -156,10 +160,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.supervisor.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
-          emptyDir:
-            medium: Memory
-            sizeLimit: 100Mi
+        - name: empty-dir
+          emptyDir: {}
         - name: config-volume
           configMap:
             name: {{ template "pinniped.supervisor.configmapName" . }}

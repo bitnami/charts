@@ -1,0 +1,2157 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "default": ""
+                }
+            }
+        },
+        "kubeVersion": {
+            "type": "string",
+            "description": "Override Kubernetes version",
+            "default": ""
+        },
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override common.names.name",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.fullname",
+            "default": ""
+        },
+        "namespaceOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.namespace",
+            "default": ""
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Labels to add to all deployed objects",
+            "default": {}
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Annotations to add to all deployed objects",
+            "default": {}
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Kubernetes cluster domain name",
+            "default": "cluster.local"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release",
+            "default": [],
+            "items": {}
+        },
+        "diagnosticMode": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
+                    "default": false
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Command to override all containers in the deployment",
+                    "default": [
+                        "sleep"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Args to override all containers in the deployment",
+                    "default": [
+                        "infinity"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "mlflow image registry",
+                    "default": "REGISTRY_NAME"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "mlflow image repository",
+                    "default": "REPOSITORY_NAME/mlflow"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "mlflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)",
+                    "default": ""
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "mlflow image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "mlflow image pull secrets",
+                    "default": [],
+                    "items": {}
+                },
+                "debug": {
+                    "type": "boolean",
+                    "description": "Enable mlflow image debug mode",
+                    "default": false
+                }
+            }
+        },
+        "gitImage": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "Git image registry",
+                    "default": "REGISTRY_NAME"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "Git image repository",
+                    "default": "REPOSITORY_NAME/git"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                    "default": ""
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "Git image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "Specify docker-registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "tracking": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable Tracking server",
+                    "default": true
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of mlflow replicas to deploy",
+                    "default": 1
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "mlflow HTTP container port",
+                            "default": 5000
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on mlflow containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on mlflow containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on mlflow containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the mlflow containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the mlflow containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled mlflow pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set mlflow pod's Security Context fsGroup",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set containers' Security Context privileged",
+                            "default": false
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "auth": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable basic authentication",
+                            "default": true
+                        },
+                        "username": {
+                            "type": "string",
+                            "description": "Admin username",
+                            "default": "user"
+                        },
+                        "password": {
+                            "type": "string",
+                            "description": "Admin password",
+                            "default": ""
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of a secret containing the admin password",
+                            "default": ""
+                        },
+                        "existingSecretUserKey": {
+                            "type": "string",
+                            "description": "Key inside the secret containing the admin password",
+                            "default": ""
+                        },
+                        "existingSecretPasswordKey": {
+                            "type": "string",
+                            "description": "Key inside the secret containing the admin password",
+                            "default": ""
+                        },
+                        "extraOverrides": {
+                            "type": "object",
+                            "description": "Add extra settings to the basic_auth.ini file",
+                            "default": {}
+                        },
+                        "overridesConfigMap": {
+                            "type": "string",
+                            "description": "Name of a ConfigMap containing overrides to the basic_auth.ini file",
+                            "default": ""
+                        }
+                    }
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS traffic support",
+                            "default": false
+                        },
+                        "autoGenerated": {
+                            "type": "boolean",
+                            "description": "Generate automatically self-signed TLS certificates",
+                            "default": false
+                        },
+                        "certificatesSecret": {
+                            "type": "string",
+                            "description": "Name of an existing secret that contains the certificates",
+                            "default": ""
+                        },
+                        "certFilename": {
+                            "type": "string",
+                            "description": "Certificate filename",
+                            "default": ""
+                        },
+                        "certKeyFilename": {
+                            "type": "string",
+                            "description": "Certificate key filename",
+                            "default": ""
+                        },
+                        "certCAFilename": {
+                            "type": "string",
+                            "description": "CA Certificate filename",
+                            "default": ""
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraArgs": {
+                    "type": "array",
+                    "description": "Add extra arguments together with the default ones",
+                    "default": [],
+                    "items": {}
+                },
+                "runUpgradeDB": {
+                    "type": "boolean",
+                    "description": "Add an init container to run mlflow db upgrade",
+                    "default": false
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "mlflow pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for mlflow pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for mlflow pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation",
+                            "default": false
+                        },
+                        "minAvailable": {
+                            "type": "string",
+                            "description": "Minimum number/percentage of pods that should remain scheduled",
+                            "default": "1"
+                        },
+                        "maxUnavailable": {
+                            "type": "string",
+                            "description": "Maximum number/percentage of pods that may be made unavailable",
+                            "default": ""
+                        }
+                    }
+                },
+                "autoscaling": {
+                    "type": "object",
+                    "properties": {
+                        "hpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable HPA",
+                                    "default": false
+                                },
+                                "minReplicas": {
+                                    "type": "string",
+                                    "description": "Minimum number of replicas",
+                                    "default": ""
+                                },
+                                "maxReplicas": {
+                                    "type": "string",
+                                    "description": "Maximum number of replicas",
+                                    "default": ""
+                                },
+                                "targetCPU": {
+                                    "type": "string",
+                                    "description": "Target CPU utilization percentage",
+                                    "default": ""
+                                },
+                                "targetMemory": {
+                                    "type": "string",
+                                    "description": "Target Memory utilization percentage",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "vpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable VPA",
+                                    "default": false
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Annotations for VPA resource",
+                                    "default": {}
+                                },
+                                "controlledResources": {
+                                    "type": "array",
+                                    "description": "VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "maxAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Max allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "minAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Min allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "updatePolicy": {
+                                    "type": "object",
+                                    "properties": {
+                                        "updateMode": {
+                                            "type": "string",
+                                            "description": "Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod",
+                                            "default": "Auto"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for mlflow pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for mlflow pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for mlflow pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "mlflow statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "mlflow pods' priorityClassName",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for mlflow pods",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds Redmine pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the mlflow container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to mlflow nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for mlflow nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for mlflow nodes",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the mlflow pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the mlflow container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the mlflow pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "enableDefaultInitContainers": {
+                    "type": "boolean",
+                    "description": "Add default init containers to the deployment",
+                    "default": true
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the mlflow pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "mlflow service type",
+                            "default": "LoadBalancer"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "number",
+                                    "description": "mlflow service HTTP port",
+                                    "default": 80
+                                },
+                                "https": {
+                                    "type": "number",
+                                    "description": "mlflow service HTTPS port",
+                                    "default": 443
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "string",
+                                    "description": "Node port for HTTP",
+                                    "default": ""
+                                },
+                                "https": {
+                                    "type": "string",
+                                    "description": "Node port for HTTPS",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "mlflow service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "mlflow service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "mlflow service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Add labels to the service object",
+                            "default": {}
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "mlflow service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for mlflow service",
+                            "default": {}
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose in mlflow service (normally used with the `sidecars` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Control where client requests go, to the same pod or round-robin",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "ingress": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable ingress record generation for mlflow",
+                            "default": false
+                        },
+                        "pathType": {
+                            "type": "string",
+                            "description": "Ingress path type",
+                            "default": "ImplementationSpecific"
+                        },
+                        "hostname": {
+                            "type": "string",
+                            "description": "Default host for the ingress record",
+                            "default": "mlflow.local"
+                        },
+                        "ingressClassName": {
+                            "type": "string",
+                            "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "Default path for the ingress record",
+                            "default": "/"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                            "default": {}
+                        },
+                        "tls": {
+                            "type": "boolean",
+                            "description": "Enable TLS configuration for the host defined at `ingress.hostname` parameter",
+                            "default": false
+                        },
+                        "selfSigned": {
+                            "type": "boolean",
+                            "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                            "default": false
+                        },
+                        "extraHosts": {
+                            "type": "array",
+                            "description": "An array with additional hostname(s) to be covered with the ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraPaths": {
+                            "type": "array",
+                            "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraTls": {
+                            "type": "array",
+                            "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "secrets": {
+                            "type": "array",
+                            "description": "Custom TLS certificates as secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraRules": {
+                            "type": "array",
+                            "description": "Additional rules to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable creation of NetworkPolicy resources",
+                            "default": true
+                        },
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "The Policy model to apply",
+                            "default": true
+                        },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {}
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {}
+                        }
+                    }
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence using Persistent Volume Claims",
+                            "default": true
+                        },
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path to mount the volume at.",
+                            "default": "/bitnami/mlflow"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "Storage class of backing PVC",
+                            "default": ""
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Persistent Volume labels",
+                            "default": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Persistent Volume Claim annotations",
+                            "default": {}
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume Access Modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Size of data volume",
+                            "default": "8Gi"
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "The name of an existing PVC to use for persistence",
+                            "default": ""
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume for WordPress data PVC",
+                            "default": {}
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a ServiceAccount should be created",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use.",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional Service Account annotations (evaluated as a template)",
+                            "default": {}
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Automount service account token for the server service account",
+                            "default": false
+                        }
+                    }
+                },
+                "metrics": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable the export of Prometheus metrics",
+                            "default": false
+                        },
+                        "serviceMonitor": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)",
+                                    "default": false
+                                },
+                                "namespace": {
+                                    "type": "string",
+                                    "description": "Namespace in which Prometheus is running",
+                                    "default": ""
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Additional custom annotations for the ServiceMonitor",
+                                    "default": {}
+                                },
+                                "labels": {
+                                    "type": "object",
+                                    "description": "Extra labels for the ServiceMonitor",
+                                    "default": {}
+                                },
+                                "jobLabel": {
+                                    "type": "string",
+                                    "description": "The name of the label on the target service to use as the job name in Prometheus",
+                                    "default": ""
+                                },
+                                "honorLabels": {
+                                    "type": "boolean",
+                                    "description": "honorLabels chooses the metric's labels on collisions with target labels",
+                                    "default": false
+                                },
+                                "interval": {
+                                    "type": "string",
+                                    "description": "Interval at which metrics should be scraped.",
+                                    "default": ""
+                                },
+                                "scrapeTimeout": {
+                                    "type": "string",
+                                    "description": "Timeout after which the scrape is ended",
+                                    "default": ""
+                                },
+                                "metricRelabelings": {
+                                    "type": "array",
+                                    "description": "Specify additional relabeling of metrics",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "relabelings": {
+                                    "type": "array",
+                                    "description": "Specify general relabeling",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "selector": {
+                                    "type": "object",
+                                    "description": "Prometheus instance selector labels",
+                                    "default": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "run": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable Run deployment",
+                    "default": true
+                },
+                "useJob": {
+                    "type": "boolean",
+                    "description": "Deploy as job",
+                    "default": false
+                },
+                "backoffLimit": {
+                    "type": "number",
+                    "description": "set backoff limit of the job",
+                    "default": 10
+                },
+                "restartPolicy": {
+                    "type": "string",
+                    "description": "set restart policy of the job",
+                    "default": "OnFailure"
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to run nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for run nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for run nodes",
+                    "default": ""
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Annotations for the run deployment",
+                    "default": {}
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Run termination grace period (in seconds)",
+                    "default": ""
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Run nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 30
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Run nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 30
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 20
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Run containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 30
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the run containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the run containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Run pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Run pod's Security Context fsGroup",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Run containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Run containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set Run containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Run containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set Run containers' Security Context privileged",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set Run containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set Run container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set Run container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Run container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the run container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "runtimeClassName": {
+                    "type": "string",
+                    "description": "Name of the runtime class to be used by pod(s)",
+                    "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "run pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "labels": {
+                    "type": "object",
+                    "description": "Extra labels for the run deployment",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for run pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for run pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `run.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `run.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `run.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `run.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `run.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Run pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Run pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Run pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains",
+                    "default": [],
+                    "items": {}
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Run pods' priorityClassName",
+                    "default": ""
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Kubernetes pod scheduler registry",
+                    "default": ""
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Run statefulset strategy type",
+                            "default": "RollingUpdate"
+                        },
+                        "rollingUpdate": {
+                            "type": "object",
+                            "description": "Run statefulset rolling update configuration parameters",
+                            "default": {}
+                        }
+                    }
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Run pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Run container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the Run pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "enableDefaultInitContainers": {
+                    "type": "boolean",
+                    "description": "Deploy default init containers",
+                    "default": true
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the Run pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable creation of NetworkPolicy resources",
+                            "default": true
+                        },
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "The Policy model to apply",
+                            "default": true
+                        },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {}
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {}
+                        }
+                    }
+                },
+                "source": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Where the source comes from: Possible values: configmap, git, custom",
+                            "default": "configmap"
+                        },
+                        "launchCommand": {
+                            "type": "string",
+                            "description": "deepspeed command to run over the project",
+                            "default": ""
+                        },
+                        "configMap": {
+                            "type": "object",
+                            "description": "List of files of the project",
+                            "default": {}
+                        },
+                        "existingConfigMap": {
+                            "type": "string",
+                            "description": "Name of a configmap containing the files of the project",
+                            "default": ""
+                        },
+                        "git": {
+                            "type": "object",
+                            "properties": {
+                                "repository": {
+                                    "type": "string",
+                                    "description": "Repository that holds the files",
+                                    "default": ""
+                                },
+                                "revision": {
+                                    "type": "string",
+                                    "description": "Revision from the repository to checkout",
+                                    "default": ""
+                                },
+                                "extraVolumeMounts": {
+                                    "type": "array",
+                                    "description": "Add extra volume mounts for the Git container",
+                                    "default": [],
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable creation of ServiceAccount for Run pods",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use",
+                            "default": ""
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Allows auto mount of ServiceAccountToken on the serviceAccount created",
+                            "default": false
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the ServiceAccount",
+                            "default": {}
+                        }
+                    }
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Use a PVC to persist data",
+                            "default": false
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "discourse & sidekiq data Persistent Volume Storage Class",
+                            "default": ""
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "Use a existing PVC which must be created manually before bound",
+                            "default": ""
+                        },
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path to mount the volume at",
+                            "default": "/bitnami/mlflow/data"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "subPath to use for mounting the volume",
+                            "default": ""
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume Access Mode",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume for the run data PVC",
+                            "default": {}
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Size of data volume",
+                            "default": "8Gi"
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Persistent Volume labels",
+                            "default": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Persistent Volume annotations",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "volumePermissions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image repository",
+                            "default": "REPOSITORY_NAME/os-shell"
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "OS Shell + Utility image pull secrets",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the init container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the init container",
+                            "default": {}
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Set container security context settings",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set init container's Security Context runAsUser",
+                            "default": 0
+                        }
+                    }
+                }
+            }
+        },
+        "waitContainer": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Init container wait-container image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Init container wait-container image name",
+                            "default": "REPOSITORY_NAME/os-shell"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Init container wait-container image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set containers' Security Context privileged",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "postgresql": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Switch to enable or disable the PostgreSQL helm chart",
+                    "default": true
+                },
+                "auth": {
+                    "type": "object",
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": "Name for a custom user to create",
+                            "default": "bn_mlflow"
+                        },
+                        "password": {
+                            "type": "string",
+                            "description": "Password for the custom user to create",
+                            "default": ""
+                        },
+                        "database": {
+                            "type": "string",
+                            "description": "Name for a custom database to create",
+                            "default": "bitnami_mlflow"
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of existing secret to use for PostgreSQL credentials",
+                            "default": ""
+                        }
+                    }
+                },
+                "architecture": {
+                    "type": "string",
+                    "description": "PostgreSQL architecture (`standalone` or `replication`)",
+                    "default": "standalone"
+                },
+                "primary": {
+                    "type": "object",
+                    "properties": {
+                        "service": {
+                            "type": "object",
+                            "properties": {
+                                "ports": {
+                                    "type": "object",
+                                    "properties": {
+                                        "postgresql": {
+                                            "type": "number",
+                                            "description": "PostgreSQL service port",
+                                            "default": 5432
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "externalDatabase": {
+            "type": "object",
+            "properties": {
+                "dialectDriver": {
+                    "type": "string",
+                    "description": "Database dialect(+driver)",
+                    "default": "postgresql",
+                    "pattern": "^(mysql|mssql|sqlite|postgresql)(\\+\\w+)?$"
+                },
+                "host": {
+                    "type": "string",
+                    "description": "Database host",
+                    "default": ""
+                },
+                "port": {
+                    "type": "number",
+                    "description": "Database port number",
+                    "default": 5432
+                },
+                "user": {
+                    "type": "string",
+                    "description": "Non-root username",
+                    "default": "postgres"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password for the non-root username",
+                    "default": ""
+                },
+                "database": {
+                    "type": "string",
+                    "description": "Database name",
+                    "default": "mlflow"
+                },
+                "authDatabase": {
+                    "type": "string",
+                    "description": "Database name for the auth module (only if tracking.auth.enabled=true)",
+                    "default": "mlflow_auth"
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Name of an existing secret resource containing the database credentials",
+                    "default": ""
+                },
+                "existingSecretPasswordKey": {
+                    "type": "string",
+                    "description": "Name of an existing secret key containing the database credentials",
+                    "default": "db-password"
+                }
+            }
+        },
+        "minio": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable/disable MinIO&reg; chart installation",
+                    "default": true
+                },
+                "auth": {
+                    "type": "object",
+                    "properties": {
+                        "rootUser": {
+                            "type": "string",
+                            "description": "MinIO&reg; root username",
+                            "default": "admin"
+                        },
+                        "rootPassword": {
+                            "type": "string",
+                            "description": "Password for MinIO&reg; root user",
+                            "default": ""
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of an existing secret containing the MinIO&reg; credentials",
+                            "default": ""
+                        }
+                    }
+                },
+                "defaultBuckets": {
+                    "type": "string",
+                    "description": "Comma, semi-colon or space separated list of MinIO&reg; buckets to create",
+                    "default": "mlflow"
+                },
+                "provisioning": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable/disable MinIO&reg; provisioning job",
+                            "default": true
+                        },
+                        "extraCommands": {
+                            "type": "array",
+                            "description": "Extra commands to run on MinIO&reg; provisioning job",
+                            "default": [
+                                "mc anonymous set download provisioning/mlflow"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable/disable MinIO&reg; TLS support",
+                            "default": false
+                        }
+                    }
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "MinIO&reg; service type",
+                            "default": "ClusterIP"
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "MinIO&reg; service LoadBalancer IP",
+                            "default": ""
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "api": {
+                                    "type": "number",
+                                    "description": "MinIO&reg; service port",
+                                    "default": 80
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "externalS3": {
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string",
+                    "description": "External S3 host",
+                    "default": ""
+                },
+                "port": {
+                    "type": "number",
+                    "description": "External S3 port number",
+                    "default": 443
+                },
+                "useCredentialsInSecret": {
+                    "type": "boolean",
+                    "description": "Whether to use a secret to store the S3 credentials",
+                    "default": true
+                },
+                "accessKeyID": {
+                    "type": "string",
+                    "description": "External S3 access key ID",
+                    "default": ""
+                },
+                "accessKeySecret": {
+                    "type": "string",
+                    "description": "External S3 access key secret",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Name of an existing secret resource containing the S3 credentials",
+                    "default": ""
+                },
+                "existingSecretAccessKeyIDKey": {
+                    "type": "string",
+                    "description": "Name of an existing secret key containing the S3 access key ID",
+                    "default": "root-user"
+                },
+                "existingSecretKeySecretKey": {
+                    "type": "string",
+                    "description": "Name of an existing secret key containing the S3 access key secret",
+                    "default": "root-password"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": "External S3 protocol",
+                    "default": "https"
+                },
+                "bucket": {
+                    "type": "string",
+                    "description": "External S3 bucket",
+                    "default": "mlflow"
+                },
+                "serveArtifacts": {
+                    "type": "boolean",
+                    "description": "Whether artifact serving is enabled",
+                    "default": true
+                }
+            }
+        }
+    }
+}

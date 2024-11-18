@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.alertmanager.enabled }}
 apiVersion: v1
 kind: Service
@@ -5,16 +10,10 @@ metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.alertmanager.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.annotations "context" $) | nindent 10 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-    {{- end }}
+  {{- if or .Values.alertmanager.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.alertmanager.service.type }}
   {{- if and .Values.alertmanager.service.clusterIP (eq .Values.alertmanager.service.type "ClusterIP") }}
@@ -35,6 +34,9 @@ spec:
   {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.alertmanager.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.alertmanager.service.loadBalancerClass }}
+  {{- end }}
   {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (eq .Values.alertmanager.service.externalTrafficPolicy "Local") .Values.alertmanager.service.healthCheckNodePort }}
   healthCheckNodePort: {{ .Values.alertmanager.service.healthCheckNodePort }}
   {{- end }}
@@ -48,7 +50,5 @@ spec:
     {{- if .Values.alertmanager.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector:
-    app.kubernetes.io/name: alertmanager
-    alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
+  selector: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 4 }}
 {{- end }}

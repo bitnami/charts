@@ -1,0 +1,47 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.applicationSet.enabled .Values.applicationSet.metrics.enabled .Values.applicationSet.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "argocd.applicationSet" . }}
+  namespace: {{ default ( include "common.names.namespace" . ) .Values.applicationSet.metrics.serviceMonitor.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.applicationSet.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: applicationSet
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - port: http-metrics
+      path: /metrics
+      {{- if .Values.applicationSet.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.applicationSet.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.applicationSet.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.applicationSet.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.applicationSet.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.applicationSet.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.applicationSet.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.applicationSet.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ include "common.names.namespace" . }}
+  selector:
+    matchLabels:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: metrics
+      app.kubernetes.io/part-of: applicationSet
+{{- end }}

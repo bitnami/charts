@@ -1,13 +1,14 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.operator.enabled .Values.rbac.create -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ template "kube-prometheus.operator.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -28,6 +29,8 @@ rules:
       - servicemonitors.monitoring.coreos.com
       - thanosrulers.monitoring.coreos.com
       - probes.monitoring.coreos.com
+      - scrapeconfigs.monitoring.coreos.com
+      - prometheusagents.monitoring.coreos.com
     resources:
       - customresourcedefinitions
     verbs:
@@ -37,6 +40,7 @@ rules:
       - monitoring.coreos.com
     resources:
       - alertmanagers
+      - alertmanagers/status
       - alertmanagers/finalizers
       - alertmanagerconfigs
       - prometheuses
@@ -44,10 +48,15 @@ rules:
       - prometheuses/finalizers
       - thanosrulers
       - thanosrulers/finalizers
+      - thanosrulers/status
       - servicemonitors
       - podmonitors
       - probes
       - prometheusrules
+      - scrapeconfigs
+      - prometheusagents
+      - prometheusagents/finalizers
+      - prometheusagents/status
     verbs:
       - '*'
   - apiGroups:
@@ -97,6 +106,13 @@ rules:
       - list
       - watch
   - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - patch
+      - create
+  - apiGroups:
       - networking.k8s.io
     resources:
       - ingresses
@@ -104,4 +120,10 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - storage.k8s.io
+    resources:
+      - storageclasses
+    verbs:
+      - get
 {{- end }}

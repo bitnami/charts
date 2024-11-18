@@ -22,37 +22,26 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/rabbitmq"
         },
-        "runtime_parameters": "YXV0aDoKICBlcmxhbmdDb29raWU6IFJqc3BDQzNubTRrTHY0TGpXRk5mRkhXM3hMeGI3elRDCiAgcGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNAogIHVzZXJuYW1lOiB1c2VyCnNlcnZpY2U6CiAgcG9ydHM6CiAgICBtYW5hZ2VyOiA4MAogIHR5cGU6IExvYWRCYWxhbmNlcg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M8"
+            "name": "M4"
           }
         }
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-rabbitmq-http-stats",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/rabbitmq/goss"
+              "path": "/.vib"
             },
+            "tests_file": "rabbitmq/goss/goss.yaml",
+            "vars_file": "rabbitmq/runtime-parameters.yaml",
             "remote": {
-              "workload": "sts-rabbitmq"
+              "pod": {
+                "workload": "sts-rabbitmq"
+              }
             }
           }
         },
@@ -65,9 +54,30 @@
             "endpoint": "lb-rabbitmq-http-stats",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
+              "username": "test_user",
               "password": "ComplicatedPassword123!4"
             }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/rabbitmq/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "rabbitmq",
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

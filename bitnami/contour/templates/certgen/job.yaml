@@ -1,8 +1,13 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.contour.enabled (include "contour.contour-certgen.enabled" .) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "common.names.fullname" . }}-contour-certgen
+  name: {{ printf "%s-contour-certgen" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
@@ -11,15 +16,14 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.contour.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: contour-certgen
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
 spec:
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: contour-certgen
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
@@ -33,7 +37,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.contour.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.contour.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.contour.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: contour
@@ -69,11 +73,58 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.contour.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.contour.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.contour.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.contour.resources }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
+          {{- else if ne .Values.contour.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.contour.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.contour.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - pgrep
+                - contour
+            initialDelaySeconds: {{ .Values.contour.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.contour.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.contour.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.contour.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.contour.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.contour.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - contour
+            initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.contour.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - pgrep
+                - contour
+            initialDelaySeconds: {{ .Values.contour.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.contour.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.contour.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.contour.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.contour.readinessProbe.failureThreshold }}
+          {{- end }}
       restartPolicy: Never
       serviceAccountName: {{ include "contour.contourCertGenServiceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.contour.certgen.automountServiceAccountToken }}
   parallelism: 1
   completions: 1
   backoffLimit: 1

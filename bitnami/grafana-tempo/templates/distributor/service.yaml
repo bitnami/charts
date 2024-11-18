@@ -1,21 +1,18 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "grafana-tempo.distributor.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: distributor
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.distributor.service.annotations }}
-  annotations:
-    {{- if .Values.distributor.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.distributor.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.distributor.service.type }}
@@ -89,6 +86,10 @@ spec:
     {{- end }}
     {{- if .Values.tempo.traces.otlp.http }}
     - name: distributor-otlp-http
+      port: 4318
+      protocol: TCP
+      targetPort: otlp-http
+    - name: distributor-otlp-http-legacy
       port: 55681
       protocol: TCP
       targetPort: otlp-http
@@ -98,7 +99,7 @@ spec:
       port: 4317
       protocol: TCP
       targetPort: otlp-grpc
-    - name: distributor-otlp-legacy
+    - name: distributor-otlp-grpc-legacy
       port: 55680
       protocol: TCP
       targetPort: otlp-grpc
@@ -112,5 +113,6 @@ spec:
     {{- if .Values.distributor.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.distributor.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.distributor.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: distributor

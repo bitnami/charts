@@ -1,0 +1,92 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "thanos.query-frontend.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list  .Values.queryFrontend.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: query-frontend
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.queryFrontend.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    {{- if .Values.minio.enabled }}
+    # Communicate with minio
+    - ports:
+        - port: {{ .Values.minio.service.ports.api }}
+        - port: {{ .Values.minio.service.ports.api }}
+      to: 
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}            
+    {{- end }}
+    {{- if .Values.query.enabled }}
+    # Communicate with query
+    - ports:
+        - port: {{ .Values.query.service.ports.http }}
+        - port: {{ .Values.query.containerPorts.http }}
+        - port: {{ .Values.query.serviceGrpc.ports.grpc }}
+        - port: {{ .Values.query.containerPorts.grpc }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: query
+    {{- end }}
+    {{- if .Values.queryFrontend.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value"  .Values.queryFrontend.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.queryFrontend.containerPorts.http }}
+        - port: {{ .Values.queryFrontend.service.ports.http }}
+      {{- if not  .Values.queryFrontend.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "thanos.query.fullname" . }}-client: "true"
+        {{- if .Values.queryFrontend.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value :=  .Values.queryFrontend.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.queryFrontend.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value :=  .Values.queryFrontend.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.queryFrontend.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value"  .Values.queryFrontend.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

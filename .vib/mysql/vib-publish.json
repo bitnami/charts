@@ -16,19 +16,6 @@
         }
       ]
     },
-    "verify": {
-      "actions": [
-        {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
-          }
-        }
-      ]
-    },
     "publish": {
       "actions": [
         {
@@ -37,8 +24,11 @@
             "repository": {
               "kind": "S3",
               "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
+              "authn": {
+                "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
+                "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}",
+                "role": "{VIB_ENV_S3_ROLE_ARN}"
+              }
             }
           }
         }

@@ -1,0 +1,59 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.tracking.metrics.enabled .Values.tracking.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "mlflow.v0.tracking.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.tracking.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.tracking.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mlflow
+    app.kubernetes.io/component: tracking
+  {{- if or .Values.tracking.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.tracking.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.tracking.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mlflow
+      app.kubernetes.io/component: tracking
+      {{- if .Values.tracking.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.tracking.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: {{ include "mlflow.v0.tracking.portName" . }}
+      {{- if .Values.tracking.auth.enabled }}
+      basicAuth:
+        password:
+          key: {{ include "mlflow.v0.tracking.passwordKey" . }}
+          name: {{ include "mlflow.v0.tracking.secretName" . }}
+        username:
+          key: {{ include "mlflow.v0.tracking.userKey" . }}
+          name: {{ include "mlflow.v0.tracking.secretName" . }}
+      {{- end }}
+      path: "/metrics"
+      {{- if .Values.tracking.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.tracking.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.tracking.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.tracking.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.tracking.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.tracking.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.tracking.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.tracking.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tracking.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.tracking.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

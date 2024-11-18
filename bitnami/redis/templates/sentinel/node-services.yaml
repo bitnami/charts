@@ -1,8 +1,13 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled (eq .Values.sentinel.service.type "NodePort") (or .Release.IsUpgrade .Values.sentinel.service.nodePorts.redis ) }}
 
 {{- range $i := until (int .Values.replica.replicaCount) }}
 
-{{ $portsmap := (lookup "v1" "ConfigMap" $.Release.Namespace (printf "%s-%s" ( include "common.names.fullname" $ ) "ports-configmap")).data }}
+{{ $portsmap := (lookup "v1" "ConfigMap" (include "common.names.namespace" $) (printf "%s-%s" ( include "common.names.fullname" $ ) "ports-configmap")).data }}
 
 {{ $sentinelport := 0}}
 {{ $redisport := 0}}
@@ -15,20 +20,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" $ }}-node-{{ $i }}
-  namespace: {{ $.Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
-    {{- if $.Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if or $.Values.sentinel.service.annotations $.Values.commonAnnotations }}
-  annotations:
-    {{- if $.Values.sentinel.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.sentinel.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if $.Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or $.Values.commonAnnotations $.Values.sentinel.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.sentinel.service.annotations $.Values.commonAnnotations ) "context" $ ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: NodePort

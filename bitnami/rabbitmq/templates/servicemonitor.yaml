@@ -1,29 +1,40 @@
-{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- /* `.Values.metrics.serviceMonitor.enabled` is deprecated, please use default/perObject/detailed */}}
+{{- if and
+  .Values.metrics.enabled
+  ( or
+    .Values.metrics.serviceMonitor.enabled
+    .Values.metrics.serviceMonitor.default.enabled
+    .Values.metrics.serviceMonitor.perObject.enabled
+    .Values.metrics.serviceMonitor.detailed.enabled
+  )
+}}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.metrics.serviceMonitor.namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.metrics.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.metrics.serviceMonitor.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  {{- if or .Values.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel | quote }}
   endpoints:
+    {{- /* deprecated, please use default/perObject/detailed */}}
+    {{- if .Values.metrics.serviceMonitor.enabled }}
     - port: metrics
       {{- if .Values.metrics.serviceMonitor.path }}
       path: {{ .Values.metrics.serviceMonitor.path }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.params }}
+      params: {{ toYaml .Values.metrics.serviceMonitor.params | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
@@ -40,6 +51,77 @@ spec:
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
+    {{- end }}
+    {{- if .Values.metrics.serviceMonitor.default.enabled }}
+    - path: /metrics
+      port: metrics
+      {{- if .Values.metrics.serviceMonitor.default.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.default.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.default.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.default.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.default.honorLabels }}
+      honorLabels: {{ .Values.metrics.serviceMonitor.default.honorLabels }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.default.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.default.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.default.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.default.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.metrics.serviceMonitor.perObject.enabled }}
+    - path: /metrics/per-object
+      port: metrics
+      {{- if .Values.metrics.serviceMonitor.perObject.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.perObject.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.perObject.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.perObject.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.perObject.honorLabels }}
+      honorLabels: {{ .Values.metrics.serviceMonitor.perObject.honorLabels }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.perObject.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.perObject.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.perObject.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.perObject.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.metrics.serviceMonitor.detailed.enabled }}
+    - path: /metrics/detailed
+      port: metrics
+      params:
+        {{- if .Values.metrics.serviceMonitor.detailed.family }}
+        family:
+          {{- range .Values.metrics.serviceMonitor.detailed.family }}
+          - {{ . | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.metrics.serviceMonitor.detailed.vhost }}
+        vhost:
+          {{- range .Values.metrics.serviceMonitor.detailed.vhost }}
+          - {{ . | quote }}
+          {{- end }}
+        {{- end }}
+      {{- if .Values.metrics.serviceMonitor.detailed.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.detailed.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.detailed.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.detailed.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.detailed.honorLabels }}
+      honorLabels: {{ .Values.metrics.serviceMonitor.detailed.honorLabels }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.detailed.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.detailed.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.detailed.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.detailed.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+    {{- end }}
   namespaceSelector:
     matchNames:
       - {{ include "common.names.namespace" . | quote }}
@@ -50,7 +132,7 @@ spec:
   targetLabels: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.targetLabels "context" $) | nindent 4 }}
   {{- end }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}

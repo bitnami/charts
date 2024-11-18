@@ -1,6 +1,9 @@
+# Bitnami Charts Template
+
 This directory contains a basic scaffolding to serve as the basis for creating a new chart.
 
 Some of the items that need to be implemented are:
+
 - commonAnnotations
 - commonLabels
 - imagePullSecret
@@ -15,6 +18,9 @@ Some of the items that need to be implemented are:
 - affinity
 - nodeSelector
 - tolerations (that would override the default one)
+- daemonsetAnnotations
+- deploymentAnnotations
+- statefulsetAnnotations
 - podAnnotations
 - priorityClassName
 - lifecycleHooks

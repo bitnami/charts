@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Return the proper NGINX image name
@@ -24,7 +29,7 @@ Return the proper Prometheus metrics image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "nginx.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.cloneStaticSiteFromGit.image .Values.metrics.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.cloneStaticSiteFromGit.image .Values.metrics.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -59,6 +64,17 @@ Return the custom NGINX server block configmap.
     {{- printf "%s" (tpl .Values.existingServerBlockConfigmap $) -}}
 {{- else -}}
     {{- printf "%s-server-block" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the custom NGINX stream server block configmap.
+*/}}
+{{- define "nginx.streamServerBlockConfigmapName" -}}
+{{- if .Values.existingStreamServerBlockConfigmap -}}
+    {{- printf "%s" (tpl .Values.existingStreamServerBlockConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-stream-server-block" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

@@ -1,29 +1,36 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and (.Values.receive.enabled) (.Values.receive.service.additionalHeadless) -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-receive-headless
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.receive.fullname" . }}-headless
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if eq .Values.receive.mode "dual-mode" }}
+    {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.receive.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - port: {{ if .Values.receive.service.http }}{{ coalesce .Values.receive.service.ports.http .Values.receive.service.http.port }}{{ else }}{{ .Values.receive.service.ports.http }}{{ end }}
+    - port: {{ .Values.receive.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ if .Values.receive.service.grpc }}{{ coalesce .Values.receive.service.ports.grpc .Values.receive.service.grpc.port }}{{ else }}{{ .Values.receive.service.ports.grpc }}{{ end }}
+    - port: {{ .Values.receive.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
       name: grpc
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive
 {{- end }}

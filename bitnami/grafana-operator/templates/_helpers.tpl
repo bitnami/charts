@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -24,24 +29,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 
 
 {{/*
-Return the proper grafana-operator grafana baseImage name
-*/}}
-{{- define "grafana-operator.grafana.baseImage" -}}
-{{- include "grafana-operator.getBaseImage" (dict "image" .Values.grafana.image "context" $) }}
-{{- end -}}
-
-{{/*
-Return the grafana-operator grafana plugins init container name if defined or the grafana base image otherwise
-*/}}
-{{- define "grafana-operator.grafana.pluginsInitContainerImage" -}}
-{{- if .Values.grafana.pluginsInitContainerImage.repository }}
-{{- include "grafana-operator.getBaseImage" (dict "image" .Values.grafana.pluginsInitContainerImage "context" $) }}
-{{- else -}}
-{{- include "grafana-operator.grafana.baseImage" . }}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create the name of the grafana-operator service account to use
 */}}
 {{- define "grafana-operator.serviceAccountName" -}}
@@ -50,14 +37,4 @@ Create the name of the grafana-operator service account to use
 {{- else -}}
     {{ default "default" .Values.operator.serviceAccount.name }}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Renders a List to a comma separated string values.
-Usage:
-{{ include "grafana-operator.joinListWithComma" .Values.path.to.the.Value }}
-*/}}
-{{- define "grafana-operator.joinListWithComma" -}}
-{{- $local := dict "first" true -}}
-{{- range $k, $v := . -}}{{- if not $local.first -}},{{- end -}}{{- $v -}}{{- $_ := set $local "first" false -}}{{- end -}}
 {{- end -}}

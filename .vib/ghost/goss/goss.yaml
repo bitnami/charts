@@ -1,26 +1,34 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://localhost:{{ .Vars.containerPorts.http }}:
+    status: 200
 command:
-  which-ghost:
-    exec: which ghost
+  {{- $checkCmd := "ghost config get %s -d /opt/bitnami/ghost | grep -q %d" }}
+  {{- $dbCheck := printf $checkCmd "database.connection.database" .Vars.mysql.auth.database }}
+  {{- $userCheck := printf $checkCmd "database.connection.user" .Vars.mysql.auth.username }}
+  {{- $passCheck := printf $checkCmd "database.connection.password" .Vars.mysql.auth.password }}
+  check-db-config:
+    exec: ($dbCheck) && ($userCheck) && ($passCheck)
+    exit-status: 0
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0
     stdout:
-      - "/opt/bitnami/ghost/bin/ghost"
-    stderr: [ ]
-    timeout: 40000
-  ghost-version-ok:
-    exec: ghost version | grep --quiet "$APP_VERSION"
-    exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 40000
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}
 file:
-  /opt/bitnami/ghost/content:
-    filetype: symlink
-    linked-to: /bitnami/ghost/content
+  /bitnami/ghost:
     exists: true
-  /bitnami/ghost/config.production.json:
-    mode: "0644"
-    filetype: file
-    exists: true
-user:
-  ghost:
-    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root

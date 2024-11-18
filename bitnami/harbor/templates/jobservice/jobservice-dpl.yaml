@@ -1,38 +1,37 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.jobservice" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.jobservice.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: jobservice
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.jobservice.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.jobservice.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: jobservice
   {{- if .Values.jobservice.updateStrategy }}
   strategy: {{- toYaml .Values.jobservice.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.jobservice.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: jobservice
       annotations:
         checksum/configmap-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm-envvars.yaml") . | sha256sum }}
         checksum/secret-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-secret-envvars.yaml") . | sha256sum }}
-        checksum/secret-config: {{ include (print $.Template.BasePath "/jobservice/jobservice-config-secret.yaml") . | sha256sum }}
+        checksum/configmap-config: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm-config.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if and .Values.internalTLS.enabled (not .Values.core.tls.existingSecret) }}
@@ -51,8 +50,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobservice.podAffinityPreset "component" "jobservice" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobservice.podAntiAffinityPreset "component" "jobservice" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobservice.podAffinityPreset "component" "jobservice" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobservice.podAntiAffinityPreset "component" "jobservice" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.jobservice.nodeAffinityPreset.type "key" .Values.jobservice.nodeAffinityPreset.key "values" .Values.jobservice.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.jobservice.nodeSelector }}
@@ -70,8 +69,9 @@ spec:
       {{- if .Values.jobservice.schedulerName }}
       schedulerName: {{ .Values.jobservice.schedulerName }}
       {{- end }}
+      serviceAccountName: {{ include "harbor.jobservice.serviceAccountName" . }}
       {{- if .Values.jobservice.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.jobservice.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jobservice.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -84,18 +84,44 @@ spec:
             - -ec
             - |
               mkdir -p /var/log/jobs
+              chown {{ .Values.jobservice.containerSecurityContext.runAsUser }}:{{ .Values.jobservice.podSecurityContext.fsGroup }} /var/log/jobs
               find /var/log/jobs -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.jobservice.containerSecurityContext.runAsUser }}:{{ .Values.jobservice.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: job-logs
               mountPath: /var/log/jobs
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
         {{- end }}
+        - name: certificate-volume
+          image: {{ include "harbor.jobservice.image" . }}
+          imagePullPolicy: {{ .Values.jobservice.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - cp -r /etc/ssl/certs/* /certs
+          {{- if .Values.jobservice.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jobservice.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certificateVolume.resources }}
+          resources: {{- toYaml .Values.certificateVolume.resources | nindent 12 }}
+          {{- else if ne .Values.certificateVolume.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certificateVolume.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /certs
+              subPath: etc-ssl-certs
         {{- if .Values.jobservice.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -104,7 +130,7 @@ spec:
           image: {{ include "harbor.jobservice.image" . }}
           imagePullPolicy: {{ .Values.jobservice.image.pullPolicy | quote }}
           {{- if .Values.jobservice.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.jobservice.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jobservice.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -121,14 +147,26 @@ spec:
               value: {{ ternary "true" "false" .Values.jobservice.image.debug | quote }}
             - name: CORE_SECRET
               valueFrom:
+                {{- if .Values.core.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.core.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}
                   key: secret
+                {{- end }}
             - name: JOBSERVICE_SECRET
               valueFrom:
+                {{- if .Values.jobservice.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.jobservice.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+                {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"
@@ -146,7 +184,11 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-envvars" (include "harbor.jobservice" .) }}
             - secretRef:
+                {{- with .Values.jobservice.existingEnvVarsSecret }}
+                name: {{ . }}
+                {{- else }}
                 name: {{ printf "%s-envvars" (include "harbor.jobservice" .) }}
+                {{- end }}
             {{- if .Values.jobservice.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.jobservice.extraEnvVarsCM "context" $) }}
@@ -163,30 +205,28 @@ spec:
               name: metrics
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.jobservice.startupProbe.enabled }}
+          {{- if .Values.jobservice.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobservice.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.jobservice.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.jobservice.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v1/stats
-              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.jobservice.customLivenessProbe }}
+          {{- if .Values.jobservice.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobservice.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
           {{- end }}
-          {{- if .Values.jobservice.readinessProbe.enabled }}
+          {{- if .Values.jobservice.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobservice.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/v1/stats
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.jobservice.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.jobservice.lifecycleHooks }}
@@ -194,8 +234,16 @@ spec:
           {{- end }}
           {{- if .Values.jobservice.resources }}
           resources: {{- toYaml .Values.jobservice.resources | nindent 12 }}
+          {{- else if ne .Values.jobservice.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.jobservice.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssl/certs
+              subPath: etc-ssl-certs
             - name: jobservice-config
               mountPath: /etc/jobservice/config.yml
               subPath: config.yml
@@ -216,9 +264,11 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: jobservice-config
-          secret:
-            secretName: {{ include "harbor.jobservice" . }}-config
+          configMap:
+            name: {{ include "harbor.jobservice" . }}-config
         - name: job-logs
           {{- if and .Values.persistence.enabled (eq .Values.jobservice.jobLogger "file") }}
           persistentVolumeClaim:

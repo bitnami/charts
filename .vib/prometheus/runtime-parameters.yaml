@@ -1,0 +1,68 @@
+server:
+  replicaCount: 1
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+  podSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    capabilities:
+      drop:
+      - ALL
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    runAsUser: 1002
+  rbac:
+    create: true
+  persistence:
+    enabled: true
+    mountPath: /opt/bitnami/prometheus/data
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+    sessionAffinity: None
+  enableFeatures: [ "memory-snapshot-on-shutdown" ]
+  containerPorts:
+    http: 8080
+  existingConfigmapKey: test.yaml
+  scrapeInterval: 10s
+  extraScrapeConfigs:
+    - job_name: wordpress
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+            - default
+      metrics_path: /metrics
+      relabel_configs:
+        - source_labels:
+            - job
+          target_label: __tmp_wordpress_job_name
+        - action: keep
+          source_labels:
+            - __meta_kubernetes_service_label_app_kubernetes_io_instance
+            - __meta_kubernetes_service_labelpresent_app_kubernetes_io_instance
+          regex: (wordpress);true
+  alertingRules:
+    groups:
+    - name: example
+      rules:
+      - alert: Example
+        expr: count(prometheus_http_requests_total) > 2
+        for: 10m
+        labels:
+          severity: page
+        annotations:
+          summary: High number of requests to prometheus
+alertmanager:
+  enabled: true
+  replicaCount: 2
+  serviceMonitor:
+    enabled: true
+  service:
+    ports:
+      http: 9095

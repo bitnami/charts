@@ -1,40 +1,17 @@
-command:
-  ruby-version-test:
-    exec: ruby -v
-    exit-status: 0
-    stdout:
-      - ruby
-    stderr: [ ]
-    timeout: 20000  
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 file:
-  /bitnami/redmine/config/configuration.yml:
-    mode: "0664"
-    filetype: file
+  /bitnami/redmine:
     exists: true
-    group: root
-    contains:
-      - "smtp_settings"
-      - "attachments_storage_path"
+    filetype: directory
+    mode: '2775'
+    owner: redmine
   /bitnami/redmine/config/database.yml:
     mode: "0664"
     filetype: file
     exists: true
     group: root
-    contains:
-      - "postgresql"
-      - "redmine"
-  /bitnami/redmine/files:
-    mode: "0775"
-    filetype: directory
-    exists: true
-    group: root
-  /opt/bitnami/mysql:
-    mode: "0755"
-    filetype: directory
-    exists: true
-    group: root
-  /opt/bitnami/postgresql:
-    mode: "0755"
-    filetype: directory
-    exists: true
-    group: root
+    contents:
+      - /username.*{{ .Vars.mariadb.auth.username }}/
+      - /password.*{{ .Vars.mariadb.auth.password }}/

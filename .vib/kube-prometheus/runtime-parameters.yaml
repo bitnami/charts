@@ -1,0 +1,67 @@
+operator:
+  enabled: true
+  serviceAccount:
+    create: true
+  automountServiceAccountToken: true
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    capabilities:
+      drop:
+      - ALL
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+  serviceMonitor:
+    enabled: true
+  kubeletService:
+    enabled: true
+  service:
+    ports:
+      http: 8081
+prometheus:
+  enabled: true
+  replicaCount: 2
+  serviceMonitor:
+    enabled: true
+  service:
+    type: LoadBalancer
+    ports: 
+      http: 80
+alertmanager:
+  enabled: true
+  replicaCount: 2
+  serviceMonitor:
+    enabled: true
+  service:
+    ports:
+      http: 9094
+node-exporter:
+  serviceMonitor:
+    enabled: true
+kube-state-metrics:
+  replicaCount: 1
+  serviceMonitor:
+    enabled: true
+exporters:
+  node-exporter:
+    enabled: true
+  kube-state-metrics:
+    enabled: true
+kubelet:
+  enabled: true
+kubeApiServer:
+  enabled: true
+kubeControllerManager:
+  enabled: true
+kubeScheduler:
+  enabled: true
+coreDns:
+  enabled: true
+kubeProxy:
+  enabled: true
+rbac:
+  create: true
+  pspEnabled: true

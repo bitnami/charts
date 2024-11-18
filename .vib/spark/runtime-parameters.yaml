@@ -1,0 +1,9 @@
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+master:
+  containerPorts:
+    cluster: 7077
+worker:
+  replicaCount: 2

@@ -1,13 +1,15 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.rbac.create (or .Values.controller.rbac.create .Values.speaker.rbac.create ) -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ printf "%s-config-watcher" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-config-watcher" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -24,12 +26,9 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ printf "%s-config-watcher" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-config-watcher" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -38,12 +37,12 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "metallb.controller.serviceAccountName" . }}
 {{- end }}
-{{- if .Values.speaker.rbac.create }}
+{{- if and .Values.speaker.enabled .Values.speaker.rbac.create }}
   - kind: ServiceAccount
     name: {{ include "metallb.speaker.serviceAccountName" . }}
 {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ printf "%s-config-watcher" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-config-watcher" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}

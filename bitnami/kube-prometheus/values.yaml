@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -6,7 +9,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -15,8 +18,16 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
-
+  defaultStorageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -44,29 +55,28 @@ extraDeploy: []
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
-
 ## @section Prometheus Operator Parameters
 ##
-
 operator:
   ## @param operator.enabled Deploy Prometheus Operator to the cluster
   ##
   enabled: true
   ## Bitnami Prometheus Operator image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param operator.image.registry Prometheus Operator image registry
-  ## @param operator.image.repository Prometheus Operator image repository
-  ## @param operator.image.tag Prometheus Operator Image tag (immutable tags are recommended)
+  ## @param operator.image.registry [default: REGISTRY_NAME] Prometheus Operator image registry
+  ## @param operator.image.repository [default: REPOSITORY_NAME/prometheus-operator] Prometheus Operator image repository
+  ## @skip operator.image.tag Prometheus Operator image tag (immutable tags are recommended)
+  ## @param operator.image.digest Prometheus Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param operator.image.pullPolicy Prometheus Operator image pull policy
   ## @param operator.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.57.0-debian-11-r4
+    tag: 0.78.1-debian-12-r1
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -122,7 +132,6 @@ operator:
   ##         containerPort: 1234
   ##
   sidecars: []
-
   ## @param operator.initContainers Add additional init containers to the Prometheus Operator pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -133,6 +142,9 @@ operator:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param operator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param operator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -150,7 +162,7 @@ operator:
     name: ""
     ## @param operator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param operator.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -170,29 +182,43 @@ operator:
   ## Prometheus Operator pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param operator.podSecurityContext.enabled Enable pod security context
-  ## @param operator.podSecurityContext.runAsUser User ID for the container
+  ## @param operator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param operator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param operator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param operator.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Prometheus Operator containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param operator.containerSecurityContext.enabled Enable container security context
-  ## @param operator.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
-  ## @param operator.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-  ## @param operator.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem
+  ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param operator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param operator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Prometheus Operator Service
   ##
   service:
@@ -219,8 +245,11 @@ operator:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param operator.service.loadBalancerClass Operator service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param operator.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
-    ## Set the LoadBalancer service type to internal only
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
@@ -237,6 +266,9 @@ operator:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     healthCheckNodePort: ""
+    ## @param operator.service.labels Additional labels for Prometheus Operator service
+    ##
+    labels: {}
     ## @param operator.service.annotations Additional annotations for Prometheus Operator service
     ##
     annotations: {}
@@ -254,12 +286,70 @@ operator:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param operator.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param operator.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param operator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param operator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param operator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param operator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param operator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Create a servicemonitor for the operator
   ##
   serviceMonitor:
     ## @param operator.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus Operator
     ##
     enabled: true
+    ## @param operator.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param operator.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -282,8 +372,28 @@ operator:
     ## @param operator.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
-  ## @param operator.resources Configure resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param operator.serviceMonitor.extraParameters Any extra parameter to be added to the endpoint configured in the ServiceMonitor
+    ## (e.g. tlsConfig for further customization of the HTTPS behavior)
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
+    ##
+    extraParameters: {}
+    ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
+  ## @param operator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param operator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param operator.podAffinityPreset Pod affinity preset
@@ -319,7 +429,7 @@ operator:
   ##
   affinity: {}
   ## @param operator.nodeSelector Prometheus Operator Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param operator.tolerations Prometheus Operator Tolerations for pod assignment
@@ -424,25 +534,36 @@ operator:
     ## registry:
     ## repository:
     ## tag:
+    ## digest: ""
     ## pullSecrets:
     ##
     image: {}
     ## Prometheus config reload container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enable container security context
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
-      readOnlyRootFilesystem: false
-      allowPrivilegeEscalation: false
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
       capabilities:
-        drop:
-          - ALL
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param operator.prometheusConfigReloader.livenessProbe.enabled Turn on and off liveness probe
@@ -475,6 +596,21 @@ operator:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+  ## Restrict the namespaces that the operator watches
+  ## ref: `-namespaces` in https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/operator.md
+  ## @param operator.namespaces Optional comma-separated list of namespaces to watch (default=all).
+  ##
+  namespaces: ""
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param operator.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param operator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param operator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 
 ## @section Prometheus Parameters
 ##
@@ -487,15 +623,19 @@ prometheus:
   enabled: true
   ## Bitnami Prometheus image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus/tags/
-  ## @param prometheus.image.registry Prometheus image registry
-  ## @param prometheus.image.repository Prometheus image repository
-  ## @param prometheus.image.tag Prometheus Image tag (immutable tags are recommended)
+  ## @param prometheus.image.registry [default: REGISTRY_NAME] Prometheus image registry
+  ## @param prometheus.image.repository [default: REPOSITORY_NAME/prometheus] Prometheus image repository
+  ## @skip prometheus.image.tag Prometheus image tag (immutable tags are recommended)
+  ## @param prometheus.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param prometheus.image.pullPolicy Prometheus image pull policy
   ## @param prometheus.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.36.1-debian-11-r2
+    tag: 2.55.1-debian-12-r1
+    digest: ""
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -522,33 +662,47 @@ prometheus:
     annotations: {}
     ## @param prometheus.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Prometheus pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param prometheus.podSecurityContext.enabled Enable security context
-  ## @param prometheus.podSecurityContext.runAsUser User ID for the container
+  ## @param prometheus.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param prometheus.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param prometheus.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param prometheus.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Prometheus containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param prometheus.containerSecurityContext.enabled Enable container security context
-  ## @param prometheus.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem
-  ## @param prometheus.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-  ## @param prometheus.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-  ## @param prometheus.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+  ## @param prometheus.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param prometheus.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param prometheus.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param prometheus.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param prometheus.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param prometheus.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param prometheus.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param prometheus.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param prometheus.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param prometheus.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    readOnlyRootFilesystem: false
-    allowPrivilegeEscalation: false
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure pod disruption budgets for Prometheus
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
   ## @param prometheus.pdb.create Create a pod disruption budget for Prometheus
@@ -556,9 +710,64 @@ prometheus:
   ## @param prometheus.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param prometheus.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param prometheus.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param prometheus.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param prometheus.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param prometheus.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param prometheus.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param prometheus.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Prometheus Service
   ##
   service:
@@ -581,13 +790,16 @@ prometheus:
     nodePorts:
       http: ""
     ## @param prometheus.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
-    ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param prometheus.service.loadBalancerClass Prometheus service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param prometheus.service.loadBalancerSourceRanges Address that are allowed when service is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ##
+    ## e.g:
     ## loadBalancerSourceRanges:
     ## - 10.10.10.0/24
     ##
@@ -603,6 +815,9 @@ prometheus:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     healthCheckNodePort: ""
+    ## @param prometheus.service.labels Additional labels for Prometheus service  (this value is evaluated as a template)
+    ##
+    labels: {}
     ## @param prometheus.service.annotations Additional annotations for Prometheus service  (this value is evaluated as a template)
     ##
     annotations: {}
@@ -621,6 +836,9 @@ prometheus:
     ## @param prometheus.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus itself
     ##
     enabled: true
+    ## @param prometheus.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param prometheus.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -633,10 +851,12 @@ prometheus:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
-
+    ## @param prometheus.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
   ## Configure the ingress resource that allows you to access the
-  ## Alertmanager installation. Set up the URL
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Prometheus installation. Set up the URL
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param prometheus.ingress.enabled Enable ingress controller resource
@@ -656,7 +876,7 @@ prometheus:
     path: /
     ## @param prometheus.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -718,6 +938,7 @@ prometheus:
     ##   key:
     ##   certificate:
     ##
+    ## NOTE: the secret name MUST match {{ingress.hostname}}-tls to be used if selfSigned is false or no certManager is used
     secrets: []
     ## @param prometheus.ingress.extraRules Additional rules to be covered with this ingress record
     ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
@@ -739,8 +960,20 @@ prometheus:
   ## externalUrl: https://prometheus.example.com
   ##
   externalUrl: ""
-  ## @param prometheus.resources CPU/Memory resource requests/limits for node
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param prometheus.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.resources is set (prometheus.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param prometheus.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param prometheus.podAffinityPreset Prometheus Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -776,9 +1009,14 @@ prometheus:
   ##
   affinity: {}
   ## @param prometheus.nodeSelector Prometheus Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
+  ## @param prometheus.topologySpreadConstraints Prometheus Topology Spread Constraints for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param prometheus.tolerations Prometheus Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -789,6 +1027,20 @@ prometheus:
   ## @param prometheus.evaluationInterval Interval between consecutive evaluations
   ##
   evaluationInterval: ""
+  ## @param prometheus.scrapeTimeout Timeout after which the global scrape is ended
+  ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+  ##
+  scrapeTimeout: ""
+  ## @param prometheus.sampleLimit Per-scrape max number of scraped samples. Requires Prometheus v2.45.0 and newer
+  ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+  sampleLimit: ""
+  ## @param prometheus.enforcedSampleLimit Override sampleLimits set by ServiceMonitor, PodMonitor or Probe objects
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusSpec
+  enforcedSampleLimit: ""
+  ## @param prometheus.keepDroppedTargets Limit per scrape config on the number of targets dropped by relabeling that will be kept in memory. 0 means no limit.
+  ## Requires Prometheus v2.47.0 and newer
+  ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+  keepDroppedTargets: ""
   ## @param prometheus.listenLocal ListenLocal makes the Prometheus server listen on loopback
   ##
   listenLocal: false
@@ -919,6 +1171,14 @@ prometheus:
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
   probeNamespaceSelector: {}
+  ## @param prometheus.scrapeConfigSelector ScrapeConfig to be selected for target discovery.
+  ## If {}, select all ScrapeConfig
+  ##
+  scrapeConfigSelector: {}
+  ## @param prometheus.scrapeConfigNamespaceSelector Namespaces to be selected for ScrapeConfig discovery
+  ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
+  ##
+  scrapeConfigNamespaceSelector: {}
   ## @param prometheus.retention Metrics retention days
   ##
   retention: 10d
@@ -970,6 +1230,9 @@ prometheus:
   ## - url: http://remote1/push
   ##
   remoteWrite: []
+  ## @param prometheus.enableRemoteWriteReceiver Enable Prometheus to be used as a receiver for the Prometheus remote write protocol.
+  ##
+  enableRemoteWriteReceiver: false
   ## @param prometheus.storageSpec Prometheus StorageSpec for persistent data
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/storage.md
   ##
@@ -1063,6 +1326,10 @@ prometheus:
   ##             summary: "Node overtemperature alarm (instance {{ $labels.instance }})"
   ##             description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
   ##
+  ## @param prometheus.additionalArgs Allows setting additional arguments for the Prometheus container
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Prometheus
+  ##
+  additionalArgs: []
   additionalPrometheusRules: []
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
   ## @param prometheus.additionalScrapeConfigs.enabled Enable additional scrape configs
@@ -1083,14 +1350,6 @@ prometheus:
       key: ""
     internal:
       jobList: []
-  ## @param prometheus.additionalScrapeConfigsExternal.enabled Deprecated: Enable additional scrape configs that are managed externally to this chart
-  ## @param prometheus.additionalScrapeConfigsExternal.name Deprecated: Name of the secret that Prometheus should use for the additional scrape configuration
-  ## @param prometheus.additionalScrapeConfigsExternal.key Deprecated: Name of the key inside the secret to be used for the additional scrape configuration
-  ##
-  additionalScrapeConfigsExternal:
-    enabled: false
-    name: ""
-    key: ""
   ## Enable additional Prometheus alert relabel configs that are managed externally to this chart
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
   ## @param prometheus.additionalAlertRelabelConfigsExternal.enabled Enable additional Prometheus alert relabel configs that are managed externally to this chart
@@ -1098,6 +1357,16 @@ prometheus:
   ## @param prometheus.additionalAlertRelabelConfigsExternal.key Name of the key inside the secret to be used for the additional Prometheus alert relabel configuration
   ##
   additionalAlertRelabelConfigsExternal:
+    enabled: false
+    name: ""
+    key: ""
+  ## Enable additional Prometheus AlertManager configs that are managed externally to this chart
+  ## Note that the prometheus will fail to provision if the correct secret does not exist.
+  ## @param prometheus.additionalAlertManagerExternal.enabled Enable additional Prometheus AlertManager configs that are managed externally to this chart
+  ## @param prometheus.additionalAlertManagerExternal.name Name of the secret that Prometheus should use for the additional Prometheus AlertManager configuration
+  ## @param prometheus.additionalAlertManagerExternal.key Name of the key inside the secret to be used for the additional Prometheus AlertManager configuration
+  ##
+  additionalAlertManagerExternal:
     enabled: false
     name: ""
     key: ""
@@ -1109,18 +1378,19 @@ prometheus:
     create: false
     ## Bitnami Thanos image
     ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
-    ## @param prometheus.thanos.image.registry Thanos image registry
-    ## @param prometheus.thanos.image.repository Thanos image name
-    ## @param prometheus.thanos.image.tag Thanos image tag
+    ## @param prometheus.thanos.image.registry [default: REGISTRY_NAME] Thanos image registry
+    ## @param prometheus.thanos.image.repository [default: REPOSITORY_NAME/thanos] Thanos image name
+    ## @skip prometheus.thanos.image.tag Thanos image tag
+    ## @param prometheus.thanos.image.digest Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param prometheus.thanos.image.pullPolicy Thanos image pull policy
     ## @param prometheus.thanos.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.26.0-scratch-r4
-      ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      tag: 0.36.1-debian-12-r5
+      digest: ""
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -1133,20 +1403,36 @@ prometheus:
       pullSecrets: []
     ## Thanos Sidecar container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param prometheus.thanos.containerSecurityContext.enabled Enable container security context
-    ## @param prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-    ## @param prometheus.thanos.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-    ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-    ## @param prometheus.thanos.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ## @param prometheus.thanos.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param prometheus.thanos.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param prometheus.thanos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param prometheus.thanos.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param prometheus.thanos.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param prometheus.thanos.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param prometheus.thanos.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param prometheus.thanos.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
-      readOnlyRootFilesystem: false
-      allowPrivilegeEscalation: false
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
       capabilities:
-        drop:
-          - ALL
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## @param prometheus.thanos.containerPorts.grpc Thanos grpc port
+    ## @param prometheus.thanos.containerPorts.http Thanos http port
+    ##
+    containerPorts:
+      grpc: 10901
+      http: 10902
     ## @param prometheus.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
     ##
     prometheusUrl: ""
@@ -1156,13 +1442,32 @@ prometheus:
     ## - --tsdb.path=/data/
     ##
     extraArgs: []
-    ## @param prometheus.thanos.objectStorageConfig Support mounting a Secret for the objectStorageConfig of the sideCar container.
+    ## @param prometheus.thanos.objectStorageConfig.secretName Support mounting a Secret for the objectStorageConfig of the sideCar container.
+    ## @param prometheus.thanos.objectStorageConfig.secretKey Secret key with the configuration file.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/thanos.md
     ## objectStorageConfig:
     ##    secretName: thanos-objstore-config
     ##    secretKey: thanos.yaml
     ##
-    objectStorageConfig: {}
+    objectStorageConfig:
+      secretName: ""
+      secretKey: thanos.yaml
+    ## @param prometheus.thanos.extraEnvVars Array with extra environment variables to add to the thanos sidecar container
+    ## For example:
+    ## extraEnvVars:
+    ##  - name: REQUEST_LOGGING_CONFIG
+    ##    valueFrom:
+    ##      secretKeyRef:
+    ##        name: thanos-request-logging-config
+    ##        key: request-logging-config.yml
+    ##
+    extraEnvVars: []
+    ## @param prometheus.thanos.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsCM: ""
+    ## @param prometheus.thanos.extraEnvVarsSecret Name of existing Secret containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsSecret: ""
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
     ## @param prometheus.thanos.extraVolumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
     ## extraVolumeMounts:
@@ -1171,27 +1476,26 @@ prometheus:
     ##
     extraVolumeMounts: []
     ## Thanos sidecar container resource requests and limits.
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param prometheus.thanos.resources.limits The resources limits for the Thanos sidecar container
-    ## @param prometheus.thanos.resources.requests The resources requests for the Thanos sidecar container
+    ## @param prometheus.thanos.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.thanos.resources is set (prometheus.thanos.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      ##
-      limits: {}
-      ## Examples:
-      ## requests:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      ##
-      requests: {}
+    resourcesPreset: "nano"
+    ## @param prometheus.thanos.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param prometheus.thanos.livenessProbe.enabled Turn on and off liveness probe
@@ -1250,10 +1554,13 @@ prometheus:
       nodePorts:
         grpc: ""
       ## @param prometheus.thanos.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
-      ## Set the LoadBalancer service type to internal only
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
       ##
       loadBalancerIP: ""
+      ## @param prometheus.thanos.service.loadBalancerClass Thanos service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerClass: ""
       ## @param prometheus.thanos.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
       ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1261,7 +1568,10 @@ prometheus:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## @param prometheus.thanos.service.annotations Additional annotations for Prometheus service
+      ## @param prometheus.thanos.service.labels Additional labels for Thanos service
+      ##
+      labels: {}
+      ## @param prometheus.thanos.service.annotations Additional annotations for Thanos service
       ##
       annotations: {}
       ## @param prometheus.thanos.service.extraPorts Additional ports to expose from the Thanos sidecar container
@@ -1289,7 +1599,7 @@ prometheus:
       sessionAffinityConfig: {}
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
-    ## ref: https://kubernetes.io/docs/user-guide/ingress/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
     ##
     ingress:
       ## @param prometheus.thanos.ingress.enabled Enable ingress controller resource
@@ -1310,7 +1620,7 @@ prometheus:
       path: /
       ## @param prometheus.thanos.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
-      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
       ## Use this parameter to set the required annotations for cert-manager, see
       ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
@@ -1384,10 +1694,107 @@ prometheus:
       ## Useful when looking for additional customization, such as using different backend
       ##
       extraRules: []
+  ## config-reloader sidecar container configuration
+  ##
+  configReloader:
+    ## config-reloader sidecar Service
+    ##
+    service:
+      ## @param prometheus.configReloader.service.enabled Enable config-reloader sidecar service
+      ##
+      enabled: false
+      ## @param prometheus.configReloader.service.type Kubernetes service type
+      ##
+      type: ClusterIP
+      ## @param prometheus.configReloader.service.ports.http config-reloader sidecar container service port
+      ##
+      ports:
+        http: 8080
+      ## @param prometheus.configReloader.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.
+      ## Use a "headless" service by default so it returns every pod's IP instead of loadbalancing requests.
+      ##
+      clusterIP: None
+      ## @param prometheus.configReloader.service.nodePorts.http Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ## e.g:
+      ## nodePort: 30901
+      ##
+      nodePorts:
+        http: ""
+      ## @param prometheus.configReloader.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+      ##
+      loadBalancerIP: ""
+      ## @param prometheus.configReloader.service.loadBalancerClass Prometheus Config Reloader service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerClass: ""
+      ## @param prometheus.configReloader.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
+      ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ## - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param prometheus.configReloader.service.labels Additional labels for Prometheus service
+      ##
+      labels: {}
+      ## @param prometheus.configReloader.service.annotations Additional annotations for Prometheus service
+      ##
+      annotations: {}
+      ## @param prometheus.configReloader.service.extraPorts Additional ports to expose from the config-reloader sidecar container
+      ## extraPorts:
+      ##   - name: http
+      ##     port: 10902
+      ##     targetPort: http
+      ##     protocol: TCP
+      ##
+      extraPorts: []
+      ## @param prometheus.configReloader.service.externalTrafficPolicy Prometheus service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param prometheus.configReloader.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param prometheus.configReloader.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Create a ServiceMonitor to monitor Prometheus config-reloader sidecar
+    ##
+    serviceMonitor:
+      ## @param prometheus.configReloader.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus config-reloader sidecar
+      ##
+      enabled: false
+      ## @param prometheus.configReloader.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
+      ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: ""
+      ## @param prometheus.configReloader.serviceMonitor.path HTTP path to scrape for metrics
+      ##
+      path: /metrics
+      ## @param prometheus.configReloader.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param prometheus.configReloader.serviceMonitor.metricRelabelings Metric relabeling
+      ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+      ##
+      metricRelabelings: []
+      ## @param prometheus.configReloader.serviceMonitor.relabelings Relabel configs
+      ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+      ##
+      relabelings: []
+      ## @param prometheus.configReloader.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+      ##
+      sampleLimit: ""
   ## @param prometheus.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
-
 ## @section Alertmanager Parameters
 ##
 
@@ -1399,16 +1806,20 @@ alertmanager:
   ##
   enabled: true
   ## Bitnami Alertmanager image version
-  ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param alertmanager.image.registry Prometheus image registry
-  ## @param alertmanager.image.repository Prometheus Image repository
-  ## @param alertmanager.image.tag Prometheus Image tag (immutable tags are recommended)
+  ## ref: https://hub.docker.com/r/bitnami/alertmanager/tags/
+  ## @param alertmanager.image.registry [default: REGISTRY_NAME] Alertmanager image registry
+  ## @param alertmanager.image.repository [default: REPOSITORY_NAME/alertmanager] Alertmanager image repository
+  ## @skip alertmanager.image.tag Alertmanager image tag (immutable tags are recommended)
+  ## @param alertmanager.image.digest Alertmanager image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param alertmanager.image.pullPolicy Alertmanager image pull policy
   ## @param alertmanager.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.24.0-debian-11-r5
+    tag: 0.27.0-debian-12-r25
+    digest: ""
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1430,36 +1841,50 @@ alertmanager:
     name: ""
     ## @param alertmanager.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param alertmanager.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
   ## Prometheus Alertmanager pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param alertmanager.podSecurityContext.enabled Enable security context
-  ## @param alertmanager.podSecurityContext.runAsUser User ID for the container
+  ## @param alertmanager.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param alertmanager.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param alertmanager.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param alertmanager.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Prometheus Alertmanager container's securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param alertmanager.containerSecurityContext.enabled Enable container security context
-  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-  ## @param alertmanager.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-  ## @param alertmanager.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-  ## @param alertmanager.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+  ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param alertmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param alertmanager.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param alertmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param alertmanager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    readOnlyRootFilesystem: false
-    allowPrivilegeEscalation: false
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
   ## @param alertmanager.pdb.create Create a pod disruption budget for Alertmanager
@@ -1467,8 +1892,8 @@ alertmanager:
   ## @param alertmanager.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Alertmanager Service
   ##
@@ -1496,6 +1921,10 @@ alertmanager:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param alertmanager.service.loadBalancerClass Alertmanager service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param alertmanager.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1530,6 +1959,61 @@ alertmanager:
     ## @param alertmanager.service.annotations Additional annotations for Alertmanager service (this value is evaluated as a template)
     ##
     annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param alertmanager.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param alertmanager.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param alertmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param alertmanager.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param alertmanager.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param alertmanager.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## If true, create a serviceMonitor for alertmanager
   ##
   serviceMonitor:
@@ -1556,7 +2040,7 @@ alertmanager:
     ##
     scrapeTimeout: ""
     ## @param alertmanager.serviceMonitor.selector ServiceMonitor selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     ## selector:
     ##   prometheus: my-prometheus
@@ -1571,9 +2055,17 @@ alertmanager:
     ## @param alertmanager.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
+    ## @param alertmanager.serviceMonitor.extraParameters Any extra parameter to be added to the endpoint configured in the ServiceMonitor
+    ## (e.g. tlsConfig for further customization of the HTTPS behavior)
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
+    ##
+    extraParameters: {}
+    ## @param alertmanager.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param alertmanager.ingress.enabled Enable ingress controller resource
@@ -1593,7 +2085,7 @@ alertmanager:
     path: /
     ## @param alertmanager.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1669,13 +2161,28 @@ alertmanager:
     ##             name: http
     ##
     extraRules: []
+  ## @param alertmanager.enableFeatures Enable access to Alertmanager disabled features.
+  ##
+  enableFeatures: []
   ## @param alertmanager.externalUrl External URL used to access Alertmanager
   ## e.g:
   ## externalUrl: https://alertmanager.example.com
   ##
   externalUrl: ""
-  ## @param alertmanager.resources CPU/Memory resource requests/limits for node
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param alertmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if alertmanager.resources is set (alertmanager.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param alertmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param alertmanager.podAffinityPreset Alertmanager Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -1711,7 +2218,7 @@ alertmanager:
   ##
   affinity: {}
   ## @param alertmanager.nodeSelector Alertmanager Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param alertmanager.tolerations Alertmanager Tolerations for pod assignment
@@ -1868,16 +2375,24 @@ alertmanager:
   ## @param alertmanager.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
-  ## @param alertmanager.configNamespaceSelector AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}
+  ## @param alertmanager.configNamespaceSelector Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
   ##
   configNamespaceSelector: {}
-  ## @param alertmanager.configSelector Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
+  ## @param alertmanager.configSelector AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}
   ##
   configSelector: {}
   ## @param alertmanager.configuration EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules
   ##
   configuration: {}
-
+  ## @param alertmanager.configMatcherStrategy alertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects match the alerts.
+  ## E.g.
+  ## configMatcherStrategy:
+  ##   type: OnNamespace
+  ## If type set to `OnNamespace`, the operator injects a label matcher matching the
+  ## namespace of the AlertmanagerConfig object for all its routes and inhibition
+  ## rules. `None` will not add any additional matchers other than the ones
+  ## specified in the AlertmanagerConfig. Default is `OnNamespace`.
+  configMatcherStrategy: {}
 ## @section Exporters
 ##
 
@@ -1902,8 +2417,8 @@ node-exporter:
     enabled: true
     jobLabel: jobLabel
   extraArgs:
-    collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
-    collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
+    collector.filesystem.mount-points-exclude: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
+    collector.filesystem.fs-types-exclude: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
 ## @param kube-state-metrics [object] Kube State Metrics deployment configuration
 ##
 kube-state-metrics:
@@ -1927,6 +2442,23 @@ kubelet:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
+    ## @param kubelet.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: k8s-app
+    ## @param kubelet.serviceMonitor.resource Enable scraping /metrics/resource from kubelet's service
+    ##
+    resource: false
+    ## @param kubelet.serviceMonitor.resourcePath From kubernetes 1.18, /metrics/resource/v1alpha1 was renamed to /metrics/resource
+    ##
+    resourcePath: "/metrics/resource/v1alpha1"
+    ## @param kubelet.serviceMonitor.resourceRelabelings Metric relabeling
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
+    ##
+    resourceRelabelings: []
+    ## @param kubelet.serviceMonitor.resourceMetricRelabelings Metric relabeling
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    resourceMetricRelabelings: []
     ## @param kubelet.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
@@ -1935,6 +2467,10 @@ kubelet:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param kubelet.serviceMonitor.cAdvisor Enable scraping /metrics/cadvisor from kubelet's service
+    ## ref: https://prometheus.io/docs/guides/cadvisor/#exploring-metrics-in-the-expression-browser
+    ##
+    cAdvisor: true
     ## @param kubelet.serviceMonitor.cAdvisorMetricRelabelings Metric relabeling for scraping cAdvisor
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
@@ -1949,7 +2485,9 @@ kubelet:
     ## @param kubelet.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
-
+    ## @param kubelet.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## @section Blackbox Exporter Deployment Parameters
 ##
 blackboxExporter:
@@ -1958,16 +2496,18 @@ blackboxExporter:
   enabled: true
   ## Bitnami Alertmanager image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param blackboxExporter.image.registry Blackbox Exporter image registry
-  ## @param blackboxExporter.image.repository Blackbox Exporter Image repository
-  ## @param blackboxExporter.image.pullPolicy Blackbox Exporter Image pull policy
-  ## @param blackboxExporter.image.tag Blackbox Exporter Image tag (immutable tags are recommended)
+  ## @param blackboxExporter.image.registry [default: REGISTRY_NAME] Blackbox Exporter image registry
+  ## @param blackboxExporter.image.repository [default: REPOSITORY_NAME/blackbox-exporter] Blackbox Exporter image repository
+  ## @param blackboxExporter.image.pullPolicy Blackbox Exporter image pull policy
+  ## @skip blackboxExporter.image.tag Blackbox Exporter image tag (immutable tags are recommended)
+  ## @param blackboxExporter.image.digest Blackbox Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param blackboxExporter.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.21.0-debian-11-r5
+    tag: 0.25.0-debian-12-r19
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1977,7 +2517,6 @@ blackboxExporter:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param blackboxExporter.extraEnvVars Array with extra environment variables to add to blackboxExporter nodes
   ## e.g:
   ## extraEnvVars:
@@ -2055,7 +2594,7 @@ blackboxExporter:
   customStartupProbe: {}
   ## @param blackboxExporter.configuration [object] Blackbox Exporter configuration
   ##
-  configuration:  |
+  configuration: |
     "modules":
       "http_2xx":
         "http":
@@ -2095,7 +2634,6 @@ blackboxExporter:
         "prober": "tcp"
         "tcp":
           "preferred_ip_protocol": "ip4"
-
   ## @param blackboxExporter.existingConfigMap ConfigMap pointing to the Blackbox Exporter configuration
   ##
   existingConfigMap: ""
@@ -2103,9 +2641,8 @@ blackboxExporter:
   ##
   containerPorts:
     http: 19115
-
   serviceAccount:
-    ## @param blackboxExporter.serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+    ## @param blackboxExporter.serviceAccount.create Enable creation of ServiceAccount for Prometheus Operator pod
     ##
     create: true
     ## @param blackboxExporter.serviceAccount.name The name of the ServiceAccount to use.
@@ -2115,40 +2652,73 @@ blackboxExporter:
     ## @param blackboxExporter.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param blackboxExporter.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Blackbox Exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param blackboxExporter.resources.limits The resources limits for the blackboxExporter containers
-  ## @param blackboxExporter.resources.requests The requested resources for the blackboxExporter containers
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param blackboxExporter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if blackboxExporter.resources is set (blackboxExporter.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param blackboxExporter.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param blackboxExporter.podSecurityContext.enabled Enabled Blackbox Exporter pods' Security Context
+  ## @param blackboxExporter.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param blackboxExporter.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param blackboxExporter.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param blackboxExporter.podSecurityContext.fsGroup Set Blackbox Exporter pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param blackboxExporter.containerSecurityContext.enabled Enabled Blackbox Exporter containers' Security Context
-  ## @param blackboxExporter.containerSecurityContext.runAsUser Set Blackbox Exporter containers' Security Context runAsUser
-  ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set Blackbox Exporter containers' Security Context runAsNonRoot
+  ## @param blackboxExporter.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param blackboxExporter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param blackboxExporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param blackboxExporter.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param blackboxExporter.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param blackboxExporter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param blackboxExporter.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param blackboxExporter.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param blackboxExporter.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param blackboxExporter.lifecycleHooks for the blackboxExporter container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param blackboxExporter.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param blackboxExporter.hostAliases blackboxExporter pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2192,7 +2762,7 @@ blackboxExporter:
   ##
   affinity: {}
   ## @param blackboxExporter.nodeSelector Node labels for Blackbox Exporter pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param blackboxExporter.tolerations Tolerations for Blackbox Exporter pods assignment
@@ -2246,7 +2816,6 @@ blackboxExporter:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Blackbox Exporter Traffic Exposure Parameters
   ##
 
@@ -2268,7 +2837,7 @@ blackboxExporter:
       http: ""
     ## @param blackboxExporter.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param blackboxExporter.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2286,6 +2855,10 @@ blackboxExporter:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
+    ## @param blackboxExporter.service.loadBalancerClass Blackbox Exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param blackboxExporter.service.loadBalancerSourceRanges Blackbox Exporter service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -2303,7 +2876,71 @@ blackboxExporter:
     ## @param blackboxExporter.service.extraPorts Extra ports to expose in the Blackbox Exporter service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param blackboxExporter.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param blackboxExporter.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param blackboxExporter.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param blackboxExporter.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param blackboxExporter.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param blackboxExporter.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param blackboxExporter.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param blackboxExporter.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param blackboxExporter.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param blackboxExporter.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## Component scraping the kube-apiserver
 ##
 kubeApiServer:
@@ -2315,6 +2952,9 @@ kubeApiServer:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
+    ## @param kubeApiServer.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: component
     ## @param kubeApiServer.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
@@ -2323,6 +2963,15 @@ kubeApiServer:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param kubeApiServer.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param kubeApiServer.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param kubeApiServer.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping the kube-controller-manager
 ##
 kubeControllerManager:
@@ -2355,11 +3004,17 @@ kubeControllerManager:
     ##   component: kube-controller-manager
     ##
     selector: {}
+    ## @param kubeControllerManager.service.labels Additional labels for kube-controller-manaer service
+    ##
+    labels: {}
   serviceMonitor:
     ## @param kubeControllerManager.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
+    ## @param kubeControllerManager.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: component
     ## @param kubeControllerManager.serviceMonitor.https Enable scraping kube-controller-manager over https
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
     ##
@@ -2378,6 +3033,15 @@ kubeControllerManager:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param kubeControllerManager.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param kubeControllerManager.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param kubeControllerManager.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping kube scheduler
 ##
 kubeScheduler:
@@ -2410,6 +3074,9 @@ kubeScheduler:
     ##   component: kube-scheduler
     ##
     selector: {}
+    ## @param kubeScheduler.service.labels Additional labels for kube-scheduler service
+    ##
+    labels: {}
   serviceMonitor:
     ## @param kubeScheduler.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ##
@@ -2418,6 +3085,9 @@ kubeScheduler:
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
     ##
     https: false
+    ## @param kubeScheduler.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: component
     ## @param kubeScheduler.serviceMonitor.insecureSkipVerify Skip TLS certificate validation when scraping
     ##
     insecureSkipVerify: ""
@@ -2447,6 +3117,9 @@ kubeScheduler:
     ## @param kubeScheduler.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param kubeScheduler.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping coreDns
 ##
 coreDns:
@@ -2472,10 +3145,16 @@ coreDns:
     ##   component: kube-dns
     ##
     selector: {}
+    ## @param coreDns.service.labels Additional labels for coredns service
+    ##
+    labels: {}
   serviceMonitor:
     ## @param coreDns.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
+    ## @param coreDns.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: k8s-app
     ## @param coreDns.serviceMonitor.metricRelabelings Metric relabel configs to apply to samples before ingestion.
     ## metricRelabelings:
     ##  - action: keep
@@ -2493,6 +3172,15 @@ coreDns:
     ##    action: replace
     ##
     relabelings: []
+    ## @param coreDns.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param coreDns.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param coreDns.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping the kube-proxy
 ##
 kubeProxy:
@@ -2524,6 +3212,9 @@ kubeProxy:
     ##   k8s-app: kube-proxy
     ##
     selector: {}
+    ## @param kubeProxy.service.labels Additional labels for kube-proxy service
+    ##
+    labels: {}
   serviceMonitor:
     ## @param kubeProxy.serviceMonitor.https Enable scraping kube-proxy over https.
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
@@ -2533,6 +3224,9 @@ kubeProxy:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
+    ## @param kubeProxy.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: k8s-app
     ## @param kubeProxy.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
@@ -2547,7 +3241,9 @@ kubeProxy:
     ## @param kubeProxy.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
-
+    ## @param kubeProxy.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## @section RBAC parameters
 ##
 

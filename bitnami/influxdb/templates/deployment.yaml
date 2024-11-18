@@ -1,13 +1,15 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: influxdb
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -16,19 +18,17 @@ spec:
   {{- if .Values.influxdb.updateStrategy }}
   strategy: {{- toYaml .Values.influxdb.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.influxdb.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: influxdb
   template:
     metadata:
       {{- if .Values.influxdb.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: influxdb
-        {{- if .Values.influxdb.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.influxdb.hostAliases }}
@@ -38,8 +38,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.influxdb.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.influxdb.podAffinityPreset "component" "influxdb" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.influxdb.podAntiAffinityPreset "component" "influxdb" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.influxdb.podAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.influxdb.podAntiAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.influxdb.nodeAffinityPreset.type "key" .Values.influxdb.nodeAffinityPreset.key "values" .Values.influxdb.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.influxdb.schedulerName }}
@@ -56,7 +56,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.influxdb.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.influxdb.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.influxdb.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "influxdb.serviceAccountName" . }}
       initContainers:
@@ -70,11 +70,10 @@ spec:
             - |
               mkdir -p /bitnami/influxdb/{data,meta,wal}
               chmod 700 /bitnami/influxdb/{data,meta,wal}
-              find /bitnami/influxdb/{data,meta,wal} -mindepth 0 -maxdepth 1 | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-                xargs -r chown -R `id -u`:`id -G | cut -d " " -f2`
+              chown -R `id -u`:`id -G | cut -d " " -f2` /bitnami/influxdb
               {{- else }}
-                xargs -r chown -R {{ .Values.influxdb.containerSecurityContext.runAsUser }}:{{ .Values.influxdb.podSecurityContext.fsGroup }}
+              chown -R {{ .Values.influxdb.containerSecurityContext.runAsUser }}:{{ .Values.influxdb.podSecurityContext.fsGroup }} /bitnami/influxdb
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:
@@ -85,6 +84,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/influxdb
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.influxdb.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.initContainers "context" $) | trim | nindent 8 }}
@@ -94,7 +96,7 @@ spec:
           image: {{ include "influxdb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.influxdb.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.influxdb.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.influxdb.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -148,6 +150,10 @@ spec:
               value: {{ .Values.auth.admin.bucket | quote }}
             - name: INFLUXDB_ADMIN_ORG
               value: {{ .Values.auth.admin.org | quote }}
+            {{- if .Values.auth.admin.retention }}
+            - name: INFLUXDB_ADMIN_RETENTION
+              value: {{ .Values.auth.admin.retention | quote }}
+            {{- end }}
             {{- if .Values.auth.user.username }}
             - name: INFLUXDB_USER
               value: {{ .Values.auth.user.username | quote }}
@@ -222,7 +228,9 @@ spec:
               containerPort: {{ .Values.influxdb.containerPorts.rpc }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.influxdb.startupProbe.enabled }}
+          {{- if .Values.influxdb.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.influxdb.startupProbe.enabled }}
           {{- $startupTimeout := sub (int .Values.influxdb.startupProbe.timeoutSeconds) 1 }}
           startupProbe: {{- omit .Values.influxdb.startupProbe "enabled" | toYaml | nindent 12 }}
             exec:
@@ -240,31 +248,19 @@ spec:
                   {{- end }}
 
                   timeout {{ $startupTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
-          {{- else if .Values.influxdb.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.influxdb.livenessProbe.enabled }}
+          {{- if .Values.influxdb.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.influxdb.livenessProbe.enabled }}
           {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- omit .Values.influxdb.livenessProbe "enabled" | toYaml | nindent 12 }}
-            exec:
-              command:
-                - bash
-                - -c
-                - |
-                  . /opt/bitnami/scripts/libinfluxdb.sh
-
-                  influxdb_env
-
-                  {{- if .Values.auth.enabled }}
-                  export INFLUX_USERNAME="$INFLUXDB_ADMIN_USER"
-                  export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
-                  {{- end }}
-
-                  timeout {{ $livenessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
-          {{- else if .Values.influxdb.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customLivenessProbe "context" $) | nindent 12 }}
+            httpGet:
+              port: http
+              path: /
           {{- end }}
-          {{- if .Values.influxdb.readinessProbe.enabled }}
+          {{- if .Values.influxdb.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.influxdb.readinessProbe.enabled }}
           {{- $readinessTimeout := sub (int .Values.influxdb.readinessProbe.timeoutSeconds) 1 }}
           readinessProbe: {{- omit .Values.influxdb.readinessProbe "enabled" | toYaml | nindent 12 }}
             exec:
@@ -282,17 +278,24 @@ spec:
                   {{- end }}
 
                   timeout {{ $readinessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
-          {{- else if .Values.influxdb.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.influxdb.resources }}
           resources: {{- toYaml .Values.influxdb.resources | nindent 12 }}
+          {{- else if ne .Values.influxdb.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.influxdb.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration  }}
             - name: influxdb-config
               mountPath: /opt/bitnami/influxdb/etc
+            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/influxdb/etc
+              subPath: app-conf-dir
             {{- end }}
             {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
             - name: custom-init-scripts
@@ -317,6 +320,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
         - name: influxdb-config
           configMap:

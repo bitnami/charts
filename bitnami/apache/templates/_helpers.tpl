@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Return the proper Apache image name
@@ -11,6 +16,17 @@ Return the proper Apache Docker Image Registry Secret Names
 */}}
 {{- define "apache.imagePullSecrets" -}}
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "apache.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -114,7 +130,7 @@ Get the vhosts config map name.
 {{- if .Values.vhostsConfigMap -}}
     {{- printf "%s" (tpl .Values.vhostsConfigMap $) -}}
 {{- else -}}
-    {{- printf "%s-vhosts" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-vhosts" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -125,6 +141,6 @@ Get the httpd.conf config map name.
 {{- if .Values.httpdConfConfigMap -}}
     {{- printf "%s" (tpl .Values.httpdConfConfigMap $) -}}
 {{- else -}}
-    {{- printf "%s-httpd-conf" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-httpd-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}

@@ -1,0 +1,61 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.storegateway.enabled .Values.storegateway.autoscaling.enabled .Values.storegateway.sharded.enabled }}
+
+{{- $shards := int 0 }}
+{{- if .Values.storegateway.sharded.hashPartitioning.shards }}
+  {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
+{{- else }}
+  {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+
+{{- range $index, $_ := until $shards }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ printf "%s-%s" (include "thanos.storegateway.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" $ }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+    shard: {{ $index | quote }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
+    kind: StatefulSet
+    name: {{ printf "%s-%s" (include "thanos.storegateway.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
+  minReplicas: {{ $.Values.storegateway.autoscaling.minReplicas }}
+  maxReplicas: {{ $.Values.storegateway.autoscaling.maxReplicas }}
+  metrics:
+    {{- if $.Values.storegateway.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" $) }}
+        targetAverageUtilization: {{ $.Values.storegateway.autoscaling.targetMemory }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $.Values.storegateway.autoscaling.targetMemory }}
+        {{- end }}
+    {{- end }}
+    {{- if $.Values.storegateway.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" $) }}
+        targetAverageUtilization: {{ $.Values.storegateway.autoscaling.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $.Values.storegateway.autoscaling.targetCPU }}
+        {{- end }}
+    {{- end }}
+---
+{{- end }}
+{{- end }}

@@ -1,0 +1,8 @@
+wildflyUsername: user
+wildflyPassword: ComplicatedPassword123!4
+exposeManagementConsole: true
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    mgmt: 9990

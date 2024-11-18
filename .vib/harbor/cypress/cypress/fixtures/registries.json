@@ -1,6 +1,7 @@
 {
   "newRegistry": {
-    "provider": "docker-hub",
-    "name": "dockerhub"
+    "provider": "harbor",
+    "name": "harbor",
+    "url": "http://harbor-registry:5000"
   }
 }

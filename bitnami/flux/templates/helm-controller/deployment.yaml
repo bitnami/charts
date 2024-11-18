@@ -1,0 +1,180 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.helmController.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "flux.helm-controller.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.helmController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: helm-controller
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.helmController.autoscaling.enabled }}
+  replicas: {{ .Values.helmController.replicaCount }}
+  {{- end }}
+  {{- if .Values.helmController.updateStrategy }}
+  strategy: {{- toYaml .Values.helmController.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.helmController.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: helm-controller
+  template:
+    metadata:
+      {{- if .Values.helmController.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
+        app.kubernetes.io/component: helm-controller
+    spec:
+      serviceAccountName: {{ template "flux.helm-controller.serviceAccountName" . }}
+      {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.helmController.automountServiceAccountToken }}
+      {{- if .Values.helmController.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.helmController.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.helmController.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.helmController.podAffinityPreset "component" "helm-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.helmController.podAntiAffinityPreset "component" "helm-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.helmController.nodeAffinityPreset.type "key" .Values.helmController.nodeAffinityPreset.key "values" .Values.helmController.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.helmController.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.helmController.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.helmController.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.helmController.priorityClassName }}
+      priorityClassName: {{ .Values.helmController.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.helmController.schedulerName }}
+      schedulerName: {{ .Values.helmController.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.helmController.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.helmController.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.helmController.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.helmController.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.helmController.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.helmController.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.helmController.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: helm-controller
+          image: {{ template "flux.helm-controller.image" . }}
+          imagePullPolicy: {{ .Values.helmController.image.pullPolicy }}
+          {{- if .Values.helmController.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.helmController.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.helmController.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.helmController.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --watch-all-namespaces={{ .Values.helmController.watchAllNamespaces }}
+            {{- if .Values.helmController.image.debug }}
+            - --log-level=debug
+            {{- else }}
+            - --log-level=info
+            {{- end }}
+            - --metrics-addr=:{{ .Values.helmController.containerPorts.metrics }}
+            - --health-addr=:{{ .Values.helmController.containerPorts.health }}
+            - --log-encoding=json
+            - --enable-leader-election
+          {{- end }}
+          env:
+            - name: RUNTIME_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            {{- if .Values.helmController.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.helmController.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.helmController.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.helmController.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.helmController.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.helmController.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.helmController.resources }}
+          resources: {{- toYaml .Values.helmController.resources | nindent 12 }}
+          {{- else if ne .Values.helmController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.helmController.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http-metrics
+              containerPort: {{ .Values.helmController.containerPorts.metrics }}
+            - name: http-health
+              containerPort: {{ .Values.helmController.containerPorts.health }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.helmController.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.helmController.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.helmController.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-health
+          {{- end }}
+          {{- if .Values.helmController.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.helmController.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.helmController.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /readyz
+              port: http-health
+          {{- end }}
+          {{- if .Values.helmController.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.helmController.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.helmController.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-health
+          {{- end }}
+          {{- end }}
+          {{- if .Values.helmController.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.helmController.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.helmController.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.helmController.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.helmController.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.helmController.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.helmController.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

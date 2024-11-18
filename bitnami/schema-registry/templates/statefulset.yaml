@@ -1,0 +1,308 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- $fullname := include "common.names.fullname" .  }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $kafkaProtocol := upper (ternary .Values.kafka.listeners.client.protocol .Values.externalKafka.listener.protocol .Values.kafka.enabled) }}
+{{- $kafkaFullname := include "schema-registry.kafka.fullname" . }}
+{{- $kafkaPort := int .Values.kafka.service.ports.client }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
+kind: StatefulSet
+metadata:
+  name: {{ $fullname | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  serviceName: {{ printf "%s-headless" $fullname }}
+  {{- if .Values.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      {{- if or (include "schema-registry.createConfigMap" .) (include "schema-registry.log4j.createConfigMap" .) .Values.podAnnotations }}
+      annotations:
+        {{- if (include "schema-registry.createConfigMap" .) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if (include "schema-registry.log4j.createConfigMap" .) }}
+        checksum/log4j-configuration: {{ include (print $.Template.BasePath "/log4j-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+    spec:
+      {{- include "schema-registry.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "schema-registry.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "customLabels" $podLabels  "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels  "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
+       {{- if .Values.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: schema-registry
+          image: {{ include "schema-registry.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              {{- if contains "SSL" $kafkaProtocol }}
+              ID="${MY_POD_NAME#"{{ $fullname }}-"}"
+              if [[ -f "/certs/schema-registry.truststore.jks" ]] && [[ -f "/certs/schema-registry-${ID}.keystore.jks" ]]; then
+                  mkdir -p /opt/bitnami/schema-registry/certs
+                  [[ -f "/opt/bitnami/schema-registry/certs/schema-registry.truststore.jks" ]] || cp "/certs/schema-registry.truststore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.truststore.jks"
+                  [[ -f "/opt/bitnami/schema-registry/certs/schema-registry.keystore.jks" ]] || cp "/certs/schema-registry-${ID}.keystore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.keystore.jks"
+              else
+                  echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled with Kafka brokers."
+                  exit 1
+              fi
+              {{- end }}
+              if [[ -f "/certs/ssl.keystore.jks" ]]; then
+                  mkdir -p /opt/bitnami/schema-registry/certs
+                  [[ -f "/opt/bitnami/schema-registry/certs/ssl.keystore.jks" ]] || cp "/certs/ssl.keystore.jks" "/opt/bitnami/schema-registry/certs/ssl.keystore.jks"
+              fi
+              if [[ -f "/certs/ssl.truststore.jks" ]]; then
+                  [[ -f "/opt/bitnami/schema-registry/certs/ssl.truststore.jks" ]] || cp "/certs/ssl.truststore.jks" "/opt/bitnami/schema-registry/certs/ssl.truststore.jks"
+              fi
+              exec /opt/bitnami/scripts/schema-registry/entrypoint.sh /opt/bitnami/scripts/schema-registry/run.sh
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: SCHEMA_REGISTRY_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: SCHEMA_REGISTRY_LISTENERS
+              value: {{ .Values.listeners | quote }}
+            {{- if .Values.auth.tls.enabled }}
+            {{- if .Values.auth.tls.keystorePassword }}
+            - name: SCHEMA_REGISTRY_SSL_KEYSTORE_PASSWORD
+              value: {{ .Values.auth.tls.keystorePassword | quote }}
+            {{- end }}
+            {{- if .Values.auth.tls.truststorePassword }}
+            - name: SCHEMA_REGISTRY_SSL_TRUSTSTORE_PASSWORD
+              value: {{ .Values.auth.tls.truststorePassword | quote }}
+            {{- end }}
+            - name: SCHEMA_REGISTRY_CLIENT_AUTHENTICATION
+              value: {{ .Values.auth.tls.clientAuthentication | quote }}
+            {{- end }}
+            - name: SCHEMA_REGISTRY_AVRO_COMPATIBILY_LEVEL
+              value: {{ .Values.avroCompatibilityLevel | quote }}
+            - name: SCHEMA_REGISTRY_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}"
+            - name: SCHEMA_REGISTRY_KAFKA_BROKERS
+              {{- if .Values.kafka.enabled }}
+              {{- $brokers := list }}
+              {{- $kafkaBrokerReplicaCount := int .Values.kafka.broker.replicaCount }}
+              {{- $kafkaControllerReplicaCount := ternary 0 (int .Values.kafka.controller.replicaCount) (or (not .Values.kafka.kraft.enabled) (.Values.kafka.controller.controllerOnly)) }}
+              {{- range $e, $i := until $kafkaBrokerReplicaCount }}
+              {{- $brokers = append $brokers (printf "%s://%s-broker-%d.%s-broker-headless.%s.svc.%s:%d" $kafkaProtocol $kafkaFullname $i $kafkaFullname $releaseNamespace $clusterDomain $kafkaPort) }}
+              {{- end }}
+              {{- range $e, $i := until $kafkaControllerReplicaCount }}
+              {{- $brokers = append $brokers (printf "%s://%s-controller-%d.%s-controller-headless.%s.svc.%s:%d" $kafkaProtocol $kafkaFullname $i $kafkaFullname $releaseNamespace $clusterDomain $kafkaPort) }}
+              {{- end }}
+              value: {{ join "," $brokers | quote }}
+              {{- else }}
+              value: {{ join "," .Values.externalKafka.brokers | quote }}
+              {{- end }}
+            {{- if contains "SASL" $kafkaProtocol }}
+            - name : SCHEMA_REGISTRY_KAFKA_SASL_MECHANISM
+              value: {{ .Values.auth.kafka.saslMechanism }}
+            - name: SCHEMA_REGISTRY_KAFKA_SASL_USERS
+              {{- if .Values.kafka.enabled }}
+              value: {{ join "," .Values.kafka.sasl.client.users | quote }}
+              {{- else }}
+              value: {{ .Values.externalKafka.sasl.user | quote }}
+              {{- end }}
+            - name: SCHEMA_REGISTRY_KAFKA_SASL_PASSWORDS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "schema-registry.secretName" . }}
+                  key: client-passwords
+            {{- end }}
+            {{- if contains "SSL" $kafkaProtocol }}
+            - name: SCHEMA_REGISTRY_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
+              value: {{ .Values.auth.kafka.tlsEndpointIdentificationAlgorithm | quote }}
+            {{- if .Values.auth.kafka.keystorePassword }}
+            - name: SCHEMA_REGISTRY_KAFKA_KEYSTORE_PASSWORD
+              value: {{ .Values.auth.kafka.keystorePassword | quote }}
+            {{- end }}
+            {{- if .Values.auth.kafka.truststorePassword }}
+            - name: SCHEMA_REGISTRY_KAFKA_TRUSTSTORE_PASSWORD
+              value: {{ .Values.auth.kafka.truststorePassword | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              port: http
+              path: /
+          {{- end }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              port: http
+              path: /
+          {{- end }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/schema-registry/etc
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/schema-registry/logs
+              subPath: app-logs-dir
+            {{- if or .Values.configuration .Values.existingConfigmap }}
+            - name: configuration
+              mountPath: /bitnami/schema-registry/etc/schema-registry/schema-registry.properties
+              subPath: schema-registry.properties
+            {{- end }}
+            {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
+            - name: log4j-configuration
+              mountPath: /bitnami/schema-registry/etc/schema-registry/log4j.properties
+              subPath: log4j.properties
+            {{- end }}
+            {{- if contains "SSL" $kafkaProtocol }}
+            - name: certificates
+              mountPath: /certs
+              readOnly: true
+            {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if or .Values.configuration .Values.existingConfigmap }}
+        - name: configuration
+          configMap:
+            name: {{ include "schema-registry.configmapName" . }}
+        {{- end }}
+        {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
+        - name: log4j-configuration
+          configMap:
+            name: {{ include "schema-registry.log4j.configmapName" . }}
+        {{ end }}
+        {{- if or (contains "SSL" $kafkaProtocol) .Values.auth.tls.enabled }}
+        - name: certificates
+          projected:
+            defaultMode: 0400
+            sources:
+            {{- if contains "SSL" $kafkaProtocol }}
+            - secret:
+                name: {{ printf "%s" (tpl .Values.auth.kafka.jksSecret $) }}
+            {{- end }}
+            {{- if .Values.auth.tls.enabled }}
+            - secret:
+                name: {{ printf "%s" (tpl .Values.auth.tls.jksSecret $) }}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

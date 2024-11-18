@@ -1,16 +1,18 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.indexGateway.enabled }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "grafana-loki.index-gateway.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: index-gateway
     loki-gossip-member: "true"
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -20,10 +22,10 @@ spec:
   updateStrategy: {{- toYaml .Values.indexGateway.updateStrategy | nindent 4 }}
   {{- end }}
   podManagementPolicy: {{ .Values.indexGateway.podManagementPolicy }}
-
   serviceName: {{ template "grafana-loki.index-gateway.fullname" . }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.indexGateway.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
       app.kubernetes.io/component: index-gateway
       loki-gossip-member: "true"
@@ -34,16 +36,14 @@ spec:
         {{- if .Values.indexGateway.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: grafana-loki
         app.kubernetes.io/component: index-gateway
         loki-gossip-member: "true"
-        {{- if .Values.indexGateway.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-loki.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.indexGateway.automountServiceAccountToken }}
       {{- if .Values.indexGateway.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -51,8 +51,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.indexGateway.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexGateway.podAffinityPreset "component" "indexGateway" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexGateway.podAntiAffinityPreset "component" "index-gateway" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexGateway.podAffinityPreset "component" "indexGateway" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexGateway.podAntiAffinityPreset "component" "index-gateway" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.indexGateway.nodeAffinityPreset.type "key" .Values.indexGateway.nodeAffinityPreset.key "values" .Values.indexGateway.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.indexGateway.nodeSelector }}
@@ -71,8 +71,9 @@ spec:
       schedulerName: {{ .Values.indexGateway.schedulerName }}
       {{- end }}
       {{- if .Values.indexGateway.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.indexGateway.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.indexGateway.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.indexGateway.enableServiceLinks }}
       initContainers:
         {{- if .Values.indexGateway.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.initContainers "context" $) | nindent 8 }}
@@ -82,7 +83,7 @@ spec:
           image: {{ template "grafana-loki.image" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           {{- if .Values.indexGateway.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.indexGateway.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.indexGateway.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -97,6 +98,9 @@ spec:
           args:
             - -target=index-gateway
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+          {{- if .Values.indexGateway.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.indexGateway.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.extraEnvVars "context" $) | nindent 12 }}
@@ -116,40 +120,46 @@ spec:
             - containerPort: {{ .Values.loki.containerPorts.grpc }}
               name: grpc
           {{- if .Values.indexGateway.resources }}
-          resources: {{- toYaml .Values.indexGateway.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.indexGateway.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.indexGateway.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.indexGateway.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.indexGateway.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
-              port: http
-          {{- else if .Values.indexGateway.customLivenessProbe }}
+          {{- if .Values.indexGateway.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.indexGateway.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.indexGateway.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
           {{- end }}
-          {{- if .Values.indexGateway.readinessProbe.enabled }}
+          {{- if .Values.indexGateway.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.indexGateway.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.indexGateway.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: http
-          {{- else if .Values.indexGateway.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.indexGateway.startupProbe.enabled }}
+          {{- if .Values.indexGateway.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.indexGateway.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.indexGateway.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.indexGateway.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.indexGateway.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: loki-config
               mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
+            - name: data
+              mountPath: {{ .Values.loki.dataDir }}
           {{- if .Values.indexGateway.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -157,10 +167,41 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.indexGateway.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: loki-config
           configMap:
             name: {{ template "grafana-loki.loki.configmapName" . }}
         {{- if .Values.indexGateway.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+  {{- if not .Values.indexGateway.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else }}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if or .Values.indexGateway.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.indexGateway.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.indexGateway.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.indexGateway.persistence.size | quote }}
+        {{- if .Values.indexGateway.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.indexGateway.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
 {{- end }}

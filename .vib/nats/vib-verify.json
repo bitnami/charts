@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/nats"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJwYXNzd29yZCI6ICJNYnFySDNGcE1qOUoiCiJjbHVzdGVyIjoKICAiYXV0aCI6CiAgICAicGFzc3dvcmQiOiAiOXB2S3ZIZ21UZmQzIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJtb25pdG9yaW5nIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiJzdGF0ZWZ1bHNldCI6CiAgInVwZGF0ZVN0cmF0ZWd5IjogIlJvbGxpbmdVcGRhdGUi",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,17 +31,49 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "nats/goss/goss.yaml",
+            "vars_file": "nats/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "sts-nats"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
+            "resources": {
+              "path": "/.vib/nats/cypress"
+            },
             "endpoint": "lb-nats-tcp-monitoring",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/nats/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "nats",
+              "username": "test_nats_client",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

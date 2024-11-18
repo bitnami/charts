@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/parse"
         },
-        "runtime_parameters": "InNlcnZlciI6CiAgInNlcnZpY2UiOgogICAgInBvcnRzIjoKICAgICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,16 +31,53 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "parse/goss/server/goss.yaml",
+            "vars_file": "parse/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-parse-server"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "goss",
           "params": {
-            "endpoint": "lb-parse-http-server"
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "parse/goss/dashboard/goss.yaml",
+            "vars_file": "parse/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-parse-dashboard"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/parse/cypress"
+            },
+            "endpoint": "lb-parse-http-server",
+            "app_protocol": "HTTP",
+            "env": {
+              "appId": "testApp",
+              "masterKey": "M4ster#K3y"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

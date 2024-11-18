@@ -1,14 +1,15 @@
-{{- if .Values.metricsGenerator.enabled }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "grafana-tempo.metrics-generator.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: metrics-generator
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,8 +18,9 @@ spec:
   {{- if .Values.metricsGenerator.updateStrategy }}
   strategy: {{- toYaml .Values.metricsGenerator.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metricsGenerator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: metrics-generator
   template:
     metadata:
@@ -27,15 +29,13 @@ spec:
         {{- if .Values.metricsGenerator.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: metrics-generator
         tempo-gossip-member: "true"
-        {{- if .Values.metricsGenerator.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.metricsGenerator.automountServiceAccountToken }}
       {{- if .Values.metricsGenerator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -43,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.metricsGenerator.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metricsGenerator.podAffinityPreset "component" "metrics-generator" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metricsGenerator.podAntiAffinityPreset "component" "metrics-generator" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metricsGenerator.podAffinityPreset "component" "metrics-generator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metricsGenerator.podAntiAffinityPreset "component" "metrics-generator" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metricsGenerator.nodeAffinityPreset.type "key" .Values.metricsGenerator.nodeAffinityPreset.key "values" .Values.metricsGenerator.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.metricsGenerator.nodeSelector }}
@@ -63,8 +63,9 @@ spec:
       schedulerName: {{ .Values.metricsGenerator.schedulerName }}
       {{- end }}
       {{- if .Values.metricsGenerator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.metricsGenerator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metricsGenerator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.metricsGenerator.enableServiceLinks }}
       initContainers:
         {{- if .Values.metricsGenerator.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.initContainers "context" $) | nindent 8 }}
@@ -74,7 +75,7 @@ spec:
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
           {{- if .Values.metricsGenerator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metricsGenerator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metricsGenerator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -104,44 +105,48 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: {{ .Values.tempo.containerPorts.http }}
+            - containerPort: {{ .Values.tempo.containerPorts.web }}
               name: http
             - containerPort: {{ .Values.tempo.containerPorts.gossipRing }}
               name: http-memberlist
             - containerPort: {{ .Values.tempo.containerPorts.grpc }}
               name: grpc
           {{- if .Values.metricsGenerator.resources }}
-          resources: {{- toYaml .Values.metricsGenerator.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.metricsGenerator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metricsGenerator.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.metricsGenerator.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
-              port: {{ .Values.tempo.containerPorts.http }}
-          {{- else if .Values.metricsGenerator.customLivenessProbe }}
+          {{- if .Values.metricsGenerator.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metricsGenerator.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
-          {{- if .Values.metricsGenerator.readinessProbe.enabled }}
+          {{- if .Values.metricsGenerator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metricsGenerator.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
-              port: {{ .Values.tempo.containerPorts.http }}
-          {{- else if .Values.metricsGenerator.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customReadinessProbe "context" $) | nindent 12 }}
+              port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
-          {{- if .Values.metricsGenerator.startupProbe.enabled }}
+          {{- if .Values.metricsGenerator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metricsGenerator.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.metricsGenerator.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.metricsGenerator.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
@@ -157,6 +162,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metricsGenerator.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           emptyDir: {}
         - name: tempo-config
@@ -168,4 +175,3 @@ spec:
         {{- if .Values.metricsGenerator.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-{{- end }}

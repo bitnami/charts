@@ -1,27 +1,34 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+{{- /* TODO: On major version upgrade, add .Values.metrics.enabled to that check */}}
 {{- if .Values.metrics.serviceMonitor.enabled }}
-apiVersion: monitoring.coreos.com/v1
+{{- $releaseNamespace := default (include "common.names.namespace" .) .Values.metrics.serviceMonitor.namespace }}
+apiVersion: {{ default "monitoring.coreos.com/v1" .Values.metrics.serviceMonitor.apiVersion }}
 kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}
-  {{- if .Values.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.metrics.serviceMonitor.namespace | quote }}
-  {{- else }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.metrics.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  namespace: {{ $releaseNamespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   endpoints:
+    {{- /* Backward Compatibility for .Values.metrics.serviceMonitor.path */}}
+    {{- $paths := list }}
+    {{- if (.Values.metrics.serviceMonitor.paths | empty | not) }}
+    {{- $paths = .Values.metrics.serviceMonitor.paths }}
+    {{- end }}
+    {{- if (.Values.metrics.serviceMonitor.path | empty | not) }}
+    {{- $paths = prepend $paths .Values.metrics.serviceMonitor.path }}
+    {{- end }}
+    {{- range $idx, $path := ($paths | uniq) }}
+    {{- with $ }}
     - port: minio-api
-      path: {{ .Values.metrics.serviceMonitor.path }}
+      path: {{ $path }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
@@ -32,19 +39,27 @@ spec:
       honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
+      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.relabelings }}
-      relabelings: {{- toYaml .Values.metrics.serviceMonitor.relabelings | nindent 6 }}
+      relabelings: {{- toYaml .Values.metrics.serviceMonitor.relabelings | nindent 8 }}
       {{- end }}
+      {{- if .Values.tls.enabled }}
+      scheme: https
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.tlsConfig }}
+      tlsConfig: {{- toYaml .Values.metrics.serviceMonitor.tlsConfig | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    {{- end }}
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace | quote }}
+      - {{ include "common.names.namespace" . | quote }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}

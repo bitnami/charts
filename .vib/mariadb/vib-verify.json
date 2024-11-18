@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mariadb"
         },
-        "runtime_parameters": "YXV0aDoKICBkYXRhYmFzZTogdGVzdF9kYXRhYmFzZQogIHVzZXJuYW1lOiAidXNlciIKICBwYXNzd29yZDogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,21 +31,39 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/mariadb/goss"
+              "path": "/.vib"
             },
+            "tests_file": "mariadb/goss/goss.yaml",
+            "vars_file": "mariadb/runtime-parameters.yaml",
             "remote": {
-              "workload": "sts-mariadb"
+              "pod": {
+                "workload": "sts-mariadb-primary"
+              }
             }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/mariadb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "mariadb-primary",
+              "username": "root",
+              "password": "R0ot)Password"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

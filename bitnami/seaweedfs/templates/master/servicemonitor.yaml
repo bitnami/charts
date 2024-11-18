@@ -1,0 +1,49 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.master.metrics.enabled .Values.master.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "seaweedfs.master.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.master.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.master.metrics.serviceMonitor.labels .Values.commonLabels) "context" .) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: master
+  {{- if or .Values.master.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.master.metrics.serviceMonitor.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.master.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: master
+      app.kubernetes.io/part-of: metrics
+      {{- if .Values.master.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.master.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: tcp-metrics
+      path: "/metrics"
+      {{- if .Values.master.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.master.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.master.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.master.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.master.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.master.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.master.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.master.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.master.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.master.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

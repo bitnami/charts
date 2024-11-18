@@ -1,14 +1,15 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.rbac.create .Values.controller.rbac.create -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ printf "%s:controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,11 +18,18 @@ rules:
       - ''
     resources:
       - services
+      - namespaces
     verbs:
       - get
       - list
       - watch
       - update
+  - apiGroups:
+      - ''
+    resources:
+      - nodes
+    verbs:
+      - list
   - apiGroups:
       - ''
     resources:
@@ -36,25 +44,150 @@ rules:
       - create
       - patch
   - apiGroups:
+      - ''
+    resources:
+      - namespaces
+    verbs:
+      - list
+      - watch
+      - get
+  {{- if and (include "common.capabilities.psp.supported" .) .Values.psp.create .Values.controller.psp.create -}}
+  - apiGroups:
       - policy
     resourceNames:
-      - {{ printf "%s-controller" (include "common.names.fullname" .) }}
+      - {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
     resources:
       - podsecuritypolicies
     verbs:
       - use
+  {{- end }}
+  - apiGroups:
+      - admissionregistration.k8s.io
+    resources:
+      - validatingwebhookconfigurations
+      - mutatingwebhookconfigurations
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+    resourceNames:
+      - {{ include "metallb.speaker.secretName" . | quote }}
+    verbs:
+      - list
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    resourceNames:
+      - {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+    verbs:
+      - get
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - metallb.io
+    resources:
+      - ipaddresspools
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - metallb.io
+    resources:
+      - bgppeers
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - metallb.io
+    resources:
+      - bgpadvertisements
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - metallb.io
+    resources:
+      - l2advertisements
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - metallb.io
+    resources:
+      - communities
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - metallb.io
+    resources:
+      - bfdprofiles
+    verbs:
+      - get
+      - list
+      - watch
 ---
 ## Role bindings
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ printf "%s:controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -65,5 +198,24 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ printf "%s:controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: RoleBinding
+metadata:
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "metallb.controller.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}

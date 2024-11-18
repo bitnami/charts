@@ -1,0 +1,37 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: cassandra
+      image: docker.io/bitnami/cassandra:5.0.2-debian-12-r3
+    - name: jaeger
+      image: docker.io/bitnami/jaeger:1.63.0-debian-12-r1
+apiVersion: v2
+appVersion: 1.63.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+- condition: cassandra.enabled
+  name: cassandra
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 12.x.x
+description: Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
+keywords:
+- jaeger
+- tracing
+- monitoring
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: jaeger
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/jaeger
+version: 4.0.0

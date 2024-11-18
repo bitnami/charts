@@ -1,0 +1,20 @@
+auth:
+  email: user@example.com
+  user: user
+  password: ComplicatedPassword123!4
+postgresql:
+  auth:
+    username: bn_discourse
+host: bitnami-discourse.my
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+discourse:
+  readinessProbe:
+    initialDelaySeconds: 300
+  livenessProbe:
+    initialDelaySeconds: 500
+sidekiq:
+  readinessProbe:
+    initialDelaySeconds: 90

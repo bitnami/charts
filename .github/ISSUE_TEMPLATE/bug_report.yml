@@ -1,5 +1,9 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: 🐞 Bug
 description: Create a report to help us improve
+labels: ["tech-issues"]
 body:
   - type: markdown
     attributes:
@@ -15,6 +19,13 @@ body:
       placeholder: bitnami/wordpress 1.2.3
     validations:
       required: true
+  - type: dropdown
+    attributes:
+      label: What architecture are you using?
+      description: Choose the architecture of the host where the containers are executed
+      options:
+        - amd64
+        - arm64
   - type: textarea
     attributes:
       label: What steps will reproduce the bug?

@@ -1,33 +1,41 @@
-process:
-  mongod:
-    running: true
-command:
-  mongod-version:
-    exec: mongod --version | grep --quiet "$APP_VERSION"
-    exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 20000
-  admin-command:
-    exec: mongosh --quiet --username "$MONGODB_ROOT_USER" --password "$MONGODB_ROOT_PASSWORD" --port "$MONGODB_PORT_NUMBER" --eval "db.adminCommand({listCollections:1})"
-    exit-status: 0
-    stdout:
-      - "system.version"
-    stderr: [ ]
-    timeout: 20000
-  create-collection:
-    exec: mongosh --quiet --username "$MONGODB_EXTRA_USERNAMES" --password "$MONGODB_EXTRA_PASSWORDS" --port "$MONGODB_PORT_NUMBER" --eval "db.sapphire.drop(); db.createCollection('sapphire'); db.getCollectionNames()" "$MONGODB_EXTRA_DATABASES"
-    exit-status: 0
-    stdout:
-      - "sapphire"
-    stderr: [ ]
-    timeout: 20000
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 file:
-  /opt/bitnami/mongodb/conf/mongodb.conf:
-    mode: "0660"
-    filetype: file
-    contains: [
-      "dbPath: /bitnami/mongodb/data/db",
-      "authorization: enabled"
-    ]
+  {{ .Vars.persistence.mountPath }}:
     exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /opt/bitnami/mongodb/conf/mongodb.conf:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contents:
+      - /port:.*{{ .Vars.containerPorts.mongodb }}/
+command:
+  {{- $conn_opts := printf "--quiet --username %s --password '%s' --host mongodb --port %d" .Vars.auth.rootUser .Vars.auth.rootPassword .Vars.service.ports.mongodb }}
+  admin-command:
+    exec: mongosh {{ $conn_opts }} --eval "db.adminCommand({listCollections:1})"
+    exit-status: 0
+  {{- $testCollection := "sapphire" }}
+  {{- $conn_opts := printf "--quiet --username %s --password '%s' --host mongodb --port %d" (index .Vars.auth.usernames 0) (index .Vars.auth.passwords 0) .Vars.service.ports.mongodb }}
+  create-collection:
+    exec: mongosh {{ $conn_opts }} --eval "db.{{ $testCollection }}.drop(); db.createCollection('{{ $testCollection }}'); db.getCollectionNames()" {{ (index .Vars.auth.databases 0) }}
+    exit-status: 0
+    stdout:
+      - "{{ $testCollection }}"
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

@@ -1,0 +1,98 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.sidekiq.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "mastodon.sidekiq.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mastodon
+    app.kubernetes.io/component: sidekiq
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sidekiq.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: sidekiq
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.sidekiq.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        # Allow smtp
+        - port: {{ .Values.smtp.port }}
+    # Allow connection to PostgreSQL
+    - ports:
+        - port: {{ include "mastodon.database.port" . | int }}
+      {{- if .Values.postgresql.enabled }}
+        - port: {{ .Values.postgresql.containerPorts.postgresql }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    # Allow connection to Redis
+    - ports:
+        - port: {{ include "mastodon.redis.port" . | int }}
+      {{- if .Values.redis.enabled }}
+        - port: {{ .Values.redis.master.containerPorts.redis }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: redis
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    # Allow connection to S3
+    - ports:
+        - port: {{ include "mastodon.s3.port" . | int }}
+      {{- if .Values.minio.enabled }}
+        - port: {{ .Values.minio.containerPorts.api }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    # Allow connection to Elasticsearch
+    - ports:
+        - port: {{ include "mastodon.elasticsearch.port" . | int }}
+      {{- if .Values.elasticsearch.enabled }}
+        - port: {{ .Values.elasticsearch.containerPorts.restAPI }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: elasticsearch
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    # Allow connection to web
+    - ports:
+        - port: {{ .Values.web.service.ports.http }}
+        - port: {{ .Values.web.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    {{- if .Values.sidekiq.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sidekiq.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    {{- if .Values.sidekiq.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sidekiq.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

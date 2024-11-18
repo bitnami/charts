@@ -1,0 +1,121 @@
+dataPlane:
+  enabled: true
+  hostAliases:
+    - ip: 127.0.0.1
+      hostnames:
+        - www.example.com
+  metrics:
+    enabled: true
+  extraConfig:
+    nginx_config:
+      max_running_timers: 3000
+  containerPorts:
+    http: 8444
+    https: 8445
+    control: 8446
+    metrics: 8447
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  service:
+    ports:
+      # We need port 80 or the deployment check will fail
+      http: 80
+      https: 443
+      metrics: 8003
+  serviceAccount:
+    automountServiceAccountToken: true
+controlPlane:
+  apiTokenAdmin: "deadbeefdeadbeefdeadbeef"
+  metrics:
+    enabled: true
+  service:
+    ports:
+      adminAPI: 9181
+      configServer: 8888
+      https: 9282
+      metrics: 8004
+dashboard:
+  username: vib-user
+  password: "ComplicatedPassword123!4"
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+      https: 443
+ingressController:
+  extraConfig:
+    kubernetes:
+      namespace_selector:
+        - 'kubernetes.io/metadata.name={{ include "common.names.namespace" . }}'
+  metrics:
+    enabled: true
+  service:
+    ports:
+      http: 8007
+      https: 8008
+
+extraDeploy:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    namespace: '{{ include "common.names.namespace" . }}'
+    name: nginx-vib-tests
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: nginx
+    template:
+      metadata:
+        labels:
+          app: nginx
+      spec:
+        containers:
+        - name: nginx
+          image: bitnami/nginx
+          ports:
+          - containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: nginx-vib-tests
+    namespace: '{{ include "common.names.namespace" . }}'
+    labels:
+      app: nginx
+  spec:
+    selector:
+      app: nginx
+    ports:
+    - port: 8080
+      name: http
+      targetPort: 8080
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    namespace: '{{ include "common.names.namespace" . }}'
+    name: vib-tests
+  spec:
+    ingressClassName: apisix
+    rules:
+    - host: www.example.com
+      http:
+        paths:
+        - path: /
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: nginx-vib-tests
+              port:
+                number: 8080

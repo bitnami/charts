@@ -1,0 +1,45 @@
+auth:
+  enabled: true
+  rootUser: root
+  rootPassword: Password123!4
+  replicaSetKey: SetPassword1234
+shards: 3
+common:
+  containerPorts:
+    mongodb: 27017
+service:
+  ports:
+    mongodb: 80
+  type: LoadBalancer
+configsvr:
+  replicaCount: 1
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+mongos:
+  replicaCount: 2
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  useStatefulSet: true
+  servicePerReplica:
+    enabled: true
+    type: ClusterIP
+    port: 80
+shardsvr:
+  dataNode:
+    replicaCount: 2
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1002
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1002
+  arbiter:
+    replicaCount: 0

@@ -1,0 +1,256 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.alertmanager.enabled }}
+{{- $clusterPort := .Values.alertmanager.containerPorts.cluster }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "prometheus.alertmanager.fullname" . | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.alertmanager.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: prometheus
+    app.kubernetes.io/component: alertmanager
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.alertmanager.replicaCount }}
+  podManagementPolicy: {{ .Values.alertmanager.podManagementPolicy | quote }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: prometheus
+      app.kubernetes.io/component: alertmanager
+  serviceName: {{ printf "%s-headless" (include "prometheus.alertmanager.fullname" .) }}
+  {{- if .Values.alertmanager.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.alertmanager.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      {{- if .Values.alertmanager.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: prometheus
+        app.kubernetes.io/component: alertmanager
+    spec:
+      serviceAccountName: {{ template "prometheus.alertmanager.serviceAccountName" . }}
+      {{- include "prometheus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.alertmanager.automountServiceAccountToken }}
+      {{- if .Values.alertmanager.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.alertmanager.podAffinityPreset "component" "alertmanager" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.alertmanager.podAntiAffinityPreset "component" "alertmanager" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.alertmanager.nodeAffinityPreset.type "key" .Values.alertmanager.nodeAffinityPreset.key "values" .Values.alertmanager.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.alertmanager.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.priorityClassName }}
+      priorityClassName: {{ .Values.alertmanager.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.alertmanager.schedulerName }}
+      schedulerName: {{ .Values.alertmanager.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.alertmanager.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.alertmanager.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.alertmanager.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "prometheus.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -ec
+            - |
+              mkdir -p {{ .Values.alertmanager.persistence.mountPath }}
+              find {{ .Values.alertmanager.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.alertmanager.containerSecurityContext.runAsUser }}:{{ .Values.alertmanager.podSecurityContext.fsGroup }}
+          {{- if .Values.alertmanager.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: data
+              mountPath: {{ .Values.alertmanager.persistence.mountPath }}
+              {{- if .Values.alertmanager.persistence.subPath }}
+              subPath: {{ .Values.alertmanager.persistence.subPath }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.alertmanager.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: alertmanager
+          image: {{ template "prometheus.alertmanager.image" . }}
+          imagePullPolicy: {{ .Values.alertmanager.image.pullPolicy }}
+          {{- if .Values.alertmanager.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - "--config.file=/opt/bitnami/alertmanager/conf/{{ include "prometheus.alertmanager.configmapKey" . }}"
+            - "--storage.path=/opt/bitnami/alertmanager/data"
+            - "--web.listen-address=0.0.0.0:{{ .Values.alertmanager.containerPorts.http }}"
+            {{- if gt (int .Values.alertmanager.replicaCount) 1 }}
+            - "--cluster.advertise-address=[$(POD_IP)]:{{ $clusterPort }}"
+            - "--cluster.listen-address=0.0.0.0:{{ $clusterPort }}"
+            {{- $fullName := include "prometheus.alertmanager.fullname" . }}
+            {{- range $i := until (int .Values.alertmanager.replicaCount) }}
+            - "--cluster.peer={{ $fullName }}-{{ $i }}.{{ $fullName }}-headless.{{ include "common.names.namespace" $ }}.svc.{{ $.Values.clusterDomain }}:{{ $clusterPort }}"
+            {{- end }}
+            {{- end }}
+            {{- if .Values.alertmanager.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            {{- if .Values.alertmanager.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.alertmanager.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.alertmanager.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.alertmanager.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.alertmanager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.alertmanager.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.alertmanager.containerPorts.http }}
+            - name: tcp-cluster
+              containerPort: {{ $clusterPort }}
+              protocol: TCP
+            - name: udp-cluster
+              containerPort: {{ $clusterPort }}
+              protocol: UDP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.alertmanager.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.alertmanager.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/healthy
+              port: http
+          {{- end }}
+          {{- if .Values.alertmanager.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.alertmanager.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/ready
+              port: http
+          {{- end }}
+          {{- if .Values.alertmanager.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.alertmanager.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.alertmanager.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: config
+              mountPath: /opt/bitnami/alertmanager/conf
+              readOnly: true
+            - name: data
+              mountPath: {{ .Values.alertmanager.persistence.mountPath }}
+          {{- if .Values.alertmanager.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.alertmanager.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: {{ include "prometheus.alertmanager.configmapName" . }}
+        {{- if not .Values.alertmanager.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+        {{- end}}
+        {{- if .Values.alertmanager.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if .Values.alertmanager.persistence.enabled }}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+        {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.alertmanager.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.alertmanager.persistence.size | quote }}
+        {{- if .Values.alertmanager.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.alertmanager.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
+{{- end }}

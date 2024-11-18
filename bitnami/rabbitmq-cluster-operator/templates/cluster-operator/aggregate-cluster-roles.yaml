@@ -1,0 +1,31 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.clusterOperator.rbac.create -}}
+{{- $readonlyVerbs := list "get" "list" "watch" }}
+{{- $allVerbs := list "create" "delete" "deletecollection" "get" "list" "patch" "update" "watch" }}
+{{- $roles := dict "view" $readonlyVerbs "edit" $allVerbs "admin" $allVerbs }}
+{{- range $role, $verbs := $roles -}}
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" $ }}
+kind: ClusterRole
+metadata:
+  name: {{ template "common.names.fullname.namespace" $ }}-{{ $role }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq-operator
+    app.kubernetes.io/part-of: rabbitmq
+    rbac.authorization.k8s.io/aggregate-to-{{ $role }}: "true"
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - rabbitmqclusters
+      - rabbitmqclusters/finalizers
+    verbs: {{ $verbs | toYaml | nindent 6 }}
+{{ end }}
+{{- end }}

@@ -1,15 +1,20 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{- define "mysql.primary.fullname" -}}
 {{- if eq .Values.architecture "replication" }}
-{{- printf "%s-%s" (include "common.names.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) .Values.primary.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- include "common.names.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
 {{- define "mysql.secondary.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "secondary" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) .Values.secondary.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -48,6 +53,17 @@ Get the initialization scripts ConfigMap name.
     {{- printf "%s" (tpl .Values.initdbScriptsConfigMap $) -}}
 {{- else -}}
     {{- printf "%s-init-scripts" (include "mysql.primary.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the startdb scripts ConfigMap name.
+*/}}
+{{- define "mysql.startdbScriptsCM" -}}
+{{- if .Values.startdbScriptsConfigMap -}}
+    {{- printf "%s" (tpl .Values.startdbScriptsConfigMap $) -}}
+{{- else -}}
+    {{- printf "%s-start-scripts" (include "mysql.primary.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -127,18 +143,42 @@ Return true if a secret object should be created for MySQL
 {{- end -}}
 
 {{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
+Return true if a secret object should be created for MySQL
 */}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
+{{- define "mysql.createPreviousSecret" -}}
+{{- if and .Values.passwordUpdateJob.previousPasswords.rootPassword (not .Values.passwordUpdateJob.previousPasswords.existingSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret with previous MySQL credentials
+*/}}
+{{- define "mysql.update-job.previousSecretName" -}}
+    {{- if .Values.passwordUpdateJob.previousPasswords.existingSecret -}}
+        {{- /* The secret with the new password is managed externally */ -}}
+        {{- tpl .Values.passwordUpdateJob.previousPasswords.existingSecret $ -}}
+    {{- else if .Values.passwordUpdateJob.previousPasswords.rootPassword -}}
+        {{- /* The secret with the new password is managed externally */ -}}
+        {{- printf "%s-previous-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
-        {{- randAlphaNum $len -}}
+        {{- /* The secret with the new password is managed by the helm chart. We use the current secret name as it has the old password */ -}}
+        {{- include "common.names.fullname" . -}}
     {{- end -}}
-{{- end }}
+{{- end -}}
+
+{{/*
+Return the secret with new MySQL credentials
+*/}}
+{{- define "mysql.update-job.newSecretName" -}}
+    {{- if and (not .Values.passwordUpdateJob.previousPasswords.existingSecret) (not .Values.passwordUpdateJob.previousPasswords.rootPassword) -}}
+        {{- /* The secret with the new password is managed by the helm chart. We create a new secret as the current one has the old password */ -}}
+        {{- printf "%s-new-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- /* The secret with the new password is managed externally */ -}}
+        {{- include "mysql.secretName" . -}}
+    {{- end -}}
+{{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "mysql.checkRollingTags" -}}

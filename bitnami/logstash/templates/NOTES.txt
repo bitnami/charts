@@ -53,7 +53,7 @@ To access Logstash from outside the cluster execute the following commands:
 {{- else if contains "ClusterIP" .Values.service.type }}
 
     export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
-    kubectl port-forward svc/{{ include "common.names.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
+    kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "common.names.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
     echo "http://127.0.0.1:${SERVICE_PORT}"
 
 {{- end }}
@@ -61,3 +61,5 @@ To access Logstash from outside the cluster execute the following commands:
 
 {{- include "logstash.validateValues" . }}
 {{- include "logstash.checkRollingTags" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

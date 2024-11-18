@@ -1,0 +1,221 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.dataPlane.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: {{ ternary "DaemonSet" "Deployment" .Values.dataPlane.useDaemonSet }}
+metadata:
+  name: {{ template "apisix.data-plane.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: apisix
+    app.kubernetes.io/component: data-plane
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and (not .Values.dataPlane.useDaemonSet) (not .Values.dataPlane.autoscaling.hpa.enabled) }}
+  replicas: {{ .Values.dataPlane.replicaCount }}
+  {{- end }}
+  {{- if .Values.dataPlane.updateStrategy }}
+  {{ ternary "updateStrategy" "strategy" .Values.dataPlane.useDaemonSet }}: {{- toYaml .Values.dataPlane.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataPlane.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: apisix
+      app.kubernetes.io/component: data-plane
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/data-plane/configmap.yaml") . | sha256sum }}
+        checksum/config-extra: {{ include (print $.Template.BasePath "/data-plane/extra-configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/control-plane/api-token-secret.yaml") . | sha256sum }}
+        {{- if .Values.dataPlane.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: apisix
+        app.kubernetes.io/component: data-plane
+    spec:
+      serviceAccountName: {{ template "apisix.data-plane.serviceAccountName" . }}
+      {{- if .Values.dataPlane.hostNetwork }}
+      hostNetwork: {{ .Values.dataPlane.hostNetwork }}
+      {{- end }}
+      {{- include "apisix.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dataPlane.automountServiceAccountToken }}
+      {{- if .Values.dataPlane.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dataPlane.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.dataPlane.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dataPlane.podAffinityPreset "component" "data-plane" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dataPlane.podAntiAffinityPreset "component" "data-plane" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dataPlane.nodeAffinityPreset.type "key" .Values.dataPlane.nodeAffinityPreset.key "values" .Values.dataPlane.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.dataPlane.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.dataPlane.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dataPlane.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dataPlane.priorityClassName }}
+      priorityClassName: {{ .Values.dataPlane.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.dataPlane.schedulerName }}
+      schedulerName: {{ .Values.dataPlane.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.dataPlane.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dataPlane.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dataPlane.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dataPlane.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.dataPlane.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.controlPlane.enabled }}
+        {{- include "apisix.waitForControlPlaneInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- include "apisix.prepareApisixInitContainer" (dict "component" "data-plane" "context" $) | nindent 8 }}
+        {{- if .Values.dataPlane.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: apisix
+          image: {{ template "apisix.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.dataPlane.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dataPlane.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.dataPlane.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - openresty
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.dataPlane.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -p
+            - /usr/local/apisix
+            - -g
+            - "daemon off;"
+          {{- end }}
+          env:
+            {{- if .Values.dataPlane.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.dataPlane.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dataPlane.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.dataPlane.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dataPlane.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.dataPlane.resources }}
+          resources: {{- toYaml .Values.dataPlane.resources | nindent 12 }}
+          {{- else if ne .Values.dataPlane.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dataPlane.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.dataPlane.containerPorts.http }}
+            - name: https
+              containerPort: {{ .Values.dataPlane.containerPorts.https }}
+            - name: http-control
+              containerPort: {{ .Values.dataPlane.containerPorts.control }}
+            {{- if .Values.dataPlane.metrics.enabled }}
+            - name: http-metrics
+              containerPort: {{ .Values.dataPlane.containerPorts.metrics }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.dataPlane.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dataPlane.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataPlane.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-control
+         {{- end }}
+          {{- if .Values.dataPlane.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dataPlane.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataPlane.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /v1/healthcheck
+              port: http-control
+          {{- end }}
+          {{- if .Values.dataPlane.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dataPlane.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataPlane.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /v1/healthcheck
+              port: http-control
+          {{- end }}
+          {{- end }}
+          {{- if .Values.dataPlane.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /usr/local/apisix
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+           {{- if .Values.dataPlane.tls.enabled }}
+            - name: certs
+              mountPath: /bitnami/certs
+           {{- end }}
+           {{- if and .Values.controlPlane.enabled .Values.controlPlane.tls.enabled}}
+            - name: control-plane-certs
+              mountPath: /etc/ssl/certs/{{ .Values.controlPlane.tls.certCAFilename }}
+              subPath: {{ .Values.controlPlane.tls.certCAFilename }}
+            {{- end }}
+           {{- if .Values.dataPlane.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.dataPlane.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.dataPlane.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "apisix.data-plane.defaultConfigmapName" . }}
+        {{- if or .Values.dataPlane.extraConfig .Values.dataPlane.extraConfigExistingConfigMap }}
+        - name: extra-config
+          configMap:
+            name: {{ include "apisix.data-plane.extraConfigmapName" . }}
+        {{- end }}
+        {{- if .Values.dataPlane.tls.enabled }}
+        - name: certs
+          secret:
+            secretName: {{ template "apisix.data-plane.tlsSecretName" . }}
+        {{- end }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- if and .Values.controlPlane.enabled .Values.controlPlane.tls.enabled }}
+        - name: control-plane-certs
+          secret:
+            secretName: {{ template "apisix.control-plane.tlsSecretName" . }}
+        {{- end }}
+        {{- if .Values.dataPlane.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

@@ -1,0 +1,127 @@
+operator:
+  enabled: true
+  # Necessary to avoid conflicts in parallel deployments
+  watchAllNamespaces: false
+  containerPorts:
+    metrics: 8100
+  service:
+    ports:
+      metrics: 8104
+  serviceAccount:
+    create: true
+  automountServiceAccountToken: true
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    runAsGroup: 1002
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  metrics:
+    enabled: true
+
+apiserver:
+  enabled: true
+  # Necessary to avoid conflicts in parallel deployments
+  watchAllNamespaces: false
+  service:
+    ports:
+      http: 8300
+      grpc: 8302
+
+cluster:
+  enabled: true
+  service:
+    type: ClusterIP
+  worker:
+    groupSpecs:
+      - groupName: vib
+
+extraDeploy:
+  # HACK: Kuberay does not allow setting a different service port from the container port, so we cannot set it at
+  # 80 because of the permissions. Instead, we create a mock service that points to the cluster head at port 80
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: kuberay-cluster-head-vib-svc
+      labels:
+        app.kubernetes.io/component: cluster-head
+    spec:
+      type: LoadBalancer
+      selector:
+        app.kubernetes.io/component: cluster-head
+      ports:
+      - port: 80
+        name: http
+        targetPort: 8265
+  # HACK: The kuberay operator directly crates pod objects (not deployment or statefulsets) when creating RayCluster
+  # objects. Therefore we cannot run goss tests on the head node. As an alternative, we will create a job that submits
+  # a job to the RayCluster and we will check it in the Cypress tests
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: kuberay-vib-job
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: job-runner
+              image: '{{ include "kuberay.ray.image" . }}'
+              securityContext:
+                runAsNonRoot: true
+                privileged: false
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: "RuntimeDefault"
+              command:
+                - /bin/bash
+              args:
+                - -ec
+                - |
+                  #!/bin/bash
+
+                  set -o errexit
+                  set -o nounset
+                  set -o pipefail
+
+                  . /opt/bitnami/scripts/libos.sh
+
+                  # Set the endpoint URL
+                  host="kuberay-cluster-head-svc"
+                  port="8265"
+
+                  kuberay_head_ready() {
+                      # Test the TCP connection with a timeout
+                      if timeout 5 bash -c "</dev/tcp/$host/$port"; then
+                          return 0
+                      else
+                          return 1
+                      fi
+                  }
+
+                  echo "0" > /tmp/ready
+                  info "Waiting for the head instance"
+                  if ! retry_while "kuberay_head_ready" 12 30; then
+                    error "Could not connect to the head instance"
+                    exit 1
+                  else
+                    info "Head ready! Running job"
+                    ray job submit --address http://${host}:${port} -- python -c "import ray; ray.init(); print(ray.cluster_resources())"
+                  fi
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: tmp
+              emptyDir: {}

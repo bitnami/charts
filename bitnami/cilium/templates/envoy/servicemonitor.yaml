@@ -1,0 +1,51 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.envoy.metrics.enabled .Values.envoy.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "cilium.envoy.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.envoy.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.envoy.metrics.serviceMonitor.labels .Values.commonLabels) "context" .) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: envoy
+  {{- if or .Values.envoy.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.envoy.metrics.serviceMonitor.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.envoy.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: cilium
+      app.kubernetes.io/component: envoy
+      prometheus.io/scrape: "true"
+      {{- if .Values.envoy.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.envoy.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: tcp-metrics
+      path: "/metrics"
+      {{- if .Values.envoy.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.envoy.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.envoy.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.envoy.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.envoy.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.envoy.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.envoy.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.envoy.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

@@ -1,0 +1,103 @@
+milvus:
+  auth:
+    enabled: true
+    rootPassword: ComplicatedPassword123!4
+  extraConfig:
+    common:
+      gracefulStopTimeout: 40
+
+proxy:
+  enabled: true
+  metrics:
+    enabled: true
+  extraConfig:
+    proxy:
+      timeTickInterval: 220
+  containerPorts:
+    grpc: 8444
+    metrics: 8445
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  service:
+    type: LoadBalancer
+    ports:
+      # We need port 80 or the deployment check will fail
+      grpc: 80
+      metrics: 8003
+  serviceAccount:
+    create: true
+  automountServiceAccountToken: true
+
+dataCoord:
+  enabled: true
+  metrics:
+    enabled: true
+  service:
+    ports:
+      grpc: 8004
+      metrics: 8005
+
+rootCoord:
+  enabled: true
+  metrics:
+    enabled: true
+  service:
+    ports:
+      grpc: 8006
+      metrics: 8007
+
+indexCoord:
+  enabled: true
+  metrics:
+    enabled: true
+  service:
+    ports:
+      grpc: 8008
+      metrics: 8009
+
+queryCoord:
+  enabled: true
+  metrics:
+    enabled: true
+  service:
+    ports:
+      grpc: 8010
+      metrics: 8011
+
+dataNode:
+  enabled: true
+  metrics:
+    enabled: true
+  service:
+    ports:
+      grpc: 8012
+      metrics: 8013
+
+queryNode:
+  enabled: true
+  metrics:
+    enabled: true
+  service:
+    ports:
+      grpc: 8014
+      metrics: 8015
+
+indexNode:
+  enabled: true
+  metrics:
+    enabled: true
+  service:
+    ports:
+      grpc: 8016
+      metrics: 8017
+
+attu:
+  enabled: true
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80

@@ -1,20 +1,21 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if eq .Values.architecture "replication" }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "mariadb.secondary.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mariadb
     app.kubernetes.io/component: secondary
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.secondary.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.secondary.service.annotations "context" $ ) | nindent 4 }}
+    {{- if or .Values.secondary.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.service.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if and .Values.metrics.enabled .Values.metrics.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.annotations "context" $ ) | nindent 4 }}
@@ -28,7 +29,7 @@ spec:
   externalTrafficPolicy: {{ .Values.secondary.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if and (eq .Values.secondary.service.type "LoadBalancer") .Values.secondary.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{ .Values.secondary.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.secondary.service.loadBalancerSourceRanges | nindent 4 }}
   {{ end }}
   {{- if and (eq .Values.secondary.service.type "LoadBalancer") (not (empty .Values.secondary.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.secondary.service.loadBalancerIP }}
@@ -49,15 +50,17 @@ spec:
       {{- else if eq .Values.secondary.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.metrics.enabled }}
+    {{- if and .Values.metrics.enabled (gt (.Values.secondary.service.ports.metrics | int) 0) }}
     - name: metrics
-      port: 9104
+      port: {{ .Values.secondary.service.ports.metrics }}
       protocol: TCP
       targetPort: metrics
     {{- end }}
     {{- if .Values.secondary.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.secondary.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mariadb
     app.kubernetes.io/component: secondary
 {{- end }}

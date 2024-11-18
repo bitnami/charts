@@ -1,0 +1,282 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.cluster.enabled }}
+apiVersion: ray.io/v1
+kind: RayCluster
+metadata:
+  name: {{ template "kuberay.cluster.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.rayImage "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kuberay
+    app.kubernetes.io/component: cluster
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  headGroupSpec:
+    serviceType: {{ .Values.cluster.serviceType  }}
+    {{- if .Values.cluster.head.rayStartParams }}
+    rayStartParams: {{- include "common.tplvalues.render" ( dict "value" .Values.cluster.head.rayStartParams "context" $ ) | nindent 6 }}
+    {{- else }}
+    rayStartParams: {}
+    {{- end }}
+    template:
+      metadata:
+        {{- if .Values.cluster.head.podAnnotations }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.podAnnotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.cluster.head.podLabels .Values.commonLabels ) "context" . ) }}
+        labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 10 }}
+          app.kubernetes.io/part-of: kuberay
+          app.kubernetes.io/component: cluster-head
+      spec:
+        {{- include "kuberay.imagePullSecrets" . | nindent 8 }}
+        serviceAccountName: {{ template "kuberay.cluster.serviceAccountName" . }}
+        automountServiceAccountToken: {{ .Values.cluster.head.automountServiceAccountToken }}
+        {{- if .Values.cluster.head.hostAliases }}
+        hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.hostAliases "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.cluster.head.affinity }}
+        affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.cluster.head.affinity "context" $) | nindent 10 }}
+        {{- else }}
+        affinity:
+          podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cluster.head.podAffinityPreset "component" "cluster-head" "customLabels" $podLabels "context" $) | nindent 12 }}
+          podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cluster.head.podAntiAffinityPreset "component" "cluster-head" "customLabels" $podLabels "context" $) | nindent 12 }}
+          nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.cluster.head.nodeAffinityPreset.type "key" .Values.cluster.head.nodeAffinityPreset.key "values" .Values.cluster.head.nodeAffinityPreset.values) | nindent 12 }}
+        {{- end }}
+        {{- if .Values.cluster.head.nodeSelector }}
+        nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.cluster.head.nodeSelector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.cluster.head.tolerations }}
+        tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.tolerations "context" .) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.cluster.head.priorityClassName }}
+        priorityClassName: {{ .Values.cluster.head.priorityClassName | quote }}
+        {{- end }}
+        {{- if .Values.cluster.head.schedulerName }}
+        schedulerName: {{ .Values.cluster.head.schedulerName | quote }}
+        {{- end }}
+        {{- if .Values.cluster.head.topologySpreadConstraints }}
+        topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.topologySpreadConstraints "context" .) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.cluster.head.podSecurityContext.enabled }}
+        securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cluster.head.podSecurityContext "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.cluster.head.terminationGracePeriodSeconds }}
+        terminationGracePeriodSeconds: {{ .Values.cluster.head.terminationGracePeriodSeconds }}
+        {{- end }}
+        {{- if .Values.cluster.head.initContainers }}
+        initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.initContainers "context" $) | nindent 10 }}
+        {{- end }}
+        containers:
+          - name: ray-head
+            image: {{ template "kuberay.ray.image" . }}
+            imagePullPolicy: {{ .Values.rayImage.pullPolicy }}
+            {{- if .Values.cluster.head.containerSecurityContext.enabled }}
+            securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cluster.head.containerSecurityContext "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.diagnosticMode.enabled }}
+            command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 14 }}
+            {{- else if .Values.cluster.head.command }}
+            command: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.command "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.diagnosticMode.enabled }}
+            args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 14 }}
+            {{- else if .Values.cluster.head.args }}
+            args: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.args "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.cluster.head.extraEnvVars }}
+            env: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.extraEnvVars "context" $) | nindent 14 }}
+            {{- end }}
+            envFrom:
+              {{- if .Values.cluster.head.extraEnvVarsCM }}
+              - configMapRef:
+                  name: {{ include "common.tplvalues.render" (dict "value" .Values.cluster.head.extraEnvVarsCM "context" $) }}
+              {{- end }}
+              {{- if .Values.cluster.head.extraEnvVarsSecret }}
+              - secretRef:
+                  name: {{ include "common.tplvalues.render" (dict "value" .Values.cluster.head.extraEnvVarsSecret "context" $) }}
+              {{- end }}
+            {{- if .Values.cluster.head.resources }}
+            resources: {{- toYaml .Values.cluster.head.resources | nindent 14 }}
+            {{- else if ne .Values.cluster.head.resourcesPreset "none" }}
+            resources: {{- include "common.resources.preset" (dict "type" .Values.cluster.head.resourcesPreset) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.cluster.head.lifecycleHooks }}
+            lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.lifecycleHooks "context" $) | nindent 14 }}
+            {{- end }}
+            volumeMounts:
+              - name: tmp
+                mountPath: /tmp
+              {{- if .Values.cluster.head.extraVolumeMounts }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.extraVolumeMounts "context" $) | nindent 14 }}
+              {{- end }}
+          {{- if .Values.cluster.head.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cluster.head.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cluster.head.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cluster.head.sidecars }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.cluster.head.sidecars "context" $) | nindent 10 }}
+          {{- end }}
+        volumes:
+          - name: tmp
+            emptyDir: {}
+          {{- if .Values.cluster.head.extraVolumes }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.extraVolumes "context" $) | nindent 10 }}
+          {{- end }}
+  workerGroupSpecs:
+    {{- range $workergroup := .Values.cluster.worker.groupSpecs }}
+    - groupName: {{ .groupName }}
+      {{- $rayStartParams := coalesce .rayStartParams $.Values.cluster.worker.common.rayStartParams }}
+      {{- if $rayStartParams }}
+      rayStartParams: {{- include "common.tplvalues.render" ( dict "value" $rayStartParams "context" $ ) | nindent 8 }}
+      {{- else }}
+      rayStartParams: {}
+      {{- end }}
+      replicas: {{ coalesce .replicaCount $.Values.cluster.worker.common.replicaCount }}
+      template:
+        metadata:
+          {{- $podAnnotations := coalesce .podAnnotations $.Values.cluster.worker.common.podAnnotations }}
+          {{- if $podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 12 }}
+          {{- end }}
+          {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list (coalesce .podLabels $.Values.cluster.worker.common.podLabels) $.Values.commonLabels ) "context" $) }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 12 }}
+            app.kubernetes.io/part-of: kuberay
+            app.kubernetes.io/component: {{ printf "cluster-worker-%s" .groupName }}
+        spec:
+          {{- include "kuberay.imagePullSecrets" $ | nindent 10 }}
+          serviceAccountName: {{ template "kuberay.cluster.serviceAccountName" $ }}
+          {{- $hostAliases := coalesce .hostAliases $.Values.cluster.worker.common.hostAliases }}
+          {{- if $hostAliases }}
+          hostAliases: {{- include "common.tplvalues.render" (dict "value" $hostAliases "context" $) | nindent 12 }}
+          {{- end }}
+          {{- $affinity := coalesce .affinity $.Values.cluster.worker.common.affinity }}
+          {{- if $affinity }}
+          affinity: {{- include "common.tplvalues.render" ( dict "value" $affinity "context" $) | nindent 12 }}
+          {{- else }}
+          affinity:
+            {{- $podAffinityPreset := coalesce .podAffinityPreset $.Values.cluster.worker.common.podAffinityPreset }}
+            podAffinity: {{- include "common.affinities.pods" (dict "type" $podAffinityPreset "component" (printf "cluster-worker-%s" .groupName) "customLabels" $podLabels "context" $) | nindent 14 }}
+            {{- $podAntiAffinityPreset := coalesce .podAntiAffinityPreset $.Values.cluster.worker.common.podAntiAffinityPreset }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $podAntiAffinityPreset "component" (printf "cluster-worker-%s" .groupName) "customLabels" $podLabels "context" $) | nindent 14 }}
+            {{- $nodeAffinityPreset := coalesce .nodeAffinityPreset $.Values.cluster.worker.common.nodeAffinityPreset }}
+            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $nodeAffinityPreset.type "key" $nodeAffinityPreset.key "values" $nodeAffinityPreset.values) | nindent 12 }}
+          {{- end }}
+          {{- $nodeSelector := coalesce .nodeSelector $.Values.cluster.worker.common.nodeSelector }}
+          {{- if $nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" ( dict "value" $nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- $tolerations := coalesce .tolerations $.Values.cluster.worker.common.tolerations }}
+          {{- if $tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" $tolerations "context" $) | nindent 12 }}
+          {{- end }}
+          {{- $priorityClassName := coalesce .priorityClassName $.Values.cluster.worker.common.priorityClassName }}
+          {{- if $priorityClassName }}
+          priorityClassName: {{ $priorityClassName | quote }}
+          {{- end }}
+          {{- $schedulerName := coalesce .schedulerName $.Values.cluster.worker.common.schedulerName }}
+          {{- if $schedulerName }}
+          schedulerName: {{ $schedulerName | quote }}
+          {{- end }}
+          {{- $topologySpreadConstraints := coalesce .topologySpreadConstraints $.Values.cluster.worker.common.topologySpreadConstraints }}
+          {{- if $topologySpreadConstraints }}
+          topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $topologySpreadConstraints "context" .) | nindent 12 }}
+          {{- end }}
+          {{- $podSecurityContext := coalesce .podSecurityContext $.Values.cluster.worker.common.podSecurityContext }}
+          {{- if $podSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $podSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- $terminationGracePeriodSeconds := coalesce .terminationGracePeriodSeconds $.Values.cluster.worker.common.terminationGracePeriodSeconds }}
+          {{- if $terminationGracePeriodSeconds }}
+          terminationGracePeriodSeconds: {{ $terminationGracePeriodSeconds }}
+          {{- end }}
+          {{- $initContainers := coalesce .initContainers $.Values.cluster.worker.common.initContainers }}
+          {{- if $initContainers }}
+          initContainers: {{- include "common.tplvalues.render" (dict "value" $initContainers "context" $) | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: ray-worker
+              image: {{ template "kuberay.ray.image" $ }}
+              imagePullPolicy: {{ $.Values.rayImage.pullPolicy }}
+              {{- $containerSecurityContext := coalesce .containerSecurityContext $.Values.cluster.worker.common.containerSecurityContext }}
+              {{- if $containerSecurityContext.enabled }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $containerSecurityContext "context" $) | nindent 16 }}
+              {{- end }}
+              {{- $command := coalesce .command $.Values.cluster.worker.common.command }}
+              {{- if $.Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.command "context" $) | nindent 16 }}
+              {{- else if $command }}
+              command: {{- include "common.tplvalues.render" (dict "value" $command "context" $) | nindent 16 }}
+              {{- end }}
+              {{- $args := coalesce .args $.Values.cluster.worker.common.args }}
+              {{- if $.Values.diagnosticMode.enabled }}
+              args: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else if $args }}
+              args: {{- include "common.tplvalues.render" (dict "value" $args "context" $) | nindent 16 }}
+              {{- end }}
+              {{- $extraEnvVars := coalesce .extraEnvVars $.Values.cluster.worker.common.extraEnvVars }}
+              {{- if $extraEnvVars }}
+              env: {{- include "common.tplvalues.render" (dict "value" $extraEnvVars "context" $) | nindent 16 }}
+              {{- end }}
+              envFrom:
+                {{- $extraEnvVarsCM := coalesce .extraEnvVarsCM $.Values.cluster.worker.common.extraEnvVarsCM }}
+                {{- if $extraEnvVarsCM }}
+                - configMapRef:
+                    name: {{ include "common.tplvalues.render" (dict "value" $extraEnvVarsCM "context" $) }}
+                {{- end }}
+                {{- $extraEnvVarsSecret := coalesce .extraEnvVarsSecret $.Values.cluster.worker.common.extraEnvVarsSecret }}
+                {{- if $extraEnvVarsSecret }}
+                - secretRef:
+                    name: {{ include "common.tplvalues.render" (dict "value" $extraEnvVarsSecret "context" $) }}
+                {{- end }}
+              {{- $resources := coalesce .resources $.Values.cluster.worker.common.resources }}
+              {{- if $resources }}
+              resources: {{- toYaml $resources | nindent 16 }}
+              {{- end }}
+              {{- $customLivenessProbe := coalesce .customLivenessProbe $.Values.cluster.worker.common.customLivenessProbe }}
+              {{- if $customLivenessProbe }}
+              livenessProbe: {{- include "common.tplvalues.render" (dict "value" $customLivenessProbe "context" $) | nindent 12 }}
+              {{- end }}
+              {{- $customReadinessProbe := coalesce .customReadinessProbe $.Values.cluster.worker.common.customReadinessProbe }}
+              {{- if $customReadinessProbe }}
+              readinessProbe: {{- include "common.tplvalues.render" (dict "value" $customReadinessProbe "context" $) | nindent 12 }}
+              {{- end }}
+              {{- $customStartupProbe := coalesce .customStartupProbe $.Values.cluster.worker.common.customStartupProbe }}
+              {{- if $customStartupProbe }}
+              startupProbe: {{- include "common.tplvalues.render" (dict "value" $customStartupProbe "context" $) | nindent 12 }}
+              {{- end }}
+              {{- $lifecycleHooks := coalesce .lifecycleHooks $.Values.cluster.worker.common.lifecycleHooks }}
+              {{- if $lifecycleHooks }}
+              lifecycle: {{- include "common.tplvalues.render" (dict "value" $lifecycleHooks "context" $) | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+                {{- $extraVolumeMounts := coalesce .extraVolumeMounts $.Values.cluster.worker.common.extraVolumeMounts }}
+                {{- if $extraVolumeMounts }}
+                {{- include "common.tplvalues.render" (dict "value" $extraVolumeMounts "context" $) | nindent 16 }}
+                {{- end }}
+            {{- $sidecars := coalesce .sidecars $.Values.cluster.worker.common.sidecars }}
+            {{- if $sidecars }}
+            {{- include "common.tplvalues.render" ( dict "value" $sidecars "context" $) | nindent 12 }}
+            {{- end }}
+          volumes:
+            - name: tmp
+              emptyDir: {}
+            {{- $extraVolumes := coalesce .extraVolumes $.Values.cluster.worker.common.extraVolumes }}
+            {{- if $extraVolumes }}
+            {{- include "common.tplvalues.render" (dict "value" $extraVolumes "context" $) | nindent 12 }}
+            {{- end }}
+    {{- end }}
+{{- end }}

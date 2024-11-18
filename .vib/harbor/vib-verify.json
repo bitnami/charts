@@ -22,48 +22,26 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/harbor"
         },
-        "runtime_parameters": "ImFkbWluUGFzc3dvcmQiOiAiQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0IgoiZXhwb3N1cmVUeXBlIjogInByb3h5IgoicG9zdGdyZXNxbCI6CiAgImF1dGgiOgogICAgInBvc3RncmVzUGFzc3dvcmQiOiAiN2RNeExmY3F4TiIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiaHR0cCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M4"
           }
         }
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-harbor-https",
-            "app_protocol": "HTTPS"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/harbor/goss/goss-portal"
+              "path": "/.vib"
             },
+            "tests_file": "harbor/goss/goss.yaml",
+            "vars_file": "harbor/runtime-parameters.yaml",
             "remote": {
-              "workload": "deploy-harbor-portal"
-            }
-          }
-        },
-        {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib/harbor/goss/goss-registry"
-            },
-            "remote": {
-              "workload": "deploy-harbor-registry"
+              "pod": {
+                "workload": "deploy-harbor-registry"
+              }
             }
           }
         },
@@ -79,6 +57,12 @@
               "username": "admin",
               "password": "ComplicatedPassword123!4"
             }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

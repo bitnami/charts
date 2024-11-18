@@ -1,0 +1,237 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.run.enabled }}
+apiVersion: {{ ternary "batch/v1" "apps/v1" .Values.run.useJob }}
+kind: {{ ternary "Job" "Deployment" .Values.run.useJob }}
+metadata:
+  name: {{ include "mlflow.v0.run.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.run.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mlflow
+    app.kubernetes.io/component: run
+  {{- if or .Values.run.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.run.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.run.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- if not .Values.run.useJob }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mlflow
+      app.kubernetes.io/component: run
+  {{- end }}
+  {{- if .Values.run.useJob }}
+  backoffLimit: {{ .Values.run.backoffLimit }}
+  {{- else }}
+  {{- if .Values.run.updateStrategy }}
+  strategy: {{- toYaml .Values.run.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/source: {{ include (print $.Template.BasePath "/run/source-configmap.yaml") . | sha256sum }}
+        {{- if or .Values.run.podAnnotations .Values.commonAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.run.podAnnotations .Values.commonAnnotations ) "context" . ) }}
+        {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mlflow
+        app.kubernetes.io/component: run
+    spec:
+      {{- include "mlflow.v0.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "mlflow.v0.run.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.run.automountServiceAccountToken }}
+      {{- if .Values.run.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.run.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.run.useJob }}
+      restartPolicy: {{ .Values.run.restartPolicy }}
+      {{- end }}
+      {{- if .Values.run.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.run.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.run.podAffinityPreset "component" "run" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.run.podAntiAffinityPreset "component" "run" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.run.nodeAffinityPreset.type "key" .Values.run.nodeAffinityPreset.key "values" .Values.run.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.run.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.run.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.run.runtimeClassName }}
+      runtimeClassName: {{ .Values.run.runtimeClassName | quote }}
+      {{- end }}
+      {{- if .Values.run.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.run.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.run.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.run.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.run.priorityClassName }}
+      priorityClassName: {{ .Values.run.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.run.schedulerName }}
+      schedulerName: {{ .Values.run.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.run.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.run.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.run.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.run.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.run.enableDefaultInitContainers }}
+        {{- if eq .Values.run.source.type "git" }}
+        # Clone git repository
+        {{- include "mlflow.v0.git.cloneInitContainer" $ | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.run.persistence.enabled }}
+        # Adjust volume permissions
+        {{- include "mlflow.v0.volumePermissionsInitContainer" (dict "component" "run" "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.tracking.auth.enabled }}
+        # Wait for tracking service
+        {{- include "mlflow.v0.waitForServiceInitContainer" (dict "target" "tracking" "host" (include "mlflow.v0.tracking.fullname" .) "port" (include "mlflow.v0.tracking.port" .) "context" $) | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.run.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.run.initContainers "context" $) | nindent 8}}
+        {{- end }}
+      containers:
+        - name: mlflow
+          image: {{ include "mlflow.v0.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.run.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.run.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.run.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.run.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - bash
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.run.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.run.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              {{- if .Values.run.source.launchCommand }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.run.source.launchCommand "context" $) | nindent 14 }}
+              {{- end }}
+              {{- if not .Values.run.useJob }}
+              sleep infinity
+              {{- end }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.tracking.enabled }}
+            - name: MLFLOW_TRACKING_URI
+              value: {{ include "mlflow.v0.tracking.uri" . | quote }}
+            {{- if and .Values.tracking.tls.enabled .Values.tracking.tls.autoGenerated }}
+            - name: MLFLOW_TRACKING_INSECURE_TLS
+              value: "true"
+            {{- end }}
+            {{- if .Values.tracking.auth.enabled }}
+            - name: MLFLOW_TRACKING_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.v0.tracking.secretName" . }}
+                  key: {{ include "mlflow.v0.tracking.userKey" . | quote }}
+            - name: MLFLOW_TRACKING_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.v0.tracking.secretName" . }}
+                  key: {{ include "mlflow.v0.tracking.passwordKey" . | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.run.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.run.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.run.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.run.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.run.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.run.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.run.resources }}
+          resources: {{- toYaml .Values.run.resources | nindent 12 }}
+          {{- else if ne .Values.run.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.run.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.run.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.run.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.run.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.run.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.run.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.run.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.run.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.run.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: source
+              mountPath: /app
+            - name: tmp
+              mountPath: /tmp
+            - name: mlruns
+              mountPath: /app/mlruns
+            - name: mlartifacts
+              mountPath: /app/mlartifacts
+            {{- if .Values.run.persistence.enabled }}
+            - name: data
+              mountPath: {{ .Values.run.persistence.mountPath }}
+              {{- if .Values.run.persistence.subPath }}
+              subPath: {{ .Values.run.persistence.subPath }}
+              {{- end }}
+            {{- end }}
+            {{- if .Values.run.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.run.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.run.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.run.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: mlruns
+          emptyDir: {}
+        - name: mlartifacts
+          emptyDir: {}
+        - name: source
+          {{- if or (.Values.run.source.existingConfigMap) (include "mlflow.v0.run.source.createConfigMap" .) }}
+          configMap:
+            name: {{ include "mlflow.v0.run.source.configMapName" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: data
+          {{- if .Values.run.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.run.persistence.existingClaim | default (include "mlflow.v0.run.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- if .Values.run.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.run.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

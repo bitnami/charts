@@ -1,39 +1,44 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.msgTopologyOperator.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "rmqco.msgTopologyOperator.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.msgTopologyOperator.replicaCount }}
+  revisionHistoryLimit: {{ .Values.msgTopologyOperator.revisionHistoryLimit }}
   {{- if .Values.msgTopologyOperator.updateStrategy }}
   strategy: {{- toYaml .Values.msgTopologyOperator.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: messaging-topology-operator
   template:
     metadata:
       {{- if .Values.msgTopologyOperator.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: messaging-topology-operator
         app.kubernetes.io/part-of: rabbitmq
-        {{- if .Values.msgTopologyOperator.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "rmqco.msgTopologyOperator.serviceAccountName" . }}
       {{- include "rmqco.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.msgTopologyOperator.automountServiceAccountToken }}
       {{- if .Values.msgTopologyOperator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -47,8 +52,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.msgTopologyOperator.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.msgTopologyOperator.podAffinityPreset "component" "messaging-topology-operator" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.msgTopologyOperator.podAntiAffinityPreset "component" "messaging-topology-operator" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.msgTopologyOperator.podAffinityPreset "component" "messaging-topology-operator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.msgTopologyOperator.podAntiAffinityPreset "component" "messaging-topology-operator" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.msgTopologyOperator.nodeAffinityPreset.type "key" .Values.msgTopologyOperator.nodeAffinityPreset.key "values" .Values.msgTopologyOperator.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.msgTopologyOperator.nodeSelector }}
@@ -61,10 +66,16 @@ spec:
       priorityClassName: {{ .Values.msgTopologyOperator.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.msgTopologyOperator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.msgTopologyOperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.msgTopologyOperator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.msgTopologyOperator.hostNetwork }}
+      hostNetwork: {{ .Values.msgTopologyOperator.hostNetwork }}
+      {{- end }}
+      {{- if .Values.msgTopologyOperator.dnsPolicy }}
+      dnsPolicy: {{ .Values.msgTopologyOperator.dnsPolicy }}
       {{- end }}
       initContainers:
         {{- if .Values.msgTopologyOperator.initContainers }}
@@ -75,7 +86,7 @@ spec:
           image: {{ template "rmqco.msgTopologyOperator.image" . }}
           imagePullPolicy: {{ .Values.msgTopologyOperator.image.pullPolicy }}
           {{- if .Values.msgTopologyOperator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.msgTopologyOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.msgTopologyOperator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.msgTopologyOperator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.command "context" $) | nindent 12 }}
@@ -94,6 +105,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if not .Values.msgTopologyOperator.watchAllNamespaces }}
+            {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.msgTopologyOperator.watchNamespaces }}
+            - name: OPERATOR_SCOPE_NAMESPACE
+              value: {{ join "," $watchNamespaces | quote }}
+            {{- end }}
             {{- if .Values.msgTopologyOperator.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -108,38 +124,39 @@ spec:
             {{- end }}
           {{- if .Values.msgTopologyOperator.resources }}
           resources: {{- toYaml .Values.msgTopologyOperator.resources | nindent 12 }}
+          {{- else if ne .Values.msgTopologyOperator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.msgTopologyOperator.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
-            - name: http-webhook
+            - name: https-webhook
               containerPort: 9443
               protocol: TCP
             - name: http-metrics
               containerPort: {{ .Values.msgTopologyOperator.containerPorts.metrics }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.msgTopologyOperator.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
-              port: http-metrics
-          {{- else if .Values.msgTopologyOperator.customLivenessProbe }}
+          {{- if .Values.msgTopologyOperator.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.msgTopologyOperator.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-metrics
           {{- end }}
-          {{- if .Values.msgTopologyOperator.readinessProbe.enabled }}
+          {{- if .Values.msgTopologyOperator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.msgTopologyOperator.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http-metrics
-          {{- else if .Values.msgTopologyOperator.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.msgTopologyOperator.startupProbe.enabled }}
+          {{- if .Values.msgTopologyOperator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.msgTopologyOperator.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http-metrics
-          {{- else if .Values.msgTopologyOperator.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.msgTopologyOperator.lifecycleHooks }}
@@ -163,3 +180,4 @@ spec:
         {{- if .Values.msgTopologyOperator.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}

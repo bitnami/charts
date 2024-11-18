@@ -47,28 +47,33 @@ To access your EJBCA site from outside the cluster follow the steps below:
         Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-   echo "EJBCA Public URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca"
+   echo "EJBCA Public URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/publicweb"
    echo "EJBCA Admin URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/adminweb"
-   echo "EJBCA Enrol URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/enrol/keystore.jsp"
+   echo "EJBCA RA URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/ra"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.httpsPort }}:{{ .Values.service.httpsPort }} &
-   echo "EJBCA Public URL: https://127.0.0.1{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca"
+   echo "EJBCA Public URL: https://127.0.0.1{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/publicweb"
    echo "EJBCA Admin URL: https://127.0.0.1{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/adminweb"
-   echo "EJBCA Enrol URL: https://127.0.0.1{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/enrol/keystore.jsp"
+   echo "EJBCA RA URL: https://127.0.0.1{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/ra"
 
 {{- end }}
 
-2. Open a browser and access EJBCA using the obtained URL.
+2. Open a browser and access EJBCA using the obtained URL(s).
 
-3. In order to be able to log in to the Admin Portal, you first need to enrol and import the generated certificate in your Browser:
+3. Refer to the official documentation (check link below) for configuring public access to RA & CA UI(s):
+
+  - https://doc.primekey.com/ejbca/ejbca-operations/ejbca-operations-guide/ra-operations-guide/configure-ejbca-for-public-access
+
+4. In order to be able to log in to the Admin Portal, you first need to enrol (via RA) and import the generated certificate in your Browser:
+
    export EJBCA_ADMIN_USERNAME={{ .Values.ejbcaAdminUsername }}
    {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "ejbca-admin-password" "context" $) }}
    echo Username: $EJBCA_ADMIN_USERNAME
    echo Password: $EJBCA_ADMIN_PASSWORD
 
-4. You can access the DB using the following password:
+5. You can access the DB using the following password:
    {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-password" "context" $) }}
 
 {{- $passwordErrors := list -}}
@@ -88,3 +93,5 @@ To access your EJBCA site from outside the cluster follow the steps below:
 {{- end -}}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

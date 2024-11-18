@@ -1,0 +1,120 @@
+jobmanager:
+  containerPorts:
+    rpc: 6555
+    http: 8078
+    blob: 9191
+  service:
+    type: LoadBalancer
+    ports:
+      rpc: 6557
+      http: 80
+      # Must be equal to the containerPort.blob. More info in the values documentation.
+      blob: 9191
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+taskmanager:
+  service:
+    ports:
+      rpc: 14272
+extraDeploy:
+  - |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: flink-job-runner
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: job-runner
+              image: docker.io/bitnami/flink:latest
+              command:
+                - /bin/bash
+              args:
+                - -ec
+                - |
+                  #!/bin/bash
+
+                  set -o errexit
+                  set -o nounset
+                  set -o pipefail
+
+                  . /opt/bitnami/scripts/libos.sh
+
+                  # Set the endpoint URL
+                  host=flink-jobmanager
+                  port={{ .Values.jobmanager.service.ports.rpc }}
+
+                  jobmanager_ready() {
+                      # Test the TCP connection with a timeout
+                      if timeout 5 bash -c "</dev/tcp/$host/$port"; then
+                          return 0
+                      else
+                          return 1
+                      fi
+                  }
+
+                  echo "0" > /tmp/ready
+                  info "Waiting for the Jobmanager instance"
+                  if ! retry_while "jobmanager_ready" 12 30; then
+                    error "Could not connect to the Jobmanager instance"
+                    exit 1
+                  else
+                    info "Jobmanager ready! Running job in 10 seconds"
+                    sleep 10
+                    while true
+                    do
+                    ./bin/flink run ./examples/batch/EnumTriangles.jar --jobmanager $host:$port -Drest.port={{ .Values.jobmanager.service.ports.http }}
+                    echo "1" > /tmp/ready
+                    # Adding a sleep to not overload the deployment
+                    sleep 10
+                    done
+                  fi
+              startupProbe:
+                exec:
+                  command:
+                    - sh
+                    - -c
+                    - |
+                      if [ $(cat /tmp/ready) = "1" ]; then
+                        exit 0
+                      else
+                        exit 1
+                      fi
+                initialDelaySeconds: 40
+                periodSeconds: 20
+                timeoutSeconds: 1
+                failureThreshold: 15
+                successThreshold: 1
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jobmanager.containerSecurityContext "context" $) | nindent 12 }}
+              volumeMounts:
+                - name: flink-config-volume
+                  mountPath: /opt/bitnami/flink/conf
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: flink-config-volume
+              configMap:
+                name: flink-job-config
+                items:
+                  - key: config.yaml
+                    path: config.yaml
+            - name: tmp
+              emptyDir: {}
+
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: flink-job-config
+    data:
+      config.yaml: |+
+        jobmanager.rpc.address: flink-jobmanager
+        jobmanager.rpc.port: {{ .Values.jobmanager.service.ports.rpc }}
+        rest.address: flink-jobmanager
+        rest.bind-address: 0.0.0.0
+        blob.server.port: {{ .Values.jobmanager.service.ports.blob }}
+        rest.port: {{ .Values.jobmanager.service.ports.http }}

@@ -1,9 +1,9 @@
 dependencies:
 - name: kibana
-  repository: https://charts.bitnami.com/bitnami
-  version: 10.1.12
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 11.3.0
 - name: common
-  repository: https://charts.bitnami.com/bitnami
-  version: 1.16.0
-digest: sha256:fb813868e923b76a502691e37328000999099cb3919da74be0cfb6878545e32e
-generated: "2022-06-20T14:56:28.69912274Z"
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 2.27.0
+digest: sha256:6649261e072bf61669299ddabd630397d10708c2b9d01bf86ab4ab79df82f2d6
+generated: "2024-11-09T20:16:51.701293611Z"

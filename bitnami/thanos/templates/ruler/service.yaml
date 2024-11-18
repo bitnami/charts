@@ -1,24 +1,22 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.ruler.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-ruler
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.ruler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ruler.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ruler
-    {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
-    prometheus-operator/monitor: 'true'
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.ruler.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.ruler.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
+    {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
+  {{- if or .Values.ruler.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ruler.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.ruler.service.type }}
   {{- if and .Values.ruler.service.clusterIP (eq .Values.ruler.service.type "ClusterIP") }}
@@ -34,7 +32,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.ruler.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ if .Values.ruler.service.http }}{{ coalesce .Values.ruler.service.ports.http .Values.ruler.service.http.port }}{{ else }}{{ .Values.ruler.service.ports.http }}{{ end }}
+    - port: {{ .Values.ruler.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http
@@ -43,7 +41,7 @@ spec:
       {{- else if eq .Values.ruler.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ if .Values.ruler.service.grpc }}{{ coalesce .Values.ruler.service.ports.grpc .Values.ruler.service.grpc.port }}{{ else }}{{ .Values.ruler.service.ports.grpc }}{{ end }}
+    - port: {{ .Values.ruler.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
       name: grpc
@@ -59,7 +57,8 @@ spec:
     {{- if .Values.ruler.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ruler.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ruler.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ruler
     {{- end }}
 {{- end }}

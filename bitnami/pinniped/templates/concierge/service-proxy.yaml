@@ -1,26 +1,21 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.concierge.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "pinniped.concierge.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.concierge.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: concierge
-    {{- if .Values.concierge.service.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.concierge.service.labels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.concierge.service.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.concierge.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.concierge.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.concierge.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.concierge.service.type }}
@@ -37,7 +32,7 @@ spec:
   externalTrafficPolicy: {{ .Values.concierge.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if and (eq .Values.concierge.service.type "LoadBalancer") (not (empty .Values.concierge.service.loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{ .Values.concierge.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{ .Values.concierge.service.loadBalancerSourceRanges | toJson }}
   {{- end }}
   {{- if and (eq .Values.concierge.service.type "LoadBalancer") (not (empty .Values.concierge.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.concierge.service.loadBalancerIP }}
@@ -55,6 +50,7 @@ spec:
     {{- if .Values.concierge.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.concierge.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.concierge.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: concierge
 {{- end }}

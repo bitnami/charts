@@ -1,0 +1,61 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.run.enabled .Values.run.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "mlflow.v0.run.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mlflow
+    app.kubernetes.io/component: run
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.tracking.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mlflow
+      app.kubernetes.io/component: run
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.run.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        # Allow connection to these sources for downloading models
+        - port: 80
+        - port: 443
+        - port: 22
+    {{- if .Values.tracking.enabled }}
+    # Allow outbound connections to other pods
+    - ports:
+        - port: {{ .Values.tracking.containerPorts.http }}
+        - port: {{ include "mlflow.v0.tracking.port" . }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: mlflow
+              app.kubernetes.io/component: tracking
+    {{- end }}
+    {{- if .Values.run.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.tracking.networkPolicy.extraEgress "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    {{- if .Values.run.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.tracking.networkPolicy.extraIngress "context" $) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,9 @@
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+listeners: http://0.0.0.0:8081
+avroCompatibilityLevel: backward
+serviceAccount:
+  create: true
+automountServiceAccountToken: true

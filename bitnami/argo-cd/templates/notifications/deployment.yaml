@@ -1,0 +1,178 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.notifications.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "argocd.notifications" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: notifications
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notifications.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: notifications
+  template:
+    metadata:
+      {{- if .Values.notifications.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: notifications
+    spec:
+      serviceAccountName: {{ include "argocd.notifications.serviceAccountName" . }}
+      {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.notifications.automountServiceAccountToken }}
+      {{- if .Values.notifications.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.notifications.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notifications.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.notifications.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notifications.podAffinityPreset "component" "notifications" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notifications.podAntiAffinityPreset "component" "notifications" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.notifications.nodeAffinityPreset.type "key" .Values.notifications.nodeAffinityPreset.key "values" .Values.notifications.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.notifications.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notifications.priorityClassName }}
+      priorityClassName: {{ .Values.notifications.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.notifications.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: notifications
+          image: {{ include "argocd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.notifications.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.notifications.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - argocd-notifications
+            - --logformat
+            - {{ .Values.notifications.logFormat | quote }}
+            - --loglevel
+            - {{ .Values.notifications.logLevel | quote }}
+            - --metrics-port
+            - {{ .Values.notifications.containerPorts.metrics | quote }}
+            - --argocd-repo-server
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
+          {{- if .Values.notifications.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.notifications.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.notifications.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.notifications.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.notifications.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.notifications.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.notifications.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.notifications.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.notifications.containerPorts.metrics }}
+              protocol: TCP
+          {{- if .Values.notifications.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notifications.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: metrics
+            initialDelaySeconds: {{ .Values.notifications.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notifications.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notifications.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notifications.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notifications.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.notifications.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notifications.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              port: metrics
+              path: /metrics
+            initialDelaySeconds: {{ .Values.notifications.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notifications.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notifications.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notifications.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notifications.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.notifications.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notifications.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: {{ .Values.notifications.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notifications.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notifications.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notifications.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.notifications.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.notifications.resources }}
+          resources: {{- toYaml .Values.notifications.resources | nindent 12 }}
+          {{- else if ne .Values.notifications.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.notifications.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.notifications.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.config.tlsCerts }}
+            - mountPath: /app/config/tls
+              name: tls-certs
+            {{- end }}
+            - mountPath: /app/config/server/tls
+              name: argocd-repo-server-tls
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.notifications.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.notifications.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.config.tlsCerts }}
+        - name: tls-certs
+          configMap:
+            name: argocd-tls-certs-cm
+        {{- end }}
+        - name: argocd-repo-server-tls
+          secret:
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+              - key: ca.crt
+                path: ca.crt
+            optional: true
+            secretName: argocd-repo-server-tls
+        {{- if .Values.notifications.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.notifications.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

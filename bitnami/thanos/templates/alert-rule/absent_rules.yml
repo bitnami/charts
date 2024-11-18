@@ -1,0 +1,134 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- /*
+Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
+*/ -}}
+{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.absent_rules ) }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ template "common.names.fullname" . }}-component-absent
+  namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.metrics.prometheusRule.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+  - name: thanos-component-absent
+    rules:
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactIsDown | default false) }}
+    - alert: ThanosCompactIsDown
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: ThanosCompact has disappeared. Prometheus target for the component cannot be discovered.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompactisdown
+        summary: Thanos component has disappeared.
+      expr: |
+        absent(up{job=~".*{{ include "thanos.compactor.fullname" . }}.*"} == 1)
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryIsDown | default false) }}
+    - alert: ThanosQueryIsDown
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: ThanosQuery has disappeared. Prometheus target for the component cannot be discovered.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryisdown
+        summary: Thanos component has disappeared.
+      expr: |
+        absent(up{job=~".*{{ include "thanos.query.fullname" . }}.*"} == 1)
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosReceiveIsDown | default false) }}
+    - alert: ThanosReceiveIsDown
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: ThanosReceive has disappeared. Prometheus target for the component cannot be discovered.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceiveisdown
+        summary: Thanos component has disappeared.
+      expr: |
+        absent(up{job=~".*{{ include "thanos.receive.fullname" . }}.*"} == 1)
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleIsDown | default false) }}
+    - alert: ThanosRuleIsDown
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: ThanosRule has disappeared. Prometheus target for the component cannot be discovered.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosruleisdown
+        summary: Thanos component has disappeared.
+      expr: |
+        absent(up{job=~".*{{ include "thanos.ruler.fullname" . }}.*"} == 1)
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosSidecarIsDown | default false) }}
+    - alert: ThanosSidecarIsDown
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: ThanosSidecar has disappeared. Prometheus target for the component cannot be discovered.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanossidecarisdown
+        summary: Thanos component has disappeared.
+      expr: |
+        absent(up{job=~"{{ .Values.metrics.prometheusRule.default.sidecarJobRegex }}"} == 1)
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreIsDown | default false) }}
+    - alert: ThanosStoreIsDown
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: ThanosStore has disappeared. Prometheus target for the component cannot be discovered.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstoreisdown
+        summary: Thanos component has disappeared.
+      expr: |
+        absent(up{job=~".*{{ include "thanos.storegateway.fullname" . }}.*"} == 1)
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,21 @@
+moodleUsername: test_user
+moodlePassword: ComplicatedPassword123!4
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    https: 444
+mariadb:
+  auth:
+    database: test_moodle_database
+    username: test_moodle_user
+    password: test_moodle_password
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+containerPorts:
+  http: 8081
+  https: 8444

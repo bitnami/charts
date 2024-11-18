@@ -1,345 +1,258 @@
-# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.1.0/config/crd
+# Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanadatasources.yaml
+# Version: 5.15.1
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.4.1
-  name: grafanadatasources.integreatly.org
+    controller-gen.kubebuilder.io/version: v0.16.3
+  name: grafanadatasources.grafana.integreatly.org
 spec:
-  group: integreatly.org
+  group: grafana.integreatly.org
   names:
-    kind: GrafanaDataSource
-    listKind: GrafanaDataSourceList
+    categories:
+    - grafana-operator
+    kind: GrafanaDatasource
+    listKind: GrafanaDatasourceList
     plural: grafanadatasources
     singular: grafanadatasource
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .status.NoMatchingInstances
+      name: No matching instances
+      type: boolean
+    - format: date-time
+      jsonPath: .status.lastResync
+      name: Last resync
+      type: date
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
     schema:
       openAPIV3Schema:
-        description: GrafanaDataSource is the Schema for the grafanadatasources API
+        description: GrafanaDatasource is the Schema for the grafanadatasources API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
           spec:
-            description: GrafanaDataSourceSpec defines the desired state of GrafanaDataSource
+            description: GrafanaDatasourceSpec defines the desired state of GrafanaDatasource
             properties:
-              datasources:
+              allowCrossNamespaceImport:
+                description: allow to import this resources from an operator in a
+                  different namespace
+                type: boolean
+              datasource:
+                properties:
+                  access:
+                    type: string
+                  basicAuth:
+                    type: boolean
+                  basicAuthUser:
+                    type: string
+                  database:
+                    type: string
+                  editable:
+                    description: Deprecated field, it has no effect
+                    type: boolean
+                  isDefault:
+                    type: boolean
+                  jsonData:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  name:
+                    type: string
+                  orgId:
+                    description: Deprecated field, it has no effect
+                    format: int64
+                    type: integer
+                  secureJsonData:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  type:
+                    type: string
+                  uid:
+                    type: string
+                  url:
+                    type: string
+                  user:
+                    type: string
+                type: object
+              instanceSelector:
+                description: selects Grafana instances for import
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
+                          type: string
+                        values:
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                    x-kubernetes-list-type: atomic
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              plugins:
+                description: plugins
                 items:
                   properties:
-                    access:
-                      type: string
-                    basicAuth:
-                      type: boolean
-                    basicAuthPassword:
-                      type: string
-                    basicAuthUser:
-                      type: string
-                    database:
-                      type: string
-                    editable:
-                      type: boolean
-                    isDefault:
-                      type: boolean
-                    jsonData:
-                      description: GrafanaDataSourceJsonData contains the most common
-                        json options See https://grafana.com/docs/administration/provisioning/#datasources
-                      properties:
-                        addCorsHeader:
-                          description: ' Useful fields for clickhouse datasource  See
-                            https://github.com/Vertamedia/clickhouse-grafana/tree/master/dist/README.md#configure-the-datasource-with-provisioning  See
-                            https://github.com/Vertamedia/clickhouse-grafana/tree/master/src/datasource.ts#L44'
-                          type: boolean
-                        appInsightsAppId:
-                          description: Fields for Azure data sources
-                          type: string
-                        assumeRoleArn:
-                          type: string
-                        authType:
-                          type: string
-                        authenticationType:
-                          type: string
-                        azureLogAnalyticsSameAs:
-                          type: string
-                        clientEmail:
-                          type: string
-                        clientId:
-                          type: string
-                        cloudName:
-                          type: string
-                        clusterUrl:
-                          type: string
-                        connMaxLifetime:
-                          type: integer
-                        customMetricsNamespaces:
-                          type: string
-                        customQueryParameters:
-                          description: Fields for Prometheus data sources
-                          type: string
-                        defaultBucket:
-                          type: string
-                        defaultDatabase:
-                          type: string
-                        defaultProject:
-                          type: string
-                        defaultRegion:
-                          type: string
-                        derivedFields:
-                          items:
-                            properties:
-                              datasourceUid:
-                                type: string
-                              matcherRegex:
-                                type: string
-                              name:
-                                type: string
-                              url:
-                                type: string
-                            type: object
-                          type: array
-                        encrypt:
-                          type: string
-                        esVersion:
-                          type: string
-                        githubUrl:
-                          description: Fields for Github data sources
-                          type: string
-                        graphiteVersion:
-                          type: string
-                        httpHeaderName1:
-                          description: Custom HTTP headers for datasources See https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
-                          type: string
-                        httpHeaderName2:
-                          type: string
-                        httpHeaderName3:
-                          type: string
-                        httpHeaderName4:
-                          type: string
-                        httpHeaderName5:
-                          type: string
-                        httpHeaderName6:
-                          type: string
-                        httpHeaderName7:
-                          type: string
-                        httpHeaderName8:
-                          type: string
-                        httpHeaderName9:
-                          type: string
-                        httpMethod:
-                          type: string
-                        httpMode:
-                          description: Fields for InfluxDB data sources
-                          type: string
-                        implementation:
-                          description: Fields for Alertmanager data sources
-                          type: string
-                        interval:
-                          type: string
-                        logAnalyticsClientId:
-                          type: string
-                        logAnalyticsDefaultWorkspace:
-                          type: string
-                        logAnalyticsSubscriptionId:
-                          type: string
-                        logAnalyticsTenantId:
-                          type: string
-                        logLevelField:
-                          type: string
-                        logMessageField:
-                          type: string
-                        maxIdleConns:
-                          type: integer
-                        maxLines:
-                          description: Fields for Loki data sources
-                          type: integer
-                        maxOpenConns:
-                          type: integer
-                        oauthPassThru:
-                          type: boolean
-                        organization:
-                          type: string
-                        postgresVersion:
-                          type: integer
-                        sigV4AssumeRoleArn:
-                          type: string
-                        sigV4Auth:
-                          description: Fields for AWS Prometheus data sources
-                          type: boolean
-                        sigV4AuthType:
-                          type: string
-                        sigV4ExternalId:
-                          type: string
-                        sigV4Profile:
-                          type: string
-                        sigV4Region:
-                          type: string
-                        sslmode:
-                          type: string
-                        subscriptionId:
-                          type: string
-                        tenantId:
-                          type: string
-                        timeField:
-                          type: string
-                        timeInterval:
-                          type: string
-                        timescaledb:
-                          type: boolean
-                        tlsAuth:
-                          type: boolean
-                        tlsAuthWithCACert:
-                          type: boolean
-                        tlsSkipVerify:
-                          type: boolean
-                        tokenUri:
-                          description: Fields for Stackdriver data sources
-                          type: string
-                        tracesToLogs:
-                          description: Fields for tracing data sources
-                          properties:
-                            datasourceUid:
-                              type: string
-                            spanEndTimeShift:
-                              type: string
-                            spanStartTimeShift:
-                              type: string
-                            tags:
-                              items:
-                                type: string
-                              type: array
-                          type: object
-                        tsdbResolution:
-                          type: string
-                        tsdbVersion:
-                          type: string
-                        usePOST:
-                          type: boolean
-                        useYandexCloudAuthorization:
-                          type: boolean
-                        version:
-                          type: string
-                        xHeaderKey:
-                          type: string
-                        xHeaderUser:
-                          type: string
-                      type: object
                     name:
                       type: string
-                    orgId:
-                      type: integer
-                    password:
-                      type: string
-                    secureJsonData:
-                      description: GrafanaDataSourceSecureJsonData contains the most
-                        common secure json options See https://grafana.com/docs/administration/provisioning/#datasources
-                      properties:
-                        accessKey:
-                          type: string
-                        accessToken:
-                          description: Fields for Github data sources
-                          type: string
-                        appInsightsApiKey:
-                          type: string
-                        basicAuthPassword:
-                          type: string
-                        clientSecret:
-                          description: Fields for Azure data sources
-                          type: string
-                        httpHeaderValue1:
-                          description: Custom HTTP headers for datasources See https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
-                          type: string
-                        httpHeaderValue2:
-                          type: string
-                        httpHeaderValue3:
-                          type: string
-                        httpHeaderValue4:
-                          type: string
-                        httpHeaderValue5:
-                          type: string
-                        httpHeaderValue6:
-                          type: string
-                        httpHeaderValue7:
-                          type: string
-                        httpHeaderValue8:
-                          type: string
-                        httpHeaderValue9:
-                          type: string
-                        logAnalyticsClientSecret:
-                          type: string
-                        password:
-                          type: string
-                        privateKey:
-                          description: Fields for Stackdriver data sources
-                          type: string
-                        secretKey:
-                          type: string
-                        sigV4AccessKey:
-                          description: Fields for AWS data sources
-                          type: string
-                        sigV4SecretKey:
-                          type: string
-                        tlsCACert:
-                          type: string
-                        tlsClientCert:
-                          type: string
-                        tlsClientKey:
-                          type: string
-                        token:
-                          description: Fields for InfluxDB data sources
-                          type: string
-                      type: object
-                    type:
-                      type: string
-                    uid:
-                      type: string
-                    url:
-                      type: string
-                    user:
-                      type: string
                     version:
-                      type: integer
-                    withCredentials:
-                      type: boolean
+                      type: string
                   required:
                   - name
-                  - type
+                  - version
                   type: object
                 type: array
-              name:
+              resyncPeriod:
+                default: 5m
+                description: how often the datasource is refreshed, defaults to 5m
+                  if not set
+                format: duration
+                pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
                 type: string
+              valuesFrom:
+                description: environments variables from secrets or config maps
+                items:
+                  properties:
+                    targetPath:
+                      type: string
+                    valueFrom:
+                      properties:
+                        configMapKeyRef:
+                          description: Selects a key of a ConfigMap.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              default: ""
+                              description: |-
+                                Name of the referent.
+                                This field is effectively required, but due to backwards compatibility is
+                                allowed to be empty. Instances of this type with an empty value here are
+                                almost certainly wrong.
+                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              type: string
+                            optional:
+                              description: Specify whether the ConfigMap or its key
+                                must be defined
+                              type: boolean
+                          required:
+                          - key
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        secretKeyRef:
+                          description: Selects a key of a Secret.
+                          properties:
+                            key:
+                              description: The key of the secret to select from.  Must
+                                be a valid secret key.
+                              type: string
+                            name:
+                              default: ""
+                              description: |-
+                                Name of the referent.
+                                This field is effectively required, but due to backwards compatibility is
+                                allowed to be empty. Instances of this type with an empty value here are
+                                almost certainly wrong.
+                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              type: string
+                            optional:
+                              description: Specify whether the Secret or its key must
+                                be defined
+                              type: boolean
+                          required:
+                          - key
+                          type: object
+                          x-kubernetes-map-type: atomic
+                      type: object
+                      x-kubernetes-validations:
+                      - message: Either configMapKeyRef or secretKeyRef must be set
+                        rule: (has(self.configMapKeyRef) && !has(self.secretKeyRef))
+                          || (!has(self.configMapKeyRef) && has(self.secretKeyRef))
+                  required:
+                  - targetPath
+                  - valueFrom
+                  type: object
+                maxItems: 99
+                type: array
             required:
-            - datasources
-            - name
+            - datasource
+            - instanceSelector
             type: object
           status:
+            description: GrafanaDatasourceStatus defines the observed state of GrafanaDatasource
             properties:
-              message:
+              NoMatchingInstances:
+                description: The datasource instanceSelector can't find matching grafana
+                  instances
+                type: boolean
+              hash:
                 type: string
-              phase:
+              lastMessage:
                 type: string
-            required:
-            - message
-            - phase
+              lastResync:
+                description: Last time the datasource was resynced
+                format: date-time
+                type: string
+              uid:
+                type: string
             type: object
         type: object
     served: true
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

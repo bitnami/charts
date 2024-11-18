@@ -1,19 +1,27 @@
 {{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Pod Spec
 */}}
 {{- define "tomcat.pod" -}}
 {{- include "tomcat.imagePullSecrets" . }}
+automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
 {{- if .Values.hostAliases }}
 hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 2 }}
 {{- end }}
 {{- if .Values.affinity }}
 affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 2 }}
 {{- else }}
+{{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
 affinity:
-  podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 4 }}
-  podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 4 }}
+  podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 4 }}
+  podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 4 }}
   nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 4 }}
 {{- end }}
+serviceAccountName: {{ include "tomcat.serviceAccountName" . }}
 {{- if .Values.schedulerName }}
 schedulerName: {{ .Values.schedulerName | quote }}
 {{- end }}
@@ -24,7 +32,7 @@ nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeS
 tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 2 }}
 {{- end }}
 {{- if .Values.podSecurityContext.enabled }}
-securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 2 }}
+securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 2 }}
 {{- end }}
 {{- if .Values.topologySpreadConstraints }}
 topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 2 }}
@@ -43,6 +51,8 @@ initContainers:
       runAsUser: 0
     {{- if .Values.volumePermissions.resources }}
     resources: {{- toYaml .Values.volumePermissions.resources | nindent 6 }}
+    {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
@@ -56,7 +66,7 @@ containers:
     image: {{ template "tomcat.image" . }}
     imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
     {{- if .Values.containerSecurityContext.enabled }}
-    securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 6 }}
+    securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 6 }}
     {{- end }}
     {{- if .Values.command }}
     command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 6 }}
@@ -68,17 +78,22 @@ containers:
       - name: BITNAMI_DEBUG
         value: {{ ternary "true" "false" .Values.image.debug | quote }}
       - name: TOMCAT_USERNAME
-        value: {{ .Values.tomcatUsername | quote }}
+        valueFrom:
+          secretKeyRef:
+            name: {{ include "tomcat.secretName" . }}
+            key: {{ include "tomcat.adminUsernameKey" . }}
       - name: TOMCAT_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: {{ template "common.names.fullname" . }}
-            key: tomcat-password
+            name: {{ include "tomcat.secretName" . }}
+            key: {{ include "tomcat.adminPasswordKey" . }}
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
+      - name: TOMCAT_HTTP_PORT_NUMBER
+        value: {{ .Values.containerPorts.http | quote }}
       {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}
       - name: CATALINA_OPTS
-        value: {{ include "tomcat.catalinaOpts" . | quote }} 
+        value: {{ include "tomcat.catalinaOpts" . | quote }}
       {{- end }}
       {{- if .Values.extraEnvVars }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 6 }}
@@ -103,39 +118,55 @@ containers:
       {{- if .Values.containerExtraPorts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.containerExtraPorts "context" $) | nindent 6 }}
       {{- end }}
-    {{- if .Values.livenessProbe.enabled }}
+    {{- if .Values.customLivenessProbe }}
+    livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 6 }}
+    {{- else if .Values.livenessProbe.enabled }}
     livenessProbe:
-      httpGet:
-        path: /
+      tcpSocket:
         port: http
         {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 6 }}
-    {{- else if .Values.customLivenessProbe }}
-    livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 6 }}
     {{- end }}
-    {{- if .Values.readinessProbe.enabled }}
+    {{- if .Values.customReadinessProbe }}
+    readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 6 }}
+    {{- else if .Values.readinessProbe.enabled }}
     readinessProbe:
       httpGet:
         path: /
         port: http
       {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 6 }}
-    {{- else if .Values.customReadinessProbe }}
-    readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 6 }}
     {{- end }}
-    {{- if .Values.startupProbe.enabled }}
+    {{- if .Values.customStartupProbe }}
+    startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 6 }}
+    {{- else if .Values.startupProbe.enabled }}
     startupProbe:
       httpGet:
         path: /
         port: http
       {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 6 }}
-    {{- else if .Values.customStartupProbe }}
-    startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 6 }}
     {{- end }}
     {{- if .Values.resources }}
     resources: {{- toYaml .Values.resources | nindent 6 }}
+    {{- else if ne .Values.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
         mountPath: /bitnami/tomcat
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/temp
+        subPath: app-tmp-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/conf
+        subPath: app-conf-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/logs
+        subPath: app-logs-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/work
+        subPath: app-work-dir
+      - name: empty-dir
+        mountPath: /tmp
+        subPath: tmp-dir
       {{- if .Values.extraVolumeMounts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 6 }}
       {{- end }}
@@ -143,11 +174,13 @@ containers:
   - name: jmx-exporter
     image: {{ template "tomcat.metrics.jmx.image" . }}
     imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
+    {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
+    securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.jmx.containerSecurityContext "context" $) | nindent 12 }}
+    {{- end }}
     command:
       - java
-      - -XX:+UnlockExperimentalVMOptions
-      - -XX:+UseCGroupMemoryLimitForHeap
-      - -XX:MaxRAMFraction=1
+    args:
+      - -XX:MaxRAMPercentage=100
       - -XshowSettings:vm
       - -jar
       - jmx_prometheus_httpserver.jar
@@ -160,15 +193,22 @@ containers:
     {{- end }}
     {{- if .Values.metrics.jmx.resources }}
     resources: {{- toYaml .Values.metrics.jmx.resources | nindent 6 }}
+    {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: jmx-config
         mountPath: /etc/jmx-tomcat
+      - name: empty-dir
+        mountPath: /tmp
+        subPath: tmp-dir
   {{- end }}
   {{- if .Values.sidecars }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 2 }}
   {{- end }}
 volumes:
+  - name: empty-dir
+    emptyDir: {}
   {{- if (eq .Values.deployment.type "deployment") }}
   {{- if and .Values.persistence.enabled }}
   - name: data
@@ -188,6 +228,6 @@ volumes:
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 2 }}
   {{- end }}
 {{- if .Values.extraPodSpec }}
-{{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) }}
+{{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) | nindent 0}}
 {{- end }}
 {{- end -}}

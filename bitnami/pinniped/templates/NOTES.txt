@@ -33,18 +33,18 @@ Follow the official documentation to configure an authenticator in Concierge: ht
 
 1. Get the Pinniped Supervisor URL by running these commands:
 
-{{- if contains "NodePort" .Values.supervisor.service.type }}
+{{- if contains "NodePort" .Values.supervisor.service.public.type }}
     export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "pinniped.supervisor.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.supervisor.service.type }}
+{{- else if contains "LoadBalancer" .Values.supervisor.service.public.type }}
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
            You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ template "common.names.fullname" . }}
     export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    echo http://$SERVICE_IP:{{ .Values.supervisor.service.ports.https }}
-{{- else if contains "ClusterIP" .Values.supervisor.service.type }}
-    echo "The Supervisor is available at http://127.0.0.1:{{ .Values.supervisor.service.ports.https }}"
-    kubectl port-forward svc/{{ template "pinniped.supervisor.fullname" . }} {{ .Values.supervisor.service.ports.https }}:{{ .Values.supervisor.service.ports.https }} &
+    echo http://$SERVICE_IP:{{ .Values.supervisor.service.public.ports.https }}
+{{- else if contains "ClusterIP" .Values.supervisor.service.public.type }}
+    echo "The Supervisor is available at http://127.0.0.1:{{ .Values.supervisor.service.public.ports.https }}"
+    kubectl port-forward svc/{{ template "pinniped.supervisor.fullname" . }} {{ .Values.supervisor.service.public.ports.https }}:{{ .Values.supervisor.service.public.ports.https }} &
 {{- end }}
 {{- end }}
 
@@ -52,3 +52,5 @@ Follow the official instructions to configure an OIDC provider: https://pinniped
 {{- end }}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "pinniped.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "concierge" "supervisor") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

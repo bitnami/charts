@@ -1,0 +1,12 @@
+service:
+  type: LoadBalancer
+  ports:
+    memcached: 80
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+containerPorts:
+  memcached: 11212

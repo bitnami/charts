@@ -1,18 +1,16 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and (not .Values.configsvr.external.host) (and .Values.metrics.enabled .Values.metrics.podMonitor.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: {{ printf "%s-configsvr" (include "common.names.fullname" .) }}
-  {{- if .Values.metrics.podMonitor.namespace }}
-  namespace: {{ .Values.metrics.podMonitor.namespace | quote }}
-  {{- else }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ default .Release.Namespace .Values.metrics.podMonitor.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: configsvr
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
     {{- if .Values.metrics.podMonitor.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podMonitor.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
@@ -32,7 +30,8 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.configsvr.podLabels .Values.common.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: configsvr
 {{- end }}

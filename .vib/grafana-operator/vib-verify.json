@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/grafana-operator"
         },
-        "runtime_parameters": "ImdyYWZhbmEiOgogICJjb25maWciOgogICAgInNlY3VyaXR5IjoKICAgICAgImFkbWluX3Bhc3N3b3JkIjogIjJiN2RSZ3FLIgogICAgICAiYWRtaW5fdXNlciI6ICJhZG1pbiIKICAic2VydmljZSI6CiAgICAiZXh0cmFQb3J0cyI6CiAgICAtICJuYW1lIjogImdyYWZhbmEtdmUiCiAgICAgICJwb3J0IjogODAKICAgICAgInRhcmdldFBvcnQiOiAiZ3JhZmFuYS1odHRwIgogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoib3BlcmF0b3IiOgogICJwb2RMYWJlbHMiOgogICAgImluc3RhbmNlIjogIm9wZXJhdG9yIg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,17 +31,38 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "grafana-operator/goss/goss.yaml",
+            "vars_file": "grafana-operator/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-grafana-operator"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
-            "endpoint": "lb-grafana-service-grafana-ve",
-            "app_protocol": "HTTP"
+            "resources": {
+              "path": "/.vib/grafana-operator/cypress"
+            },
+            "endpoint": "lb-grafana-operator-grafana-service-grafana-ve",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_admin",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

@@ -1,13 +1,18 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.dashboard.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kubeapps.dashboard-config.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.dashboard.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: dashboard
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -69,7 +74,8 @@ data:
     {
       "kubeappsCluster": {{ include "kubeapps.kubeappsCluster" . | quote }},
       "kubeappsNamespace": {{ .Release.Namespace | quote }},
-      "globalReposNamespace": {{ include "kubeapps.globalReposNamespace" . | quote }},
+      "helmGlobalNamespace": {{ include "kubeapps.helmGlobalPackagingNamespace" . | quote }},
+      "carvelGlobalNamespace": {{ .Values.kubeappsapis.pluginConfig.kappController.packages.v1alpha1.globalPackagingNamespace | quote }},
       "appVersion": {{ printf "v%s" .Chart.AppVersion | quote }},
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
@@ -80,5 +86,7 @@ data:
       "theme": {{ .Values.dashboard.defaultTheme | quote }},
       "remoteComponentsUrl": {{ .Values.dashboard.remoteComponentsUrl | quote }},
       "customAppViews": {{ .Values.dashboard.customAppViews | toJson }},
-      "skipAvailablePackageDetails": {{ .Values.dashboard.skipAvailablePackageDetails }}
+      "skipAvailablePackageDetails": {{ .Values.dashboard.skipAvailablePackageDetails }},
+      "createNamespaceLabels": {{ .Values.dashboard.createNamespaceLabels | toJson }}
     }
+{{- end -}}

@@ -1,0 +1,27 @@
+containerPorts:
+  http: 2378
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+config:
+  outputs: |
+    [OUTPUT]
+        Name file
+        Match *
+        Path /logs
+extraVolumeMounts:
+  - name: logs
+    mountPath: /logs
+extraVolumes:
+  - name: logs
+    emptyDir: {}

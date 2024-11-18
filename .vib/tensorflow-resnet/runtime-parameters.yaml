@@ -1,0 +1,15 @@
+containerPorts:
+  server: 8500
+  restApi: 8501
+service:
+  type: LoadBalancer
+  ports:
+    server: 8501
+    restApi: 80
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+  runAsNonRoot: true
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002

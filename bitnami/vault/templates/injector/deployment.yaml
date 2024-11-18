@@ -1,0 +1,184 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.injector.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "vault.injector.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.injector.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: vault
+    app.kubernetes.io/component: injector
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.injector.autoscaling.enabled }}
+  replicas: {{ .Values.injector.replicaCount }}
+  {{- end }}
+  {{- if .Values.injector.updateStrategy }}
+  strategy: {{- toYaml .Values.injector.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.injector.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: vault
+      app.kubernetes.io/component: injector
+  template:
+    metadata:
+      {{- if .Values.injector.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.injector.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: vault
+        app.kubernetes.io/component: injector
+    spec:
+      serviceAccountName: {{ template "vault.injector.serviceAccountName" . }}
+      {{- include "vault.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.injector.automountServiceAccountToken }}
+      {{- if .Values.injector.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.injector.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.injector.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.injector.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.injector.podAffinityPreset "component" "injector" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.injector.podAntiAffinityPreset "component" "injector" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.injector.nodeAffinityPreset.type "key" .Values.injector.nodeAffinityPreset.key "values" .Values.injector.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.injector.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.injector.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.injector.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.injector.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.injector.priorityClassName }}
+      priorityClassName: {{ .Values.injector.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.injector.schedulerName }}
+      schedulerName: {{ .Values.injector.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.injector.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.injector.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.injector.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.injector.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.injector.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.injector.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.injector.initContainers }}
+      initContainers:
+        {{- include "common.tplvalues.render" (dict "value" .Values.injector.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: sidecar-injector
+          image: {{ template "vault.injector.image" . }}
+          imagePullPolicy: {{ .Values.injector.image.pullPolicy }}
+          {{- if .Values.injector.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.injector.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.injector.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.injector.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.injector.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.injector.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - agent-inject
+            - 2>&1
+            {{- if .Values.injector.image.debug }}
+            - -log-level=debug
+            {{- end }}
+          {{- end }}
+          env:
+            - name: AGENT_INJECT_LISTEN
+              value: :{{ .Values.injector.containerPorts.https }}
+            - name: AGENT_INJECT_VAULT_ADDR
+              value: http://{{ include "vault.server.fullname" . }}.{{ include "common.names.namespace" . }}.svc:{{ .Values.server.service.general.ports.http }}
+            - name: AGENT_INJECT_VAULT_AUTH_PATH
+              value: auth/kubernetes
+            - name: AGENT_INJECT_VAULT_IMAGE
+              value: {{ include "vault.server.image" . | quote }}
+            - name: AGENT_INJECT_TLS_AUTO
+              value: {{ include "vault.injector.fullname.namespace" . | quote }}
+            {{- $host := include "vault.injector.fullname" . }}
+            {{- $ns := include "common.names.namespace" . }}
+            - name: AGENT_INJECT_TLS_AUTO_HOSTS
+              value: {{ $host }},{{ printf "%s.%s" $host $ns }},{{ printf "%s.%s.svc" $host $ns }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+                 {{- if .Values.injector.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.injector.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.injector.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.injector.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.injector.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.injector.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.injector.resources }}
+          resources: {{- toYaml .Values.injector.resources | nindent 12 }}
+          {{- else if ne .Values.injector.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.injector.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.injector.containerPorts.https }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.injector.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.injector.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.injector.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.injector.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: https
+          {{- end }}
+          {{- if .Values.injector.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.injector.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.injector.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.injector.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health/ready
+              port: https
+              scheme: HTTPS
+          {{- end }}
+          {{- if .Values.injector.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.injector.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.injector.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.injector.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health/ready
+              port: https
+              scheme: HTTPS
+          {{- end }}
+          {{- end }}
+          {{- if .Values.injector.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.injector.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.injector.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.injector.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.injector.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.injector.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if .Values.injector.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.injector.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

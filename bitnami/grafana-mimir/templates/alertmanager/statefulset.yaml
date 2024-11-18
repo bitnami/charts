@@ -1,0 +1,251 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.alertmanager.enabled }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ template "grafana-mimir.alertmanager.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: alertmanager
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.alertmanager.replicaCount }}
+  podManagementPolicy: {{ .Values.alertmanager.podManagementPolicy | quote }}
+  {{- if .Values.alertmanager.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.alertmanager.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: grafana-mimir
+      app.kubernetes.io/component: alertmanager
+  serviceName:  {{ template "grafana-mimir.alertmanager.fullname" . }}
+  template:
+    metadata:
+      {{- if .Values.alertmanager.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: grafana-mimir
+        app.kubernetes.io/component: alertmanager
+        mimir-gossip-member: "true"
+    spec:
+      serviceAccountName: {{ template "grafana-mimir.serviceAccountName" . }}
+      {{- include "grafana-mimir.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.alertmanager.automountServiceAccountToken }}
+      {{- if .Values.alertmanager.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.alertmanager.podAffinityPreset "component" "alertmanager" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.alertmanager.podAntiAffinityPreset "component" "alertmanager" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.alertmanager.nodeAffinityPreset.type "key" .Values.alertmanager.nodeAffinityPreset.key "values" .Values.alertmanager.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.alertmanager.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.priorityClassName }}
+      priorityClassName: {{ .Values.alertmanager.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.alertmanager.schedulerName }}
+      schedulerName: {{ .Values.alertmanager.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.alertmanager.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.alertmanager.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.alertmanager.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.alertmanager.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "grafana-mimir.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              mkdir -p {{ .Values.mimir.dataDir }}
+              {{- if and .Values.alertmanager.podSecurityContext.enabled .Values.alertmanager.containerSecurityContext.enabled }}
+              find {{ .Values.mimir.dataDir }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.alertmanager.containerSecurityContext.runAsUser }}:{{ .Values.alertmanager.podSecurityContext.fsGroup }}
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: data
+              mountPath: {{ .Values.mimir.dataDir }}
+      {{- end }}
+      containers:
+        - name: alertmanager
+          image: {{ template "grafana-mimir.image" . }}
+          imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
+          {{- if .Values.alertmanager.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - "-target=alertmanager"
+            - "-config.expand-env=true"
+            - "-config.file={{ .Values.mimir.dataDir }}/conf/mimir.yaml"
+            {{- if .Values.alertmanager.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.minio.enabled }}
+            - name: MIMIR_MINIO_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.accessKeyIDKey" . }}
+            - name: MIMIR_MINIO_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.secretAccessKeyKey" . }}
+            {{- end }}
+            {{- if .Values.alertmanager.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.alertmanager.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.alertmanager.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.alertmanager.resources }}
+          resources: {{- toYaml .Values.alertmanager.resources | nindent 12 }}
+          {{- else if ne .Values.alertmanager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.alertmanager.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.mimir.containerPorts.http }}
+              name: http
+            - containerPort: {{ .Values.mimir.containerPorts.gossipRing }}
+              name: http-memberlist
+            - containerPort: {{ .Values.mimir.containerPorts.grpc }}
+              name: grpc
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.alertmanager.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.alertmanager.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.alertmanager.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.alertmanager.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
+          {{- end }}
+          {{- if .Values.alertmanager.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.alertmanager.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.alertmanager.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.alertmanager.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: mimir-config
+              mountPath: {{ .Values.mimir.dataDir }}/conf
+            - name: data
+              mountPath: {{ .Values.mimir.dataDir }}
+          {{- if .Values.alertmanager.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.alertmanager.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: mimir-config
+          configMap:
+            name: {{ template "grafana-mimir.mimir.configmapName" . }}
+        {{- if .Values.alertmanager.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if not .Values.alertmanager.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.alertmanager.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.alertmanager.persistence.size | quote }}
+        {{- if .Values.alertmanager.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.alertmanager.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.persistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.alertmanager.persistence "global" .Values.global) | nindent 8 }}
+{{- end }}
+{{- end }}

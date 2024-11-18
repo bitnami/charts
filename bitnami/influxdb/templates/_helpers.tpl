@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 
@@ -84,6 +89,17 @@ Return the InfluxDB&trade; PVC name.
     {{- printf "%s" (tpl .Values.persistence.existingClaim $) -}}
 {{- else -}}
     {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the InfluxDB&trade; backup PVC name.
+*/}}
+{{- define "influxdb.backup.claimName" -}}
+{{- if and .Values.backup.persistence.ownConfig .Values.backup.persistence.existingClaim }}
+    {{- printf "%s" (tpl .Values.backup.persistence.existingClaim $) -}}
+{{- else -}}
+    {{- printf "%s-backups" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

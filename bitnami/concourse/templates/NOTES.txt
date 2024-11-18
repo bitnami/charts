@@ -57,7 +57,7 @@ host. To configure Concourse with the URL of your service:
     {{- if and .Values.secrets.localAuth.enabled }}
     {{ include "common.utils.secret.getvalue" (dict "secret" $concourseWebSecretName "field" "local_users" "context" $) }}
     {{- end }}
-    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
       {{- if and .Values.secrets.localAuth.enabled }}
       --set secrets.localUsers=$LOCAL_USERS \
       {{- end }}
@@ -72,7 +72,7 @@ host. To configure Concourse with the URL of your service:
   {{- else }}
 
     ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
-    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
       {{- if and .Values.secrets.localAuth.enabled }}
       --set secrets.localUsers=$LOCAL_USERS \
       {{- end }}
@@ -167,3 +167,5 @@ To connect to Concourse from outside the cluster, perform the following steps:
     {{- $passwordValidationErrors = append $passwordValidationErrors $requiredWebPasswordError -}}
 {{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+{{- include "common.warnings.resources" (dict "sections" (list "volumePermissions" "web" "worker") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

@@ -1,0 +1,146 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.compactor.enabled .Values.compactor.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "grafana-loki.compactor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-loki
+    app.kubernetes.io/component: compactor
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: grafana-loki
+      app.kubernetes.io/component: compactor
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.compactor.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to loki cluster
+    - ports:
+        - port: {{ .Values.loki.containerPorts.http }}
+        - port: {{ .Values.loki.containerPorts.gossipRing }}
+        - port: {{ .Values.loki.containerPorts.grpc }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: grafana-loki
+    # Allow outbound connections to gateway
+    - ports:
+        - port: {{ .Values.gateway.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: grafana-loki
+              app.kubernetes.io/component: grafana-loki
+    # Allow outbound connections to gateway
+    - ports:
+        - port: {{ .Values.gateway.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: grafana-loki
+              app.kubernetes.io/component: gateway
+    # Allow outbound connections to Memcached Chunks
+    - ports:
+      {{- if .Values.memcachedchunks.enabled }}
+        - port: {{ .Values.memcachedchunks.containerPorts.memcached }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: memcachedchunks
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- else }}
+        - port: {{ .Values.externalMemcachedChunks.port }}
+      {{- end }}
+    # Allow outbound connections to Memcached Metadata
+    - ports:
+      {{- if .Values.memcachedindexqueries.enabled }}
+        - port: {{ .Values.memcachedindexqueries.containerPorts.memcached }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: memcachedindexqueries
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- else }}
+        - port: {{ .Values.externalMemcachedIndexQueries.port }}
+      {{- end }}
+    # Allow outbound connections to Memcached Frontend
+    - ports:
+      {{- if .Values.memcachedfrontend.enabled }}
+        - port: {{ .Values.memcachedfrontend.containerPorts.memcached }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: memcachedfrontend
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- else }}
+        - port: {{ .Values.externalMemcachedFrontend.port }}
+      {{- end }}
+    # Allow outbound connections to Memcached Metadata
+    - ports:
+      {{- if .Values.memcachedindexwrites.enabled }}
+        - port: {{ .Values.memcachedindexwrites.containerPorts.memcached }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: memcachedindexwrites
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- else }}
+        - port: {{ .Values.externalMemcachedIndexWrites.port }}
+      {{- end }}
+    {{- if .Values.compactor.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.loki.containerPorts.http }}
+        - port: {{ .Values.loki.containerPorts.gossipRing }}
+        - port: {{ .Values.loki.containerPorts.grpc }}
+      {{- if not .Values.compactor.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: grafana-loki
+        {{- if .Values.compactor.networkPolicy.addExternalClientAccess }}
+        - podSelector:
+            matchLabels:
+              {{ template "grafana-loki.compactor.fullname" . }}-compactor: "true"
+        {{- end }}
+        {{- if .Values.compactor.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
+        {{- if .Values.compactor.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
+          {{- if .Values.compactor.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.compactor.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

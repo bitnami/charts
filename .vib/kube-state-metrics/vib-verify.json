@@ -17,12 +17,45 @@
       ]
     },
     "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/kube-state-metrics"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "health-check",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "endpoint": "lb-kube-state-metrics-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "kube-state-metrics/goss/goss.yaml",
+            "vars_file": "kube-state-metrics/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-kube-state-metrics"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

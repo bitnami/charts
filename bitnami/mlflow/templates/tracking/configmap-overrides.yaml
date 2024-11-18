@@ -1,0 +1,25 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.tracking.enabled .Values.tracking.auth.enabled (not .Values.tracking.auth.overridesConfigMap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-auth-overrides" (include "mlflow.v0.tracking.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  # Use render-template to substitute with environment variables
+  basic_auth_overrides.ini: |
+    database_uri = {{ print "{{ MLFLOW_DATABASE_AUTH_URI }}" }}
+    admin_username = {{ print "{{ MLFLOW_TRACKING_USERNAME }}" }}
+    admin_password = {{ print "{{ MLFLOW_TRACKING_PASSWORD }}" }}
+    {{- range $key, $value := .Values.tracking.auth.extraOverrides }}
+    {{ $key }} = {{ include "common.tplvalues.render" (dict "value" $value "context" $) }}
+    {{- end }}
+{{- end }}

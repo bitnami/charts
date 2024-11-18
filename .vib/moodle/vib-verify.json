@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/moodle"
         },
-        "runtime_parameters": "Im1vb2RsZVBhc3N3b3JkIjogImJpdG5hbWkxIgoibW9vZGxlVXNlcm5hbWUiOiAidXNlciIKInNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,17 +31,38 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "moodle/goss/goss.yaml",
+            "vars_file": "moodle/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-moodle"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
+            "resources": {
+              "path": "/.vib/moodle/cypress"
+            },
             "endpoint": "lb-moodle-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

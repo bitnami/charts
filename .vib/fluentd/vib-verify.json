@@ -22,27 +22,36 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/fluentd"
         },
-        "runtime_parameters": "ImFnZ3JlZ2F0b3IiOgogICJjb250YWluZXJTZWN1cml0eUNvbnRleHQiOgogICAgImNhcGFiaWxpdGllcyI6CiAgICAgICJkcm9wIjogbnVsbAoiZm9yd2FyZGVyIjoKICAiY29udGFpbmVyU2VjdXJpdHlDb250ZXh0IjoKICAgICJjYXBhYmlsaXRpZXMiOgogICAgICAiZHJvcCI6IG51bGwKICAic2VydmljZSI6CiAgICAicG9ydHMiOgogICAgICAiaHR0cCI6CiAgICAgICAgInBvcnQiOiA4MAogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "S4",
+            "worker_nodes_instance_count": 1
           }
         }
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "wait": {
+              "file": "fluentd/goss/goss-wait.yaml"
+            },
+            "tests_file": "fluentd/goss/goss.yaml",
+            "remote": {
+              "pod": {
+                "workload": "ds-fluentd"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "kubescape",
           "params": {
-            "endpoint": "lb-fluentd-forwarder-http",
-            "app_protocol": "HTTP"
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

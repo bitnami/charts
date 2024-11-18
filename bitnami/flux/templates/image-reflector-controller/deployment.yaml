@@ -1,0 +1,215 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.imageReflectorController.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "flux.image-reflector-controller.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.imageReflectorController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: image-reflector-controller
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.imageReflectorController.autoscaling.enabled }}
+  replicas: {{ .Values.imageReflectorController.replicaCount }}
+  {{- end }}
+  {{- if .Values.imageReflectorController.updateStrategy }}
+  strategy: {{- toYaml .Values.imageReflectorController.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.imageReflectorController.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: image-reflector-controller
+  template:
+    metadata:
+      {{- if .Values.imageReflectorController.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
+        app.kubernetes.io/component: image-reflector-controller
+    spec:
+      serviceAccountName: {{ template "flux.image-reflector-controller.serviceAccountName" . }}
+      {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.imageReflectorController.automountServiceAccountToken }}
+      {{- if .Values.imageReflectorController.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.imageReflectorController.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.imageReflectorController.podAffinityPreset "component" "image-reflector-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.imageReflectorController.podAntiAffinityPreset "component" "image-reflector-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.imageReflectorController.nodeAffinityPreset.type "key" .Values.imageReflectorController.nodeAffinityPreset.key "values" .Values.imageReflectorController.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.imageReflectorController.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.priorityClassName }}
+      priorityClassName: {{ .Values.imageReflectorController.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.schedulerName }}
+      schedulerName: {{ .Values.imageReflectorController.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.imageReflectorController.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.imageReflectorController.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if or (and .Values.volumePermissions.enabled .Values.imageReflectorController.persistence.enabled) .Values.imageReflectorController.initContainers }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.imageReflectorController.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "flux.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              mkdir -p {{ .Values.imageReflectorController.persistence.mountPath }}
+              find {{ .Values.imageReflectorController.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.imageReflectorController.containerSecurityContext.runAsUser }}:{{ .Values.imageReflectorController.podSecurityContext.fsGroup }}
+          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.imageReflectorController.persistence.mountPath }}
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- end }}
+      containers:
+        - name: image-reflector-controller
+          image: {{ template "flux.image-reflector-controller.image" . }}
+          imagePullPolicy: {{ .Values.imageReflectorController.image.pullPolicy }}
+          {{- if .Values.imageReflectorController.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.imageReflectorController.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.imageReflectorController.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.imageReflectorController.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --watch-all-namespaces={{ .Values.imageReflectorController.watchAllNamespaces }}
+            {{- if .Values.imageReflectorController.image.debug }}
+            - --log-level=debug
+            {{- else }}
+            - --log-level=info
+            {{- end }}
+            - --metrics-addr=:{{ .Values.imageReflectorController.containerPorts.metrics }}
+            - --health-addr=:{{ .Values.imageReflectorController.containerPorts.health }}
+            - --storage-path={{ .Values.imageReflectorController.persistence.mountPath }}
+            - --log-encoding=json
+            - --enable-leader-election
+          {{- end }}
+          env:
+            - name: RUNTIME_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            {{- if .Values.imageReflectorController.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.imageReflectorController.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.imageReflectorController.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.imageReflectorController.resources }}
+          resources: {{- toYaml .Values.imageReflectorController.resources | nindent 12 }}
+          {{- else if ne .Values.imageReflectorController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.imageReflectorController.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http-metrics
+              containerPort: {{ .Values.imageReflectorController.containerPorts.metrics }}
+            - name: http-health
+              containerPort: {{ .Values.imageReflectorController.containerPorts.health }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.imageReflectorController.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.imageReflectorController.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.imageReflectorController.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-health
+          {{- end }}
+          {{- if .Values.imageReflectorController.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.imageReflectorController.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.imageReflectorController.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /readyz
+              port: http-health
+          {{- end }}
+          {{- if .Values.imageReflectorController.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.imageReflectorController.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.imageReflectorController.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-health
+          {{- end }}
+          {{- end }}
+          {{- if .Values.imageReflectorController.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.imageReflectorController.persistence.mountPath }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.imageReflectorController.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.imageReflectorController.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.imageReflectorController.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: data
+          {{- if .Values.imageReflectorController.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.persistence.existingClaim "context" $) | default (include "flux.image-reflector-controller.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.imageReflectorController.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

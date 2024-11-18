@@ -1,4 +1,9 @@
 {{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper kiam image name
 */}}
 {{- define "kiam.image" -}}
@@ -41,9 +46,10 @@ Generate certificates for kiam agent and server
 {{- $ca := .ca | default (genCA "kiam-ca" 365) -}}
 {{- $_ := set . "ca" $ca -}}
 {{- $cert := genSignedCert "Kiam Agent" nil nil 365 $ca -}}
-{{ .Values.agent.tlsCerts.caFileName }}: {{ $ca.Cert | b64enc }}
-{{ .Values.agent.tlsCerts.certFileName }}: {{ $cert.Cert | b64enc }}
-{{ .Values.agent.tlsCerts.keyFileName }}: {{ $cert.Key | b64enc }}
+{{- $secretName := printf "%s-agent" (include "common.names.fullname" .) -}}
+{{ .Values.agent.tlsCerts.certFileName }}: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" .Values.agent.tlsCerts.certFileName "defaultValue" $cert.Cert "context" $) }}
+{{ .Values.agent.tlsCerts.keyFileName }}: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" .Values.agent.tlsCerts.keyFileName "defaultValue" $cert.Key "context" $) }}
+{{ .Values.agent.tlsCerts.caFileName }}: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" .Values.agent.tlsCerts.caFileName "defaultValue" $ca.Cert "context" $) }}
 {{- end -}}
 
 {{- define "kiam.server.gen-certs" -}}
@@ -51,9 +57,10 @@ Generate certificates for kiam agent and server
 {{- $ca := .ca | default (genCA "kiam-ca" 365) -}}
 {{- $_ := set . "ca" $ca -}}
 {{- $cert := genSignedCert "Kiam Server" (list "127.0.0.1") $altNames 365 $ca -}}
-{{ .Values.server.tlsCerts.caFileName }}: {{ $ca.Cert | b64enc }}
-{{ .Values.server.tlsCerts.certFileName }}: {{ $cert.Cert | b64enc }}
-{{ .Values.server.tlsCerts.keyFileName }}: {{ $cert.Key | b64enc }}
+{{- $secretName := printf "%s-server" (include "common.names.fullname" .) -}}
+{{ .Values.server.tlsCerts.certFileName }}: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" .Values.server.tlsCerts.certFileName "defaultValue" $cert.Cert "context" $) }}
+{{ .Values.server.tlsCerts.keyFileName }}: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" .Values.server.tlsCerts.keyFileName "defaultValue" $cert.Key "context" $) }}
+{{ .Values.server.tlsCerts.caFileName }}: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" .Values.server.tlsCerts.caFileName "defaultValue" $ca.Cert "context" $) }}
 {{- end -}}
 
 {{/*

@@ -1,0 +1,33 @@
+operator:
+  enabled: true
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  podSecurityContext:
+    fsGroup: 1002
+  containerPorts:
+    metrics: 8080
+  podLabels:
+    instance: operator
+  rbac:
+    create: true
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+grafana:
+  enabled: true
+  config:
+    security:
+      admin_user: test_admin
+      admin_password: ComplicatedPassword123!4
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    runAsGroup: 0
+  service:
+    type: LoadBalancer
+    extraPorts:
+      - name: grafana-ve
+        port: 80
+        protocol: TCP
+        targetPort: grafana-http

@@ -1,26 +1,36 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if eq .Values.architecture "replication" }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "mysql.secondary.fullname" . }}-headless
+  name: {{ printf "%s-headless" (include "mysql.secondary.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
     app.kubernetes.io/component: secondary
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.secondary.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
   publishNotReadyAddresses: true
   ports:
     - name: mysql
-      port: {{ .Values.secondary.service.ports.mysql }}
+      port: {{ .Values.secondary.containerPorts.mysql }}
       targetPort: mysql
-  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
+    {{- if .Values.secondary.service.exposeMySQLX }}
+    - name: mysqlx
+      port: {{ .Values.secondary.containerPorts.mysqlx }}
+      targetPort: mysqlx
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
     app.kubernetes.io/component: secondary
 {{- end }}

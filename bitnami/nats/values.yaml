@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -5,6 +8,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -13,7 +17,16 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-
+  defaultStorageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -48,14 +61,14 @@ diagnosticMode:
     - sleep
   args:
     - infinity
-
 ## @section NATS parameters
 
 ## Bitnami NATS image version
 ## ref: https://hub.docker.com/r/bitnami/nats/tags/
-## @param image.registry NATS image registry
-## @param image.repository NATS image repository
-## @param image.tag NATS image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] NATS image registry
+## @param image.repository [default: REPOSITORY_NAME/nats] NATS image repository
+## @skip image.tag NATS image tag (immutable tags are recommended)
+## @param image.digest NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy NATS image pull policy
 ## @param image.pullSecrets NATS image pull secrets
 ## @param image.debug Enable NATS image debug mode
@@ -63,10 +76,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.8.4-debian-11-r3
+  tag: 2.10.22-debian-12-r2
+  digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -80,7 +93,7 @@ image:
   ##
   debug: false
 ## Client Authentication
-## ref: https://github.com/nats-io/gnatsd#authentication
+## ref: https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro
 ## @param auth.enabled Switch to enable/disable client authentication
 ## @param auth.user Client authentication user
 ## @param auth.password Client authentication password
@@ -102,23 +115,32 @@ auth:
   usersCredentials: []
   noAuthUser: ""
 ## Cluster Configuration
+## ref: https://docs.nats.io/running-a-nats-service/configuration/clustering/cluster_config
 ##
 cluster:
+  ## @param cluster.name Cluster name
+  name: nats
   ## @param cluster.connectRetries Configure number of connect retries for implicit routes, otherwise leave blank
   ##
   connectRetries: ""
   ## Cluster Authentication
-  ## ref: https://github.com/nats-io/gnatsd#authentication
+  ## ref: https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro
   ## @param cluster.auth.enabled Switch to enable/disable cluster authentication
   ## @param cluster.auth.user Cluster authentication user
   ## @param cluster.auth.password Cluster authentication password
-  ## @param cluster.auth.token Cluster authentication token
   ##
   auth:
     enabled: true
     user: nats_cluster
     password: ""
-    token: ""
+## JetStream Configuration
+## ref: https://docs.nats.io/running-a-nats-service/configuration/resource_management
+## @param jetstream.enabled Switch to enable/disable JetStream
+## @param jetstream.maxMemory Max memory usage for JetStream
+##
+jetstream:
+  enabled: false
+  maxMemory: 1G
 ## Logging parameters
 ## ref: https://github.com/nats-io/gnatsd#command-line-arguments
 ## @param debug.enabled Switch to enable/disable debug on logging
@@ -163,6 +185,9 @@ natsFilename: nats-server
 configuration: |-
   {{- $authPwd := default (include "nats.randomPassword" .) .Values.auth.password -}}
   {{- $clusterAuthPwd := default (include "nats.randomPassword" .) .Values.cluster.auth.password -}}
+  {{- if eq .Values.resourceType "statefulset" }}
+  server_name: $NATS_SERVER_NAME
+  {{- end }}
   listen: 0.0.0.0:{{ .Values.containerPorts.client }}
   http: 0.0.0.0:{{ .Values.containerPorts.monitoring }}
 
@@ -209,18 +234,16 @@ configuration: |-
   write_deadline: {{ .Values.writeDeadline | quote }}
   {{- end }}
 
+  {{- if gt (int .Values.replicaCount) 1 }}
   # Clustering definition
   cluster {
+    name: {{ .Values.cluster.name | quote }}
     listen: 0.0.0.0:{{ .Values.containerPorts.cluster }}
     {{- if .Values.cluster.auth.enabled }}
     # Authorization for cluster connections
     authorization {
-      {{- if .Values.cluster.auth.user }}
       user: {{ .Values.cluster.auth.user | quote }}
       password: {{ $clusterAuthPwd | quote }}
-      {{- else if .Values.cluster.auth.token }}
-      token: {{ .Values.cluster.auth.token | quote }}
-      {{- end }}
       timeout:  1
     }
     {{- end }}
@@ -229,11 +252,7 @@ configuration: |-
     # in their routes definitions from above
     routes = [
       {{- if .Values.cluster.auth.enabled }}
-      {{- if .Values.cluster.auth.user }}
       nats://{{ .Values.cluster.auth.user }}:{{ $clusterAuthPwd }}@{{ include "common.names.fullname" . }}:{{ .Values.service.ports.cluster }}
-      {{- else if .Values.cluster.auth.token }}
-      nats://{{ .Values.cluster.auth.token }}@{{ template "common.names.fullname" . }}:{{ .Values.service.ports.cluster }}
-      {{- end }}
       {{- else }}
       nats://{{ template "common.names.fullname" . }}:{{ .Values.service.ports.cluster }}
       {{- end }}
@@ -243,6 +262,17 @@ configuration: |-
     connect_retries: {{ .Values.cluster.connectRetries }}
     {{- end }}
   }
+  {{- end }}
+
+  {{- if .Values.jetstream.enabled }}
+  # JetStream configuration
+  jetstream: enabled
+  jetstream {
+    store_dir: /data/jetstream
+    max_memory_store: {{ .Values.jetstream.maxMemory }}
+    max_file_store: {{ .Values.persistence.size }}
+  }
+  {{- end }}
 ## @param existingSecret The name of an existing Secret with your custom configuration for NATS
 ## NOTE: When it's set the configuration parameter is ignored
 ##
@@ -266,7 +296,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
 extraEnvVarsSecret: ""
-
 ## @section NATS deployment/statefulset parameters
 
 ## @param resourceType NATS cluster resource type under Kubernetes. Allowed values: `statefulset` (default) or `deployment`
@@ -292,6 +321,9 @@ updateStrategy:
   ## @param updateStrategy.type StrategyType. Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
+## @param podManagementPolicy StatefulSet pod management policy
+##
+podManagementPolicy: OrderedReady
 ## @param containerPorts.client NATS client container port
 ## @param containerPorts.cluster NATS cluster container port
 ## @param containerPorts.monitoring NATS monitoring container port
@@ -303,29 +335,60 @@ containerPorts:
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled NATS pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set NATS pod's Security Context fsGroup
 ##
 podSecurityContext:
-  enabled: false
+  enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled NATS containers' Security Context
-## @param containerSecurityContext.runAsUser Set NATS containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set NATS containers' Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
-  enabled: false
+  enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## NATS resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-## @param resources.limits The resources limits for the NATS containers
-## @param resources.requests The requested resources for the NATS containers
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests: {}
+resourcesPreset: "nano"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## NATS containers' liveness probe.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -381,6 +444,9 @@ customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
 ##
 customStartupProbe: {}
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -426,7 +492,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -468,7 +534,24 @@ initContainers: []
 ##         containerPort: 1234
 ##
 sidecars: []
-
+## Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for NATS pod
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+  ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+  ##
+  automountServiceAccountToken: false
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
 ## @section Traffic Exposure parameters
 
 ## NATS service parameters
@@ -497,7 +580,7 @@ service:
     monitoring: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -532,8 +615,17 @@ service:
   ## @param service.extraPorts Extra ports to expose in the NATS service (normally used with the `sidecar` value)
   ##
   extraPorts: []
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
+    ## @param service.headless.publishNotReadyAddresses Publishes the addresses of not ready Pods
+    ##
+    publishNotReadyAddresses: false
 ## NATS ingress parameters
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
@@ -635,25 +727,54 @@ ingress:
 networkPolicy:
   ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
   ##
-  enabled: false
+  enabled: true
   ## @param networkPolicy.allowExternal The Policy model to apply
-  ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-  ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+  ## When set to false, only pods with the correct client label will have network access to the ports NATS is
+  ## listening on. When true, NATS will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
-  ## @param networkPolicy.additionalRules Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.
-  ## Example:
-  ## additionalRules:
-  ##   - matchLabels:
-  ##       - role: frontend
-  ##   - matchExpressions:
-  ##       - key: role
-  ##         operator: In
-  ##         values:
-  ##           - frontend
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  additionalRules: {}
-
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## @section Metrics parameters
 
 ## Metrics / Prometheus NATS Exporter
@@ -663,16 +784,44 @@ metrics:
   ## @param metrics.enabled Enable Prometheus metrics via exporter side-car
   ##
   enabled: false
-  ## @param metrics.image.registry Prometheus metrics exporter image registry
-  ## @param metrics.image.repository Prometheus metrics exporter image repository
-  ## @param metrics.image.tag Prometheus metrics exporter image tag (immutable tags are recommended)
+  ## metrics exporter containers' liveness probe.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    timeoutSeconds: 5
+  ## metrics exporter containers' readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+  ## @param metrics.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: { }
+  ## @param metrics.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: { }
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Prometheus metrics exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/nats-exporter] Prometheus metrics exporter image repository
+  ## @skip metrics.image.tag Prometheus metrics exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest NATS Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Prometheus metrics image pull policy
   ## @param metrics.image.pullSecrets Prometheus metrics image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.9.3-debian-11-r3
+    tag: 0.15.0-debian-12-r17
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -682,13 +831,26 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
-  ## @param metrics.containerPort Prometheus metrics exporter port
+  ## @param metrics.containerPorts.http Prometheus metrics exporter port
   ##
-  containerPort: 7777
+  containerPorts:
+    http: 7777
   ## @param metrics.flags [array] Flags to be passed to Prometheus metrics
   ##
   flags:
@@ -748,10 +910,56 @@ metrics:
     ##
     relabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
+## @section Persistence parameters
 
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable NATS data persistence using PVC(s)
+  ##
+  enabled: false
+  ## @param persistence.storageClass PVC Storage Class for NATS data volume
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner
+  ##
+  storageClass: ""
+  ## @param persistence.accessModes PVC Access modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for NATS data volume
+  ##
+  size: 8Gi
+  ## @param persistence.annotations Annotations for the PVC
+  ##
+  annotations: {}
+  ## @param persistence.selector Selector to match an existing Persistent Volume for NATS's data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+## Persistent Volume Claim Retention Policy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+##
+persistentVolumeClaimRetentionPolicy:
+  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for NATS statefulset
+  ##
+  enabled: false
+  ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ##
+  whenScaled: Retain
+  ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  whenDeleted: Retain
 ## @section Other parameters
 
 ## NATS Pod Disruption Budget configuration
@@ -760,10 +968,10 @@ metrics:
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
   ##
-  minAvailable: 1
+  minAvailable: ""
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   maxUnavailable: ""

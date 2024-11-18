@@ -1,0 +1,116 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- /*
+Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
+*/ -}}
+{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.store_gateway ) }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "thanos.storegateway.fullname" . }}
+  namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.metrics.prometheusRule.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+  - name: thanos-store
+    rules:
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreGrpcErrorRate | default false) }}
+    - alert: ThanosStoreGrpcErrorRate
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Store {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of requests.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstoregrpcerrorrate
+        summary: Thanos Store is failing to handle qrpcd requests.
+      expr: |
+        (
+          sum by (job) (rate(grpc_server_handled_total{grpc_code=~"Unknown|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded", job=~".*thanos-store.*"}[5m]))
+        /
+          sum by (job) (rate(grpc_server_started_total{job=~".*thanos-store.*"}[5m]))
+        * 100 > 5
+        )
+      for: 5m
+      labels:
+        severity: warning
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreSeriesGateLatencyHigh | default false) }}
+    - alert: ThanosStoreSeriesGateLatencyHigh
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Store {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for store series gate requests.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstoreseriesgatelatencyhigh
+        summary: Thanos Store has high latency for store series gate requests.
+      expr: |
+        (
+          histogram_quantile(0.99, sum by (job, le) (rate(thanos_bucket_store_series_gate_duration_seconds_bucket{job=~".*thanos-store.*"}[5m]))) > 2
+        and
+          sum by (job) (rate(thanos_bucket_store_series_gate_duration_seconds_count{job=~".*thanos-store.*"}[5m])) > 0
+        )
+      for: 10m
+      labels:
+        severity: warning
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreBucketHighOperationFailures | default false) }}
+    - alert: ThanosStoreBucketHighOperationFailures
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Store {{`{{`}} $labels.job {{`}}`}} Bucket is failing to execute {{`{{`}} $value | humanize {{`}}`}}% of operations.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstorebuckethighoperationfailures
+        summary: Thanos Store Bucket is failing to execute operations.
+      expr: |
+        (
+          sum by (job) (rate(thanos_objstore_bucket_operation_failures_total{job=~".*thanos-store.*"}[5m]))
+        /
+          sum by (job) (rate(thanos_objstore_bucket_operations_total{job=~".*thanos-store.*"}[5m]))
+        * 100 > 5
+        )
+      for: 15m
+      labels:
+        severity: warning
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreObjstoreOperationLatencyHigh | default false) }}
+    - alert: ThanosStoreObjstoreOperationLatencyHigh
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Store {{`{{`}} $labels.job {{`}}`}} Bucket has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for the bucket operations.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstoreobjstoreoperationlatencyhigh
+        summary: Thanos Store is having high latency for bucket operations.
+      expr: |
+        (
+          histogram_quantile(0.99, sum by (job, le) (rate(thanos_objstore_bucket_operation_duration_seconds_bucket{job=~".*thanos-store.*"}[5m]))) > 2
+        and
+          sum by (job) (rate(thanos_objstore_bucket_operation_duration_seconds_count{job=~".*thanos-store.*"}[5m])) > 0
+        )
+      for: 10m
+      labels:
+        severity: warning
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+{{- end }}

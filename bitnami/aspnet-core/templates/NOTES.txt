@@ -6,7 +6,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ASP.NET Core can be accessed through the following DNS name from within your cluster:
 
-    {{ include "aspnet-core.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.ports.http }})
+    {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.ports.http }})
 
 To access ASP.NET Core from outside the cluster execute the following commands:
 
@@ -24,23 +24,23 @@ To access ASP.NET Core from outside the cluster execute the following commands:
 
 {{- if contains "NodePort" .Values.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "aspnet-core.fullname" . }})
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo "http://${NODE_IP}:${NODE_PORT}"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ include "aspnet-core.fullname" . }}'
+        You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ include "common.names.fullname" . }}'
 
-    export SERVICE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].port}" services {{ include "aspnet-core.fullname" . }})
-    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "aspnet-core.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    export SERVICE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo "http://${SERVICE_IP}:${SERVICE_PORT}"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    export SERVICE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].port}" services {{ include "aspnet-core.fullname" . }})
-    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "aspnet-core.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
+    export SERVICE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
     echo "http://127.0.0.1:${SERVICE_PORT}"
 
 {{- end }}
@@ -52,3 +52,5 @@ To access ASP.NET Core from outside the cluster execute the following commands:
 {{- include "common.warnings.rollingTag" .Values.appFromExternalRepo.clone.image }}
 {{- include "common.warnings.rollingTag" .Values.appFromExternalRepo.publish.image }}
 {{- include "aspnet-core.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.appFromExternalRepo.clone.image .Values.appFromExternalRepo.publish.image) "context" $) }}

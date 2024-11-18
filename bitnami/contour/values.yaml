@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -6,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -15,8 +19,17 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -41,7 +54,6 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
 ## Diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -56,7 +68,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Contour parameters
 ##
 
@@ -77,14 +88,14 @@ configInline:
   tls:
     fallback-certificate: {}
   accesslog-format: envoy
-
 contour:
   ## @param contour.enabled Contour Deployment creation.
   ##
   enabled: true
-  ## @param contour.image.registry Contour image registry
-  ## @param contour.image.repository Contour image name
-  ## @param contour.image.tag Contour image tag
+  ## @param contour.image.registry [default: REGISTRY_NAME] Contour image registry
+  ## @param contour.image.repository [default: REPOSITORY_NAME/contour] Contour image name
+  ## @skip contour.image.tag Contour image tag
+  ## @param contour.image.digest Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param contour.image.pullPolicy Contour Image pull policy
   ## @param contour.image.pullSecrets [array] Contour Image pull secrets
   ## @param contour.image.debug Enable image debug mode
@@ -92,10 +103,10 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.21.1-debian-11-r0
+    tag: 1.30.1-debian-12-r1
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -107,8 +118,14 @@ contour:
     ##
     pullSecrets: []
     debug: false
-  ## @param contour.replicaCount Number of Contour Pod replicas
+  ## @param contour.contourConfigName Contour Deployment with ContourConfiguration CRD.
+  #
+  contourConfigName: "contour"
+  ## @param contour.configPath Contour Deployment with configmap.
   ##
+  configPath: true
+  ## @param contour.replicaCount Number of Contour Pod replicas
+  #
   replicaCount: 1
   ## @param contour.priorityClassName Priority class assigned to the pods
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
@@ -134,6 +151,9 @@ contour:
   containerPorts:
     xds: 8001
     metrics: 8000
+  ## @param contour.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param contour.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -146,31 +166,43 @@ contour:
   ##
   extraArgs: []
   ## Contour container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## ref: https://projectcontour.io/guides/resource-limits/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param contour.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
-  ## @param contour.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ## @param contour.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if contour.resources is set (contour.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 400m
-    ##    memory: 258Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 25Mi
-    ##
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param contour.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param contour.manageCRDs Manage the creation, upgrade and deletion of Contour CRDs.
   ##
   manageCRDs: true
+  ## @param contour.envoyServiceNamespace Namespace of the envoy service to inspect for Ingress status details.
+  ##
+  envoyServiceNamespace: ""
+  ## Name of the envoy service to inspect for Ingress status details.
+  ## @param contour.envoyServiceName DEPRECATED: use envoy.service.name
+  ##
+  envoyServiceName: ""
+  ## @param contour.leaderElectionResourceName Name of the contour (Lease) leader election will lease.
+  ##
+  leaderElectionResourceName: ""
+  ## @param contour.ingressStatusAddress Address to set in Ingress object status. It is exclusive with `envoyServiceName` and `envoyServiceNamespace`.
+  ##
+  ingressStatusAddress: ""
   ## @param contour.podAffinityPreset Contour Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -225,7 +257,7 @@ contour:
   ##
   affinity: {}
   ## @param contour.nodeSelector [object] Node labels for Contour pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param contour.tolerations [array] Tolerations for Contour pod assignment
@@ -244,26 +276,48 @@ contour:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## Contour Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param contour.podSecurityContext.enabled Default backend Pod securityContext
+  ## @param contour.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param contour.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param contour.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param contour.podSecurityContext.fsGroup Set Default backend Pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Envoy container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param contour.containerSecurityContext.enabled Envoy Container securityContext
-  ## @param contour.containerSecurityContext.runAsUser User ID for the Contour container (to change this, http and https containerPorts must be set to >1024)
-  ## @param contour.containerSecurityContext.runAsNonRoot Run as non root
+  ## @param contour.containerSecurityContext.enabled Enabled contour containers' Security Context
+  ## @param contour.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param contour.containerSecurityContext.runAsUser Set contour containers' Security Context runAsUser
+  ## @param contour.containerSecurityContext.runAsGroup Set contour containers' Security Context runAsGroup
+  ## @param contour.containerSecurityContext.runAsNonRoot Set contour containers' Security Context runAsNonRoot
+  ## @param contour.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param contour.containerSecurityContext.privileged Set contour container's Security Context privileged
+  ## @param contour.containerSecurityContext.allowPrivilegeEscalation Set contour container's Security Context allowPrivilegeEscalation
+  ## @param contour.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param contour.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
   ## @param contour.livenessProbe.enabled Enable/disable the Liveness probe
   ## @param contour.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
   ## @param contour.livenessProbe.periodSeconds How often to perform the probe
@@ -317,11 +371,72 @@ contour:
     serviceAccount:
       create: true
       name: ""
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
     ## @param contour.certgen.certificateLifetime Generated certificate lifetime (in days).
     ##
     certificateLifetime: 365
+    ## @param contour.certgen.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: true
+    ## Network Policies
+    ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+    ##
+    networkPolicy:
+      ## @param contour.certgen.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+      ##
+      enabled: true
+      ## @param contour.certgen.networkPolicy.allowExternal Don't require server label for connections
+      ## The Policy model to apply. When set to false, only pods with the correct
+      ## server label will have network access to the ports server is listening
+      ## on. When true, server will accept connections from any source
+      ## (with the correct destination port).
+      ##
+      allowExternal: true
+      ## @param contour.certgen.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+      ##
+      allowExternalEgress: true
+      ## @param contour.certgen.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+      ##
+      kubeAPIServerPorts: [443, 6443, 8443]
+      ## @param contour.certgen.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+      ## e.g:
+      ## extraIngress:
+      ##   - ports:
+      ##       - port: 1234
+      ##     from:
+      ##       - podSelector:
+      ##           - matchLabels:
+      ##               - role: frontend
+      ##       - podSelector:
+      ##           - matchExpressions:
+      ##               - key: role
+      ##                 operator: In
+      ##                 values:
+      ##                   - frontend
+      extraIngress: []
+      ## @param contour.certgen.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+      ## e.g:
+      ## extraEgress:
+      ##   - ports:
+      ##       - port: 1234
+      ##     to:
+      ##       - podSelector:
+      ##           - matchLabels:
+      ##               - role: frontend
+      ##       - podSelector:
+      ##           - matchExpressions:
+      ##               - key: role
+      ##                 operator: In
+      ##                 values:
+      ##                   - frontend
+      ##
+      extraEgress: []
+      ## @param contour.certgen.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+      ## @param contour.certgen.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+      ##
+      ingressNSMatchLabels: {}
+      ingressNSPodMatchLabels: {}
   ## @param contour.tlsExistingSecret Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.
   ## It will override `tlsExistingSecret`
   ##
@@ -361,6 +476,10 @@ contour:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param contour.service.loadBalancerClass Contour service Load Balancer Class
+    ## ref https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param contour.service.externalTrafficPolicy Contour service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -382,6 +501,64 @@ contour:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param contour.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param contour.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param contour.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param contour.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param contour.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param contour.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param contour.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param contour.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## @param contour.initContainers [array] Attach additional init containers to Contour pods
   ## For example:
   ## initContainers:
@@ -434,41 +611,62 @@ contour:
     name: ""
     create: true
     default: true
-
   ## @param contour.debug Enable Contour debug log level
   ##
   debug: false
-
+  ## @param contour.logFormat Set contour log-format. Default text, either text or json.
+  ##
+  logFormat: text
   ## @param contour.kubernetesDebug Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.
   ##
   kubernetesDebug: 0
-
   ## @param contour.rootNamespaces Restrict Contour to searching these namespaces for root ingress routes.
   ##
   rootNamespaces: ""
+  ## Exposes configuration of Envoy's Overload Manager through Contour's bootstrapping process
+  ## When 95% of max heap size is reached for an Envoy, "shrink heap" operation is triggered.
+  ## When 98% of max heap size is reached for an Envoy, it no longer accepts requests.
+  ## https://projectcontour.io/docs/main/config/overload-manager/
+  ## @param contour.overloadManager.enabled Enable Overload Manager
+  ## @param contour.overloadManager.maxHeapBytes Overload Manager's maximum heap size in bytes
+  ##
+  overloadManager:
+    enabled: false
+    maxHeapBytes: "2147483648"
+  ## PodDisruptionBudget for default backend
+  ## Contour Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param contour.pdb.create Enable Pod Disruption Budget configuration
+  ## @param contour.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
+  ## @param contour.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 
 ## @section Envoy parameters
 ##
-
 envoy:
   ## @param envoy.enabled Envoy Proxy creation
   ##
   enabled: true
   ## Bitnami Envoy image
   ## ref: https://hub.docker.com/r/bitnami/envoy/tags/
-  ## @param envoy.image.registry Envoy Proxy image registry
-  ## @param envoy.image.repository Envoy Proxy image repository
-  ## @param envoy.image.tag Envoy Proxy image tag (immutable tags are recommended)
+  ## @param envoy.image.registry [default: REGISTRY_NAME] Envoy Proxy image registry
+  ## @param envoy.image.repository [default: REPOSITORY_NAME/envoy] Envoy Proxy image repository
+  ## @skip envoy.image.tag Envoy Proxy image tag (immutable tags are recommended)
+  ## @param envoy.image.digest Envoy Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param envoy.image.pullPolicy Envoy image pull policy
   ## @param envoy.image.pullSecrets [array] Envoy image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.22.2-debian-11-r1
+    tag: 1.31.3-debian-12-r0
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -495,33 +693,35 @@ envoy:
   ## @param envoy.extraArgs [array] Extra arguments passed to Envoy container
   ##
   extraArgs: []
+  ## @param envoy.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param envoy.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
   ## Envoy container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## ref: https://projectcontour.io/guides/resource-limits/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param envoy.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
-  ## @param envoy.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ## @param envoy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.resources is set (envoy.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##   cpu: 400m
-    ##   memory: 250Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ## cpu: 100m
-    ## memory: 25Mi
-    ##
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param envoy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param envoy.command Override default command
   ##
   command: []
@@ -529,24 +729,133 @@ envoy:
   ##
   args: []
   ## @param envoy.shutdownManager.enabled Contour shutdownManager sidecar
-  ## @param envoy.shutdownManager.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
-  ## @param envoy.shutdownManager.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ## @param envoy.shutdownManager.extraArgs [array] Extra arguments passed to shutdown container
+  ## @param envoy.shutdownManager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.shutdownManager.resources is set (envoy.shutdownManager.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ## @param envoy.shutdownManager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## @param envoy.shutdownManager.containerPorts.http Specify Port for shutdown container
+  ## @param envoy.shutdownManager.lifecycleHooks lifecycleHooks for the container to automate configuration before or after startup.
   ##
   shutdownManager:
+    lifecycleHooks: {}
+    extraArgs: []
     enabled: true
-    resources:
-      ## Example:
-      ## limits:
-      ##   cpu: 50m
-      ##   memory: 32Mi
-      ##
-      limits: {}
-      ## Examples:
-      ## requests:
-      ## cpu: 10m
-      ## memory: 16Mi
-      ##
-      requests: {}
+    resourcesPreset: "nano"
+    containerPorts:
+      http: 8090
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    resources: {}
+    ## Shutdown Manager container security context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param envoy.shutdownManager.containerSecurityContext.enabled Enabled envoy shutdownManager containers' Security Context
+    ## @param envoy.shutdownManager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param envoy.shutdownManager.containerSecurityContext.runAsUser Set envoy shutdownManager containers' Security Context runAsUser
+    ## @param envoy.shutdownManager.containerSecurityContext.runAsGroup Set contour containers' Security Context runAsGroup
+    ## @param envoy.shutdownManager.containerSecurityContext.runAsNonRoot Set envoy shutdownManager containers' Security Context runAsNonRoot
+    ## @param envoy.shutdownManager.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+    ## @param envoy.shutdownManager.containerSecurityContext.privileged Set envoy.shutdownManager container's Security Context privileged
+    ## @param envoy.shutdownManager.containerSecurityContext.allowPrivilegeEscalation Set envoy shutdownManager container's Security Context allowPrivilegeEscalation
+    ## @param envoy.shutdownManager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param envoy.shutdownManager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+      readOnlyRootFilesystem: true
+    ## @param envoy.shutdownManager.livenessProbe.enabled Enable livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 120
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+    ## @param envoy.shutdownManager.readinessProbe.enabled Enable/disable the readiness probe
+    ## @param envoy.shutdownManager.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+    ## @param envoy.shutdownManager.readinessProbe.periodSeconds How often to perform the probe
+    ## @param envoy.shutdownManager.readinessProbe.timeoutSeconds When the probe times out
+    ## @param envoy.shutdownManager.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded.
+    ## @param envoy.shutdownManager.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed.
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 3
+      timeoutSeconds: 1
+      failureThreshold: 3
+      successThreshold: 1
+    ## @param envoy.shutdownManager.startupProbe.enabled Enable/disable the startup probe
+    ## @param envoy.shutdownManager.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+    ## @param envoy.shutdownManager.startupProbe.periodSeconds How often to perform the probe
+    ## @param envoy.shutdownManager.startupProbe.timeoutSeconds When the probe times out
+    ## @param envoy.shutdownManager.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded.
+    ## @param envoy.shutdownManager.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed.
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 15
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+    ## @param envoy.shutdownManager.customLivenessProbe Override default liveness probe
+    ##
+    customLivenessProbe: {}
+    ## @param envoy.shutdownManager.customReadinessProbe Override default readiness probe
+    ##
+    customReadinessProbe: {}
+    ## @param envoy.shutdownManager.customStartupProbe Override default startup probe
+    ##
+    customStartupProbe: {}
+  ## Envoy Initconfig initcontainer security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param envoy.initConfig.containerSecurityContext.enabled Enabled envoy initConfig containers' Security Context
+  ## @param envoy.initConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param envoy.initConfig.containerSecurityContext.runAsUser Set envoy initConfig containers' Security Context runAsUser
+  ## @param envoy.initConfig.containerSecurityContext.runAsGroup Set envoy initConfig containers' Security Context runAsUser
+  ## @param envoy.initConfig.containerSecurityContext.runAsNonRoot Set envoy initConfig containers' Security Context runAsNonRoot
+  ## @param envoy.initConfig.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param envoy.initConfig.containerSecurityContext.privileged Set contraller container's Security Context privileged
+  ## @param envoy.initConfig.containerSecurityContext.allowPrivilegeEscalation Set contraller container's Security Context allowPrivilegeEscalation
+  ## @param envoy.initConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param envoy.initConfig.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  initConfig:
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+      readOnlyRootFilesystem: true
   ## @param envoy.kind Install as deployment or daemonset
   ##
   kind: daemonset
@@ -557,12 +866,16 @@ envoy:
   ##
   lifecycleHooks: {}
   ## @param envoy.updateStrategy [object] Strategy to use to update Pods
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 10%
   ## @param envoy.minReadySeconds The minimum number of seconds for which a newly created Pod should be ready
   ##
   minReadySeconds: 0
@@ -575,6 +888,7 @@ envoy:
   ## @param envoy.autoscaling.maxReplicas Maximum number of Controller replicas
   ## @param envoy.autoscaling.targetCPU Target CPU utilization percentage
   ## @param envoy.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param envoy.autoscaling.behavior HPA Behavior
   ##
   autoscaling:
     enabled: false
@@ -582,6 +896,7 @@ envoy:
     maxReplicas: 11
     targetCPU: ""
     targetMemory: ""
+    behavior: {}
   ## @param envoy.podAffinityPreset Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -613,7 +928,7 @@ envoy:
   ##
   affinity: {}
   ## @param envoy.nodeSelector [object] Node labels for Envoy pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param envoy.tolerations [array] Tolerations for Envoy pod assignment
@@ -631,23 +946,43 @@ envoy:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param envoy.podSecurityContext.enabled Envoy Pod securityContext
+  ## @param envoy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param envoy.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param envoy.podSecurityContext.fsGroup User ID for the for the mounted volumes
   ## @param envoy.podSecurityContext.sysctls Array of sysctl options to allow
   ##
   podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    supplementalGroups: []
     fsGroup: 0
     sysctls: []
-    enabled: false
   ## Envoy container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param envoy.containerSecurityContext.enabled Envoy Container securityContext
-  ## @param envoy.containerSecurityContext.runAsUser User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)
-  ## @param envoy.containerSecurityContext.runAsNonRoot Run as non root
+  ## @param envoy.containerSecurityContext.enabled Enabled envoy containers' Security Context
+  ## @param envoy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param envoy.containerSecurityContext.runAsUser Set envoy containers' Security Context runAsUser
+  ## @param envoy.containerSecurityContext.runAsGroup Set envoy containers' Security Context runAsGroup
+  ## @param envoy.containerSecurityContext.runAsNonRoot Set envoy containers' Security Context runAsNonRoot
+  ## @param envoy.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param envoy.containerSecurityContext.privileged Set envoy container's Security Context privileged
+  ## @param envoy.containerSecurityContext.allowPrivilegeEscalation Set envoy container's Security Context allowPrivilegeEscalation
+  ## @param envoy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param envoy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
   ## @param envoy.hostNetwork Envoy Pod host network access
   ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
   ##
@@ -671,6 +1006,7 @@ envoy:
     automountServiceAccountToken: false
     annotations: {}
   ## @param envoy.livenessProbe.enabled Enable livenessProbe
+  ## @param envoy.livenessProbe.port LivenessProbe port
   ## @param envoy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param envoy.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param envoy.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -679,12 +1015,14 @@ envoy:
   ##
   livenessProbe:
     enabled: true
+    port: 8002
     initialDelaySeconds: 120
     periodSeconds: 20
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
   ## @param envoy.readinessProbe.enabled Enable/disable the readiness probe
+  ## @param envoy.readinessProbe.port ReadinessProbe port
   ## @param envoy.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
   ## @param envoy.readinessProbe.periodSeconds How often to perform the probe
   ## @param envoy.readinessProbe.timeoutSeconds When the probe times out
@@ -693,12 +1031,14 @@ envoy:
   ##
   readinessProbe:
     enabled: true
+    port: 8002
     initialDelaySeconds: 10
     periodSeconds: 3
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
   ## @param envoy.startupProbe.enabled Enable/disable the startup probe
+  ## @param envoy.startupProbe.port StartupProbe port
   ## @param envoy.startupProbe.initialDelaySeconds Delay before startup probe is initiated
   ## @param envoy.startupProbe.periodSeconds How often to perform the probe
   ## @param envoy.startupProbe.timeoutSeconds When the probe times out
@@ -707,6 +1047,7 @@ envoy:
   ##
   startupProbe:
     enabled: false
+    port: 8002
     initialDelaySeconds: 15
     periodSeconds: 10
     timeoutSeconds: 5
@@ -730,11 +1071,33 @@ envoy:
   ## Envoy Service properties
   ##
   service:
+    ## @param envoy.service.name envoy service name
+    ##
+    name: ""
+    ## The multi az feature renders multiple service, so you could attach different service provider loadbalancer to it.
+    ## This feature is primarily used to achieve a high availability with multiple loadbalancer
+    ## @param envoy.service.multiAz.enabled enables the rendering of the multiple services
+    ## @param envoy.service.multiAz.zones defines different zones their annotations and loadBalancerIPs
+    ##
+    multiAz:
+      enabled: false
+      zones: []
+    ## Example
+    ## - name: "zone1"
+    ##   loadBalancerIP: "1.2.3.4"
+    ##   annotations:
+    ##    service.beta.kubernetes.io/loadbalancer-zone: zone1
+    ## - name: "zone2"
+    ##   loadBalancerIP: "5.6.7.8"
+    ##   annotations:
+    ##    service.beta.kubernetes.io/loadbalancer-zone: zone2
+    ##
     ## @param envoy.service.targetPorts [object] Map the controller service HTTP/HTTPS port
     ##
     targetPorts:
       http: http
       https: https
+      metrics: metrics
     ## @param envoy.service.type Type of Envoy service to create
     ##
     type: LoadBalancer
@@ -758,9 +1121,20 @@ envoy:
     ## @param envoy.service.loadBalancerSourceRanges [array] List of IP CIDRs allowed access to load balancer (if supported)
     ##
     loadBalancerSourceRanges: []
+    ## @param envoy.service.loadBalancerClass Envoy service Load Balancer Class
+    ## ref https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param envoy.service.ipFamilyPolicy [string], support SingleStack, PreferDualStack and RequireDualStack
     ##
     ipFamilyPolicy: ""
+    ## @param envoy.service.ipFamilies [array] List of IP families (e.g. IPv4, IPv6) assigned to the service.
+    ## Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/
+    ## E.g.
+    ## ipFamilies:
+    ##   - IPv6
+    ##
+    ipFamilies: []
     ## @param envoy.service.annotations [object] Annotations for Envoy service
     ##
     annotations: {}
@@ -771,14 +1145,19 @@ envoy:
       ## @param envoy.service.ports.https Sets service https port
       ##
       https: 443
+      ## @param envoy.service.ports.metrics Sets service metrics port
+      ##
+      metrics: 8002
     ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## @param envoy.service.nodePorts.http HTTP Port. If `envoy.service.type` is NodePort and this is non-empty
     ## @param envoy.service.nodePorts.https HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty
+    ## @param envoy.service.nodePorts.metrics Metrics Port. If `envoy.service.type` is NodePort and this is non-empty
     ##
     nodePorts:
       http: ""
       https: ""
+      metrics: ""
     ## @param envoy.service.extraPorts [array] Extra ports to expose (normally used with the `sidecar` value)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
     ##
@@ -794,31 +1173,99 @@ envoy:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-  ## @param envoy.useHostPort Enable/disable `hostPort` for TCP/80 and TCP/443
+    ## @param envoy.service.exposeMetrics Setting to expose the metrics port in the service
+    exposeMetrics: false
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
-  useHostPort: true
+  networkPolicy:
+    ## @param envoy.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param envoy.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param envoy.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param envoy.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param envoy.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param envoy.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param envoy.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## @param envoy.useHostPort.http Enable/disable `hostPort` for TCP/80
+  ## @param envoy.useHostPort.https Enable/disable `hostPort` TCP/443
+  ## @param envoy.useHostPort.metrics Enable/disable `hostPort` for TCP/8002
+  ##
+  useHostPort:
+    http: false
+    https: false
+    metrics: false
   ## @param envoy.useHostIP Enable/disable `hostIP`
   ##
   useHostIP: false
   ## @param envoy.hostPorts.http Sets `hostPort` http port
   ## @param envoy.hostPorts.https Sets `hostPort` https port
+  ## @param envoy.hostPorts.metrics Sets `hostPort` metrics port
   ##
   hostPorts:
     http: 80
     https: 443
+    metrics: 8002
   ## @param envoy.hostIPs.http Sets `hostIP` http IP
   ## @param envoy.hostIPs.https Sets `hostIP` https IP
+  ## @param envoy.hostIPs.metrics Sets `hostIP` metrics IP
   ##
   hostIPs:
     http: 127.0.0.1
     https: 127.0.0.1
+    metrics: 127.0.0.1
   ## Configures the ports the Envoy proxy listens on
   ## @param envoy.containerPorts.http Sets http port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)
   ## @param envoy.containerPorts.https Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)
+  ## @param envoy.containerPorts.metrics Sets metrics port inside Envoy pod (change this to >1024 to run envoy as a non-root user)
   ##
   containerPorts:
     http: 8080
     https: 8443
+    metrics: 8002
   ## @param envoy.initContainers [array] Attach additional init containers to Envoy pods
   ## For example:
   ## initContainers:
@@ -857,6 +1304,25 @@ envoy:
   ## @param envoy.extraEnvVarsSecret Secret containing extra env vars to be added to all Envoy containers
   ##
   extraEnvVarsSecret: ""
+  ## PodDisruptionBudget for default backend
+  ## Envoy Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param envoy.pdb.create Enable Pod Disruption Budget configuration
+  ## @param envoy.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
+  ## @param envoy.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+
+## @section Gateway API parameters
+##
+
+gatewayAPI:
+  ## @param gatewayAPI.manageCRDs Manage the creation, upgrade and deletion of Gateway API CRDs.
+  ##
+  manageCRDs: false
 
 ## @section Default backend parameters
 ##
@@ -869,19 +1335,20 @@ defaultBackend:
   enabled: false
   ## Bitnami NGINX image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
-  ## @param defaultBackend.image.registry Default backend image registry
-  ## @param defaultBackend.image.repository Default backend image name
-  ## @param defaultBackend.image.tag Default backend image tag
+  ## @param defaultBackend.image.registry [default: REGISTRY_NAME] Default backend image registry
+  ## @param defaultBackend.image.repository [default: REPOSITORY_NAME/nginx] Default backend image name
+  ## @skip defaultBackend.image.tag Default backend image tag
+  ## @param defaultBackend.image.digest Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param defaultBackend.image.pullPolicy Image pull policy
   ## @param defaultBackend.image.pullSecrets [array] Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-11-r5
+    tag: 1.27.2-debian-12-r2
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -961,42 +1428,63 @@ defaultBackend:
   ## Default backend pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param defaultBackend.podSecurityContext.enabled Default backend Pod securityContext
+  ## @param defaultBackend.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param defaultBackend.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param defaultBackend.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param defaultBackend.podSecurityContext.fsGroup Set Default backend Pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Default backend containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param defaultBackend.containerSecurityContext.enabled Default backend container securityContext
-  ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)
-  ## @param defaultBackend.containerSecurityContext.runAsNonRoot Run as non root
+  ## @param defaultBackend.containerSecurityContext.enabled Enabled defaultBackend containers' Security Context
+  ## @param defaultBackend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param defaultBackend.containerSecurityContext.runAsUser Set defaultBackend containers' Security Context runAsUser
+  ## @param defaultBackend.containerSecurityContext.runAsGroup Set defaultBackend containers' Security Context runAsGroup
+  ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set defaultBackend containers' Security Context runAsNonRoot
+  ## @param defaultBackend.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param defaultBackend.containerSecurityContext.privileged Set defaultBackend container's Security Context privileged
+  ## @param defaultBackend.containerSecurityContext.allowPrivilegeEscalation Set defaultBackend container's Security Context allowPrivilegeEscalation
+  ## @param defaultBackend.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param defaultBackend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
   ## Default backend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube.
-  ## @param defaultBackend.resources.limits [object] The resources limits for the Default backend container
-  ## @param defaultBackend.resources.requests [object] The requested resources for the Default backend container
+  ## @param defaultBackend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if defaultBackend.resources is set (defaultBackend.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param defaultBackend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Default backend containers' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param defaultBackend.livenessProbe.enabled Enable livenessProbe
@@ -1110,7 +1598,7 @@ defaultBackend:
   ##
   affinity: {}
   ## @param defaultBackend.nodeSelector [object] Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param defaultBackend.tolerations [array] Tolerations for pod assignment. Evaluated as a template.
@@ -1127,6 +1615,61 @@ defaultBackend:
     ports:
       http: 80
     annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param defaultBackend.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param defaultBackend.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param defaultBackend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param defaultBackend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param defaultBackend.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param defaultBackend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param defaultBackend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## PodDisruptionBudget for default backend
   ## Default backend Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -1135,15 +1678,14 @@ defaultBackend:
   ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
-
 ## Ingress parameters
 ##
 ingress:
   ## @param ingress.enabled Ingress configuration enabled
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ## Enable Ingress.
   ##
@@ -1238,35 +1780,57 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Metrics parameters
 ##
-
-## Prometheus Operator service monitors
-## @param metrics.serviceMonitor.namespace Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)
-## @param metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator.
-## @param metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
-## @param metrics.serviceMonitor.interval Specify the scrape interval if not specified use default prometheus scrapeIntervall, the Prometheus default scrape interval is used.
-## @param metrics.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics.
-## @param metrics.serviceMonitor.relabelings [array] Specify general relabeling.
-## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
-## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
-## @param metrics.serviceMonitor.selector Specify honorLabels parameter to add the scrape endpoint
-## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
-##
 metrics:
+  ## Prometheus Operator service monitors
+  ##
   serviceMonitor:
+    ## @param metrics.serviceMonitor.namespace Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)
+    ##
     namespace: ""
+    ## @param metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator.
+    ##
     enabled: false
+    ## @param metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+    ##
     jobLabel: "app.kubernetes.io/name"
+    ## @param metrics.serviceMonitor.interval Specify the scrape interval if not specified use default prometheus scrapeIntervall, the Prometheus default scrape interval is used.
+    ##
     interval: ""
+    ## @param metrics.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics.
+    ##
     metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings [array] Specify general relabeling.
+    ##
     relabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
     honorLabels: false
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
+    ##
     scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.selector Specify honorLabels parameter to add the scrape endpoint
+    ##
     selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
     labels: {}
-
+  ## Prometheus Operator prometheusRules
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Creates a Prometheus Operator prometheusRule
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the prometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+    ##
+    rules: []
 ## @section Other parameters
 ##
 

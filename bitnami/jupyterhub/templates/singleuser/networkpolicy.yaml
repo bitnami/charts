@@ -1,12 +1,14 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.singleuser.networkPolicy.enabled -}}
-apiVersion: networking.k8s.io/v1
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: singleuser
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   name: {{ printf "%s-singleuser" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
@@ -14,36 +16,23 @@ metadata:
   {{- end }}
 spec:
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: singleuser
   policyTypes:
     - Ingress
     - Egress
-  ingress:
-    {{- if .Values.singleuser.networkPolicy.extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
-    {{- end }}
-    # Pods with label "hub.jupyter.org/network-access-singleuser" --> Single User
-    - ports:
-        - port: {{ .Values.singleuser.containerPort }}
-      from:
-        - podSelector:
-            matchLabels:
-              hub.jupyter.org/network-access-singleuser: "true"
-        {{- if .Values.singleuser.networkPolicy.allowInterspaceAccess }}
-          namespaceSelector:
-            matchLabels: {}
-        - namespaceSelector:
-            matchLabels:
-              hub.jupyter.org/network-access-singleuser: "true"
-        {{- end }}
+  {{- if .Values.singleuser.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Single User --> Hub
     - ports:
-        - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
+        - port: {{ .Values.hub.containerPorts.http }}
       to:
+        {{- $hubPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $hubPodLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: hub
     {{- if not .Values.singleuser.networkPolicy.allowCloudMetadataAccess }}
     ## Limit access to the Cloud Metadata API
@@ -67,5 +56,40 @@ spec:
           port: {{ .Values.postgresql.service.ports.postgresql }}
     {{- if .Values.singleuser.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.singleuser.containerPorts.http }}
+      {{- if not .Values.singleuser.networkPolicy.allowExternal }}
+      from:
+        # Pods with label "hub.jupyter.org/network-access-singleuser" --> Single User
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-singleuser: "true"
+        {{- if .Values.singleuser.networkPolicy.allowInterspaceAccess }}
+          namespaceSelector:
+            matchLabels: {}
+        - namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-singleuser: "true"
+        {{- end }}
+        {{- if .Values.singleuser.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.singleuser.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.singleuser.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.singleuser.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.singleuser.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

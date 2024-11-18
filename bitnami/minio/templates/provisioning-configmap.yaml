@@ -1,15 +1,17 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.provisioning.enabled }}
 {{- $fullname := printf "%s-provisioning" (include "common.names.fullname" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $fullname }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: minio-provisioning
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -64,7 +66,8 @@ data:
           {
             "Effect": "{{ default "Deny" $statement.effect }}"{{ if $statement.actions }},
             "Action": {{ toJson $statement.actions }}{{end}}{{ if $statement.resources }},
-            "Resource": {{ toJson $statement.resources }}{{end}}
+            "Resource": {{ toJson $statement.resources }}{{end}}{{ if $statement.condition }},
+            "Condition": {{ toJson $statement.condition }}{{end}}
           }{{ if lt $i $statementsLength }},{{end }}
           {{- end }}
         ]

@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/keycloak"
         },
-        "runtime_parameters": "YXV0aDoKICBhZG1pblBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKICBtYW5hZ2VtZW50UGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzZXJ2aWNlOgogIHBvcnRzOgogICAgaHR0cDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,27 +31,17 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-keycloak-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/keycloak/goss"
+              "path": "/.vib"
             },
+            "tests_file": "keycloak/goss/goss.yaml",
+            "vars_file": "keycloak/runtime-parameters.yaml",
             "remote": {
-              "workload": "sts-keycloak"
+              "pod": {
+                "workload": "sts-keycloak"
+              }
             }
           }
         },
@@ -62,12 +51,18 @@
             "resources": {
               "path": "/.vib/keycloak/cypress"
             },
-            "endpoint": "lb-keycloak-http",
-            "app_protocol": "HTTP",
+            "endpoint": "lb-keycloak-https",
+            "app_protocol": "HTTPS",
             "env": {
               "username": "user",
               "password": "ComplicatedPassword123!4"
             }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

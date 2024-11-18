@@ -1,14 +1,18 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.packaging.helm.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.apprepository.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: apprepository
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,22 +21,21 @@ spec:
   {{- if .Values.apprepository.updateStrategy }}
   strategy: {{- toYaml .Values.apprepository.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.apprepository.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: apprepository
   template:
     metadata:
       {{- if .Values.apprepository.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: apprepository
-        {{- if .Values.apprepository.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
-      {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      {{- include "kubeapps.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "kubeapps.apprepository.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.apprepository.automountServiceAccountToken }}
       {{- if .Values.apprepository.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -40,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.apprepository.podAffinityPreset "component" "apprepository" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.apprepository.podAntiAffinityPreset "component" "apprepository" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.apprepository.podAffinityPreset "component" "apprepository" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.apprepository.podAntiAffinityPreset "component" "apprepository" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.apprepository.nodeAffinityPreset.type "key" .Values.apprepository.nodeAffinityPreset.key "values" .Values.apprepository.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.apprepository.schedulerName }}
@@ -60,7 +63,7 @@ spec:
       priorityClassName: {{ .Values.apprepository.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.apprepository.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.apprepository.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.apprepository.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.apprepository.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.initContainers "context" $) | trim | nindent 8 }}
@@ -70,7 +73,7 @@ spec:
           image: {{ include "kubeapps.apprepository.image" . }}
           imagePullPolicy: {{ .Values.apprepository.image.pullPolicy | quote }}
           {{- if .Values.apprepository.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.apprepository.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.apprepository.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.apprepository.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.lifecycleHooks "context" $) | nindent 12 }}
@@ -96,11 +99,11 @@ spec:
             {{- end }}
             - --repo-sync-cmd=/asset-syncer
             - --namespace={{ .Release.Namespace }}
-            - --global-repos-namespace={{ include "kubeapps.globalReposNamespace" . }}
+            - --global-repos-namespace={{ include "kubeapps.helmGlobalPackagingNamespace" . }}
             - --database-secret-name={{ include "kubeapps.postgresql.secretName" . }}
             - --database-secret-key=postgres-password
             - --database-url={{ printf "%s:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) }}
-            - --database-user=postgres
+            - --database-user={{ .Values.postgresql.auth.username }}
             - --database-name={{ .Values.postgresql.auth.database }}
             {{- if .Values.apprepository.crontab }}
             - --crontab={{ .Values.apprepository.crontab }}
@@ -123,6 +126,10 @@ spec:
           env:
             - name: REPO_SYNC_IMAGE
               value: {{ include "kubeapps.apprepository.syncImage" . }}
+            {{- if .Values.ociCatalog.enabled }}
+            - name: OCI_CATALOG_URL
+              value: {{ printf "%s:%d" (include "kubeapps.kubeappsapis.fullname" .) (int .Values.ociCatalog.containerPorts.grpc) | quote }}
+            {{- end }}
             {{- if .Values.apprepository.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -135,16 +142,25 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.apprepository.extraEnvVarsSecret "context" $) }}
             {{- end }}
-          {{- if .Values.apprepository.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.apprepository.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
+          {{- else if ne .Values.apprepository.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.apprepository.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.apprepository.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
-      {{- if .Values.apprepository.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.apprepository.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

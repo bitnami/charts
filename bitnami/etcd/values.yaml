@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -6,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -15,8 +19,17 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -41,7 +54,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy [array] Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -56,28 +68,27 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section etcd parameters
 ##
 
 ## Bitnami etcd image version
 ## ref: https://hub.docker.com/r/bitnami/etcd/tags/
-## @param image.registry etcd image registry
-## @param image.repository etcd image name
-## @param image.tag etcd image tag
-## @param image.pullPolicy etcd image pull policy
-## @param image.pullSecrets [array] etcd image pull secrets
-## @param image.debug Enable image debug mode
+## @param image.registry [default: REGISTRY_NAME] etcd image registry
+## @param image.repository [default: REPOSITORY_NAME/etcd] etcd image name
+## @skip image.tag etcd image tag
+## @param image.digest etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ##
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.4-debian-11-r3
+  tag: 3.5.17-debian-12-r0
+  digest: ""
+  ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
+  ## @param image.pullSecrets [array] etcd image pull secrets
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -86,6 +97,7 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## @param image.debug Enable image debug mode
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
@@ -115,6 +127,9 @@ auth:
   ## ref: https://etcd.io/docs/latest/learning/design-auth-v3/#two-types-of-tokens-simple-and-jwt
   ##
   token:
+    ## @param auth.token.enabled Enables token authentication
+    ##
+    enabled: true
     ## @param auth.token.type Authentication token type. Allowed values: 'simple' or 'jwt'
     ## ref: https://etcd.io/docs/latest/op-guide/configuration/#--auth-token
     ##
@@ -201,13 +216,22 @@ autoCompactionRetention: ""
 ## - 'existing': when upgrading the chart ('helm upgrade ...')
 ##
 initialClusterState: ""
+## @param initialClusterToken Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters.
+## If spinning up multiple clusters (or creating and destroying a single cluster)
+## with same configuration for testing purpose, it is highly recommended that each cluster is given a unique initial-cluster-token.
+## By doing this, etcd can generate unique cluster IDs and member IDs for the clusters even if they otherwise have the exact same configuration.
+##
+initialClusterToken: "etcd-cluster-k8s"
+## @param logLevel Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'
+##
+logLevel: "info"
 ## @param maxProcs Limits the number of operating system threads that can execute user-level
 ## Go code simultaneously by setting GOMAXPROCS environment variable
 ## ref: https://golang.org/pkg/runtime
 ##
 maxProcs: ""
 ## @param removeMemberOnContainerTermination Use a PreStop hook to remove the etcd members from the etcd cluster on container termination
-## they the containers are terminated
+## they the containers are terminated. Set to 'false' if appears an error-related member ID wasn't properly stored.
 ## NOTE: Ignored if lifecycleHooks is set or replicaCount=1
 ##
 removeMemberOnContainerTermination: true
@@ -241,10 +265,8 @@ command: []
 ## @param args [array] Default container args (useful when using custom images)
 ##
 args: []
-
 ## @section etcd statefulset parameters
 ##
-
 
 ## @param replicaCount Number of etcd replicas to deploy
 ##
@@ -259,6 +281,9 @@ updateStrategy:
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
 ##
 podManagementPolicy: Parallel
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases [array] etcd pod host aliases
 ## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -269,45 +294,73 @@ lifecycleHooks: {}
 ## etcd container ports to open
 ## @param containerPorts.client Client port to expose at container level
 ## @param containerPorts.peer Peer port to expose at container level
+## @param containerPorts.metrics Metrics port to expose at container level when metrics.useSeparateEndpoint is true
 ##
 containerPorts:
   client: 2379
   peer: 2380
+  metrics: 9090
 ## etcd pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled etcd pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set etcd pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## etcd containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled etcd containers' Security Context
-## @param containerSecurityContext.runAsUser Set etcd container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set etcd container's Security Context runAsNonRoot
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+## @param containerSecurityContext.runAsUser Set etcd containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set etcd containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set primary container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## etcd containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits [object] The resources limits for the etcd container
-## @param resources.requests [object] The requested resources for the etcd container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 500m
-  ##    memory: 1Gi
-  ##
-  limits: {}
-  requests: {}
+resourcesPreset: "micro"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -371,6 +424,9 @@ extraVolumes: []
 ## @param extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for etcd container(s)
 ##
 extraVolumeMounts: []
+## @param extraVolumeClaimTemplates [array] Optionally specify extra list of additional volumeClaimTemplates for etcd container(s)
+##
+extraVolumeClaimTemplates: []
 ## @param initContainers [array] Add additional init containers to the etcd pods
 ## e.g:
 ## initContainers:
@@ -433,7 +489,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector [object] Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations [array] Tolerations for pod assignment
@@ -457,6 +513,14 @@ priorityClassName: ""
 ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
 ##
 runtimeClassName: ""
+## @param shareProcessNamespace Enable shared process namespace in a pod.
+## If set to false (default), each container will run in separate namespace, etcd will have PID=1.
+## If set to true, the /pause will run as init process and will reap any zombie PIDs,
+## for example, generated by a custom exec probe running longer than a probe timeoutSeconds.
+## Enable this only if customLivenessProbe or customReadinessProbe is used and zombie PIDs are accumulating.
+## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+##
+shareProcessNamespace: false
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
 ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 ## The value is evaluated as a template
@@ -488,25 +552,32 @@ service:
   clusterIP: ""
   ## @param service.ports.client etcd client port
   ## @param service.ports.peer etcd peer port
+  ## @param service.ports.metrics etcd metrics port when metrics.useSeparateEndpoint is true
   ##
   ports:
     client: 2379
     peer: 2380
+    metrics: 9090
   ## @param service.nodePorts.client Specify the nodePort client value for the LoadBalancer and NodePort service types.
   ## @param service.nodePorts.peer Specify the nodePort peer value for the LoadBalancer and NodePort service types.
+  ## @param service.nodePorts.metrics Specify the nodePort metrics value for the LoadBalancer and NodePort service types. The metrics port is only exposed when metrics.useSeparateEndpoint is true.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
     client: ""
     peer: ""
+    metrics: ""
   ## @param service.clientPortNameOverride etcd client port name override
   ##
   clientPortNameOverride: ""
   ## @param service.peerPortNameOverride etcd peer port name override
   ##
   peerPortNameOverride: ""
+  ## @param service.metricsPortNameOverride etcd metrics port name override. The metrics port is only exposed when metrics.useSeparateEndpoint is true.
+  ##
+  metricsPortNameOverride: ""
   ## @param service.loadBalancerIP loadBalancerIP for the etcd service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges [array] Load Balancer source ranges
@@ -541,12 +612,17 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## @section Persistence parameters
 ##
 
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled If true, use a Persistent Volume Claim. If false, use emptyDir.
@@ -564,6 +640,9 @@ persistence:
   ## @param persistence.annotations [object] Annotations for the PVC
   ##
   annotations: {}
+  ## @param persistence.labels [object] Labels for the PVC
+  ##
+  labels: {}
   ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:
@@ -575,7 +654,6 @@ persistence:
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
   ##
   selector: {}
-
 ## @section Volume Permissions parameters
 ##
 
@@ -586,17 +664,20 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
-  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
-  ## @param volumePermissions.image.pullSecrets [array] Specify docker-registry secret names as an array
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r3
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r33
+    digest: ""
+    ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+    ##
     pullPolicy: IfNotPresent
+    ## @param volumePermissions.image.pullSecrets [array] Specify docker-registry secret names as an array
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -606,36 +687,42 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits [object] Init container volume-permissions resource  limits
-  ## @param volumePermissions.resources.requests [object] Init container volume-permissions resource  requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 500m
-    ##    memory: 1Gi
-    ##
-    limits: {}
-    requests: {}
-
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Network Policy parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
   ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
   ##
-  enabled: false
+  enabled: true
   ## @param networkPolicy.allowExternal Don't require client label for connections
   ## When set to false, only pods with the correct client label will have network access to the ports
   ## etcd is listening on. When true, etcd will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
   ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
@@ -675,19 +762,20 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
 ## @section Metrics parameters
 ##
-
 metrics:
   ## @param metrics.enabled Expose etcd metrics
   ##
   enabled: false
+  ## @param metrics.useSeparateEndpoint Use a separate endpoint for exposing metrics
+  #
+  useSeparateEndpoint: false
   ## @param metrics.podAnnotations [object] Annotations for the Prometheus metrics on etcd pods
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.containerPorts.client }}"
+    prometheus.io/port: "{{ .Values.metrics.useSeparateEndpoint | ternary .Values.containerPorts.metrics .Values.containerPorts.client }}"
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##
@@ -723,7 +811,6 @@ metrics:
     ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
     ##
     relabelings: []
-  
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
@@ -737,19 +824,17 @@ metrics:
     ##
     additionalLabels: {}
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
-      # - alert: ETCD has no leader
-      #   annotations:
-      #     summary: "ETCD has no leader"
-      #     description: "pod {{`{{`}} $labels.pod {{`}}`}} state error, can't connect leader"
-      #   for: 1m
-      #   expr: etcd_server_has_leader == 0
-      #   labels:
-      #     severity: critical
-      #     group: PaaS
+    # - alert: ETCD has no leader
+    #   annotations:
+    #     summary: "ETCD has no leader"
+    #     description: "pod {{`{{`}} $labels.pod {{`}}`}} state error, can't connect leader"
+    #   for: 1m
+    #   expr: etcd_server_has_leader == 0
+    #   labels:
+    #     severity: critical
+    #     group: PaaS
     ##
     rules: []
-
-
 ## @section Snapshotting parameters
 ##
 
@@ -786,37 +871,92 @@ disasterRecovery:
     ## @param disasterRecovery.cronjob.snapshotHistoryLimit Number of etcd snapshots to retain, tagged by date
     ##
     snapshotHistoryLimit: 1
+    ## @param disasterRecovery.cronjob.snapshotsDir Directory to store snapshots
+    ##
+    snapshotsDir: "/snapshots"
     ## @param disasterRecovery.cronjob.podAnnotations [object] Pod annotations for cronjob pods
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
+    ## K8s Security Context for Snapshotter cronjob pods
+    ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ## @param disasterRecovery.cronjob.podSecurityContext.enabled Enable security context for Snapshotter pods
+    ## @param disasterRecovery.cronjob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param disasterRecovery.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param disasterRecovery.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param disasterRecovery.cronjob.podSecurityContext.fsGroup Group ID for the Snapshotter filesystem
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
+    ## Configure container security context for Snapshotter cronjob containers
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param disasterRecovery.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param disasterRecovery.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param disasterRecovery.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param disasterRecovery.cronjob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param disasterRecovery.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param disasterRecovery.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param disasterRecovery.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param disasterRecovery.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param disasterRecovery.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param disasterRecovery.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## Configure resource requests and limits for snapshotter containers
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param disasterRecovery.cronjob.resources.limits [object] Cronjob container resource limits
-    ## @param disasterRecovery.cronjob.resources.requests [object] Cronjob container resource requests
+    ## @param disasterRecovery.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if disasterRecovery.cronjob.resources is set (disasterRecovery.cronjob.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 500m
-      ##    memory: 1Gi
-      ##
-      limits: {}
-      requests: {}
-
+    resourcesPreset: "nano"
+    ## @param disasterRecovery.cronjob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## @param disasterRecovery.cronjob.nodeSelector Node labels for cronjob pods assignment
-    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param disasterRecovery.cronjob.tolerations Tolerations for cronjob pods assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-
+    ## @param disasterRecovery.cronjob.podLabels [object] Labels that will be added to pods created by cronjob
+    ##
+    podLabels: {}
+    ## @param disasterRecovery.cronjob.serviceAccountName Specifies the service account to use for disaster recovery cronjob
+    ##
+    serviceAccountName: ""
+    ## @param disasterRecovery.cronjob.command Override default snapshot container command (useful when you want to customize the snapshot logic)
+    ##
+    command: []
+    ##
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim
     ## If defined, PVC must be created manually before volume will be bound
@@ -829,28 +969,156 @@ disasterRecovery:
     ## @param disasterRecovery.pvc.storageClassName Storage Class for snapshots volume
     ##
     storageClassName: nfs
-
+    ## @param disasterRecovery.pvc.subPath Path within the volume from which to mount
+    ## Useful if snapshots should only be stored in a subdirectory of the volume
+    ##
+    subPath: ""
 ## @section Service account parameters
 ##
-
 serviceAccount:
   ## @param serviceAccount.create Enable/disable service account creation
   ##
-  create: false
+  create: true
   ## @param serviceAccount.name Name of the service account to create or use
   ##
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of service account token
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations [object] Additional annotations to be included on the service account
   ##
   annotations: {}
   ## @param serviceAccount.labels [object] Additional labels to be included on the service account
   ##
   labels: {}
+## @section Defragmentation parameters
+##
 
+## Enable defragmentation by periodically rearranging fragmented data after history compaction.
+## It creates a cronjob to periodically run the defragmentation command:
+## etcdctl defrag [OPTIONS]
+## See https://etcd.io/docs/latest/op-guide/maintenance/
+##
+defrag:
+  ## @param defrag.enabled Enable automatic defragmentation. This is most effective when paired with auto compaction: consider setting "autoCompactionRetention > 0".
+  ##
+  enabled: false
+  cronjob:
+    ## @param defrag.cronjob.startingDeadlineSeconds Number of seconds representing the deadline for starting the job if it misses scheduled time for any reason
+    ##
+    startingDeadlineSeconds: ""
+    ## @param defrag.cronjob.schedule Schedule in Cron format to defrag (daily at midnight by default)
+    ## See https://en.wikipedia.org/wiki/Cron
+    ##
+    schedule: "0 0 * * *"
+    ## @param defrag.cronjob.concurrencyPolicy Set the cronjob parameter concurrencyPolicy
+    ##
+    concurrencyPolicy: Forbid
+    ## @param defrag.cronjob.suspend Boolean that indicates if the controller must suspend subsequent executions (not applied to already started executions) 
+    ##
+    suspend: false
+    ## @param defrag.cronjob.successfulJobsHistoryLimit Number of successful finished jobs to retain
+    ##
+    successfulJobsHistoryLimit: 1
+    ## @param defrag.cronjob.failedJobsHistoryLimit Number of failed finished jobs to retain
+    ##
+    failedJobsHistoryLimit: 1
+    ## @param defrag.cronjob.labels [object] Additional labels to be added to the Defrag cronjob
+    ##
+    labels: {}
+    ## @param defrag.cronjob.annotations [object] Annotations to be added to the Defrag cronjob
+    ##
+    annotations: {}
+    ## @param defrag.cronjob.activeDeadlineSeconds Number of seconds relative to the startTime that the job may be continuously active before the system tries to terminate it
+    ##
+    activeDeadlineSeconds: ""
+    ## @param defrag.cronjob.restartPolicy Set the cronjob parameter restartPolicy
+    ##
+    restartPolicy: OnFailure
+    ## @param defrag.cronjob.podLabels [object] Labels that will be added to pods created by Defrag cronjob
+    ##
+    podLabels: {}
+    ## @param defrag.cronjob.podAnnotations [object] Pod annotations for Defrag cronjob pods
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## K8s Security Context for Defrag cronjob pods
+    ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ## @param defrag.cronjob.podSecurityContext.enabled Enable security context for Defrag pods
+    ## @param defrag.cronjob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param defrag.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param defrag.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param defrag.cronjob.podSecurityContext.fsGroup Group ID for the Defrag filesystem
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
+    ## Configure container security context for Defrag cronjob containers
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param defrag.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param defrag.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param defrag.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param defrag.cronjob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param defrag.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param defrag.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param defrag.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param defrag.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param defrag.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param defrag.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## @param defrag.cronjob.nodeSelector [object]  Node labels for pod assignment in Defrag cronjob
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
+    ## @param defrag.cronjob.tolerations [array] Tolerations for pod assignment in Defrag cronjob
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param defrag.cronjob.serviceAccountName Specifies the service account to use for Defrag cronjob
+    ##
+    serviceAccountName: ""
+    ## @param defrag.cronjob.command [array] Override default container command for defragmentation (useful when using custom images)
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    command: []
+    ## @param defrag.cronjob.args [array] Override default container args (useful when using custom images)
+    ##
+    args: []
+    ## @param defrag.cronjob.resourcesPreset Set container resources according to one common preset
+    ## (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if
+    ## defrag.cronjob.resources is set (defrag.cronjob.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defrag.cronjob.resources [object] Set container requests and limits for different resources like CPU or
+    ## memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## @section Other parameters
 ##
 

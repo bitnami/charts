@@ -1,0 +1,61 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.alertmanager.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "prometheus.alertmanager.fullname" . | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.alertmanager.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: prometheus
+    app.kubernetes.io/component: alertmanager
+  {{- if or .Values.alertmanager.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.alertmanager.service.type }}
+  {{- if and .Values.alertmanager.service.clusterIP (eq .Values.alertmanager.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.alertmanager.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.alertmanager.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.alertmanager.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.alertmanager.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.alertmanager.service.type "LoadBalancer") (eq .Values.alertmanager.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.alertmanager.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.alertmanager.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.alertmanager.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.alertmanager.service.loadBalancerClass }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.alertmanager.service.ports.http }}
+      protocol: TCP
+      targetPort: http
+      {{- if and (or (eq .Values.alertmanager.service.type "NodePort") (eq .Values.alertmanager.service.type "LoadBalancer")) (not (empty .Values.alertmanager.service.nodePorts.http)) }}
+      nodePort: {{ .Values.alertmanager.service.nodePorts.http }}
+      {{- else if eq .Values.alertmanager.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.alertmanager.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: prometheus
+    app.kubernetes.io/component: alertmanager
+{{- end }}

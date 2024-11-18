@@ -1,4 +1,9 @@
 {{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper Argo CD image name
 */}}
 {{- define "argocd.image" -}}
@@ -20,10 +25,17 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+Return the proper Redis image name
+*/}}
+{{- define "argocd.redis.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.redis.image "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "argocd.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image .Values.redis.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -34,10 +46,38 @@ Return the proper service name for Argo CD controller
 {{- end -}}
 
 {{/*
+Return the proper service name for Argo CD controller adding the working namespace
+*/}}
+{{- define "argocd.namespace.application-controller" -}}
+  {{- printf "%s-app-controller" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+Return the proper service name for Argo CD applicationSet controller
+*/}}
+{{- define "argocd.applicationSet" -}}
+  {{- printf "%s-applicationset-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+Return the proper service name for Argo CD notifications controller
+*/}}
+{{- define "argocd.notifications" -}}
+  {{- printf "%s-notifications" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
 Return the proper service name for Argo CD server
 */}}
 {{- define "argocd.server" -}}
   {{- printf "%s-server" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+Return the proper service name for Argo CD server adding the working namespace
+*/}}
+{{- define "argocd.namespace.server" -}}
+  {{- printf "%s-server" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*
@@ -93,6 +133,39 @@ Create the name of the service account to use for the Argo CD application contro
     {{ default (printf "%s-argocd-app-controller" (include "common.names.fullname" .)) .Values.controller.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
     {{ default "default" .Values.controller.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Argo CD applicationSet controller
+*/}}
+{{- define "argocd.applicationSet.serviceAccountName" -}}
+{{- if .Values.applicationSet.serviceAccount.create -}}
+    {{ default (printf "%s-applicationset-controller" (include "common.names.fullname" .)) .Values.applicationSet.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.applicationSet.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Argo CD notifications controller
+*/}}
+{{- define "argocd.notifications.serviceAccountName" -}}
+{{- if .Values.notifications.serviceAccount.create -}}
+    {{ default (printf "%s-notifications" (include "common.names.fullname" .)) .Values.notifications.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.notifications.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Argo CD Slack bot
+*/}}
+{{- define "argocd.notifications.bots.slack.serviceAccountName" -}}
+{{- if .Values.notifications.bots.slack.serviceAccount.create -}}
+    {{ default (printf "%s-notifications-slack-bot" (include "common.names.fullname" .)) .Values.notifications.bots.slack.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.notifications.bots.slack.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -177,9 +250,22 @@ Return the Redis&reg; port
 */}}
 {{- define "argocd.redisPort" -}}
 {{- if .Values.redis.enabled }}
-    {{- .Values.redis.service.port -}}
+    {{- coalesce .Values.redis.service.port .Values.redis.service.ports.redis -}}
 {{- else -}}
     {{- .Values.externalRedis.port -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate Application Controller config
+*/}}
+{{- define "argocd.validateValues.controller.config" -}}
+{{- if gt (int .Values.controller.replicaCount) 1 }}
+    {{- if and .Values.controller.dynamicClusterDistribution.enabled (not (eq .Values.controller.kind "Deployment")) }}
+Argo CD: When running in HA mode with dynamic cluster distribution enabled, the application controller must be installed as a Deployment.
+    {{- else if and (not .Values.controller.dynamicClusterDistribution.enabled) (not (eq .Values.controller.kind "StatefulSet")) }}
+Argo CD: When running in HA mode, the application controller must be installed as a StatefulSet.
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -203,7 +289,12 @@ Validate external Redis config
 */}}
 {{- define "argocd.validateValues.externalRedis" -}}
 {{- if not .Values.redis.enabled -}}
+    {{- if not .Values.externalRedis.port -}}
 Argo CD: If the redis dependency is disabled you need to add an external redis port
+    {{- end -}}
+    {{- if not .Values.externalRedis.host -}}
+Argo CD: If the redis dependency is disabled you need to add an external redis host
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -243,10 +334,15 @@ Compile all warnings into a single message.
 */}}
 {{- define "argocd.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "argocd.validateValues.controller.config" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.dex.config" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.clusterCredentials" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.externalRedis" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.redis" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
 {{- end -}}

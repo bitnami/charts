@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/tomcat"
         },
-        "runtime_parameters": "InRvbWNhdFBhc3N3b3JkIjogIm5jalhyTlgzalJYYyI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,17 +31,38 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "tomcat/goss/goss.yaml",
+            "vars_file": "tomcat/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-tomcat"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
+            "resources": {
+              "path": "/.vib/tomcat/cypress"
+            },
             "endpoint": "lb-tomcat-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "tomcatUser",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

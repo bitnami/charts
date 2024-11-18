@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -12,6 +17,17 @@ Return the proper metrics image name
 */}}
 {{- define "consul.metrics.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "consul.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -34,7 +50,7 @@ Usage:
 {{ include "consul.retryjoin.endpoint" . }}
 */}}
 {{- define "consul.retryjoin.endpoint" -}}
-    {{- $name := printf "%s-headless" (include "common.names.fullname" .) -}}
+    {{- $name := printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- $domain := .Values.clusterDomain -}}
     {{- $namespace := .Release.Namespace -}}
     {{- printf "%s.%s.svc.%s" $name $namespace $domain -}}
@@ -47,7 +63,7 @@ Return the configmap with the Consul configuration
 {{- if .Values.existingConfigmap -}}
     {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s" (printf "%s-configuration" (include "common.names.fullname" .)) -}}
+    {{- printf "%s" (printf "%s-configuration" (include "common.names.fullname" .)) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 

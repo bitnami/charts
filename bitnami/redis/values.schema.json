@@ -1,156 +1,3275 @@
 {
-  "$schema": "http://json-schema.org/schema#",
-  "type": "object",
-  "properties": {
-    "architecture": {
-      "type": "string",
-      "title": "Redis architecture",
-      "form": true,
-      "description": "Allowed values: `standalone` or `replication`",
-      "enum": ["standalone", "replication"]
-    },
-    "auth": {
-      "type": "object",
-      "title": "Authentication configuration",
-      "form": true,
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "form": true,
-          "title": "Use password authentication"
-        },
-        "password": {
-          "type": "string",
-          "title": "Redis password",
-          "form": true,
-          "description": "Defaults to a random 10-character alphanumeric string if not set",
-          "hidden": {
-            "value": false,
-            "path": "auth/enabled"
-          }
-        }
-      }
-    },
-    "master": {
-      "type": "object",
-      "title": "Master replicas settings",
-      "form": true,
-      "properties": {
-        "kind": {
-          "type": "string",
-          "title": "Workload Kind",
-          "form": true,
-          "description": "Allowed values: `Deployment` or `StatefulSet`",
-          "enum": ["Deployment", "StatefulSet"]
-        },
-        "persistence": {
-          "type": "object",
-          "title": "Persistence for master replicas",
-          "form": true,
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "form": true,
-              "title": "Enable persistence",
-              "description": "Enable persistence using Persistent Volume Claims"
-            },
-            "size": {
-              "type": "string",
-              "title": "Persistent Volume Size",
-              "form": true,
-              "render": "slider",
-              "sliderMin": 1,
-              "sliderMax": 100,
-              "sliderUnit": "Gi",
-              "hidden": {
-                "value": false,
-                "path": "master/persistence/enabled"
-              }
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "defaultStorageClass": {
+                    "type": "string",
+                    "description": "Global default StorageClass for Persistent Volume(s)",
+                    "default": ""
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "DEPRECATED: use global.defaultStorageClass instead",
+                    "default": ""
+                },
+                "redis": {
+                    "type": "object",
+                    "properties": {
+                        "password": {
+                            "type": "string",
+                            "description": "Global Redis&reg; password (overrides `auth.password`)",
+                            "default": ""
+                        }
+                    }
+                },
+                "compatibility": {
+                    "type": "object",
+                    "properties": {
+                        "openshift": {
+                            "type": "object",
+                            "properties": {
+                                "adaptSecurityContext": {
+                                    "type": "string",
+                                    "description": "Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)",
+                                    "default": "auto"
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
-    },
-    "replica": {
-      "type": "object",
-      "title": "Redis replicas settings",
-      "form": true,
-      "hidden": {
-        "value": "standalone",
-        "path": "architecture"
-      },
-      "properties": {
-        "replicaCount": {
-          "type": "integer",
-          "form": true,
-          "title": "Number of Redis replicas"
         },
-        "persistence": {
-          "type": "object",
-          "title": "Persistence for Redis replicas",
-          "form": true,
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "form": true,
-              "title": "Enable persistence",
-              "description": "Enable persistence using Persistent Volume Claims"
-            },
-            "size": {
-              "type": "string",
-              "title": "Persistent Volume Size",
-              "form": true,
-              "render": "slider",
-              "sliderMin": 1,
-              "sliderMax": 100,
-              "sliderUnit": "Gi",
-              "hidden": {
-                "value": false,
-                "path": "replica/persistence/enabled"
-              }
-            }
-          }
-        }
-      }
-    },
-    "volumePermissions": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "form": true,
-          "title": "Enable Init Containers",
-          "description": "Use an init container to set required folder permissions on the data volume before mounting it in the final destination"
-        }
-      }
-    },
-    "metrics": {
-      "type": "object",
-      "form": true,
-      "title": "Prometheus metrics details",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "Create Prometheus metrics exporter",
-          "description": "Create a side-car container to expose Prometheus metrics",
-          "form": true
+        "kubeVersion": {
+            "type": "string",
+            "description": "Override Kubernetes version",
+            "default": ""
         },
-        "serviceMonitor": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "title": "Create Prometheus Operator ServiceMonitor",
-              "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
-              "form": true,
-              "hidden": {
-                "value": false,
-                "path": "metrics/enabled"
-              }
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override common.names.fullname",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.fullname",
+            "default": ""
+        },
+        "namespaceOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.namespace",
+            "default": ""
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Labels to add to all deployed objects",
+            "default": {}
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Annotations to add to all deployed objects",
+            "default": {}
+        },
+        "secretAnnotations": {
+            "type": "object",
+            "description": "Annotations to add to secret",
+            "default": {}
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Kubernetes cluster domain name",
+            "default": "cluster.local"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release",
+            "default": [],
+            "items": {}
+        },
+        "useHostnames": {
+            "type": "boolean",
+            "description": "Use hostnames internally when announcing replication. If false, the hostname will be resolved to an IP address",
+            "default": true
+        },
+        "nameResolutionThreshold": {
+            "type": "number",
+            "description": "Failure threshold for internal hostnames resolution",
+            "default": 5
+        },
+        "nameResolutionTimeout": {
+            "type": "number",
+            "description": "Timeout seconds between probes for internal hostnames resolution",
+            "default": 5
+        },
+        "diagnosticMode": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
+                    "default": false
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Command to override all containers in the deployment",
+                    "default": [
+                        "sleep"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Args to override all containers in the deployment",
+                    "default": [
+                        "infinity"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
             }
-          }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "Redis&reg; image registry",
+                    "default": "REGISTRY_NAME"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "Redis&reg; image repository",
+                    "default": "REPOSITORY_NAME/redis"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                    "default": ""
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "Redis&reg; image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "Redis&reg; image pull secrets",
+                    "default": [],
+                    "items": {}
+                },
+                "debug": {
+                    "type": "boolean",
+                    "description": "Enable image debug mode",
+                    "default": false
+                }
+            }
+        },
+        "architecture": {
+            "type": "string",
+            "description": "Redis&reg; architecture. Allowed values: `standalone` or `replication`",
+            "default": "replication"
+        },
+        "auth": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable password authentication",
+                    "default": true
+                },
+                "sentinel": {
+                    "type": "boolean",
+                    "description": "Enable password authentication on sentinels too",
+                    "default": true
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Redis&reg; password",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "The name of an existing secret with Redis&reg; credentials",
+                    "default": ""
+                },
+                "existingSecretPasswordKey": {
+                    "type": "string",
+                    "description": "Password key to be retrieved from existing secret",
+                    "default": ""
+                },
+                "usePasswordFiles": {
+                    "type": "boolean",
+                    "description": "Mount credentials as files instead of using an environment variable",
+                    "default": false
+                },
+                "usePasswordFileFromSecret": {
+                    "type": "boolean",
+                    "description": "Mount password file from secret",
+                    "default": true
+                }
+            }
+        },
+        "commonConfiguration": {
+            "type": "string",
+            "description": "Common configuration to be added into the ConfigMap",
+            "default": "\"\""
+        },
+        "existingConfigmap": {
+            "type": "string",
+            "description": "The name of an existing ConfigMap with your custom configuration for Redis&reg; nodes",
+            "default": ""
+        },
+        "master": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "number",
+                    "description": "Number of Redis&reg; master instances to deploy (experimental, requires additional configuration)",
+                    "default": 1
+                },
+                "revisionHistoryLimit": {
+                    "type": "number",
+                    "description": "The number of old history to retain to allow rollback",
+                    "default": 10
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "Configuration for Redis&reg; master nodes",
+                    "default": ""
+                },
+                "disableCommands": {
+                    "type": "array",
+                    "description": "Array with Redis&reg; commands to disable on master nodes",
+                    "default": [
+                        "FLUSHDB",
+                        "FLUSHALL"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "enableServiceLinks": {
+                    "type": "boolean",
+                    "description": "Whether information about services should be injected into pod's environment variable",
+                    "default": true
+                },
+                "preExecCmds": {
+                    "type": "array",
+                    "description": "Additional commands to run prior to starting Redis&reg; master",
+                    "default": [],
+                    "items": {}
+                },
+                "extraFlags": {
+                    "type": "array",
+                    "description": "Array with additional command line flags for Redis&reg; master",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Redis&reg; master nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for Redis&reg; master nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for Redis&reg; master nodes",
+                    "default": ""
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "redis": {
+                            "type": "number",
+                            "description": "Container port to open on Redis&reg; master nodes",
+                            "default": 6379
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Redis&reg; master nodes",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Redis&reg; master nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Redis&reg; master nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&reg; master pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Redis&reg; master pod's Security Context fsGroup",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&reg; master containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Redis&reg; master containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set Redis&reg; master containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Redis&reg; master containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Is it possible to escalate Redis&reg; pod(s) privileges",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context read-only root filesystem",
+                            "default": true
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Redis&reg; master containers' Security Context seccompProfile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set Redis&reg; master containers' Security Context capabilities to drop",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "kind": {
+                    "type": "string",
+                    "description": "Use either Deployment, StatefulSet (default) or DaemonSet",
+                    "default": "StatefulSet"
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Alternate scheduler for Redis&reg; master pods",
+                    "default": ""
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&reg; master statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "minReadySeconds": {
+                    "type": "number",
+                    "description": "How many seconds a pod needs to be ready before killing the next, during update",
+                    "default": 0
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Redis&reg; master pods' priorityClassName",
+                    "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Redis&reg; master pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for Redis&reg; master pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for Redis&reg; master pods",
+                    "default": {}
+                },
+                "shareProcessNamespace": {
+                    "type": "boolean",
+                    "description": "Share a single process namespace between all of the containers in Redis&reg; master pods",
+                    "default": false
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `master.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `master.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Redis&reg; master pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Redis&reg; master pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Redis&reg; master pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Spread Constraints for Redis&reg; master pod assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "dnsPolicy": {
+                    "type": "string",
+                    "description": "DNS Policy for Redis&reg; master pod",
+                    "default": ""
+                },
+                "dnsConfig": {
+                    "type": "object",
+                    "description": "DNS Configuration for Redis&reg; master pod",
+                    "default": {}
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the Redis&reg; master container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Redis&reg; master pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Redis&reg; master container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the Redis&reg; master pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the Redis&reg; master pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence on Redis&reg; master nodes using Persistent Volume Claims",
+                            "default": true
+                        },
+                        "medium": {
+                            "type": "string",
+                            "description": "Provide a medium for `emptyDir` volumes.",
+                            "default": ""
+                        },
+                        "sizeLimit": {
+                            "type": "string",
+                            "description": "Set this to enable a size limit for `emptyDir` volumes.",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "The path the volume will be mounted at on Redis&reg; master containers",
+                            "default": "/data"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "The subdirectory of the volume to mount on Redis&reg; master containers",
+                            "default": ""
+                        },
+                        "subPathExpr": {
+                            "type": "string",
+                            "description": "Used to construct the subPath subdirectory of the volume to mount on Redis&reg; master containers",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "Persistent Volume storage class",
+                            "default": ""
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume access modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Persistent Volume size",
+                            "default": "8Gi"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the PVC",
+                            "default": {}
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Additional custom labels for the PVC",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Additional labels to match for the PVC",
+                            "default": {}
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "Use a existing PVC which must be created manually before bound",
+                            "default": ""
+                        }
+                    }
+                },
+                "persistentVolumeClaimRetentionPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Controls if and how PVCs are deleted during the lifecycle of a StatefulSet",
+                            "default": false
+                        },
+                        "whenScaled": {
+                            "type": "string",
+                            "description": "Volume retention behavior when the replica count of the StatefulSet is reduced",
+                            "default": "Retain"
+                        },
+                        "whenDeleted": {
+                            "type": "string",
+                            "description": "Volume retention behavior that applies when the StatefulSet is deleted",
+                            "default": "Retain"
+                        }
+                    }
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&reg; master service type",
+                            "default": "ClusterIP"
+                        },
+                        "portNames": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "string",
+                                    "description": "Redis&reg; master service port name",
+                                    "default": "tcp-redis"
+                                }
+                            }
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "number",
+                                    "description": "Redis&reg; master service port",
+                                    "default": 6379
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "string",
+                                    "description": "Node port for Redis&reg; master",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&reg; master service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose (normally used with the `sidecar` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "internalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&reg; master service internal traffic policy (requires Kubernetes v1.22 or greater to be usable)",
+                            "default": "Cluster"
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Redis&reg; master service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Redis&reg; master service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerClass": {
+                            "type": "string",
+                            "description": "master service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Redis&reg; master service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "externalIPs": {
+                            "type": "array",
+                            "description": "Redis&reg; master service External IPs",
+                            "default": [],
+                            "items": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Redis&reg; master service",
+                            "default": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "number",
+                    "description": "Integer setting the termination grace period for the redis-master pods",
+                    "default": 30
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a ServiceAccount should be created",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use.",
+                            "default": ""
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Whether to auto mount the service account token",
+                            "default": false
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the ServiceAccount",
+                            "default": {}
+                        }
+                    }
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation",
+                            "default": true
+                        }
+                    }
+                }
+            }
+        },
+        "replica": {
+            "type": "object",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": "Use either DaemonSet or StatefulSet (default)",
+                    "default": "StatefulSet"
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of Redis&reg; replicas to deploy",
+                    "default": 3
+                },
+                "revisionHistoryLimit": {
+                    "type": "number",
+                    "description": "The number of old history to retain to allow rollback",
+                    "default": 10
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "Configuration for Redis&reg; replicas nodes",
+                    "default": ""
+                },
+                "disableCommands": {
+                    "type": "array",
+                    "description": "Array with Redis&reg; commands to disable on replicas nodes",
+                    "default": [
+                        "FLUSHDB",
+                        "FLUSHALL"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "enableServiceLinks": {
+                    "type": "boolean",
+                    "description": "Whether information about services should be injected into pod's environment variable",
+                    "default": true
+                },
+                "preExecCmds": {
+                    "type": "array",
+                    "description": "Additional commands to run prior to starting Redis&reg; replicas",
+                    "default": [],
+                    "items": {}
+                },
+                "extraFlags": {
+                    "type": "array",
+                    "description": "Array with additional command line flags for Redis&reg; replicas",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Redis&reg; replicas nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for Redis&reg; replicas nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for Redis&reg; replicas nodes",
+                    "default": ""
+                },
+                "externalMaster": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Use external master for bootstrapping",
+                            "default": false
+                        },
+                        "host": {
+                            "type": "string",
+                            "description": "External master host to bootstrap from",
+                            "default": ""
+                        },
+                        "port": {
+                            "type": "number",
+                            "description": "Port for Redis service external master host",
+                            "default": 6379
+                        }
+                    }
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "redis": {
+                            "type": "number",
+                            "description": "Container port to open on Redis&reg; replicas nodes",
+                            "default": 6379
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Redis&reg; replicas nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 10
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 22
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Redis&reg; replicas nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Redis&reg; replicas nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if replica.resources is set (replica.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&reg; replicas pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Redis&reg; replicas pod's Security Context fsGroup",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&reg; replicas containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Redis&reg; replicas containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set Redis&reg; replicas containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Redis&reg; replicas containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set Redis&reg; replicas pod's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context read-only root filesystem",
+                            "default": true
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Redis&reg; replicas containers' Security Context seccompProfile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set Redis&reg; replicas containers' Security Context capabilities to drop",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Alternate scheduler for Redis&reg; replicas pods",
+                    "default": ""
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&reg; replicas statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "minReadySeconds": {
+                    "type": "number",
+                    "description": "How many seconds a pod needs to be ready before killing the next, during update",
+                    "default": 0
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Redis&reg; replicas pods' priorityClassName",
+                    "default": ""
+                },
+                "podManagementPolicy": {
+                    "type": "string",
+                    "description": "podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods",
+                    "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Redis&reg; replicas pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for Redis&reg; replicas pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for Redis&reg; replicas pods",
+                    "default": {}
+                },
+                "shareProcessNamespace": {
+                    "type": "boolean",
+                    "description": "Share a single process namespace between all of the containers in Redis&reg; replicas pods",
+                    "default": false
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `replica.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `replica.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Redis&reg; replicas pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Redis&reg; replicas pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Redis&reg; replicas pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Spread Constraints for Redis&reg; replicas pod assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "dnsPolicy": {
+                    "type": "string",
+                    "description": "DNS Policy for Redis&reg; replica pods",
+                    "default": ""
+                },
+                "dnsConfig": {
+                    "type": "object",
+                    "description": "DNS Configuration for Redis&reg; replica pods",
+                    "default": {}
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the Redis&reg; replica container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Redis&reg; replicas pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Redis&reg; replicas container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the Redis&reg; replicas pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the Redis&reg; replicas pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence on Redis&reg; replicas nodes using Persistent Volume Claims",
+                            "default": true
+                        },
+                        "medium": {
+                            "type": "string",
+                            "description": "Provide a medium for `emptyDir` volumes.",
+                            "default": ""
+                        },
+                        "sizeLimit": {
+                            "type": "string",
+                            "description": "Set this to enable a size limit for `emptyDir` volumes.",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "The path the volume will be mounted at on Redis&reg; replicas containers",
+                            "default": "/data"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "The subdirectory of the volume to mount on Redis&reg; replicas containers",
+                            "default": ""
+                        },
+                        "subPathExpr": {
+                            "type": "string",
+                            "description": "Used to construct the subPath subdirectory of the volume to mount on Redis&reg; replicas containers",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "Persistent Volume storage class",
+                            "default": ""
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume access modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Persistent Volume size",
+                            "default": "8Gi"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the PVC",
+                            "default": {}
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Additional custom labels for the PVC",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Additional labels to match for the PVC",
+                            "default": {}
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "Use a existing PVC which must be created manually before bound",
+                            "default": ""
+                        }
+                    }
+                },
+                "persistentVolumeClaimRetentionPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Controls if and how PVCs are deleted during the lifecycle of a StatefulSet",
+                            "default": false
+                        },
+                        "whenScaled": {
+                            "type": "string",
+                            "description": "Volume retention behavior when the replica count of the StatefulSet is reduced",
+                            "default": "Retain"
+                        },
+                        "whenDeleted": {
+                            "type": "string",
+                            "description": "Volume retention behavior that applies when the StatefulSet is deleted",
+                            "default": "Retain"
+                        }
+                    }
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&reg; replicas service type",
+                            "default": "ClusterIP"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "number",
+                                    "description": "Redis&reg; replicas service port",
+                                    "default": 6379
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "string",
+                                    "description": "Node port for Redis&reg; replicas",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&reg; replicas service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "internalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&reg; replicas service internal traffic policy (requires Kubernetes v1.22 or greater to be usable)",
+                            "default": "Cluster"
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose (normally used with the `sidecar` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Redis&reg; replicas service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Redis&reg; replicas service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerClass": {
+                            "type": "string",
+                            "description": "replicas service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Redis&reg; replicas service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Redis&reg; replicas service",
+                            "default": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "number",
+                    "description": "Integer setting the termination grace period for the redis-replicas pods",
+                    "default": 30
+                },
+                "autoscaling": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable replica autoscaling settings",
+                            "default": false
+                        },
+                        "minReplicas": {
+                            "type": "number",
+                            "description": "Minimum replicas for the pod autoscaling",
+                            "default": 1
+                        },
+                        "maxReplicas": {
+                            "type": "number",
+                            "description": "Maximum replicas for the pod autoscaling",
+                            "default": 11
+                        },
+                        "targetCPU": {
+                            "type": "string",
+                            "description": "Percentage of CPU to consider when autoscaling",
+                            "default": ""
+                        },
+                        "targetMemory": {
+                            "type": "string",
+                            "description": "Percentage of Memory to consider when autoscaling",
+                            "default": ""
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a ServiceAccount should be created",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use.",
+                            "default": ""
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Whether to auto mount the service account token",
+                            "default": false
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the ServiceAccount",
+                            "default": {}
+                        }
+                    }
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation",
+                            "default": true
+                        }
+                    }
+                }
+            }
+        },
+        "sentinel": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Use Redis&reg; Sentinel on Redis&reg; pods.",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Redis&reg; Sentinel image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Redis&reg; Sentinel image repository",
+                            "default": "REPOSITORY_NAME/redis-sentinel"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Redis&reg; Sentinel image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Redis&reg; Sentinel image pull secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "debug": {
+                            "type": "boolean",
+                            "description": "Enable image debug mode",
+                            "default": false
+                        }
+                    }
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Additional custom annotations for Redis&reg; Sentinel resource",
+                    "default": {}
+                },
+                "masterSet": {
+                    "type": "string",
+                    "description": "Master set name",
+                    "default": "mymaster"
+                },
+                "quorum": {
+                    "type": "number",
+                    "description": "Sentinel Quorum",
+                    "default": 2
+                },
+                "getMasterTimeout": {
+                    "type": "number",
+                    "description": "Amount of time to allow before get_sentinel_master_info() times out.",
+                    "default": 90
+                },
+                "automateClusterRecovery": {
+                    "type": "boolean",
+                    "description": "Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.",
+                    "default": false
+                },
+                "redisShutdownWaitFailover": {
+                    "type": "boolean",
+                    "description": "Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).",
+                    "default": true
+                },
+                "downAfterMilliseconds": {
+                    "type": "number",
+                    "description": "Timeout for detecting a Redis&reg; node is down",
+                    "default": 60000
+                },
+                "failoverTimeout": {
+                    "type": "number",
+                    "description": "Timeout for performing a election failover",
+                    "default": 180000
+                },
+                "parallelSyncs": {
+                    "type": "number",
+                    "description": "Number of replicas that can be reconfigured in parallel to use the new master after a failover",
+                    "default": 1
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "Configuration for Redis&reg; Sentinel nodes",
+                    "default": ""
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "enableServiceLinks": {
+                    "type": "boolean",
+                    "description": "Whether information about services should be injected into pod's environment variable",
+                    "default": true
+                },
+                "preExecCmds": {
+                    "type": "array",
+                    "description": "Additional commands to run prior to starting Redis&reg; Sentinel",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Redis&reg; Sentinel nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for Redis&reg; Sentinel nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for Redis&reg; Sentinel nodes",
+                    "default": ""
+                },
+                "externalMaster": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Use external master for bootstrapping",
+                            "default": false
+                        },
+                        "host": {
+                            "type": "string",
+                            "description": "External master host to bootstrap from",
+                            "default": ""
+                        },
+                        "port": {
+                            "type": "number",
+                            "description": "Port for Redis service external master host",
+                            "default": 6379
+                        }
+                    }
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "sentinel": {
+                            "type": "number",
+                            "description": "Container port to open on Redis&reg; Sentinel nodes",
+                            "default": 26379
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Redis&reg; Sentinel nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 10
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 22
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Redis&reg; Sentinel nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Redis&reg; Sentinel nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence on Redis&reg; sentinel nodes using Persistent Volume Claims (Experimental)",
+                            "default": false
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "Persistent Volume storage class",
+                            "default": ""
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume access modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Persistent Volume size",
+                            "default": "100Mi"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the PVC",
+                            "default": {}
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Additional custom labels for the PVC",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Additional labels to match for the PVC",
+                            "default": {}
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        },
+                        "medium": {
+                            "type": "string",
+                            "description": "Provide a medium for `emptyDir` volumes.",
+                            "default": ""
+                        },
+                        "sizeLimit": {
+                            "type": "string",
+                            "description": "Set this to enable a size limit for `emptyDir` volumes.",
+                            "default": ""
+                        }
+                    }
+                },
+                "persistentVolumeClaimRetentionPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Controls if and how PVCs are deleted during the lifecycle of a StatefulSet",
+                            "default": false
+                        },
+                        "whenScaled": {
+                            "type": "string",
+                            "description": "Volume retention behavior when the replica count of the StatefulSet is reduced",
+                            "default": "Retain"
+                        },
+                        "whenDeleted": {
+                            "type": "string",
+                            "description": "Volume retention behavior that applies when the StatefulSet is deleted",
+                            "default": "Retain"
+                        }
+                    }
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sentinel.resources is set (sentinel.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&reg; Sentinel containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Redis&reg; Sentinel containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set Redis&reg; Sentinel containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Redis&reg; Sentinel containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context read-only root filesystem",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set Redis&reg; Sentinel containers' Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Redis&reg; Sentinel containers' Security Context seccompProfile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set Redis&reg; Sentinel containers' Security Context capabilities to drop",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the Redis&reg; sentinel container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Redis&reg; Sentinel",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Redis&reg; Sentinel container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&reg; Sentinel service type",
+                            "default": "ClusterIP"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "number",
+                                    "description": "Redis&reg; service port for Redis&reg;",
+                                    "default": 6379
+                                },
+                                "sentinel": {
+                                    "type": "number",
+                                    "description": "Redis&reg; service port for Redis&reg; Sentinel",
+                                    "default": 26379
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "string",
+                                    "description": "Node port for Redis&reg;",
+                                    "default": ""
+                                },
+                                "sentinel": {
+                                    "type": "string",
+                                    "description": "Node port for Sentinel",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&reg; Sentinel service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose (normally used with the `sidecar` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Redis&reg; Sentinel service Cluster IP",
+                            "default": ""
+                        },
+                        "createMaster": {
+                            "type": "boolean",
+                            "description": "Enable master service pointing to the current master (experimental)",
+                            "default": false
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Redis&reg; Sentinel service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerClass": {
+                            "type": "string",
+                            "description": "sentinel service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Redis&reg; Sentinel service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Redis&reg; Sentinel service",
+                            "default": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        },
+                        "headless": {
+                            "type": "object",
+                            "properties": {
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Annotations for the headless service.",
+                                    "default": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "masterService": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable master service pointing to the current master (experimental)",
+                            "default": false
+                        },
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&reg; Sentinel master service type",
+                            "default": "ClusterIP"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "number",
+                                    "description": "Redis&reg; service port for Redis&reg;",
+                                    "default": 6379
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "string",
+                                    "description": "Node port for Redis&reg;",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&reg; master service external traffic policy",
+                            "default": ""
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose (normally used with the `sidecar` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Redis&reg; master service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Redis&reg; master service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerClass": {
+                            "type": "string",
+                            "description": "master service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Redis&reg; master service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Redis&reg; master service",
+                            "default": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "number",
+                    "description": "Integer setting the termination grace period for the redis-node pods",
+                    "default": 30
+                }
+            }
+        },
+        "serviceBindings": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Create secret for service binding (Experimental)",
+                    "default": false
+                }
+            }
+        },
+        "networkPolicy": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable creation of NetworkPolicy resources",
+                    "default": true
+                },
+                "allowExternal": {
+                    "type": "boolean",
+                    "description": "Don't require client label for connections",
+                    "default": true
+                },
+                "allowExternalEgress": {
+                    "type": "boolean",
+                    "description": "Allow the pod to access any range of port and all destinations.",
+                    "default": true
+                },
+                "extraIngress": {
+                    "type": "array",
+                    "description": "Add extra ingress rules to the NetworkPolicy",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEgress": {
+                    "type": "array",
+                    "description": "Add extra egress rules to the NetworkPolicy",
+                    "default": [],
+                    "items": {}
+                },
+                "ingressNSMatchLabels": {
+                    "type": "object",
+                    "description": "Labels to match to allow traffic from other namespaces",
+                    "default": {}
+                },
+                "ingressNSPodMatchLabels": {
+                    "type": "object",
+                    "description": "Pod labels to match to allow traffic from other namespaces",
+                    "default": {}
+                },
+                "metrics": {
+                    "type": "object",
+                    "properties": {
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "Don't require client label for connections for metrics endpoint",
+                            "default": true
+                        },
+                        "ingressNSMatchLabels": {
+                            "type": "object",
+                            "description": "Labels to match to allow traffic from other namespaces to metrics endpoint",
+                            "default": {}
+                        },
+                        "ingressNSPodMatchLabels": {
+                            "type": "object",
+                            "description": "Pod labels to match to allow traffic from other namespaces to metrics endpoint",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "podSecurityPolicy": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later",
+                    "default": false
+                },
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable PodSecurityPolicy's RBAC rules",
+                    "default": false
+                }
+            }
+        },
+        "rbac": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Specifies whether RBAC resources should be created",
+                    "default": false
+                },
+                "rules": {
+                    "type": "array",
+                    "description": "Custom RBAC rules to set",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Specifies whether a ServiceAccount should be created",
+                    "default": true
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the ServiceAccount to use.",
+                    "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Whether to auto mount the service account token",
+                    "default": false
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Additional custom annotations for the ServiceAccount",
+                    "default": {}
+                }
+            }
+        },
+        "pdb": {
+            "type": "object",
+            "description": "DEPRECATED Please use `master.pdb` and `replica.pdb` values instead",
+            "default": {}
+        },
+        "tls": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable TLS traffic",
+                    "default": false
+                },
+                "authClients": {
+                    "type": "boolean",
+                    "description": "Require clients to authenticate",
+                    "default": true
+                },
+                "autoGenerated": {
+                    "type": "boolean",
+                    "description": "Enable autogenerated certificates",
+                    "default": false
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "The name of the existing secret that contains the TLS certificates",
+                    "default": ""
+                },
+                "certificatesSecret": {
+                    "type": "string",
+                    "description": "DEPRECATED. Use existingSecret instead.",
+                    "default": ""
+                },
+                "certFilename": {
+                    "type": "string",
+                    "description": "Certificate filename",
+                    "default": ""
+                },
+                "certKeyFilename": {
+                    "type": "string",
+                    "description": "Certificate Key filename",
+                    "default": ""
+                },
+                "certCAFilename": {
+                    "type": "string",
+                    "description": "CA Certificate filename",
+                    "default": ""
+                },
+                "dhParamsFilename": {
+                    "type": "string",
+                    "description": "File containing DH params (in order to support DH based ciphers)",
+                    "default": ""
+                }
+            }
+        },
+        "metrics": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Start a sidecar prometheus exporter to expose Redis&reg; metrics",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Redis&reg; Exporter image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Redis&reg; Exporter image repository",
+                            "default": "REPOSITORY_NAME/redis-exporter"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Redis&reg; Exporter image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Redis&reg; Exporter image pull secrets",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "Metrics HTTP container port",
+                            "default": 9121
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Redis&reg; replicas nodes",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 10
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Redis&reg; replicas nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Redis&reg; replicas nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 3
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default metrics container init command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "redisTargetHost": {
+                    "type": "string",
+                    "description": "A way to specify an alternative Redis&reg; hostname",
+                    "default": "localhost"
+                },
+                "extraArgs": {
+                    "type": "object",
+                    "description": "Extra arguments for Redis&reg; exporter, for example:",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Redis&reg; exporter",
+                    "default": [],
+                    "items": {}
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&reg; exporter containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Redis&reg; exporter containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set Redis&reg; exporter containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Redis&reg; exporter containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set Redis&reg; exporter containers' Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context read-only root filesystem",
+                            "default": true
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Redis&reg; exporter containers' Security Context seccompProfile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set Redis&reg; exporter containers' Security Context capabilities to drop",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Redis&reg; metrics sidecar",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Redis&reg; metrics sidecar",
+                    "default": [],
+                    "items": {}
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for Redis&reg; exporter pods",
+                    "default": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Create Service resource(s) for scraping metrics using PrometheusOperator ServiceMonitor, can be disabled when using a PodMonitor",
+                            "default": true
+                        },
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&reg; exporter service type",
+                            "default": "ClusterIP"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "number",
+                                    "description": "Redis&reg; exporter service port",
+                                    "default": 9121
+                                }
+                            }
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&reg; exporter service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose (normally used with the `sidecar` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Redis&reg; exporter service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerClass": {
+                            "type": "string",
+                            "description": "exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Redis&reg; exporter service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Redis&reg; exporter service",
+                            "default": {}
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Redis&reg; exporter service Cluster IP",
+                            "default": ""
+                        }
+                    }
+                },
+                "serviceMonitor": {
+                    "type": "object",
+                    "properties": {
+                        "port": {
+                            "type": "string",
+                            "description": "the service port to scrape metrics from",
+                            "default": "http-metrics"
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "The namespace in which the ServiceMonitor will be created",
+                            "default": ""
+                        },
+                        "interval": {
+                            "type": "string",
+                            "description": "The interval at which metrics should be scraped",
+                            "default": "30s"
+                        },
+                        "scrapeTimeout": {
+                            "type": "string",
+                            "description": "The timeout after which the scrape is ended",
+                            "default": ""
+                        },
+                        "relabelings": {
+                            "type": "array",
+                            "description": "Metrics RelabelConfigs to apply to samples before scraping.",
+                            "default": [],
+                            "items": {}
+                        },
+                        "metricRelabelings": {
+                            "type": "array",
+                            "description": "Metrics RelabelConfigs to apply to samples before ingestion.",
+                            "default": [],
+                            "items": {}
+                        },
+                        "honorLabels": {
+                            "type": "boolean",
+                            "description": "Specify honorLabels parameter to add the scrape endpoint",
+                            "default": false
+                        },
+                        "additionalLabels": {
+                            "type": "object",
+                            "description": "Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus",
+                            "default": {}
+                        },
+                        "podTargetLabels": {
+                            "type": "array",
+                            "description": "Labels from the Kubernetes pod to be transferred to the created metrics",
+                            "default": [],
+                            "items": {}
+                        },
+                        "sampleLimit": {
+                            "type": "boolean",
+                            "description": "Limit of how many samples should be scraped from every Pod",
+                            "default": false
+                        },
+                        "targetLimit": {
+                            "type": "boolean",
+                            "description": "Limit of how many targets should be scraped",
+                            "default": false
+                        },
+                        "additionalEndpoints": {
+                            "type": "array",
+                            "description": "Additional endpoints to scrape (e.g sentinel)",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "podMonitor": {
+                    "type": "object",
+                    "properties": {
+                        "port": {
+                            "type": "string",
+                            "description": "the pod port to scrape metrics from",
+                            "default": "metrics"
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Create PodMonitor resource(s) for scraping metrics using PrometheusOperator",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "The namespace in which the PodMonitor will be created",
+                            "default": ""
+                        },
+                        "interval": {
+                            "type": "string",
+                            "description": "The interval at which metrics should be scraped",
+                            "default": "30s"
+                        },
+                        "scrapeTimeout": {
+                            "type": "string",
+                            "description": "The timeout after which the scrape is ended",
+                            "default": ""
+                        },
+                        "relabelings": {
+                            "type": "array",
+                            "description": "Metrics RelabelConfigs to apply to samples before scraping.",
+                            "default": [],
+                            "items": {}
+                        },
+                        "metricRelabelings": {
+                            "type": "array",
+                            "description": "Metrics RelabelConfigs to apply to samples before ingestion.",
+                            "default": [],
+                            "items": {}
+                        },
+                        "honorLabels": {
+                            "type": "boolean",
+                            "description": "Specify honorLabels parameter to add the scrape endpoint",
+                            "default": false
+                        },
+                        "additionalLabels": {
+                            "type": "object",
+                            "description": "Additional labels that can be used so PodMonitor resource(s) can be discovered by Prometheus",
+                            "default": {}
+                        },
+                        "podTargetLabels": {
+                            "type": "array",
+                            "description": "Labels from the Kubernetes pod to be transferred to the created metrics",
+                            "default": [],
+                            "items": {}
+                        },
+                        "sampleLimit": {
+                            "type": "boolean",
+                            "description": "Limit of how many samples should be scraped from every Pod",
+                            "default": false
+                        },
+                        "targetLimit": {
+                            "type": "boolean",
+                            "description": "Limit of how many targets should be scraped",
+                            "default": false
+                        },
+                        "additionalEndpoints": {
+                            "type": "array",
+                            "description": "Additional endpoints to scrape (e.g sentinel)",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "prometheusRule": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "The namespace in which the prometheusRule will be created",
+                            "default": ""
+                        },
+                        "additionalLabels": {
+                            "type": "object",
+                            "description": "Additional labels for the prometheusRule",
+                            "default": {}
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Custom Prometheus rules",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        },
+        "volumePermissions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image repository",
+                            "default": "REPOSITORY_NAME/os-shell"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "OS Shell + Utility image pull secrets",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set init container's Security Context runAsUser",
+                            "default": 0
+                        }
+                    }
+                }
+            }
+        },
+        "kubectl": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Kubectl image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Kubectl image repository",
+                            "default": "REPOSITORY_NAME/kubectl"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Kubectl image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Kubectl pull secrets",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "kubectl command to execute",
+                    "default": [
+                        "/opt/bitnami/scripts/kubectl-scripts/update-master-label.sh"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled kubectl containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set kubectl containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set kubectl containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set kubectl containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set kubectl containers' Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context read-only root filesystem",
+                            "default": true
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set kubectl containers' Security Context seccompProfile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set kubectl containers' Security Context capabilities to drop",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the kubectl containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the kubectl containers",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "sysctl": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container to modify Kernel settings",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image repository",
+                            "default": "REPOSITORY_NAME/os-shell"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "OS Shell + Utility image pull secrets",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default init-sysctl container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "mountHostSys": {
+                    "type": "boolean",
+                    "description": "Mount the host `/sys` folder to `/host-sys`",
+                    "default": false
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sysctl.resources is set (sysctl.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                }
+            }
+        },
+        "useExternalDNS": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable various syntax that would enable external-dns to work.  Note this requires a working installation of `external-dns` to be usable.",
+                    "default": false
+                },
+                "additionalAnnotations": {
+                    "type": "object",
+                    "description": "Extra annotations to be utilized when `external-dns` is enabled.",
+                    "default": {}
+                },
+                "annotationKey": {
+                    "type": "string",
+                    "description": "The annotation key utilized when `external-dns` is enabled. Setting this to `false` will disable annotations.",
+                    "default": "external-dns.alpha.kubernetes.io/"
+                },
+                "suffix": {
+                    "type": "string",
+                    "description": "The DNS suffix utilized when `external-dns` is enabled.  Note that we prepend the suffix with the full name of the release.",
+                    "default": ""
+                }
+            }
         }
-      }
     }
-  }
 }

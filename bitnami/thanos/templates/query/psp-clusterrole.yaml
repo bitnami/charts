@@ -1,16 +1,15 @@
-{{- $query := (include "thanos.query.values" . | fromYaml) }}
-{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) }}
-{{- if and $pspAvailable $query.enabled $query.pspEnabled $query.rbac.create }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (include "common.capabilities.psp.supported" .) .Values.query.enabled .Values.query.pspEnabled .Values.query.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-query
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.query.fullname" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -19,7 +18,7 @@ rules:
     resources: ['podsecuritypolicies']
     verbs:     ['use']
     resourceNames:
-      - {{ include "common.names.fullname" . }}-query
+      - {{ include "thanos.query.fullname" . }}
   {{- if .Values.query.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.query.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}

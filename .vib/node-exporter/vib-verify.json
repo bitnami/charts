@@ -22,27 +22,43 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/node-exporter"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6IAogICAgIm1ldHJpY3MiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "L4"
           }
         }
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "node-exporter/goss/goss.yaml",
+            "vars_file": "node-exporter/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "ds-node-exporter"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
+            "resources": {
+              "path": "/.vib/node-exporter/cypress"
+            },
             "endpoint": "lb-node-exporter-metrics",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

@@ -104,13 +104,9 @@ Access the Kong admin by using the following commands:
 {{- include "common.warnings.rollingTag" .Values.ingressController.image }}
 {{- end }}
 
-{{- $passwordValidationErrors := list }}
-
 If you want to upgrade the installation you will need to re-set the database credentials. Execute the following command
 {{- if ne .Values.database "postgresql" }}
   {{- $dbSecretName := include "kong.cassandra.secretName" . -}}
-  {{- $dbPasswordValidationErrors := include "common.validations.values.cassandra.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
-  {{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
 
   kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.cassandra.secretName" . }} -o jsonpath="{.data.cassandra-password}" | base64 -d
 {{- end }}
@@ -120,5 +116,6 @@ WARNING: You made the Kong admin {{ if contains "ClusterIP" .Values.service.type
 {{- end }}
 
 {{- include "kong.validateValues" . }}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "ingressController" "kong" "migration") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.ingressController.image .Values.postgresql.image) "context" $) }}

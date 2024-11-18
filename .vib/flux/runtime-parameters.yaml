@@ -1,0 +1,201 @@
+sourceController:
+  enabled: true
+  containerPorts:
+    health: 8772
+    http: 4567
+    metrics: 4889
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 8881
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  persistence:
+    enabled: true
+    mountPath: /test/bitnami/path
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+  rbac:
+    create: true
+
+kustomizeController:
+  enabled: true
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 8882
+  rbac:
+    create: true
+
+helmController:
+  enabled: true
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 8883
+  rbac:
+    create: true
+
+notificationController:
+  enabled: true
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 8884
+  rbac:
+    create: true
+
+imageAutomationController:
+  enabled: true
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 8885
+  rbac:
+    create: true
+
+imageReflectorController:
+  enabled: true
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 8886
+  rbac:
+    create: true
+
+extraDeploy:
+  # This is for kustomize-controller and source-controller
+  # Source: https://fluxcd.io/flux/components/kustomize/kustomization/
+  - apiVersion: source.toolkit.fluxcd.io/v1
+    kind: GitRepository
+    metadata:
+      name: vib-podinfo
+      namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
+    spec:
+      interval: 5m
+      url: https://github.com/mdhont/podinfo
+      ref:
+        branch: '{{ ternary "openshift" "master" (.Capabilities.APIVersions.Has "security.openshift.io/v1") }}'
+  - apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: vib-podinfo
+      namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
+    spec:
+      interval: 10m
+      targetNamespace: '{{ include "common.names.namespace" . }}'
+      sourceRef:
+        kind: GitRepository
+        name: vib-podinfo
+      path: "./kustomize"
+      prune: false
+  # This is for helm-controller and source-controller
+  # We use bitnami charts for not causing conflicts with the deployment above
+  - apiVersion: source.toolkit.fluxcd.io/v1
+    kind: GitRepository
+    metadata:
+      name: vib-bitnami-charts
+      namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
+    spec:
+      interval: 5m0s
+      url: https://github.com/bitnami/charts
+      ref:
+        branch: main
+  - apiVersion: helm.toolkit.fluxcd.io/v2beta2
+    kind: HelmRelease
+    metadata:
+      name: vib-nginx
+      namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
+    spec:
+      interval: 5m
+      chart:
+        spec:
+          chart: ./bitnami/nginx
+          sourceRef:
+            kind: GitRepository
+            name: vib-bitnami-charts
+            namespace: '{{ include "common.names.namespace" . }}'
+          interval: 1m
+      values:
+        global:
+          compatibility:
+            openshift:
+              adaptSecurityContext: auto
+        fullnameOverride: vib-nginx
+        persistence:
+          enabled: false
+  # This is for image-notification-controller. We will use the metrics to ensure that it is consumed
+  # and therefore RBAC is correct. The values do not need to be correct
+  # Source: https://fluxcd.io/flux/components/notification/receiver/
+  - apiVersion: notification.toolkit.fluxcd.io/v1
+    kind: Receiver
+    metadata:
+      name: vib-github-receiver
+      namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
+    spec:
+      type: github
+      events:
+        - "ping"
+        - "push"
+      secretRef:
+        name: receiver-token
+      resources:
+        - apiVersion: source.toolkit.fluxcd.io/v1
+          kind: GitRepository
+          name: bitnami-charts
+          namespace: '{{ include "common.names.namespace" . }}'
+  # This is for image-reflector-controller. We will use the metrics to ensure that it is consumed
+  # and therefore RBAC is correct. The values do not need to be correct
+  # Source: https://fluxcd.io/flux/components/image/imagerepositories/
+  - apiVersion: image.toolkit.fluxcd.io/v1beta2
+    kind: ImageRepository
+    metadata:
+      name: vib-image-rep-podinfo
+      namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
+    spec:
+      image: stefanprodan/podinfo
+      interval: 1h
+      provider: generic
+  # This is for image-automation-controller. We will use the metrics to ensure that it is consumed
+  # and therefore RBAC is correct. The values do not need to be correct
+  # Source: https://fluxcd.io/flux/components/image/imagerepositories/
+  - apiVersion: image.toolkit.fluxcd.io/v1beta1
+    kind: ImageUpdateAutomation
+    metadata:
+      name: vib-update-automation
+      namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
+    spec:
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: '{{ include "common.names.namespace" . }}'
+        namespace: bitnami-charts

@@ -1,13 +1,17 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kubeapps.frontend-config.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.frontend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: frontend
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -125,71 +129,11 @@ data:
         proxy_pass {{ include "kubeapps.kubeappsapis.proxy_pass" . -}};
       }
 
-  {{- if .Values.assetsvc.enabled }}
-      # Forward '/api/assetsvc' to '/assetsvc'
-      # but preserving the encoding (eg. '%2F' is not converted to '/')
-      # see https://serverfault.com/a/906479
-      # Ex: from "/api/assetsvc/what$2Fever?param=value"
-      #     it matches as $1="/what$2Fever" and $args="param=value"
-      #     downstream services will receive "/assetsvc/what$2Fever?param=value"
-      location ~* /api/assetsvc {
-        rewrite ^ $request_uri; # pass the encoded url downstream as is,
-        rewrite /api/assetsvc([^?]*) /assetsvc$1?$args break;
-
-    {{- if .Values.frontend.proxypassExtraSetHeader }}
-        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
-    {{- end }}
-
-    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
-        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
-        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-    {{- end }}
-        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
-      }
-  {{- end }}
-
-  {{- if .Values.kubeops.enabled }}
-      location ~* /api/kubeops {
-        # Keep the connection open with the API server even if idle (the default is 60 seconds)
-        # Setting it to 10 minutes which should be enough for our current use case of deploying/upgrading/deleting apps
-        proxy_read_timeout 10m;
-        rewrite /api/kubeops/(.*) /$1 break;
-        rewrite /api/kubeops / break;
-
-    {{- if .Values.frontend.proxypassExtraSetHeader }}
-        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
-    {{- end }}
-
-    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
-        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
-        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-    {{- end }}
-
-        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
-      }
-
-      # The route for the Kubeapps backend API is not prefixed.
-      location ~* /api/ {
-        rewrite /api/(.*) /backend/$1 break;
-        rewrite /api/ /backend break;
-
-    {{- if .Values.frontend.proxypassExtraSetHeader }}
-        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
-    {{- end }}
-
-    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
-        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
-        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-    {{- end }}
-
-        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
-      }
-  {{- end }}
-
+    {{- if .Values.dashboard.enabled }}
       location / {
         # Add the Authorization header if exists
         add_header Authorization $http_authorization;
-
         proxy_pass {{ printf "http://%s:%d" (include "kubeapps.dashboard.fullname" .) (int .Values.dashboard.service.ports.http) }};
       }
+    {{- end }}
     }

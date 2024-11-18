@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/redis-cluster"
         },
-        "runtime_parameters": "InBhc3N3b3JkIjogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAicmVkaXMiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,27 +31,38 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-redis-cluster-tcp-redis"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/redis-cluster/goss"
+              "path": "/.vib"
             },
+            "tests_file": "redis-cluster/goss/goss.yaml",
+            "vars_file": "redis-cluster/runtime-parameters.yaml",
             "remote": {
-              "workload": "sts-redis-cluster"
+              "pod": {
+                "workload": "sts-redis-cluster"
+              }
             }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/redis-cluster/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "redis-cluster",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

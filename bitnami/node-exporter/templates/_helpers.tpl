@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -11,7 +16,7 @@ Return the proper Node Exporter image name
 Return the proper Docker Image Registry Secret Names for Node Exporter image
 */}}
 {{- define "node-exporter.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -37,10 +42,19 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "node-exporter.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "node-exporter.validateValues.resourceType" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
 {{- printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Node Exporter - resource type */}}
+{{- define "node-exporter.validateValues.resourceType" -}}
+{{- if and (not (eq .Values.resourceType "daemonset")) (not (eq .Values.resourceType "deployment")) -}}
+node-exporter: resource-type
+    Resource type {{ .Values.resourceType }} is not valid, only "daemonset" and "deployment" are allowed
 {{- end -}}
 {{- end -}}

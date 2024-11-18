@@ -1,0 +1,44 @@
+externalAccess:
+  enabled: true
+  autoDiscovery:
+    enabled: true
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1002
+  controller:
+    service:
+      ports:
+        external: 80
+      type: LoadBalancer
+rbac:
+  create: true
+listeners:
+  client:
+    containerPort: 9192
+    protocol: PLAINTEXT
+  controller:
+    containerPort: 9193
+  interbroker:
+    containerPort: 9194
+  external:
+    containerPort: 9195
+service:
+  ports:
+    client: 19092
+    controller: 19093
+    interbroker: 19094
+controller:
+  logPersistence:
+    enabled: true
+    mountPath: /opt/bitnami/kafka/logs
+  persistence:
+    mountPath: /bitnami/kafka
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  automountServiceAccountToken: true
+serviceAccount:
+  create: true

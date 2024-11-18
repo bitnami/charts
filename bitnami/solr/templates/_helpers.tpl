@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -76,38 +81,33 @@ Return true if a Solr authentication credentials secret object should be created
 {{- end -}}
 
 {{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
+Return proper Zookeeper hosts
 */}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
-    {{- else -}}
-        {{- randAlphaNum $len -}}
-    {{- end -}}
-{{- end }}
-
-{{/*
-Return Solr admin password
-*/}}
-{{- define "solr.password" -}}
-{{- if not (empty .Values.auth.adminPassword) -}}
-    {{- .Values.auth.adminPassword -}}
-{{- else -}}
-    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "solr-password")  -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Zookeeper host
-*/}}
-{{- define "solr.zookeeper.host" -}}
+{{- define "solr.zookeeper.hosts" -}}
 {{- if .Values.externalZookeeper.servers -}}
     {{- include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) -}}
 {{- else -}}
-    {{- printf "%s:%d" (include "solr.zookeeper.fullname" .) (int .Values.zookeeper.containerPorts.client) -}}
+    {{- $zookeeperList := list -}}
+    {{- $releaseNamespace :=  default (include "common.names.namespace" .) .Values.zookeeper.namespaceOverride -}}
+    {{- $clusterDomain := .Values.clusterDomain -}}
+    {{- $zookeeperFullname := include "solr.zookeeper.fullname" . -}}
+    {{- range $e, $i := until (int .Values.zookeeper.replicaCount) -}}
+        {{- $zookeeperList = append $zookeeperList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $zookeeperFullname $i $zookeeperFullname $releaseNamespace $clusterDomain (int $.Values.zookeeper.containerPorts.client))  -}}
+    {{- end -}}
+    {{- include "common.tplvalues.render" (dict "value" (join "," $zookeeperList) "context" $) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return proper Zookeeper hosts
+*/}}
+{{- define "solr.zookeeper.port" -}}
+{{- if .Values.externalZookeeper.servers -}}
+    {{- include "solr.zookeeper.hosts" . | regexFind ":[0-9]+" | trimPrefix ":" | default "2181" | int -}}
+{{- else if .Values.zookeeper.enabled -}}
+    {{- int .Values.zookeeper.containerPorts.client -}}
+{{- else -}}
+    {{- int "2181" -}}
 {{- end -}}
 {{- end -}}
 

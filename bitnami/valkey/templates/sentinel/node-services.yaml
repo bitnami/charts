@@ -1,0 +1,68 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled (eq .Values.sentinel.service.type "NodePort") (or .Release.IsUpgrade .Values.sentinel.service.nodePorts.valkey ) }}
+
+{{- range $i := until (int .Values.replica.replicaCount) }}
+
+{{ $portsmap := (lookup "v1" "ConfigMap" (include "common.names.namespace" $) (printf "%s-%s" ( include "common.names.fullname" $ ) "ports-configmap")).data }}
+
+{{ $sentinelport := 0}}
+{{ $valkeyport := 0}}
+{{- if $portsmap }}
+{{ $sentinelport = index $portsmap (printf "%s-node-%s-%s" (include "common.names.fullname" $) (toString $i) "sentinel") }}
+{{ $valkeyport = index $portsmap (printf "%s-node-%s-%s" (include "common.names.fullname" $) (toString $i) "valkey") }}
+{{- else }}
+{{- end }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" $ }}-node-{{ $i }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: node
+    app.kubernetes.io/part-of: valkey
+  {{- if or $.Values.commonAnnotations $.Values.sentinel.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.sentinel.service.annotations $.Values.commonAnnotations ) "context" $ ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: NodePort
+  ports:
+  - name: sentinel
+    {{- if $.Values.sentinel.service.nodePorts.sentinel  }}
+    nodePort: {{ (add $.Values.sentinel.service.nodePorts.sentinel $i 1) }}
+    port: {{ (add $.Values.sentinel.service.nodePorts.sentinel $i 1) }}
+    {{- else }}
+    nodePort: {{ $sentinelport }}
+    port: {{ $sentinelport }}
+    {{- end }}
+    protocol: TCP
+    targetPort: {{ $.Values.sentinel.containerPorts.sentinel }}
+  - name: valkey
+    {{- if $.Values.sentinel.service.nodePorts.valkey }}
+    nodePort: {{ (add $.Values.sentinel.service.nodePorts.valkey $i 1) }}
+    port: {{ (add $.Values.sentinel.service.nodePorts.valkey $i 1) }}
+    {{- else }}
+    nodePort: {{ $valkeyport }}
+    port: {{ $valkeyport }}
+    {{- end }}
+    protocol: TCP
+    targetPort: {{ $.Values.replica.containerPorts.valkey }}
+  - name: sentinel-internal
+    nodePort: null
+    port: {{ $.Values.sentinel.containerPorts.sentinel }}
+    protocol: TCP
+    targetPort: {{ $.Values.sentinel.containerPorts.sentinel }}
+  - name: valkey-internal
+    nodePort: null
+    port: {{ $.Values.replica.containerPorts.valkey }}
+    protocol: TCP
+    targetPort: {{ $.Values.replica.containerPorts.valkey }}
+  selector:
+    statefulset.kubernetes.io/pod-name: {{ template "common.names.fullname" $ }}-node-{{ $i }}
+---
+{{- end }}
+{{- end }}

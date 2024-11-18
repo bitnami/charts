@@ -1,0 +1,44 @@
+extraDeploy:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: ve-testing-default-user
+  stringData:
+    default_user.conf: |
+      default_user = test_user
+      default_pass = ComplicatedPassword123!4
+    password: ComplicatedPassword123!4
+    username: test_user
+- apiVersion: rabbitmq.com/v1beta1
+  kind: RabbitmqCluster
+  metadata:
+    name: ve-testing
+  spec:
+    replicas: 2
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: extra-svc
+  spec:
+    type: LoadBalancer
+    ports:
+      - appProtocol: http
+        name: management
+        port: 80
+        protocol: TCP
+        targetPort: 15672
+    selector:
+      app.kubernetes.io/name: ve-testing
+msgTopologyOperator:
+  enabled: true
+  fullnameOverride: rmq-op
+  containerPorts:
+    metrics: 8080
+  service:
+    ports:
+      webhook: 443
+    type: LoadBalancer

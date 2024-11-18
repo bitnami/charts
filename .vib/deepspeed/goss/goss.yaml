@@ -1,0 +1,44 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+{{- $nodes := .Vars.worker.replicaCount }}
+file:
+  /job/hostfile:
+    exists: true
+    contents:
+    {{- range $i, $e := until $nodes }}
+      - /deepspeed-worker-{{ $i }}/
+    {{ end }}
+  {{ .Vars.client.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+addr:
+  {{ range $e, $i := until $nodes }}
+  tcp://deepspeed-worker-{{ $i }}-external:{{ $.Vars.worker.externalAccess.service.ports.ssh }}:
+    reachable: true
+    timeout: 500
+  tcp://deepspeed-worker-{{ $i }}.deepspeed-worker-headless:{{ $.Vars.worker.containerPorts.ssh }}:
+    reachable: true
+    timeout: 500
+  {{ end }}
+command:
+  run-git-example:
+    exec: bash -c ". /opt/bitnami/scripts/deepspeed/entrypoint.sh && cd /app/compression/cifar/ && deepspeed resnet.py"
+    exit-status: 0
+    timeout: 900000
+  {{- $uid := .Vars.client.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.client.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: bash -c 'groups_array=($(id -G)); [ ${#groups_array[@]} -gt 1 ] && group=${groups_array[1]} || group=${groups_array[0]}; if [ $(id -u) -lt {{ $uid }} ] || [ $group -lt {{ $gid }} ]; then exit 1; fi'
+    exit-status: 0
+  {{ if .Vars.client.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*deepspeed-client/
+  {{ end }}

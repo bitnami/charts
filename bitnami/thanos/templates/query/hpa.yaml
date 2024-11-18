@@ -1,15 +1,16 @@
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
-{{- if and $query.enabled $query.autoscaling.enabled }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.query.enabled .Values.query.autoscaling.enabled }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "common.names.fullname" . }}-query
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.query.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,32 +18,41 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: {{ include "common.names.fullname" . }}-query
-  minReplicas: {{ $query.autoscaling.minReplicas }}
-  maxReplicas: {{ $query.autoscaling.maxReplicas }}
+    name: {{ include "thanos.query.fullname" . }}
+  minReplicas: {{ .Values.query.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.query.autoscaling.maxReplicas }}
   metrics:
-    {{- if $query.autoscaling.targetMemory }}
+    {{- if .Values.query.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ $query.autoscaling.targetMemory }}
+        targetAverageUtilization: {{ .Values.query.autoscaling.targetMemory }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ $query.autoscaling.targetMemory }}
+          averageUtilization: {{ .Values.query.autoscaling.targetMemory }}
         {{- end }}
     {{- end }}
-    {{- if $query.autoscaling.targetCPU }}
+    {{- if .Values.query.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ $query.autoscaling.targetCPU }}
+        targetAverageUtilization: {{ .Values.query.autoscaling.targetCPU }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ $query.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.query.autoscaling.targetCPU }}
         {{- end }}
+    {{- end }}
+    {{- range $targetPodMetric := .Values.query.autoscaling.targetPodMetrics }}
+    - type: Pods
+      pods:
+        metric:
+          name: {{ $targetPodMetric.name }}
+        target:
+          type: AverageValue
+          averageValue: {{ $targetPodMetric.averageValue }}
     {{- end }}
 {{- end }}

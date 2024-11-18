@@ -1,10 +1,13 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -13,8 +16,16 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
-
+  defaultStorageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -46,7 +57,6 @@ rbac:
 ## @param createAggregateRoles Create Aggregated cluster roles
 ##
 createAggregateRoles: true
-
 ## @section Argo Workflows Server configuration parameters
 ##
 
@@ -55,21 +65,22 @@ createAggregateRoles: true
 server:
   ## Bitnami Argo Workflow CLI image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-cli/tags/
-  ## @param server.image.registry server image registry
-  ## @param server.image.repository server image repository
-  ## @param server.image.tag server image tag (immutable tags are recommended)
+  ## @param server.image.registry [default: REGISTRY_NAME] server image registry
+  ## @param server.image.repository [default: REPOSITORY_NAME/argo-workflow-cli] server image repository
+  ## @skip server.image.tag server image tag (immutable tags are recommended)
+  ## @param server.image.digest server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy server image pull policy
   ## @param server.image.pullSecrets server image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.3.7-scratch-r0
+    tag: 3.6.0-debian-12-r0
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -78,7 +89,6 @@ server:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param server.enabled Enable server deployment
   ##
   enabled: true
@@ -141,34 +151,62 @@ server:
   ##
   customStartupProbe: {}
   ## server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param server.resources.limits The resources limits for the server containers
-  ## @param server.resources.requests The requested resources for the server containers
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled server pods' Security Context
+  ## @param server.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param server.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param server.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param server.podSecurityContext.fsGroup Set server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.containerSecurityContext.enabled Enabled server containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set server containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param server.containerSecurityContext.privileged Set server container's Security Context privileged
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set server container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
     readOnlyRootFilesystem: true
-
   ## Create RBAC resources for the Argo workflows server
   ## @param server.rbac.create Create RBAC resources for the Argo workflows server
   ##
@@ -190,12 +228,12 @@ server:
     ## SSO configuration when SSO is specified as a server auth mode.
     ## All the values are required. SSO is activated by adding --auth-mode=sso to the server command line.
     ## @param server.auth.sso.enabled Enable SSO configuration for the server auth mode
-    ## @param server.auth.sso.issuer Root URL for the OIDC identity provider
-    ## @param server.auth.sso.clientId.name Name of the secret containing the OIDC client ID
-    ## @param server.auth.sso.clientId.key Key in the secret to obtain the OIDC client ID
-    ## @param server.auth.sso.clientSecret.name Name of the secret containing the OIDC client secret
-    ## @param server.auth.sso.clientSecret.key Key in the secret to obtain the OIDC client secret
-    ## @param server.auth.sso.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+    ## @param server.auth.sso.config.issuer Root URL for the OIDC identity provider
+    ## @param server.auth.sso.config.clientId.name Name of the secret containing the OIDC client ID
+    ## @param server.auth.sso.config.clientId.key Key in the secret to obtain the OIDC client ID
+    ## @param server.auth.sso.config.clientSecret.name Name of the secret containing the OIDC client secret
+    ## @param server.auth.sso.config.clientSecret.key Key in the secret to obtain the OIDC client secret
+    ## @param server.auth.sso.config.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
     ## @param server.auth.sso.rbac.enabled Create RBAC resources for SSO
     ## @param server.auth.sso.rbac.secretWhitelist Restricts the secrets that the server can read
     ## @param server.auth.sso.scopes Scopes requested from the SSO ID provider
@@ -206,20 +244,21 @@ server:
       ## E.g.
       ## issuer: "https://accounts.google.com"
       ##
-      issuer: ""
-      ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
-      ##
-      clientId:
-        name: ""
-        key: ""
-      ## Name of a secret and a key in it to retrieve the app OIDC client secret from.
-      ##
-      clientSecret:
-        name: ""
-        key: ""
-      ## The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
-      ##
-      redirectUrl: ""
+      config:
+        issuer: ""
+        ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
+        ##
+        clientId:
+          name: ""
+          key: ""
+        ## Name of a secret and a key in it to retrieve the app OIDC client secret from.
+        ##
+        clientSecret:
+          name: ""
+          key: ""
+        ## The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+        ##
+        redirectUrl: ""
       ## Create RBAC resources for SSO
       ##
       rbac:
@@ -235,7 +274,6 @@ server:
       ## decisions.
       ##
       scopes: []
-
   ## @param server.clusterWorkflowTemplates.enabled Create ClusterRole and CRB for the controoler to access ClusterWorkflowTemplates
   ## @param server.clusterWorkflowTemplates.enableEditing Give the server permissions to edit ClusterWorkflowTemplates
   ##
@@ -250,28 +288,24 @@ server:
   ## @param server.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
   ##
   pdb:
-    enabled: false
-    minAvailable: 1
-    maxUnavailable: 1
-
+    enabled: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Run the argo server in "secure" mode.
   ## Ref: https://argoproj.github.io/argo-workflows/tls/
   ## @param server.secure Run Argo server in secure mode
   ##
   secure: false
-
   ## Base URL for client resources
   ## Ref: https://github.com/argoproj/argo-workflows/issues/716#issuecomment-433213190
   ## @param server.baseHref Base href of the Argo Workflows deployment
   ##
   baseHref: /
-
   ## Server container port
   ## @param server.containerPorts.web argo Server container port
   ##
   containerPorts:
     web: 2746
-
   ## Server Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -282,15 +316,17 @@ server:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
-
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param server.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -334,7 +370,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for server pods assignment
@@ -408,7 +444,6 @@ server:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Server service parameters
   ##
   service:
@@ -419,7 +454,6 @@ server:
     ##
     ports:
       http: 80
-
     ## Node ports to expose
     ## @param server.service.nodePorts.http Node port for HTTP
     ## NOTE: choose port between <30000-32767>
@@ -452,7 +486,64 @@ server:
     ## @param server.service.extraPorts Extra port to expose on the server service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param server.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param server.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param server.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param server.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param server.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param server.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param server.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Argo Workflows Controller configuration parameters
 ##
 
@@ -461,19 +552,20 @@ server:
 controller:
   ## Bitnami Argo Workflow Controller image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-controller/tags/
-  ## @param controller.image.registry controller image registry
-  ## @param controller.image.repository controller image repository
-  ## @param controller.image.tag controller image tag (immutable tags are recommended)
+  ## @param controller.image.registry [default: REGISTRY_NAME] controller image registry
+  ## @param controller.image.repository [default: REPOSITORY_NAME/argo-workflow-controller] controller image repository
+  ## @skip controller.image.tag controller image tag (immutable tags are recommended)
+  ## @param controller.image.digest controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy controller image pull policy
   ## @param controller.image.pullSecrets controller image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.3.6-scratch-r1
+    tag: 3.6.0-debian-12-r0
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -484,7 +576,6 @@ controller:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param controller.replicaCount Number of controller replicas to deploy
   ##
   replicaCount: 1
@@ -544,34 +635,62 @@ controller:
   ##
   customStartupProbe: {}
   ## controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param controller.resources.limits The resources limits for the controller containers
-  ## @param controller.resources.requests The requested resources for the controller containers
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled controller pods' Security Context
+  ## @param controller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controller.podSecurityContext.fsGroup Set controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
+  ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsGroup Set controller containers' Security Context runAsGroup
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param controller.containerSecurityContext.privileged Set controller container's Security Context privileged
+  ## @param controller.containerSecurityContext.allowPrivilegeEscalation Set controller container's Security Context allowPrivilegeEscalation
+  ## @param controller.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param controller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
     readOnlyRootFilesystem: true
-
   ## Server container port
   ## @param controller.containerPorts.metrics Port to expose controller metrics
   ## @param controller.containerPorts.telemetry Port to expose controller telemetry
@@ -579,22 +698,23 @@ controller:
   containerPorts:
     metrics: 9090
     telemetry: 8081
-
   ## Create RBAC resources for the Argo workflows controller
   ## @param controller.rbac.create Create RBAC resources for the Argo workflows controller
   ##
   rbac:
     create: true
-
   ## Use an existing configmap instead of creating a configmap with the specified parameters
   ## @param controller.existingConfigMap
   ##
   existingConfigMap: ""
-
   ## @param controller.extraArgs Extra arguments for the controller command line
   ##
   extraArgs: ""
-
+  ##
+  ## @param controller.persistence.archive.enabled Save completed workflows to an SQL database.
+  persistence:
+    archive:
+      enabled: false
   ## Controller configmap configuration content. Requires controller.existingConfigmap to be empty.
   ## @param controller.config [object] Controller configmap configuration content
   ##
@@ -606,33 +726,24 @@ controller:
     instanceID: {{ .Values.controller.instanceID.explicitID }}
     {{- end }}
     {{- end }}
-    ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-    ##
-    containerRuntimeExecutor: {{ .Values.controller.containerRuntimeExecutor }}
-    ## Uncomment to create containerRuntimeExecutors
-    ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-    ## containerRuntimeExecutors: {}
     ## How many workflows can be running at the same time
     ##
     parallelism:
     ## Maximun number of workflows running in a namespace
     ##
     namespaceParallelism:
-    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.podSecurityContext }}
+    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.containerSecurityContext }}
     executor:
       {{- if .Values.executor.resources }}
       resources: {{- include "common.tplvalues.render" (dict "value" .Values.executor.resources "context" $) | nindent 4 }}
+      {{- else if ne .Values.executor.resourcesPreset "none" }}
+      resources: {{- include "common.resources.preset" (dict "type" .Values.executor.resourcesPreset) | nindent 4 }}
       {{- end }}
       {{- if .Values.executor.extraEnvVars }}
       env: {{- include "common.tplvalues.render" (dict "value" .Values.executor.extraEnvVars "context" $) | nindent 4 }}
       {{- end }}
-      {{- if .Values.executor.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.containerSecurityContext "context" $) | nindent 4 }}
-        {{- if not (eq .Values.controller.containerRuntimeExecutor "docker") }}
-        ## Docker executor requires to run executor as root
-        ##
-        runAsNonRoot: true
-        {{- end }}
+      {{- if .Values.executor.containerSecurityContext }}
+      securityContext: {{- omit .Values.executor.containerSecurityContext "enabled" | toYaml | nindent 4 }}
       {{- end }}
     {{- end }}
     ## Uncomment to enable Artofact repository with the provided configuration
@@ -652,10 +763,10 @@ controller:
         maxIdleConns: 100
         maxOpenConns: 0
       nodeStatusOffLoad: false
-      archive: false
-      {{- if or .Values.postgresql.enabled (eq .Values.externalDatabase.type "postgresql") }}
+      archive: {{ include "common.tplvalues.render" (dict "value" .Values.controller.persistence.archive.enabled "context" $) }}
+      {{- if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.type "postgresql")) }}
       postgresql:
-      {{- else if or .Values.mysql.enabled (eq .Values.externalDatabase.type "mysql") }}
+      {{- else if or .Values.mysql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.type "mysql")) }}
       mysql:
       {{- end }}
         host: {{ include "argo-workflows.controller.database.host" . }}
@@ -675,7 +786,7 @@ controller:
     workflowDefaults: {{- include "common.tplvalues.render" (dict "value" .Values.controller.workflowDefaults "context" $) | nindent 2 }}
     {{- end }}
     {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
-    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 2 }}
+    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso.config "context" $) | nindent 2 }}
     {{- end }}
     ## Uncomment to set workflowRestrictions
     ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
@@ -684,7 +795,6 @@ controller:
     ## Ref: https://argoproj.github.io/argo-workflows/links/
     ## links: {}
     ##
-
   ## Configure the controller to accept only submissions with a matching instanceID attribute
   ## @param controller.instanceID.enabled Enable submission filtering based on instanceID attribute. Requires to set instanceID.useReleaseName or instanceID.explicitID
   ## @param controller.instanceID.useReleaseName Use the release name to filter submissions
@@ -696,19 +806,10 @@ controller:
     ##
     useReleaseName: false
     explicitID: ""
-
-  ## Default container runtime that the executor will use.
-  ## Set as `k8sapi` because `docker` requires privileged access. Also, `k8sapi` allows to runAsNonRoot
-  ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-  ## @param controller.containerRuntimeExecutor Specifies the container runtime for the executor
-  ##
-  containerRuntimeExecutor: k8sapi
-
-  ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
+    ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
   ##
   clusterWorkflowTemplates:
     enabled: true
-
   ## Metrics configuration for the controller
   ## @param controller.metrics.enabled Enable controller metrics exporter
   ## @param controller.metrics.path Path to expose controller metrics
@@ -726,12 +827,10 @@ controller:
   telemetry:
     enabled: false
     path: /telemetry
-
   ## Number of workflow workers to deploy
   ## @param controller.workflowWorkers Number of workflow workers to deploy
   ##
   workflowWorkers: 32
-
   ## Namespaces allowed to run workflows
   ## @param controller.workflowNamespaces Namespaces allowed to run workflows
   ##
@@ -756,9 +855,9 @@ controller:
   ## @param controller.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
   ##
   pdb:
-    enabled: false
-    minAvailable: 1
-    maxUnavailable: 1
+    enabled: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Controller Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -769,15 +868,17 @@ controller:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
-
   ## @param controller.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param controller.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param controller.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controller.hostAliases controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -821,7 +922,7 @@ controller:
   ##
   affinity: {}
   ## @param controller.nodeSelector Node labels for controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for controller pods assignment
@@ -895,14 +996,12 @@ controller:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Controller service parameters
   ##
   service:
     ## @param controller.service.type controller service type
     ##
     type: ClusterIP
-
     ## @param controller.service.ports.metrics Metrics port for the controller
     ## @param controller.service.ports.telemetry Telemetry port for the controller
     ##
@@ -943,28 +1042,85 @@ controller:
     ## @param controller.service.extraPorts Extra port to expose on the controller service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param controller.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param controller.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param controller.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param controller.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param controller.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param controller.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param controller.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Executor configuration section
 ##
-
 executor:
   ## Bitnami Argo Workflow Executor image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-exec/tags/
-  ## @param executor.image.registry executor image registry
-  ## @param executor.image.repository executor image repository
-  ## @param executor.image.tag executor image tag (immutable tags are recommended)
+  ## @param executor.image.registry [default: REGISTRY_NAME] executor image registry
+  ## @param executor.image.repository [default: REPOSITORY_NAME/argo-workflow-exec] executor image repository
+  ## @skip executor.image.tag executor image tag (immutable tags are recommended)
+  ## @param executor.image.digest executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param executor.image.pullPolicy executor image pull policy
   ## @param executor.image.pullSecrets executor image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.3.6-debian-11-r7
+    tag: 3.6.0-debian-12-r0
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -974,13 +1130,22 @@ executor:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param executor.resources.limits The resources limits for the init container
-  ## @param executor.resources.requests The requested resources for the init container
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param executor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if executor.resources is set (executor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param executor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param executor.extraEnvVars Array with extra environment variables to add to server nodes
   ## e.g:
   ## extraEnvVars:
@@ -990,20 +1155,35 @@ executor:
   extraEnvVars: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param executor.containerSecurityContext.enabled Enabled executor pods' Security Context
-  ## @param executor.containerSecurityContext.fsGroup Set executor pod's Security Context fsGroup
-  ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Context
+  ## @param executor.containerSecurityContext.enabled Enabled executor containers' Security Context
+  ## @param executor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param executor.containerSecurityContext.runAsUser Set executor containers' Security Context runAsUser
+  ## @param executor.containerSecurityContext.runAsGroup Set executor containers' Security Context runAsGroup
+  ## @param executor.containerSecurityContext.runAsNonRoot Set executor containers' Security Context runAsNonRoot
+  ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param executor.containerSecurityContext.privileged Set executor container's Security Context privileged
+  ## @param executor.containerSecurityContext.allowPrivilegeEscalation Set executor container's Security Context allowPrivilegeEscalation
+  ## @param executor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param executor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    fsGroup: 1001
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
     readOnlyRootFilesystem: true
-
 ## @section Traffic Exposure Parameters
 ##
 
 ## Server ingress parameters
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for server
@@ -1029,7 +1209,7 @@ ingress:
   ingressClassName: ""
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -1047,9 +1227,6 @@ ingress:
   ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
 
   ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
@@ -1113,10 +1290,8 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Workflows configuration
 ##
-
 workflows:
   ## Service account configuration for workflows
   ## @param workflows.serviceAccount.create Whether to create a service account to run workflows
@@ -1125,9 +1300,9 @@ workflows:
   ## @param workflows.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    create: false
+    create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## Create RBAC resources to run workflows.
   ## A Role and Role Bindding are created per namespace in controller.workflowNamespaces
@@ -1135,7 +1310,6 @@ workflows:
   ##
   rbac:
     create: true
-
 ## @section PostgreSQL subchart
 ##
 
@@ -1155,6 +1329,24 @@ postgresql:
     username: postgres
     database: bn_argo_workflows
     password: ""
+  primary:
+    ## PostgreSQL Primary resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param postgresql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 
 ## @section MySQL subchart
 ##
@@ -1175,6 +1367,28 @@ mysql:
     username: mysql
     database: bn_argo_workflows
     password: ""
+  primary:
+    ## MySQL primary container's resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param mysql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "small"
+    ## @param mysql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 
 ## @section External Database configuration
 ##
@@ -1191,14 +1405,14 @@ mysql:
 ##
 externalDatabase:
   enabled: false
-  ## Either "postgres" or  "mysql"
+  ## Either "postgresql" or  "mysql"
   ##
   type: ""
   host: localhost
   port: 3306
-  username: bn_wordpress
+  username: bn_workflows
   password: ""
-  database: bitnami_wordpress
+  database: bitnami_workflows
   ## NOTE: Must contain key `database-password`
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##

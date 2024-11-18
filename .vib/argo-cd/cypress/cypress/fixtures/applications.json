@@ -1,0 +1,9 @@
+{
+  "newApplication": {
+    "name": "all-new-app-number",
+    "repoUrl": "https://github.com/javsalgar/charts-repo-actions-demo.git",
+    "repoPath": "charts/example-v2",
+    "clusterUrl": "https://kubernetes.default.svc",
+    "namespace": "default"
+  }
+}

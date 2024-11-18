@@ -1,0 +1,880 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+## @section Common parameters
+##
+
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+## @section Apache Flink parameters
+##
+
+## Bitnami Apache Flink image
+## ref: https://hub.docker.com/r/bitnami/flink/tags/
+## @param image.registry [default: REGISTRY_NAME] Apache Flink image registry
+## @param image.repository [default: REPOSITORY_NAME/flink] Apache Flink image repository
+## @skip image.tag Apache Flink image tag (immutable tags are recommended)
+## @param image.digest Apache Flink image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy image pull policy
+## @param image.pullSecrets Apache Flink image pull secrets
+## @param image.debug Enable image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/flink
+  tag: 1.20.0-debian-12-r8
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+## @section Jobmanager deployment parameters
+##
+jobmanager:
+  ## @param jobmanager.command Command for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  ## @param jobmanager.args Args for running the container (set to default if not set). Use array form
+  ##
+  args: []
+  ## @param jobmanager.lifecycleHooks [object] Override default etcd container hooks
+  ##
+  lifecycleHooks: {}
+  ## @param jobmanager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param jobmanager.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param jobmanager.extraEnvVars Extra environment variables to be set on flink container
+  ## For example:
+  ##  - name: FOO
+  ##    value: BAR
+  ##
+  extraEnvVars: []
+  ## @param jobmanager.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM: ""
+  ## @param jobmanager.extraEnvVarsSecret Name of existing Secret containing extra env vars
+  ##
+  extraEnvVarsSecret: ""
+  ## @param jobmanager.replicaCount Number of Apache Flink Jobmanager replicas
+  ##
+  replicaCount: 1
+  ## Configure extra options for container's liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param jobmanager.livenessProbe.enabled Enable livenessProbe on Jobmanager nodes
+  ## @param jobmanager.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param jobmanager.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param jobmanager.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param jobmanager.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param jobmanager.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param jobmanager.startupProbe.enabled Enable startupProbe on Jobmanager containers
+  ## @param jobmanager.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param jobmanager.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param jobmanager.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param jobmanager.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param jobmanager.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param jobmanager.readinessProbe.enabled Enable readinessProbe
+  ## @param jobmanager.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param jobmanager.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param jobmanager.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param jobmanager.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param jobmanager.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param jobmanager.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param jobmanager.customStartupProbe [object] Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param jobmanager.customReadinessProbe [object] Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## Apache Flink pods' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## Minimum memory for development is 4GB and 2 CPU cores
+  ## Minimum memory for production is 8GB and 4 CPU cores
+  ## ref: http://docs.datastax.com/en/archived/flink/2.0/flink/architecture/architecturePlanningHardware_c.html
+  ##
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param jobmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if jobmanager.resources is set (jobmanager.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param jobmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param jobmanager.extraVolumeMounts Optionally specify extra list of additional volumeMounts for flink container
+  ##
+  extraVolumeMounts: []
+  ## Container ports to expose
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  containerPorts:
+    ## @param jobmanager.containerPorts.rpc Port for RPC
+    ##
+    rpc: 6123
+    ## @param jobmanager.containerPorts.http Port for http UI
+    ##
+    http: 8081
+    ## @param jobmanager.containerPorts.blob Port for blob server
+    ##
+    blob: 6124
+  ## Apache Flink jobmanager.service parameters
+  ##
+  service:
+    ## @param jobmanager.service.type Apache Flink service type
+    ##
+    type: ClusterIP
+    ## Ports to expose
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ports:
+      ## @param jobmanager.service.ports.rpc Port for RPC
+      ##
+      rpc: 6123
+      ## @param jobmanager.service.ports.http Port for http UI
+      ##
+      http: 8081
+      ## @param jobmanager.service.ports.blob Port for blob server
+      ## Due the Apache Flink specificities this port should match the jobmanager.containerPorts.blob port. The taskmanager should be
+      ## able to communicate with the jobmanager through the port jobmanager indicates to the taskmanager, being the jobmanager not aware of the service port.
+      blob: 6124
+    ## Node ports to expose
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    nodePorts:
+      ## @param jobmanager.service.nodePorts.rpc Node port for RPC
+      ##
+      rpc: ""
+      ## @param jobmanager.service.nodePorts.http Node port for http UI
+      ##
+      http: ""
+      ## @param jobmanager.service.nodePorts.blob Port for blob server
+      ##
+      blob: ""
+    ## @param jobmanager.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param jobmanager.service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param jobmanager.service.loadBalancerSourceRanges Service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param jobmanager.service.clusterIP Service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param jobmanager.service.externalTrafficPolicy Service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param jobmanager.service.annotations Provide any additional annotations which may be required.
+    ## This can be used to set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    ## @param jobmanager.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param jobmanager.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param jobmanager.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param jobmanager.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param jobmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param jobmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param jobmanager.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param jobmanager.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param jobmanager.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Apache Flink Jobmanager serviceAccount parameters
+  ##
+  serviceAccount:
+    ## @param jobmanager.serviceAccount.create Enables ServiceAccount
+    ##
+    create: true
+    ## @param jobmanager.serviceAccount.name ServiceAccount name
+    ##
+    name: ""
+    ## @param jobmanager.serviceAccount.annotations Annotations to add to all deployed objects
+    ##
+    annotations: {}
+    ## @param jobmanager.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+    ##
+    automountServiceAccountToken: false
+  ## Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param jobmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
+  ## @param jobmanager.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param jobmanager.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param jobmanager.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param jobmanager.podSecurityContext.fsGroup Set Apache Flink pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param jobmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
+  ## @param jobmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param jobmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
+  ## @param jobmanager.containerSecurityContext.runAsGroup Set Apache Flink container's Security Context runAsGroup
+  ## @param jobmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param jobmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
+  ## @param jobmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param jobmanager.containerSecurityContext.privileged Set primary container's Security Context privileged
+  ## @param jobmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param jobmanager.containerSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param jobmanager.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param jobmanager.podLabels Additional pod labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param jobmanager.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param jobmanager.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param jobmanager.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param jobmanager.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+    ##
+    key: ""
+    ## @param jobmanager.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param jobmanager.priorityClassName Server priorityClassName
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+  ## @param jobmanager.affinity Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param jobmanager.nodeSelector Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param jobmanager.tolerations Tolerations for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param jobmanager.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
+  ## @param jobmanager.schedulerName Alternative scheduler
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param jobmanager.updateStrategy.type Apache Flink jobmanager deployment strategy type
+  ## @param jobmanager.updateStrategy.rollingUpdate [object,nullable] Apache Flink jobmanager deployment rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: null
+  ## @param jobmanager.extraVolumes Optionally specify extra list of additional volumes for flink container
+  ##
+  extraVolumes: []
+  ## @param jobmanager.initContainers Add additional init containers to the flink pods
+  ##
+  initContainers: []
+  ## @param jobmanager.sidecars Add additional sidecar containers to the flink pods
+  ##
+  sidecars: []
+
+  ## @param jobmanager.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param jobmanager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param jobmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+## @section TaskManager deployment parameters
+##
+taskmanager:
+  ## @param taskmanager.command Command for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  ## @param taskmanager.args Args for running the container (set to default if not set). Use array form
+  ##
+  args: []
+  ## @param taskmanager.lifecycleHooks [object] Override default etcd container hooks
+  ##
+  lifecycleHooks: {}
+  ## @param taskmanager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param taskmanager.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param taskmanager.extraEnvVars Extra environment variables to be set on flink container
+  ## For example:
+  ##  - name: FOO
+  ##    value: BAR
+  ##
+  extraEnvVars: []
+  ## @param taskmanager.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM: ""
+  ## @param taskmanager.extraEnvVarsSecret Name of existing Secret containing extra env vars
+  ##
+  extraEnvVarsSecret: ""
+  ## @param taskmanager.replicaCount Number of Apache Flink replicas
+  ##
+  replicaCount: 1
+  ## Configure extra options for container's liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param taskmanager.livenessProbe.enabled Enable livenessProbe on taskmanager nodes
+  ## @param taskmanager.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param taskmanager.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param taskmanager.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param taskmanager.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param taskmanager.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param taskmanager.startupProbe.enabled Enable startupProbe on taskmanager containers
+  ## @param taskmanager.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param taskmanager.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param taskmanager.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param taskmanager.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param taskmanager.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param taskmanager.readinessProbe.enabled Enable readinessProbe
+  ## @param taskmanager.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param taskmanager.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param taskmanager.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param taskmanager.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param taskmanager.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param taskmanager.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param taskmanager.customStartupProbe [object] Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param taskmanager.customReadinessProbe [object] Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## Apache Flink pods' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## Minimum memory for development is 4GB and 2 CPU cores
+  ## Minimum memory for production is 8GB and 4 CPU cores
+  ## ref: http://docs.datastax.com/en/archived/flink/2.0/flink/architecture/architecturePlanningHardware_c.html
+  ##
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param taskmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if taskmanager.resources is set (taskmanager.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param taskmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param taskmanager.extraVolumeMounts Optionally specify extra list of additional volumeMounts for flink container
+  ##
+  extraVolumeMounts: []
+  ## Container ports to expose
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param taskmanager.containerPorts.data data exchange port
+  ## @param taskmanager.containerPorts.rpc Port for RPC
+  ## @param taskmanager.containerPorts.internalMetrics Port for internal metrics query service
+  ##
+  containerPorts:
+    data: 6121
+    rpc: 6122
+    internalMetrics: 6126
+  ## Apache Flink taskmanager.service parameters
+  ##
+  service:
+    ## @param taskmanager.service.type Apache Flink service type
+    ##
+    type: ClusterIP
+    ## Ports to expose
+    ## @param taskmanager.service.ports.data data exchange port
+    ## @param taskmanager.service.ports.rpc Port for RPC
+    ## @param taskmanager.service.ports.internalMetrics Port for internal metrics query service
+    ##
+    ports:
+      data: 6121
+      rpc: 6122
+      internalMetrics: 6126
+    ## Node ports to expose
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param taskmanager.service.nodePorts.data data exchange port
+    ## @param taskmanager.service.nodePorts.rpc Port for RPC
+    ## @param taskmanager.service.nodePorts.internalMetrics Port for internal metrics query service
+    ##
+    nodePorts:
+      data: ""
+      rpc: ""
+      internalMetrics: ""
+    ## @param taskmanager.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param taskmanager.service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param taskmanager.service.loadBalancerSourceRanges Service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param taskmanager.service.clusterIP Service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param taskmanager.service.externalTrafficPolicy Service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param taskmanager.service.annotations Provide any additional annotations which may be required.
+    ## This can be used to set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    ## @param taskmanager.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param taskmanager.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param taskmanager.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param taskmanager.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param taskmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param taskmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param taskmanager.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param taskmanager.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param taskmanager.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Apache Flink taskmanager serviceAccount parameters
+  ##
+  serviceAccount:
+    ## @param taskmanager.serviceAccount.create Enables ServiceAccount
+    ##
+    create: true
+    ## @param taskmanager.serviceAccount.name ServiceAccount name
+    ##
+    name: ""
+    ## @param taskmanager.serviceAccount.annotations Annotations to add to all deployed objects
+    ##
+    annotations: {}
+    ## @param taskmanager.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+    ##
+    automountServiceAccountToken: false
+  ## Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param taskmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
+  ## @param taskmanager.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param taskmanager.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param taskmanager.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param taskmanager.podSecurityContext.fsGroup Set Apache Flink pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param taskmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
+  ## @param taskmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param taskmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
+  ## @param taskmanager.containerSecurityContext.runAsGroup Set Apache Flink container's Security Context runAsGroup
+  ## @param taskmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param taskmanager.containerSecurityContext.privileged Set primary container's Security Context privileged
+  ## @param taskmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
+  ## @param taskmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param taskmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param taskmanager.containerSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param taskmanager.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param taskmanager.podLabels Additional pod labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param taskmanager.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param taskmanager.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param taskmanager.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param taskmanager.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+    ##
+    key: ""
+    ## @param taskmanager.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param taskmanager.priorityClassName Server priorityClassName
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+  ## @param taskmanager.affinity Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param taskmanager.nodeSelector Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param taskmanager.tolerations Tolerations for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param taskmanager.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
+  ## @param taskmanager.schedulerName Alternative scheduler
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param taskmanager.podManagementPolicy Pod management policy for the Apache Flink taskmanager statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
+  ## @param taskmanager.updateStrategy.type Apache Flink taskmanager statefulset strategy type
+  ## @param taskmanager.updateStrategy.rollingUpdate [object,nullable] Apache Flink taskmanager statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: null
+  ## @param taskmanager.extraVolumes Optionally specify extra list of additional volumes for flink container
+  ##
+  extraVolumes: []
+  ## @param taskmanager.initContainers Add additional init containers to the flink pods
+  ##
+  initContainers: []
+  ## @param taskmanager.sidecars Add additional sidecar containers to the flink pods
+  ##
+  sidecars: []
+  ## @param taskmanager.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param taskmanager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param taskmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""

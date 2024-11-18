@@ -1,0 +1,38 @@
+source:
+  type: "git"
+  git:
+    repository: https://github.com/microsoft/DeepSpeedExamples
+    revision: master
+client:
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    runAsGroup: 1002
+  serviceAccount:
+    create: true
+  automountServiceAccountToken: true
+  resourcesPreset: large
+  persistence:
+    enabled: true
+    mountPath: /bitnami/deepspeed/vib-test
+worker:
+  replicaCount: 2
+  containerPorts:
+    ssh: 3333
+  # We found an issue when the worker belonged to a group
+  # different from 1001
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1004
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1004
+    runAsGroup: 1004
+  externalAccess:
+    enabled: true
+    service:
+      ports:
+        ssh: 4444

@@ -1,0 +1,16 @@
+matomoUsername: user
+matomoPassword: ComplicatedPassword123!4
+matomoEmail: user@example.com
+matomoWebsiteHost: https://bitnami-matomo.my
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+readinessProbe:
+  initialDelaySeconds: 120
+cronjobs:
+  archive:
+    enabled: false
+  taskScheduler:
+    enabled: false
+

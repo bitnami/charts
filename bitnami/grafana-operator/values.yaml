@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -14,7 +17,15 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -42,14 +53,13 @@ commonAnnotations: {}
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
-
 ## @section Grafana Operator parameters
 ##
 
-## This all configuration for the Grafana Operator.
-## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/README.md
+## This contains all configuration options for the Grafana Operator.
+## Ref: https://grafana.github.io/grafana-operator/docs/installation/helm/
 ## Constants it is using for creating instances:
-## Ref: https://github.com/integr8ly/grafana-operator/blob/master/pkg/controller/model/constants.go
+## Ref: https://github.com/grafana/grafana-operator/blob/master/controllers/config/operator_constants.go
 ##
 operator:
   ## @param operator.enabled Enable the deployment of the Grafana Operator
@@ -79,13 +89,13 @@ operator:
   ## @param operator.customStartupProbe [object] Override default startup probe
   ##
   customStartupProbe: {}
-  ## @param operator.extraVolumes [array] Optionally specify extra list of additional volumes for etcd pods
+  ## @param operator.extraVolumes [array] Optionally specify extra list of additional volumes for Grafana Operator pods
   ##
   extraVolumes: []
-  ## @param operator.extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for etcd container(s)
+  ## @param operator.extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for Grafana Operator container(s)
   ##
   extraVolumeMounts: []
-  ## @param operator.initContainers [array] Add additional init containers to the etcd pods
+  ## @param operator.initContainers [array] Add additional init containers to the Grafana Operator pods
   ## e.g:
   ## initContainers:
   ##   - name: your-image-name
@@ -96,7 +106,17 @@ operator:
   ##         containerPort: 1234
   ##
   initContainers: []
-  ## @param operator.sidecars [array] Add additional sidecar containers to the etcd pods
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param operator.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param operator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param operator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `operator.pdb.minAvailable` and `operator.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param operator.sidecars [array] Add additional sidecar containers to the Grafana Operator pods
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -107,6 +127,10 @@ operator:
   ##         containerPort: 1234
   ##
   sidecars: []
+  ## @param operator.namespaceScope If the operator should run in namespace-scope mode or not,
+  ## if true the operator will only be able to manage instances in the same namespace
+  ##
+  namespaceScope: false
   ## @param operator.watchNamespace Override the namespace to watch
   ##
   watchNamespace: ""
@@ -134,19 +158,20 @@ operator:
   ##
   updateStrategy:
     type: Recreate
-  ## @param operator.image.registry Grafana Operator image registry
-  ## @param operator.image.repository Grafana Operator image name
-  ## @param operator.image.tag Grafana Operator image tag
+  ## @param operator.image.registry [default: REGISTRY_NAME] Grafana Operator image registry
+  ## @param operator.image.repository [default: REPOSITORY_NAME/grafana-operator] Grafana Operator image name
+  ## @skip operator.image.tag Grafana Operator image tag
+  ## @param operator.image.digest Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param operator.image.pullPolicy Grafana Operator image pull policy
   ## @param operator.image.pullSecrets Grafana Operator image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 4.4.1-debian-11-r3
+    tag: 5.15.1-debian-12-r1
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## Ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## Ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -158,8 +183,6 @@ operator:
     ##
     pullSecrets: []
   ## @param operator.leaderElect Enables or disables the operator leader Election.
-  ## @param operator.scanAllNamespaces Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)
-  ## @param operator.scanNamespaces Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)
   ## @param operator.zapDevel Enable zap development mode (changes defaults to console encoder, debug log level, disables sampling and stacktrace from 'warning' level)
   ## @param operator.zapEncoder Zap log encoding ('json' or 'console')
   ## @param operator.zapLevel Zap log level (one of 'debug', 'info', 'error' or any integer value > 0) (default info)
@@ -175,8 +198,6 @@ operator:
   ## ensure that the operator is able to get data from other namespaces.
   ## The options are mutually exclusive.
   ##
-  scanAllNamespaces: false
-  scanNamespaces: []
   zapDevel: false
   zapEncoder: ""
   zapLevel: ""
@@ -184,7 +205,6 @@ operator:
   zapStacktraceLevel: ""
   zapTimeEncoding: ""
   extraArgs: []
-
   ## @param operator.rbac.create Create specifies whether to install and use RBAC rules
   ##
   rbac:
@@ -201,43 +221,60 @@ operator:
     annotations: {}
     ## @param operator.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param operator.podSecurityContext.enabled Enable pods security context
-  ## @param operator.podSecurityContext.runAsUser User ID for the pods
-  ## @param operator.podSecurityContext.runAsGroup User ID for the pods
-  ## @param operator.podSecurityContext.runAsNonRoot Grafana Operator must run as nonRoot
+  ## @param operator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param operator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param operator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param operator.podSecurityContext.fsGroup Group ID for the pods
-  ## @param operator.podSecurityContext.supplementalGroups Which group IDs containers add
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    fsGroup: 1001
+    fsGroupChangePolicy: Always
+    sysctls: []
     supplementalGroups: []
+    fsGroup: 1001
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param operator.containerSecurityContext.enabled Enable container security context
-  ## @param operator.containerSecurityContext.runAsUser User ID for the operator container
-  ## @param operator.containerSecurityContext.runAsGroup User ID for the operator container
-  ## @param operator.containerSecurityContext.runAsNonRoot Force the container to be run as non-root
-  ## @param operator.containerSecurityContext.privileged Decide if the container runs privileged.
-  ## @param operator.containerSecurityContext.readOnlyRootFilesystem ReadOnlyRootFilesystem fot the operator container
-  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation for the operator container
+  ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param operator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param operator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
-  ## @param operator.resources Container resource requests and limits
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param operator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param operator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -251,9 +288,14 @@ operator:
   ##
   resources: {}
   ## @param operator.containerPorts.metrics Grafana Operator container port (used for metrics)
+  ## @param operator.containerPorts.health Grafana Operator container port (used for health probes)
   ##
   containerPorts:
     metrics: 8080
+    health: 8081
+  ## @param operator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param operator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -271,11 +313,6 @@ operator:
   ## @param operator.extraEnvVarsSecret Name of existing Secret containing extra env vars for RabbitMQ Cluster Operator nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param operator.podAffinityPreset Pod affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
   ## @param operator.podAntiAffinityPreset Pod anti-affinity preset. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -308,7 +345,7 @@ operator:
   ##
   podLabels: {}
   ## @param operator.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param operator.tolerations Tolerations for controller pod assignment
@@ -346,7 +383,7 @@ operator:
       ##
       relabelings: []
       ## @param operator.prometheus.serviceMonitor.selector ServiceMonitor selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       ## selector:
       ##   prometheus: my-prometheus
@@ -406,40 +443,86 @@ operator:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param operator.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param operator.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param operator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param operator.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param operator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param operator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param operator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param operator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Grafana parameters
 ##
-
 grafana:
   ## @param grafana.enabled Enabled the deployment of the Grafana CRD object into the cluster
   ##
   enabled: true
-  ## @param grafana.image.registry Grafana image registry
-  ## @param grafana.image.repository Grafana image name
-  ## @param grafana.image.tag Grafana image tag
+  ## @param grafana.image.registry [default: REGISTRY_NAME] Grafana image registry
+  ## @param grafana.image.repository [default: REPOSITORY_NAME/grafana] Grafana image name
+  ## @skip grafana.image.tag Grafana image tag
+  ## @param grafana.image.digest Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param grafana.image.pullPolicy Grafana image pull policy
   ## @param grafana.image.pullSecrets Grafana image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 8.5.5-debian-11-r1
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
+    tag: 11.3.0-debian-12-r2
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
-    pullSecrets: []
-  ## Grafana Plugins init container image attributes. If omitted values from `grafana.image` will be used
-  ## @param grafana.pluginsInitContainerImage.registry Grafana Plugins image registry
-  ## @param grafana.pluginsInitContainerImage.repository Grafana Plugins image name
-  ## @param grafana.pluginsInitContainerImage.tag Grafana Plugins image tag
-  ## @param grafana.pluginsInitContainerImage.pullSecrets Grafana Plugins image pull secrets
-  pluginsInitContainerImage:
-    registry: ""
-    repository: ""
-    tag: ""
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -456,70 +539,81 @@ grafana:
   ##     iam.gke.io/gcp-service-account: "grafana@preprodz.iam.gserviceaccount.com"
   ##
   serviceAccount: {}
+  ## @param grafana.podLabels Additional pod labels to pods in the grafana deployment
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param grafana.podAnnotations Additional pod annotations to pods in the grafana deployment
+  ## Ref https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param grafana.podSecurityContext.enabled Enable pods security context
-  ## @param grafana.podSecurityContext.runAsUser User ID for the pods
-  ## @param grafana.podSecurityContext.runAsGroup User ID for the pods
-  ## @param grafana.podSecurityContext.runAsNonRoot Grafana Operator must run as nonRoot
+  ## @param grafana.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param grafana.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param grafana.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param grafana.podSecurityContext.fsGroup Group ID for the pods
-  ## @param grafana.podSecurityContext.supplementalGroups Which group IDs containers add
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
-    runAsGroup: 0
-    runAsNonRoot: true
-    fsGroup: 1001
+    fsGroupChangePolicy: Always
+    sysctls: []
     supplementalGroups: []
+    fsGroup: 1001
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param grafana.containerSecurityContext.enabled Enable containers security context
-  ## @param grafana.containerSecurityContext.runAsUser User ID for the containers
-  ## @param grafana.containerSecurityContext.runAsGroup Group ID for the containers
-  ## @param grafana.containerSecurityContext.privileged Decide if the container runs privileged.
-  ## @param grafana.containerSecurityContext.runAsNonRoot Force the container to run as non-root
-  ## @param grafana.containerSecurityContext.allowPrivilegeEscalation Don't allow privilege escalation for the containers
+  ## @param grafana.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param grafana.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param grafana.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param grafana.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param grafana.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param grafana.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param grafana.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param grafana.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param grafana.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param grafana.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param grafana.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 0
-    privileged: false
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Grafana containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param grafana.resources.limits The resources limits for the container
-  ## @param grafana.resources.requests The requested resources for the container
+  ## @param grafana.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if grafana.resources is set (grafana.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 500m
-    ##    memory: 1Gi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param grafana.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param grafana.replicaCount Specify the amount of replicas running
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## NOTE: Number of replicas. If more than one is selected, a shared database should be configured.
   ##
   replicaCount: 1
-  ## @param grafana.skipCreateAdminAccount Prevent the operator from creating an admin secret
-  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/env_vars.md
-  ## Allowed values: true, false
-  ##
-  skipCreateAdminAccount: false
   ## @param grafana.podAffinityPreset Pod affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -557,31 +651,46 @@ grafana:
   ##
   affinity: {}
   ## @param grafana.nodeSelector Node labels for controller pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param grafana.tolerations Tolerations for controller pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## Pod Disruption Budget configuration for the grafana instance
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param grafana.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param grafana.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param grafana.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `grafana.pdb.minAvailable` and `grafana.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: false
+    minAvailable: ""
+    maxUnavailable: ""
+  ## @param grafana.extraEnvVars Array containing extra env vars to configure Grafana
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV
+  ##    value: my-env-value
+  ##
+  extraEnvVars: []
   ## @param grafana.envFrom Extra environment variable to pass to the running container
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## e.g:
   ## envFrom:
   ## - configMapRef:
-  ##   name: grafana-configmap
+  ##     name: grafana-configmap
   ## - secretRef:
-  ##   name: grafana-secrets
+  ##     name: grafana-secrets
   ##
   envFrom: []
   ## The grafana-operator client-configuration for this grafana instance
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-grafana-api-access
   ## @param grafana.client.timeout The timeout in seconds for the Grafana Rest API on that instance
-  ## @param grafana.client.preferService If the API should be used via Ingress or via the internal service
   ##
   client:
     timeout: 5
-    preferService: true
   ## @param grafana.labels Add additional labels to the grafana deployment, service and ingress resources
   ##
   labels: {}
@@ -602,9 +711,10 @@ grafana:
     ##     protocol: TCP
     ##     targetPort: grafana-http
     extraPorts: []
+  ##
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-ingress-or-route
   ##
   ingress:
@@ -616,9 +726,9 @@ grafana:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable. If empty the parameter will not be set.
+    ## @param grafana.ingress.host The host under which the grafana instance should be reachable. If empty the parameter will not be set.
     ##
-    hostname: grafana.local
+    host: grafana.local
     ## @param grafana.ingress.path The path for the ingress instance to forward to the grafana app
     ##
     path: /
@@ -630,7 +740,7 @@ grafana:
     labels: {}
     ## @param grafana.ingress.annotations Additional Annotations for the ingress resource
     ## For a full list of possible ingress annotations, please see
-    ## Ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ##
     ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
@@ -645,7 +755,7 @@ grafana:
     ##
     tlsSecret: grafana.local-tls
   ## Enable persistence using Persistent Volume Claims
-  ## Ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## Ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param grafana.persistence.enabled Enable persistent storage for the grafana deployment
@@ -662,6 +772,9 @@ grafana:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
+    ## @param grafana.persistence.existingVolume Define the existingVolume for the persistent storage provisioned outside this chart
+    ## https://github.com/grafana-operator/grafana-operator/blob/master/deploy/examppersistentvolume/Grafana-existingVolume.yaml
+    existingVolume: ""
     ## @param grafana.persistence.accessModes Define the accessModes for the persistent storage
     ##
     accessModes:
@@ -680,77 +793,49 @@ grafana:
     server:
       root_url: |-
         {{- if .Values.grafana.ingress.enabled }}
-        {{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
+        {{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
         {{- else }}
         http://localhost:3000
         {{- end }}
     log:
       mode: "console"
       level: "warn"
-    alerting:
-      enabled: false
+    database:
+      wal: "true"
     analytics:
-      reporting_enabled: false
-      check_for_updates: false
+      reporting_enabled: "false"
+      check_for_updates: "false"
     security:
       # ## Grafana Admin credentials, if omitted they will be admin:<random_pass>
       # admin_user:
       # admin_password:
-      #
-      # ## OIDC configuration
-      # ##
-      # auth:
-      #   disable_login_form: false
-      #   disable_signout_menu: false
-      # auth.generic_oauth:
-      #   enabled: True
-      #   client_id: grafana
-      #   client_secret: a391df94-dd1f-46d6-b3ab-60e90f23e8a2
-      #   scopes: profile email
-      #   auth_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/auth
-      #   token_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/token
-      #   api_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/userinfo
-      #   ## Automatic role handling with OIDC
-      #   ##
-      #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
-      #   # allowed_domains: example.com
-      #   allow_sign_up: True
-      disable_gravatar: false
-  ## @param grafana.configMaps Extra configMaps to mount into the grafana pod
-  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
-  ## e.g:
-  ## configMaps:
-  ##   - myCustomConfigMap
-  ##
-  configMaps: []
-  ## @param grafana.secrets Extra secrets to mount into the grafana pod
-  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
-  ## e.g:
-  ## secrets:
-  ##   - myCustomSecret
-  ##
-  secrets: []
+      disable_gravatar: "false"
+
+    # ## OIDC configuration (all auth sections should be under config, not security)
+    # ##
+    # auth:
+    #   disable_login_form: "false"
+    #   disable_signout_menu: "false"
+    # auth.generic_oauth:
+    #   enabled: "true"
+    #   client_id: grafana
+    #   client_secret: a391df94-dd1f-46d6-b3ab-60e90f23e8a2
+    #   scopes: profile email
+    #   auth_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/auth
+    #   token_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/token
+    #   api_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/userinfo
+    #   ## Automatic role handling with OIDC
+    #   ##
+    #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
+    #   # allowed_domains: example.com
+    #   allow_sign_up: "True"
+
   ## @param grafana.jsonnetLibrarySelector [object] Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
   ##
   jsonnetLibrarySelector:
     matchLabels:
       app.kubernetes.io/instance: "{{ .Release.Name }}"
-  ## @param grafana.dashboardLabelSelectors [object] This selects dashboards on the label.
-  ## A cachall is not possible so you need to define at least one label selector here.
-  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#deploying-grafana
-  ##
-  dashboardLabelSelectors:
-    - matchLabels:
-        app.kubernetes.io/instance: "{{ .Release.Name }}"
-  ## @param grafana.dashboardNamespaceSelector Watch for dashboards only in the Namespaces that have the specified namespace label
-  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
-  ## e.g:
-  ## dashboardNamespaceSelector:
-  ##   matchLabels:
-  ##     key: value
-  ##
-  dashboardNamespaceSelector: {}
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
@@ -797,9 +882,12 @@ grafana:
   ## @param grafana.extraVolumes Optionally specify extra list of additional volumes for the grafana pod(s)
   ##
   extraVolumes: []
-  ## @param grafana.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the grafana container(s)
+  ## @param grafana.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the grafana container
   ##
   extraVolumeMounts: []
+  ## @param grafana.secrets Optionally specify a list of secrets to be mounted to the grafana pod(s)
+  ##
+  secrets: []
   ## @param grafana.sidecars Add additional sidecar containers to the grafana pod(s)
   ## e.g:
   ## sidecars:

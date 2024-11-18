@@ -1,0 +1,14 @@
+controller:
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+  serviceAccount:
+    create: true
+  automountServiceAccountToken: true

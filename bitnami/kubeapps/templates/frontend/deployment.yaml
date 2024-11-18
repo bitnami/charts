@@ -1,13 +1,17 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.frontend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: frontend
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -16,8 +20,9 @@ spec:
   {{- if .Values.frontend.updateStrategy }}
   strategy: {{- toYaml .Values.frontend.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.frontend.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: frontend
   template:
     metadata:
@@ -26,13 +31,11 @@ spec:
         {{- if .Values.frontend.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.frontend.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: frontend
-        {{- if .Values.frontend.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.frontend.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
-      {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      {{- include "kubeapps.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.frontend.automountServiceAccountToken }}
       {{- if .Values.frontend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -40,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAffinityPreset "component" "frontend" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAntiAffinityPreset "component" "frontend" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAffinityPreset "component" "frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAntiAffinityPreset "component" "frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.frontend.nodeAffinityPreset.type "key" .Values.frontend.nodeAffinityPreset.key "values" .Values.frontend.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.frontend.schedulerName }}
@@ -60,7 +63,7 @@ spec:
       priorityClassName: {{ .Values.frontend.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.frontend.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.frontend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.frontend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.frontend.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.initContainers "context" $) | nindent 8 }}
@@ -70,7 +73,7 @@ spec:
           image: {{ include "kubeapps.frontend.image" . }}
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy | quote }}
           {{- if .Values.frontend.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.frontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.frontend.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -104,34 +107,44 @@ spec:
             - name: http
               containerPort: {{ .Values.frontend.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.frontend.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.frontend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
-              port: http
-          {{- else if .Values.frontend.customLivenessProbe }}
+          {{- if .Values.frontend.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.frontend.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.frontend.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
           {{- end }}
-          {{- if .Values.frontend.readinessProbe.enabled }}
+          {{- if .Values.frontend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.frontend.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.frontend.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: http
-          {{- else if .Values.frontend.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.frontend.startupProbe.enabled }}
+          {{- if .Values.frontend.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.frontend.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.frontend.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.frontend.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.frontend.resources }}
           resources: {{- toYaml .Values.frontend.resources | nindent 12 }}
+          {{- else if ne .Values.frontend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.frontend.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/logs
+              subPath: app-logs-dir
             - name: vhost
               mountPath: /opt/bitnami/nginx/conf/server_blocks
             {{- if .Values.frontend.extraVolumeMounts }}
@@ -142,7 +155,7 @@ spec:
           image: {{ include "kubeapps.authProxy.image" . }}
           imagePullPolicy: {{ .Values.authProxy.image.pullPolicy | quote }}
           {{- if .Values.authProxy.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.authProxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.authProxy.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.authProxy.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.authProxy.lifecycleHooks "context" $) | nindent 12 }}
@@ -166,14 +179,17 @@ spec:
             - --pass-access-token=true
             - --pass-authorization-header=true
             - --skip-auth-regex=^\/config\.json$
-            - --skip-auth-regex=^\/manifest\.json$
+            - --skip-auth-regex=^\/site\.webmanifest$
             - --skip-auth-regex=^\/custom_style\.css$
             - --skip-auth-regex=^\/clr-ui.min\.css$
             - --skip-auth-regex=^\/clr-ui-dark.min\.css$
             - --skip-auth-regex=^\/custom_locale\.json$
             - --skip-auth-regex=^\/favicon.*\.png$
             - --skip-auth-regex=^\/favicon.*\.ico$
+            - --skip-auth-regex=^\/android-chrome-.*\.png$
             - --skip-auth-regex=^\/static\/
+            - --skip-auth-regex=^\/apis/core/plugins/v1alpha1/configured-plugins$
+            - --skip-auth-regex=^\/apis/kubeappsapis.core.plugins.v1alpha1.PluginsService/GetConfiguredPlugins$
             - --skip-auth-regex=^\/$
             - --scope={{ .Values.authProxy.scope }}
             - --cookie-refresh={{ .Values.authProxy.cookieRefresh }}
@@ -214,10 +230,16 @@ spec:
               containerPort: {{ .Values.authProxy.containerPorts.proxy }}
           {{- if .Values.authProxy.resources }}
           resources: {{- toYaml .Values.authProxy.resources | nindent 12 }}
+          {{- else if ne .Values.authProxy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.authProxy.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if .Values.authProxy.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.authProxy.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.authProxy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.authProxy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- end }}
         {{- if and (gt (len .Values.clusters) 1) (not .Values.authProxy.enabled) }}
           {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication." }}
@@ -227,7 +249,7 @@ spec:
           image: {{ include "kubeapps.pinnipedProxy.image" . }}
           imagePullPolicy: {{ .Values.pinnipedProxy.image.pullPolicy | quote }}
           {{- if .Values.pinnipedProxy.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.pinnipedProxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.pinnipedProxy.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -236,6 +258,10 @@ spec:
           {{- else }}
           command:
             - pinniped-proxy
+            {{- if .Values.pinnipedProxy.tls.existingSecret }}
+            - --proxy-tls-cert=/etc/pinniped-tls/tls.crt
+            - --proxy-tls-cert-key=/etc/pinniped-tls/tls.key
+            {{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -255,6 +281,7 @@ spec:
             - name: DEFAULT_PINNIPED_API_SUFFIX
               value: {{ .Values.pinnipedProxy.defaultPinnipedAPISuffix | quote }}
             - name: RUST_LOG
+              # Use info,pinniped_proxy::pinniped=debug for module control.
               value: info
               {{- if .Values.pinnipedProxy.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.extraEnvVars "context" $) | nindent 12 }}
@@ -273,18 +300,36 @@ spec:
               containerPort: {{ .Values.pinnipedProxy.containerPorts.pinnipedProxy }}
           {{- if .Values.pinnipedProxy.resources }}
           resources: {{- toYaml .Values.pinnipedProxy.resources | nindent 12 }}
+          {{- else if ne .Values.pinnipedProxy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.pinnipedProxy.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if .Values.pinnipedProxy.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.pinnipedProxy.tls.existingSecret }}
+            - name: pinniped-tls-secret
+              mountPath: "/etc/pinniped-tls"
+              readOnly: true
+            {{- end }}
+            {{- if .Values.pinnipedProxy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- end }}
         {{- if .Values.frontend.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.frontend.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: vhost
           configMap:
             name: {{ template "kubeapps.frontend-config.fullname" . }}
+        {{- if .Values.pinnipedProxy.tls.existingSecret }}
+        - name: pinniped-tls-secret
+          secret:
+            secretName: {{ .Values.pinnipedProxy.tls.existingSecret }}
+        {{- end }}
         {{- if .Values.frontend.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.frontend.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

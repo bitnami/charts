@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -43,11 +48,51 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the Tomcat credential secret name
+*/}}
+{{- define "tomcat.secretName" -}}
+{{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
+Get the tomcat-username key.
+*/}}
+{{- define "tomcat.adminUsernameKey" -}}
+{{- if and .Values.existingSecret .Values.secretKeys.adminUsernameKey -}}
+    {{- printf "%s" (tpl .Values.secretKeys.adminUsernameKey $) -}}
+{{- else -}}
+    {{- "tomcat-username" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the tomcat-password key.
+*/}}
+{{- define "tomcat.adminPasswordKey" -}}
+{{- if and .Values.existingSecret .Values.secretKeys.adminPasswordKey -}}
+    {{- printf "%s" (tpl .Values.secretKeys.adminPasswordKey $) -}}
+{{- else -}}
+    {{- "tomcat-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "tomcat.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "tomcat.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*

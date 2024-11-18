@@ -1,4 +1,9 @@
 {{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper RabbitMQ Cluster Operator fullname
 Note: We use the regular common function as the chart name already contains the
 the rabbitmq-cluster-operator name.
@@ -13,12 +18,19 @@ NOTE: Not using the common function to avoid generating too long names
 */}}
 {{- define "rmqco.msgTopologyOperator.fullname" -}}
 {{- if .Values.msgTopologyOperator.fullnameOverride -}}
-    {{- .Values.msgTopologyOperator.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+    {{- printf "%s" .Values.msgTopologyOperator.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else if .Values.fullnameOverride -}}
     {{- printf "%s-%s" .Values.fullnameOverride "messaging-topology-operator" | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
     {{- printf "%s-%s" .Release.Name "rabbitmq-messaging-topology-operator" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper RabbitMQ Messaging Topology Operator fullname adding the installation's namespace.
+*/}}
+{{- define "rmqco.msgTopologyOperator.fullname.namespace" -}}
+{{- printf "%s-%s" (include "rmqco.msgTopologyOperator.fullname" .) (include "common.names.namespace" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -33,6 +45,13 @@ NOTE: Not using the common function to avoid generating too long names
 {{- else -}}
     {{- printf "%s-%s" .Release.Name "rabbitmq-messaging-topology-operator-webhook" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper RabbitMQ Messaging Topology Operator fullname adding the installation's namespace.
+*/}}
+{{- define "rmqco.msgTopologyOperator.webhook.fullname.namespace" -}}
+{{- printf "%s-%s" (include "rmqco.msgTopologyOperator.webhook.fullname" .) (include "common.names.namespace" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*

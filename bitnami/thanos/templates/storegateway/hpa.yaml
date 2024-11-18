@@ -1,22 +1,24 @@
-{{- if and .Values.storegateway.enabled .Values.storegateway.autoscaling.enabled }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.storegateway.enabled .Values.storegateway.autoscaling.enabled (not .Values.storegateway.sharded.enabled) }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "common.names.fullname" . }}-storegateway
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.storegateway.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
-    name: {{ include "common.names.fullname" . }}-storegateway
+    name: {{ include "thanos.storegateway.fullname" . }}
   minReplicas: {{ .Values.storegateway.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.storegateway.autoscaling.maxReplicas }}
   metrics:

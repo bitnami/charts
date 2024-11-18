@@ -1,0 +1,72 @@
+query:
+  sidecars: |-
+    - name: hotrod-example
+      image: jaegertracing/example-hotrod:{{ .Chart.AppVersion }}
+      args: ['all']
+      env:
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://jaeger-collector:4318
+      securityContext:
+        runAsNonRoot: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        {{- if not (.Capabilities.APIVersions.Has "security.openshift.io/v1") }}
+        runAsUser: 1001
+        {{- end }}
+        capabilities:
+          drop: [ "ALL" ]
+        seccompProfile:
+          type: "RuntimeDefault"
+    - name: trace-generator
+      image: bitnami/os-shell:11-debian-11-r2
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          #!/bin/bash
+          while true; do
+            # Sample taken from inspecting hotrod code
+            curl 'http://127.0.0.1:8080/dispatch?customer=392&nonse=0.45838884710501726'
+            sleep 5
+          done
+      securityContext:
+        runAsNonRoot: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: [ "ALL" ]
+        seccompProfile:
+          type: "RuntimeDefault"
+  service:
+    type: LoadBalancer
+    ports:
+      admin: 16688
+      api: 80
+collector:
+  service:
+    ports:
+      admin: 14270
+  containerPorts:
+    admin: 14771
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+  extraVolumes:
+    - name: empty-dir
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+cassandra:
+  enabled: true
+  keyspace: bitnami_test_jaeger
+  dbUser:
+    user: bn_test_jaeger
+    password: bn_test_jaeger

@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -34,7 +39,7 @@ Return the proper name for master related resources
 {{- define "pytorch.master.name" -}}
 {{- $architecture := coalesce .Values.mode .Values.architecture }}
 {{- if eq .Values.architecture "distributed" }}
-{{- printf "%s-master" (include "common.names.fullname" .) }}
+{{- printf "%s-master" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- include "common.names.fullname" . }}
 {{- end -}}
@@ -46,12 +51,23 @@ Return the proper securityContext when enabled by the deprecated or new params
 {{- define "pytorch.securityContext" -}}
 {{- if .Values.securityContext }}
 {{- if .Values.securityContext.enabled }}
-      securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.securityContext "context" $) | nindent 8 }}
 {{- end }}
 {{- else }}
 {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
 {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "pytorch.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

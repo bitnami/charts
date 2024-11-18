@@ -100,6 +100,65 @@
         }
       }
     },
+    "networkPolicy": {
+      "type": "object",
+      "title": "Network policy configuration",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable network policy",
+          "description": "Enable network policy using Kubernetes native NP",
+          "hidden": {
+            "value": false,
+            "path": "networkPolicy/enabled"
+          }
+        },
+        "ingress": {
+          "type": "object",
+          "properties": {
+            "namespaceSelector": {
+              "type": "object",
+              "title": "Namespace selector label that is allowed to access this instance",
+              "hidden": {
+                "value": {},
+                "path": "networkPolicy/ingress/namespaceSelector"
+              }
+            },
+            "podSelector": {
+              "type": "object",
+              "title": "Pod selector label that is allowed to access this instance",
+              "hidden": {
+                "value": {},
+                "path": "networkPolicy/ingress/podSelector"
+              }
+            },
+            "customRules": {
+              "type": "array",
+              "title": "Custom rules for ingress network policy",
+              "hidden": {
+                "value": [],
+                "path": "networkPolicy/ingress/customRules"
+              }
+            }
+          }
+        },
+        "egress": {
+          "type": "object",
+          "properties": {
+            "customRules": {
+              "type": "array",
+              "title": "Custom rules for egress network policy",
+              "hidden": {
+                "value": [],
+                "path": "networkPolicy/egress/customRules"
+              }
+            }
+          }
+        }
+      }
+    },
     "persistence": {
       "type": "object",
       "title": "Persistence configuration",

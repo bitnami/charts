@@ -1,0 +1,27 @@
+dbUser:
+  user: test_cassandra
+  password: ComplicatedPassword123!4
+replicaCount: 2
+cluster:
+  seedCount: 2
+  numTokens: 256
+containerPorts:
+  intra: 7001
+  tls: 7002
+  jmx: 7198
+  cql: 9043
+persistence:
+  mountPath: /bitnami/cassandra
+service:
+  ports:
+    cql: 80
+  type: LoadBalancer
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002

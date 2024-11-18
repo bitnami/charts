@@ -1,0 +1,18 @@
+appFromExternalRepo:
+  enabled: true
+  clone:
+    repository: https://github.com/dotnet/AspNetCore.Docs.git
+    revision: main
+    depth: 1
+  publish:
+    subFolder: aspnetcore/performance/caching/output/samples/8.x/
+  startCommand: [dotnet, OCMinimal.dll]
+containerPorts:
+  http: 8080
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+service:
+  type: LoadBalancer
+  ports:
+    http: 80

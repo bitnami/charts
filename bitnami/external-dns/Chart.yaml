@@ -1,27 +1,31 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: DeveloperTools
+  licenses: Apache-2.0
+  images: |
+    - name: external-dns
+      image: docker.io/bitnami/external-dns:0.15.0-debian-12-r4
 apiVersion: v2
-appVersion: 0.12.0
+appVersion: 0.15.0
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: ExternalDNS is a Kubernetes addon that configures public DNS servers with information about exposed Kubernetes services to make them discoverable.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/external-dns
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/external-dns/img/external-dns-stack-220x234.png
 keywords:
-  - external-dns
-  - network
-  - dns
+- external-dns
+- network
+- dns
 maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: external-dns
 sources:
-  - https://github.com/kubernetes-sigs/external-dns
-  - https://github.com/bitnami/bitnami-docker-external-dns
-  - https://github.com/kubernetes-sigs/external-dns
-version: 6.5.6
+- https://github.com/bitnami/charts/tree/main/bitnami/external-dns
+version: 8.5.1

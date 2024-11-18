@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.alertmanager.enabled .Values.alertmanager.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -8,20 +13,15 @@ metadata:
     {{- if .Values.alertmanager.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.alertmanager.serviceMonitor.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.serviceMonitor.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.alertmanager.serviceMonitor.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   jobLabel: {{ .Values.alertmanager.serviceMonitor.jobLabel | quote }}
   selector:
-    matchLabels: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 6 }}
+    matchLabels:
+      app.kubernetes.io/component: alertmanager
       {{- if .Values.alertmanager.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
@@ -45,5 +45,8 @@ spec:
       {{- end }}
       {{- if .Values.alertmanager.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.serviceMonitor.extraParameters }}
+      {{- toYaml .Values.alertmanager.serviceMonitor.extraParameters | nindent 6 }}
       {{- end }}
 {{- end }}

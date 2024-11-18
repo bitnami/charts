@@ -1,0 +1,50 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.compactor.enabled .Values.compactor.cronJob.enabled }}
+apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
+kind: CronJob
+metadata:
+  name: {{ include "thanos.compactor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: compactor
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: "{{ .Values.compactor.cronJob.schedule }}"
+  {{- if .Values.compactor.cronJob.timeZone }}
+  timeZone: {{ .Values.compactor.cronJob.timeZone }}
+  {{- end }}
+  {{- if .Values.compactor.cronJob.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ .Values.compactor.cronJob.startingDeadlineSeconds }}
+  {{- end }}
+  {{- if .Values.compactor.cronJob.concurrencyPolicy }}
+  concurrencyPolicy: {{ .Values.compactor.cronJob.concurrencyPolicy }}
+  {{- end }}
+  {{- if .Values.compactor.cronJob.suspend }}
+  suspend: {{ .Values.compactor.cronJob.suspend }}
+  {{- end }}
+  {{- if .Values.compactor.cronJob.successfulJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.compactor.cronJob.successfulJobsHistoryLimit }}
+  {{- end }}
+  {{- if .Values.compactor.cronJob.failedJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.compactor.cronJob.failedJobsHistoryLimit }}
+  {{- end }}
+  jobTemplate:
+    spec:
+      {{- if .Values.compactor.cronJob.backoffLimit }}
+      backoffLimit: {{ .Values.compactor.cronJob.backoffLimit }}
+      {{- end }}
+      {{- if .Values.compactor.cronJob.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ .Values.compactor.cronJob.activeDeadlineSeconds }}
+      {{- end }}
+      {{- if .Values.compactor.cronJob.ttlSecondsAfterFinished }}
+      ttlSecondsAfterFinished: {{ .Values.compactor.cronJob.ttlSecondsAfterFinished }}
+      {{- end }}
+      template:
+        {{- include "thanos.compactor.podTemplate" . | nindent 8 }}
+{{- end }}

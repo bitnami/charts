@@ -12,11 +12,11 @@ The chart has been deployed in diagnostic mode. All probes have been disabled an
 
 Get the list of pods by executing:
 
-  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
 Access the pod you want to debug by executing
 
-  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
 
 In order to replicate the container startup scripts execute this command:
 
@@ -53,12 +53,28 @@ For Redis Sentinel:
 {{- end }}
 {{- end }}
 
+{{- if and .Values.auth.usePasswordFiles (not .Values.auth.usePasswordFileFromSecret) (or (empty .Values.master.initContainers) (empty .Values.replica.initContainers)) }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    By specifying ".Values.auth.usePasswordFiles=true" and ".Values.auth.usePasswordFileFromSecret=false"
+    Redis is expecting that the password is mounted as a file in each pod
+    (by default in /opt/bitnami/redis/secrets/redis-password)
+
+    Ensure that you specify the respective initContainers in
+    both .Values.master.initContainers and .Values.replica.initContainers
+    in order to populate the contents of this file.
+
+-------------------------------------------------------------------------------
+{{- end }}
+
 {{- if eq .Values.architecture "replication" }}
 {{- if .Values.sentinel.enabled }}
 
 Redis&reg; can be accessed via port {{ .Values.sentinel.service.ports.redis }} on the following DNS name from within your cluster:
 
-    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} for read only operations
+    {{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} for read only operations
 
 For read/write operations, first access the Redis&reg; Sentinel cluster, which is available in port {{ .Values.sentinel.service.ports.sentinel }} using the same domain name above.
 
@@ -66,15 +82,15 @@ For read/write operations, first access the Redis&reg; Sentinel cluster, which i
 
 Redis&reg; can be accessed on the following DNS names from within your cluster:
 
-    {{ printf "%s-master.%s.svc.%s" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain }} for read/write operations (port {{ .Values.master.service.ports.redis }})
-    {{ printf "%s-replicas.%s.svc.%s" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain }} for read-only operations (port {{ .Values.replica.service.ports.redis }})
+    {{ printf "%s-master.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} for read/write operations (port {{ .Values.master.service.ports.redis }})
+    {{ printf "%s-replicas.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} for read-only operations (port {{ .Values.replica.service.ports.redis }})
 
 {{- end }}
 {{- else }}
 
 Redis&reg; can be accessed via port {{ .Values.master.service.ports.redis }} on the following DNS name from within your cluster:
 
-    {{ template "common.names.fullname" . }}-master.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+    {{ template "common.names.fullname" . }}-master.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
 {{- end }}
 
@@ -82,7 +98,7 @@ Redis&reg; can be accessed via port {{ .Values.master.service.ports.redis }} on 
 
 To get your password run:
 
-    export REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 -d)
+    export REDIS_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 -d)
 
 {{- end }}
 
@@ -90,15 +106,15 @@ To connect to your Redis&reg; server:
 
 1. Run a Redis&reg; pod that you can use as a client:
 
-   kubectl run --namespace {{ .Release.Namespace }} redis-client --restart='Never' {{ if .Values.auth.enabled }} --env REDIS_PASSWORD=$REDIS_PASSWORD {{ end }} --image {{ template "redis.image" . }} --command -- sleep infinity
+   kubectl run --namespace {{ include "common.names.namespace" . }} redis-client --restart='Never' {{ if .Values.auth.enabled }} --env REDIS_PASSWORD=$REDIS_PASSWORD {{ end }} --image {{ template "redis.image" . }} --command -- sleep infinity
 
 {{- if .Values.tls.enabled }}
 
    Copy your TLS certificates to the pod:
 
-   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.cert redis-client:/tmp/client.cert
-   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.key redis-client:/tmp/client.key
-   kubectl cp --namespace {{ .Release.Namespace }} /path/to/CA.cert redis-client:/tmp/CA.cert
+   kubectl cp --namespace {{ include "common.names.namespace" . }} /path/to/client.cert redis-client:/tmp/client.cert
+   kubectl cp --namespace {{ include "common.names.namespace" . }} /path/to/client.key redis-client:/tmp/client.key
+   kubectl cp --namespace {{ include "common.names.namespace" . }} /path/to/CA.cert redis-client:/tmp/CA.cert
 
 {{- end }}
 
@@ -106,7 +122,7 @@ To connect to your Redis&reg; server:
 
    kubectl exec --tty -i redis-client \
    {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
-   --namespace {{ .Release.Namespace }} -- bash
+   --namespace {{ include "common.names.namespace" . }} -- bash
 
 2. Connect using the Redis&reg; CLI:
 
@@ -133,42 +149,42 @@ To connect to your database from outside the cluster execute the following comma
 {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
 {{- if contains "NodePort" .Values.sentinel.service.type }}
 
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
     {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "LoadBalancer" .Values.sentinel.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h $SERVICE_IP -p {{ .Values.sentinel.service.ports.redis }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "ClusterIP" .Values.sentinel.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ .Values.sentinel.service.ports.redis }}:{{ .Values.sentinel.service.ports.redis }} &
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.sentinel.service.ports.redis }}:{{ .Values.sentinel.service.ports.redis }} &
     {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h 127.0.0.1 -p {{ .Values.sentinel.service.ports.redis }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- end }}
 {{- else }}
 {{- if contains "NodePort" .Values.master.service.type }}
 
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-master" (include "common.names.fullname" .) }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-master" (include "common.names.fullname" .) }})
     {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "LoadBalancer" .Values.master.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-master" (include "common.names.fullname" .) }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ printf "%s-master" (include "common.names.fullname" .) }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h $SERVICE_IP -p {{ .Values.master.service.ports.redis }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "ClusterIP" .Values.master.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-master" (include "common.names.fullname" .) }} {{ .Values.master.service.ports.redis }}:{{ .Values.master.service.ports.redis }} &
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ printf "%s-master" (include "common.names.fullname" .) }} {{ .Values.master.service.ports.redis }}:{{ .Values.master.service.ports.redis }} &
     {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h 127.0.0.1 -p {{ .Values.master.service.ports.redis }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- end }}
@@ -189,3 +205,9 @@ No need to upgrade, ports and nodeports have been set from values
 YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
 {{- end }}
 {{- end }}
+{{- $resourceSections := list "metrics" "replica" "sentinel" "sysctl" "volumePermissions" }}
+{{- if not (and (eq .Values.architecture "replication") .Values.sentinel.enabled) }}
+  {{- $resourceSections = append $resourceSections "master" -}}
+{{- end }}
+{{- include "common.warnings.resources" (dict "sections" $resourceSections "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.kubectl.image .Values.sysctl.image) "context" $) }}

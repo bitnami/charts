@@ -1,14 +1,18 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.packaging.helm.enabled }}
+{{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.apprepository.image "chart" .Chart ) ) }}
+{{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
 {{- range .Values.apprepository.initialRepos }}
 apiVersion: kubeapps.com/v1alpha1
 kind: AppRepository
 metadata:
   name: {{ .name }}
-  namespace: {{ default (include "kubeapps.globalReposNamespace" $) .namespace | quote }}
-  labels: {{- include "common.labels.standard" $ | nindent 4 }}
-    {{- if $.Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  namespace: {{ default (include "kubeapps.helmGlobalPackagingNamespace" $) .namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if $.Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -21,12 +25,14 @@ spec:
   - {{ . }}
   {{- end }}
   {{- end }}
-  {{- if or $.Values.apprepository.containerSecurityContext.enabled $.Values.apprepository.initialReposProxy.enabled .nodeSelector }}
+  {{- if or $.Values.apprepository.podSecurityContext.enabled $.Values.apprepository.containerSecurityContext.enabled $.Values.apprepository.initialReposProxy.enabled .nodeSelector .tolerations}}
   syncJobPodTemplate:
     spec:
-      {{- if $.Values.apprepository.initialReposProxy.enabled }}
+      {{- if or $.Values.apprepository.initialReposProxy.enabled $.Values.apprepository.containerSecurityContext.enabled }}
       containers:
-        - env:
+        -
+      {{- if $.Values.apprepository.initialReposProxy.enabled }}
+          env:
             - name: https_proxy
               value: {{ $.Values.apprepository.initialReposProxy.httpsProxy }}
             - name: http_proxy
@@ -35,8 +41,11 @@ spec:
               value: {{ $.Values.apprepository.initialReposProxy.noProxy }}
       {{- end }}
       {{- if $.Values.apprepository.containerSecurityContext.enabled }}
-      securityContext:
-        runAsUser: {{ $.Values.apprepository.containerSecurityContext.runAsUser }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.apprepository.containerSecurityContext "context" $) | nindent 12 }}
+      {{- end }}
+      {{- end }}
+      {{- if $.Values.apprepository.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.apprepository.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .nodeSelector }}
       nodeSelector: {{- toYaml .nodeSelector | nindent 8 }}

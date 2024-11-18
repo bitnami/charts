@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/etcd"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJyYmFjIjoKICAgICJyb290UGFzc3dvcmQiOiAiQ3YzdzliTmRjcW1wIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJjbGllbnQiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,17 +31,38 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "etcd/goss/goss.yaml",
+            "vars_file": "etcd/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "sts-etcd"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "ginkgo",
           "params": {
-            "endpoint": "lb-etcd-client",
-            "app_protocol": "HTTP"
+            "resources": {
+              "path": "/.vib/etcd/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "etcd",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

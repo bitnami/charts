@@ -1,0 +1,19 @@
+{
+  "users" : [ {
+    "id" : "",
+    "createdTimestamp" : 0,
+    "username" : "test-realm-user",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "test-realm",
+    "lastName" : "user",
+    "email" : "test-realm-user@example.com",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-test-realm" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}

@@ -1,29 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: ApplicationServer
+  licenses: Apache-2.0
+  images: |
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:12-debian-12-r32
+    - name: wildfly
+      image: docker.io/bitnami/wildfly:34.0.0-debian-12-r3
 apiVersion: v2
-appVersion: 26.1.1
+appVersion: 34.0.0
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Wildfly is a lightweight, open source application server, formerly known as JBoss, that implements the latest enterprise Java standards.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/wildfly
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-220x234.png
 keywords:
-  - wildfly
-  - java
-  - http
-  - web
-  - application server
-  - jsp
+- wildfly
+- java
+- http
+- web
+- application server
+- jsp
 maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: wildfly
 sources:
-  - https://github.com/bitnami/bitnami-docker-wildfly
-  - http://wildfly.org
-version: 13.3.10
+- https://github.com/bitnami/charts/tree/main/bitnami/wildfly
+version: 22.0.2

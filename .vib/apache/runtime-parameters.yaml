@@ -1,0 +1,18 @@
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    https: 444
+containerPorts:
+  http: 8081
+  https: 8444
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.localhost
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002

@@ -1,24 +1,26 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.agent.enabled }}
 {{- if .Values.agent.metrics.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: agent
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   name: {{ template "common.names.fullname" . }}-agent-metrics
   namespace: {{ .Release.Namespace | quote }}
-  annotations:
-  {{- if .Values.commonAnnotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.agent.service.annotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.agent.service.annotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.agent.service.annotations .Values.commonAnnotations (and .Values.agent.metrics.enabled .Values.agent.metrics.annotations) }}
+  {{- $annotations := dict -}}
+  {{- if or .Values.agent.service.annotations .Values.commonAnnotations }}
+  {{- $annotations = merge $annotations .Values.agent.service.annotations .Values.commonAnnotations -}}
   {{- end }}
   {{- if and .Values.agent.metrics.enabled .Values.agent.metrics.annotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.agent.metrics.annotations "context" $ ) | nindent 4 }}
+  {{- $annotations = merge $annotations .Values.agent.metrics.annotations }}
+  {{- end }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.agent.service.type }}
@@ -53,7 +55,8 @@ spec:
     {{- if .Values.agent.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.agent.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.agent.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: agent
 {{- end }}
 {{- end }}

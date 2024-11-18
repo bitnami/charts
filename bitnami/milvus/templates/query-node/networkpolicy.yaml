@@ -1,0 +1,119 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.queryNode.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "milvus.query-node.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: query-node
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryNode.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: milvus
+      app.kubernetes.io/component: query-node
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.queryNode.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ .Values.queryCoord.containerPorts.grpc }}
+        - port: {{ .Values.dataCoord.containerPorts.grpc }}
+        - port: {{ .Values.indexCoord.containerPorts.grpc }}
+        - port: {{ .Values.rootCoord.containerPorts.grpc }}
+        - port: {{ .Values.queryNode.containerPorts.grpc }}
+        - port: {{ .Values.dataNode.containerPorts.grpc }}
+        - port: {{ .Values.indexNode.containerPorts.grpc }}
+        - port: {{ .Values.proxy.containerPorts.grpc }}
+        - port: {{ .Values.proxy.containerPorts.grpcInternal }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    # Allow outbound connections to S3
+    - ports:
+        - port: {{ include "milvus.s3.port" . }}
+      {{- if .Values.minio.enabled }}
+        - port: {{ .Values.minio.containerPorts.api }}
+      to: 
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+    # Allow outbound connections to etcd
+    - ports:
+        - port: {{ include "milvus.etcd.port" . }}
+      to: 
+        {{- if .Values.etcd.enabled }}
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: etcd
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+    # Allow outbound connections to kafka
+    - ports:
+        - port: {{ include "milvus.kafka.port" . }}
+      to: 
+        {{- if .Values.kafka.enabled }}
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: kafka
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+    {{- if .Values.queryNode.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.queryNode.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.queryNode.containerPorts.grpc }}
+        {{- if .Values.queryNode.metrics.enabled }}
+        - port: {{ .Values.queryNode.containerPorts.metrics }}
+        {{- end }}
+      {{- if not .Values.queryNode.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: milvus
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+        {{- if .Values.queryNode.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.queryNode.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.queryNode.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.queryNode.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.queryNode.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.queryNode.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,22 @@
+backend:
+  adminPassword: bitnami!1234
+  adminEmail: vibuser@example.com
+  service:
+    ports:
+      http: 8083
+rts:
+  service:
+    ports:
+      http: 8085
+client:
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+  automountServiceAccountToken: true
+  containerSecurityContext:
+    runAsUser: 1002
+  podSecurityContext:
+    fsGroup: 1002
+  containerPorts:
+    http: 8022

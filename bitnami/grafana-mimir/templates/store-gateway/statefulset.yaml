@@ -1,0 +1,249 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ template "grafana-mimir.store-gateway.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: store-gateway
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.storeGateway.replicaCount }}
+  podManagementPolicy: {{ .Values.storeGateway.podManagementPolicy | quote }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storeGateway.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: grafana-mimir
+      app.kubernetes.io/component: store-gateway
+  serviceName:  {{ template "grafana-mimir.store-gateway.fullname" . }}
+  {{- if .Values.storeGateway.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.storeGateway.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      {{- if .Values.storeGateway.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: grafana-mimir
+        app.kubernetes.io/component: store-gateway
+        mimir-gossip-member: "true"
+    spec:
+      serviceAccountName: {{ template "grafana-mimir.serviceAccountName" . }}
+      {{- include "grafana-mimir.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.storeGateway.automountServiceAccountToken }}
+      {{- if .Values.storeGateway.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storeGateway.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.storeGateway.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.storeGateway.podAffinityPreset "component" "store-gateway" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.storeGateway.podAntiAffinityPreset "component" "store-gateway" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.storeGateway.nodeAffinityPreset.type "key" .Values.storeGateway.nodeAffinityPreset.key "values" .Values.storeGateway.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.storeGateway.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.storeGateway.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storeGateway.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storeGateway.priorityClassName }}
+      priorityClassName: {{ .Values.storeGateway.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.storeGateway.schedulerName }}
+      schedulerName: {{ .Values.storeGateway.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.storeGateway.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storeGateway.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.storeGateway.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storeGateway.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.storeGateway.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.storeGateway.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.storeGateway.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "grafana-mimir.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              mkdir -p {{ .Values.mimir.dataDir }}
+              {{- if and .Values.storeGateway.podSecurityContext.enabled .Values.storeGateway.containerSecurityContext.enabled }}
+              find {{ .Values.mimir.dataDir }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.storeGateway.containerSecurityContext.runAsUser }}:{{ .Values.storeGateway.podSecurityContext.fsGroup }}
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: data
+              mountPath: {{ .Values.mimir.dataDir }}
+        {{- end }}
+      containers:
+        - name: store-gateway
+          image: {{ template "grafana-mimir.image" . }}
+          imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
+          {{- if .Values.storeGateway.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.storeGateway.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.storeGateway.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.storeGateway.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - "-target=store-gateway"
+            - "-config.expand-env=true"
+            - "-config.file={{ .Values.mimir.dataDir }}/conf/mimir.yaml"
+            {{- if .Values.storeGateway.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end}}
+          env:
+            {{- if .Values.minio.enabled }}
+            - name: MIMIR_MINIO_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.accessKeyIDKey" . }}
+            - name: MIMIR_MINIO_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.secretAccessKeyKey" . }}
+            {{- end }}
+            {{- if .Values.storeGateway.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.storeGateway.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.storeGateway.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.storeGateway.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.storeGateway.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.storeGateway.resources }}
+          resources: {{- toYaml .Values.storeGateway.resources | nindent 12 }}
+          {{- else if ne .Values.storeGateway.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.storeGateway.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.mimir.containerPorts.http }}
+            - name: http-memberlist
+              containerPort: {{ .Values.mimir.containerPorts.gossipRing }}
+            - name: grpc
+              containerPort: {{ .Values.mimir.containerPorts.grpc }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.storeGateway.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storeGateway.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storeGateway.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.storeGateway.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storeGateway.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storeGateway.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
+          {{- end }}
+          {{- if .Values.storeGateway.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storeGateway.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storeGateway.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.storeGateway.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: mimir-config
+              mountPath: {{ .Values.mimir.dataDir }}/conf
+            - name: data
+              mountPath: {{ .Values.mimir.dataDir }}
+          {{- if .Values.storeGateway.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.storeGateway.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.storeGateway.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: mimir-config
+          configMap:
+            name: {{ template "grafana-mimir.mimir.configmapName" . }}
+        {{- if .Values.storeGateway.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if not .Values.storeGateway.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        {{- if or .Values.storeGateway.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.storeGateway.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.storeGateway.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.storeGateway.persistence.size | quote }}
+        {{- if .Values.storeGateway.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.storeGateway.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.persistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.storeGateway.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}

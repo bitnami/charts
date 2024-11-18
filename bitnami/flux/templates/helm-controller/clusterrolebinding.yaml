@@ -1,0 +1,97 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.helmController.enabled .Values.helmController.rbac.create }}
+{{- $bindingKind := ternary "ClusterRoleBinding" "RoleBinding" .Values.helmController.watchAllNamespaces }}
+{{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.helmController.image "chart" .Chart ) ) }}
+{{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+kind: {{ $bindingKind }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-manager" (include "flux.helm-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: helm-controller
+  {{- if not .Values.helmController.watchAllNamespaces }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ printf "%s-manager" (include "flux.helm-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "flux.helm-controller.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
+---
+kind: {{ $bindingKind }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-helmrelease-editor" (include "flux.helm-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: helm-controller
+  {{- if not .Values.helmController.watchAllNamespaces }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ printf "%s-helmrelease-editor" (include "flux.helm-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "flux.helm-controller.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
+---
+kind: {{ $bindingKind }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-helmrelease-viewer" (include "flux.helm-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: helm-controller
+  {{- if not .Values.helmController.watchAllNamespaces }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ printf "%s-helmrelease-viewer" (include "flux.helm-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "flux.helm-controller.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
+---
+kind: {{ $bindingKind }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-cluster-reconciler" (include "flux.helm-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: helm-controller
+  {{- if not .Values.helmController.watchAllNamespaces }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "flux.helm-controller.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
+{{- end }}

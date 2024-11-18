@@ -1,20 +1,22 @@
-{{- if (include "postgresql.primary.createConfigmap" .) }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if (include "postgresql.v1.primary.createConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-configuration" (include "postgresql.primary.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ printf "%s-configuration" (include "postgresql.v1.primary.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
   {{- if .Values.primary.configuration }}
-  postgresql.conf: |-
+  postgresql.conf: |
     {{- include "common.tplvalues.render" ( dict "value" .Values.primary.configuration "context" $ ) | nindent 4 }}
   {{- end }}
   {{- if .Values.primary.pgHbaConfiguration }}

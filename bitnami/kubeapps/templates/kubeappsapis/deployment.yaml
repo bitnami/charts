@@ -1,13 +1,17 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.kubeappsapis.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels:
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.kubeappsapis.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kubeappsapis
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -16,22 +20,21 @@ spec:
   {{- if .Values.kubeappsapis.updateStrategy }}
   strategy: {{- toYaml .Values.kubeappsapis.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubeappsapis.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: kubeappsapis
   template:
     metadata:
       {{- if .Values.kubeappsapis.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: kubeappsapis
-        {{- if .Values.kubeappsapis.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
-      {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      {{- include "kubeapps.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "kubeapps.kubeappsapis.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.kubeappsapis.automountServiceAccountToken }}
       {{- if .Values.kubeappsapis.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -39,8 +42,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.kubeappsapis.podAffinityPreset "component" "kubeappsapis" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.kubeappsapis.podAntiAffinityPreset "component" "kubeappsapis" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.kubeappsapis.podAffinityPreset "component" "kubeappsapis" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.kubeappsapis.podAntiAffinityPreset "component" "kubeappsapis" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.kubeappsapis.nodeAffinityPreset.type "key" .Values.kubeappsapis.nodeAffinityPreset.key "values" .Values.kubeappsapis.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.kubeappsapis.schedulerName }}
@@ -59,7 +62,7 @@ spec:
       priorityClassName: {{ .Values.kubeappsapis.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.kubeappsapis.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.kubeappsapis.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kubeappsapis.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       # Increase termination timeout to let remaining operations to finish before ending the pods
       # This is because new releases/upgrades/deletions are synchronous operations
@@ -72,7 +75,7 @@ spec:
           image: {{ include "kubeapps.kubeappsapis.image" . }}
           imagePullPolicy: {{ .Values.kubeappsapis.image.pullPolicy | quote }}
           {{- if .Values.kubeappsapis.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.kubeappsapis.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kubeappsapis.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kubeappsapis.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.lifecycleHooks "context" $) | nindent 12 }}
@@ -103,9 +106,12 @@ spec:
             - --plugin-config-path=/config/kubeapps-apis/plugins.conf
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
-            - --pinniped-proxy-url={{ printf "http://%s.%s:%d" (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace (int .Values.pinnipedProxy.service.ports.pinnipedProxy) }}
+            - --pinniped-proxy-url={{ printf "http%s://%s.%s:%d" (eq .Values.pinnipedProxy.tls.caCertificate "" | ternary "" "s") (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace (int .Values.pinnipedProxy.service.ports.pinnipedProxy) }}
+            {{- if .Values.pinnipedProxy.tls.caCertificate }}
+            - --pinniped-proxy-ca-cert=/etc/pinniped-proxy-tls/ca.crt
             {{- end }}
-            - --global-repos-namespace={{ include "kubeapps.globalReposNamespace" . }}
+            {{- end }}
+            - --global-repos-namespace={{ include "kubeapps.helmGlobalPackagingNamespace" . }}
             {{- if .Values.kubeappsapis.qps }}
             - --kube-api-qps={{ .Values.kubeappsapis.qps }}
             {{- end }}
@@ -144,16 +150,24 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ASSET_SYNCER_DB_URL
+              {{- if .Values.postgresql.enabled }}
               value: {{ printf "%s-hl:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) }}
+              {{- else }}
+              value: {{ printf "%s:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) }}
+              {{- end }}
             - name: ASSET_SYNCER_DB_NAME
               value: {{ .Values.postgresql.auth.database | quote }}
             - name: ASSET_SYNCER_DB_USERNAME
-              value: postgres
+              value: {{ .Values.postgresql.auth.username | quote }}
             - name: ASSET_SYNCER_DB_USERPASSWORD
               valueFrom:
                 secretKeyRef:
                   key: postgres-password
                   name: {{ include "kubeapps.postgresql.secretName" . }}
+            {{- if .Values.ociCatalog.enabled }}
+            - name: OCI_CATALOG_URL
+              value: {{ printf ":%d" (int .Values.ociCatalog.containerPorts.grpc) | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.kubeappsapis.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.extraEnvVars "context" $) | nindent 12 }}
@@ -171,34 +185,37 @@ spec:
             - name: grpc-http
               containerPort: {{ .Values.kubeappsapis.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.kubeappsapis.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /core/plugins/v1alpha1/configured-plugins
-              port: grpc-http
-          {{- else if .Values.kubeappsapis.customLivenessProbe }}
+          {{- if .Values.kubeappsapis.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.kubeappsapis.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /core/plugins/v1alpha1/configured-plugins
+          {{- else if .Values.kubeappsapis.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
               port: grpc-http
-          {{- else if .Values.kubeappsapis.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kubeappsapis.startupProbe.enabled }}
+          {{- if .Values.kubeappsapis.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kubeappsapis.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command: ["grpc_health_probe", "-addr=:{{ .Values.kubeappsapis.containerPorts.http }}"]
+          {{- end }}
+          {{- if .Values.kubeappsapis.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kubeappsapis.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: grpc-http
-          {{- else if .Values.kubeappsapis.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.kubeappsapis.resources }}
           resources: {{- toYaml .Values.kubeappsapis.resources | nindent 12 }}
+          {{- else if ne .Values.kubeappsapis.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.kubeappsapis.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.clusters }}
             - name: clusters-config
               mountPath: /config
@@ -209,13 +226,106 @@ spec:
             - name: plugins-config
               mountPath: /config/kubeapps-apis
           {{- end }}
+          {{- if .Values.pinnipedProxy.tls.caCertificate }}
+            - name: pinniped-proxy-ca-cert
+              mountPath: /etc/pinniped-proxy-tls
+          {{- end }}
           {{- if .Values.kubeappsapis.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        {{- if .Values.ociCatalog.enabled }}
+        - name: oci-catalog
+          image: {{ include "kubeapps.ociCatalog.image" . }}
+          imagePullPolicy: {{ .Values.ociCatalog.image.pullPolicy | quote }}
+          {{- if .Values.ociCatalog.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ociCatalog.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.kubeappsapis.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /oci-catalog
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            {{- range .Values.ociCatalog.extraFlags }}
+            - {{ . }}
+            {{- end }}
+          {{- end }}
+          env:
+            - name: OCI_CATALOG_PORT
+              value: {{ .Values.ociCatalog.containerPorts.grpc | quote }}
+            - name: RUST_LOG
+              # Use info,pinniped_proxy::pinniped=debug for module control.
+              value: info
+            {{- if .Values.ociCatalog.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.ociCatalog.extraEnvVarsCM .Values.ociCatalog.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.ociCatalog.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.ociCatalog.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.ociCatalog.containerPorts.grpc }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.ociCatalog.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: grpc-http
+          {{- end }}
+          {{- if .Values.ociCatalog.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ociCatalog.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command: ["grpc_health_probe", "-addr=:{{ .Values.ociCatalog.containerPorts.grpc }}"]
+          {{- end }}
+          {{- if .Values.ociCatalog.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ociCatalog.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: grpc-http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.ociCatalog.resources }}
+          resources: {{- toYaml .Values.ociCatalog.resources | nindent 12 }}
+          {{- else if ne .Values.ociCatalog.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ociCatalog.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.ociCatalog.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- end }}
         {{- if .Values.kubeappsapis.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
       {{- if .Values.clusters }}
         - name: clusters-config
           configMap:
@@ -227,6 +337,11 @@ spec:
         - name: plugins-config
           configMap:
             name: {{ template "kubeapps.kubeappsapis.fullname" . }}-configmap
+      {{- end }}
+      {{- if .Values.pinnipedProxy.tls.caCertificate }}
+        - name: pinniped-proxy-ca-cert
+          configMap:
+            name: {{ .Values.pinnipedProxy.tls.caCertificate }}
       {{- end }}
       {{- if .Values.kubeappsapis.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.extraVolumes "context" $) | nindent 8 }}

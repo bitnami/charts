@@ -1,23 +1,20 @@
-{{- if .Values.clusterOperator.metrics.enabled }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.clusterOperator.metrics.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: rabbitmq-operator
     app.kubernetes.io/part-of: rabbitmq
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  name: {{ printf "%s-metrics" (include "rmqco.clusterOperator.fullname" .) }}
+  name: {{ printf "%s-metrics" (include "rmqco.clusterOperator.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- if or .Values.commonAnnotations .Values.clusterOperator.metrics.service.annotations }}
-  annotations:
-    {{- if .Values.clusterOperator.metrics.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.metrics.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.metrics.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.clusterOperator.metrics.service.type }}
@@ -52,6 +49,7 @@ spec:
     {{- if .Values.clusterOperator.metrics.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.metrics.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: rabbitmq-operator
 {{- end }}

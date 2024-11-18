@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "name": "vib-testing-template-7t1b6",
+    "namespace": "default",
+    "labels": {
+      "vib": "testing"
+    }
+  },
+  "spec": {
+    "workflowMetadata": {
+      "labels": {
+        "vib": "testing"
+      }
+    },
+    "securityContext" : {
+      "runAsNonRoot": true,
+      "seccompProfile": {
+        "type": "RuntimeDefault"
+     }
+    },
+    "entrypoint": "echo",
+    "arguments": {
+      "parameters": [
+        {
+          "name": "message",
+          "value": "hello world"
+        }
+      ]
+    },
+    "templates": [
+      {
+        "name": "echo",
+        "inputs": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "{{workflow.parameters.message}}"
+            }
+          ]
+        },
+        "container": {
+          "name": "main",
+          "image": "bitnami/minideb",
+          "command": [
+            "echo"
+          ],
+          "args": [
+            "{{inputs.parameters.message}}"
+          ],
+          "securityContext": {
+             "runAsUser": 1001,
+             "runAsGroup": 1001,
+             "allowPrivilegeEscalation": false,
+             "capabilities": {
+                "drop": [ "ALL"]
+              }
+            }
+        }
+      }
+    ],
+    "ttlStrategy": {
+      "secondsAfterCompletion": 300
+    },
+    "podGC": {
+      "strategy": "OnPodCompletion"
+    }
+  }
+}

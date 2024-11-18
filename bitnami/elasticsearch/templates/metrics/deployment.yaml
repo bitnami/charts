@@ -1,38 +1,45 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.metrics.enabled }}
 apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "elasticsearch.metrics.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: metrics
+    {{- if .Values.useIstioLabels }}
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: metrics
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.metrics.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   replicas: 1
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: metrics
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: metrics
+        {{- if .Values.useIstioLabels }}
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: metrics
-        {{- if .Values.metrics.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if .Values.metrics.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "elasticsearch.metrics.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.metrics.automountServiceAccountToken }}
       {{- if .Values.metrics.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -40,8 +47,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.podAffinityPreset "component" "metrics" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.podAntiAffinityPreset "component" "metrics" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.podAffinityPreset "component" "metrics" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.podAntiAffinityPreset "component" "metrics" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metrics.nodeAffinityPreset.type "key" .Values.metrics.nodeAffinityPreset.key "values" .Values.metrics.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.metrics.nodeSelector }}
@@ -57,7 +64,7 @@ spec:
       schedulerName: {{ .Values.metrics.schedulerName | quote }}
       {{- end }}
       {{- if .Values.metrics.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.metrics.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -70,7 +77,7 @@ spec:
           image: {{ include "elasticsearch.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -84,11 +91,12 @@ spec:
           {{- else }}
           args:
             {{- $protocol := (ternary "https" "http" (and .Values.security.enabled .Values.security.tls.restEncryption)) }}
-            - --es.uri={{$protocol}}://{{ include "common.names.fullname" . }}:{{ include "elasticsearch.service.ports.restAPI" . }}
+            - --es.uri={{$protocol}}://{{ include "elasticsearch.service.name" . }}:{{ include "elasticsearch.service.ports.restAPI" . }}
             - --es.all
             {{- if .Values.security.tls.restEncryption }}
             - --es.ssl-skip-verify
             {{- end }}
+            - --web.listen-address=:{{ .Values.metrics.containerPorts.http }}
             {{- if .Values.metrics.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -117,22 +125,23 @@ spec:
             {{- end }}
           ports:
             - name: metrics
-              containerPort: 9114
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.metrics.livenessProbe.enabled }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: metrics
-          {{- else if .Values.metrics.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metrics.readinessProbe.enabled }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
           readinessProbe:
             initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
@@ -142,10 +151,10 @@ spec:
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.metrics.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metrics.startupProbe.enabled }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
           startupProbe:
             initialDelaySeconds: {{ .Values.metrics.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.startupProbe.periodSeconds }}
@@ -155,20 +164,27 @@ spec:
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.metrics.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.metrics.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.metrics.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.sidecars "context" $) | nindent 8 }}
         {{- end }}
+      volumes: 
+        - name: empty-dir
+          emptyDir: {}
       {{- if .Values.metrics.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
 {{- end }}

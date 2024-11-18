@@ -1,0 +1,39 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.run.enabled .Values.run.persistence.enabled (not .Values.run.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "mlflow.v0.run.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.run.persistence.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mlflow
+    app.kubernetes.io/component: run
+  {{- if or .Values.run.persistence.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.run.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- if not (empty .Values.run.persistence.accessModes) }}
+  {{- range .Values.run.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
+    - {{ .Values.run.persistence.accessMode | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.run.persistence.size | quote }}
+  {{- if .Values.run.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.run.persistence.selector "context" $) | nindent 4 }}
+  {{- end -}}
+  {{- include "common.storage.class" (dict "persistence" .Values.run.persistence "global" .Values.global) | nindent 2 }}
+  {{- if .Values.run.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.run.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+{{- end }}

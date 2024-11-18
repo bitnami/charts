@@ -1,13 +1,15 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%s-hooks-scripts" (include "postgresql-ha.postgresql" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: postgresql
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -21,6 +23,9 @@ data:
     # Debug section
     exec 3>&1
     exec 4>&2
+
+    # Process input parameters
+    MIN_DELAY_AFTER_PG_STOP_SECONDS=$1
 
     # Load Libraries
     . /opt/bitnami/scripts/liblog.sh
@@ -63,11 +68,69 @@ data:
     primary_host="${primary_node[0]}"
 
     # Stop postgresql for graceful exit.
+    PG_STOP_TIME=$EPOCHSECONDS
     postgresql_stop
 
     if [[ -z "$primary_host" ]] || [[ "$primary_host" == "$REPMGR_NODE_NETWORK_NAME" ]]; then
         info "Primary node need to wait for a new primary node before leaving the cluster"
         retry_while is_new_primary_ready 10 5
     else
-        info "Standby node doesn't need to wait, leaving the cluster."
+        info "Standby node doesn't need to wait for a new primary switchover. Leaving the cluster"
+    fi
+
+    # Make sure pre-stop hook waits at least 25 seconds after stop of PG to make sure PGPOOL detects node is down.
+    # default terminationGracePeriodSeconds=30 seconds
+    PG_STOP_DURATION=$(($EPOCHSECONDS - $PG_STOP_TIME))
+    if (( $PG_STOP_DURATION < $MIN_DELAY_AFTER_PG_STOP_SECONDS )); then
+        WAIT_TO_PG_POOL_TIME=$(($MIN_DELAY_AFTER_PG_STOP_SECONDS - $PG_STOP_DURATION)) 
+        info "PG stopped including primary switchover in $PG_STOP_DURATION. Waiting additional $WAIT_TO_PG_POOL_TIME seconds for PG pool"
+        sleep $WAIT_TO_PG_POOL_TIME
+    fi
+
+  readiness-probe.sh: |-
+    #!/bin/bash
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Debug section
+    exec 3>&1
+    exec 4>&2
+
+    # Load Libraries
+    . /opt/bitnami/scripts/liblog.sh
+    . /opt/bitnami/scripts/libpostgresql.sh
+
+    # Load PostgreSQL & repmgr environment variables
+    . /opt/bitnami/scripts/postgresql-env.sh
+
+    # Process input parameters
+    MIN_DELAY_AFTER_POD_READY_FIRST_TIME=$1
+    TMP_FIRST_READY_FILE_TS="/tmp/ts-first-ready.mark"
+    TMP_DELAY_APPLIED_FILE="/tmp/delay-applied.mark"
+
+    DB_CHECK_RESULT=$(echo "SELECT 1" | postgresql_execute_print_output "$POSTGRESQL_DATABASE" "$POSTGRESQL_USERNAME" "$POSTGRESQL_PASSWORD" "-h 127.0.0.1 -tA" || echo "command failed")
+    if [[ "$DB_CHECK_RESULT" == "1" ]]; then
+      if [[ ! -f "$TMP_DELAY_APPLIED_FILE" ]]; then
+        # DB up, but initial readiness delay not applied
+        if [[ -f "$TMP_FIRST_READY_FILE_TS" ]]; then
+          # calculate delay from the first readiness success
+          FIRST_READY_TS=$(cat $TMP_FIRST_READY_FILE_TS)
+          CURRENT_DELAY_SECONDS=$(($EPOCHSECONDS - $FIRST_READY_TS))
+          if (( $CURRENT_DELAY_SECONDS > $MIN_DELAY_AFTER_POD_READY_FIRST_TIME )); then
+            # minimal delay of the first readiness state passed - report success and mark delay as applied
+            touch "$TMP_DELAY_APPLIED_FILE"
+          else
+            # minimal delay of the first readiness state not reached yet - report failure
+            exit 1
+          fi
+        else
+          # first ever readiness test success - store timestamp and report failure
+          echo $EPOCHSECONDS > $TMP_FIRST_READY_FILE_TS
+          exit 1
+        fi
+      fi
+    else
+      # DB test failed - report failure
+      exit 1
     fi

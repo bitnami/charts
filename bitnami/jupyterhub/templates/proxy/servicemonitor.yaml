@@ -1,22 +1,19 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 
 {{- if .Values.proxy.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ printf "%s-proxy-api" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-  {{- if .Values.proxy.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.proxy.metrics.serviceMonitor.namespace }}
-  {{- else }}
-  namespace: {{ .Release.Namespace }}
-  {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ default .Release.Namespace .Values.proxy.metrics.serviceMonitor.namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.proxy.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: proxy
-    {{- if .Values.proxy.metrics.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.proxy.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -46,7 +43,7 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- if .Values.proxy.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.proxy.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}

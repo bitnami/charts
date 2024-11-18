@@ -1,8 +1,0 @@
-{
-  "newApplication": {
-    "streamApplicationType": "Stream application starters for Kafka/Maven",
-    "taskApplicationType": "Task application starters for Maven",
-    "streamApplication1": "mongodb",
-    "streamApplication2": "cassandra"
-  }
-}

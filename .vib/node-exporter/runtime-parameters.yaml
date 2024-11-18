@@ -1,0 +1,18 @@
+rbac:
+  create: true
+  pspEnabled: true
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+containerPorts:
+  metrics: 9101
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+service:
+  ports: 
+    metrics: 80
+  type: LoadBalancer

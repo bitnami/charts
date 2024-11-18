@@ -1,0 +1,237 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (include "mastodon.web.domain" .) (or .Values.enableS3 .Values.persistence.enabled) }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "mastodon.streaming.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mastodon
+    app.kubernetes.io/component: streaming
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.streaming.replicaCount }}
+  {{- if .Values.streaming.updateStrategy }}
+  strategy: {{- toYaml .Values.streaming.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.streaming.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: streaming
+  template:
+    metadata:
+      {{- if .Values.streaming.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: streaming
+    spec:
+      serviceAccountName: {{ template "mastodon.serviceAccountName" . }}
+      {{- include "mastodon.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.streaming.automountServiceAccountToken }}
+      {{- if .Values.streaming.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.streaming.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.streaming.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.streaming.podAffinityPreset "component" "streaming" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.streaming.podAntiAffinityPreset "component" "streaming" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.streaming.nodeAffinityPreset.type "key" .Values.streaming.nodeAffinityPreset.key "values" .Values.streaming.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.streaming.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.streaming.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.streaming.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.streaming.priorityClassName }}
+      priorityClassName: {{ .Values.streaming.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.streaming.schedulerName }}
+      schedulerName: {{ .Values.streaming.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.streaming.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.streaming.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.streaming.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.streaming.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.streaming.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if and (not .Values.diagnosticMode.enabled) .Values.defaultInitContainers.waitForBackends.enabled }}
+        {{- include "mastodon.waitForDBInitContainer" . | nindent 8 }}
+        {{- include "mastodon.waitForWebInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.streaming.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: mastodon
+          image: {{ template "mastodon.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.streaming.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.streaming.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.streaming.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /opt/bitnami/scripts/mastodon/run.sh
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.streaming.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: MASTODON_MODE
+              value: "streaming"
+            - name: MASTODON_STREAMING_PORT_NUMBER
+              value: {{ .Values.streaming.containerPorts.http | quote }}
+            - name: MASTODON_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.database.secretName" . }}
+                  key: {{ include "mastodon.database.passwordKey" . | quote }}
+            {{- if (include "mastodon.redis.auth.enabled" .) }}
+            - name: MASTODON_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.redis.secretName" . }}
+                  key: {{ include "mastodon.redis.passwordKey" . | quote }}
+            {{- end }}
+            {{- if .Values.enableS3 }}
+            - name: MASTODON_AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.s3.secretName" . }}
+                  key: {{ include "mastodon.s3.accessKeyIDKey" . | quote }}
+            - name: MASTODON_AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.s3.secretName" . }}
+                  key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
+            {{- end }}
+            {{- if and .Values.enableSearches (include "mastodon.elasticsearch.auth.enabled" .) }}
+            - name: MASTODON_ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.elasticsearch.secretName" . }}
+                  key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
+            {{- end }}
+            {{- if ne .Values.smtp.auth_method "none" }}
+            - name: SMTP_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.loginKey" . | quote }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.passwordKey" . | quote }}
+            {{- end }}
+            {{- if .Values.streaming.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.streaming.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "mastodon.defaultConfigmapName" . }}
+            - secretRef:
+                name: {{ include "mastodon.defaultSecretName" . }}
+            {{- if or .Values.extraConfig .Values.extraConfigExistingConfigmap }}
+            - configMapRef:
+                name: {{ include "mastodon.extraConfigmapName" . }}
+            {{- end }}
+            {{- if or .Values.extraSecretConfig .Values.extraConfigExistingSecret }}
+            - secretRef:
+                name: {{ include "mastodon.extraSecretName" . }}
+            {{- end }}
+            {{- if .Values.streaming.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.streaming.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.streaming.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.streaming.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.streaming.resources }}
+          resources: {{- toYaml .Values.streaming.resources | nindent 12 }}
+          {{- else if ne .Values.streaming.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.streaming.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.streaming.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.streaming.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.streaming.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.streaming.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.streaming.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.streaming.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.streaming.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /api/v1/streaming/health
+              port: http
+          {{- end }}
+          {{- if .Values.streaming.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.streaming.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.streaming.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /api/v1/streaming/health
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.streaming.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if not .Values.enableS3 }}
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+          {{- end }}
+          {{- if .Values.streaming.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.streaming.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.streaming.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+          - name: empty-dir
+            emptyDir: {}
+        {{- if not .Values.enableS3 }}
+          - name: data
+            {{- if .Values.persistence.enabled }}
+            persistentVolumeClaim:
+              claimName: {{ include "mastodon.pvc" . }}
+            {{- else }}
+            emptyDir: {}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.streaming.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.extraVolumes "context" $) | nindent 10 }}
+        {{- end }}
+{{- end }}

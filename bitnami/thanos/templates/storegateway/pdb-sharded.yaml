@@ -1,0 +1,41 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.storegateway.enabled .Values.storegateway.pdb.create .Values.storegateway.sharded.enabled }}
+
+{{- $shards := int 0 }}
+{{- if .Values.storegateway.sharded.hashPartitioning.shards }}
+  {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
+{{- else }}
+  {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+
+{{- range $index, $_ := until $shards }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" $ }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ printf "%s-%s" (include "thanos.storegateway.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" $ }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+    shard: {{ $index | quote }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $.Values.storegateway.pdb.minAvailable }}
+  minAvailable: {{ $.Values.storegateway.pdb.minAvailable }}
+  {{- end }}
+  {{- if or $.Values.storegateway.pdb.maxUnavailable ( not $.Values.storegateway.pdb.minAvailable ) }}
+  maxUnavailable: {{ $.Values.storegateway.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.storegateway.podLabels $.Values.commonLabels ) "context" $ ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: storegateway
+      shard: {{ $index | quote }}
+---
+{{- end }}
+{{- end }}

@@ -1,0 +1,81 @@
+loki:
+  dataDir: /bitnami/grafana-loki
+  containerPorts:
+    http: 3101
+    gossipRing: 7946
+  gossipRing:
+    service:
+      ports:
+        http: 7946
+compactor:
+  enabled: true
+  service:
+    ports:
+      http: 3100
+gateway:
+  enabled: true
+  service:
+    ports:
+      http: 80
+    type: LoadBalancer
+distributor:
+  service:
+    ports:
+      http: 3100
+ingester:
+  service:
+    ports:
+      http: 3100
+querier:
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  service:
+    ports:
+      http: 3100
+queryFrontend:
+  service:
+    ports:
+      http: 3100
+queryScheduler:
+  service:
+    ports:
+      http: 3100
+promtail:
+  enabled: true
+  containerPorts:
+    http: 8081
+  podSecurityContext:
+    enabled: true
+    fsGroup: 0
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 0
+  logLevel: debug
+  service:
+    type: ClusterIP
+    ports:
+      http: 3101
+  rbac:
+    create: true
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+memcachedchunks:
+  enabled: true
+  service:
+    ports:
+      memcached: 11212
+memcachedfrontend:
+  enabled: true
+  service:
+    ports:
+      memcached: 11212
+memcachedindexqueries:
+  enabled: true
+  service:
+    ports:
+      memcached: 11212 

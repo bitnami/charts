@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -5,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global storage class for dynamic provisioning
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -14,8 +18,17 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -39,7 +52,6 @@ commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -54,14 +66,14 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section InfluxDB&trade; parameters
 
 ## Bitnami InfluxDB&trade; image
 ## ref: https://hub.docker.com/r/bitnami/influxdb/tags/
-## @param image.registry InfluxDB&trade; image registry
-## @param image.repository InfluxDB&trade; image repository
-## @param image.tag InfluxDB&trade; image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] InfluxDB&trade; image registry
+## @param image.repository [default: REPOSITORY_NAME/influxdb] InfluxDB&trade; image repository
+## @skip image.tag InfluxDB&trade; image tag (immutable tags are recommended)
+## @param image.digest InfluxDB&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy InfluxDB&trade; image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -69,9 +81,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.3.0-debian-11-r0
-  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  tag: 2.7.10-debian-12-r7
+  digest: ""
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -112,6 +124,9 @@ auth:
     ## @param auth.admin.bucket InfluxDB&trade; admin user's bucket. Only valid with InfluxDB&trade; v2
     ##
     bucket: primary
+    ## @param auth.admin.retention InfluxDB&trade; admin user's bucket retention. Only valid with InfluxDB&trade; v2
+    ##
+    retention: ""
   ## @param auth.createUserToken Whether to create tokens for the different users. Take into account these tokens are going to be created by CLI randomly and they will not be accessible from a secret. See more influxdb 2.0 [auth ref](https://docs.influxdata.com/influxdb/v2.0/security/tokens/)
   ## You should take into account these tokens are going to be created by CLI
   ## so it is not possible to get them by k8s secrets nor to provide them though
@@ -156,13 +171,11 @@ auth:
 ##
 influxdb:
   ## @param influxdb.configuration Specify content for influxdb.conf
-  ## Alternatively, you can put your influxdb.conf under the files/conf/ directory
+  ## Alternatively, you can put your config.yaml under the files/conf/ directory
   ##
   ## configuration: |-
-  ##   reporting-disabled = false
-  ##   bind-address = "127.0.0.1:8088"
-  ##   [meta]
-  ##   dir = "/bitnami/influxdb/meta"
+  ##   reporting-disabled: true
+  ##   http-bind-address: "127.0.0.1:8086"
   ##   ...
   ##
   configuration: ""
@@ -215,7 +228,7 @@ influxdb:
   ##
   affinity: {}
   ## @param influxdb.nodeSelector InfluxDB&trade; Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param influxdb.tolerations InfluxDB&trade; Tolerations for pod assignment
@@ -230,6 +243,9 @@ influxdb:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
+  ## @param influxdb.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param influxdb.hostAliases InfluxDB&trade; pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -262,41 +278,64 @@ influxdb:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param influxdb.podSecurityContext.enabled Enabled InfluxDB&trade; pods' Security Context
+  ## @param influxdb.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param influxdb.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param influxdb.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param influxdb.podSecurityContext.fsGroup Set InfluxDB&trade; pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param influxdb.containerSecurityContext.enabled Enabled InfluxDB&trade; containers' Security Context
-  ## @param influxdb.containerSecurityContext.runAsUser Set InfluxDB&trade; containers' Security Context runAsUser
-  ## @param influxdb.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+  ## @param influxdb.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param influxdb.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param influxdb.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param influxdb.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param influxdb.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param influxdb.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param influxdb.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param influxdb.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param influxdb.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param influxdb.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## InfluxDB&trade; pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param influxdb.resources.limits The resources limits for the container
-  ## @param influxdb.resources.requests The requested resources for the container
+  ## @param influxdb.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param influxdb.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param influxdb.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -331,7 +370,6 @@ influxdb:
   containerPorts:
     http: 8086
     rpc: 8088
-
   ## Configure extra options for InfluxDB&trade; containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param influxdb.startupProbe.enabled Enable startupProbe
@@ -406,7 +444,16 @@ influxdb:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param influxdb.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param influxdb.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param influxdb.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `influxdb.pdb.minAvailable` and `influxdb.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Service parameters
   ##
   service:
@@ -461,9 +508,7 @@ influxdb:
     ##   clientIP:
     ##     timeoutSeconds: 300
     sessionAffinityConfig: {}
-
 ## @section InfluxDB Collectd&trade; parameters
-
 collectd:
   ## @param collectd.enabled InfluxDB Collectd&trade; service enable
   ##
@@ -519,12 +564,11 @@ collectd:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
 ## @section Exposing parameters
 
 ## Configure the ingress resource that allows you to access the
 ## influxdb installation. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource
@@ -554,7 +598,7 @@ ingress:
   path: /
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -621,7 +665,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Metrics parameters
 
 ## Prometheus metrics
@@ -682,7 +725,6 @@ metrics:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -715,7 +757,7 @@ metrics:
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
@@ -724,18 +766,61 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-## NetworkPolicy parameters
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable NetworkPolicy
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## client labels will have network access to the ports InfluxDB&trade; is listening
-  ## on. When true, InfluxDB&trade; will accept connections from any source
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## Persistence parameters
 ##
 persistence:
@@ -764,7 +849,6 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
-
 ## Pod Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -778,23 +862,20 @@ serviceAccount:
   #enabled: false
   create: true
   name: ""
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   annotations: {}
-
 ## Pod Security Policy
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 psp:
   create: false
-
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Create Role and RoleBinding (required for PSP to work)
 ##
 rbac:
   create: false
-
 ## @section Volume permissions parameters
 
 ## Init Container parameters
@@ -805,18 +886,19 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r6
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r32
+    digest: ""
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -835,13 +917,13 @@ volumePermissions:
   ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
   ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
   ## pod securityContext.enabled=false and shmVolume.chmod.enabled=false
+  ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.securityContext.runAsUser User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")
   ##
   securityContext:
+    seLinuxOptions: {}
     runAsUser: 0
-
 ## @section InfluxDB&trade; backup parameters
-
 backup:
   ## @param backup.enabled Enable InfluxDB&trade; backup
   ##
@@ -852,6 +934,40 @@ backup:
   ## @param backup.retentionDays Retention time in days for backups (older backups are deleted)
   ##
   retentionDays: 10
+
+  ## Persistence parameters
+  ##
+  persistence:
+    ## @param backup.persistence.ownConfig Prefer independent own persistence parameters to configure the backup volume
+    ## When set to `false` (for backwards compatibility), the rest of the persistence parameters below will be ignored.
+    ## This parameter will be set to `true` and removed in a future release.
+    ##
+    ownConfig: false
+    ## @param backup.persistence.enabled Enable data persistence for backup volume
+    ##
+    enabled: true
+    ## @param backup.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    existingClaim: ""
+    ## @param backup.persistence.storageClass Specify the `storageClass` used to provision the volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    storageClass: ""
+    ## @param backup.persistence.accessModes Access mode of data volume
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param backup.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param backup.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
   ## Cronjob configuration
   ## This cronjob is used to create InfluxDB&trade; backups
   ##
@@ -869,14 +985,58 @@ backup:
     podAnnotations: {}
     ## K8s Security Context for Backup Cronjob pods
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-    ## @param backup.cronjob.securityContext.enabled Enable security context for InfluxDB&trade;
-    ## @param backup.cronjob.securityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
-    ## @param backup.cronjob.securityContext.runAsUser Group ID for the InfluxDB&trade; filesystem
+    ## @param backup.cronjob.podSecurityContext.enabled Enable security context for InfluxDB&trade; backup pods
+    ## @param backup.cronjob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param backup.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param backup.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
     ##
-    securityContext:
+    podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
+    ## K8s Security Context for Backup Cronjob containers
+    ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param backup.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param backup.cronjob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param backup.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param backup.cronjob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   ## @param backup.podAffinityPreset Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -909,7 +1069,7 @@ backup:
   ##
   affinity: {}
   ## @param backup.nodeSelector Backup&trade; Node labels for backup pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param backup.tolerations Backup&trade; Tolerations for backup pod assignment
@@ -934,18 +1094,19 @@ backup:
       bucketName: "gs://bucket/influxdb"
       ## Bitnami Google Cloud SDK image
       ## ref: https://hub.docker.com/r/bitnami/google-cloud-sdk/tags/
-      ## @param backup.uploadProviders.google.image.registry Google Cloud SDK image registry
-      ## @param backup.uploadProviders.google.image.repository Google Cloud SDK image name
-      ## @param backup.uploadProviders.google.image.tag Google Cloud SDK image tag
+      ## @param backup.uploadProviders.google.image.registry [default: REGISTRY_NAME] Google Cloud SDK image registry
+      ## @param backup.uploadProviders.google.image.repository [default: REPOSITORY_NAME/google-cloud-sdk] Google Cloud SDK image name
+      ## @skip backup.uploadProviders.google.image.tag Google Cloud SDK image tag
+      ## @param backup.uploadProviders.google.image.digest Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.google.image.pullPolicy Google Cloud SDK image pull policy
       ## @param backup.uploadProviders.google.image.pullSecrets Specify docker-registry secret names as an array
       ##
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.390.0-debian-11-r2
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-        ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        tag: 0.500.0-debian-12-r0
+        digest: ""
+        ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
         ## Optionally specify an array of imagePullSecrets.
@@ -956,6 +1117,21 @@ backup:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
+      ## @param backup.uploadProviders.google.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "none"
+      ## @param backup.uploadProviders.google.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## resources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
     ## Azure Storage Container configuration
     ##
     azure:
@@ -971,18 +1147,19 @@ backup:
       containerName: "influxdb-container"
       ## Bitnami Azure CLI image
       ## ref: https://hub.docker.com/r/bitnami/azure-cli/tags/
-      ## @param backup.uploadProviders.azure.image.registry Azure CLI image registry
-      ## @param backup.uploadProviders.azure.image.repository Azure CLI image repository
-      ## @param backup.uploadProviders.azure.image.tag Azure CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.azure.image.registry [default: REGISTRY_NAME] Azure CLI image registry
+      ## @param backup.uploadProviders.azure.image.repository [default: REPOSITORY_NAME/azure-cli] Azure CLI image repository
+      ## @skip backup.uploadProviders.azure.image.tag Azure CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.azure.image.digest Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.azure.image.pullPolicy Azure CLI image pull policy
       ## @param backup.uploadProviders.azure.image.pullSecrets Specify docker-registry secret names as an array
       ##
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.37.0-debian-11-r7
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-        ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        tag: 2.65.0-debian-12-r1
+        digest: ""
+        ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
         ## Optionally specify an array of imagePullSecrets.
@@ -993,6 +1170,21 @@ backup:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
+      ## @param backup.uploadProviders.azure.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "none"
+      ## @param backup.uploadProviders.azure.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## resources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
     aws:
       ## @param backup.uploadProviders.aws.enabled Enable upload to aws s3 bucket
       ## @param backup.uploadProviders.aws.accessKeyID Access Key ID to access aws s3
@@ -1000,26 +1192,29 @@ backup:
       ## @param backup.uploadProviders.aws.region Region of aws s3 bucket
       ## @param backup.uploadProviders.aws.existingSecret Name of existing secret object
       ## @param backup.uploadProviders.aws.bucketName aws s3 bucket name
+      ## @param backup.uploadProviders.aws.endpoint aws s3 endpoint, no value default public endpoint aws s3 endpoint
       enabled: false
       accessKeyID: ""
       secretAccessKey: ""
       region: "us-east-1"
       existingSecret: ""
       bucketName: "s3://bucket/influxdb"
+      endpoint: ""
       ## Bitnami AWS CLI image
       ## ref: https://hub.docker.com/r/bitnami/aws-cli/tags
-      ## @param backup.uploadProviders.aws.image.registry AWS CLI image registry
-      ## @param backup.uploadProviders.aws.image.repository AWS CLI image repository
-      ## @param backup.uploadProviders.aws.image.tag AWS CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.aws.image.registry [default: REGISTRY_NAME] AWS CLI image registry
+      ## @param backup.uploadProviders.aws.image.repository [default: REPOSITORY_NAME/aws-cli] AWS CLI image repository
+      ## @skip backup.uploadProviders.aws.image.tag AWS CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.aws.image.digest AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.aws.image.pullPolicy AWS CLI image pull policy
       ## @param backup.uploadProviders.aws.image.pullSecrets Specify docker-registry secret names as an array
       ##
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.4.7-debian-10-r4
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-        ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        tag: 2.19.0-debian-12-r0
+        digest: ""
+        ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
         ## Optionally specify an array of imagePullSecrets.
@@ -1030,3 +1225,18 @@ backup:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
+      ## @param backup.uploadProviders.aws.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "none"
+      ## @param backup.uploadProviders.aws.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## resources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}

@@ -22,9 +22,8 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/pinniped"
         },
-        "runtime_parameters": "InN1cGVydmlzb3IiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwcyI6IDQ0MwogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgo=",
         "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
             "name": "S4"
           }
@@ -32,19 +31,23 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "ginkgo",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
+            "resources": {
+              "path": "/.vib/pinniped/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "auth-user": "vibuser",
+              "auth-password": "vibUser123"
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "kubescape",
           "params": {
-            "endpoint": "lb-pinniped-supervisor-https",
-            "app_protocol": "GENERIC"
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

@@ -1,28 +1,27 @@
-{{- if .Values.queryFrontend.ingress.enabled -}}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}-query-frontend
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.query-frontend.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query-frontend
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.queryFrontend.ingress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.ingress.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.queryFrontend.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryFrontend.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.queryFrontend.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.queryFrontend.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
     {{- if .Values.queryFrontend.ingress.hostname }}
-    - host: {{ .Values.queryFrontend.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.ingress.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.queryFrontend.ingress.path }}
@@ -52,7 +51,7 @@ spec:
       secretName: {{ printf "%s-query-frontend" (include "common.names.fullname" .) }}
     {{- end }}
     {{- if .Values.queryFrontend.ingress.extraTls }}
-    {{- toYaml .Values.queryFrontend.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

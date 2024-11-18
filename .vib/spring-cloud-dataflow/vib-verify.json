@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/spring-cloud-dataflow"
         },
-        "runtime_parameters": "c2VydmVyOgogIHNlcnZpY2U6CiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICAgIHBvcnQ6IDgwCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,29 +31,17 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-spring-cloud-dataflow-server-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/spring-cloud-dataflow/goss"
+              "path": "/.vib"
             },
+            "tests_file": "spring-cloud-dataflow/goss/goss.yaml",
+            "vars_file": "spring-cloud-dataflow/runtime-parameters.yaml",
             "remote": {
-              "workload": "deploy-spring-cloud-dataflow-server"
+              "pod": {
+                "workload": "deploy-spring-cloud-dataflow-server"
+              }
             }
           }
         },
@@ -66,6 +53,12 @@
             },
             "endpoint": "lb-spring-cloud-dataflow-server-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

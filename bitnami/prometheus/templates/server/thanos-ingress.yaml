@@ -1,0 +1,62 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.server.thanos.create .Values.server.thanos.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "prometheus.thanos-sidecar.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: prometheus
+    app.kubernetes.io/component: server
+    app.kubernetes.io/subcomponent: thanos
+  {{- if or .Values.server.thanos.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.thanos.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.server.thanos.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.server.thanos.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.server.thanos.ingress.hostname }}
+    - host: {{ .Values.server.thanos.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.server.thanos.ingress.extraPaths }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.ingress.extraPaths "context" $) | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.server.thanos.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.server.thanos.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "prometheus.thanos-sidecar.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- range .Values.server.thanos.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "prometheus.thanos-sidecar.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.server.thanos.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.server.thanos.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.server.thanos.ingress.annotations )) .Values.server.thanos.ingress.selfSigned)) .Values.server.thanos.ingress.extraTls }}
+  tls:
+    {{- if and .Values.server.thanos.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.server.thanos.ingress.annotations )) .Values.server.thanos.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.server.thanos.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.server.thanos.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.server.thanos.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end -}}

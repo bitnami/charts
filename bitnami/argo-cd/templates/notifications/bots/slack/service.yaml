@@ -1,0 +1,53 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and .Values.notifications.enabled .Values.notifications.bots.slack.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "argocd.notifications" . }}-slack-bot
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: notifications-slack-bot
+  {{- if or .Values.commonAnnotations .Values.notifications.bots.slack.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.notifications.bots.slack.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.notifications.bots.slack.service.type }}
+  {{- if and .Values.notifications.bots.slack.service.clusterIP (eq .Values.notifications.bots.slack.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.notifications.bots.slack.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.notifications.bots.slack.service.type "LoadBalancer") (eq .Values.notifications.bots.slack.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.notifications.bots.slack.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if eq .Values.notifications.bots.slack.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.notifications.bots.slack.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if (and (eq .Values.notifications.bots.slack.service.type "LoadBalancer") (not (empty .Values.notifications.bots.slack.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.notifications.bots.slack.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.notifications.bots.slack.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.notifications.bots.slack.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.notifications.bots.slack.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ coalesce .Values.notifications.bots.slack.service.port .Values.notifications.bots.slack.service.ports.http }}
+      targetPort: http
+      {{- if (and (or (eq .Values.notifications.bots.slack.service.type "NodePort") (eq .Values.notifications.bots.slack.service.type "LoadBalancer")) (not (empty (coalesce .Values.notifications.bots.slack.service.nodePort .Values.notifications.bots.slack.service.nodePorts.http)))) }}
+      nodePort: {{ coalesce .Values.notifications.bots.slack.service.nodePort .Values.notifications.bots.slack.service.nodePorts.http }}
+      {{- else if eq .Values.notifications.bots.slack.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.notifications.bots.slack.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notifications.bots.slack.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: notifications-slack-bot
+{{ end }}

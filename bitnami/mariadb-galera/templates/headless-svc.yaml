@@ -1,33 +1,41 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-  {{- if .Values.commonLabels }}
-  {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-  {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if or .Values.service.headless.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.service.headless.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.service.headless.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
   ports:
+    {{- $appProtocolAvailable := (semverCompare ">=1.20-0" (include "common.capabilities.kubeVersion" .)) }}
     - name: galera
       port: 4567
       targetPort: galera
+      {{- if $appProtocolAvailable }}
+      appProtocol: mysql
+      {{- end }}
     - name: ist
       port: 4568
       targetPort: ist
+      {{- if $appProtocolAvailable }}
+      appProtocol: mysql
+      {{- end }}
     - name: sst
       port: 4444
       targetPort: sst
+      {{- if $appProtocolAvailable }}
+      appProtocol: mysql
+      {{- end }}
   publishNotReadyAddresses: {{ .Values.service.headless.publishNotReadyAddresses }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}

@@ -1,13 +1,14 @@
-{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-{{- if and $pspAvailable .Values.agent.enabled .Values.agent.podSecurityPolicy.create }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (include "common.capabilities.psp.supported" .) .Values.agent.enabled .Values.agent.podSecurityPolicy.create }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: agent
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   name: {{ template "common.names.fullname" . }}-agent
   namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}

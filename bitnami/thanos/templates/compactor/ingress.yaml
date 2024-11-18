@@ -1,28 +1,27 @@
-{{- if .Values.compactor.ingress.enabled -}}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.compactor.enabled .Values.compactor.ingress.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}-compactor
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.compactor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.compactor.ingress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.ingress.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.compactor.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
-  {{- if and .Values.bucketweb.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  {{- if and .Values.compactor.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.compactor.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
     {{- if .Values.compactor.ingress.hostname }}
-    - host: {{ .Values.compactor.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.compactor.ingress.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.compactor.ingress.path }}
@@ -52,7 +51,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.compactor.ingress.hostname }}
     {{- end }}
     {{- if .Values.compactor.ingress.extraTls }}
-    {{- toYaml .Values.compactor.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.compactor.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

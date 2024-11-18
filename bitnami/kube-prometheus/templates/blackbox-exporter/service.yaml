@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.blackboxExporter.enabled }}
 apiVersion: v1
 kind: Service
@@ -5,16 +10,10 @@ metadata:
   name: {{ template "kube-prometheus.blackboxExporter.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.blackboxExporter.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.blackboxExporter.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.blackboxExporter.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.blackboxExporter.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.blackboxExporter.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.blackboxExporter.service.type }}
   {{- if .Values.blackboxExporter.service.sessionAffinity }}
@@ -35,6 +34,9 @@ spec:
   {{- if and (eq .Values.blackboxExporter.service.type "LoadBalancer") (not (empty .Values.blackboxExporter.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.blackboxExporter.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.blackboxExporter.service.type "LoadBalancer") (not (empty .Values.blackboxExporter.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.blackboxExporter.service.loadBalancerClass }}
+  {{- end }}
   publishNotReadyAddresses: true
   ports:
     - name: http
@@ -49,6 +51,5 @@ spec:
     {{- if .Values.blackboxExporter.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
-    app.kubernetes.io/component: blackbox-exporter
+  selector: {{- include "kube-prometheus.blackboxExporter.matchLabels" . | nindent 4 }}
 {{- end }}

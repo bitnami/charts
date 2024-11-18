@@ -1,19 +1,24 @@
-{{- if and (.Values.useCertManager) (not .Values.msgTopologyOperator.existingWebhookCertSecret) }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (.Values.msgTopologyOperator.enabled) (.Values.useCertManager) (not .Values.msgTopologyOperator.existingWebhookCertSecret) }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  commonName: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
   dnsNames:
     - {{ printf "%s.%s.svc" (include "rmqco.msgTopologyOperator.webhook.fullname" .) (include "common.names.namespace" .) }}
     - {{ printf "%s.%s.svc.%s" (include "rmqco.msgTopologyOperator.webhook.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain }}

@@ -1,20 +1,19 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "jupyterhub.hub.name" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: hub
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.hub.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.hub.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.hub.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.hub.service.type }}
   {{- if and .Values.hub.service.clusterIP (eq .Values.hub.service.type "ClusterIP") }}
@@ -37,7 +36,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ coalesce .Values.hub.service.ports.http .Values.hub.service.port }}
+      port: {{ .Values.hub.service.ports.http }}
       targetPort: http
       protocol: TCP
       {{- if and (or (eq .Values.hub.service.type "NodePort") (eq .Values.hub.service.type "LoadBalancer")) (not (empty .Values.hub.service.nodePorts.http)) }}
@@ -48,5 +47,6 @@ spec:
     {{- if .Values.hub.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.hub.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: hub

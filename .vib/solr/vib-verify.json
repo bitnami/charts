@@ -22,37 +22,26 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/solr"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJhZG1pblBhc3N3b3JkIjogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCIKICAiYWRtaW5Vc2VybmFtZSI6ICJ1c2VyIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJodHRwIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M4"
           }
         }
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-solr-tcp-client",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/solr/goss"
+              "path": "/.vib"
             },
+            "tests_file": "solr/goss/goss.yaml",
+            "vars_file": "solr/runtime-parameters.yaml",
             "remote": {
-              "workload": "sts-solr"
+              "pod": {
+                "workload": "sts-solr"
+              }
             }
           }
         },
@@ -63,11 +52,28 @@
               "path": "/.vib/solr/cypress"
             },
             "endpoint": "lb-solr-tcp-client",
-            "app_protocol": "HTTP",
-            "env": {
-              "username": "user",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/solr/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "solr",
+              "username": "admin_user",
               "password": "ComplicatedPassword123!4"
             }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

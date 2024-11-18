@@ -2,6 +2,24 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+{{- if (include "elasticsearch.singleNode.enabled" .) }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    Elasticsearch is only running one master node replica, assuming all the
+    roles and with "single-node" discovery configured. If you want to scale up
+    to more replicas, make sure you refresh the configuration of the existing
+    statefulset. For example, scale down to 0 replicas first to avoid
+    inconsistencies in the configuration:
+
+      kubectl scale --namespace {{ include "common.names.namespace" . }} statefulset {{ .Release.Name }}-master --replicas=0
+      helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/elasticsearch --reset-values --set master.masterOnly=false
+
+    Please note that the master nodes should continue assuming all the roles
+    (master.masterOnly: false) since there is shard data on the first replica.
+-------------------------------------------------------------------------------
+{{- end }}
 {{- if contains .Values.service.type "LoadBalancer" }}
 
 -------------------------------------------------------------------------------
@@ -39,7 +57,7 @@ APP VERSION: {{ .Chart.AppVersion }}
     As an alternative, you can specify "sysctlImage.enabled=true" to use a
     privileged initContainer to change those settings in the Kernel:
 
-      helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} bitnami/elasticsearch --set sysctlImage.enabled=true
+      helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/elasticsearch --set sysctlImage.enabled=true
 
     Note that this requires the ability to run privileged containers, which is likely not
     the case on many secure clusters. To cover this use case, you can also set some parameters
@@ -91,17 +109,6 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-{{- if .Values.curator.enabled }}
-
-  A CronJob will run with schedule {{ .Values.curator.cronjob.schedule }}.
-
-  The Jobs will not be removed automagically when deleting this Helm chart.
-  To remove these jobs, run the following:
-
-    kubectl --namespace {{ include "common.names.namespace" . }} delete job -l app={{ template "common.names.name" . }},role=curator
-
-{{- end }}
-
   Elasticsearch can be accessed within the cluster on port {{ include "elasticsearch.service.ports.restAPI" . }} at {{ template "elasticsearch.service.name" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
   To access from outside the cluster execute the following commands:
@@ -126,7 +133,10 @@ In order to replicate the container startup scripts execute this command:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.copyTlsCerts.image }}
 {{- include "common.warnings.rollingTag" .Values.sysctlImage }}
 
 {{- end }}
 {{ include "elasticsearch.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "coordinating" "copyTlsCerts" "data" "ingest" "master" "metrics" "sysctlImage" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.copyTlsCerts.image .Values.metrics.image .Values.volumePermissions.image .Values.sysctlImage ) "context" $) }}

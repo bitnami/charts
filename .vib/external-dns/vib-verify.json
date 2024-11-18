@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/external-dns"
         },
-        "runtime_parameters": "ImNsb3VkZmxhcmUiOgogICJhcGlLZXkiOiAidGVzdGluZ2FwaWtleTEyMzQiCiAgImVtYWlsIjogInRlc3RAdGVzdC5vcmciCiJwcm92aWRlciI6ICJjbG91ZGZsYXJlIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJodHRwIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,17 +31,34 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "external-dns/goss/goss.yaml",
+            "vars_file": "external-dns/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-external-dns"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
+            "resources": {
+              "path": "/.vib/external-dns/cypress"
+            },
             "endpoint": "lb-external-dns-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

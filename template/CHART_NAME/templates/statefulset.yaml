@@ -1,23 +1,27 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: %%COMPONENT_NAME%%
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.%%MAIN_OBJECT_BLOCK%%.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.%%MAIN_OBJECT_BLOCK%%.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.%%MAIN_OBJECT_BLOCK%%.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.%%MAIN_OBJECT_BLOCK%%.replicaCount }}
   {{- end }}
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.%%MAIN_OBJECT_BLOCK%%.podLabels .Values.commonLabels) "context" .) }}
   selector:
-    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: %%COMPONENT_NAME%%
   serviceName: {{ template "common.names.fullname" . }}
   {{- if .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy }}
@@ -28,14 +32,12 @@ spec:
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: %%COMPONENT_NAME%%
-        {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
-      serviceAccountName: {{ template "%%TEMPLATE_NAME%%.serviceAccountName" . }}
       {{- include "%%TEMPLATE_NAME%%.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "%%TEMPLATE_NAME%%.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.%%MAIN_OBJECT_BLOCK%%.automountServiceAccountToken }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -43,8 +45,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAffinityPreset "component" "%%COMPONENT_NAME%%" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAntiAffinityPreset "component" "%%COMPONENT_NAME%%" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAffinityPreset "component" "%%COMPONENT_NAME%%" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAntiAffinityPreset "component" "%%COMPONENT_NAME%%" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.nodeAffinityPreset.type "key" .Values.%%MAIN_OBJECT_BLOCK%%.nodeAffinityPreset.key "values" .Values.%%MAIN_OBJECT_BLOCK%%.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.nodeSelector }}
@@ -75,14 +77,16 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - %%commands%%
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: foo
+            - name: data
               mountPath: {{ .Values.persistence.mountPath }}
               {{- if .Values.persistence.subPath }}
               subPath: {{ .Values.persistence.subPath }}
@@ -96,7 +100,7 @@ spec:
           image: {{ template "%%TEMPLATE_NAME%%.image" . }}
           imagePullPolicy: {{ .Values.%%MAIN_OBJECT_BLOCK%%.image.pullPolicy }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.%%MAIN_OBJECT_BLOCK%%.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -127,42 +131,50 @@ spec:
             {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.resources }}
           resources: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.resources | nindent 12 }}
+          {{- else if ne .Values.%%MAIN_OBJECT_BLOCK%%.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http }}
             - name: https
               containerPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.https }}
+            {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.enabled }}
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe "enabled") "context" $) | nindent 12 }}
             %%httpGet || command || etc%%
-          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.enabled }}
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe "enabled") "context" $) | nindent 12 }}
             %%httpGet || command || etc%%
-          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.startupProbe.enabled }}
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.startupProbe "enabled") "context" $) | nindent 12 }}
             %%httpGet || command || etc%%
-          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: foo
+            - name: data
               mountPath: {{ .Values.persistence.mountPath }}
               {{- if .Values.persistence.subPath }}
               subPath: {{ .Values.persistence.subPath }}
               {{- end }}
               readOnly: true
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -170,7 +182,9 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: foo
+        - name: empty-dir
+          emptyDir: {}
+        - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
             claimName: {{ default (include "common.names.fullname" .) .Values.persistence.existingClaim }}
@@ -184,15 +198,12 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        annotations:
-          {{- if .Values.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
+        {{- if or .Values.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.persistence.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
-        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
@@ -207,4 +218,3 @@ spec:
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
-{{- end }}

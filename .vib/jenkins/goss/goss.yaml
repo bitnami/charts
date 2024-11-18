@@ -1,32 +1,14 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 command:
-  jenkins-cli:
-    exec: java -jar /bitnami/jenkins/home/war/WEB-INF/lib/cli-${APP_VERSION}.jar -s http://localhost:8080 -auth ${JENKINS_USERNAME}:${JENKINS_PASSWORD} help
-    exit-status: 0
-    stdout: []
-    stderr: []
-    timeout: 20000
   jenkins-cli-user:
-    exec: java -jar /bitnami/jenkins/home/war/WEB-INF/lib/cli-${APP_VERSION}.jar -s http://localhost:8080 -auth ${JENKINS_USERNAME}:${JENKINS_PASSWORD} who-am-i
+    exec: java -jar /bitnami/jenkins/home/war/WEB-INF/lib/cli-${APP_VERSION}.jar -s http://localhost:{{ .Vars.containerPorts.http }} -auth {{ .Vars.jenkinsUser }}:{{ .Vars.jenkinsPassword }} who-am-i
     exit-status: 0
-    stdout:
-    - {{ printf "Authenticated as: %s" .Env.JENKINS_USERNAME | quote }}
-    stderr: []
     timeout: 20000
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
 file:
-  /opt/bitnami/jenkins/jenkins.war:
-    # Jenkins Web Application Resource
+  /bitnami/jenkins:
     exists: true
-    mode: "0644"
+    mode: "2775"
     owner: root
-    group: root
-    filetype: file
-  /bitnami/jenkins/home:
-    # Path where Jenkins resources live (JENKINS_HOME)
-    exists: true
-    mode: "2755"
     filetype: directory

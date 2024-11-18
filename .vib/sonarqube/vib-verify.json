@@ -22,27 +22,47 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/sonarqube"
         },
-        "runtime_parameters": "InBvc3RncmVzcWwiOgogICJwb3N0Z3Jlc3FsUGFzc3dvcmQiOiAiV0ozbnRRY2EiCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKInNvbmFycXViZVBhc3N3b3JkIjogImpLaG03OGJYIgoic29uYXJxdWJlVXNlcm5hbWUiOiAidXNlciI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "L4"
           }
         }
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "cypress",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib/sonarqube/cypress"
+            },
+            "endpoint": "lb-sonarqube-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "user": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "goss",
           "params": {
-            "endpoint": "lb-sonarqube-http",
-            "app_protocol": "HTTP"
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "sonarqube/goss/goss.yaml",
+            "vars_file": "sonarqube/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-sonarqube"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

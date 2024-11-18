@@ -1,0 +1,45 @@
+tempo:
+  dataDir: /bitnami/grafana-tempo/data
+  traces:
+    otlp:
+      grpc: true
+  search:
+    enabled: true
+  containerPorts:
+    web: 3101
+    gossipRing: 7946
+compactor:
+  enabled: true
+  replicaCount: 2
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+distributor:
+  replicaCount: 1
+  service:
+    ports:
+      http: 3101
+ingester:
+  replicaCount: 1
+  service:
+    ports:
+      http: 3101
+querier:
+  replicaCount: 1
+  service:
+    ports:
+      http: 3101
+queryFrontend:
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+vulture:
+  enabled: true

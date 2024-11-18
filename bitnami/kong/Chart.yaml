@@ -1,37 +1,48 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: kong
+      image: docker.io/bitnami/kong:3.8.0-debian-12-r10
+    - name: kong-ingress-controller
+      image: docker.io/bitnami/kong-ingress-controller:3.3.1-debian-12-r7
+    - name: postgresql
+      image: docker.io/bitnami/postgresql:14.13.0-debian-12-r21
 apiVersion: v2
-appVersion: 2.8.1
+appVersion: 3.8.0
 dependencies:
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
-  - condition: cassandra.enabled
-    name: cassandra
-    repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 16.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+- condition: cassandra.enabled
+  name: cassandra
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 12.x.x
 description: Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/kong
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
 keywords:
-  - kong
-  - ingress
-  - openresty
-  - controller
-  - http
-  - web
-  - www
-  - reverse proxy
+- kong
+- ingress
+- openresty
+- controller
+- http
+- web
+- www
+- reverse proxy
 maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: kong
 sources:
-  - https://github.com/bitnami/bitnami-docker-kong
-  - https://konghq.com/
-version: 6.3.11
+- https://github.com/bitnami/charts/tree/main/bitnami/kong
+version: 14.0.5

@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/logstash"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAtICJuYW1lIjogImh0dHAiCiAgICAgICJwb3J0IjogODAKICAgICAgInRhcmdldFBvcnQiOiAiaHR0cCIKICAgICAgInByb3RvY29sIjogIlRDUCIKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,17 +31,34 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "logstash/goss/goss.yaml",
+            "vars_file": "logstash/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "sts-logstash"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
-            "endpoint": "lb-logstash-http",
+            "resources": {
+              "path": "/.vib/logstash/cypress"
+            },
+            "endpoint": "lb-logstash-monitoring",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

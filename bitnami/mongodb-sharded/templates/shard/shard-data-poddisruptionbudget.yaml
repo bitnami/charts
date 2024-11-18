@@ -1,22 +1,25 @@
-{{- if and .Values.shards .Values.shardsvr.dataNode.pdb.create -}}
-{{- $replicas := .Values.shards | int -}}
-{{- range $i, $e := until $replicas -}}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.shards .Values.shardsvr.dataNode.pdb.create }}
+{{- $replicas := .Values.shards | int }}
+{{- range $i, $e := until $replicas }}
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" $ }}
 metadata:
   name: {{ printf "%s-shard%d-data" (include "common.names.fullname" $ ) $i }}
   namespace: {{ include "common.names.namespace" $ | quote }}
-  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: shardsvr
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if $.Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.shardsvr.arbiter.podLabels $.Values.common.podLabels $.Values.common.podLabels ) "context" $ ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: shardsvr
       shard: {{ $i | quote }}
   {{- if $.Values.shardsvr.dataNode.pdb.minAvailable }}

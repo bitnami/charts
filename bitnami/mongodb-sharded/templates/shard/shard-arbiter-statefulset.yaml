@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.shards .Values.shardsvr.arbiter.replicaCount }}
 {{- $replicas := $.Values.shards | int }}
 {{- range $i, $e := until $replicas }}
@@ -6,17 +11,15 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-shard%d-arbiter" (include "common.names.fullname" $ ) $i }}
   namespace: {{ include "common.names.namespace" $ | quote }}
-  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: shardsvr-arbiter
-    {{- if $.Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if $.Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.shardsvr.arbiter.podLabels $.Values.common.podLabels $.Values.common.podLabels ) "context" $ ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: shardsvr-arbiter
   podManagementPolicy: {{ $.Values.shardsvr.arbiter.podManagementPolicy }}
   updateStrategy: {{- toYaml $.Values.shardsvr.arbiter.updateStrategy | nindent 4 }}
@@ -24,25 +27,17 @@ spec:
   replicas: {{ $.Values.shardsvr.arbiter.replicaCount }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" $ | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: shardsvr-arbiter
-        {{- if $.Values.common.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value"  $.Values.common.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if $.Values.shardsvr.arbiter.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
         shard: {{ $i | quote }}
       {{- if or $.Values.common.podAnnotations $.Values.shardsvr.arbiter.podAnnotations $.Values.metrics.enabled }}
       annotations:
-        {{- if $.Values.common.podAnnotations }}
-           {{- include "common.tplvalues.render" ( dict "value" $.Values.common.podAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if $.Values.shardsvr.arbiter.podAnnotations }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.podAnnotations "context" $ ) | nindent 8 }}
+        {{- if or $.Values.common.podAnnotations $.Values.shardsvr.arbiter.podAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.shardsvr.arbiter.podAnnotations $.Values.common.podAnnotations ) "context" $ ) }}
+        {{- include "common.tplvalues.render" ( dict "value" $annotations  "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if $.Values.metrics.enabled }}
-           {{- include "common.tplvalues.render" ( dict "value" $.Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value" $.Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
@@ -50,6 +45,7 @@ spec:
       {{- if $.Values.shardsvr.arbiter.schedulerName }}
       schedulerName: {{ $.Values.shardsvr.arbiter.schedulerName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ $.Values.shardsvr.arbiter.automountServiceAccountToken }}
       {{- if $.Values.shardsvr.arbiter.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -57,8 +53,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.affinity "context" (set $ "arbiterLoopId" $i)) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.arbiter.podAffinityPreset "component" "shardsvr-arbiter" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.arbiter.podAntiAffinityPreset "component" "shardsvr-arbiter" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.arbiter.podAffinityPreset "component" "shardsvr-arbiter" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.arbiter.podAntiAffinityPreset "component" "shardsvr-arbiter" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.shardsvr.arbiter.nodeAffinityPreset.type "key" $.Values.shardsvr.arbiter.nodeAffinityPreset.key "values" $.Values.shardsvr.arbiter.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.nodeSelector }}
@@ -71,10 +67,10 @@ spec:
       priorityClassName: {{ $.Values.shardsvr.arbiter.priorityClassName | quote }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.podSecurityContext.enabled }}
-      securityContext: {{- omit $.Values.shardsvr.arbiter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.shardsvr.arbiter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ $.Values.shardsvr.arbiter.terminationGracePeriodSeconds }}
@@ -94,7 +90,7 @@ spec:
           image: {{ include "mongodb-sharded.image" $ }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
           {{- if $.Values.shardsvr.arbiter.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.shardsvr.arbiter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.shardsvr.arbiter.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: {{ $.Values.common.containerPorts.mongodb }}
@@ -116,8 +112,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: MONGODB_MAX_TIMEOUT
-              value: {{ $.Values.common.mongodbMaxWaitTimeout | quote }}
+            - name: MONGODB_INIT_RETRY_ATTEMPTS
+              value: {{ $.Values.common.mongodbInitRetryAttempts | quote }}
+            - name: MONGODB_INIT_RETRY_DELAY
+              value: {{ $.Values.common.mongodbInitRetryDelay | quote }}
             - name: MONGODB_SHARDING_MODE
               value: "shardsvr"
             - name: MONGODB_REPLICA_SET_MODE
@@ -190,7 +188,7 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if $.Values.shardsvr.arbiter.extraEnvVarsSecret }}
-            - configMapRef:
+            - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
@@ -204,32 +202,50 @@ spec:
           {{- if $.Values.shardsvr.arbiter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.shardsvr.arbiter.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: mongodb
-          {{- else if  $.Values.shardsvr.arbiter.customLivenessProbe }}
+          {{- if $.Values.shardsvr.arbiter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.shardsvr.arbiter.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - mongodb
           {{- end }}
-          {{- if  $.Values.shardsvr.arbiter.readinessProbe.enabled }}
+          {{- if $.Values.shardsvr.arbiter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.shardsvr.arbiter.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: mongodb
-          {{- else if  $.Values.shardsvr.arbiter.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.shardsvr.arbiter.startupProbe.enabled }}
+          {{- if $.Values.shardsvr.arbiter.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.shardsvr.arbiter.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: mongodb
-          {{- else if $.Values.shardsvr.arbiter.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if $.Values.shardsvr.arbiter.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /.mongodb
+              subPath: app-mongosh-dir
             {{- if or $.Values.shardsvr.arbiter.config $.Values.shardsvr.arbiter.configCM }}
             - name: config
               mountPath: /bitnami/mongodb/conf/
@@ -252,13 +268,17 @@ spec:
             {{- if $.Values.shardsvr.arbiter.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if $.Values.shardsvr.arbiter.resources }}
           resources: {{- toYaml $.Values.shardsvr.arbiter.resources | nindent 12 }}
+          {{- else if ne $.Values.shardsvr.arbiter.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.shardsvr.arbiter.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- if $.Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" $ }}
           imagePullPolicy: {{ $.Values.metrics.image.pullPolicy | quote }}
           {{- if $.Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
           {{- if $.Values.auth.enabled }}
@@ -287,42 +307,48 @@ spec:
               {{- if $.Values.auth.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --web.listen-address ":{{ $.Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ $.Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ $.Values.metrics.extraArgs }}
+              /bin/mongodb_exporter --collect-all --compatible-mode --web.listen-address ":{{ $.Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ $.Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ $.Values.metrics.extraArgs }}
           {{- end }}
-          {{- if $.Values.auth.usePasswordFile }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if $.Values.auth.usePasswordFile }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
-          {{- end }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: {{ $.Values.metrics.containerPorts.metrics }}
           {{- if not $.Values.diagnosticMode.enabled }}
-          {{- if $.Values.metrics.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
-              port: metrics
-          {{- else if $.Values.metrics.customLivenessProbe }}
+          {{- if $.Values.metrics.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
           {{- end }}
-          {{- if $.Values.metrics.readinessProbe.enabled }}
+          {{- if $.Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if $.Values.metrics.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.metrics.startupProbe.enabled }}
+          {{- if $.Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.metrics.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: metrics
-          {{- else if $.Values.metrics.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
+          {{- if $.Values.metrics.resources }}
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
+          {{- else if ne $.Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- with $.Values.shardsvr.arbiter.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
@@ -331,6 +357,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or $.Values.shardsvr.arbiter.config $.Values.shardsvr.arbiter.configCM }}
         - name: config
           configMap:

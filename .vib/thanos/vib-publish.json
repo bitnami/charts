@@ -16,49 +16,6 @@
         }
       ]
     },
-    "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/thanos"
-        },
-        "runtime_parameters": "b2Jqc3RvcmVDb25maWc6IHwtCiAgdHlwZTogRklMRVNZU1RFTQogIGNvbmZpZzoKICAgIGRpcmVjdG9yeTogIi8iCgpxdWVyeUZyb250ZW5kOgogIGVuYWJsZWQ6IHRydWUKICBzZXJ2aWNlOgogICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICBwb3J0czoKICAgICAgaHR0cDogODAKCnN0b3JlZ2F0ZXdheToKICBlbmFibGVkOiB0cnVlCg==",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "M4"
-          }
-        }
-      },
-      "actions": [
-        {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-thanos-query-frontend-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
-          "action_id": "cypress",
-          "params": {
-            "resources": {
-              "path": "/.vib/thanos/queryfrontend/cypress"
-            },
-            "endpoint": "lb-thanos-query-frontend-http",
-            "app_protocol": "HTTP"
-          }
-        }
-      ]
-    },
     "publish": {
       "actions": [
         {
@@ -67,8 +24,11 @@
             "repository": {
               "kind": "S3",
               "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
+              "authn": {
+                "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
+                "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}",
+                "role": "{VIB_ENV_S3_ROLE_ARN}"
+              }
             }
           }
         }

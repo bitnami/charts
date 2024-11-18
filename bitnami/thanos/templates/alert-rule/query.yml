@@ -1,0 +1,201 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- /*
+Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
+*/ -}}
+{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.query ) }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "thanos.query.fullname" . }}
+  namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.metrics.prometheusRule.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+  - name: thanos-query
+    rules:
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryHttpRequestQueryErrorRateHigh | default false) }}
+    - alert: ThanosQueryHttpRequestQueryErrorRateHigh
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of "query" requests.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryhttprequestqueryerrorratehigh
+        summary: Thanos Query is failing to handle requests.
+      expr: |
+        (
+          sum by (job) (rate(http_requests_total{code=~"5..", job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query"}[5m]))
+        /
+          sum by (job) (rate(http_requests_total{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query"}[5m]))
+        ) * 100 > 5
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryHttpRequestQueryRangeErrorRateHigh | default false) }}
+    - alert: ThanosQueryHttpRequestQueryRangeErrorRateHigh
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of "query_range" requests.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryhttprequestqueryrangeerrorratehigh
+        summary: Thanos Query is failing to handle requests.
+      expr: |
+        (
+          sum by (job) (rate(http_requests_total{code=~"5..", job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query_range"}[5m]))
+        /
+          sum by (job) (rate(http_requests_total{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query_range"}[5m]))
+        ) * 100 > 5
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryGrpcServerErrorRate | default false) }}
+    - alert: ThanosQueryGrpcServerErrorRate
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of requests.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosquerygrpcservererrorrate
+        summary: Thanos Query is failing to handle requests.
+      expr: |
+        (
+          sum by (job) (rate(grpc_server_handled_total{grpc_code=~"Unknown|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded", job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
+        /
+          sum by (job) (rate(grpc_server_started_total{job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
+        * 100 > 5
+        )
+      for: 5m
+      labels:
+        severity: warning
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryGrpcClientErrorRate | default false) }}
+    - alert: ThanosQueryGrpcClientErrorRate
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} is failing to send {{`{{`}} $value | humanize {{`}}`}}% of requests.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosquerygrpcclienterrorrate
+        summary: Thanos Query is failing to send requests.
+      expr: |
+        (
+          sum by (job) (rate(grpc_client_handled_total{grpc_code!="OK", job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
+        /
+          sum by (job) (rate(grpc_client_started_total{job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
+        ) * 100 > 5
+      for: 5m
+      labels:
+        severity: warning
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryHighDNSFailures | default false) }}
+    - alert: ThanosQueryHighDNSFailures
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} have {{`{{`}} $value | humanize{{`}}`}}% of failing DNS queries for store endpoints.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryhighdnsfailures
+        summary: Thanos Query is having high number of DNS failures.
+      expr: |
+        (
+          sum by (job) (rate(thanos_query_store_apis_dns_failures_total{job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
+        /
+          sum by (job) (rate(thanos_query_store_apis_dns_lookups_total{job=~".*{{ include "thanos.query.fullname" . }}.*"}[5m]))
+        ) * 100 > 1
+      for: 15m
+      labels:
+        severity: warning
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryInstantLatencyHigh | default false) }}
+    - alert: ThanosQueryInstantLatencyHigh
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for instant queries.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryinstantlatencyhigh
+        summary: Thanos Query has high latency for queries.
+      expr: |
+        (
+          histogram_quantile(0.99, sum by (job, le) (rate(http_request_duration_seconds_bucket{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query"}[5m]))) > 40
+        and
+          sum by (job) (rate(http_request_duration_seconds_bucket{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query"}[5m])) > 0
+        )
+      for: 10m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryRangeLatencyHigh | default false) }}
+    - alert: ThanosQueryRangeLatencyHigh
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for range queries.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryrangelatencyhigh
+        summary: Thanos Query has high latency for queries.
+      expr: |
+        (
+          histogram_quantile(0.99, sum by (job, le) (rate(http_request_duration_seconds_bucket{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query_range"}[5m]))) > 90
+        and
+          sum by (job) (rate(http_request_duration_seconds_count{job=~".*{{ include "thanos.query.fullname" . }}.*", handler="query_range"}[5m])) > 0
+        )
+      for: 10m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryOverload | default false) }}
+    - alert: ThanosQueryOverload
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Query {{`{{`}} $labels.job {{`}}`}} has been overloaded for more than 15 minutes. This may be a symptom of excessive simultanous complex requests, low performance of the Prometheus API, or failures within these components. Assess the health of the Thanos query instances, the connnected Prometheus instances, look for potential senders of these requests and then contact support.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryoverload
+        summary: Thanos query reaches its maximum capacity serving concurrent requests.
+      expr: |
+        (
+          max_over_time(thanos_query_concurrent_gate_queries_max[5m]) - avg_over_time(thanos_query_concurrent_gate_queries_in_flight[5m]) < 1
+        )
+      for: 15m
+      labels:
+        severity: warning
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+{{- end }}

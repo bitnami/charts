@@ -1,12 +1,9 @@
-{{/* vim: set filetype=mustache: */}}
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
 */}}
-{{- define "aspnet-core.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end }}
+
+{{/* vim: set filetype=mustache: */}}
 
 {{/*
 Return the proper ASP.NET Core image name
@@ -41,7 +38,7 @@ Create the name of the Service Account to use
 */}}
 {{- define "aspnet-core.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-    {{- default (include "aspnet-core.fullname" .) .Values.serviceAccount.name }}
+    {{- default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
     {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

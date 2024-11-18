@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -6,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ## @param global.namespaceOverride Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride
 ##
 global:
@@ -16,9 +20,18 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   namespaceOverride: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -74,7 +87,20 @@ commonLabels: {}
 ## @param commonAnnotations Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
-
+## @param topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+## i.e. topologyKey: topology.kubernetes.io/zone
+##
+topologyKey: ""
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
+## @param enableServiceLinks Whether information about services should be injected into pod's environment variable
+## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+##
+enableServiceLinks: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -89,15 +115,15 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section MongoDB(&reg;) parameters
 ##
 
 ## Bitnami MongoDB(&reg;) image
 ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
-## @param image.registry MongoDB(&reg;) image registry
-## @param image.repository MongoDB(&reg;) image registry
-## @param image.tag MongoDB(&reg;) image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] MongoDB(&reg;) image registry
+## @param image.repository [default: REPOSITORY_NAME/mongodb] MongoDB(&reg;) image registry
+## @skip image.tag MongoDB(&reg;) image tag (immutable tags are recommended)
+## @param image.digest MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MongoDB(&reg;) image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Set to true if you would like to see extra information on logs
@@ -105,9 +131,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 5.0.9-debian-10-r15
+  tag: 8.0.3-debian-12-r0
+  digest: ""
   ## Specify a imagePullPolicy
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -121,7 +148,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
 ## @param schedulerName Name of the scheduler (other than default) to dispatch pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -143,11 +169,11 @@ auth:
   ##
   rootUser: root
   ## @param auth.rootPassword MongoDB(&reg;) root password
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
   ##
   rootPassword: ""
   ## MongoDB(&reg;) custom users and databases
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-users-and-databases-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#creating-a-user-and-database-on-first-run
   ## @param auth.usernames List of custom users to be created during the initialization
   ## @param auth.passwords List of passwords for the custom users set at `auth.usernames`
   ## @param auth.databases List of custom databases to be created during the initialization
@@ -158,13 +184,14 @@ auth:
   ## @param auth.username DEPRECATED: use `auth.usernames` instead
   ## @param auth.password DEPRECATED: use `auth.passwords` instead
   ## @param auth.database DEPRECATED: use `auth.databases` instead
+  ##
   username: ""
   password: ""
   database: ""
   ## @param auth.replicaSetKey Key used for authentication in the replicaset (only when `architecture=replicaset`)
   ##
   replicaSetKey: ""
-  ## @param auth.existingSecret Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, ` mongodb-replica-set-key`)
+  ## @param auth.existingSecret Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, `mongodb-replica-set-key`)
   ## NOTE: When it's set the previous parameters are ignored.
   ##
   existingSecret: ""
@@ -172,11 +199,14 @@ tls:
   ## @param tls.enabled Enable MongoDB(&reg;) TLS support between nodes in the cluster as well as between mongo clients and nodes
   ##
   enabled: false
+  mTLS:
+    ## @param tls.mTLS.enabled IF TLS support is enabled, require clients to provide certificates
+    enabled: true
   ## @param tls.autoGenerated Generate a custom CA and self-signed certificates
   ##
   autoGenerated: true
-  ## @param tls.existingSecret Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)
-  ## NOTE: When it's set it will disable certificate creation
+  ## @param tls.existingSecret Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`)
+  ## NOTE: When it's set it will disable secret creation.
   ##
   existingSecret: ""
   ## Add Custom CA certificate
@@ -185,10 +215,41 @@ tls:
   ##
   caCert: ""
   caKey: ""
+  ## @param tls.pemChainIncluded Flag to denote that the Certificate Authority (CA) certificates are bundled with the endpoint cert.
+  ## Certificates must be in proper order, where the top certificate is the leaf and the bottom certificate is the top-most intermediate CA.
+  ##
+  pemChainIncluded: false
+  standalone:
+    ## @param tls.standalone.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
+    ## NOTE: When it's set it will disable certificate self-generation from existing CA.
+    ##
+    existingSecret: ""
+  replicaset:
+    ## @param tls.replicaset.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
+    ## existingSecrets:
+    ##  - "mySecret-0"
+    ##  - "mySecret-1"
+    ## NOTE: When it's set it will disable certificate self-generation from existing CA.
+    ##
+    existingSecrets: []
+  hidden:
+    ## @param tls.hidden.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
+    ## existingSecrets:
+    ##  - "mySecret-0"
+    ##  - "mySecret-1"
+    ## NOTE: When it's set it will disable certificate self-generation from existing CA.
+    ##
+    existingSecrets: []
+  arbiter:
+    ## @param tls.arbiter.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
+    ## NOTE: When it's set it will disable certificate self-generation from existing CA.
+    ##
+    existingSecret: ""
   ## Bitnami Nginx image
-  ## @param tls.image.registry Init container TLS certs setup image registry
-  ## @param tls.image.repository Init container TLS certs setup image repository
-  ## @param tls.image.tag Init container TLS certs setup image tag (immutable tags are recommended)
+  ## @param tls.image.registry [default: REGISTRY_NAME] Init container TLS certs setup image registry
+  ## @param tls.image.repository [default: REPOSITORY_NAME/nginx] Init container TLS certs setup image repository
+  ## @skip tls.image.tag Init container TLS certs setup image tag (immutable tags are recommended)
+  ## @param tls.image.digest Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param tls.image.pullPolicy Init container TLS certs setup image pull policy
   ## @param tls.image.pullSecrets Init container TLS certs specify docker-registry secret names as an array
   ## @param tls.extraDnsNames Add extra dns names to the CA, can solve x509 auth issue for pod clients
@@ -196,7 +257,8 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-11-r5
+    tag: 1.27.2-debian-12-r2
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -206,7 +268,6 @@ tls:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## e.g:
   ## extraDnsNames
   ##   "DNS.6": "$my_host"
@@ -217,27 +278,39 @@ tls:
   ##
   mode: requireTLS
   ## Init Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param tls.resources.limits Init container generate-tls-certs resource limits
-  ## @param tls.resources.requests Init container generate-tls-certs resource requests
+  ## @param tls.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if tls.resources is set (tls.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param tls.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Init Container securityContext
+  ## ref: https://kubernetes.io/docs/concepts/security/pod-security-policy/
+  ## @param tls.securityContext Init container generate-tls-cert Security context
+  ##
+  securityContext: {}
+  ## Example:
+  ## allowPrivilegeEscalation: false
+  ## capabilities:
+  ##   drop: ["ALL"]
+  ##
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -252,15 +325,15 @@ replicaSetName: rs0
 ##
 replicaSetHostnames: true
 ## @param enableIPv6 Switch to enable/disable IPv6 on MongoDB(&reg;)
-## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-ipv6
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-ipv6
 ##
 enableIPv6: false
 ## @param directoryPerDB Switch to enable/disable DirectoryPerDB on MongoDB(&reg;)
-## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-directoryperdb
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-directoryperdb
 ##
 directoryPerDB: false
 ## MongoDB(&reg;) System Log configuration
-## ref: https://github.com/bitnami/bitnami-docker-mongodb#configuring-system-log-verbosity-level
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#configuring-system-log-verbosity-level
 ## @param systemLogVerbosity MongoDB(&reg;) system log verbosity level
 ## @param disableSystemLog Switch to enable/disable MongoDB(&reg;) system log
 ##
@@ -326,6 +399,11 @@ configuration: ""
 replicaSetConfigurationSettings:
   enabled: false
   configuration: {}
+## Custom configurations for individual replica set members.
+## Use the prefix 'members[X].' to apply settings to the member X of the replica set.
+## Example: 'members[0].priority: 3' sets the priority of the first replica set member to 3.
+## The index X in 'members[X]' corresponds to the member's position in the replica set.
+##    members[0].priority: 3
 ##    chainingAllowed : false
 ##    heartbeatTimeoutSecs : 10
 ##    heartbeatIntervalMillis : 2000
@@ -372,7 +450,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars (in case of sensitive data)
 ##
 extraEnvVarsSecret: ""
-
 ## @section MongoDB(&reg;) statefulset parameters
 ##
 
@@ -382,8 +459,9 @@ annotations: {}
 ## @param labels Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template
 ##
 labels: {}
-## @param replicaCount Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)
-## Ignored when mongodb.architecture=standalone
+## @param replicaCount Number of MongoDB(&reg;) nodes
+## When `mongodb.architecture=replicaset`, the number of replicas is taken in account
+## When `mongodb.architecture=standalone`, the number of replicas can only be 0 or 1 (value higher then 1 will not be taken in account)
 ##
 replicaCount: 2
 ## @param updateStrategy.type Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false,
@@ -436,7 +514,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector MongoDB(&reg;) Node labels for pod assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations MongoDB(&reg;) Tolerations for pod assignment
@@ -472,11 +550,15 @@ runtimeClassName: ""
 ## MongoDB(&reg;) pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable MongoDB(&reg;) pod(s)' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Group ID for the volumes of the MongoDB(&reg;) pod(s)
 ## @param podSecurityContext.sysctls sysctl settings of the MongoDB(&reg;) pod(s)'
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  supplementalGroups: []
   fsGroup: 1001
   ## sysctl settings
   ## Example:
@@ -487,37 +569,53 @@ podSecurityContext:
   sysctls: []
 ## MongoDB(&reg;) containers' Security Context (main and metrics container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable MongoDB(&reg;) container(s)' Security Context
-## @param containerSecurityContext.runAsUser User ID for the MongoDB(&reg;) container
-## @param containerSecurityContext.runAsNonRoot Set MongoDB(&reg;) container's Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## MongoDB(&reg;) containers' resource requests and limits.
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for MongoDB(&reg;) containers
-## @param resources.requests The requested resources for MongoDB(&reg;) containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  ##
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  ##
-  requests: {}
+resourcesPreset: "small"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## @param containerPorts.mongodb MongoDB(&reg;) container port
+##
 containerPorts:
   mongodb: 27017
 ## MongoDB(&reg;) pods' liveness probe. Evaluated as a template.
@@ -639,14 +737,13 @@ extraVolumes: []
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation for MongoDB(&reg;) pod(s)
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction
   ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
   maxUnavailable: ""
-
 ## @section Traffic exposure parameters
 ##
 
@@ -684,10 +781,17 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerClass loadBalancerClass for MongoDB(&reg;) Service (only for standalone architecture)
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+  loadBalancerClass: ""
   ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
   loadBalancerSourceRanges: []
+  ## @param service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+  ##
+  allocateLoadBalancerNodePorts: true
   ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []
@@ -700,7 +804,7 @@ service:
   externalTrafficPolicy: Local
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -709,6 +813,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## External Access to MongoDB(&reg;) nodes configuration
 ##
 externalAccess:
@@ -725,19 +835,20 @@ externalAccess:
     enabled: false
     ## Bitnami Kubectl image
     ## ref: https://hub.docker.com/r/bitnami/kubectl/tags/
-    ## @param externalAccess.autoDiscovery.image.registry Init container auto-discovery image registry
-    ## @param externalAccess.autoDiscovery.image.repository Init container auto-discovery image repository
-    ## @param externalAccess.autoDiscovery.image.tag Init container auto-discovery image tag (immutable tags are recommended)
+    ## @param externalAccess.autoDiscovery.image.registry [default: REGISTRY_NAME] Init container auto-discovery image registry
+    ## @param externalAccess.autoDiscovery.image.repository [default: REPOSITORY_NAME/kubectl] Init container auto-discovery image repository
+    ## @skip externalAccess.autoDiscovery.image.tag Init container auto-discovery image tag (immutable tags are recommended)
+    ## @param externalAccess.autoDiscovery.image.digest Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param externalAccess.autoDiscovery.image.pullPolicy Init container auto-discovery image pull policy
     ## @param externalAccess.autoDiscovery.image.pullSecrets Init container auto-discovery image pull secrets
     ##
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.24.1-debian-11-r5
+      tag: 1.31.2-debian-12-r3
+      digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -748,27 +859,84 @@ externalAccess:
       ##
       pullSecrets: []
     ## Init Container resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param externalAccess.autoDiscovery.resources.limits Init container auto-discovery resource limits
-    ## @param externalAccess.autoDiscovery.resources.requests Init container auto-discovery resource requests
+    ## @param externalAccess.autoDiscovery.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if externalAccess.autoDiscovery.resources is set (externalAccess.autoDiscovery.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
+    resourcesPreset: "nano"
+    ## @param externalAccess.autoDiscovery.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+  ## Init container what mission is ensure public names can be resolved.
+  ##
+  dnsCheck:
+    ## Bitnami os-shell image
+    ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+    ## @param externalAccess.dnsCheck.image.registry [default: REGISTRY_NAME] Init container dns-check image registry
+    ## @param externalAccess.dnsCheck.image.repository [default: REPOSITORY_NAME/kubectl] Init container dns-check image repository
+    ## @skip externalAccess.dnsCheck.image.tag Init container dns-check image tag (immutable tags are recommended)
+    ## @param externalAccess.dnsCheck.image.digest Init container dns-check image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param externalAccess.dnsCheck.image.pullPolicy Init container dns-check image pull policy
+    ## @param externalAccess.dnsCheck.image.pullSecrets Init container dns-check image pull secrets
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/os-shell
+      tag: 12-debian-12-r32
+      digest: ""
+      ## Specify a imagePullPolicy
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
       ## Example:
-      ## limits:
-      ##    cpu: 100m
-      ##    memory: 128Mi
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
       ##
-      limits: {}
-      ## Examples:
-      ## requests:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      ##
-      requests: {}
+      pullSecrets: []
+    ## Init Container resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param externalAccess.dnsCheck.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if externalAccess.autoDiscovery.resources is set (externalAccess.autoDiscovery.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param externalAccess.dnsCheck.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+  ## Parameters to configure a set of Pods that connect to an existing MongoDB(&reg;) deployment that lies outside of Kubernetes.
+  ## @param externalAccess.externalMaster.enabled Use external master for bootstrapping
+  ## @param externalAccess.externalMaster.host External master host to bootstrap from
+  ## @param externalAccess.externalMaster.port Port for MongoDB(&reg;) service external master host
+  ##
+  externalMaster:
+    enabled: false
+    host: ""
+    port: 27017
   ## Parameters to configure K8s service(s) used to externally access MongoDB(&reg;)
   ## A new service per broker will be created
   ##
@@ -790,6 +958,12 @@ externalAccess:
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
+    ## @param externalAccess.service.publicNames Array of public names. The size should be equal to the number of replicas.
+    ##
+    publicNames: []
+    ## @param externalAccess.service.loadBalancerClass loadBalancerClass when service type is LoadBalancer
+    # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    loadBalancerClass: ""
     ## @param externalAccess.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## Example:
@@ -797,6 +971,10 @@ externalAccess:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param externalAccess.service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+    ##
+    allocateLoadBalancerNodePorts: true
     ## @param externalAccess.service.externalTrafficPolicy MongoDB(&reg;) service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -817,12 +995,19 @@ externalAccess:
     ## @param externalAccess.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
-    ## @param externalAccess.service.annotations Service annotations for external access
+    ## @param externalAccess.service.annotations Service annotations for external access. These annotations are common for all services created.
     ##
     annotations: {}
-      ## @param externalAccess.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## @param externalAccess.service.annotationsList Service annotations for eache external service. This value contains a list allowing different annotations per each external service.
+    ## Eg:
+    ##   annotationsList:
+    ##     - external-dns.alpha.kubernetes.io/hostname: mongodb-0.example.com
+    ##     - external-dns.alpha.kubernetes.io/hostname: mongodb-1.example.com
+    ##
+    annotationsList: []
+    ## @param externalAccess.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param externalAccess.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -858,6 +1043,9 @@ externalAccess:
       ##   - Y.Y.Y.Y
       ##
       loadBalancerIPs: []
+      ## @param externalAccess.hidden.service.loadBalancerClass loadBalancerClass when service type is LoadBalancer
+      # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+      loadBalancerClass: ""
       ## @param externalAccess.hidden.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## Example:
@@ -865,6 +1053,10 @@ externalAccess:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
+      ## @param externalAccess.hidden.service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+      ##
+      allocateLoadBalancerNodePorts: true
       ## @param externalAccess.hidden.service.externalTrafficPolicy MongoDB(&reg;) service external traffic policy
       ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
@@ -890,7 +1082,7 @@ externalAccess:
       annotations: {}
       ## @param externalAccess.hidden.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param externalAccess.hidden.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -899,17 +1091,211 @@ externalAccess:
       ##     timeoutSeconds: 300
       ##
       sessionAffinityConfig: {}
+## @section Password update job
+##
+passwordUpdateJob:
+  ## @param passwordUpdateJob.enabled Enable password update job
+  ##
+  enabled: false
+  ## @param passwordUpdateJob.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param passwordUpdateJob.command Override default container command on mysql Primary container(s) (useful when using custom images)
+  ##
+  command: []
+  ## @param passwordUpdateJob.args Override default container args on mysql Primary container(s) (useful when using custom images)
+  ##
+  args: []
+  ## @param passwordUpdateJob.extraCommands Extra commands to pass to the generation job
+  ##
+  extraCommands: ""
+  ## @param passwordUpdateJob.previousPasswords.rootPassword Previous root password (set if the password secret was already changed)
+  ## @param passwordUpdateJob.previousPasswords.existingSecret Name of a secret containing the previous passwords (set if the password secret was already changed)
+  previousPasswords:
+    rootPassword: ""
+    existingSecret: ""
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param passwordUpdateJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param passwordUpdateJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param passwordUpdateJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param passwordUpdateJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param passwordUpdateJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param passwordUpdateJob.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param passwordUpdateJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param passwordUpdateJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param passwordUpdateJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param passwordUpdateJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param passwordUpdateJob.podSecurityContext.enabled Enabled credential init job pods' Security Context
+  ## @param passwordUpdateJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param passwordUpdateJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param passwordUpdateJob.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param passwordUpdateJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param passwordUpdateJob.extraEnvVars Array containing extra env vars to configure the credential init job
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: GF_DEFAULT_INSTANCE_NAME
+  ##    value: my-instance
+  ##
+  extraEnvVars: []
+  ## @param passwordUpdateJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the credential init job
+  ##
+  extraEnvVarsCM: ""
+  ## @param passwordUpdateJob.extraEnvVarsSecret Secret containing extra env vars to configure the credential init job (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param passwordUpdateJob.extraVolumes Optionally specify extra list of additional volumes for the credential init job
+  ##
+  extraVolumes: []
+  ## @param passwordUpdateJob.extraVolumeMounts Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.
+  ##
+  extraVolumeMounts: []
+  ## @param passwordUpdateJob.initContainers Add additional init containers for the mysql Primary pod(s)
+  ##
+  initContainers: []
+  ## Container resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param passwordUpdateJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param passwordUpdateJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param passwordUpdateJob.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param passwordUpdateJob.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param passwordUpdateJob.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param passwordUpdateJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param passwordUpdateJob.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param passwordUpdateJob.annotations [object] Add annotations to the job
+  ##
+  annotations: {}
+  ## @param passwordUpdateJob.podLabels Additional pod labels
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param passwordUpdateJob.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
-## @section Persistence parameters
+
+## @section Network policy parameters
 ##
 
-## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  addExternalClientAccess: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+  ## e.g:
+  ## ingressPodMatchLabels:
+  ##   my-client: "true"
+  #
+  ingressPodMatchLabels: {}
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 persistence:
   ## @param persistence.enabled Enable MongoDB(&reg;) data persistence using PVC
   ##
   enabled: true
+  ## @param persistence.name Name of the PVC and mounted volume
+  ##
+  name: "datadir"
   ## @param persistence.medium Provide a medium for `emptyDir` volumes.
   ## Requires persistence.enabled: false
   ##
@@ -921,6 +1307,7 @@ persistence:
   ##
   existingClaim: ""
   ## @param persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+  ##
   resourcePolicy: ""
   ## @param persistence.storageClass PVC Storage Class for MongoDB(&reg;) data volume
   ## If defined, storageClassName: <storageClass>
@@ -939,6 +1326,9 @@ persistence:
   ## @param persistence.annotations PVC annotations
   ##
   annotations: {}
+  ## @param persistence.labels PVC labels
+  ##
+  labels: {}
   ## @param persistence.mountPath Path to mount the volume at
   ## MongoDB(&reg;) images.
   ##
@@ -963,7 +1353,156 @@ persistence:
     ## @param persistence.volumeClaimTemplates.dataSource Add dataSource to the VolumeClaimTemplate
     ##
     dataSource: {}
-
+## Persistent Volume Claim Retention Policy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+##
+persistentVolumeClaimRetentionPolicy:
+  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for MongoDB(&reg;) Statefulset
+  ##
+  enabled: false
+  ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ##
+  whenScaled: Retain
+  ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  whenDeleted: Retain
+## @section Backup parameters
+## This section implements a trivial logical dump cronjob of the database.
+## This only comes with the consistency guarantees of the dump program.
+## This is not a snapshot based roll forward/backward recovery backup.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
+##
+backup:
+  ## @param backup.enabled Enable the logical dump of the database "regularly"
+  ##
+  enabled: false
+  ## Fine tuning cronjob's config
+  ##
+  cronjob:
+    ## @param backup.cronjob.schedule Set the cronjob parameter schedule
+    ##
+    schedule: "@daily"
+    ## @param backup.cronjob.timeZone Set the cronjob parameter timeZone
+    ##
+    timeZone: ""
+    ## @param backup.cronjob.concurrencyPolicy Set the cronjob parameter concurrencyPolicy
+    ##
+    concurrencyPolicy: Allow
+    ## @param backup.cronjob.failedJobsHistoryLimit Set the cronjob parameter failedJobsHistoryLimit
+    ##
+    failedJobsHistoryLimit: 1
+    ## @param backup.cronjob.successfulJobsHistoryLimit Set the cronjob parameter successfulJobsHistoryLimit
+    ##
+    successfulJobsHistoryLimit: 3
+    ## @param backup.cronjob.startingDeadlineSeconds Set the cronjob parameter startingDeadlineSeconds
+    ##
+    startingDeadlineSeconds: ""
+    ## @param backup.cronjob.ttlSecondsAfterFinished Set the cronjob parameter ttlSecondsAfterFinished
+    ##
+    ttlSecondsAfterFinished: ""
+    ## @param backup.cronjob.restartPolicy Set the cronjob parameter restartPolicy
+    ##
+    restartPolicy: OnFailure
+    ## @param backup.cronjob.backoffLimit Set the cronjob parameter backoffLimit
+    backoffLimit: 6
+    ## backup container's Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param backup.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param backup.cronjob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param backup.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## backup container's resource requests and limits.
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param backup.cronjob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## @param backup.cronjob.command Set backup container's command to run
+    ##
+    command: []
+    ## @param backup.cronjob.labels Set the cronjob labels
+    ##
+    labels: {}
+    ## @param backup.cronjob.annotations Set the cronjob annotations
+    ##
+    annotations: {}
+    ## Backup container's
+    ##
+    storage:
+      ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
+      ## If defined, PVC must be created manually before volume will be bound
+      ##
+      existingClaim: ""
+      ## @param backup.cronjob.storage.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+      ##
+      resourcePolicy: ""
+      ## @param backup.cronjob.storage.storageClass PVC Storage Class for the backup data volume
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ## set, choosing the default provisioner.
+      ##
+      storageClass: ""
+      ## @param backup.cronjob.storage.accessModes PV Access Mode
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param backup.cronjob.storage.size PVC Storage Request for the backup data volume
+      ##
+      size: 8Gi
+      ## @param backup.cronjob.storage.annotations PVC annotations
+      ##
+      annotations: {}
+      ## @param backup.cronjob.storage.mountPath Path to mount the volume at
+      ##
+      mountPath: /backup/mongodb
+      ## @param backup.cronjob.storage.subPath Subdirectory of the volume to mount at
+      ## and one PV for multiple services.
+      ##
+      subPath: ""
+      ## Fine tuning for volumeClaimTemplates
+      ##
+      volumeClaimTemplates:
+        ## @param backup.cronjob.storage.volumeClaimTemplates.selector A label query over volumes to consider for binding (e.g. when using local volumes)
+        ## A label query over volumes to consider for binding (e.g. when using local volumes)
+        ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+        ##
+        selector: {}
 ## @section RBAC parameters
 ##
 
@@ -984,7 +1523,7 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -1040,7 +1579,7 @@ podSecurityPolicy:
   ##    hostNetwork: false
   ##    hostPID: false
   ##    privileged: false
-  ##    readOnlyRootFilesystem: false
+  ##    readOnlyRootFilesystem: true
   ##    requiredDropCapabilities:
   ##      - ALL
   ##    runAsUser:
@@ -1061,7 +1600,6 @@ podSecurityPolicy:
   ##      - 'emptyDir'
   ##      - 'persistentVolumeClaim'
   ##
-
 ## @section Volume Permissions parameters
 ##
 ## Init Container parameters
@@ -1072,19 +1610,20 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r4
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r32
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1095,27 +1634,26 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.securityContext.runAsUser
@@ -1124,19 +1662,22 @@ volumePermissions:
   ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
   ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
   ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false and shmVolume.chmod.enabled=false
+  ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.securityContext.runAsUser User ID for the volumePermissions container
   ##
   securityContext:
+    seLinuxOptions: {}
     runAsUser: 0
-
 ## @section Arbiter parameters
 ##
-
 arbiter:
   ## @param arbiter.enabled Enable deploying the arbiter
   ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
   ##
   enabled: true
+  ## @param arbiter.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param arbiter.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1241,7 +1782,7 @@ arbiter:
   ##
   affinity: {}
   ## @param arbiter.nodeSelector Arbiter Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param arbiter.tolerations Arbiter Tolerations for pod assignment
@@ -1267,11 +1808,15 @@ arbiter:
   ## MongoDB(&reg;) Arbiter pods' Security Context.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param arbiter.podSecurityContext.enabled Enable Arbiter pod(s)' Security Context
+  ## @param arbiter.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param arbiter.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param arbiter.podSecurityContext.fsGroup Group ID for the volumes of the Arbiter pod(s)
   ## @param arbiter.podSecurityContext.sysctls sysctl settings of the Arbiter pod(s)'
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    supplementalGroups: []
     fsGroup: 1001
     ## sysctl settings
     ## Example:
@@ -1282,36 +1827,51 @@ arbiter:
     sysctls: []
   ## MongoDB(&reg;) Arbiter containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param arbiter.containerSecurityContext.enabled Enable Arbiter container(s)' Security Context
-  ## @param arbiter.containerSecurityContext.runAsUser User ID for the Arbiter container
-  ## @param arbiter.containerSecurityContext.runAsNonRoot Set Arbiter containers' Security Context runAsNonRoot
+  ## @param arbiter.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param arbiter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param arbiter.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param arbiter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param arbiter.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param arbiter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param arbiter.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param arbiter.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param arbiter.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MongoDB(&reg;) Arbiter containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param arbiter.resources.limits The resources limits for Arbiter containers
-  ## @param arbiter.resources.requests The requested resources for Arbiter containers
+  ## @param arbiter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if arbiter.resources is set (arbiter.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "small"
+  ## @param arbiter.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param arbiter.containerPorts.mongodb MongoDB(&reg;) arbiter container port
   ##
   containerPorts:
@@ -1418,11 +1978,11 @@ arbiter:
   pdb:
     ## @param arbiter.pdb.create Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)
     ##
-    create: false
+    create: true
     ## @param arbiter.pdb.minAvailable Minimum number/percentage of Arbiter pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param arbiter.pdb.maxUnavailable Maximum number/percentage of Arbiter pods that may be made unavailable
+    minAvailable: ""
+    ## @param arbiter.pdb.maxUnavailable Maximum number/percentage of Arbiter pods that may be made unavailable. Defaults to `1` if both `arbiter.pdb.minAvailable` and `arbiter.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## MongoDB(&reg;) Arbiter service parameters
@@ -1441,15 +2001,22 @@ arbiter:
     ## @param arbiter.service.annotations Provide any additional annotations that may be required
     ##
     annotations: {}
-
+    ## Headless service properties
+    ##
+    headless:
+      ## @param arbiter.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
 ## @section Hidden Node parameters
 ##
-
 hidden:
   ## @param hidden.enabled Enable deploying the hidden nodes
   ##   https://docs.mongodb.com/manual/tutorial/configure-a-hidden-replica-set-member/
   ##
   enabled: false
+  ## @param hidden.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param hidden.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1507,7 +2074,7 @@ hidden:
   ## @param hidden.terminationGracePeriodSeconds Hidden Termination Grace Period
   ##
   terminationGracePeriodSeconds: ""
- ## @param hidden.updateStrategy.type Strategy that will be employed to update Pods in the StatefulSet
+  ## @param hidden.updateStrategy.type Strategy that will be employed to update Pods in the StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## updateStrategy:
   ##  type: RollingUpdate
@@ -1558,7 +2125,7 @@ hidden:
   ##
   affinity: {}
   ## @param hidden.nodeSelector Hidden node Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param hidden.tolerations Hidden node Tolerations for pod assignment
@@ -1584,11 +2151,15 @@ hidden:
   ## MongoDB(&reg;) Hidden pods' Security Context.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param hidden.podSecurityContext.enabled Enable Hidden pod(s)' Security Context
+  ## @param hidden.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param hidden.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param hidden.podSecurityContext.fsGroup Group ID for the volumes of the Hidden pod(s)
   ## @param hidden.podSecurityContext.sysctls sysctl settings of the Hidden pod(s)'
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    supplementalGroups: []
     fsGroup: 1001
     ## sysctl settings
     ## Example:
@@ -1599,37 +2170,53 @@ hidden:
     sysctls: []
   ## MongoDB(&reg;) Hidden containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param hidden.containerSecurityContext.enabled Enable Hidden container(s)' Security Context
-  ## @param hidden.containerSecurityContext.runAsUser User ID for the Hidden container
-  ## @param hidden.containerSecurityContext.runAsNonRoot Set Hidden containers' Security Context runAsNonRoot
+  ## @param hidden.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param hidden.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param hidden.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param hidden.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param hidden.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param hidden.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param hidden.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param hidden.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param hidden.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param hidden.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MongoDB(&reg;) Hidden containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param hidden.resources.limits The resources limits for hidden node containers
-  ## @param hidden.resources.requests The requested resources for hidden node containers
+  ## @param hidden.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if hidden.resources is set (hidden.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "micro"
+  ## @param hidden.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param hidden.containerPorts.mongodb MongoDB(&reg;) hidden container port
+  ##
   containerPorts:
     mongodb: 27017
   ## MongoDB(&reg;) Hidden pods' liveness probe. Evaluated as a template.
@@ -1735,15 +2322,15 @@ hidden:
   pdb:
     ## @param hidden.pdb.create Enable/disable a Pod Disruption Budget creation for hidden node pod(s)
     ##
-    create: false
+    create: true
     ## @param hidden.pdb.minAvailable Minimum number/percentage of hidden node pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param hidden.pdb.maxUnavailable Maximum number/percentage of hidden node pods that may be made unavailable
+    minAvailable: ""
+    ## @param hidden.pdb.maxUnavailable Maximum number/percentage of hidden node pods that may be made unavailable. Defaults to `1` if both `hidden.pdb.minAvailable` and `hidden.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param hidden.persistence.enabled Enable hidden node data persistence using PVC
@@ -1793,6 +2380,9 @@ hidden:
       ##
       dataSource: {}
   service:
+    ## @param hidden.service.nameOverride The hidden service name
+    ##
+    nameOverride: ""
     ## @param hidden.service.portName MongoDB(&reg;) service port name
     ##
     portName: "mongodb"
@@ -1806,26 +2396,32 @@ hidden:
     ## @param hidden.service.annotations Provide any additional annotations that may be required
     ##
     annotations: {}
-
+    ## Headless service properties
+    ##
+    headless:
+      ## @param hidden.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
 ## @section Metrics parameters
 ##
-
 metrics:
   ## @param metrics.enabled Enable using a sidecar Prometheus exporter
   ##
   enabled: false
   ## Bitnami MongoDB(&reg;) Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/mongodb-exporter/tags/
-  ## @param metrics.image.registry MongoDB(&reg;) Prometheus exporter image registry
-  ## @param metrics.image.repository MongoDB(&reg;) Prometheus exporter image repository
-  ## @param metrics.image.tag MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] MongoDB(&reg;) Prometheus exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/mongodb-exporter] MongoDB(&reg;) Prometheus exporter image repository
+  ## @skip metrics.image.tag MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy MongoDB(&reg;) Prometheus exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.32.0-debian-11-r5
+    tag: 0.41.2-debian-12-r1
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1835,15 +2431,40 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param metrics.username String with username for the metrics exporter
   ## If undefined the root user will be used for the metrics exporter
+  ##
   username: ""
   ## @param metrics.password String with password for the metrics exporter
   ## If undefined but metrics.username is defined, a random password will be generated
+  ##
   password: ""
+  ## @param metrics.compatibleMode Enables old style mongodb-exporter metrics
+  compatibleMode: true
+  collector:
+    ## @param metrics.collector.all Enable all collectors. Same as enabling all individual metrics
+    ## Enabling all metrics will cause significant CPU load on mongod
+    all: false
+    ## @param metrics.collector.diagnosticdata Boolean Enable collecting metrics from getDiagnosticData
+    diagnosticdata: true
+    ## @param metrics.collector.replicasetstatus Boolean Enable collecting metrics from replSetGetStatus
+    replicasetstatus: true
+    ## @param metrics.collector.dbstats Boolean Enable collecting metrics from dbStats
+    dbstats: false
+    ## @param metrics.collector.topmetrics Boolean Enable collecting metrics from top admin command
+    topmetrics: false
+    ## @param metrics.collector.indexstats Boolean Enable collecting metrics from $indexStats
+    indexstats: false
+    ## @param metrics.collector.collstats Boolean Enable collecting metrics from $collStats
+    collstats: false
+    ## @param metrics.collector.collstatsColls List of \<databases\>.\<collections\> to get $collStats
+    collstatsColls: []
+    ## @param metrics.collector.indexstatsColls List - List of \<databases\>.\<collections\> to get $indexStats
+    indexstatsColls: []
+    ## @param metrics.collector.collstatsLimit Number - Disable collstats, dbstats, topmetrics and indexstats collector if there are more than \<n\> collections. 0=No limit
+    collstatsLimit: 0
   ## @param metrics.extraFlags String with extra flags to the metrics exporter
-  ## ref: https://github.com/percona/mongodb_exporter/blob/master/mongodb_exporter.go
+  ## ref: https://github.com/percona/mongodb_exporter/blob/main/main.go
   ##
   extraFlags: ""
   ## Command and args for running the container (set to default if not set). Use array form
@@ -1853,27 +2474,26 @@ metrics:
   command: []
   args: []
   ## Metrics exporter container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param metrics.resources.limits The resources limits for Prometheus exporter containers
-  ## @param metrics.resources.requests The requested resources for Prometheus exporter containers
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param metrics.containerPort Port of the Prometheus metrics container
   ##
   containerPort: 9216
@@ -1910,7 +2530,7 @@ metrics:
     enabled: true
     initialDelaySeconds: 15
     periodSeconds: 5
-    timeoutSeconds: 5
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## Metrics exporter readiness probe
@@ -1926,7 +2546,7 @@ metrics:
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 5
-    timeoutSeconds: 1
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## Slow starting containers can be protected through startup probes
@@ -1958,6 +2578,14 @@ metrics:
   ## Ignored when startupProbe.enabled=true
   ##
   customStartupProbe: {}
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metrics container(s)
+  ## Examples:
+  ## extraVolumeMounts:
+  ##   - name: extras
+  ##     mountPath: /usr/share/extras
+  ##     readOnly: true
+  ##
+  extraVolumeMounts: []
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md
@@ -1988,7 +2616,7 @@ metrics:
     ##
     labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint

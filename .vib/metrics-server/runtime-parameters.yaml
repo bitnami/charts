@@ -1,0 +1,17 @@
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+extraArgs:
+- --authorization-always-allow-paths=/metrics
+- --kubelet-insecure-tls=true
+containerPorts:
+  https: 8444
+service:
+  type: LoadBalancer
+  ports:
+    https: 443
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+rbac:
+  create: true

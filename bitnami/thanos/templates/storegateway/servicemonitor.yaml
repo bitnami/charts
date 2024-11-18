@@ -1,17 +1,17 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.storegateway.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "common.names.fullname" . }}-storegateway
+  name: {{ include "thanos.storegateway.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.metrics.serviceMonitor.labels }}
-    {{- toYaml .Values.metrics.serviceMonitor.labels | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -33,13 +33,17 @@ spec:
       {{- if .Values.metrics.serviceMonitor.relabelings }}
       relabelings: {{ toYaml .Values.metrics.serviceMonitor.relabelings | nindent 8 }}
       {{- end }}
+      {{- if .Values.https.enabled }}
+      scheme: https
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.extraParameters }}
+      {{- toYaml .Values.metrics.serviceMonitor.extraParameters | nindent 6 }}
+      {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace | quote }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: storegateway
-      {{- if .Values.metrics.serviceMonitor.selector }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
-      {{- end }}
+      {{- include "thanos.servicemonitor.selector" . | nindent 6 -}}
 {{- end }}

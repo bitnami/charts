@@ -1,13 +1,15 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: solr
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -30,7 +32,8 @@ data:
             -srcstoretype PKCS12 \
             -srcstorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
             -deststorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
-            -destkeystore "/opt/bitnami/solr/certs/keystore.p12"
+            -destkeystore "/opt/bitnami/solr/certs/keystore.p12" \
+            -noprompt
         rm "/tmp/keystore.p12"
         keytool -import -file "/certs/ca.crt" -keystore "/opt/bitnami/solr/certs/truststore.p12" -storepass "${SOLR_SSL_TRUST_STORE_PASSWORD}" -noprompt
     else
@@ -46,5 +49,5 @@ data:
     fi
     {{- end }}
     # Use hostname instead of IP to register in ZooKeeper
-    export SOLR_HOST="${MY_POD_NAME}.{{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    export SOLR_HOST="${MY_POD_NAME}.{{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
     /opt/bitnami/scripts/solr/entrypoint.sh /opt/bitnami/scripts/solr/run.sh

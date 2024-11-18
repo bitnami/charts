@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/cassandra"
         },
-        "runtime_parameters": "ImRiVXNlciI6CiAgInBhc3N3b3JkIjogIjBQVzFmbFlMIgogICJ1c2VyIjogImNhc3NhbmRyYSIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiY3FsIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,16 +31,39 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "cassandra/goss/goss.yaml",
+            "vars_file": "cassandra/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "sts-cassandra"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "ginkgo",
           "params": {
-            "endpoint": "lb-cassandra-cql"
+            "resources": {
+              "path": "/.vib/cassandra/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "cassandra",
+              "username": "test_cassandra",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

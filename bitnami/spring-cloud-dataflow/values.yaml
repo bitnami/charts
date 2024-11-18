@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -5,7 +8,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -14,14 +17,22 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
-
+  defaultStorageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
-## @param nameOverride String to partially override scdf.fullname template (will maintain the release name).
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name).
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override scdf.fullname template.
+## @param fullnameOverride String to fully override common.names.fullname template.
 ##
 fullnameOverride: ""
 ## @param commonAnnotations Annotations to add to all deployed objects
@@ -39,7 +50,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section Dataflow Server parameters
 
 ## Spring Cloud Dataflow Server parameters.
@@ -47,9 +57,10 @@ extraDeploy: []
 server:
   ## Bitnami Spring Cloud Dataflow Server image
   ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
-  ## @param server.image.registry Spring Cloud Dataflow image registry
-  ## @param server.image.repository Spring Cloud Dataflow image repository
-  ## @param server.image.tag Spring Cloud Dataflow image tag (immutable tags are recommended)
+  ## @param server.image.registry [default: REGISTRY_NAME] Spring Cloud Dataflow image registry
+  ## @param server.image.repository [default: REPOSITORY_NAME/spring-cloud-dataflow] Spring Cloud Dataflow image repository
+  ## @skip server.image.tag Spring Cloud Dataflow image tag (immutable tags are recommended)
+  ## @param server.image.digest Spring Cloud Dataflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy Spring Cloud Dataflow image pull policy
   ## @param server.image.pullSecrets Specify docker-registry secret names as an array
   ## @param server.image.debug Enable image debug mode
@@ -57,9 +68,9 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.9.4-debian-11-r3
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    tag: 2.11.5-debian-12-r2
+    digest: ""
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -73,6 +84,9 @@ server:
     ## Set to true if you would like to see extra information on logs
     ##
     debug: false
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -80,14 +94,16 @@ server:
   composedTaskRunner:
     ## Bitnami Spring Cloud Dataflow Composed Task Runner image
     ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
-    ## @param server.composedTaskRunner.image.registry Spring Cloud Dataflow Composed Task Runner image registry
-    ## @param server.composedTaskRunner.image.repository Spring Cloud Dataflow Composed Task Runner image repository
-    ## @param server.composedTaskRunner.image.tag Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)
+    ## @param server.composedTaskRunner.image.registry [default: REGISTRY_NAME] Spring Cloud Dataflow Composed Task Runner image registry
+    ## @param server.composedTaskRunner.image.repository [default: REPOSITORY_NAME/spring-cloud-dataflow-composed-task-runner] Spring Cloud Dataflow Composed Task Runner image repository
+    ## @skip server.composedTaskRunner.image.tag Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)
+    ## @param server.composedTaskRunner.image.digest Spring Cloud Dataflow Composed Task Runner image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ##
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.9.4-debian-11-r3
+      tag: 2.11.5-debian-12-r2
+      digest: ""
   ## Spring Cloud Dataflow Server configuration parameters
   ##
   configuration:
@@ -111,9 +127,6 @@ server:
     ##     authorization-type: dockeroauth2
     ##
     containerRegistries: {}
-    ## @param server.configuration.grafanaInfo Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)
-    ##
-    grafanaInfo: ""
     ## @param server.configuration.metricsDashboard Endpoint to the metricsDashboard instance
     ##
     metricsDashboard: ""
@@ -135,6 +148,12 @@ server:
   ##  parameters are ignored,
   ##
   existingConfigmap: ""
+  ## @param server.containerPorts.http Container HTTP port
+  ## @param server.containerPorts.jdwp Container JDWP port
+  ##
+  containerPorts:
+    http: 8080
+    jdwp: 5005
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -168,9 +187,6 @@ server:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## @param server.containerPort Dataflow server port
-  ##
-  containerPort: 8080
   ## Dataflow Server node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -196,7 +212,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Dataflow server node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Dataflow server tolerations for pod assignment
@@ -238,39 +254,64 @@ server:
   ## Dataflow Server pods' Security Context.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled Dataflow Server pods' Security Context
+  ## @param server.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param server.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param server.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param server.podSecurityContext.fsGroup Group ID for the volumes of the pod
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Dataflow Server containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param server.containerSecurityContext.enabled Enabled Dataflow Server containers' Security Context
-  ## @param server.containerSecurityContext.runAsUser Set Dataflow Server container's Security Context runAsUser
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Dataflow Server containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param server.resources.limits The resources limits for the Dataflow server container
-  ## @param server.resources.requests The requested resources for the Dataflow server container
+  ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "small"
+  ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Dataflow Server pods' startup probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param server.startupProbe.enabled Enable startupProbe
@@ -328,15 +369,74 @@ server:
   ## @param server.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param server.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param server.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param server.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param server.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param server.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param server.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param server.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Dataflow Server Service parameters.
   ##
   service:
     ## @param server.service.type Kubernetes service type
     ##
     type: ClusterIP
-    ## @param server.service.port Service HTTP port
+    ## @param server.service.ports.http Server HTTP port
     ##
-    port: 8080
+    ports:
+      http: 8080
     ## @param server.service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -384,7 +484,7 @@ server:
     ## @param server.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param server.ingress.path The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.
+    ## @param server.ingress.path The Path to Spring Cloud Dataflow. You may need to set this to '/*' in order to use this with ALB ingress controllers.
     ##
     path: /
     ## @param server.ingress.apiVersion Force Ingress API version (automatically detected if not set)
@@ -393,16 +493,12 @@ server:
     ## @param server.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param server.ingress.hostname Default host for the ingress resource
     ##
     hostname: dataflow.local
     ## @param server.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -448,15 +544,26 @@ server:
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
     ##
-    ## name should line up with a tlsSecret set further up
+    ## name should line up with a tlsSecret set further up:
+    ## e.g:
+    ## secrets:
+    ##   - name: dataflow.local-tls
+    ##     key: |
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##     certificate: |
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##
     ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
     ##
     ## It is also possible to create and manage the certificates outside of this helm chart
-    ## Please see README.md for more information
+    ## In this case specify only the name of existing secret without entries for container and key:
     ## e.g:
-    ## - name: dataflow.local-tls
-    ##   key:
-    ##   certificate:
+    ## secrets:
+    ##   - name: dataflow.local-tls
+    ##
+    ## Please see README.md for more information
     ##
     secrets: []
     ## @param server.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
@@ -471,7 +578,7 @@ server:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -506,11 +613,11 @@ server:
   pdb:
     ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
     ##
-    create: false
+    create: true
     ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    minAvailable: ""
+    ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Dataflow Server Autoscaling parameters.
@@ -562,7 +669,13 @@ server:
   ## @param server.applicationProperties Specify common application properties added by SCDF server to streams and/or tasks
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#spring-cloud-dataflow-global-properties
   applicationProperties: {}
-
+  security:
+    ## @param server.security.authorization Authorization customization
+    ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-customizing-authorization
+    authorization: {}
+    ## @param server.security.oauth2 OAuth 2.0 authentication configuration
+    ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-oauth2
+    oauth2: {}
 ## @section Dataflow Skipper parameters
 
 ## Spring Cloud Skipper parameters.
@@ -572,15 +685,19 @@ skipper:
   ## Note: it'll be also enabled if streams are enabled in Dataflow server configuration.
   ##
   enabled: true
+  ## @param skipper.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param skipper.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
   ## Bitnami Spring Cloud Skipper image
   ## ref: https://hub.docker.com/r/bitnami/spring-cloud-skipper/tags/
-  ## @param skipper.image.registry Spring Cloud Skipper image registry
-  ## @param skipper.image.repository Spring Cloud Skipper image repository
-  ## @param skipper.image.tag Spring Cloud Skipper image tag (immutable tags are recommended)
+  ## @param skipper.image.registry [default: REGISTRY_NAME] Spring Cloud Skipper image registry
+  ## @param skipper.image.repository [default: REPOSITORY_NAME/spring-cloud-skipper] Spring Cloud Skipper image repository
+  ## @skip skipper.image.tag Spring Cloud Skipper image tag (immutable tags are recommended)
+  ## @param skipper.image.digest Spring Cloud Skipper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param skipper.image.pullPolicy Spring Cloud Skipper image pull policy
   ## @param skipper.image.pullSecrets Specify docker-registry secret names as an array
   ## @param skipper.image.debug Enable image debug mode
@@ -588,9 +705,9 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.8.4-debian-11-r3
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    tag: 2.11.5-debian-12-r2
+    digest: ""
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -618,6 +735,12 @@ skipper:
   ##  parameters are ignored,
   ##
   existingConfigmap: ""
+  ## @param skipper.containerPorts.http Container HTTP port
+  ## @param skipper.containerPorts.jdwp Container JDWP port
+  ##
+  containerPorts:
+    http: 7577
+    jdwp: 5005
   ## @param skipper.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -676,7 +799,7 @@ skipper:
   ##
   affinity: {}
   ## @param skipper.nodeSelector Skipper node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param skipper.tolerations Skipper tolerations for pod assignment
@@ -718,39 +841,64 @@ skipper:
   ## Skipper pods' Security Context.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param skipper.podSecurityContext.enabled Enabled Skipper pods' Security Context
+  ## @param skipper.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param skipper.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param skipper.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param skipper.podSecurityContext.fsGroup Group ID for the volumes of the pod
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Skipper containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param skipper.containerSecurityContext.enabled Enabled Datafkiw Skipper containers' Security Context
-  ## @param skipper.containerSecurityContext.runAsUser Set Dataflow Skipper container's Security Context runAsUser
+  ## @param skipper.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param skipper.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param skipper.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param skipper.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param skipper.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param skipper.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param skipper.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param skipper.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param skipper.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param skipper.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Skipper containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param skipper.resources.limits The resources limits for the Skipper server container
-  ## @param skipper.resources.requests The requested resources for the Skipper server container
+  ## @param skipper.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if skipper.resources is set (skipper.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "small"
+  ## @param skipper.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param skipper.startupProbe.enabled Enable startupProbe
@@ -808,15 +956,74 @@ skipper:
   ## @param skipper.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param skipper.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param skipper.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param skipper.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param skipper.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param skipper.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param skipper.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param skipper.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param skipper.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Skipper Service parameters.
   ##
   service:
     ## @param skipper.service.type Kubernetes service type
     ##
     type: ClusterIP
-    ## @param skipper.service.port Service HTTP port
+    ## @param skipper.service.ports.http Skipper HTTP port
     ##
-    port: 80
+    ports:
+      http: 80
     ## @param skipper.service.nodePort Service HTTP node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -886,11 +1093,11 @@ skipper:
   pdb:
     ## @param skipper.pdb.create Enable/disable a Pod Disruption Budget creation
     ##
-    create: false
+    create: true
     ## @param skipper.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param skipper.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    minAvailable: ""
+    ## @param skipper.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `skipper.pdb.minAvailable` and `skipper.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Skipper Autoscaling parameters.
@@ -940,26 +1147,28 @@ externalSkipper:
   ## @param externalSkipper.port External Skipper Server port number
   ##
   port: 7577
-
 ## @section Deployer parameters
 
 ## Spring Cloud Deployer for Kubernetes parameters.
 ##
 deployer:
   ## Streaming applications resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param deployer.resources.limits [object] Streaming applications resource limits
-  ## @param deployer.resources.requests Streaming applications resource requests
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param deployer.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if deployer.resources is set (deployer.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits:
-      cpu: 500m
-      memory: 1024Mi
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "small"
+  ## @param deployer.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param deployer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -981,10 +1190,10 @@ deployer:
   tolerations: []
   ## @param deployer.volumeMounts Streaming applications extra volume mounts
   ##
-  volumeMounts: {}
+  volumeMounts: []
   ## @param deployer.volumes Streaming applications extra volumes
   ##
-  volumes: {}
+  volumes: []
   ## @param deployer.environmentVariables Streaming applications environment variables
   ## RabbitMQ/Kafka envs.
   ## Example:
@@ -998,9 +1207,11 @@ deployer:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param deployer.podSecurityContext.enabled Enabled pods' Security Context of the deployed pods batch or stream pods
   ## @param deployer.podSecurityContext.runAsUser Set Dataflow Streams container's Security Context runAsUser
+  ## @param deployer.podSecurityContext.fsGroup Set Dataflow Streams container's Security Context fsGroup
   podSecurityContext:
     enabled: true
     runAsUser: 1001
+    fsGroup: 1001
   ## @param deployer.imagePullSecrets Streaming applications imagePullSecrets
   ##
   imagePullSecrets: []
@@ -1013,20 +1224,22 @@ deployer:
   ## @param deployer.imagePullPolicy An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_image_pull_policy
   imagePullPolicy: IfNotPresent
-
+  ## @param deployer.taskServiceAccountName Custom service account for scheduled tasks
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_service_account
+  taskServiceAccountName: ""
 ## @section RBAC parameters
 
 ## K8s Service Account.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ## @param serviceAccount.create Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods
-## @param serviceAccount.name Name of the created serviceAccount. If not set and create is true, a name is generated using the scdf.fullname template
+## @param serviceAccount.name Name of the created serviceAccount. If not set and create is true, a name is generated using the common.names.fullname template
 ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
 ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
 serviceAccount:
   create: true
   name: ""
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   annotations: {}
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -1037,7 +1250,6 @@ rbac:
   ## that allows pods querying the K8s API
   ##
   create: true
-
 ## @section Metrics parameters
 
 ## Prometheus metrics
@@ -1048,18 +1260,19 @@ metrics:
   enabled: false
   ## Bitnami Prometheus Rsocket Proxy image
   ## ref: https://hub.docker.com/r/bitnami/prometheus-rsocket-proxy/tags/
-  ## @param metrics.image.registry Prometheus Rsocket Proxy image registry
-  ## @param metrics.image.repository Prometheus Rsocket Proxy image repository
-  ## @param metrics.image.tag Prometheus Rsocket Proxy image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Prometheus Rsocket Proxy image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/prometheus-rsocket-proxy] Prometheus Rsocket Proxy image repository
+  ## @skip metrics.image.tag Prometheus Rsocket Proxy image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Prometheus Rsocket Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Prometheus Rsocket Proxy image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.4.0-debian-11-r3
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    tag: 1.5.3-debian-12-r31
+    digest: ""
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1071,25 +1284,26 @@ metrics:
     ##
     pullSecrets: []
   ## Prometheus Rsocket Proxy containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param metrics.resources.limits The resources limits for the Prometheus Rsocket Proxy container
-  ## @param metrics.resources.requests The requested resources for the Prometheus Rsocket Proxy container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "nano"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param metrics.replicaCount Number of Prometheus Rsocket Proxy replicas to deploy
   ##
   replicaCount: 1
@@ -1126,9 +1340,12 @@ metrics:
   ##
   affinity: {}
   ## @param metrics.nodeSelector Prometheus Rsocket Proxy node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
+  ## @param metrics.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param metrics.hostAliases Prometheus Proxy pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1148,19 +1365,43 @@ metrics:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.podSecurityContext.enabled Enabled Prometheus Proxy pods' Security Context
+  ## @param metrics.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param metrics.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param metrics.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param metrics.podSecurityContext.fsGroup Set Prometheus Proxy pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metrics.containerSecurityContext.enabled Enabled Prometheus Proxy containers' Security Context
-  ## @param metrics.containerSecurityContext.runAsUser Set Prometheus Proxy containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param metrics.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1196,6 +1437,59 @@ metrics:
   containerPorts:
     http: 8080
     rsocket: 7001
+  ## Configure extra options for Prometheus Proxy containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.startupProbe.enabled Enable startupProbe on Prometheus Proxy nodes
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on Prometheus Proxy nodes
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on Prometheus Proxy nodes
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
   ## @param metrics.sidecars Add additional sidecar containers to the Prometheus Proxy pod(s)
   ## e.g:
   ## sidecars:
@@ -1241,6 +1535,61 @@ metrics:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param metrics.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param metrics.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param metrics.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param metrics.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param metrics.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param metrics.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param metrics.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Prometheus Proxy service parameters
   ##
   service:
@@ -1333,7 +1682,7 @@ metrics:
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     ## selector:
     ##   prometheus: my-prometheus
@@ -1351,11 +1700,11 @@ metrics:
   pdb:
     ## @param metrics.pdb.create Enable/disable a Pod Disruption Budget creation
     ##
-    create: false
+    create: true
     ## @param metrics.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param metrics.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    minAvailable: ""
+    ## @param metrics.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `metrics.pdb.minAvailable` and `metrics.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Prometheus Rsocket Proxy Autoscaling parameters.
@@ -1371,7 +1720,6 @@ metrics:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
-
 ## @section Init Container parameters
 
 ## Init containers parameters:
@@ -1381,19 +1729,20 @@ waitForBackends:
   ## @param waitForBackends.enabled Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming
   ##
   enabled: true
-  ## @param waitForBackends.image.registry Init container wait-for-backend image registry
-  ## @param waitForBackends.image.repository Init container wait-for-backend image name
-  ## @param waitForBackends.image.tag Init container wait-for-backend image tag
+  ## @param waitForBackends.image.registry [default: REGISTRY_NAME] Init container wait-for-backend image registry
+  ## @param waitForBackends.image.repository [default: REPOSITORY_NAME/kubectl] Init container wait-for-backend image name
+  ## @skip waitForBackends.image.tag Init container wait-for-backend image tag
+  ## @param waitForBackends.image.digest Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param waitForBackends.image.pullPolicy Init container wait-for-backend image pull policy
   ## @param waitForBackends.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.24.1-debian-11-r3
+    tag: 1.31.2-debian-12-r3
+    digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1403,36 +1752,76 @@ waitForBackends:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## waitForBackends containers' Security Context (init container).
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param waitForBackends.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param waitForBackends.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param waitForBackends.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param waitForBackends.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param waitForBackends.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param waitForBackends.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param waitForBackends.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param waitForBackends.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param waitForBackends.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param waitForBackends.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Init container resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param waitForBackends.resources.limits Init container wait-for-backend resource limits
-  ## @param waitForBackends.resources.requests Init container wait-for-backend resource requests
+  ## @param waitForBackends.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if waitForBackends.resources is set (waitForBackends.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
-
+  resourcesPreset: "nano"
+  ## @param waitForBackends.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Database parameters
 
 ## MariaDB chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
   ## @param mariadb.enabled Enable/disable MariaDB chart installation
   ##
   enabled: true
+  jdbcParameter:
+    ## @param mariadb.jdbcParameter.useMysqlMetadata Use MariaDB useMysqlMetadata parameter.
+    useMysqlMetadata: true
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
+  ## @param mariadb.image.registry [default: REGISTRY_NAME] MariaDB image registry
+  ## @param mariadb.image.repository [default: REPOSITORY_NAME/mariadb] MariaDB image repository
+  ## @skip mariadb.image.tag MariaDB image tag (immutable tags are recommended)
+  ## @param mariadb.image.digest MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/mariadb
+    tag: 10.11.9-debian-12-r3
+    digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
@@ -1440,18 +1829,18 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.username Username of new user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     username: dataflow
     ## @param mariadb.auth.password Password for the new user
     ##
     password: change-me
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#creating-a-database-on-first-run
     ##
     database: dataflow
     ## @param mariadb.auth.forcePassword Force users to specify required passwords in the database
@@ -1471,6 +1860,28 @@ mariadb:
       CREATE DATABASE IF NOT EXISTS `skipper`;
       GRANT ALL ON skipper.* to 'skipper'@'%';
       FLUSH PRIVILEGES;
+  primary:
+    ## MariaDB primary container's resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param mariadb.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param mariadb.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## Flyway Configuration
 ## @param flyway.enabled Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup
 ## All database creation scripts are ignored on startup when flyway.enabled is set to false
@@ -1494,54 +1905,65 @@ externalDatabase:
   ## @param externalDatabase.scheme The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL
   ##
   scheme: ""
-  ## @param externalDatabase.password Password for the above username
+  ## @param externalDatabase.hibernateDialect Hibernate Dialect used by Dataflow/Skipper servers
+  ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
-  password: ""
-  ## @param externalDatabase.existingPasswordSecret Existing secret with database password
-  ##
-  existingPasswordSecret: ""
-  ## @param externalDatabase.existingPasswordKey Key of the existing secret with database password, defaults to `datasource-password`
-  ##
-  existingPasswordKey: ""
+  hibernateDialect: ""
   ## Data Flow user and database
   ##
   dataflow:
-    ## @param externalDatabase.dataflow.url JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters.
+    ## @param externalDatabase.dataflow.url JDBC URL for dataflow server. Overrides external scheme, host, port, password, and dataflow.database parameters.
     ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
-    ## individual attributes (scheme, host, port, database)
+    ## individual attributes (scheme, host, port, dataflow.database)
+    ## Ensure you don't include userspec in the URL and use the username and password fields instead
     ##
     url: ""
-    ## @param externalDatabase.dataflow.database Name of the existing database to be used by Dataflow server
+    ## @param externalDatabase.dataflow.database Name of the existing database to be used by Dataflow server. Ignored if url is provided
     ##
     database: dataflow
     ## @param externalDatabase.dataflow.username Existing username in the external db to be used by Dataflow server
     ##
     username: dataflow
+    ## @param externalDatabase.dataflow.password Password for the above username. Ignored if existing secret is provided
+    ##
+    password: ""
+    ## @param externalDatabase.dataflow.existingSecret Name of the existing secret containing database credentials for Dataflow server
+    ##
+    existingSecret: ""
+    ## @param externalDatabase.dataflow.existingSecretPasswordKey Key of the above existing secret with database password, defaults to `datasource-password`
+    ##
+    existingSecretPasswordKey: ""
   ## Skipper and database
   ##
   skipper:
-    ## @param externalDatabase.skipper.url JDBC URL for skipper. Overrides external scheme, host, port, database, and jdbc parameters.
+    ## @param externalDatabase.skipper.url JDBC URL for skipper. Overrides external scheme, host, port, database, and skipper.database parameters.
     ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
-    ## individual attributes (scheme, host, port, database)
+    ## individual attributes (scheme, host, port, skipper.database)
+    ## Ensure you don't include userspec in the URL and use the username and password fields instead
     ##
     url: ""
-    ## @param externalDatabase.skipper.database Name of the existing database to be used by Skipper server
+    ## @param externalDatabase.skipper.database Name of the existing database to be used by Skipper server. Ignored if url is provided
     ##
     database: skipper
     ## @param externalDatabase.skipper.username Existing username in the external db to be used by Skipper server
     ##
     username: skipper
-  ## @param externalDatabase.hibernateDialect Hibernate Dialect used by Dataflow/Skipper servers
-  ## e.g: org.hibernate.dialect.MariaDB102Dialect
-  ##
-  hibernateDialect: ""
+    ## @param externalDatabase.skipper.password Password for the above username. Ignored if existing secret is provided
+    ##
+    password: ""
+    ## @param externalDatabase.skipper.existingSecret Name of the existing secret containing database credentials for Skipper server
+    ##
+    existingSecret: ""
+    ## @param externalDatabase.skipper.existingSecretPasswordKey Key of the above existing secret with database password, defaults to `datasource-password`
+    ##
+    existingSecretPasswordKey: ""
 
 ## @section RabbitMQ chart parameters
 
 ## RabbitMQ chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/rabbitmq/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/rabbitmq/values.yaml
 ##
 rabbitmq:
   ## @param rabbitmq.enabled Enable/disable RabbitMQ chart installation
@@ -1551,6 +1973,27 @@ rabbitmq:
   ##
   auth:
     username: user
+  ## RabbitMQ containers' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param rabbitmq.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param rabbitmq.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## External RabbitMQ Configuration
 ## All of these values are ignored when rabbitmq.enabled is set to true
 ##
@@ -1575,31 +2018,46 @@ externalRabbitmq:
   ## vhost: /
   ##
   vhost: ""
-  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password. It will be saved in a kubernetes secret
+  ## @param externalRabbitmq.existingSecret Name of the existing secret containing RabbitMQ credentials
   ##
-  existingPasswordSecret: ""
-
+  existingSecret: ""
+  ## @param externalRabbitmq.existingSecretPasswordKey Key of the above existing secret with RabbitMQ password, defaults to `password`
+  ##
+  existingSecretPasswordKey: ""
 ## @section Kafka chart parameters
 
 ## Kafka chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/kafka/values.yaml
 ##
 kafka:
   ## @param kafka.enabled Enable/disable Kafka chart installation
   ##
   enabled: false
-  ## @param kafka.replicaCount Number of Kafka brokers
+  ## @param kafka.controller.replicaCount Number of Kafka controller+brokers nodes
   ##
-  replicaCount: 1
-  ## @param kafka.offsetsTopicReplicationFactor Kafka Secret Key
-  ##
-  offsetsTopicReplicationFactor: 1
-  ## Zookeeper chart configuration
-  ## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
-  ## @param kafka.zookeeper.replicaCount Number of Zookeeper replicas
-  ##
-  zookeeper:
+  controller:
     replicaCount: 1
+    ## Kafka resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param kafka.controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "small"
+    ## @param kafka.controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+  ## @param kafka.extraConfig Kafka extra configuration to be appended to dynamic settings
+  ##
+  extraConfig: |-
+    offsets.topic.replication.factor=1
 ## External Kafka Configuration
 ## All of these values are ignored when kafka.enabled is set to true
 ##

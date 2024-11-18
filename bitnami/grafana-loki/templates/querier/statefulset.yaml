@@ -1,15 +1,17 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "grafana-loki.querier.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: querier
     loki-gossip-member: "true"
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -19,8 +21,9 @@ spec:
   updateStrategy: {{- toYaml .Values.querier.updateStrategy | nindent 4 }}
   {{- end }}
   podManagementPolicy: {{ .Values.querier.podManagementPolicy }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.querier.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
       app.kubernetes.io/component: querier
       loki-gossip-member: "true"
@@ -32,16 +35,14 @@ spec:
         {{- if .Values.querier.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.querier.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: grafana-loki
         app.kubernetes.io/component: querier
         loki-gossip-member: "true"
-        {{- if .Values.querier.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.querier.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-loki.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.querier.automountServiceAccountToken }}
       {{- if .Values.querier.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.querier.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -49,8 +50,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.querier.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.querier.podAffinityPreset "component" "querier" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.querier.podAntiAffinityPreset "component" "querier" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.querier.podAffinityPreset "component" "querier" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.querier.podAntiAffinityPreset "component" "querier" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.querier.nodeAffinityPreset.type "key" .Values.querier.nodeAffinityPreset.key "values" .Values.querier.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.querier.nodeSelector }}
@@ -69,8 +70,9 @@ spec:
       schedulerName: {{ .Values.querier.schedulerName }}
       {{- end }}
       {{- if .Values.querier.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.querier.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.querier.enableServiceLinks }}
       initContainers:
         {{- if .Values.querier.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.querier.initContainers "context" $) | nindent 8 }}
@@ -94,18 +96,23 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.loki.dataDir }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
       containers:
         - name: grafana-loki-querier
           image: {{ template "grafana-loki.image" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           {{- if .Values.querier.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.querier.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -120,6 +127,12 @@ spec:
           args:
             - -target=querier
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+            {{- if .Values.queryScheduler.enabled }}
+            - -querier.scheduler-address={{ template "grafana-loki.query-scheduler.fullname" . }}:{{ .Values.queryScheduler.service.ports.grpc }}
+            {{- end }}
+          {{- if .Values.querier.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.querier.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraEnvVars "context" $) | nindent 12 }}
@@ -141,35 +154,41 @@ spec:
             - containerPort: {{ .Values.loki.containerPorts.grpc }}
               name: grpc
           {{- if .Values.querier.resources }}
-          resources: {{- toYaml .Values.querier.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.querier.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.querier.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.querier.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.querier.livenessProbe.enabled }}
+          {{- if .Values.querier.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.querier.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.querier.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.querier.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: http
-          {{- else if .Values.querier.customReadinessProbe }}
+          {{- if .Values.querier.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.querier.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
           {{- end }}
-          {{- if .Values.querier.startupProbe.enabled }}
+          {{- if .Values.querier.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.querier.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.querier.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.querier.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.querier.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: loki-config
               mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
@@ -182,6 +201,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.querier.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: loki-config
           configMap:
             name: {{ template "grafana-loki.loki.configmapName" . }}
@@ -193,18 +214,17 @@ spec:
           emptyDir: {}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
-        annotations:
-          {{- if .Values.querier.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.querier.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
+        {{- if or .Values.querier.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.querier.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.querier.persistence.accessModes }}

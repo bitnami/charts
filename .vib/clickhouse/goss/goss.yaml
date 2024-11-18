@@ -1,0 +1,50 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /opt/bitnami/clickhouse/etc/conf.d/00_default_overrides.xml:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contents:
+      - "zookeeper"
+      - "remote_servers"
+      - "logger"
+  /bitnami/clickhouse/data:
+    mode: "2750"
+    filetype: directory
+    exists: true
+http:
+  http://clickhouse:{{ .Vars.service.ports.http }}/replicas_status:
+    status: 200
+    body:
+      - Ok
+command:
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  check-cluster-status:
+    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }}  --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
+    exit-status: 0
+    {{- $expectedCount := mul .Vars.shards .Vars.replicaCount }}
+    stdout:
+      - "{{ $expectedCount }}"
+  create-database-in-cluster:
+    {{- $database := printf "test_goss_%s" (randAlpha 5) }}
+    {{- $table := printf "%s.table_%s" $database (randAlpha 5) }}
+    {{- $insertValue := 23 }}
+    exec: clickhouse-client --host clickhouse --port {{ .Vars.service.ports.tcp }} --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --multiquery --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
+    exit-status: 0
+    stdout:
+      - "{{ $insertValue }}"
+  {{ if .Vars.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

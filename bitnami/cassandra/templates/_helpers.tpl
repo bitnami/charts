@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -45,7 +50,7 @@ Return the list of Cassandra seed nodes
 {{- define "cassandra.seeds" -}}
 {{- $seeds := list }}
 {{- $fullname := include "common.names.fullname" .  }}
-{{- $releaseNamespace := .Release.Namespace }}
+{{- $releaseNamespace := include "common.names.namespace" . }}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $seedCount := .Values.cluster.seedCount | int }}
 {{- range $e, $i := until $seedCount }}
@@ -100,12 +105,7 @@ Return  the proper Commit Storage Class
 {{ include "cassandra.commitstorage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
 */}}
 {{- define "cassandra.commitstorage.class" -}}
-{{- $storageClass := .persistence.commitStorageClass -}}
-{{- if .global -}}
-    {{- if .global.storageClass -}}
-        {{- $storageClass = .global.commitStorageClass -}}
-    {{- end -}}
-{{- end -}}
+{{- $storageClass := default .persistence.commitStorageClass | default (.global).defaultStorageClass | default "" -}}
 
 {{- if $storageClass -}}
   {{- if (eq "-" $storageClass) -}}
@@ -131,8 +131,6 @@ Return true if encryption via TLS for internode communication connections should
 {{- define "cassandra.internode.tlsEncryption" -}}
 {{- if (ne .Values.tls.internodeEncryption "none") -}}
     {{- printf "%s" .Values.tls.internodeEncryption -}}
-{{- else if (ne .Values.cluster.internodeEncryption "none") -}}
-    {{- printf "%s" .Values.cluster.internodeEncryption -}}
 {{- else -}}
     {{- printf "none" -}}
 {{- end -}}
@@ -148,14 +146,85 @@ Return true if encryption via TLS should be configured
 {{- end -}}
 
 {{/*
-Return the Cassandra TLS credentials secret
+Convert memory to M
+Usage:
+{{ include "cassandra.memory.convertToM" (dict "value" "3Gi") }}
+*/}}
+{{- define "cassandra.memory.convertToM" -}}
+{{- $res := 0 -}}
+{{- if regexMatch "G" .value -}}
+{{- /* Multiply by 1000 if it is Gigabytes */ -}}
+{{- $res = regexFind "[0-9.]+" .value | float64 | mulf 1000 | int -}}
+{{- else -}}
+{{- /* Assume M for the rest, so simply extract the number and convert to int */ -}}
+{{- $res = regexFind "[0-9]+" .value | int -}}
+{{- end -}}
+{{- $res -}}
+{{- end -}}
+
+{{/*
+Return memory limit if resources or resourcesPreset has been set (in M)
+*/}}
+{{- define "cassandra.memory.getLimitInM" -}}
+{{- $res := "" -}}
+{{- if .Values.resources -}}
+    {{- /* We need to go step by step to avoid nil pointer exceptions */ -}}
+    {{- if .Values.resources.limits -}}
+        {{- if .Values.resources.limits.memory -}}
+            {{- $res = .Values.resources.limits.memory -}}
+        {{- end -}}
+    {{- end }}
+{{- else if (ne .Values.resourcesPreset "none") -}}
+    {{- $preset := include "common.resources.preset" (dict "type" .Values.resourcesPreset) | fromYaml -}}
+    {{- $res = $preset.limits.memory -}}
+{{- end -}}
+{{- if $res -}}
+    {{- /* Convert to M */ -}}
+    {{- include "cassandra.memory.convertToM" (dict "value" $res) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Calculate Max Heap Size based on the given values
+*/}}
+{{- define "cassandra.memory.calculateMaxHeapSize" -}}
+{{- if .Values.jvm.maxHeapSize -}}
+{{- /* Honor value explicitly set */ -}}
+{{- print .Values.jvm.maxHeapSize -}}
+{{- else -}}
+{{- /* Calculate based on resources set */ -}}
+{{- /* Reference: https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gc-ergonomics.html */ -}}
+{{- $res := include "cassandra.memory.getLimitInM" . -}}
+{{- $res = div $res 4 | min 1000 -}}
+{{- printf "%vM" $res -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Calculate New Heap Size based on the given values
+*/}}
+{{- define "cassandra.memory.calculateNewHeapSize" -}}
+{{- if .Values.jvm.newHeapSize -}}
+{{- /* Honor value explicitly set */ -}}
+{{- print .Values.jvm.newHeapSize -}}
+{{- else -}}
+{{- /* Calculate based on resources set */ -}}
+{{- /* Reference: https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gc-ergonomics.html */ -}}
+{{- $res := include "cassandra.memory.getLimitInM" . -}}
+{{- $res = div $res 64 | max 256 -}}
+{{- printf "%vM" $res -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Cassandra TLS    credentials secret
 */}}
 {{- define "cassandra.tlsSecretName" -}}
 {{- $secretName := coalesce .Values.tls.existingSecret .Values.tls.tlsEncryptionSecretName -}}
 {{- if $secretName -}}
     {{- printf "%s" (tpl $secretName $) -}}
 {{- else -}}
-    {{- printf "%s-crt" (include "common.names.fullname" .) -}}
+    {{- printf "%s-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -176,79 +245,38 @@ Return true if a TLS credentials secret object should be created
 {{- if $secretName -}}
     {{- printf "%s" (tpl $secretName $) -}}
 {{- else -}}
-    {{- printf "%s-tls-pass" (include "common.names.fullname" .) -}}
+    {{- printf "%s-tls-pass" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
+Get the password to use to access Cassandra
 */}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
-    {{- else -}}
-        {{- randAlphaNum $len -}}
-    {{- end -}}
-{{- end }}
-
 {{- define "cassandra.password" -}}
-    {{- if .Values.dbUser.password }}
-        {{- .Values.dbUser.password }}
-    {{- else if (not .Values.dbUser.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "cassandra-password")  -}}
-    {{- else }}
+    {{- if (and (empty .Values.dbUser.password) .Values.dbUser.forcePassword) }}
         {{ required "A Cassandra Password is required!" .Values.dbUser.password }}
-    {{- end }}
-{{- end -}}
-
-{{- define "cassandra.keystore.password" -}}
-    {{- if .Values.tls.keystorePassword }}
-        {{- .Values.tls.keystorePassword }}
     {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass") "Length" 10 "Key" "keystore-password")  -}}
+        {{- include "common.secrets.passwords.manage" (dict "secret" (include "common.names.fullname" .) "key" "cassandra-password" "providedValues" (list "dbUser.password") "context" $) -}}
     {{- end }}
 {{- end -}}
-
-{{- define "cassandra.truststore.password" -}}
-    {{- if .Values.tls.truststorePassword }}
-        {{- .Values.tls.truststorePassword }}
-    {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass") "Length" 10 "Key" "truststore-password")  -}}
-    {{- end }}
-{{- end -}}
-
 
 {{/*
-Returns the available TLS Cert in an existing secret (if it exists),
-otherwise it generates a new one.
+Get the metrics config map name.
 */}}
-{{- define "cassandra.getTlsCertStrFromSecret" }}
-    {{- $len := (default 365 .Length) | int -}}
-    {{- $ca := "" -}}
-    {{- $crt := "" -}}
-    {{- $key := "" -}}
-    {{- $tlsCert := (lookup "v1" "Secret" .Release.Namespace (printf "%s-%s" (include "common.names.fullname" .) "crt")).data -}}
+{{- define "cassandra.metricsConfConfigMap" -}}
+    {{- printf "%s-metrics-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
-    {{- if $tlsCert }}
-        {{- $ca = (get $tlsCert "ca.crt" | b64dec) -}}
-        {{- $crt = (get $tlsCert "tls.crt" | b64dec) -}}
-        {{- $key = (get $tlsCert "tls.key" | b64dec) -}}
-    {{- else -}}
-        {{- $caFull := genCA "cassandra-ca" 365 }}
-        {{- $fullname := include "common.names.fullname" . }}
-        {{- $releaseNamespace := .Release.Namespace }}
-        {{- $clusterDomain := .Values.clusterDomain }}
-        {{- $serviceName := include "common.names.fullname" . }}
-        {{- $headlessServiceName := printf "%s-headless" (include "common.names.fullname" .) }}
-        {{- $altNames := list (printf "*.%s.%s.svc.%s" $serviceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $serviceName $releaseNamespace $clusterDomain) (printf "*.%s.%s.svc.%s" $headlessServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $headlessServiceName $releaseNamespace $clusterDomain) "localhost" "127.0.0.1" $fullname }}
-        {{- $cert := genSignedCert $fullname nil $altNames 365 $caFull }}
-        {{- $ca = $caFull.Cert -}}
-        {{- $crt = $cert.Cert -}}
-        {{- $key = $cert.Key -}}
-    {{- end -}}
-
-    {{- printf "%s###%s###%s" $ca $crt $key -}}
+{{/*
+Print warning if jvm memory not set
+*/}}
+{{- define "cassandra.warnings.jvm" -}}
+{{- if not .Values.jvm.maxHeapSize }}
+WARNING: JVM Max Heap Size not set in value jvm.maxHeapSize. When not set, the chart will calculate the following size:
+     MIN(Memory Limit (if set) / 4, 1024M)
 {{- end }}
+{{- if not .Values.jvm.maxHeapSize }}
+WARNING: JVM New Heap Size not set in value jvm.newHeapSize. When not set, the chart will calculate the following size:
+     MAX(Memory Limit (if set) / 64, 256M)
+{{- end }}
+{{- end -}}

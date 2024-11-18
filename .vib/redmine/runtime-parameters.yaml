@@ -1,0 +1,11 @@
+redmineUsername: bitnamiTest
+redminePassword: ComplicatedPassword123!4
+service:
+  port: 80
+  type: LoadBalancer
+databaseType: mariadb
+mariadb:
+  enabled: true
+  auth:
+    username: bn_test_redmine
+    password: bitnami_test_password

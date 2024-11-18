@@ -22,27 +22,47 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/rabbitmq-cluster-operator"
         },
-        "runtime_parameters": "Im1zZ1RvcG9sb2d5T3BlcmF0b3IiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJ3ZWJob29rIjogNDQzCiAgICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M4"
           }
         }
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "rabbitmq-cluster-operator/goss/goss.yaml",
+            "vars_file": "rabbitmq-cluster-operator/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "sts-ve-testing-server"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
-            "endpoint": "lb-rabbitmq-cluster-operator-rabbitmq-messaging-topology-operator-http",
-            "app_protocol": "HTTP"
+            "resources": {
+              "path": "/.vib/rabbitmq-cluster-operator/cypress"
+            },
+            "endpoint": "lb-extra-svc-management",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

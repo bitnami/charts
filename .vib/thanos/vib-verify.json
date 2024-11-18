@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/thanos"
         },
-        "runtime_parameters": "b2Jqc3RvcmVDb25maWc6IHwtCiAgdHlwZTogRklMRVNZU1RFTQogIGNvbmZpZzoKICAgIGRpcmVjdG9yeTogIi8iCgpxdWVyeUZyb250ZW5kOgogIGVuYWJsZWQ6IHRydWUKICBzZXJ2aWNlOgogICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICBwb3J0czoKICAgICAgaHR0cDogODAKCnN0b3JlZ2F0ZXdheToKICBlbmFibGVkOiB0cnVlCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,27 +31,23 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-thanos-query-frontend-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "cypress",
           "params": {
             "resources": {
-              "path": "/.vib/thanos/queryfrontend/cypress"
+              "path": "/.vib/thanos/cypress"
             },
             "endpoint": "lb-thanos-query-frontend-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "env": {
+              "storePort": "10903",
+              "receivePort": "10904"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

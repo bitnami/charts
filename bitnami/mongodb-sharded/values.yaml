@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -6,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global storage class for dynamic provisioning
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -15,8 +19,17 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -44,7 +57,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -59,15 +71,15 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section MongoDB(&reg;) Sharded parameters
 ##
 
 ## Bitnami MongoDB(&reg;) Sharded image version
 ## ref: https://hub.docker.com/r/bitnami/mongodb-sharded/tags/
-## @param image.registry MongoDB(&reg;) Sharded image registry
-## @param image.repository MongoDB(&reg;) Sharded Image name
-## @param image.tag MongoDB(&reg;) Sharded image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] MongoDB(&reg;) Sharded image registry
+## @param image.repository [default: REPOSITORY_NAME/mongodb-sharded] MongoDB(&reg;) Sharded Image name
+## @skip image.tag MongoDB(&reg;) Sharded image tag (immutable tags are recommended)
+## @param image.digest MongoDB(&reg;) Sharded image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MongoDB(&reg;) Sharded image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -75,10 +87,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 5.0.9-debian-10-r10
+  tag: 8.0.3-debian-12-r0
+  digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -92,7 +104,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
 ## MongoDB(&reg;) Authentication parameters
 ##
 auth:
@@ -104,21 +115,19 @@ auth:
   ##
   rootUser: root
   ## @param auth.rootPassword MongoDB(&reg;) root password
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
   ##
   rootPassword: ""
-  ## @param auth.replicaSetKey Key used for authentication in the replicaset (only when `architecture=replicaset`)
+  ## @param auth.replicaSetKey Key used for authentication in the replicaset
   ##
   replicaSetKey: ""
-  ## @param auth.existingSecret Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`)
+  ## @param auth.existingSecret Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-password`, `mongodb-root-password`, `mongodb-replica-set-key`)
   ## NOTE: When it's set the previous parameters are ignored.
   ##
   existingSecret: ""
   ## @param auth.usePasswordFile Mount credentials as files instead of using environment variables
   ##
   usePasswordFile: false
-
-
 ## @param shards Number of shards to be created
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
 ##
@@ -134,11 +143,11 @@ common:
   ##
   useHostnames: true
   ## @param common.mongodbEnableIPv6 Switch to enable/disable IPv6 on MongoDB&reg;
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-ipv6
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-ipv6
   ##
   mongodbEnableIPv6: false
   ## @param common.mongodbDirectoryPerDB Switch to enable/disable DirectoryPerDB on MongoDB&reg;
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-directoryperdb
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-directoryperdb
   ##
   mongodbDirectoryPerDB: false
   ## @param common.mongodbSystemLogVerbosity MongoDB&reg; system log verbosity level
@@ -146,12 +155,15 @@ common:
   ##
   mongodbSystemLogVerbosity: 0
   ## @param common.mongodbDisableSystemLog Whether to disable MongoDB&reg; system log or not
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb#configuring-system-log-verbosity-level
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#configuring-system-log-verbosity-level
   ##
   mongodbDisableSystemLog: false
-  ## @param common.mongodbMaxWaitTimeout Maximum time (in seconds) for MongoDB&reg; nodes to wait for another MongoDB&reg; node to be ready
+  ## @param common.mongodbInitRetryAttempts Maximum retries for checking the MongoDB&reg; initialization status
   ##
-  mongodbMaxWaitTimeout: 120
+  mongodbInitRetryAttempts: 24
+  ## @param common.mongodbInitRetryDelay Time (in seconds) to wait between retries for checking the MongoDB&reg; initialization status
+  ##
+  mongodbInitRetryDelay: 5
   ## @param common.initScriptsCM Configmap with init scripts to execute
   ##
   initScriptsCM: ""
@@ -214,7 +226,7 @@ common:
   serviceAccount:
     ## @param common.serviceAccount.create Whether to create a Service Account for all pods automatically
     ##
-    create: false
+    create: true
     ## @param common.serviceAccount.name Name of a Service Account to be used by all Pods
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -224,8 +236,7 @@ common:
     annotations: {}
     ## @param common.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
-
+    automountServiceAccountToken: false
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -233,16 +244,18 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r4
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r32
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -252,7 +265,19 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param volumePermissions.resources Init container resource requests/limit
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
   resources: {}
 ## Kubernetes service type
@@ -314,7 +339,67 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## @section Config Server parameters
 ##
 
@@ -325,10 +410,25 @@ configsvr:
   ## @param configsvr.replicaCount Number of nodes in the replica set (the first node will be primary)
   ##
   replicaCount: 1
-  ## @param configsvr.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param configsvr.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if configsvr.resources is set (configsvr.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param configsvr.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
+  ## @param configsvr.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param configsvr.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -380,7 +480,7 @@ configsvr:
   ##
   affinity: {}
   ## @param configsvr.nodeSelector Config Server Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param configsvr.tolerations Config Server Tolerations for pod assignment
@@ -459,7 +559,7 @@ configsvr:
   pdb:
     ## @param configsvr.pdb.create Enable pod disruption budget
     ##
-    create: false
+    create: true
     ## @param configsvr.pdb.minAvailable Minimum number of available config pods allowed (`0` to disable)
     ##
     minAvailable: 0
@@ -467,7 +567,7 @@ configsvr:
     ##
     maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param configsvr.persistence.enabled Use a PVC to persist data
@@ -477,7 +577,7 @@ configsvr:
     ## MongoDB&reg; images.
     ##
     mountPath: /bitnami/mongodb
-    ## @param configsvr.persistence.subPath Subdirectory of the volume to mount at
+    ## @param configsvr.persistence.subPath Subdirectory of the volume to mount at (evaluated as a template)
     ## Useful in dev environments and one PV for multiple services.
     ##
     subPath: ""
@@ -500,15 +600,26 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
-    ## @param configsvr.persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
-    resourcePolicy: ""
+  ## Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param configsvr.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Config Server StatefulSet
+    ##
+    enabled: false
+    ## @param configsvr.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param configsvr.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
   ## K8s Service Account.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccount:
     ## @param configsvr.serviceAccount.create Specifies whether a ServiceAccount should be created for Config Server
     ##
-    create: false
+    create: true
     ## @param configsvr.serviceAccount.name Name of a Service Account to be used by Config Server
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -518,7 +629,7 @@ configsvr:
     annotations: {}
     ## @param configsvr.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Use a external config server instead of deploying one
   ##
   external:
@@ -537,23 +648,43 @@ configsvr:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param configsvr.podSecurityContext.enabled Enable security context
+  ## @param configsvr.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param configsvr.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param configsvr.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param configsvr.podSecurityContext.fsGroup Group ID for the container
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param configsvr.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param configsvr.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param configsvr.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param configsvr.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param configsvr.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param configsvr.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param configsvr.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param configsvr.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param configsvr.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param configsvr.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param configsvr.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param configsvr.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param configsvr.command Override default container command (useful when using custom images)
   ##
   command:
@@ -601,7 +732,6 @@ configsvr:
     timeoutSeconds: 20
     failureThreshold: 6
     successThreshold: 1
-
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param configsvr.startupProbe.enabled Enable startupProbe
@@ -618,7 +748,6 @@ configsvr:
     timeoutSeconds: 5
     failureThreshold: 30
     successThreshold: 1
-
   ## @param configsvr.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -628,7 +757,6 @@ configsvr:
   ## @param configsvr.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-
 ## @section Mongos parameters
 ##
 
@@ -639,10 +767,25 @@ mongos:
   ## @param mongos.replicaCount Number of replicas
   ##
   replicaCount: 1
-  ## @param mongos.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param mongos.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if mongos.resources is set (mongos.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "small"
+  ## @param mongos.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
+  ## @param mongos.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param mongos.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -694,7 +837,7 @@ mongos:
   ##
   affinity: {}
   ## @param mongos.nodeSelector Mongos Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param mongos.tolerations Mongos Tolerations for pod assignment
@@ -834,7 +977,7 @@ mongos:
   pdb:
     ## @param mongos.pdb.create Enable pod disruption budget
     ##
-    create: false
+    create: true
     ## @param mongos.pdb.minAvailable Minimum number of available mongo pods allowed (`0` to disable)
     ##
     minAvailable: 0
@@ -847,7 +990,7 @@ mongos:
   serviceAccount:
     ## @param mongos.serviceAccount.create Whether to create a Service Account for mongos automatically
     ##
-    create: false
+    create: true
     ## @param mongos.serviceAccount.name Name of a Service Account to be used by mongos
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -857,27 +1000,47 @@ mongos:
     annotations: {}
     ## @param mongos.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param mongos.podSecurityContext.enabled Enable security context
+  ## @param mongos.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param mongos.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param mongos.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param mongos.podSecurityContext.fsGroup Group ID for the container
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param mongos.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param mongos.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param mongos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param mongos.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param mongos.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param mongos.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param mongos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param mongos.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param mongos.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param mongos.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param mongos.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param mongos.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param mongos.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -923,7 +1086,6 @@ mongos:
     timeoutSeconds: 20
     failureThreshold: 6
     successThreshold: 1
-
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param mongos.startupProbe.enabled Enable startupProbe
@@ -940,7 +1102,6 @@ mongos:
     timeoutSeconds: 5
     failureThreshold: 30
     successThreshold: 1
-
   ## @param mongos.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -963,8 +1124,20 @@ shardsvr:
     ## @param shardsvr.dataNode.replicaCount Number of nodes in each shard replica set (the first node will be primary)
     ##
     replicaCount: 1
-    ## @param shardsvr.dataNode.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param shardsvr.dataNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if shardsvr.dataNode.resources is set (shardsvr.dataNode.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "medium"
+    ## @param shardsvr.dataNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.dataNode.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1019,7 +1192,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.dataNode.nodeSelector Data nodes Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
     ## nodeSelector: { shardId: "{{ .dataNodeLoopId }}" }
     ##
@@ -1043,6 +1216,9 @@ shardsvr:
     ##
     updateStrategy:
       type: RollingUpdate
+    ## @param shardsvr.dataNode.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: false
     ## @param shardsvr.dataNode.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -1110,7 +1286,7 @@ shardsvr:
     pdb:
       ## @param shardsvr.dataNode.pdb.create Enable pod disruption budget
       ##
-      create: false
+      create: true
       ## @param shardsvr.dataNode.pdb.minAvailable Minimum number of available data pods allowed (`0` to disable)
       ##
       minAvailable: 0
@@ -1123,7 +1299,7 @@ shardsvr:
     serviceAccount:
       ## @param shardsvr.dataNode.serviceAccount.create Specifies whether a ServiceAccount should be created for shardsvr
       ##
-      create: false
+      create: true
       ## @param shardsvr.dataNode.serviceAccount.name Name of a Service Account to be used by shardsvr data pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
@@ -1133,27 +1309,47 @@ shardsvr:
       annotations: {}
       ## @param shardsvr.dataNode.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param shardsvr.dataNode.podSecurityContext.enabled Enable security context
+    ## @param shardsvr.dataNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param shardsvr.dataNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param shardsvr.dataNode.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param shardsvr.dataNode.podSecurityContext.fsGroup Group ID for the container
     ##
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.dataNode.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param shardsvr.dataNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param shardsvr.dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-    ## @param shardsvr.dataNode.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-    ## @param shardsvr.dataNode.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+    ## @param shardsvr.dataNode.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param shardsvr.dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param shardsvr.dataNode.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param shardsvr.dataNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param shardsvr.dataNode.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param shardsvr.dataNode.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param shardsvr.dataNode.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
-      readOnlyRootFilesystem: false
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param shardsvr.dataNode.command Override default container command (useful when using custom images)
     ##
     command:
@@ -1201,7 +1397,6 @@ shardsvr:
       timeoutSeconds: 20
       failureThreshold: 6
       successThreshold: 1
-
     ## Configure extra options for startup probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
     ## @param shardsvr.dataNode.startupProbe.enabled Enable startupProbe
@@ -1218,7 +1413,6 @@ shardsvr:
       timeoutSeconds: 5
       failureThreshold: 30
       successThreshold: 1
-
     ## @param shardsvr.dataNode.customLivenessProbe Custom livenessProbe that overrides the default one
     ##
     customLivenessProbe: {}
@@ -1228,12 +1422,11 @@ shardsvr:
     ## @param shardsvr.dataNode.customStartupProbe Custom startupProbe that overrides the default one
     ##
     customStartupProbe: {}
-
   ## @section Shard configuration: Persistence parameters
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param shardsvr.persistence.enabled Use a PVC to persist data
@@ -1242,7 +1435,7 @@ shardsvr:
     ## @param shardsvr.persistence.mountPath The path the volume will be mounted at, useful when using different MongoDB&reg; images.
     ##
     mountPath: /bitnami/mongodb
-    ## @param shardsvr.persistence.subPath Subdirectory of the volume to mount at
+    ## @param shardsvr.persistence.subPath Subdirectory of the volume to mount at (evaluated as a template)
     ## Useful in development environments and one PV for multiple services.
     ##
     subPath: ""
@@ -1265,8 +1458,19 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
-    ## @param shardsvr.persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
-    resourcePolicy: ""
+  ## Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param shardsvr.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Shard replicas StatefulSet
+    ##
+    enabled: false
+    ## @param shardsvr.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param shardsvr.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
 
   ## @section Shard configuration: Arbiter parameters
   ##
@@ -1278,12 +1482,27 @@ shardsvr:
     ## @param shardsvr.arbiter.replicaCount Number of arbiters in each shard replica set (the first node will be primary)
     ##
     replicaCount: 0
+    ## @param shardsvr.arbiter.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: false
     ## @param shardsvr.arbiter.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
     hostAliases: []
-    ## @param shardsvr.arbiter.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param shardsvr.arbiter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if shardsvr.arbiter.resources is set (shardsvr.arbiter.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "small"
+    ## @param shardsvr.arbiter.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.arbiter.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1338,7 +1557,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.arbiter.nodeSelector Arbiter's Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param shardsvr.arbiter.tolerations Arbiter's Tolerations for pod assignment
@@ -1418,7 +1637,7 @@ shardsvr:
     serviceAccount:
       ## @param shardsvr.arbiter.serviceAccount.create Specifies whether a ServiceAccount should be created for shardsvr arbiter nodes
       ##
-      create: false
+      create: true
       ## @param shardsvr.arbiter.serviceAccount.name Name of a Service Account to be used by shardsvr arbiter pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
@@ -1428,27 +1647,47 @@ shardsvr:
       annotations: {}
       ## @param shardsvr.arbiter.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param shardsvr.arbiter.podSecurityContext.enabled Enable security context
+    ## @param shardsvr.arbiter.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param shardsvr.arbiter.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param shardsvr.arbiter.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param shardsvr.arbiter.podSecurityContext.fsGroup Group ID for the container
     ##
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.arbiter.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param shardsvr.arbiter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param shardsvr.arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-    ## @param shardsvr.arbiter.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-    ## @param shardsvr.arbiter.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+    ## @param shardsvr.arbiter.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param shardsvr.arbiter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param shardsvr.arbiter.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param shardsvr.arbiter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param shardsvr.arbiter.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param shardsvr.arbiter.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param shardsvr.arbiter.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
-      readOnlyRootFilesystem: false
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param shardsvr.arbiter.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -1494,7 +1733,6 @@ shardsvr:
       timeoutSeconds: 20
       failureThreshold: 6
       successThreshold: 1
-
     ## Configure extra options for startup probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
     ## @param shardsvr.arbiter.startupProbe.enabled Enable startupProbe
@@ -1511,7 +1749,6 @@ shardsvr:
       timeoutSeconds: 5
       failureThreshold: 30
       successThreshold: 1
-
     ## @param shardsvr.arbiter.customLivenessProbe Custom livenessProbe that overrides the default one
     ##
     customLivenessProbe: {}
@@ -1528,16 +1765,18 @@ metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
   ##
   enabled: false
-  ## @param metrics.image.registry MongoDB&reg; exporter image registry
-  ## @param metrics.image.repository MongoDB&reg; exporter image name
-  ## @param metrics.image.tag MongoDB&reg; exporter image tag
+  ## @param metrics.image.registry [default: REGISTRY_NAME] MongoDB&reg; exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/mongodb-exporter] MongoDB&reg; exporter image name
+  ## @skip metrics.image.tag MongoDB&reg; exporter image tag
+  ## @param metrics.image.digest MongoDB&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy MongoDB&reg; exporter image pull policy
   ## @param metrics.image.pullSecrets MongoDB&reg; exporter image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.32.0-debian-11-r5
+    tag: 0.41.2-debian-12-r1
+    digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1551,25 +1790,51 @@ metrics:
   ##
   useTLS: false
   ## @param metrics.extraArgs String with extra arguments to the metrics exporter
-  ## ref: https://github.com/dcu/mongodb_exporter/blob/master/mongodb_exporter.go
+  ## ref: https://github.com/percona/mongodb_exporter/blob/main/main.go
   ##
   extraArgs: ""
-  ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param metrics.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Metrics exporter liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param metrics.livenessProbe.enabled Enable livenessProbe
@@ -1618,7 +1883,6 @@ metrics:
     timeoutSeconds: 2
     failureThreshold: 15
     successThreshold: 1
-
   ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}

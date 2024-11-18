@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -48,6 +53,18 @@ Fully qualified app name for LDAP
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "postgresql-ha.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Return the proper PostgreSQL image name
 */}}
@@ -80,7 +97,7 @@ Return the proper PostgreSQL Prometheus exporter image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "postgresql-ha.image.pullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.postgresql.image .Values.pgpool.image .Values.volumePermissions.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.postgresql.image .Values.pgpool.image .Values.volumePermissions.image .Values.metrics.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -287,6 +304,22 @@ Return the database to use for repmgr
 {{- end -}}
 
 {{/*
+Return true if the PostgreSQL credential secret has a separate entry for the postgres user
+*/}}
+{{- define "postgresql-ha.postgresqlSeparatePostgresPassword" -}}
+{{- if (include "postgresql-ha.postgresqlCreateSecret" .) -}}
+    {{- if and (include "postgresql-ha.postgresqlPostgresPassword" .) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) -}}
+        {{- true -}}
+    {{- end -}}
+{{- else -}}
+    {{- $pgSecret := index (lookup "v1" "Secret" (include "common.names.namespace" .) (include "postgresql-ha.postgresqlSecretName" .)) "data" -}}
+    {{- if and $pgSecret (index $pgSecret "postgres-password") -}}
+        {{- true -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a secret object should be created for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresqlCreateSecret" -}}
@@ -356,20 +389,20 @@ Return the Pgpool credentials secret.
 {{- if .Values.global -}}
     {{- if .Values.global.pgpool -}}
         {{- if .Values.global.pgpool.existingSecret -}}
-            {{- printf "%s" .Values.global.pgpool.existingSecret -}}
+            {{- printf "%s" (tpl .Values.global.pgpool.existingSecret $) -}}
         {{- else if .Values.pgpool.existingSecret -}}
-            {{- printf "%s" .Values.pgpool.existingSecret -}}
+            {{- printf "%s" (tpl .Values.pgpool.existingSecret $) -}}
         {{- else -}}
             {{- printf "%s" (include "postgresql-ha.pgpool" .) -}}
         {{- end -}}
      {{- else if .Values.pgpool.existingSecret -}}
-         {{- printf "%s" .Values.pgpool.existingSecret -}}
+         {{- printf "%s" (tpl .Values.pgpool.existingSecret $) -}}
      {{- else -}}
          {{- printf "%s" (include "postgresql-ha.pgpool" .) -}}
      {{- end -}}
 {{- else -}}
      {{- if .Values.pgpool.existingSecret -}}
-         {{- printf "%s" .Values.pgpool.existingSecret -}}
+         {{- printf "%s" (tpl .Values.pgpool.existingSecret $) -}}
      {{- else -}}
          {{- printf "%s" (include "postgresql-ha.pgpool" .) -}}
      {{- end -}}
@@ -539,7 +572,7 @@ postgresql-ha: LDAP
     Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.uri",
     "ldap.basedn", "ldap.binddn", and "ldap.bindpw" are mandatory. Please provide them:
 
-    $ helm install {{ .Release.Name }} bitnami/postgresql-ha \
+    $ helm install {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
       --set ldap.enabled=true \
       --set ldap.uri="ldap://my_ldap_server" \
       --set ldap.basedn="dc=example\,dc=org" \
@@ -564,18 +597,27 @@ postgresql-ha: LDAP & pg_hba.conf
 postgresql-ha: Upgrade repmgr extension
     There must be only one replica when upgrading repmgr extension:
 
-    $ helm upgrade {{ .Release.Name }} bitnami/postgresql-ha \
+    $ helm upgrade {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
       --set postgresql.replicaCount=1 \
       --set postgresql.upgradeRepmgrExtension=true
 {{- end -}}
 {{- end -}}
 
-{{/* Set PGPASSWORD as environment variable depends on configuration */}}
+{{/* Set PostgreSQL PGPASSWORD as environment variable depends on configuration */}}
 {{- define "postgresql-ha.pgpassword" -}}
 {{- if .Values.postgresql.usePasswordFile -}}
 PGPASSWORD=$(< $POSTGRES_PASSWORD_FILE)
 {{- else -}}
 PGPASSWORD=$POSTGRES_PASSWORD
+{{- end -}}
+{{- end -}}
+
+{{/* Set Pgpool PGPASSWORD as environment variable depends on configuration */}}
+{{- define "postgresql-ha.pgpoolPostgresPassword" -}}
+{{- if .Values.postgresql.usePasswordFile -}}
+PGPASSWORD=$(< $PGPOOL_POSTGRES_PASSWORD_FILE)
+{{- else -}}
+PGPASSWORD=$PGPOOL_POSTGRES_PASSWORD
 {{- end -}}
 {{- end -}}
 
@@ -641,7 +683,7 @@ Return the path to the CA cert file.
 {{- if .Values.pgpool.tls.autoGenerated }}
     {{- printf "%s-crt" (include "postgresql-ha.pgpool" .) -}}
 {{- else -}}
-    {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.pgpool.tls.certificatesSecret }}
+    {{ required "A secret containing TLS certificates is required when TLS is enabled" (tpl .Values.pgpool.tls.certificatesSecret $) }}
 {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -703,9 +745,17 @@ Return the path to the cert key file.
 {{- end -}}
 
 {{/*
-Return the path to the CA cert file.
+Get the readiness probe command
 */}}
-{{- define "postgresql-ha.postgresql.tlsCACert" -}}
-{{- printf "/opt/bitnami/postgresql/certs/%s" .Values.postgresql.tls.certCAFilename -}}
+{{- define "postgresql-ha.readinessProbeCommand" -}}
+{{- $block := index .context.Values .component }}
+{{- if eq .component "postgresql" -}}
+- |
+  exec pg_isready -U "postgres" {{- if $block.tls.enabled }} -d "sslcert={{ include "postgresql-ha.postgresql.tlsCert" .context }} sslkey={{ include "postgresql-ha.postgresql.tlsCertKey" .context }}"{{- end }} -h 127.0.0.1 -p {{ $block.containerPorts.postgresql }}
+{{- if contains "bitnami/" $block.image.repository }}
+  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+{{- end }}
+{{- else -}}
+- exec pg_isready -U "postgres" -h 127.0.0.1 -p {{ $block.containerPorts.postgresql }}
+{{- end }}
 {{- end -}}
-

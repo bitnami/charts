@@ -4,18 +4,14 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
-{{- if .Values.gateway.enabled }}
-MinIO&reg; deployed as a {{ upper .Values.gateway.type }} Gateway
-{{- end }}
-
 MinIO&reg; can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
    {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To get your credentials run:
 
-   export ROOT_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.root-user}" | base64 -d)
-   export ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.root-password}" | base64 -d)
+   export ROOT_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.{{ include "minio.rootUserKey" . }}}" | base64 -d)
+   export ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.{{ include "minio.rootPasswordKey" . }}}" | base64 -d)
 
 To connect to your MinIO&reg; server using a client:
 
@@ -37,7 +33,7 @@ To connect to your MinIO&reg; server using a client:
    "{{ template "common.names.fullname" . }}-client=true" will be able to connect to MinIO&reg;.
 
 {{- end }}
-{{- if or .Values.gateway.enabled (not .Values.disableWebUI) }}
+{{- if (not .Values.disableWebUI) }}
 
 To access the MinIO&reg; web UI:
 
@@ -78,14 +74,5 @@ To access the MinIO&reg; web UI:
 {{- include "common.warnings.rollingTag" .Values.clientImage }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "minio.validateValues" . }}
-
-{{- $requiredPasswords := list -}}
-{{- $secretName := include "minio.secretName" . -}}
-{{- if and (not .Values.auth.existingSecret) (not .Values.auth.forceNewKeys) (not .Values.gateway.enabled) -}}
-  {{- $requiredRootUser := dict "valueKey" "auth.rootUser" "secret" $secretName "field" "root-user" -}}
-  {{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "root-password" -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredRootUser -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
-{{- end -}}
-{{- $requiredMinioPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredMinioPasswordErrors) "context" $) -}}
+{{- include "common.warnings.resources" (dict "sections" (list "provisioning" "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.clientImage .Values.volumePermissions.image) "context" $) }}

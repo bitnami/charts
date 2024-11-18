@@ -1,15 +1,16 @@
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.ruler.enabled }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "common.names.fullname" . }}-ruler
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.ruler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ruler
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,33 +18,35 @@ spec:
   {{- if not .Values.ruler.autoscaling.enabled }}
   replicas: {{ .Values.ruler.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.ruler.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.ruler.podManagementPolicy }}
-  serviceName: {{ include "common.names.fullname" . }}-ruler-headless
+  serviceName: {{ include "thanos.ruler.fullname" . }}-headless
   {{- if .Values.ruler.updateStrategy }}
   updateStrategy: {{- toYaml .Values.ruler.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ruler.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: ruler
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: ruler
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.ruler.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.ruler.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      {{- if or .Values.ruler.podAnnotations (include "thanos.ruler.createConfigmap" .) (include "thanos.createObjstoreSecret" .) }}
       annotations:
-        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
-        checksum/ruler-configuration: {{ include (print $.Template.BasePath "/ruler/configmap.yaml") . | sha256sum }}
+        {{- if (include "thanos.createObjstoreSecret" .) }}
+        checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
+        {{- end }}
+        {{- if (include "thanos.ruler.createConfigmap" .) }}
+        checksum/ruler-configuration: {{ include "thanos.rulerConfigMap" . | sha256sum }}
+        {{- end }}
         {{- if .Values.ruler.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.ruler.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "ruler" "context" $) }}
+      serviceAccountName: {{ include "thanos.ruler.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.ruler.automountServiceAccountToken }}
       {{- if .Values.ruler.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.hostAliases "context" $) | nindent 8 }}
@@ -52,9 +55,15 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ruler.podAffinityPreset "component" "ruler" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ruler.podAntiAffinityPreset "component" "ruler" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ruler.podAffinityPreset "component" "ruler" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ruler.podAntiAffinityPreset "component" "ruler" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.ruler.nodeAffinityPreset.type "key" .Values.ruler.nodeAffinityPreset.key "values" .Values.ruler.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.ruler.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.dnsPolicy }}
+      dnsPolicy: {{ .Values.ruler.dnsPolicy | quote }}
       {{- end }}
       {{- if .Values.ruler.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.nodeSelector "context" $) | nindent 8 }}
@@ -69,7 +78,7 @@ spec:
       schedulerName: {{ .Values.ruler.schedulerName }}
       {{- end }}
       {{- if .Values.ruler.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.ruler.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ruler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.ruler.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -104,7 +113,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.ruler.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.ruler.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ruler.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ruler.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.command "context" $) | nindent 12 }}
@@ -116,19 +125,27 @@ spec:
             - rule
             - --log.level={{ .Values.ruler.logLevel }}
             - --log.format={{ .Values.ruler.logFormat }}
-            - --grpc-address=0.0.0.0:10901
-            - --http-address=0.0.0.0:10902
+            - --grpc-address=0.0.0.0:{{ .Values.ruler.containerPorts.grpc }}
+            - --http-address=0.0.0.0:{{ .Values.ruler.containerPorts.http }}
+            {{- if .Values.ruler.dataPath }}
+            - --data-dir={{ .Values.ruler.dataPath }}
+            {{- else }}
             - --data-dir=/data
+            {{- end }}
             - --eval-interval={{ .Values.ruler.evalInterval }}
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - --http.config=/conf/http/http-config.yml
+            {{- end }}
             {{- range .Values.ruler.alertmanagers }}
             - --alertmanagers.url={{ . }}
             {{- end }}
             {{- if .Values.ruler.alertmanagersConfig }}
             - --alertmanagers.config-file=/conf/alertmanagers/alertmanagers_config.yml
             {{- end }}
-            {{- if and $query.enabled .Values.ruler.dnsDiscovery.enabled }}
-            - --query=dnssrv+_http._tcp.{{ include "common.names.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- if and .Values.query.enabled .Values.ruler.dnsDiscovery.enabled }}
+            - --query=dnssrv+_http._tcp.{{ include "thanos.query.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
+            - --alert.query-url={{- template "thanos.ruler.queryURL" .}}
             - --label={{ .Values.ruler.replicaLabel }}="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
             - --alert.label-drop={{ .Values.ruler.replicaLabel }}
@@ -138,7 +155,7 @@ spec:
             - --query={{ . }}
             {{- end }}
             {{- if .Values.ruler.extraFlags }}
-            {{- .Values.ruler.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           env:
@@ -162,46 +179,74 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 10902
+              containerPort: {{ .Values.ruler.containerPorts.http }}
               protocol: TCP
             - name: grpc
-              containerPort: 10901
+              containerPort: {{ .Values.ruler.containerPorts.grpc }}
               protocol: TCP
-          {{- if .Values.ruler.livenessProbe.enabled }}
+          {{- if .Values.ruler.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ruler.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ruler.livenessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/healthy
               port: http
-          {{- else if .Values.ruler.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.ruler.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ruler.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /-/ready
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
               port: http
-          {{- else if .Values.ruler.customReadinessProbe }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.ruler.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.ruler.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ruler.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.ruler.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ruler.readinessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.ruler.customStartupProbe }}
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
+          {{- end }}
+          {{- if .Values.ruler.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ruler.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ruler.startupProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
+            httpGet:
+              path: /-/ready
+              port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- end }}
           {{- if .Values.ruler.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ruler.resources }}
           resources: {{- toYaml .Values.ruler.resources | nindent 12 }}
+          {{- else if ne .Values.ruler.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ruler.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: ruler-config
               mountPath: /conf/rules
             - name: objstore-config
               mountPath: /conf/objstore
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - name: http-config
+              mountPath: /conf/http
+            {{- if .Values.https.enabled }}
+            - name: http-certs
+              mountPath: /certs
+            {{- end }}
+            {{- end }}
             - name: data
               mountPath: /data
             {{- if .Values.ruler.alertmanagersConfig }}
@@ -221,10 +266,20 @@ spec:
             {{- if .Values.existingObjstoreSecretItems }}
             items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
             {{- end }}
+        {{- if (include "thanos.httpConfigEnabled" .) }}
+        - name: http-config
+          secret:
+            secretName: {{ include "thanos.httpConfigSecretName" . }}
+        {{- if .Values.https.enabled }}
+        - name: http-certs
+          secret:
+            secretName: {{ include "thanos.httpCertsSecretName" . }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.ruler.alertmanagersConfig }}
         - name: alertmanagers-config
           secret:
-            secretName: {{ include "common.names.fullname" . }}-ruler-alertmanagers-config
+            secretName: {{ include "thanos.ruler.fullname" . }}-alertmanagers-config
         {{- end }}
         {{- if .Values.ruler.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraVolumes "context" $) | nindent 8 }}
@@ -237,8 +292,17 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.ruler.persistence.enabled (not .Values.ruler.persistence.existingClaim) }}
+  {{- if semverCompare ">=1.23-0" (include "common.capabilities.kubeVersion" .) -}}
+  {{- if .Values.ruler.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.ruler.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.ruler.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.ruler.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.ruler.persistence.annotations "context" $) | nindent 10 }}

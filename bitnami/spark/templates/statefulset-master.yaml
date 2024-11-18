@@ -1,13 +1,15 @@
-apiVersion: apps/v1
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ printf "%s-master" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: master
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,24 +19,22 @@ spec:
   {{- if .Values.master.updateStrategy }}
   updateStrategy: {{- toYaml .Values.master.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: master
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: master
-        {{- if .Values.master.podLabels }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.master.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-      {{- if or .Values.master.podAnnotations .Values.metrics.enabled }}
+      {{- if or .Values.master.podAnnotations (and .Values.metrics.enabled .Values.metrics.masterAnnotations) }}
       annotations:
-      {{- if .Values.master.podAnnotations }}
+        {{- if .Values.master.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.master.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if and .Values.metrics.enabled }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.masterAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.masterAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+        {{- end }}
       {{- end }}
     spec:
       {{- include "spark.imagePullSecrets" . | nindent 6 }}
@@ -43,10 +43,11 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.master.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAffinityPreset "component" "master" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAntiAffinityPreset "component" "master" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAffinityPreset "component" "master" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAntiAffinityPreset "component" "master" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.master.nodeAffinityPreset.type "key" .Values.master.nodeAffinityPreset.key "values" .Values.master.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.master.automountServiceAccountToken }}
       {{- if .Values.master.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -66,7 +67,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.master.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.master.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.master.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.master.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
@@ -135,12 +136,17 @@ spec:
                   key: ssl-truststore-password
           {{- if .Values.security.ssl.resources }}
           resources: {{- toYaml .Values.security.ssl.resources | nindent 12 }}
+          {{- else if ne .Values.security.ssl.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.security.ssl.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          - name: certs
-            mountPath: /certs
-          - name: shared-certs
-            mountPath: /opt/bitnami/spark/conf/certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: certs
+              mountPath: /certs
+            - name: shared-certs
+              mountPath: /opt/bitnami/spark/conf/certs
         {{- end }}
       {{- end }}
       containers:
@@ -148,7 +154,7 @@ spec:
           image: {{ include "spark.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.master.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.master.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.master.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -176,17 +182,44 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.master.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/work
+              subPath: app-work-dir
             {{- if .Values.master.existingConfigmap }}
             - name: config
               mountPath: /bitnami/spark/conf/
             {{- end }}
             {{- if .Values.security.ssl.enabled }}
             - name: shared-certs
-              mountPath: /bitnami/spark/conf/certs
+              mountPath: /opt/bitnami/spark/conf/certs
               readOnly: true
             {{- end }}
             {{- if .Values.master.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.initScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/init-scripts
+            {{- end }}
+            {{- if .Values.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-cm
+            {{- end }}
+            {{- if .Values.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -266,29 +299,28 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.master.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.master.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
-              port: {{ .Values.master.containerPorts.http }}
-          {{- else if .Values.master.customLivenessProbe }}
+          {{- if .Values.master.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.master.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.master.containerPorts.http }}
           {{- end }}
-          {{- if .Values.master.readinessProbe.enabled }}
+          {{- if .Values.master.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.master.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: {{ .Values.master.containerPorts.http }}
-          {{- else if .Values.master.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.master.startupProbe.enabled }}
+          {{- if .Values.master.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.master.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: {{ .Values.master.containerPorts.http }}
-          {{- else if .Values.master.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.master.lifecycleHooks }}
@@ -296,11 +328,15 @@ spec:
           {{- end }}
           {{- if .Values.master.resources }}
           resources: {{- toYaml .Values.master.resources | nindent 12 }}
+          {{- else if ne .Values.master.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.master.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.master.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.master.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.master.existingConfigmap }}
         - name: config
           configMap:
@@ -316,3 +352,22 @@ spec:
         {{- if .Values.master.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.initScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ template "spark.initScripts" . }}
+        {{- end }}
+        {{- if .Values.initScriptsCM }}
+        - name: custom-init-scripts-cm
+          configMap:
+            name: {{ template ".Values.initScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template ".Values.initScriptsSecret" . }}
+            defaultMode: 0755
+        {{- end }}
+  {{- if .Values.master.extraVolumeClaimTemplates }}
+  volumeClaimTemplates: {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumeClaimTemplates "context" $) | nindent 8 }}
+  {{- end }}

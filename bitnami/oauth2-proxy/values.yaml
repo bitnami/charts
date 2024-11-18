@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -6,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -15,8 +19,17 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -41,7 +54,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -56,7 +68,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -112,7 +123,61 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## Configure the ingress resource that allows you to access the OAuth2 Proxy installation
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -144,7 +209,7 @@ ingress:
   path: /
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -212,6 +277,9 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.existingSecretName If you're providing your own certificate and want to manage the secret yourself
+  ##
+  existingSecretName: ""
   ## @param ingress.extraRules Additional rules to be covered with this ingress record
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   ## e.g:
@@ -219,32 +287,32 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
   ##             name: http
   ##
   extraRules: []
-
 ## @section OAuth2 Proxy Image parameters
 ##
 
 ## Bitnami OAuth2 Proxy image
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-## @param image.registry OAuth2 Proxy image registry
-## @param image.repository OAuth2 Proxy image repository
-## @param image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] OAuth2 Proxy image registry
+## @param image.repository [default: REPOSITORY_NAME/oauth2-proxy] OAuth2 Proxy image repository
+## @skip image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+## @param image.digest OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy OAuth2 Proxy image pull policy
 ## @param image.pullSecrets OAuth2 Proxy image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.3.0-debian-11-r3
+  tag: 7.7.1-debian-12-r2
+  digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets
@@ -255,7 +323,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## @section OAuth2 Proxy configuration parameters
 ##
 
@@ -286,14 +353,14 @@ configuration:
   ##
   ## @param configuration.google.enabled Enable Google service account
   ## @param configuration.google.adminEmail Google admin email
-  ## @param configuration.google.googleGroup Restrict logins to members of this google group
+  ## @param configuration.google.groups Restrict logins to members of these google groups
   ## @param configuration.google.serviceAccountJson Google Service account JSON
   ## @param configuration.google.existingSecret Existing secret containing Google Service Account
   ##
   google:
     enabled: false
     adminEmail: ""
-    googleGroup: ""
+    groups: []
     serviceAccountJson: ""
     existingSecret: ""
   ## Custom configuration file: oauth2_proxy.cfg
@@ -306,7 +373,6 @@ configuration:
   content: |
     email_domains = [ "*" ]
     upstreams = [ "file:///dev/null" ]
-
   ## @param configuration.existingConfigmap Configmap with the OAuth2 Proxy configuration
   ##
   existingConfigmap: ""
@@ -326,7 +392,6 @@ configuration:
     ##
     content: ""
     existingSecret: ""
-
   ## Additionally authenticate against a htpasswd file. Entries must be created with "htpasswd -s" for SHA encryption
   ## @param configuration.htpasswdFile.enabled Enable htpasswd file
   ## @param configuration.htpasswdFile.existingSecret Existing secret for htpasswd file
@@ -343,18 +408,28 @@ configuration:
     ##    testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
     ##
     content: ""
-
+  ## @param configuration.oidcIssuerUrl OpenID Connect issuer URL
+  oidcIssuerUrl: ""
+  ## @param configuration.redirectUrl OAuth Redirect URL
+  redirectUrl: ""
+  ## @param configuration.whiteList Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains
+  whiteList: ""
 ## @section OAuth2 Proxy deployment parameters
 ##
 
 ## @param containerPort OAuth2 Proxy port number
 ##
 containerPort: 4180
-
+## @param extraContainerPorts Array of additional container ports for the OAuth2 Proxy container
+## e.g:
+## extraContainerPorts:
+##   - name: metrics
+##     containerPort: 9100
+##
+extraContainerPorts: []
 ## @param replicaCount Number of OAuth2 Proxy replicas to deploy
 ##
 replicaCount: 1
-
 ## @param extraArgs add extra args to the default command
 ##
 extraArgs: []
@@ -412,14 +487,22 @@ customLivenessProbe: {}
 ##
 customReadinessProbe: {}
 ## OAuth2 Proxy resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-## @param resources.limits The resources limits for the OAuth2 Proxy containers
-## @param resources.requests The requested resources for the OAuth2 Proxy containers
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests: {}
-
+resourcesPreset: "nano"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
 ## e.g:
@@ -428,36 +511,61 @@ resources:
 ##   maxUnavailable: 1
 ## @param pdb.create Enable a Pod Disruption Budget creation
 ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
 ##
 pdb:
-  create: false
-  minAvailable: 1
-  maxUnavailable: 1
-
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled OAuth2 Proxy pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set OAuth2 Proxy pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled OAuth2 Proxy containers' Security Context
-## @param containerSecurityContext.runAsUser Set OAuth2 Proxy containers' Security Context runAsUser
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
-
+  runAsGroup: 1001
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases OAuth2 Proxy pods host aliases
 ## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -501,7 +609,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for OAuth2 Proxy pods assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for OAuth2 Proxy pods assignment
@@ -571,7 +679,24 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
-
+## @param dnsPolicy Pod DNS policy. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'.
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+##
+dnsPolicy: ""
+## @param dnsConfig Pod DNS configuration.
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## e.g:
+## dnsConfig:
+##   nameservers:
+##   - 8.8.8.8
+##   - 8.8.4.4
+##   options:
+##   - name: ndots
+##     value: "2"
+##   searches:
+##   - example.com
+##
+dnsConfig: {}
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -584,11 +709,10 @@ serviceAccount:
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   annotations: {}
-
 ## @section External Redis&reg; parameters
 ##
 externalRedis:
@@ -601,12 +725,17 @@ externalRedis:
   ## @param externalRedis.port External Redis&reg; server port
   ##
   port: 6379
+  ## @param externalRedis.databaseIndex External Redis&reg; database index
+  ##
+  databaseIndex: 0
   ## @param externalRedis.existingSecret The name of an existing secret with Redis&reg; credentials
   ## NOTE: Must contain key `redis-password`
   ## NOTE: When it's set, the `externalRedis.password` parameter is ignored
   ##
   existingSecret: ""
-
+  ## @param externalRedis.existingSecretPasswordKey Key inside the existing secret with Redis&reg; credentials
+  ##
+  existingSecretPasswordKey: ""
 ## @section Redis&reg; sub-chart parameters
 ##
 redis:

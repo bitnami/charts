@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.prometheus.enabled }}
 apiVersion: v1
 kind: Service
@@ -5,16 +10,13 @@ metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.prometheus.service.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.service.labels "context" $ ) | nindent 4 }}
     {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.prometheus.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.prometheus.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.prometheus.service.type }}
   {{- if .Values.prometheus.service.sessionAffinity }}
@@ -25,6 +27,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.prometheus.service.type "LoadBalancer") (not (empty .Values.prometheus.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.prometheus.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.prometheus.service.type "LoadBalancer") (not (empty .Values.prometheus.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.prometheus.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.prometheus.service.type "LoadBalancer") (not (empty .Values.prometheus.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.prometheus.service.loadBalancerSourceRanges }}
@@ -46,7 +51,5 @@ spec:
       {{- if and .Values.prometheus.service.nodePorts.http (or (eq .Values.prometheus.service.type "NodePort") (eq .Values.prometheus.service.type "LoadBalancer")) }}
       nodePort: {{ .Values.prometheus.service.nodePorts.http }}
       {{- end }}
-  selector:
-    app.kubernetes.io/name: prometheus
-    prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
+  selector: {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 4 }}
 {{- end }}

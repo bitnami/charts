@@ -1,5 +1,10 @@
 {{/*
-Return the proper SonarQube image name
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
+Return the proper SonarQube(TM) image name
 */}}
 {{- define "sonarqube.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -20,6 +25,20 @@ Return the proper sysctl image name
 {{- end -}}
 
 {{/*
+Return the proper install_plugins initContainer image name
+*/}}
+{{- define "sonarqube.plugins.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.plugins.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper caCerts initContainer image name
+*/}}
+{{- define "sonarqube.caCerts.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.caCerts.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper sysctl image name
 */}}
 {{- define "sonarqube.metrics.jmx.image" -}}
@@ -30,7 +49,7 @@ Return the proper sysctl image name
 Return the proper Container Image Registry Secret Names
 */}}
 {{- define "sonarqube.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctl.image .Values.metrics.jmx.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctl.image .Values.metrics.jmx.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -128,7 +147,7 @@ Return the Database Secret Name
 {{- end -}}
 
 {{/*
-Return true if a SonarQube authentication credentials secret object should be created
+Return true if a SonarQube(TM) authentication credentials secret object should be created
 */}}
 {{- define "sonarqube.createSecret" -}}
 {{- if or (not .Values.existingSecret) (and (not .Values.smtpExistingSecret) .Values.smtpPassword) }}
@@ -137,7 +156,7 @@ Return true if a SonarQube authentication credentials secret object should be cr
 {{- end -}}
 
 {{/*
-Return the SonarQube Secret Name
+Return the SonarQube(TM) Secret Name
 */}}
 {{- define "sonarqube.secretName" -}}
 {{- if .Values.existingSecret }}
@@ -183,7 +202,7 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of SonarQube - Database */}}
+{{/* Validate values of SonarQube(TM) - Database */}}
 {{- define "sonarqube.validateValues.database" -}}
 {{- if and (not .Values.postgresql.enabled) (or (empty .Values.externalDatabase.host) (empty .Values.externalDatabase.port) (empty .Values.externalDatabase.database)) -}}
 sonarqube: database
@@ -195,4 +214,30 @@ sonarqube: database
        externalDatabase.port=DB_SERVER_PORT
        externalDatabase.database=DB_NAME
 {{- end -}}
+{{- end -}}
+
+{{/*
+Set sonarqube.jvmOpts
+*/}}
+{{- define "sonarqube.jvmOpts" -}}
+    {{- if and .Values.caCerts.enabled .Values.metrics.jmx.enabled -}}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=10443 -Dcom.sun.management.jmxremote.rmi.port=10444 %s" .Values.jvmOpts | trim | quote }}
+    {{- else if .Values.caCerts.enabled -}}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts %s" .Values.jvmOpts | trim | quote }}
+    {{- else if .Values.metrics.jmx.enabled -}}
+        {{ printf "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=10443 -Dcom.sun.management.jmxremote.rmi.port=10444 %s" .Values.jvmOpts | trim | quote }}
+    {{- else -}}
+        {{ printf "%s" .Values.jvmOpts }}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Set sonarqube.jvmCEOpts
+*/}}
+{{- define "sonarqube.jvmCEOpts" -}}
+    {{- if .Values.caCerts.enabled -}}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts %s" .Values.jvmCeOpts | trim | quote }}
+    {{- else -}}
+        {{ printf "%s" .Values.jvmCeOpts }}
+    {{- end -}}
 {{- end -}}

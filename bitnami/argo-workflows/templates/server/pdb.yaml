@@ -1,3 +1,7 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and .Values.server.enabled .Values.server.pdb.enabled -}}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
@@ -5,24 +9,23 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ include "argo-workflows.server.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.server.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- if .Values.server.pdb.minAvailable }}
   minAvailable: {{ .Values.server.pdb.minAvailable }}
-  {{- else if .Values.server.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.server.pdb.maxUnavailable }}
-  {{- else }}
-  minAvailable: 0
   {{- end }}
+  {{-  if or .Values.server.pdb.maxUnavailable ( not .Values.server.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.server.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: server
 {{- end -}}

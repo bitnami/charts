@@ -1,40 +1,114 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ template "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   podSelector:
-    matchLabels:
-      {{- include "common.labels.matchLabels" . | nindent 6 }}
-  ingress:
-    # Allow inbound connections
+    matchLabels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
     - ports:
-        - port: {{ .Values.primary.service.ports.mysql }}
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow connection to other cluster pods
+    {{- $containerEgressPorts := list .Values.primary.containerPorts.mysql .Values.secondary.containerPorts.mysql }}
+    {{- if .Values.primary.enableMySQLX }}
+    {{- $containerEgressPorts = append $containerEgressPorts .Values.primary.containerPorts.mysqlx }}
+    {{- end }}
+    {{- if .Values.secondary.enableMySQLX }}
+    {{- $containerEgressPorts = append $containerEgressPorts .Values.secondary.containerPorts.mysqlx }}
+    {{- end }}
+    - ports:
+        {{- range $value := (compact $containerEgressPorts | uniq ) }}
+        - port: {{ $value }}
+        {{- end }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    # Allow connection from other cluster pods
+    {{- $containerIngressPorts := list .Values.primary.containerPorts.mysql .Values.secondary.containerPorts.mysql }}
+    {{- if .Values.primary.enableMySQLX }}
+    {{- $containerIngressPorts = append $containerIngressPorts .Values.primary.containerPorts.mysqlx }}
+    {{- end }}
+    {{- if .Values.secondary.enableMySQLX }}
+    {{- $containerIngressPorts = append $containerIngressPorts .Values.secondary.containerPorts.mysqlx }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    {{- $containerIngressPorts = append $containerIngressPorts .Values.metrics.containerPorts.http }}
+    {{- end }}
+    {{- if .Values.primary.extraPorts }}
+    {{- range $value := .Values.primary.extraPorts }}
+    {{- $containerIngressPorts = append $containerIngressPorts $value.containerPort }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.primary.service.extraPorts }}
+    {{- range $value := .Values.primary.service.extraPorts }}
+    {{- $containerIngressPorts = append $containerIngressPorts $value.port }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.secondary.extraPorts }}
+    {{- range $value := .Values.secondary.extraPorts }}
+    {{- $containerIngressPorts = append $containerIngressPorts $value.containerPort }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.secondary.service.extraPorts }}
+    {{- range $value := .Values.secondary.service.extraPorts }}
+    {{- $containerIngressPorts = append $containerIngressPorts $value.port }}
+    {{- end }}
+    {{- end }}
+    - ports:
+        {{- range $value := (compact $containerIngressPorts | uniq ) }}
+        - port: {{ $value }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-          {{- if .Values.networkPolicy.explicitNamespacesSelector }}
-          namespaceSelector:
-{{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
-          {{- end }}
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
             matchLabels:
-            {{- include "common.labels.matchLabels" . | nindent 14 }}
+              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
       {{- end }}
-    {{- if .Values.metrics.enabled }}
-    # Allow prometheus scrapes
-    - ports:
-        - port: 9104
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

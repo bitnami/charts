@@ -1,43 +1,42 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://localhost:{{ .Vars.containerPorts.console }}:
+    status: 200
 command:
-  mc-version-development:
-    exec: mc --version
-    exit-status: 0
-    stdout:
-      - "DEVELOPMENT"
-    stderr: [ ]
-    timeout: 20000 
+  {{- $auth := printf "'%s' '%s'" .Vars.auth.rootUser .Vars.auth.rootPassword }}
+  {{- $minio_cfg_name := printf "minio%s" (randAlpha 5) }}
+  {{- $minio_bucket := printf "bucket%s" (randAlpha 5 | toLower) }}
+  {{- $minio_endpoint := printf "http://minio:%d" .Vars.service.ports.api }}
   mc-make-bucket:
-    exec: mc mb test
+    exec: mc config host add {{ $minio_cfg_name }} {{ $minio_endpoint }} {{ $auth }} && mc mb {{ $minio_cfg_name }}/{{ $minio_bucket }} && mc ls {{ $minio_cfg_name }}
     exit-status: 0
     stdout:
-      - "Bucket created successfully `test`."
-    stderr: [ ]
-    timeout: 20000    
+      - "{{ $minio_bucket }}/"
   mc-list-buckets:
-    exec: mc ls
+    exec: mc admin info local
     exit-status: 0
     stdout:
-      - "bin"
-      - "licenses"
-    stderr: [ ]
-    timeout: 20000 
-  mc-ls-play:
-    exec: mc ls play
+      - /Network.*OK/
+      - /Drives.*OK/
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-    stderr: [ ]
-    timeout: 20000  
-  which-minio:
-    exec: which minio
+  {{ if .Vars.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0
     stdout:
-      - "/opt/bitnami/minio/bin/minio"
-    stderr: [ ]
-    timeout: 20000                
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}
 file:
-  /data:
+  {{ .Vars.persistence.mountPath }}:
     filetype: directory
     exists: true
-  /opt/bitnami/minio-client/bin/mc:
-    filetype: file
-    exists: true
-    group: root    
+    mode: "2775"
+    owner: root

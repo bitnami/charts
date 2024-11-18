@@ -1,0 +1,26 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://neo4j:{{ .Vars.service.ports.http }}:
+    status: 200
+    body:
+      - /neo4j_version/
+  https://neo4j:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
+    body:
+      - /neo4j_version/
+addr:
+  tcp://neo4j:{{ .Vars.service.ports.bolt }}:
+    reachable: true
+    timeout: 500
+file:
+  /opt/bitnami/neo4j/conf/neo4j.conf:
+    mode: "0644"
+    filetype: file
+    exists: true
+  /opt/bitnami/neo4j/conf/apoc.conf:
+    mode: "0644"
+    filetype: file
+    exists: true

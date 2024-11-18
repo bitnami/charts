@@ -49,3 +49,5 @@ APP VERSION: {{ .Chart.AppVersion }}
   echo Password: $ODOO_PASSWORD
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

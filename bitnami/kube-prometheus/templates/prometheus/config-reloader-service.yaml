@@ -1,0 +1,57 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.prometheus.enabled .Values.prometheus.configReloader.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kube-prometheus.configReloader.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+    app.kubernetes.io/subcomponent: config-reloader
+    {{- if .Values.prometheus.configReloader.service.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.configReloader.service.labels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.prometheus.configReloader.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.configReloader.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.prometheus.configReloader.service.type }}
+  {{- if and (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (not (empty .Values.prometheus.configReloader.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.prometheus.configReloader.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (not (empty .Values.prometheus.configReloader.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.prometheus.configReloader.service.loadBalancerClass }}
+  {{- end }}
+  {{- if and (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (not (empty .Values.prometheus.configReloader.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.prometheus.configReloader.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and .Values.prometheus.configReloader.service.clusterIP (eq .Values.prometheus.configReloader.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.prometheus.configReloader.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.prometheus.configReloader.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.prometheus.configReloader.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.prometheus.configReloader.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.configReloader.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (eq .Values.prometheus.configReloader.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.prometheus.configReloader.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.prometheus.configReloader.service.ports.http }}
+      targetPort: reloader-web
+      protocol: TCP
+      {{- if and .Values.prometheus.configReloader.service.nodePorts.http (or (eq .Values.prometheus.configReloader.service.type "NodePort") (eq .Values.prometheus.configReloader.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.prometheus.configReloader.service.nodePorts.http }}
+      {{- end }}
+    {{- if .Values.prometheus.configReloader.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.configReloader.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 4 }}
+    prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
+{{- end }}

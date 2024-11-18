@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{ $ingressClass := .Values.contour.ingressClass }}
 {{- if kindIs "map" $ingressClass }}
 {{- if $ingressClass.create }}
@@ -10,7 +15,9 @@ metadata:
 {{- if $ingressClass.default }}
     ingressclass.kubernetes.io/is-default-class: "true"
 {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.contour.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:
   controller: {{ printf "projectcontour.io/%s/%s-contour" (include "common.names.namespace" .) (include "common.names.fullname" .) }}

@@ -1,22 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://spring-cloud-dataflow-skipper:{{ .Vars.skipper.service.ports.http }}:
+    status: 200
 file:
   /opt/bitnami/spring-cloud-dataflow/conf/application.yml:
     exists: true
     filetype: symlink
     mode: "0777"
     owner: root
-  /bitnami/spring-cloud-dataflow:
+    contents:
+    - "{{ .Vars.server.configuration.accountName }}"
+    - /url.*jdbc:mariadb.*{{ .Vars.mariadb.auth.database }}/
+    - /username.*{{ .Vars.mariadb.auth.username }}/
+  /etc/secrets/database:
     exists: true
     filetype: directory
-    mode: "0775"
+    mode: "3777"
     owner: root
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+  {{- $uid := .Vars.server.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.server.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-    stdout: []
-    stderr: []
-  java-test:
-    exec: java -version
+  {{ if .Vars.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0
     stdout:
-    stderr: []  
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

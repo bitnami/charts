@@ -1,0 +1,239 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.rootCoord.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "milvus.root-coordinator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: root-coordinator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.rootCoord.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.rootCoord.replicaCount }}
+  {{- end }}
+  {{- if .Values.rootCoord.updateStrategy }}
+  strategy: {{- toYaml .Values.rootCoord.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.rootCoord.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: milvus
+      app.kubernetes.io/component: root-coordinator
+  template:
+    metadata:
+      annotations:
+        checksum/common-config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/common-config-extra: {{ include (print $.Template.BasePath "/extra-configmap.yaml") . | sha256sum }}
+        checksum/config-extra: {{ include (print $.Template.BasePath "/root-coordinator/extra-configmap.yaml") . | sha256sum }}
+        {{- if .Values.rootCoord.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: milvus
+        app.kubernetes.io/component: root-coordinator
+    spec:
+      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- end }}
+      serviceAccountName: {{ template "milvus.root-coordinator.serviceAccountName" . }}
+      {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.rootCoord.automountServiceAccountToken }}
+      {{- if .Values.rootCoord.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.rootCoord.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.rootCoord.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.rootCoord.podAffinityPreset "component" "root-coordinator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.rootCoord.podAntiAffinityPreset "component" "root-coordinator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.rootCoord.nodeAffinityPreset.type "key" .Values.rootCoord.nodeAffinityPreset.key "values" .Values.rootCoord.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.rootCoord.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.rootCoord.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.rootCoord.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.rootCoord.runtimeClassName }}
+      runtimeClassName: {{ .Values.rootCoord.runtimeClassName | quote }}
+      {{- end }}
+      {{- if .Values.rootCoord.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.rootCoord.priorityClassName }}
+      priorityClassName: {{ .Values.rootCoord.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.rootCoord.schedulerName }}
+      schedulerName: {{ .Values.rootCoord.schedulerName }}
+      {{- end }}
+      {{- if .Values.rootCoord.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.rootCoord.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.rootCoord.enableDefaultInitContainers }}
+        {{- include "milvus.waitForETCDInitContainer" . | nindent 8 }}
+        {{- include "milvus.waitForKafkaInitContainer" . | nindent 8 }}
+        {{- include "milvus.waitForS3InitContainer" . | nindent 8 }}
+        {{- include "milvus.prepareMilvusInitContainer" (dict "component" "rootCoord" "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.rootCoord.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: milvus
+          image: {{ template "milvus.image" . }}
+          imagePullPolicy: {{ .Values.milvus.image.pullPolicy }}
+          {{- if .Values.rootCoord.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.rootCoord.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.rootCoord.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.rootCoord.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - run
+            - rootcoord
+          {{- end }}
+          env:
+            - name: METRICS_PORT
+              value: {{ .Values.rootCoord.containerPorts.metrics | quote }}
+            {{- if .Values.rootCoord.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.rootCoord.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.rootCoord.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.rootCoord.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.rootCoord.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.rootCoord.containerPorts.grpc }}
+              name: grpc
+            - containerPort: {{ .Values.rootCoord.containerPorts.metrics }}
+              name: http-metrics
+          {{- if .Values.rootCoord.resources }}
+          resources: {{- toYaml .Values.rootCoord.resources | nindent 12 }}
+          {{- else if ne .Values.rootCoord.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.rootCoord.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.rootCoord.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.rootCoord.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rootCoord.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-metrics
+          {{- end }}
+          {{- if .Values.rootCoord.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.rootCoord.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rootCoord.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-metrics
+          {{- end }}
+          {{- if .Values.rootCoord.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.rootCoord.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rootCoord.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-metrics
+          {{- end }}
+          {{- end }}
+          {{- if .Values.rootCoord.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/milvus/configs
+              subPath: app-rendered-conf-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/milvus/tmp
+              subPath: app-tmp-dir
+              # We are using a s3 backend, so this data dir is temporary
+            - name: empty-dir
+              mountPath: /bitnami/milvus/data
+              subPath: app-data-dir
+            {{- if and (not .Values.etcd.enabled) .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
+            - name: etcd-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/etcd/client
+              readOnly: true
+            {{- end }}
+            {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+            - name: kafka-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/kafka/client
+              readOnly: true
+            {{- end }}
+            {{- if and (not .Values.minio.enabled) .Values.externalS3.tls.enabled .Values.externalS3.tls.existingSecret }}
+            - name: minio-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/minio/client
+              readOnly: true
+            {{- end }}
+          {{- if .Values.rootCoord.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.rootCoord.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.rootCoord.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: config-common
+          configMap:
+            name: {{ template "milvus.configmapName" . }}
+        {{- if or .Values.milvus.extraConfig .Values.milvus.extraConfigExistingConfigMap }}
+        - name: extra-config-common
+          configMap:
+            name: {{ template "milvus.extraConfigmapName" . }}
+        {{- end }}
+        - name: component-config-default
+          configMap:
+            name: {{ template "milvus.root-coordinator.configmapName" . }}
+        {{- if or .Values.rootCoord.extraConfig .Values.rootCoord.extraConfigExistingConfigMap }}
+        - name: component-extra-config
+          configMap:
+            name: {{ template "milvus.root-coordinator.extraConfigmapName" . }}
+        {{- end }}
+        {{- if and (not .Values.etcd.enabled) .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
+        - name: etcd-client-certs
+          secret:
+            secretName: {{ .Values.externalEtcd.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+        - name: kafka-client-certs
+          secret:
+            secretName: {{ .Values.externalKafka.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and (not .Values.minio.enabled) .Values.externalS3.tls.enabled .Values.externalS3.tls.existingSecret }}
+        - name: minio-client-certs
+          secret:
+            secretName: {{ .Values.externalS3.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.rootCoord.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

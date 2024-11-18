@@ -1,0 +1,2145 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "default": ""
+                },
+                "compatibility": {
+                    "type": "object",
+                    "properties": {
+                        "openshift": {
+                            "type": "object",
+                            "properties": {
+                                "adaptSecurityContext": {
+                                    "type": "string",
+                                    "description": "Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)",
+                                    "default": "auto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "kubeVersion": {
+            "type": "string",
+            "description": "Override Kubernetes version",
+            "default": ""
+        },
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override common.names.name",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.fullname",
+            "default": ""
+        },
+        "namespaceOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.namespace",
+            "default": ""
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Labels to add to all deployed objects",
+            "default": {}
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Annotations to add to all deployed objects",
+            "default": {}
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Kubernetes cluster domain name",
+            "default": "cluster.local"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release",
+            "default": [],
+            "items": {}
+        },
+        "diagnosticMode": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
+                    "default": false
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Command to override all containers in the deployment",
+                    "default": [
+                        "sleep"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Args to override all containers in the deployment",
+                    "default": [
+                        "infinity"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "ingress": {
+            "type": "object",
+            "properties": {
+                "apiVersion": {
+                    "type": "string",
+                    "description": "Force Ingress API version (automatically detected if not set)",
+                    "default": ""
+                }
+            }
+        },
+        "alertmanager": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Alertmanager enabled",
+                    "default": true
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Alertmanager image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Alertmanager image repository",
+                            "default": "REPOSITORY_NAME/alertmanager"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Alertmanager image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Alertmanager image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Alertmanager image pull secrets",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "Alertmanager configuration. This content will be stored in the the alertmanager.yaml file and the content can be a template.",
+                    "default": "\"\""
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of Alertmanager replicas to deploy",
+                    "default": 1
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "Alertmanager HTTP container port",
+                            "default": 9093
+                        },
+                        "cluster": {
+                            "type": "number",
+                            "description": "Alertmanager Cluster HA port",
+                            "default": 9094
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Alertmanager containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 3
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 3
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Alertmanager containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 2
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Alertmanager containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 2
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 2
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 10
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if alertmanager.resources is set (alertmanager.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Alertmanager pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Alertmanager pod's Security Context fsGroup",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "List of capabilities to be dropped",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "existingConfigmap": {
+                    "type": "string",
+                    "description": "The name of an existing ConfigMap with your custom configuration for Alertmanager",
+                    "default": ""
+                },
+                "existingConfigmapKey": {
+                    "type": "string",
+                    "description": "The name of the key with the Alertmanager config file",
+                    "default": ""
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraArgs": {
+                    "type": "array",
+                    "description": "Additional arguments passed to the Prometheus server container",
+                    "default": [],
+                    "items": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": false
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Alertmanager pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for Alertmanager pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for Alertmanager pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation",
+                            "default": true
+                        }
+                    }
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Alertmanager pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Alertmanager pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Alertmanager pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Alertmanager statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "podManagementPolicy": {
+                    "type": "string",
+                    "description": "Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join",
+                    "default": "OrderedReady"
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Alertmanager pods' priorityClassName",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for Alertmanager pods",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds Redmine pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the Alertmanager container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Alertmanager nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for Alertmanager nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for Alertmanager nodes",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Alertmanager pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Alertmanager container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the Alertmanager pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the Alertmanager pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "ingress": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable ingress record generation for Alertmanager",
+                            "default": false
+                        },
+                        "pathType": {
+                            "type": "string",
+                            "description": "Ingress path type",
+                            "default": "ImplementationSpecific"
+                        },
+                        "hostname": {
+                            "type": "string",
+                            "description": "Default host for the ingress record",
+                            "default": "alertmanager.prometheus.local"
+                        },
+                        "ingressClassName": {
+                            "type": "string",
+                            "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "Default path for the ingress record",
+                            "default": "/"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                            "default": {}
+                        },
+                        "tls": {
+                            "type": "boolean",
+                            "description": "Enable TLS configuration for the host defined at `ingress.hostname` parameter",
+                            "default": false
+                        },
+                        "selfSigned": {
+                            "type": "boolean",
+                            "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                            "default": false
+                        },
+                        "extraHosts": {
+                            "type": "array",
+                            "description": "An array with additional hostname(s) to be covered with the ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraPaths": {
+                            "type": "array",
+                            "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraTls": {
+                            "type": "array",
+                            "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "secrets": {
+                            "type": "array",
+                            "description": "Custom TLS certificates as secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraRules": {
+                            "type": "array",
+                            "description": "Additional rules to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a ServiceAccount should be created",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use.",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional Service Account annotations (evaluated as a template)",
+                            "default": {}
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Automount service account token for the server service account",
+                            "default": false
+                        }
+                    }
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Specifies whether a NetworkPolicy should be created",
+                            "default": true
+                        },
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "Don't require alertmanager label for connections",
+                            "default": true
+                        },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Alertmanager service type",
+                            "default": "LoadBalancer"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "number",
+                                    "description": "Alertmanager service HTTP port",
+                                    "default": 80
+                                },
+                                "cluster": {
+                                    "type": "number",
+                                    "description": "Alertmanager cluster HA port",
+                                    "default": 9094
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "string",
+                                    "description": "Node port for HTTP",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Alertmanager service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Alertmanager service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerClass": {
+                            "type": "string",
+                            "description": "Alertmanager service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Alertmanager service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Alertmanager service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Alertmanager service",
+                            "default": {}
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose in Alertmanager service (normally used with the `sidecars` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Control where client requests go, to the same pod or round-robin",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable Alertmanager data persistence using VolumeClaimTemplates",
+                            "default": false
+                        },
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path to mount the volume at.",
+                            "default": "/bitnami/alertmanager/data"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "PVC Storage Class for Concourse worker data volume",
+                            "default": ""
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "PVC Access Mode for Concourse worker volume",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "PVC Storage Request for Concourse worker volume",
+                            "default": "8Gi"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Annotations for the PVC",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume (this value is evaluated as a template)",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "server": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Prometheus image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Prometheus image repository",
+                            "default": "REPOSITORY_NAME/prometheus"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Prometheus image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Prometheus image pull secrets",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.",
+                    "default": "\"\""
+                },
+                "alertingRules": {
+                    "type": "object",
+                    "description": "Prometheus alerting rules. This content will be stored in the the rules.yaml file and the content can be a template.",
+                    "default": {}
+                },
+                "extraScrapeConfigs": {
+                    "type": "array",
+                    "description": "Promethus configuration, useful to declare new scrape_configs. This content will be merged with the 'server.configuration' value and stored in the the prometheus.yaml file.",
+                    "default": [],
+                    "items": {}
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of Prometheus replicas to deploy",
+                    "default": 1
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "Prometheus HTTP container port",
+                            "default": 9090
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Prometheus containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 3
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 3
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Prometheus containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 2
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Prometheus containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 2
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 2
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 10
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Prometheus pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroupChangePolicy": {
+                            "type": "string",
+                            "description": "Set filesystem group change policy",
+                            "default": "Always"
+                        },
+                        "sysctls": {
+                            "type": "array",
+                            "description": "Set kernel settings using the sysctl interface",
+                            "default": [],
+                            "items": {}
+                        },
+                        "supplementalGroups": {
+                            "type": "array",
+                            "description": "Set filesystem extra groups",
+                            "default": [],
+                            "items": {}
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Prometheus pod's Security Context fsGroup",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context privileged",
+                            "default": false
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context readOnlyRootFilesystem",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set container's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "List of capabilities to be dropped",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "existingConfigmap": {
+                    "type": "string",
+                    "description": "The name of an existing ConfigMap with your custom configuration for Prometheus",
+                    "default": ""
+                },
+                "existingConfigmapKey": {
+                    "type": "string",
+                    "description": "The name of the key with the Prometheus config file",
+                    "default": ""
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraArgs": {
+                    "type": "array",
+                    "description": "Additional arguments passed to the Prometheus server container",
+                    "default": [],
+                    "items": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Mount Service Account token in pod",
+                    "default": true
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Prometheus pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for Prometheus pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for Prometheus pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation",
+                            "default": true
+                        }
+                    }
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Prometheus pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Prometheus pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Prometheus pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Prometheus deployment strategy type. If persistence is enabled, strategy type should be set to Recreate to avoid dead locks.",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Prometheus pods' priorityClassName",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for Prometheus pods",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds Redmine pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the Prometheus container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Prometheus nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for Prometheus nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for Prometheus nodes",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Prometheus pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Prometheus container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the Prometheus pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the Prometheus pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "routePrefix": {
+                    "type": "string",
+                    "description": "Prefix for the internal routes of web endpoints",
+                    "default": "/"
+                },
+                "remoteWrite": {
+                    "type": "array",
+                    "description": "The remote_write spec configuration for Prometheus",
+                    "default": [],
+                    "items": {}
+                },
+                "scrapeInterval": {
+                    "type": "string",
+                    "description": "Interval between consecutive scrapes. Example: \"1m\"",
+                    "default": ""
+                },
+                "scrapeTimeout": {
+                    "type": "string",
+                    "description": "Interval between consecutive scrapes. Example: \"10s\"",
+                    "default": ""
+                },
+                "evaluationInterval": {
+                    "type": "string",
+                    "description": "Interval between consecutive evaluations. Example: \"1m\"",
+                    "default": ""
+                },
+                "enableAdminAPI": {
+                    "type": "boolean",
+                    "description": "Enable Prometheus adminitrative API",
+                    "default": false
+                },
+                "enableRemoteWriteReceiver": {
+                    "type": "boolean",
+                    "description": "Enable Prometheus to be used as a receiver for the Prometheus remote write protocol.",
+                    "default": false
+                },
+                "enableFeatures": {
+                    "type": "array",
+                    "description": "Enable access to Prometheus disabled features.",
+                    "default": [],
+                    "items": {}
+                },
+                "logLevel": {
+                    "type": "string",
+                    "description": "Log level for Prometheus",
+                    "default": "info"
+                },
+                "logFormat": {
+                    "type": "string",
+                    "description": "Log format for Prometheus",
+                    "default": "logfmt"
+                },
+                "retention": {
+                    "type": "string",
+                    "description": "Metrics retention days",
+                    "default": "10d"
+                },
+                "retentionSize": {
+                    "type": "string",
+                    "description": "Maximum size of metrics",
+                    "default": "0"
+                },
+                "alertingEndpoints": {
+                    "type": "array",
+                    "description": "Alertmanagers to which alerts will be sent",
+                    "default": [],
+                    "items": {}
+                },
+                "externalLabels": {
+                    "type": "object",
+                    "description": "External labels to add to any time series or alerts when communicating with external systems",
+                    "default": {}
+                },
+                "thanos": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Create a Thanos sidecar container",
+                            "default": false
+                        },
+                        "image": {
+                            "type": "object",
+                            "properties": {
+                                "registry": {
+                                    "type": "string",
+                                    "description": "Thanos image registry",
+                                    "default": "REGISTRY_NAME"
+                                },
+                                "repository": {
+                                    "type": "string",
+                                    "description": "Thanos image name",
+                                    "default": "REPOSITORY_NAME/thanos"
+                                },
+                                "digest": {
+                                    "type": "string",
+                                    "description": "Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                                    "default": ""
+                                },
+                                "pullPolicy": {
+                                    "type": "string",
+                                    "description": "Thanos image pull policy",
+                                    "default": "IfNotPresent"
+                                },
+                                "pullSecrets": {
+                                    "type": "array",
+                                    "description": "Specify docker-registry secret names as an array",
+                                    "default": [],
+                                    "items": {}
+                                }
+                            }
+                        },
+                        "containerSecurityContext": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enabled containers' Security Context",
+                                    "default": true
+                                },
+                                "runAsUser": {
+                                    "type": "number",
+                                    "description": "Set containers' Security Context runAsUser",
+                                    "default": 1001
+                                },
+                                "runAsGroup": {
+                                    "type": "number",
+                                    "description": "Set containers' Security Context runAsGroup",
+                                    "default": 1001
+                                },
+                                "runAsNonRoot": {
+                                    "type": "boolean",
+                                    "description": "Set container's Security Context runAsNonRoot",
+                                    "default": true
+                                },
+                                "privileged": {
+                                    "type": "boolean",
+                                    "description": "Set container's Security Context privileged",
+                                    "default": false
+                                },
+                                "readOnlyRootFilesystem": {
+                                    "type": "boolean",
+                                    "description": "Set container's Security Context readOnlyRootFilesystem",
+                                    "default": true
+                                },
+                                "allowPrivilegeEscalation": {
+                                    "type": "boolean",
+                                    "description": "Set container's Security Context allowPrivilegeEscalation",
+                                    "default": false
+                                },
+                                "capabilities": {
+                                    "type": "object",
+                                    "properties": {
+                                        "drop": {
+                                            "type": "array",
+                                            "description": "List of capabilities to be dropped",
+                                            "default": [
+                                                "ALL"
+                                            ],
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "seccompProfile": {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "description": "Set container's Security Context seccomp profile",
+                                            "default": "RuntimeDefault"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "prometheusUrl": {
+                            "type": "string",
+                            "description": "Override default prometheus url `http://localhost:9090`",
+                            "default": ""
+                        },
+                        "extraArgs": {
+                            "type": "array",
+                            "description": "Additional arguments passed to the thanos sidecar container",
+                            "default": [],
+                            "items": {}
+                        },
+                        "objectStorageConfig": {
+                            "type": "object",
+                            "properties": {
+                                "secretName": {
+                                    "type": "string",
+                                    "description": "Support mounting a Secret for the objectStorageConfig of the sideCar container.",
+                                    "default": ""
+                                },
+                                "secretKey": {
+                                    "type": "string",
+                                    "description": "Secret key with the configuration file.",
+                                    "default": "thanos.yaml"
+                                }
+                            }
+                        },
+                        "extraVolumeMounts": {
+                            "type": "array",
+                            "description": "Additional volumeMounts from `server.volumes` for thanos sidecar container",
+                            "default": [],
+                            "items": {}
+                        },
+                        "resourcesPreset": {
+                            "type": "string",
+                            "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if server.thanos.resources is set (server.thanos.resources is recommended for production).",
+                            "default": "nano"
+                        },
+                        "resources": {
+                            "type": "object",
+                            "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                            "default": {}
+                        },
+                        "livenessProbe": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Turn on and off liveness probe",
+                                    "default": true
+                                },
+                                "initialDelaySeconds": {
+                                    "type": "number",
+                                    "description": "Delay before liveness probe is initiated",
+                                    "default": 0
+                                },
+                                "periodSeconds": {
+                                    "type": "number",
+                                    "description": "How often to perform the probe",
+                                    "default": 5
+                                },
+                                "timeoutSeconds": {
+                                    "type": "number",
+                                    "description": "When the probe times out",
+                                    "default": 3
+                                },
+                                "failureThreshold": {
+                                    "type": "number",
+                                    "description": "Minimum consecutive failures for the probe",
+                                    "default": 120
+                                },
+                                "successThreshold": {
+                                    "type": "number",
+                                    "description": "Minimum consecutive successes for the probe",
+                                    "default": 1
+                                }
+                            }
+                        },
+                        "readinessProbe": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Turn on and off readiness probe",
+                                    "default": true
+                                },
+                                "initialDelaySeconds": {
+                                    "type": "number",
+                                    "description": "Delay before readiness probe is initiated",
+                                    "default": 0
+                                },
+                                "periodSeconds": {
+                                    "type": "number",
+                                    "description": "How often to perform the probe",
+                                    "default": 5
+                                },
+                                "timeoutSeconds": {
+                                    "type": "number",
+                                    "description": "When the probe times out",
+                                    "default": 3
+                                },
+                                "failureThreshold": {
+                                    "type": "number",
+                                    "description": "Minimum consecutive failures for the probe",
+                                    "default": 120
+                                },
+                                "successThreshold": {
+                                    "type": "number",
+                                    "description": "Minimum consecutive successes for the probe",
+                                    "default": 1
+                                }
+                            }
+                        },
+                        "customLivenessProbe": {
+                            "type": "object",
+                            "description": "Custom livenessProbe that overrides the default one",
+                            "default": {}
+                        },
+                        "customReadinessProbe": {
+                            "type": "object",
+                            "description": "Custom readinessProbe that overrides the default one",
+                            "default": {}
+                        },
+                        "service": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Kubernetes service type",
+                                    "default": "ClusterIP"
+                                },
+                                "ports": {
+                                    "type": "object",
+                                    "properties": {
+                                        "grpc": {
+                                            "type": "number",
+                                            "description": "Thanos service port",
+                                            "default": 10901
+                                        }
+                                    }
+                                },
+                                "clusterIP": {
+                                    "type": "string",
+                                    "description": "Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.",
+                                    "default": "None"
+                                },
+                                "nodePorts": {
+                                    "type": "object",
+                                    "properties": {
+                                        "grpc": {
+                                            "type": "string",
+                                            "description": "Specify the nodePort value for the LoadBalancer and NodePort service types.",
+                                            "default": ""
+                                        }
+                                    }
+                                },
+                                "loadBalancerIP": {
+                                    "type": "string",
+                                    "description": "`loadBalancerIP` if service type is `LoadBalancer`",
+                                    "default": ""
+                                },
+                                "loadBalancerClass": {
+                                    "type": "string",
+                                    "description": "Thanos service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
+                                    "default": ""
+                                },
+                                "loadBalancerSourceRanges": {
+                                    "type": "array",
+                                    "description": "Address that are allowed when svc is `LoadBalancer`",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Additional annotations for Prometheus service",
+                                    "default": {}
+                                },
+                                "extraPorts": {
+                                    "type": "array",
+                                    "description": "Additional ports to expose from the Thanos sidecar container",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "externalTrafficPolicy": {
+                                    "type": "string",
+                                    "description": "Prometheus service external traffic policy",
+                                    "default": "Cluster"
+                                },
+                                "sessionAffinity": {
+                                    "type": "string",
+                                    "description": "Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"",
+                                    "default": "None"
+                                },
+                                "sessionAffinityConfig": {
+                                    "type": "object",
+                                    "description": "Additional settings for the sessionAffinity",
+                                    "default": {}
+                                }
+                            }
+                        },
+                        "ingress": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable ingress controller resource",
+                                    "default": false
+                                },
+                                "pathType": {
+                                    "type": "string",
+                                    "description": "Ingress path type",
+                                    "default": "ImplementationSpecific"
+                                },
+                                "hostname": {
+                                    "type": "string",
+                                    "description": "Default host for the ingress record",
+                                    "default": "thanos.prometheus.local"
+                                },
+                                "path": {
+                                    "type": "string",
+                                    "description": "Default path for the ingress record",
+                                    "default": "/"
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                                    "default": {}
+                                },
+                                "ingressClassName": {
+                                    "type": "string",
+                                    "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                                    "default": ""
+                                },
+                                "tls": {
+                                    "type": "boolean",
+                                    "description": "Enable TLS configuration for the host defined at `ingress.hostname` parameter",
+                                    "default": false
+                                },
+                                "selfSigned": {
+                                    "type": "boolean",
+                                    "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                                    "default": false
+                                },
+                                "extraHosts": {
+                                    "type": "array",
+                                    "description": "An array with additional hostname(s) to be covered with the ingress record",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "extraPaths": {
+                                    "type": "array",
+                                    "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "extraTls": {
+                                    "type": "array",
+                                    "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "secrets": {
+                                    "type": "array",
+                                    "description": "Custom TLS certificates as secrets",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "extraRules": {
+                                    "type": "array",
+                                    "description": "The list of additional rules to be added to this ingress record. Evaluated as a template",
+                                    "default": [],
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "ingress": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable ingress record generation for Prometheus",
+                            "default": false
+                        },
+                        "pathType": {
+                            "type": "string",
+                            "description": "Ingress path type",
+                            "default": "ImplementationSpecific"
+                        },
+                        "hostname": {
+                            "type": "string",
+                            "description": "Default host for the ingress record",
+                            "default": "server.prometheus.local"
+                        },
+                        "ingressClassName": {
+                            "type": "string",
+                            "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "Default path for the ingress record",
+                            "default": "/"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                            "default": {}
+                        },
+                        "tls": {
+                            "type": "boolean",
+                            "description": "Enable TLS configuration for the host defined at `ingress.hostname` parameter",
+                            "default": false
+                        },
+                        "selfSigned": {
+                            "type": "boolean",
+                            "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                            "default": false
+                        },
+                        "extraHosts": {
+                            "type": "array",
+                            "description": "An array with additional hostname(s) to be covered with the ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraPaths": {
+                            "type": "array",
+                            "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraTls": {
+                            "type": "array",
+                            "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "secrets": {
+                            "type": "array",
+                            "description": "Custom TLS certificates as secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraRules": {
+                            "type": "array",
+                            "description": "Additional rules to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a ServiceAccount should be created",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use.",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional Service Account annotations (evaluated as a template)",
+                            "default": {}
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Automount service account token for the server service account",
+                            "default": false
+                        }
+                    }
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Specifies whether a NetworkPolicy should be created",
+                            "default": true
+                        },
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "Don't require server label for connections",
+                            "default": true
+                        },
+                        "allowExternalEgress": {
+                            "type": "boolean",
+                            "description": "Allow the pod to access any range of port and all destinations.",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": "[]",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Prometheus service type",
+                            "default": "LoadBalancer"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "number",
+                                    "description": "Prometheus service HTTP port",
+                                    "default": 80
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "string",
+                                    "description": "Node port for HTTP",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Prometheus service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Prometheus service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerClass": {
+                            "type": "string",
+                            "description": "Prometheus service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Prometheus service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Prometheus service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Prometheus service",
+                            "default": {}
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose in Prometheus service (normally used with the `sidecars` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Control where client requests go, to the same pod or round-robin. ClientIP by default.",
+                            "default": "ClientIP"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence using Persistent Volume Claims. If you have multiple instances (server.repicacount > 1), please considere using an external storage service like Thanos or Grafana Mimir",
+                            "default": false
+                        },
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path to mount the volume at.",
+                            "default": "/bitnami/prometheus/data"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "Storage class of backing PVC",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Persistent Volume Claim annotations",
+                            "default": {}
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume Access Modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Size of data volume",
+                            "default": "8Gi"
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "The name of an existing PVC to use for persistence",
+                            "default": ""
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume for Prometheus data PVC",
+                            "default": {}
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        }
+                    }
+                },
+                "rbac": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether RBAC resources should be created",
+                            "default": true
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Custom RBAC rules to set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        },
+        "volumePermissions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image registry",
+                            "default": "REGISTRY_NAME"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image repository",
+                            "default": "REPOSITORY_NAME/os-shell"
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "OS Shell + Utility image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "OS Shell + Utility image pull secrets",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "resourcesPreset": {
+                    "type": "string",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).",
+                    "default": "nano"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
+                    "default": {}
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set init container's Security Context runAsUser",
+                            "default": 0
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

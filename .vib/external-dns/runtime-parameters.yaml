@@ -1,0 +1,18 @@
+containerPorts:
+  http: 7980
+provider: inmemory
+service:
+  ports:
+    http: 80
+  type: LoadBalancer
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+rbac:
+  create: true
+  clusterRole: true
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002

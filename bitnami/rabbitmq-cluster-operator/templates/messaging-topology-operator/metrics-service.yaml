@@ -1,24 +1,23 @@
-{{- if .Values.msgTopologyOperator.metrics.enabled }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.msgTopologyOperator.enabled .Values.msgTopologyOperator.metrics.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq
     type: metrics
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  name: {{ printf "%s-metrics" (include "rmqco.msgTopologyOperator.fullname" .) }}
+  name: {{ printf "%s-metrics" (include "rmqco.msgTopologyOperator.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- if or .Values.commonAnnotations .Values.msgTopologyOperator.metrics.service.annotations }}
-  annotations:
-    {{- if .Values.msgTopologyOperator.metrics.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.msgTopologyOperator.metrics.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.metrics.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.msgTopologyOperator.metrics.service.type }}
@@ -53,6 +52,7 @@ spec:
     {{- if .Values.msgTopologyOperator.metrics.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.metrics.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
 {{- end }}

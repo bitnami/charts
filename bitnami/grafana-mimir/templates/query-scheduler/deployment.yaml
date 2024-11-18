@@ -1,0 +1,175 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.queryScheduler.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "grafana-mimir.query-scheduler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: query-scheduler
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.queryScheduler.replicaCount }}
+  {{- if .Values.queryScheduler.updateStrategy }}
+  strategy: {{- toYaml .Values.queryScheduler.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryScheduler.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: grafana-mimir
+      app.kubernetes.io/component: query-scheduler
+  template:
+    metadata:
+      {{- if .Values.queryScheduler.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: grafana-mimir
+        app.kubernetes.io/component: query-scheduler
+    spec:
+      serviceAccountName: {{ template "grafana-mimir.serviceAccountName" . }}
+      {{- include "grafana-mimir.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.queryScheduler.automountServiceAccountToken }}
+      {{- if .Values.queryScheduler.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.queryScheduler.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryScheduler.podAffinityPreset "component" "queryScheduler" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryScheduler.podAntiAffinityPreset "component" "queryScheduler" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryScheduler.nodeAffinityPreset.type "key" .Values.queryScheduler.nodeAffinityPreset.key "values" .Values.queryScheduler.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.queryScheduler.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.priorityClassName }}
+      priorityClassName: {{ .Values.queryScheduler.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.queryScheduler.schedulerName }}
+      schedulerName: {{ .Values.queryScheduler.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.queryScheduler.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryScheduler.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.queryScheduler.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.queryScheduler.initContainers }}
+      initContainers:
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: query-scheduler
+          image: {{ template "grafana-mimir.image" . }}
+          imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
+          {{- if .Values.queryScheduler.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryScheduler.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -target=query-scheduler
+            - -config.file={{ .Values.mimir.dataDir }}/conf/mimir.yaml
+            {{- if .Values.queryScheduler.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.compactor.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.queryScheduler.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.queryScheduler.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.queryScheduler.resources }}
+          resources: {{- toYaml .Values.queryScheduler.resources | nindent 12 }}
+          {{- else if ne .Values.queryScheduler.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.queryScheduler.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.mimir.containerPorts.http }}
+              name: http
+            - containerPort: {{ .Values.mimir.containerPorts.grpc }}
+              name: grpc
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.queryScheduler.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.queryScheduler.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
+          {{- end }}
+          {{- if .Values.queryScheduler.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.queryScheduler.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: mimir-config
+              mountPath: {{ .Values.mimir.dataDir }}/conf
+            - name: data
+              mountPath: {{ .Values.mimir.dataDir }}
+          {{- if .Values.queryScheduler.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.queryScheduler.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.queryScheduler.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: data
+          emptyDir: {}
+        - name: mimir-config
+          configMap:
+            name: {{ template "grafana-mimir.mimir.configmapName" . }}
+        {{- if .Values.queryScheduler.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

@@ -1,22 +1,21 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.aggregator.enabled .Values.aggregator.service.ports -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-headless
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: aggregator
     app: aggregator
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if or .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.aggregator.service.annotationsHeadless }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.service.annotationsHeadless "context" $) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.aggregator.service.headless.annotations .Values.aggregator.service.annotationsHeadless }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.service.headless.annotations .Values.aggregator.service.annotationsHeadless .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
@@ -25,6 +24,7 @@ spec:
     - name: {{ $key }}
       {{ omit $value "nodePort" | toYaml | nindent 6 }}
   {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: aggregator
 {{- end -}}

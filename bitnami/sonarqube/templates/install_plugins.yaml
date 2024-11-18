@@ -1,0 +1,24 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-install-plugins-configmap" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations:
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  install_plugins.sh: |-
+    {{- if .Values.plugins.install }}
+    [ -e {{.Values.provisioningFolder}}/extensions/plugins/* ] && rm {{.Values.provisioningFolder}}/extensions/plugins/*
+    cd {{.Values.provisioningFolder}}/extensions/plugins/
+      {{- range $index, $val := .Values.plugins.install }}
+    curl {{ if $.Values.plugins.noCheckCertificate }}--insecure{{ end }} {{ if $.Values.plugins.netrcCreds }}--netrc-file /root/.netrc{{ end }} -fsSLO {{ $val | quote }}
+      {{- end }}
+    {{- end }}

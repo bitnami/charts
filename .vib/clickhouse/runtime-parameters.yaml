@@ -1,0 +1,32 @@
+auth:
+  username: test_user
+  password: bitnami1234
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    tcp: 9001
+    tcpSecure: 9441
+    mysql: 9005
+    postgresql: 9006
+    interserver: 9010
+    metrics: 8002
+containerPorts:
+  http: 8124
+  tcp: 9001
+  tcpSecure: 9441
+  mysql: 9005
+  postgresql: 9006
+  interserver: 9010
+  metrics: 8002
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+shards: 2
+replicaCount: 2
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002

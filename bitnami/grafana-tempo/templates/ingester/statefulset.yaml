@@ -1,13 +1,15 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "grafana-tempo.ingester.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ingester
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -16,8 +18,9 @@ spec:
   {{- if .Values.ingester.updateStrategy }}
   updateStrategy: {{- toYaml .Values.ingester.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingester.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: ingester
   serviceName: {{ template "grafana-tempo.ingester.fullname" . }}
   template:
@@ -27,15 +30,13 @@ spec:
         {{- if .Values.ingester.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.ingester.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: ingester
         tempo-gossip-member: "true"
-        {{- if .Values.ingester.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.ingester.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.ingester.automountServiceAccountToken }}
       {{- if .Values.ingester.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -43,8 +44,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.ingester.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingester.podAffinityPreset "component" "ingester" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingester.podAntiAffinityPreset "component" "ingester" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingester.podAffinityPreset "component" "ingester" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingester.podAntiAffinityPreset "component" "ingester" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.ingester.nodeAffinityPreset.type "key" .Values.ingester.nodeAffinityPreset.key "values" .Values.ingester.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.ingester.nodeSelector }}
@@ -63,8 +64,9 @@ spec:
       schedulerName: {{ .Values.ingester.schedulerName }}
       {{- end }}
       {{- if .Values.ingester.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.ingester.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingester.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.ingester.enableServiceLinks }}
       initContainers:
         {{- if .Values.ingester.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.ingester.initContainers "context" $) | nindent 8 }}
@@ -88,9 +90,14 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.tempo.dataDir }}
         {{- end }}
@@ -99,7 +106,7 @@ spec:
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
           {{- if .Values.ingester.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.ingester.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingester.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -136,35 +143,41 @@ spec:
             - containerPort: {{ .Values.tempo.containerPorts.grpc }}
               name: grpc
           {{- if .Values.ingester.resources }}
-          resources: {{- toYaml .Values.ingester.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.ingester.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ingester.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.ingester.livenessProbe.enabled }}
+          {{- if .Values.ingester.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingester.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.ingester.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingester.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: http
-          {{- else if .Values.ingester.customReadinessProbe }}
+          {{- if .Values.ingester.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingester.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
           {{- end }}
-          {{- if .Values.ingester.startupProbe.enabled }}
+          {{- if .Values.ingester.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingester.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.ingester.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.ingester.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
@@ -180,6 +193,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.ingester.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: tempo-config
           configMap:
             name: {{ template "grafana-tempo.tempoConfigmapName" . }}
@@ -196,16 +211,13 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        {{- if or .Values.ingester.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingester.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
-        annotations:
-          {{- if .Values.ingester.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.ingester.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
       spec:
         accessModes:
         {{- range .Values.ingester.persistence.accessModes }}

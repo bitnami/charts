@@ -1,0 +1,47 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  # Metrics
+  http://kuberay-operator:{{ .Vars.operator.service.ports.metrics }}/metrics:
+    status: 200
+    body:
+      - /workqueue_queue_duration_seconds_bucket/
+  http://127.0.0.1:{{ .Vars.operator.containerPorts.metrics }}/metrics:
+    status: 200
+    body:
+      - /workqueue_queue_duration_seconds_bucket/
+  http://kuberay-apiserver:{{ .Vars.apiserver.service.ports.http }}/healthz:
+    status: 200
+addr:
+  # Container ports
+  tcp://kuberay-apiserver:{{ .Vars.apiserver.service.ports.grpc }}:
+    reachable: true
+    timeout: 180000
+command:
+  {{- $uid := .Vars.operator.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.operator.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always
+    # be either the one specified as vars (always a bigger number that the def<ault)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{- if .Vars.operator.containerSecurityContext.enabled }}
+  check-no-capabilities:
+    exec: cat /proc/1/status
+    exit-status: 0
+    stdout:
+    - "CapInh:	0000000000000000"
+    - "CapPrm:	0000000000000000"
+    - "CapEff:	0000000000000000"
+    - "CapBnd:	0000000000000000"
+    - "CapAmb:	0000000000000000"
+  {{- end }}
+  {{ if .Vars.operator.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*kuberay-operator/
+  {{ end }}

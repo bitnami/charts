@@ -1,10 +1,15 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kubeapps.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.assetsvc.image .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image .Values.testImage) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -19,13 +24,6 @@ Return the proper apprepository-controller sync image name
 */}}
 {{- define "kubeapps.apprepository.syncImage" -}}
 {{- include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
-Return the proper assetsvc image name
-*/}}
-{{- define "kubeapps.assetsvc.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.assetsvc.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -64,10 +62,10 @@ Return the proper kubeappsapis image name
 {{- end -}}
 
 {{/*
-Return the proper kubeops image name
+Return the proper oci-catalog image name
 */}}
-{{- define "kubeapps.kubeops.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.kubeops.image "global" .Values.global) -}}
+{{- define "kubeapps.ociCatalog.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.ociCatalog.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -120,10 +118,10 @@ Create name for the apprepository-controller based on the fullname
 {{- end -}}
 
 {{/*
-Create name for the assetsvc based on the fullname
+Create name for the apprepository-controller based on the namespace
 */}}
-{{- define "kubeapps.assetsvc.fullname" -}}
-{{- printf "%s-internal-assetsvc" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- define "kubeapps.apprepository.fullname.namespace" -}}
+{{- printf "%s-internal-apprepository-controller" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -152,13 +150,6 @@ Create name for kubeappsapis based on the fullname
 */}}
 {{- define "kubeapps.kubeappsapis.fullname" -}}
 {{- printf "%s-internal-kubeappsapis" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create name for kubeops based on the fullname
-*/}}
-{{- define "kubeapps.kubeops.fullname" -}}
-{{- printf "%s-internal-kubeops" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -191,24 +182,6 @@ Create the name of the kubeappsapis service account to use
 {{- end -}}
 
 {{/*
-Create the name of the kubeops service account to use
-*/}}
-{{- define "kubeapps.kubeops.serviceAccountName" -}}
-{{- if .Values.kubeops.serviceAccount.create -}}
-    {{- default (include "kubeapps.kubeops.fullname" .) .Values.kubeops.serviceAccount.name -}}
-{{- else -}}
-    {{- default "default" .Values.kubeops.serviceAccount.name -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create proxy_pass for the frontend config
-*/}}
-{{- define "kubeapps.frontend-config.proxy_pass" -}}
-{{- printf "http://%s:%d" (include "kubeapps.kubeops.fullname" .) (int .Values.kubeops.service.ports.http) -}}
-{{- end -}}
-
-{{/*
 Create proxy_pass for the kubeappsapis
 */}}
 {{- define "kubeapps.kubeappsapis.proxy_pass" -}}
@@ -219,7 +192,11 @@ Create proxy_pass for the kubeappsapis
 Create name for the secrets related to oauth2_proxy
 */}}
 {{- define "kubeapps.oauth2_proxy-secret.name" -}}
+{{- if .Values.authProxy.existingOauth2Secret -}}
+{{- printf "%s" (tpl .Values.authProxy.existingOauth2Secret $) -}}
+{{- else -}}
 {{- printf "%s-oauth2" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -285,10 +262,15 @@ Returns a JSON list of cluster names only (without sensitive tokens etc.)
 {{- end -}}
 
 {{/*
-Returns the name of the globalRepos namespace
+Returns the name of the global packaging namespace for the Helm plugin.
+It uses the value passed in the plugin's config, but falls back to the "release namespace + suffix" formula.
 */}}
-{{- define "kubeapps.globalReposNamespace" -}}
-{{- printf "%s%s" .Release.Namespace .Values.apprepository.globalReposNamespaceSuffix -}}
+{{- define "kubeapps.helmGlobalPackagingNamespace" -}}
+  {{- if .Values.kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace }}
+      {{- printf "%s" .Values.kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace -}}
+  {{- else -}}
+      {{- printf "%s%s" .Release.Namespace .Values.apprepository.globalReposNamespaceSuffix -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*
@@ -383,8 +365,6 @@ Check if there are rolling tags in the images
 {{- include "common.warnings.rollingTag" .Values.frontend.image }}
 {{- include "common.warnings.rollingTag" .Values.dashboard.image }}
 {{- include "common.warnings.rollingTag" .Values.apprepository.image }}
-{{- include "common.warnings.rollingTag" .Values.assetsvc.image }}
-{{- include "common.warnings.rollingTag" .Values.kubeops.image }}
 {{- include "common.warnings.rollingTag" .Values.authProxy.image }}
 {{- include "common.warnings.rollingTag" .Values.pinnipedProxy.image }}
 {{- include "common.warnings.rollingTag" .Values.kubeappsapis.image }}

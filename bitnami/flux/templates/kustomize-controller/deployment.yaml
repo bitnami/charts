@@ -1,0 +1,180 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.kustomizeController.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "flux.kustomize-controller.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.kustomizeController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: kustomize-controller
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.kustomizeController.autoscaling.enabled }}
+  replicas: {{ .Values.kustomizeController.replicaCount }}
+  {{- end }}
+  {{- if .Values.kustomizeController.updateStrategy }}
+  strategy: {{- toYaml .Values.kustomizeController.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kustomizeController.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: kustomize-controller
+  template:
+    metadata:
+      {{- if .Values.kustomizeController.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
+        app.kubernetes.io/component: kustomize-controller
+    spec:
+      serviceAccountName: {{ template "flux.kustomize-controller.serviceAccountName" . }}
+      {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.kustomizeController.automountServiceAccountToken }}
+      {{- if .Values.kustomizeController.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kustomizeController.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.kustomizeController.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.kustomizeController.podAffinityPreset "component" "kustomize-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.kustomizeController.podAntiAffinityPreset "component" "kustomize-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.kustomizeController.nodeAffinityPreset.type "key" .Values.kustomizeController.nodeAffinityPreset.key "values" .Values.kustomizeController.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.kustomizeController.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.kustomizeController.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kustomizeController.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kustomizeController.priorityClassName }}
+      priorityClassName: {{ .Values.kustomizeController.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.kustomizeController.schedulerName }}
+      schedulerName: {{ .Values.kustomizeController.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.kustomizeController.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kustomizeController.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kustomizeController.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kustomizeController.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.kustomizeController.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.kustomizeController.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: kustomize-controller
+          image: {{ template "flux.kustomize-controller.image" . }}
+          imagePullPolicy: {{ .Values.kustomizeController.image.pullPolicy }}
+          {{- if .Values.kustomizeController.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kustomizeController.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.kustomizeController.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.kustomizeController.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --watch-all-namespaces={{ .Values.kustomizeController.watchAllNamespaces }}
+            {{- if .Values.kustomizeController.image.debug }}
+            - --log-level=debug
+            {{- else }}
+            - --log-level=info
+            {{- end }}
+            - --metrics-addr=:{{ .Values.kustomizeController.containerPorts.metrics }}
+            - --health-addr=:{{ .Values.kustomizeController.containerPorts.health }}
+            - --log-encoding=json
+            - --enable-leader-election
+          {{- end }}
+          env:
+            - name: RUNTIME_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            {{- if .Values.kustomizeController.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.kustomizeController.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.kustomizeController.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.kustomizeController.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.kustomizeController.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.kustomizeController.resources }}
+          resources: {{- toYaml .Values.kustomizeController.resources | nindent 12 }}
+          {{- else if ne .Values.kustomizeController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.kustomizeController.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http-metrics
+              containerPort: {{ .Values.kustomizeController.containerPorts.metrics }}
+            - name: http-health
+              containerPort: {{ .Values.kustomizeController.containerPorts.health }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.kustomizeController.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kustomizeController.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kustomizeController.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-health
+          {{- end }}
+          {{- if .Values.kustomizeController.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kustomizeController.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kustomizeController.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /readyz
+              port: http-health
+          {{- end }}
+          {{- if .Values.kustomizeController.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kustomizeController.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kustomizeController.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-health
+          {{- end }}
+          {{- end }}
+          {{- if .Values.kustomizeController.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.kustomizeController.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.kustomizeController.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.kustomizeController.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.kustomizeController.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

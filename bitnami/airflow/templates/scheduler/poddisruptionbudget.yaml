@@ -1,22 +1,25 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.scheduler.pdb.create }}
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
-  name: {{ printf "%s-scheduler" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ template "airflow.scheduler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scheduler
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
 spec:
   {{- if .Values.scheduler.pdb.minAvailable }}
   minAvailable: {{ .Values.scheduler.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.scheduler.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.scheduler.pdb.maxUnavailable }}
+  {{- if or .Values.scheduler.pdb.maxUnavailable ( not .Values.scheduler.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.scheduler.pdb.maxUnavailable | default 1 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scheduler.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: scheduler
 {{- end }}

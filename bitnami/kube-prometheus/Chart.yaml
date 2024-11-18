@@ -1,38 +1,52 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Analytics
+  licenses: Apache-2.0
+  images: |
+    - name: alertmanager
+      image: docker.io/bitnami/alertmanager:0.27.0-debian-12-r25
+    - name: blackbox-exporter
+      image: docker.io/bitnami/blackbox-exporter:0.25.0-debian-12-r19
+    - name: prometheus
+      image: docker.io/bitnami/prometheus:2.55.1-debian-12-r1
+    - name: prometheus-operator
+      image: docker.io/bitnami/prometheus-operator:0.78.1-debian-12-r1
+    - name: thanos
+      image: docker.io/bitnami/thanos:0.36.1-debian-12-r5
 apiVersion: v2
-appVersion: 0.57.0
+appVersion: 0.78.1
 dependencies:
-  - condition: exporters.enabled,exporters.node-exporter.enabled
-    name: node-exporter
-    repository: https://charts.bitnami.com/bitnami
-    version: 3.x.x
-  - condition: exporters.enabled,exporters.kube-state-metrics.enabled
-    name: kube-state-metrics
-    repository: https://charts.bitnami.com/bitnami
-    version: 3.x.x
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
+- condition: exporters.enabled,exporters.node-exporter.enabled
+  name: node-exporter
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 4.x.x
+- condition: exporters.enabled,exporters.kube-state-metrics.enabled
+  name: kube-state-metrics
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 4.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+- name: kube-prometheus-crds
+  repository: file://./charts/kube-prometheus-crds
+  version: 0.x.x
 description: Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/prometheus-operator/img/prometheus-operator-stack-220x234.png
 keywords:
-  - prometheus
-  - alertmanager
-  - operator
-  - monitoring
+- prometheus
+- alertmanager
+- operator
+- monitoring
 kubeVersion: '>= 1.16.0-0'
 maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: kube-prometheus
 sources:
-  - https://github.com/bitnami/bitnami-docker-prometheus-operator
-  - https://github.com/bitnami/bitnami-docker-prometheus
-  - https://github.com/bitnami/bitnami-docker-alertmanager
-  - https://github.com/prometheus-operator/kube-prometheus
-version: 8.0.7
+- https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
+version: 10.0.4

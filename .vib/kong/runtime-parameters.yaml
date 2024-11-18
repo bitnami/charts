@@ -1,0 +1,114 @@
+replicaCount: 1
+database: postgresql
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+kong:
+  containerPorts: 
+    proxyHttp: 8000
+    proxyHttps: 8443
+    adminHttp: 8001
+    adminHttps: 8444
+service:
+  type: LoadBalancer
+  exposeAdmin: true
+  disableHttpPort: false
+  ports:
+    proxyHttp: 80
+    proxyHttps: 8443
+    adminHttp: 443
+    adminHttps: 8444
+ingressController:
+  enabled: true
+  ingressClass: kong
+postgresql:
+  enabled: true
+  auth:
+    username: kong
+    password: ""
+    database: kong
+extraDeploy:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: nginx-vib-tests
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: nginx
+    template:
+      metadata:
+        labels:
+          app: nginx
+      spec:
+        containers:
+        - name: nginx
+          image: bitnami/nginx
+          ports:
+            - containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: nginx-vib-tests
+    labels:
+      app: nginx
+  spec:
+    selector:
+      app: nginx
+    ports:
+    - port: 8080
+      name: http
+      targetPort: 8080
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: apikey-vib-tests
+    labels:
+      konghq.com/credential: key-auth
+  data:
+    key: Q29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0
+- apiVersion: configuration.konghq.com/v1
+  kind: KongConsumer
+  metadata:
+    name: vib-tests
+    annotations:
+      kubernetes.io/ingress.class: kong
+  username: vib-tests
+  credentials:
+  - apikey-vib-tests
+- apiVersion: configuration.konghq.com/v1
+  kind: KongPlugin
+  metadata:
+    name: auth-vib-tests
+  plugin: key-auth
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: vib-tests
+    annotations:
+      konghq.com/strip-path: "true"
+      konghq.com/plugins: auth-vib-tests
+  spec:
+    ingressClassName: kong
+    rules:
+    - host: www.example.com
+      http:
+        paths:
+        - path: /nginx
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: nginx-vib-tests
+              port:
+                number: 8080

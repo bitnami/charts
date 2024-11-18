@@ -1,0 +1,28 @@
+drupalUsername: test_user
+drupalPassword: ComplicatedPassword123!4
+mariadb:
+  auth:
+    database: test_drupal_database
+    username: test_drupal_username
+    password: test_drupal_password
+containerPorts:
+  http: 8081
+  https: 8444
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    https: 444
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.testhost
+serviceAccount:
+  create: true
+automountServiceAccountToken: true

@@ -1,0 +1,90 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if $.Values.snapshots.enabled -}}
+{{- $host := (include "opensearch.service.name" $) -}}
+{{- $port := (include "opensearch.service.ports.restAPI" $) -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    helm.sh/hook: post-install
+  {{- if .Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: snapshots
+  name: {{ include "opensearch.snapshots.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - args:
+            - --silent
+            - --show-error
+            - "file:///dev/null" # Starting with curl 8, a URL is required before the first `--next`
+          {{- range $name, $_ := $.Values.snapshots.repositories }}
+            # Register snapshot repository:
+            - --next
+            - -w
+            - '\n'
+            - -XPUT
+            - -H
+            - "Content-Type: application/json"
+            - -d
+            - "@/run/repo-data/{{ $name }}"
+            - http://{{ $host }}:{{ $port }}/_snapshot/{{ $name }}
+          {{- end }}
+          {{- range $name, $_ := $.Values.snapshots.policies }}
+            # Register snapshot policy:
+            - --next
+            - -w
+            - '\n'
+            - -H
+            - "Content-Type: application/json"
+            - -d
+            - "@/run/policy-data/{{ $name }}"
+            - http://{{ $host }}:{{ $port }}/_plugins/_sm/policies/{{ $name }}
+          {{- end }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.snapshots.command "context" $) | nindent 12 }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.snapshots.image.debug .Values.diagnosticMode.enabled) | quote }}
+          image: {{ template "opensearch.snapshots.image" . }}
+          imagePullPolicy: {{ .Values.snapshots.image.pullPolicy }}
+          name: {{ include "opensearch.snapshots.fullname" . }}
+          {{- if .Values.snapshots.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.snapshots.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.snapshots.resources }}
+          resources: {{- toYaml .Values.snapshots.resources | nindent 12 }}
+          {{- else if ne .Values.snapshots.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.snapshots.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: repo-data
+              mountPath: /run/repo-data/
+            - name: policy-data
+              mountPath: /run/policy-data/
+      {{- with .Values.snapshots.image.pullSecrets }}
+      imagePullPolicy:
+      {{- range . }}
+        - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      restartPolicy: Never
+      {{- if .Values.dashboards.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboards.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: policy-data
+          configMap:
+            name: {{ include "opensearch.snapshots.policyDataConfigMap" . }}
+        - name: repo-data
+          configMap:
+            name: {{ include "opensearch.snapshots.repoDataConfigMap" . }}
+{{- end -}}

@@ -1,30 +1,35 @@
-command:
-  kibana-version-ok:
-    exec: kibana --version
-    exit-status: 0
-    stdout:
-    stderr: [ ]
-    timeout: 20000
-  which-kibana:
-    exec: which kibana
-    exit-status: 0
-    stdout:
-    - "/opt/bitnami/kibana/bin/kibana"
-    stderr: []
-    timeout: 0  
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 file:
-  /opt/bitnami/kibana/config/kibana.yml:
-    mode: "0664"
-    filetype: file
+  /bitnami/kibana:
     exists: true
-    group: root
-  /opt/bitnami/kibana/x-pack:
-    mode: "0755"
     filetype: directory
+    mode: "2775"
+    owner: root
+  /bitnami/kibana/conf:
     exists: true
-    group: root
-  /opt/bitnami/kibana/config/node.options:
-    mode: "0664"
+    filetype: directory
+    mode: "2777"
+    owner: root
+  /opt/bitnami/kibana/config/kibana.yml:
+    mode: "0644"
     filetype: file
     exists: true
-    group: root  
+    contents:
+    - "{{ toJson .Vars.extraConfiguration }}"
+command:
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

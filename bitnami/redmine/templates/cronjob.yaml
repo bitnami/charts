@@ -1,14 +1,16 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.mailReceiver.enabled }}
-apiVersion: batch/v1beta1
+apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
   name: {{ template "redmine.mailReceiver.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mail-receiver
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -20,11 +22,9 @@ spec:
     spec:
       template:
         metadata:
-          labels: {{- include "common.labels.standard" . | nindent 12 }}
+          {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: mail-receiver
-            {{- if .Values.mailReceiver.podLabels }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.mailReceiver.podLabels "context" $ ) | nindent 12 }}
-            {{- end }}
           {{- if .Values.mailReceiver.podAnnotations }}
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.mailReceiver.podAnnotations "context" $ ) | nindent 12 }}
           {{- end }}
@@ -35,7 +35,7 @@ spec:
           priorityClassName: {{ .Values.mailReceiver.priorityClassName | quote }}
           {{- end }}
           {{- if .Values.mailReceiver.podSecurityContext.enabled }}
-          securityContext: {{- omit .Values.mailReceiver.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.mailReceiver.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           initContainers:
             {{- if .Values.mailReceiver.initContainers }}
@@ -45,8 +45,8 @@ spec:
           affinity: {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.affinity "context" $) | nindent 12 }}
           {{- else }}
           affinity:
-            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mailReceiver.podAffinityPreset "component" "mail-receiver" "context" $) | nindent 14 }}
-            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mailReceiver.podAntiAffinityPreset "component" "mail-receiver" "context" $) | nindent 14 }}
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mailReceiver.podAffinityPreset "component" "mail-receiver" "customLabels" $podLabels "context" $) | nindent 14 }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mailReceiver.podAntiAffinityPreset "component" "mail-receiver" "customLabels" $podLabels "context" $) | nindent 14 }}
             nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.mailReceiver.nodeAffinityPreset.type "key" .Values.mailReceiver.nodeAffinityPreset.key "values" .Values.mailReceiver.nodeAffinityPreset.values) | nindent 14 }}
           {{- end }}
           {{- if .Values.mailReceiver.nodeSelector }}
@@ -60,7 +60,7 @@ spec:
               image: {{ template "redmine.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.mailReceiver.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.mailReceiver.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.mailReceiver.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.diagnosticMode.enabled }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}

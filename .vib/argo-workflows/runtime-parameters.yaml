@@ -1,0 +1,45 @@
+rbac:
+  singleNamespace: false
+createAggregateRoles: true
+server:
+  enabled: true
+  rbac:
+    create: true
+  auth:
+    enabled: true
+    mode: server
+  clusterWorkflowTemplates:
+    enabled: true
+    enableEditing: true
+  secure: false
+  service:
+    ports:
+      http: 80
+    type: LoadBalancer
+workflows:
+  rbac:
+    create: true
+postgresql:
+  enabled: true
+  service:
+    ports:
+      postgresql: 5432
+mysql:
+  enabled: false
+# The service account running the workflows needs to have 'patch' privileges on pods for the given namespace
+# In our tests, that combination is 'default/default'
+extraDeploy:
+  - |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      name: default-cluster-admin
+      namespace: default
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+    - kind: ServiceAccount
+      name: default
+      namespace: default

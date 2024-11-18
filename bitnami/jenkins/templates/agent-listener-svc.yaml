@@ -1,0 +1,53 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.agent.enabled .Values.agentListenerService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-agent-listener" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.agentListenerService.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.agentListenerService.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.agentListenerService.type }}
+  {{- if and .Values.agentListenerService.clusterIP (eq .Values.agentListenerService.type "ClusterIP") }}
+  clusterIP: {{ .Values.agentListenerService.clusterIP }}
+  {{- end }}
+  {{- if or (eq .Values.agentListenerService.type "LoadBalancer") (eq .Values.agentListenerService.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.agentListenerService.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.agentListenerService.type "LoadBalancer") .Values.agentListenerService.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.agentListenerService.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if (and (eq .Values.agentListenerService.type "LoadBalancer") (not (empty .Values.agentListenerService.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.agentListenerService.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.agentListenerService.sessionAffinity }}
+  sessionAffinity: {{ .Values.agentListenerService.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.agentListenerService.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.agentListenerService.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: agent-listener
+      port: {{ .Values.agentListenerService.ports.agentListener }}
+      protocol: TCP
+      targetPort: agent-listener
+      {{- if (and (or (eq .Values.agentListenerService.type "NodePort") (eq .Values.agentListenerService.type "LoadBalancer")) (not (empty .Values.agentListenerService.nodePorts.agentListener))) }}
+      nodePort: {{ .Values.agentListenerService.nodePorts.agentListener }}
+      {{- else if eq .Values.agentListenerService.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.agentListenerService.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.agentListenerService.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: jenkins-controller
+{{- end }}

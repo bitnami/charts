@@ -1,0 +1,49 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.filer.enabled .Values.filer.autoscaling.enabled }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "seaweedfs.filer.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: filer
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+    kind: StatefulSet
+    name: {{ template "seaweedfs.filer.fullname" . }}
+  minReplicas: {{ .Values.filer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.filer.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.filer.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.filer.autoscaling.targetMemory  }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.filer.autoscaling.targetMemory }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.filer.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.filer.autoscaling.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.filer.autoscaling.targetCPU }}
+        {{- end }}
+    {{- end }}
+{{- end }}

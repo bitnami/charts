@@ -1,0 +1,29 @@
+auth:
+  enabled: true
+  rootUser: bitnamiRoot
+  rootPassword: ComplicatedPassword123!4
+  usernames:
+    - kayle
+  passwords:
+    - R1sing0fSun2022
+  databases:
+    - awesome_db
+service:
+  type: LoadBalancer
+  ports:
+    mongodb: 80
+persistence:
+  enabled: true
+  mountPath: /bitnami/mongodb
+containerPorts:
+  mongodb: 27018
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+automountServiceAccountToken: true
+serviceAccount:
+  create: true
+  

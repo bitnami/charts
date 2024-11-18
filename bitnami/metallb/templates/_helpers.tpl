@@ -1,17 +1,30 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Create the name of the controller service account to use
-*/}}
+ Create the name of the controller service account to use
+ */}}
 {{- define "metallb.controller.serviceAccountName" -}}
-{{ include "common.secrets.name" (dict "existingSecret" .Values.controller.serviceAccount.name "defaultNameSuffix" "controller" "context" $) }}
+{{- if .Values.controller.serviceAccount.create -}}
+    {{ default (printf "%s-controller" (include "common.names.fullname" .)) .Values.controller.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.controller.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*
-Create the name of the speaker service account to use
-*/}}
+ Create the name of the speaker service account to use
+ */}}
 {{- define "metallb.speaker.serviceAccountName" -}}
-{{ include "common.secrets.name" (dict "existingSecret" .Values.speaker.serviceAccount.name "defaultNameSuffix" "speaker" "context" $) }}
+{{- if .Values.speaker.serviceAccount.create -}}
+    {{ default (printf "%s-speaker" (include "common.names.fullname" .)) .Values.speaker.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.speaker.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*

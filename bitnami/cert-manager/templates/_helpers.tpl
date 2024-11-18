@@ -1,4 +1,9 @@
 {{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper certmanager.image name
 */}}
 {{- define "certmanager.image" -}}
@@ -23,7 +28,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "certmanager.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.controller.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.controller.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -63,7 +68,7 @@ Return the proper certmanager.webhook image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "certmanager.webhook.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.webhook.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.webhook.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -103,7 +108,7 @@ Return the proper cainjector image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "certmanager.cainjector.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.cainjector.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.cainjector.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -150,12 +155,11 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Cert Manager - CRD */}}
+{{/* Validate values of cert-manager - CRD */}}
 {{- define "certmanager.validateValues.setCRD" -}}
 {{- if not .Values.installCRDs -}}
 cert-manager: CRDs
-    You will use cert manager without installing CRDs.
-    If you want to include our CRD resources, please install the cert manager using the crd flags (--set .Values.installCRDs=true).
+    You will use cert-manager without installing CRDs.
+    If you want to include our CRD resources, please install the cert-manager using the crd flags (--set .Values.installCRDs=true).
 {{- end -}}
 {{- end -}}
-

@@ -1,16 +1,16 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.service.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{ include "external-dns.labels" . | nindent 4 }}
-  {{- if .Values.service.labels -}}
-  {{ toYaml .Values.service.labels | nindent 4 }}
-  {{- end }}
-  {{- if .Values.commonLabels }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-  {{- end }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if .Values.service.annotations }}
   annotations: {{ toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
@@ -24,6 +24,9 @@ spec:
   {{- end }}
   {{- if .Values.service.externalIPs }}
   externalIPs: {{ toYaml .Values.service.externalIPs | nindent 4 }}
+  {{- end }}
+  {{- if and (eq .Values.service.type "ExternalName") .Values.service.externalName }}
+  externalName: {{ .Values.service.externalName }}
   {{- end }}
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
@@ -48,5 +51,6 @@ spec:
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{ include "external-dns.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
 {{- end }}

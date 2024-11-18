@@ -1,19 +1,24 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "certmanager.cainjector.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.cainjector.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: cainjector
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.cainjector.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: cainjector
   {{- if .Values.cainjector.updateStrategy }}
   strategy: {{- toYaml .Values.cainjector.updateStrategy | nindent 4 }}
@@ -21,22 +26,15 @@ spec:
   replicas: {{ .Values.cainjector.replicaCount }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: cainjector
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.cainjector.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-      annotations:
-        {{- if .Values.cainjector.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.cainjector.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "certmanager.cainjector.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.cainjector.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.cainjector.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cainjector.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.cainjector.schedulerName }}
       schedulerName: {{ .Values.cainjector.schedulerName }}
@@ -54,8 +52,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cainjector.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cainjector.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cainjector.podAffinityPreset "component" "cainjector" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cainjector.podAntiAffinityPreset "component" "cainjector" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.cainjector.nodeAffinityPreset.type "key" .Values.cainjector.nodeAffinityPreset.key "values" .Values.cainjector.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.cainjector.nodeSelector }}
@@ -64,6 +62,7 @@ spec:
       {{- if .Values.cainjector.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.cainjector.automountServiceAccountToken }}
       {{- if .Values.cainjector.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -85,9 +84,12 @@ spec:
           args:
             - --v={{ .Values.logLevel }}
             - --leader-election-namespace={{ .Values.leaderElection.namespace }}
+            {{- if .Values.cainjector.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           {{- end }}
           {{- if .Values.cainjector.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.cainjector.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cainjector.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -108,11 +110,58 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.cainjector.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- if .Values.cainjector.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.cainjector.startupProbe.enabled }}
+          startupProbe:
+            # Using exec instead of tcpSocket to avoid noise in te logs
+            exec:
+              command:
+                - pgrep
+                - cainjector
+            initialDelaySeconds: {{ .Values.cainjector.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.cainjector.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.cainjector.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.cainjector.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.cainjector.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.cainjector.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.cainjector.livenessProbe.enabled }}
+          livenessProbe:
+            # Using exec instead of tcpSocket to avoid noise in te logs
+            exec:
+              command:
+                - pgrep
+                - cainjector
+            initialDelaySeconds: {{ .Values.cainjector.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.cainjector.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.cainjector.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.cainjector.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.cainjector.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.cainjector.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.cainjector.readinessProbe.enabled }}
+          readinessProbe:
+            # Using exec instead of tcpSocket to avoid noise in te logs
+            exec:
+              command:
+                - pgrep
+                - cainjector
+            initialDelaySeconds: {{ .Values.cainjector.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.cainjector.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.cainjector.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.cainjector.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.cainjector.readinessProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.cainjector.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.cainjector.resources }}
           resources: {{- toYaml .Values.cainjector.resources | nindent 12 }}
+          {{- else if ne .Values.cainjector.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cainjector.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.cainjector.extraVolumeMounts }}

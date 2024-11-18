@@ -1,0 +1,176 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.ruler.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "grafana-mimir.ruler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: ruler
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.ruler.replicaCount }}
+  {{- if .Values.ruler.updateStrategy }}
+  strategy: {{- toYaml .Values.ruler.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ruler.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: grafana-mimir
+      app.kubernetes.io/component: ruler
+  template:
+    metadata:
+      {{- if .Values.ruler.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: grafana-mimir
+        app.kubernetes.io/component: ruler
+    spec:
+      serviceAccountName: {{ template "grafana-mimir.serviceAccountName" . }}
+      {{- include "grafana-mimir.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.ruler.automountServiceAccountToken }}
+      {{- if .Values.ruler.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.ruler.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ruler.podAffinityPreset "component" "ruler" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ruler.podAntiAffinityPreset "component" "ruler" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.ruler.nodeAffinityPreset.type "key" .Values.ruler.nodeAffinityPreset.key "values" .Values.ruler.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.ruler.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.ruler.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.priorityClassName }}
+      priorityClassName: {{ .Values.ruler.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.ruler.schedulerName }}
+      schedulerName: {{ .Values.ruler.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.ruler.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ruler.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.ruler.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.ruler.initContainers }}
+      initContainers:
+        {{- include "common.tplvalues.render" (dict "value" .Values.ruler.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: ruler
+          image: {{ template "grafana-mimir.image" . }}
+          imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
+          {{- if .Values.ruler.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ruler.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.ruler.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.ruler.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - "-target=ruler"
+            - "-config.expand-env=true"
+            - "-config.file={{ .Values.mimir.dataDir }}/conf/mimir.yaml"
+            {{- if .Values.ruler.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.ruler.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.ruler.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.ruler.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.ruler.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.ruler.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.ruler.resources }}
+          resources: {{- toYaml .Values.ruler.resources | nindent 12 }}
+          {{- else if ne .Values.ruler.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ruler.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.mimir.containerPorts.http }}
+              name: http
+            - containerPort: {{ .Values.mimir.containerPorts.grpc }}
+              name: grpc
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.ruler.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ruler.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ruler.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.ruler.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ruler.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ruler.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
+          {{- end }}
+          {{- if .Values.ruler.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ruler.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ruler.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.ruler.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: mimir-config
+              mountPath: {{ .Values.mimir.dataDir }}/conf
+            - name: data
+              mountPath: {{ .Values.mimir.dataDir }}
+          {{- if .Values.ruler.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.ruler.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.ruler.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: data
+          emptyDir: {}
+        - name: mimir-config
+          configMap:
+            name: {{ template "grafana-mimir.mimir.configmapName" . }}
+        {{- if .Values.ruler.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

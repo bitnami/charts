@@ -1,0 +1,37 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.query.enabled .Values.query.serviceGrpc.additionalHeadless }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thanos.query.fullname" . }}-grpc-headless
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query
+  {{- if or .Values.query.serviceGrpc.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.serviceGrpc.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: {{ .Values.query.serviceGrpc.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+    {{- if .Values.query.serviceGrpc.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.serviceGrpc.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector:
+    {{- if .Values.query.serviceGrpc.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.serviceGrpc.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- end }}
+{{- end }}

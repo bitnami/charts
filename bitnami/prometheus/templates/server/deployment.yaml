@@ -1,0 +1,292 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "prometheus.server.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: prometheus
+    app.kubernetes.io/component: server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.server.replicaCount }}
+  {{- if .Values.server.updateStrategy }}
+  strategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: prometheus
+      app.kubernetes.io/component: server
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/server/configmap.yaml") . | sha256sum }}
+        {{- if .Values.server.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: prometheus
+        app.kubernetes.io/component: server
+    spec:
+      serviceAccountName: {{ template "prometheus.server.serviceAccountName" . }}
+      {{- include "prometheus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.server.automountServiceAccountToken }}
+      {{- if .Values.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.server.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAffinityPreset "component" "server" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAntiAffinityPreset "component" "server" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.server.nodeAffinityPreset.type "key" .Values.server.nodeAffinityPreset.key "values" .Values.server.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.server.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.server.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.priorityClassName }}
+      priorityClassName: {{ .Values.server.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.server.schedulerName }}
+      schedulerName: {{ .Values.server.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.server.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.server.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.server.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "prometheus.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -ec
+            - |
+              mkdir -p {{ .Values.server.persistence.mountPath }}
+              find {{ .Values.server.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.server.containerSecurityContext.runAsUser }}:{{ .Values.server.podSecurityContext.fsGroup }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: data
+              mountPath: {{ .Values.server.persistence.mountPath }}
+              {{- if .Values.server.persistence.subPath }}
+              subPath: {{ .Values.server.persistence.subPath }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.server.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.server.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: prometheus
+          image: {{ template "prometheus.server.image" . }}
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          {{- if .Values.server.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.server.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.server.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.server.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - "--config.file=/opt/bitnami/prometheus/conf/{{ include "prometheus.server.configmapKey" . }}"
+            - "--storage.tsdb.path={{ .Values.server.persistence.mountPath }}"
+            - "--storage.tsdb.retention.time={{ .Values.server.retention }}"
+            - "--storage.tsdb.retention.size={{ .Values.server.retentionSize }}"
+            - "--log.level={{ .Values.server.logLevel }}"
+            - "--log.format={{ .Values.server.logFormat }}"
+            - "--web.listen-address=:{{ .Values.server.containerPorts.http }}"
+            - "--web.console.libraries=/opt/bitnami/prometheus/conf/console_libraries"
+            - "--web.console.templates=/opt/bitnami/prometheus/conf/consoles"
+            {{- if .Values.server.enableAdminAPI}}
+            - "--web.enable-admin-api"
+            {{- end }}
+            {{- if .Values.server.enableRemoteWriteReceiver }}
+            -  "--web.enable-remote-write-receiver"
+            {{- end }}
+            {{- if .Values.server.routePrefix }}
+            - "--web.route-prefix={{ .Values.server.routePrefix }}"
+            {{- end }}
+            {{- if .Values.server.enableFeatures }}
+            - "--enable-feature={{ join "," .Values.server.enableFeatures }}"
+            {{- end }}
+            {{- if .Values.server.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          env:
+            {{- if .Values.server.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.server.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.server.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.server.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.server.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.server.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.server.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.server.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/healthy
+              port: http
+          {{- end }}
+          {{- if .Values.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/ready
+              port: http
+          {{- end }}
+          {{- if .Values.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: config
+              mountPath: /opt/bitnami/prometheus/conf
+              readOnly: true
+            - name: data
+              mountPath: {{ .Values.server.persistence.mountPath }}
+          {{- if .Values.server.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.server.thanos.create }}
+        - name: thanos-sidecar
+          image: {{ template "prometheus.server.thanosImage" . }}
+          imagePullPolicy: {{ .Values.server.thanos.image.pullPolicy }}
+          args:
+            - sidecar
+            - --prometheus.url={{ default "http://localhost:9090" .Values.server.thanos.prometheusUrl }}
+            - --grpc-address=0.0.0.0:10901
+            - --http-address=0.0.0.0:10902
+            - --tsdb.path=/prometheus/
+            {{- if .Values.server.thanos.objectStorageConfig.secretName }}
+            - --objstore.config=$(OBJSTORE_CONFIG)
+            {{- end }}
+            {{- if .Values.server.thanos.extraArgs }}
+            {{ toYaml .Values.server.thanos.extraArgs | indent 12  | trim }}
+            {{- end }}
+          {{- if .Values.server.thanos.objectStorageConfig.secretName }}
+          env:
+            - name: OBJSTORE_CONFIG
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.server.thanos.objectStorageConfig.secretName }}
+                  key: {{ .Values.server.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
+          {{- end }}
+          {{- if .Values.server.thanos.resources }}
+          resources: {{- toYaml .Values.server.thanos.resources | nindent 12 }}
+          {{- else if ne .Values.server.thanos.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.server.thanos.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: grpc
+              containerPort: 10901
+              protocol: TCP
+            - name: http
+              containerPort: 10902
+              protocol: TCP
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - mountPath: /prometheus
+              name: data
+            {{- if .Values.server.thanos.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.server.thanos.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.thanos.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.thanos.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.thanos.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.thanos.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/healthy
+              port: http
+              scheme: HTTP
+          {{- end }}
+          {{- if .Values.server.thanos.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.thanos.livenessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.thanos.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/ready
+              port: http
+              scheme: HTTP
+          {{- end }}
+        {{- end }}
+        {{- if .Values.server.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: {{ include "prometheus.server.configmapName" . }}
+        - name: data
+        {{- if .Values.server.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ default (include "prometheus.server.fullname" .) .Values.server.persistence.existingClaim }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.server.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

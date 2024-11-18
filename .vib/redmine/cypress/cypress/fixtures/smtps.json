@@ -1,7 +1,0 @@
-{
-  "newSMTP": {
-    "smtpEmailAddress": "redmine@vmware.net",
-    "header": "Please take a look at this issue",
-    "footer": "You can change the notification preferences"
-  }
-}

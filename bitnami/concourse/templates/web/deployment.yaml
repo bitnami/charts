@@ -1,14 +1,16 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.web.enabled (include "concourse.host" .) }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "concourse.web.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: web
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,21 +19,20 @@ spec:
   {{- if .Values.web.updateStrategy }}
   strategy: {{- toYaml .Values.web.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: web
   template:
     metadata:
       {{- if .Values.web.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.web.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: web
-        {{- if .Values.web.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       {{- include "concourse.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.web.automountServiceAccountToken }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -39,8 +40,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.web.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.web.podAffinityPreset "component" "web" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.web.podAntiAffinityPreset "component" "web" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.web.podAffinityPreset "component" "web" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.web.podAntiAffinityPreset "component" "web" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.web.nodeAffinityPreset.type "key" .Values.web.nodeAffinityPreset.key "values" .Values.web.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.web.nodeSelector }}
@@ -62,12 +63,12 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.web.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.web.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.web.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "concourse.web.serviceAccountName" . }}
       initContainers:
         {{- if .Values.postgresql.enabled }}
-        # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use bitnami-shell if
+        # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use os-shell if
         # it had the binary wait-for-port.
         # This init container is for avoiding CrashLoopback errors in the Hub container because the PostgreSQL container is not ready
         - name: wait-for-db
@@ -100,7 +101,7 @@ spec:
                   info "Connected to the PostgreSQL instance"
               fi
           {{- if .Values.web.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
@@ -125,6 +126,9 @@ spec:
           args:
             - migrate
             - --migrate-to-latest-version
+          {{- if .Values.web.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: CONCOURSE_POSTGRES_PASSWORD
               valueFrom:
@@ -150,7 +154,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.web.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.web.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -199,6 +203,8 @@ spec:
               value: "/bitnami/concourse/concourse-keys/worker_key.pub"
             - name: CONCOURSE_SESSION_SIGNING_KEY
               value: "/bitnami/concourse/concourse-keys/session_signing_key"
+            - name: CONCOURSE_WEB_PUBLIC_DIR
+              value: "/opt/bitnami/concourse/web/public"
             {{- if .Values.web.logLevel }}
             - name: CONCOURSE_LOG_LEVEL
               value: {{ .Values.web.logLevel | quote }}
@@ -209,8 +215,6 @@ spec:
             {{- end }}
             - name: CONCOURSE_EXTERNAL_URL
               value: {{ include "concourse.host" . | quote }}
-            - name: CONCOURSE_BIND_PORT
-              value: {{ .Values.web.containerPorts.http | quote }}
             {{- if .Values.web.peerAddress }}
             - name: CONCOURSE_PEER_ADDRESS
               value: {{ .Values.web.peerAddress | quote }}
@@ -347,39 +351,43 @@ spec:
             - name: https
               containerPort: {{ .Values.web.containerPorts.https }}
             {{- end }}
-            {{- if .Values.web.containerPorts.tsa }}
+            {{- if .Values.web.containerPorts.pprof }}
             - name: http-debug
-              containerPort: {{ .Values.web.containerPorts.tsa }}
+              containerPort: {{ .Values.web.containerPorts.pprof }}
             {{- end }}
           {{- if .Values.web.resources }}
           resources: {{- toYaml .Values.web.resources | nindent 12 }}
+          {{- else if ne .Values.web.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.web.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.web.startupProbe.enabled }}
+          {{- if .Values.web.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.web.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.web.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
-              port: http
-          {{- else if .Values.web.customLivenessProbe }}
+          {{- if .Values.web.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
           {{- end }}
-          {{- if .Values.web.readinessProbe.enabled }}
+          {{- if .Values.web.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
               port: http
-          {{- else if .Values.web.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}     
+          {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: concourse-keys
               mountPath: /bitnami/concourse/concourse-keys
               readOnly: true
@@ -400,6 +408,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.web.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: concourse-configuration
           configMap:
             name: {{ include "concourse.web.configmapName" . }}

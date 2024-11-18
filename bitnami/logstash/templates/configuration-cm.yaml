@@ -1,28 +1,25 @@
-{{ if and (or .Values.input .Values.filter .Values.output) (not .Values.existingConfiguration) }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and (or .Values.input .Values.extraInput .Values.filter .Values.output .Values.extraConfigurationFiles) (not .Values.existingConfiguration) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.ingress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
 {{- if (or .Values.input .Values.filter .Values.output) }}
   logstash.conf: |-
-{{- if .Values.input }}
+{{- if or .Values.input .Values.extraInput }}
     input {
     {{- include "common.tplvalues.render" (dict "value" .Values.input "context" $) | nindent 6 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraInput "context" $) | nindent 6 }}
     }
 {{- end }}
 {{- if .Values.filter }}
@@ -36,4 +33,7 @@ data:
     }
 {{- end }}
 {{- end }}
+{{- if .Values.extraConfigurationFiles -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.extraConfigurationFiles "context" $) | nindent 2 }}
+{{- end -}}
 {{- end }}

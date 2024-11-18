@@ -1,0 +1,99 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.contour.enabled .Values.contour.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-contour" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: contour
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: contour
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.contour.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress: 
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        {{- range $port := .Values.contour.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+    # Allow outbound connections to other contour pods
+    - ports:
+        - port: {{ .Values.contour.containerPorts.xds }}
+        - port: {{ .Values.contour.containerPorts.metrics }}
+      to:
+        - podSelector: 
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: contour
+    {{- if .Values.envoy.enabled }}
+    # Allow outbound connections to envoy
+    - ports:
+        - port: {{ .Values.envoy.containerPorts.http }}
+        - port: {{ .Values.envoy.containerPorts.https }}
+        - port: {{ .Values.envoy.containerPorts.metrics }}
+      to:
+        - podSelector: 
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: envoy
+    {{- end }}
+    {{- if .Values.defaultBackend.enabled }}
+    # Allow outbound connections to envoy
+    - ports:
+        - port: {{ .Values.defaultBackend.containerPorts.http }}
+      to:
+        - podSelector: 
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: default-backend
+    {{- end }}
+    {{- if .Values.contour.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.contour.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.contour.containerPorts.xds }}
+        - port: {{ .Values.contour.containerPorts.metrics }}
+      {{- if not .Values.contour.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+        {{- if .Values.contour.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.contour.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.contour.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.contour.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.contour.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.contour.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

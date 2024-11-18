@@ -1,28 +1,27 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.storegateway.ingress.grpc.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}-storegateway-grpc
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.storegateway.fullname" . }}-grpc
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.storegateway.ingress.grpc.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.ingress.grpc.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.storegateway.ingress.grpc.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.storegateway.ingress.grpc.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.storegateway.ingress.grpc.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.storegateway.ingress.grpc.ingressClassName | quote }}
   {{- end }}
   rules:
     {{- if .Values.storegateway.ingress.grpc.hostname }}
-    - host: {{ .Values.storegateway.ingress.grpc.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.storegateway.ingress.grpc.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.storegateway.ingress.grpc.path }}
@@ -52,7 +51,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.storegateway.ingress.grpc.hostname }}
     {{- end }}
     {{- if .Values.storegateway.ingress.grpc.extraTls }}
-    {{- toYaml .Values.storegateway.ingress.grpc.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.ingress.grpc.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

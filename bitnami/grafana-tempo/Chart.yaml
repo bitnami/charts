@@ -1,31 +1,42 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: grafana-tempo
+      image: docker.io/bitnami/grafana-tempo:2.6.1-debian-12-r2
+    - name: grafana-tempo-query
+      image: docker.io/bitnami/grafana-tempo-query:2.6.1-debian-12-r2
+    - name: grafana-tempo-vulture
+      image: docker.io/bitnami/grafana-tempo-vulture:2.6.1-debian-12-r2
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:12-debian-12-r32
 apiVersion: v2
-appVersion: 1.4.1
+appVersion: 2.6.1
 dependencies:
-  - condition: memcached.enabled
-    name: memcached
-    repository: https://charts.bitnami.com/bitnami
-    version: 6.x.x
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
+- condition: memcached.enabled
+  name: memcached
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 7.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Grafana Tempo is a distributed tracing system that has out-of-the-box integration with Grafana. It is highly scalable and works with many popular tracing protocols.
-engine: gotpl
-home: https://github.com/grafana/tempo/
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/grafana-tempo/img/grafana-tempo-stack-220x234.png
 keywords:
-  - grafana
-  - tracing
-  - metrics
-  - infrastructure
+- grafana
+- tracing
+- metrics
+- infrastructure
 maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: grafana-tempo
 sources:
-  - https://github.com/bitnami/bitnami-docker-grafana-tempo
-  - https://github.com/grafana/tempo/
-version: 1.3.1
+- https://github.com/bitnami/charts/tree/main/bitnami/grafana-tempo
+version: 3.7.13

@@ -1,4 +1,9 @@
 {{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper Sealed Secrets image name
 */}}
 {{- define "sealed-secrets.image" -}}
@@ -20,6 +25,39 @@ Create the name of the service account to use
     {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the unsealer cluster role
+*/}}
+{{- define "sealed-secrets.clusterRoleName" -}}
+{{- if .Values.rbac.clusterRoleName -}}
+    {{ printf "%s" .Values.rbac.clusterRoleName }}
+{{- else -}}
+    {{ printf "%s-unsealer" (include "common.names.fullname" .) }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the unsealer namespaced cluster role
+*/}}
+{{- define "sealed-secrets.namespacedRoleName" -}}
+{{- if .Values.rbac.namespacedRolesName -}}
+    {{ printf "%s" .Values.rbac.namespacedRolesName }}
+{{- else -}}
+    {{ printf "%s-unsealer" (include "common.names.fullname" .) | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the secret that hold keys
+*/}}
+{{- define "sealed-secrets.secretName" -}}
+{{- if .Values.secretName -}}
+    {{ printf "%s" .Values.secretName }}
+{{- else -}}
+    {{ printf "%s-key" (include "common.names.fullname" .) | quote }}
 {{- end -}}
 {{- end -}}
 

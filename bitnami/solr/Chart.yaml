@@ -1,30 +1,37 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:12-debian-12-r31
+    - name: solr
+      image: docker.io/bitnami/solr:9.7.0-debian-12-r1
 apiVersion: v2
-appVersion: 9.0.0
+appVersion: 9.7.0
 dependencies:
-  - condition: zookeeper.enabled
-    name: zookeeper
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
+- condition: zookeeper.enabled
+  name: zookeeper
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 13.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Apache Solr is an extremely powerful, open source enterprise search platform built on Apache Lucene. It is highly reliable and flexible, scalable, and designed to add value very quickly after launch.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/solr
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/solr/img/solr-stack-220x234.png
 keywords:
-  - solr
-  - zookeeper
-  - apache
+- solr
+- zookeeper
+- apache
 maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: solr
 sources:
-  - https://github.com/bitnami/bitnami-docker-solr
-  - https://lucene.apache.org/solr/
-version: 6.0.0
+- https://github.com/bitnami/charts/tree/main/bitnami/solr
+version: 9.4.7

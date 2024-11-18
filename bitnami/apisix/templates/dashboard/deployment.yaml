@@ -1,0 +1,199 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.dashboard.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "apisix.dashboard.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.dashboard.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: apisix
+    app.kubernetes.io/component: dashboard
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.dashboard.updateStrategy }}
+  strategy: {{- toYaml .Values.dashboard.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- if not .Values.dashboard.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.dashboard.replicaCount }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboard.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: apisix
+      app.kubernetes.io/component: dashboard
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/dashboard/configmap.yaml") . | sha256sum }}
+        checksum/config-extra: {{ include (print $.Template.BasePath "/dashboard/extra-configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/dashboard/secret.yaml") . | sha256sum }}
+        {{- if .Values.dashboard.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: apisix
+        app.kubernetes.io/component: dashboard
+    spec:
+      serviceAccountName: {{ template "apisix.dashboard.serviceAccountName" . }}
+      {{- include "apisix.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dashboard.automountServiceAccountToken }}
+      {{- if .Values.dashboard.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.dashboard.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboard.podAffinityPreset "component" "csi-provider" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboard.podAntiAffinityPreset "component" "csi-provider" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dashboard.nodeAffinityPreset.type "key" .Values.dashboard.nodeAffinityPreset.key "values" .Values.dashboard.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.dashboard.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.dashboard.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.priorityClassName }}
+      priorityClassName: {{ .Values.dashboard.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.dashboard.schedulerName }}
+      schedulerName: {{ .Values.dashboard.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.dashboard.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.dashboard.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- include "apisix.waitForETCDInitContainer" . | nindent 8 }}
+        {{- include "apisix.renderConfInitContainer" (dict "component" "dashboard" "context" $) | nindent 8 }}
+        {{- if .Values.dashboard.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: apisix-dashboard
+          image: {{ template "apisix.dashboard.image" . }}
+          imagePullPolicy: {{ .Values.dashboard.image.pullPolicy }}
+          {{- if .Values.dashboard.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.dashboard.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.dashboard.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -c
+            - /bitnami/apisix/conf/config.yaml
+            - -p
+            - /opt/bitnami/apisix-dashboard
+          {{- end }}
+          env:
+            {{- if .Values.dashboard.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.dashboard.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dashboard.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.dashboard.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dashboard.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.dashboard.resources }}
+          resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- else if ne .Values.dashboard.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboard.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.dashboard.containerPorts.http }}
+            - name: https
+              containerPort: {{ .Values.dashboard.containerPorts.https }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.dashboard.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dashboard.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboard.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.dashboard.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dashboard.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboard.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ping
+              port: http
+          {{- end }}
+          {{- if .Values.dashboard.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dashboard.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboard.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ping
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.dashboard.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /bitnami/apisix/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/apisix-dashboard/logs
+              subPath: app-logs-dir
+            {{- if .Values.dashboard.tls.enabled }}
+            - name: certs
+              mountPath: /bitnami/certs
+            {{- end }}
+         {{- if .Values.dashboard.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.dashboard.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.dashboard.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "apisix.dashboard.defaultConfigmapName" . }}
+        {{- if or .Values.dashboard.extraConfig .Values.dashboard.extraConfigExistingConfigMap }}
+        - name: extra-config
+          configMap:
+            name: {{ include "apisix.dashboard.extraConfigmapName" . }}
+        {{- end }}
+        {{- if .Values.dashboard.tls.enabled }}
+        - name: certs
+          secret:
+            secretName: {{ template "apisix.dashboard.tlsSecretName" . }}
+        {{- end }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.dashboard.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

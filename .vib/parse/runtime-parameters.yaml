@@ -1,0 +1,44 @@
+server:
+  host: parse.local
+  appId: testApp
+  masterKey: M4ster#K3y
+  automountServiceAccountToken: true
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+  containerPorts:
+    http: 1338
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+dashboard:
+  enabled: true
+  automountServiceAccountToken: true
+  containerPorts:
+    http: 4040
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  username: parseUser
+  password: ComplicatedPassword123!4
+  appName: ChickenGame
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+serviceAccount:
+  create: true
+mongodb:
+  enabled: true
+  auth: 
+    enabled: true
+    username: bn_test_parse
+    password: M0ngoP4ss
+    database: bitnami_parse

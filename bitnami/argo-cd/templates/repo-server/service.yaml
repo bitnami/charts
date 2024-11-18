@@ -1,21 +1,18 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "argocd.repo-server" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: repo-server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.repoServer.service.annotations }}
-  annotations:
-  {{- if .Values.commonAnnotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.repoServer.service.annotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.service.annotations "context" $ ) | nindent 4 }}
-  {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.repoServer.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.repoServer.service.type }}
@@ -39,16 +36,17 @@ spec:
   {{- end }}
   ports:
     - name: tcp-repo-server
-      port: {{ .Values.repoServer.service.port }}
+      port: {{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
       targetPort: repo-server
       protocol: TCP
-      {{- if (and (or (eq .Values.repoServer.service.type "NodePort") (eq .Values.repoServer.service.type "LoadBalancer")) (not (empty .Values.repoServer.service.nodePort))) }}
-      nodePort: {{ .Values.repoServer.service.nodePort }}
+      {{- if (and (or (eq .Values.repoServer.service.type "NodePort") (eq .Values.repoServer.service.type "LoadBalancer")) (not (empty (coalesce .Values.repoServer.service.nodePort .Values.repoServer.service.nodePorts.repoServer)))) }}
+      nodePort: {{ coalesce .Values.repoServer.service.nodePort .Values.repoServer.service.nodePorts.repoServer }}
       {{- else if eq .Values.repoServer.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     {{- if .Values.repoServer.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.repoServer.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: repo-server

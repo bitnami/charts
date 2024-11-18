@@ -11,6 +11,5 @@ Watch the Grafana Operator Deployment status using the command:
 {{- if .Values.operator.enabled }}
 {{ include "common.warnings.rollingTag" .Values.operator.image }}
 {{- end }}
-{{- if .Values.grafana.enabled }}
-{{ include "common.warnings.rollingTag" .Values.grafana.image }}
-{{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "grafana" "operator") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.operator.image .Values.grafana.image) "context" $) }}

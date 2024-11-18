@@ -1,15 +1,16 @@
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.queryFrontend.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-query-frontend
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.query-frontend.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query-frontend
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,26 +18,22 @@ spec:
   {{- if not .Values.queryFrontend.autoscaling.enabled }}
   replicas: {{ .Values.queryFrontend.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.queryFrontend.revisionHistoryLimit }}
   {{- if .Values.queryFrontend.updateStrategy }}
   strategy: {{- toYaml .Values.queryFrontend.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryFrontend.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: query-frontend
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: query-frontend
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.queryFrontend.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       {{- if or .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
       annotations:
         {{- if (include "thanos.queryFrontend.createConfigmap" .) }}
-        checksum/query-frontend-configuration: {{ include (print $.Template.BasePath "/query-frontend/configmap.yaml") . | sha256sum }}
+        checksum/query-frontend-configuration: {{ include "thanos.queryFrontendConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.queryFrontend.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podAnnotations "context" $) | nindent 8 }}
@@ -44,7 +41,7 @@ spec:
       {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "query-frontend" "context" $) }}
+      serviceAccountName: {{ include "thanos.query-frontend.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.queryFrontend.automountServiceAccountToken }}
       {{- if .Values.queryFrontend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.hostAliases "context" $) | nindent 8 }}
@@ -53,9 +50,15 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAffinityPreset "component" "query-frontend" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAntiAffinityPreset "component" "query-frontend" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAffinityPreset "component" "query-frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAntiAffinityPreset "component" "query-frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryFrontend.nodeAffinityPreset.type "key" .Values.queryFrontend.nodeAffinityPreset.key "values" .Values.queryFrontend.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.dnsPolicy }}
+      dnsPolicy: {{ .Values.queryFrontend.dnsPolicy | quote }}
       {{- end }}
       {{- if .Values.queryFrontend.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.nodeSelector "context" $) | nindent 8 }}
@@ -70,7 +73,7 @@ spec:
       schedulerName: {{ .Values.queryFrontend.schedulerName }}
       {{- end }}
       {{- if .Values.queryFrontend.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.queryFrontend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryFrontend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.queryFrontend.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -86,7 +89,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.queryFrontend.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.queryFrontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryFrontend.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.command "context" $) | nindent 12 }}
@@ -98,13 +101,16 @@ spec:
             - query-frontend
             - --log.level={{ .Values.queryFrontend.logLevel }}
             - --log.format={{ .Values.queryFrontend.logFormat }}
-            - --http-address=0.0.0.0:10902
-            - --query-frontend.downstream-url=http://{{ include "common.names.fullname" . }}-query:{{ if $query.service.http }}{{ coalesce $query.service.ports.http $query.service.http.port }}{{ else }}{{ $query.service.ports.http }}{{ end }}
+            - --http-address=0.0.0.0:{{ .Values.queryFrontend.containerPorts.http }}
+            - --query-frontend.downstream-url={{ ternary "https" "http" .Values.https.enabled }}://{{ include "thanos.query.fullname" . }}:{{ .Values.query.service.ports.http }}
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - --http.config=/conf/http/http-config.yml
+            {{- end }}
             {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}
             - --query-range.response-cache-config-file=/conf/cache/config.yml
             {{- end }}
             {{- if .Values.queryFrontend.extraFlags }}
-            {{- .Values.queryFrontend.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           {{- if .Values.queryFrontend.extraEnvVars }}
@@ -123,47 +129,85 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 10902
+              containerPort: {{ .Values.queryFrontend.containerPorts.http }}
               protocol: TCP
-          {{- if .Values.queryFrontend.livenessProbe.enabled }}
+          {{- if .Values.queryFrontend.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.livenessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/healthy
               port: http
-          {{- else if .Values.queryFrontend.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.queryFrontend.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /-/ready
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
               port: http
-          {{- else if .Values.queryFrontend.customReadinessProbe }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.queryFrontend.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.queryFrontend.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.readinessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.queryFrontend.customStartupProbe }}
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
+          {{- end }}
+          {{- if .Values.queryFrontend.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.startupProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
+            httpGet:
+              path: /-/ready
+              port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- end }}
           {{- if .Values.queryFrontend.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.resources }}
           resources: {{- toYaml .Values.queryFrontend.resources | nindent 12 }}
+          {{- else if ne .Values.queryFrontend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.queryFrontend.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - name: http-config
+              mountPath: /conf/http
+            {{- if .Values.https.enabled }}
+            - name: http-certs
+              mountPath: /certs
+            {{- end }}
+            {{- end }}
             {{- if .Values.queryFrontend.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
       volumes:
+        {{- if (include "thanos.httpConfigEnabled" .) }}
+        - name: http-config
+          secret:
+            secretName: {{ include "thanos.httpConfigSecretName" . }}
+        {{- if .Values.https.enabled }}
+        - name: http-certs
+          secret:
+            secretName: {{ include "thanos.httpCertsSecretName" . }}
+        {{- end }}
+        {{- end }}
         {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}
         - name: cache-config
           configMap:

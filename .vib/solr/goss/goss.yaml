@@ -1,39 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 command:
-  which-solr:
-    exec: which solr
+  {{- $auth := printf "SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS=-Dbasicauth=%s:%s" .Vars.auth.adminUsername .Vars.auth.adminPassword }}
+  {{- $collection := printf "test.%s" (randNumeric 5) }}
+  {{- $replicas := .Vars.replicaCount }}
+  solr-manage-collection:
+    exec: |
+      export {{ $auth }} && \
+      solr create_collection --solr-url http://127.0.0.1:{{ .Vars.containerPorts.http }} -replicationFactor {{ $replicas }} -c {{ $collection }}
+    # TODO: solr healthcheck is broken in version 9.7.0. In newer versions that contain the commit below it will be fixed. Uncomment and indent when it gets released
+    # https://github.com/apache/solr/commit/463e093d336ff129e7b4fbe736cc3a2bb4725d39
+    # solr healthcheck -z solr-zookeeper:2181/solr -c {{ $collection }}
     exit-status: 0
-    stdout:
-      - "/opt/bitnami/solr/bin/solr"
-    stderr: [ ]
-    timeout: 40000
-  solr-version-ok:
-    exec: solr version | grep --quiet "$APP_VERSION"
+    # TODO: Uncomment when a new version gets released
+    # stdout:
+    #  - "healthy"
+    # {{ range $e, $i := until $replicas }}
+    #  - /solr-{{ $i }}/
+    # {{ end }}
+    timeout: 30000
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 40000
-  solr-assert-running:
-    exec: SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS="-Dbasicauth=${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" solr assert --cloud "http://localhost:${SOLR_PORT_NUMBER}/solr/"
-    exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 40000
-  solr-create-collection:
-    exec: SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS="-Dbasicauth=${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" /opt/bitnami/solr/bin/solr create_collection -c "test.${RANDOM}"
-    exit-status: 0
-    stdout:
-      - "Created collection"
-    stderr: [ ]
-    timeout: 40000
 file:
-  /opt/bitnami/solr/server:
+  {{ .Vars.persistence.mountPath }}:
     filetype: directory
     exists: true
-  /opt/bitnami/solr/server/solr/solr.xml:
-    mode: "0644"
+    mode: "2775"
+    owner: root
+  /scripts/setup.sh:
+    mode: "0755"
     filetype: file
     exists: true
-  /opt/bitnami/solr/server/solr/zoo.cfg:
-    mode: "0644"
-    filetype: file
-    exists: true
+    contents:
+    - "SOLR_CLOUD_BOOTSTRAP={{ if .Vars.cloudBootstrap }}yes{{ else }}no{{ end }}"

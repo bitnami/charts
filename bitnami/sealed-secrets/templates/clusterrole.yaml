@@ -1,13 +1,17 @@
-{{- if .Values.rbac.create -}}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if and (and .Values.rbac.create .Values.rbac.clusterRole) (not .Values.rbac.namespacedRoles) }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ printf "%s-unsealer" (include "common.names.fullname" .) }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  name: {{ printf "%s" (include "sealed-secrets.clusterRoleName" .) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.rbac.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.labels "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -35,6 +39,8 @@ rules:
       - create
       - update
       - delete
+      - watch
+      - list
   - apiGroups:
       - ""
     resources:
@@ -42,6 +48,16 @@ rules:
     verbs:
       - create
       - patch
+  {{- if .Values.additionalNamespaces }}
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    resourceNames:
+      {{- include "common.tplvalues.render" (dict "value" .Values.additionalNamespaces "context" $) | nindent 6 }}
+    verbs:
+      - get
+  {{- end }}
   {{- if .Values.rbac.unsealer.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.unsealer.rules "context" $ ) | nindent 2 }}
   {{- end }}

@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.prometheus.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
@@ -5,9 +10,6 @@ metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -30,6 +32,11 @@ spec:
   {{- else }}
   probeSelector: {}
   {{- end }}
+  {{- if .Values.prometheus.scrapeConfigSelector }}
+  scrapeConfigSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.scrapeConfigSelector "context" $) | nindent 4 }}
+  {{- else }}
+  scrapeConfigSelector: {}
+  {{- end }}
   alerting:
     alertmanagers:
     {{- if .Values.prometheus.alertingEndpoints }}
@@ -44,7 +51,11 @@ spec:
     {{- end }}
   {{- if .Values.prometheus.image }}
   image: {{ template "kube-prometheus.prometheus.image" . }}
+  imagePullPolicy: {{ .Values.prometheus.image.pullPolicy }}
   {{- end }}
+  {{- if .Values.prometheus.additionalArgs }}
+  additionalArgs: {{- toYaml .Values.prometheus.additionalArgs | nindent 4 }}
+  {{- end -}}
   {{- if .Values.prometheus.externalLabels }}
   externalLabels: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.externalLabels "context" $) | nindent 4 }}
   {{- end }}
@@ -82,8 +93,22 @@ spec:
   {{- if .Values.prometheus.evaluationInterval }}
   evaluationInterval: {{ .Values.prometheus.evaluationInterval }}
   {{- end }}
+  {{- if .Values.prometheus.scrapeTimeout }}
+  scrapeTimeout: {{ .Values.prometheus.scrapeTimeout }}
+  {{- end }}
+  {{- if .Values.prometheus.sampleLimit }}
+  sampleLimit: {{ .Values.prometheus.sampleLimit }}
+  {{- end }}
+  {{- if .Values.prometheus.enforcedSampleLimit }}
+  enforcedSampleLimit: {{ .Values.prometheus.enforcedSampleLimit }}
+  {{- end }}
+  {{- if .Values.prometheus.keepDroppedTargets }}
+  keepDroppedTargets: {{ .Values.prometheus.keepDroppedTargets }}
+  {{- end }}
   {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
+  {{- else if ne .Values.prometheus.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.prometheus.resourcesPreset) | nindent 4 }}
   {{- end }}
   retention: {{ .Values.prometheus.retention }}
   {{- if .Values.prometheus.retentionSize }}
@@ -118,6 +143,12 @@ spec:
   {{- else }}
   probeNamespaceSelector: {}
   {{- end }}
+  {{- if .Values.prometheus.scrapeConfigNamespaceSelector }}
+  scrapeConfigNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.scrapeConfigNamespaceSelector "context" $) | nindent 4 }}
+  {{- else }}
+  scrapeConfigNamespaceSelector: {}
+  {{- end }}
+  enableRemoteWriteReceiver: {{ .Values.prometheus.enableRemoteWriteReceiver }}
   {{- if .Values.prometheus.remoteRead }}
   remoteRead: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.remoteRead "context" $) | nindent 4 }}
   {{- end }}
@@ -125,7 +156,7 @@ spec:
   remoteWrite: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.remoteWrite "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.prometheus.podSecurityContext.enabled }}
-  securityContext: {{- omit .Values.prometheus.podSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.prometheus.podSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.prometheus.ruleNamespaceSelector }}
   ruleNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.ruleNamespaceSelector "context" $) | nindent 4 }}
@@ -142,17 +173,16 @@ spec:
   {{- else if .Values.prometheus.persistence.enabled }}
   storage:
     volumeClaimTemplate:
+      {{- if or .Values.prometheus.persistence.annotations .Values.commonAnnotations .Values.commonLabels }}
       metadata:
-        annotations:
-          {{- if .Values.prometheus.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
+        {{- if or .Values.prometheus.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
+      {{- end }}
       spec:
         accessModes:
           {{- range .Values.prometheus.persistence.accessModes }}
@@ -163,20 +193,11 @@ spec:
             storage: {{ .Values.prometheus.persistence.size | quote }}
         {{- include "common.storage.class" (dict "persistence" .Values.prometheus.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
-  {{- if or .Values.prometheus.podMetadata.labels .Values.prometheus.podMetadata.annotations (eq .Values.prometheus.podAntiAffinityPreset "soft") (eq .Values.prometheus.podAntiAffinityPreset "hard") }}
   podMetadata:
-    labels:
-    {{- if .Values.prometheus.podMetadata.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.podMetadata.labels "context" $) | nindent 6 }}
-    {{- end }}
-    {{- if or (eq .Values.prometheus.podAntiAffinityPreset "soft") (eq .Values.prometheus.podAntiAffinityPreset "hard") }}
-    {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 6 }}
-    {{- end }}
+    labels: {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 6 }}
     {{- if .Values.prometheus.podMetadata.annotations }}
-    annotations:
-    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.podMetadata.annotations "context" $) | nindent 6 }}
+    annotations: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.podMetadata.annotations "context" $) | nindent 6 }}
     {{- end }}
-  {{- end }}
   {{- if .Values.prometheus.querySpec }}
   query: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.querySpec "context" $) | nindent 4 }}
   {{- end }}
@@ -200,13 +221,23 @@ spec:
   {{- if .Values.prometheus.tolerations }}
   tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.tolerations "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.volumes }}
-  volumes: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumes "context" $) | nindent 4 }}
+  {{- if .Values.prometheus.topologySpreadConstraints }}
+  topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.topologySpreadConstraints "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.volumeMounts }}
-  volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if or .Values.prometheus.additionalScrapeConfigs.enabled .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
+  volumes:
+    - name: empty-dir
+      emptyDir: {}
+    {{- if .Values.prometheus.volumes }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumes "context" $) | nindent 4 }}
+    {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+    {{- if .Values.prometheus.volumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.prometheus.additionalScrapeConfigs.enabled }}
   additionalScrapeConfigs:
     {{- if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "external") }}
     name: {{ .Values.prometheus.additionalScrapeConfigs.external.name }}
@@ -214,9 +245,6 @@ spec:
     {{- else if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "internal") }}
     name: additional-scrape-jobs-{{ template "kube-prometheus.prometheus.fullname" . }}
     key: scrape-jobs.yaml
-    {{- else if and (not .Values.prometheus.additionalScrapeConfigs.enabled) .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
-    name: {{ .Values.prometheus.additionalScrapeConfigsExternal.name }}
-    key: {{ .Values.prometheus.additionalScrapeConfigsExternal.key }}
     {{- end }}
   {{- end }}
   {{- if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
@@ -224,12 +252,17 @@ spec:
     name: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.name }}
     key: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.key }}
   {{- end }}
-{{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
+  {{- if .Values.prometheus.additionalAlertManagerExternal.enabled }}
+  additionalAlertManagerConfigs:
+    name: {{ .Values.prometheus.additionalAlertManagerExternal.name }}
+    key: {{ .Values.prometheus.additionalAlertManagerExternal.key }}
+  {{- end -}}
+{{- include "kube-prometheus.imagePullSecrets" . | nindent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+  {{- if .Values.prometheus.initContainers }}
   initContainers:
-    {{- if .Values.prometheus.initContainers }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.initContainers "context" $) | nindent 4 }}
-    {{- end }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.initContainers "context" $) | nindent 4 }}
+  {{- end }}
   containers:
     {{- if .Values.prometheus.thanos.create }}
     - name: thanos-sidecar
@@ -238,32 +271,48 @@ spec:
       args:
         - sidecar
         - --prometheus.url={{ default "http://localhost:9090" .Values.prometheus.thanos.prometheusUrl }}
-        - --grpc-address=0.0.0.0:10901
-        - --http-address=0.0.0.0:10902
+        - --grpc-address=0.0.0.0:{{ .Values.prometheus.thanos.containerPorts.grpc }}
+        - --http-address=0.0.0.0:{{ .Values.prometheus.thanos.containerPorts.http }}
         - --tsdb.path=/prometheus/
-        {{- if .Values.prometheus.thanos.objectStorageConfig }}
+        {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
         - --objstore.config=$(OBJSTORE_CONFIG)
         {{- end }}
         {{- if .Values.prometheus.thanos.extraArgs }}
         {{ toYaml .Values.prometheus.thanos.extraArgs | indent 8  | trim }}
         {{- end }}
-      {{- if .Values.prometheus.thanos.objectStorageConfig }}
       env:
+        {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
         - name: OBJSTORE_CONFIG
           valueFrom:
             secretKeyRef:
               name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
               key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
-      {{- end }}
+        {{- end }}
+        {{- if .Values.prometheus.thanos.extraEnvVars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if or .Values.prometheus.thanos.extraEnvVarsCM .Values.prometheus.thanos.extraEnvVarsSecret }}
+      envFrom:
+        {{- if .Values.prometheus.thanos.extraEnvVarsCM }}
+        - configMapRef:
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVarsCM "context" $) }}
+        {{- end }}
+        {{- if .Values.prometheus.thanos.extraEnvVarsSecret }}
+        - secretRef:
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraEnvVarsSecret "context" $) }}
+        {{- end }}
+      {{- end}}
       {{- if .Values.prometheus.thanos.resources }}
       resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
+      {{- else if ne .Values.prometheus.thanos.resourcesPreset "none" }}
+      resources: {{- include "common.resources.preset" (dict "type" .Values.prometheus.thanos.resourcesPreset) | nindent 8 }}
       {{- end }}
       ports:
         - name: grpc
-          containerPort: 10901
+          containerPort: {{ .Values.prometheus.thanos.containerPorts.grpc }}
           protocol: TCP
         - name: http
-          containerPort: 10902
+          containerPort: {{ .Values.prometheus.thanos.containerPorts.http }}
           protocol: TCP
       volumeMounts:
         - mountPath: /prometheus
@@ -276,7 +325,7 @@ spec:
         {{- end }}
       {{- if .Values.prometheus.thanos.containerSecurityContext.enabled }}
       # yamllint disable rule:indentation
-      securityContext: {{- omit .Values.prometheus.thanos.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.prometheus.thanos.containerSecurityContext "context" $) | nindent 8 }}
       # yamllint enable rule:indentation
       {{- end }}
       {{- if .Values.prometheus.thanos.livenessProbe.enabled }}
@@ -312,7 +361,7 @@ spec:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: prometheus
       {{- if .Values.prometheus.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.prometheus.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.prometheus.containerSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.prometheus.livenessProbe.enabled }}
       livenessProbe:
@@ -359,7 +408,7 @@ spec:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: config-reloader
       {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.prometheusConfigReloader.containerSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
       livenessProbe:

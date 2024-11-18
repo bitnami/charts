@@ -1,0 +1,117 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  {{ .Vars.tracking.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root
+  /bitnami/mlflow-basic-auth/basic_auth.ini:
+    exists: true
+    filetype: file
+    mode: '0644'
+    contents:
+      - /admin_username={{ .Vars.tracking.auth.username }}/
+      - /admin_password={{ .Vars.tracking.auth.password }}/
+      - /database_uri=postgresql://.*mlflow-postgresql/
+      - /default_permission=WRITE/
+  # If one of these folders exist, then we are not writing the artifacts to S3
+  /app/mlartifacts/0:
+    exists: false
+  {{ .Vars.tracking.persistence.mountPath }}/mlartifacts/0:
+    exists: false
+http:
+  # Unauthenticated
+  http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}:
+    status: 401
+    timeout: 10000
+  http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}:
+    status: 401
+    timeout: 10000
+  # Authenticated
+  http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}/:
+    status: 200
+    username: {{ .Vars.tracking.auth.username }}
+    password: {{ .Vars.tracking.auth.password  }}
+    timeout: 10000
+  http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}/:
+    status: 200
+    username: {{ .Vars.tracking.auth.username }}
+    password: {{ .Vars.tracking.auth.password  }}
+    timeout: 10000
+  # Metrics
+  http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}/metrics:
+    status: 200
+    username: {{ .Vars.tracking.auth.username }}
+    password: {{ .Vars.tracking.auth.password  }}
+    body:
+      - /mlflow_http_request_duration_seconds_bucket/
+    timeout: 10000
+  http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}/metrics:
+    status: 200
+    username: {{ .Vars.tracking.auth.username }}
+    password: {{ .Vars.tracking.auth.password  }}
+    body:
+      - /mlflow_http_request_duration_seconds_bucket/
+    timeout: 10000
+  # API Check to ensure that the Job succeeded and got stored
+  http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}/api/2.0/mlflow/runs/search:
+    status: 200
+    username: {{ .Vars.tracking.auth.username }}
+    password: {{ .Vars.tracking.auth.password  }}
+    method: POST
+    request-body: '{"experiment_ids":["0"]}'
+    request-headers:
+       - "Content-Type: application/json"
+    body:
+      # The job is lauched by the admin user
+      - /{{ .Vars.tracking.auth.username }}/
+      # The job is finished
+      - /FINISHED/
+      # The job uses RandomForestRegressor (which is used in the example)
+      - /RandomForestRegressor/
+    timeout: 30000
+  http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}/api/2.0/mlflow/runs/search:
+    status: 200
+    username: {{ .Vars.tracking.auth.username }}
+    password: {{ .Vars.tracking.auth.password  }}
+    method: POST
+    request-body: '{"experiment_ids":["0"]}'
+    request-headers:
+       - "Content-Type: application/json"
+    body:
+      # The job is lauched by the admin user
+      - /{{ .Vars.tracking.auth.username }}/
+      # The job is finished
+      - /FINISHED/
+      # The job uses RandomForestRegressor (which is used in the example)
+      - /RandomForestRegressor/
+    timeout: 30000
+command:
+  {{- $uid := .Vars.tracking.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.tracking.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always
+    # be either the one specified as vars (always a bigger number that the def<ault)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{- if .Vars.tracking.containerSecurityContext.enabled }}
+  check-no-capabilities:
+    exec: cat /proc/1/status
+    exit-status: 0
+    stdout:
+    - "CapInh:	0000000000000000"
+    - "CapPrm:	0000000000000000"
+    - "CapEff:	0000000000000000"
+    - "CapBnd:	0000000000000000"
+    - "CapAmb:	0000000000000000"
+  {{- end }}
+  {{ if .Vars.tracking.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*mlflow-tracking/
+  {{ end }}

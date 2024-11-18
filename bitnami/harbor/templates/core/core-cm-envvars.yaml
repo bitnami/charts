@@ -1,14 +1,18 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- $scheme := ternary "https" "http" .Values.internalTLS.enabled -}}
 {{- $port := ternary .Values.core.containerPorts.https .Values.core.containerPorts.http .Values.internalTLS.enabled | int -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%s-envvars" (include "harbor.core" .) }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.core.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: core
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -26,16 +30,12 @@ data:
   JOBSERVICE_URL: {{ include "harbor.jobservice.url" . | quote }}
   REGISTRY_URL: {{ include "harbor.registry.url" . | quote }}
   TOKEN_SERVICE_URL: {{ include "harbor.tokenService.url" . | quote }}
-  WITH_NOTARY: {{ .Values.notary.enabled | quote }}
-  NOTARY_URL: {{ printf "http://%s:4443" (include "harbor.notary-server" .) | quote }}
   CORE_LOCAL_URL: {{ printf "%s://127.0.0.1:%d" $scheme $port | quote }}
   CFG_EXPIRATION: "5"
   ADMIRAL_URL: "NA"
   WITH_TRIVY: {{ .Values.trivy.enabled | quote }}
   TRIVY_ADAPTER_URL: {{ include "harbor.trivy.url" . | quote }}
   REGISTRY_STORAGE_PROVIDER_NAME: {{ .Values.persistence.imageChartStorage.type | quote }}
-  WITH_CHARTMUSEUM: {{ .Values.chartmuseum.enabled | quote }}
-  CHART_REPOSITORY_URL: {{ include "harbor.chartmuseum.url" . | quote }}
   LOG_LEVEL: {{ .Values.logLevel | quote }}
   CONFIG_PATH: "/etc/core/app.conf"
   SYNC_REGISTRY: "false"
@@ -43,7 +43,7 @@ data:
   PORTAL_URL: {{ include "harbor.portal.url" . | quote }}
   REGISTRY_CONTROLLER_URL: {{ include "harbor.registryCtl.url" . | quote }}
   REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
-  PERMITTED_REGISTRY_TYPES_FOR_PROXY_CACHE: "docker-hub,harbor,azure-acr,aws-ecr,google-gcr,quay,docker-registry"
+  PERMITTED_REGISTRY_TYPES_FOR_PROXY_CACHE: "docker-hub,harbor,azure-acr,aws-ecr,google-gcr,quay,docker-registry,github-ghcr,jfrog-artifactory"
   {{- if .Values.core.uaaSecret }}
   UAA_CA_ROOT: "/etc/core/auth-ca/auth-ca.crt"
   {{- end }}
@@ -58,4 +58,8 @@ data:
   METRIC_PORT: {{ .Values.core.containerPorts.metrics | quote }}
   METRIC_NAMESPACE: harbor
   METRIC_SUBSYSTEM: core
+  {{- end }}
+  {{- if .Values.tracing.enabled }}
+  TRACE_SERVICE_NAME: "harbor-core"
+  {{- include "harbor.tracing.envvars" . | nindent 2}}
   {{- end }}

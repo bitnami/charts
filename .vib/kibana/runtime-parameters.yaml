@@ -1,0 +1,28 @@
+containerPorts:
+  http: 5602
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+extraConfiguration:
+  "csp.strict": false
+service:
+  ports:
+    http: 80
+  type: LoadBalancer
+elasticsearch:
+  hosts:
+    - localhost
+  port: 9200
+sidecars:
+ - name: elasticsearch
+   image: bitnami/elasticsearch:latest
+   imagePullPolicy: IfNotPresent
+   ports:
+     - name: http
+       containerPort: 9200
+serviceAccount:
+  create: true
+automountServiceAccountToken: true

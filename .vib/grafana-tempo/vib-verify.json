@@ -22,27 +22,51 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/grafana-tempo"
         },
-        "runtime_parameters": "InF1ZXJ5RnJvbnRlbmQiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M4"
           }
         }
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "grafana-tempo/goss/goss.yaml",
+            "vars_file": "grafana-tempo/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-grafana-tempo-compactor"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
-            "endpoint": "lb-grafana-tempo-query-frontend-http",
-            "app_protocol": "HTTP"
+            "resources": {
+              "path": "/.vib/grafana-tempo/cypress"
+            },
+            "endpoint": "lb-grafana-tempo-compactor-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "compactorReplicaCount": "2",
+              "distributorReplicaCount": "1",
+              "ingesterReplicaCount": "1",
+              "querierReplicaCount": "1",
+              "metricsReplicaCount": "1",
+              "gossipRingPort": "7946"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

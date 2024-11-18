@@ -57,7 +57,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
 2. Complete your Discourse deployment by running:
 
-    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
       {{- if .Values.global }}
       {{- if .Values.global.imagePullSecrets }}
       --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
@@ -121,3 +121,5 @@ To connect to Discourse from outside the cluster, perform the following steps:
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "discourse" "sidekiq" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

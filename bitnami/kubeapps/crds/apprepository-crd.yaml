@@ -74,6 +74,8 @@ spec:
                   type: boolean
                 passCredentials:
                   type: boolean
+                interval:
+                  type: string
                 filterRule:
                   type: object
                   properties:

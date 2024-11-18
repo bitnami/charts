@@ -1,0 +1,175 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.queryScheduler.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "grafana-loki.query-scheduler.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-loki
+    app.kubernetes.io/component: query-scheduler
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  minReadySeconds: 10
+  replicas: {{ .Values.queryScheduler.replicaCount }}
+  {{- if .Values.queryScheduler.updateStrategy }}
+  strategy: {{- toYaml .Values.queryScheduler.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryScheduler.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: grafana-loki
+      app.kubernetes.io/component: query-scheduler
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/loki-configmap.yaml") . | sha256sum }}
+        {{- if .Values.queryScheduler.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        name: {{ template "grafana-loki.query-scheduler.fullname" . }}
+        app.kubernetes.io/part-of: grafana-loki
+        app.kubernetes.io/component: query-scheduler
+        loki-gossip-member: "true"
+    spec:
+      serviceAccountName: {{ template "grafana-loki.serviceAccountName" . }}
+      {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.queryScheduler.automountServiceAccountToken }}
+      {{- if .Values.queryScheduler.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.queryScheduler.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryScheduler.podAffinityPreset "component" "query-scheduler" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryScheduler.podAntiAffinityPreset "component" "query-scheduler" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryScheduler.nodeAffinityPreset.type "key" .Values.queryScheduler.nodeAffinityPreset.key "values" .Values.queryScheduler.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.queryScheduler.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryScheduler.priorityClassName }}
+      priorityClassName: {{ .Values.queryScheduler.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.queryScheduler.schedulerName }}
+      schedulerName: {{ .Values.queryScheduler.schedulerName }}
+      {{- end }}
+      {{- if .Values.queryScheduler.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryScheduler.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      enableServiceLinks: {{ .Values.queryScheduler.enableServiceLinks }}
+      initContainers:
+        {{- if .Values.queryScheduler.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: grafana-loki-query-scheduler
+          image: {{ template "grafana-loki.image" . }}
+          imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
+          {{- if .Values.queryScheduler.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryScheduler.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -target=query-scheduler
+            - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+            - -log.level=debug
+          {{- if .Values.queryScheduler.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.queryScheduler.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          envFrom:
+            {{- if .Values.queryScheduler.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.queryScheduler.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.loki.containerPorts.http }}
+              name: http
+            - containerPort: {{ .Values.loki.containerPorts.grpc }}
+              name: grpc
+          {{- if .Values.queryScheduler.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.queryScheduler.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.queryScheduler.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.queryScheduler.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.queryScheduler.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
+          {{- end }}
+          {{- if .Values.queryScheduler.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.queryScheduler.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: loki-config
+              mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
+              subPath: loki.yaml
+          {{- if .Values.queryScheduler.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.queryScheduler.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.queryScheduler.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: loki-config
+          configMap:
+            name: {{ template "grafana-loki.loki.configmapName" . }}
+        {{- if .Values.queryScheduler.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

@@ -1,0 +1,22 @@
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+usePassword: true
+password: ComplicatedPassword123!4
+service:
+  ports:
+    redis: 80
+  type: LoadBalancer
+persistence:
+  path: /bitnami/redis/data
+redis:
+  containerPorts:
+    redis: 6380
+    bus: 16380
+cluster:
+  init: true
+  nodes: 9
+  replicas: 2

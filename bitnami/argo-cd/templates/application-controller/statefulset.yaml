@@ -1,0 +1,39 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if eq .Values.controller.kind "StatefulSet" }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "argocd.application-controller" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.controller.replicaCount }}
+  {{- if .Values.controller.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.controller.podManagementPolicy }}
+  {{- end }}
+  {{- if .Values.controller.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.controller.updateStrategy | nindent 4 }}
+  {{- end }}
+  serviceName: {{ include "argocd.application-controller" . }}-headless
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: controller
+  template:
+    metadata:
+      {{- if .Values.controller.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.controller.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: controller
+    spec: {{- include "argocd.pod" . | nindent 6 }}
+  volumeClaimTemplates: []
+{{- end -}}

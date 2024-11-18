@@ -11,11 +11,11 @@ APP VERSION: {{ .Chart.AppVersion }}
 
      You can watch the status by running:
 
-         $ kubectl get svc {{ include "common.names.fullname" . }}-envoy --namespace {{ include "common.names.namespace" . }} -w
+         $ kubectl get svc {{ printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }} --namespace {{ include "common.names.namespace" . }} -w
 
      Once 'EXTERNAL-IP' is no longer '<pending>':
 
-         $ kubectl describe svc {{ include "common.names.fullname" . }}-envoy --namespace {{ include "common.names.namespace" . }} | grep Ingress | awk '{print $3}'
+         $ kubectl describe svc {{ printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }} --namespace {{ include "common.names.namespace" . }} | grep Ingress | awk '{print $3}'
 
 2. Configure DNS records corresponding to Kubernetes ingress resources to point to the load balancer IP/hostname found in step 1
 {{- end }}
@@ -38,3 +38,5 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- include "contour.validateValues" . }}
 {{- include "common.warnings.rollingTag" .Values.contour.image }}
 {{- include "common.warnings.rollingTag" .Values.envoy.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "contour" "defaultBackend" "envoy" "envoy.shutdownManager") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.contour.image .Values.envoy.image .Values.defaultBackend.image) "context" $) }}

@@ -11,7 +11,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 Complete your Kibana deployment by running:
 
-  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} bitnami/kibana \
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/kibana \
     --set elasticsearch.hosts[0]=YOUR_ES_HOST,elasticsearch.port=YOUR_ES_PORT
 
 Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of your Elasticsearch deployment.
@@ -76,3 +76,5 @@ WARNING: For Prometheus metrics to work, make sure that the kibana-prometheus-ex
 {{- include "kibana.validateValues" . }}
 {{- include "kibana.checkRollingTags" . }}
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

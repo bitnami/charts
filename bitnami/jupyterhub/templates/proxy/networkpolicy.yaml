@@ -1,32 +1,89 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.proxy.networkPolicy.enabled -}}
-apiVersion: networking.k8s.io/v1
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.proxy.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: proxy
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   name: {{ include "jupyterhub.proxy.name" . }}
   namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $proxyPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $proxyPodLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: proxy
   policyTypes:
     - Ingress
     - Egress
-  ingress:
-    {{- if .Values.proxy.networkPolicy.extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+  {{- if .Values.singleuser.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Proxy --> Hub
+    - ports:
+        - port: {{ .Values.hub.containerPorts.http }}
+      to:
+        {{- $hubPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $hubPodLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: hub
+    # Proxy --> Single User
+    - ports:
+        - port: {{ .Values.singleuser.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: singleuser
+    ## DNS access
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    {{- if .Values.proxy.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
-    # Pods with label "hub.jupyter.org/network-access-proxy-api" --> Proxy API
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.proxy.containerPort.http }}
+      {{- if not .Values.proxy.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+        {{- if .Values.proxy.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.proxy.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.proxy.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.proxy.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
     - ports:
         - port: {{ .Values.proxy.containerPort.api }}
+      {{- if not .Values.proxy.networkPolicy.allowExternal }}
       from:
+        # Pods with label "hub.jupyter.org/network-access-proxy-api" --> Proxy API
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-api: "true"
@@ -37,29 +94,22 @@ spec:
             matchLabels:
               hub.jupyter.org/network-access-proxy-api: "true"
         {{- end }}
-  egress:
-    # Proxy --> Hub
-    - ports:
-        - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
-      to:
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
-              app.kubernetes.io/component: hub
-    # Proxy --> Single User
-    - ports:
-        - port: {{ .Values.singleuser.containerPort }}
-      to:
-        - podSelector:
+        {{- if .Values.proxy.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
             matchLabels:
-               {{- include "common.labels.matchLabels" . | nindent 14 }}
-              app.kubernetes.io/component: singleuser
-    ## DNS access
-    - ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
-    {{- if .Values.proxy.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+              {{- range $key, $value := .Values.proxy.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.proxy.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.proxy.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.proxy.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

@@ -1,5 +1,9 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: "\U0001F680 Feature request"
 description: Suggest an idea for this project
+labels: ["feature-request"]
 body:
   - type: markdown
     attributes:

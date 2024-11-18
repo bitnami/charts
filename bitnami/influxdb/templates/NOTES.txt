@@ -103,7 +103,7 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- else if contains "ClusterIP" .Values.influxdb.service.type }}
 
-    kubectl port-forward svc/{{ include "common.names.fullname" . }} 8086:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }} &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8086:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }} &
     {{- if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.auth.admin.username }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{- end }} influx -host 127.0.0.1 -port 8086
 
 {{- end }}
@@ -140,3 +140,5 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "influxdb") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.backup.uploadProviders.google.image .Values.backup.uploadProviders.azure.image .Values.backup.uploadProviders.aws.image) "context" $) }}

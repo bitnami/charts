@@ -1,20 +1,20 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "mysql.primary.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
     app.kubernetes.io/component: primary
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.primary.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.primary.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.primary.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.primary.service.type }}
   {{- if and .Values.primary.service.clusterIP (eq .Values.primary.service.type "ClusterIP") }}
@@ -30,7 +30,7 @@ spec:
   externalTrafficPolicy: {{ .Values.primary.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if and (eq .Values.primary.service.type "LoadBalancer") (not (empty .Values.primary.service.loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{ .Values.primary.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.primary.service.loadBalancerSourceRanges | nindent 4}}
   {{- end }}
   {{- if and (eq .Values.primary.service.type "LoadBalancer") (not (empty .Values.primary.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.primary.service.loadBalancerIP }}
@@ -45,8 +45,21 @@ spec:
       {{- else if eq .Values.primary.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.primary.enableMySQLX }}
+    - name: mysqlx
+      port: {{ .Values.primary.service.ports.mysqlx }}
+      protocol: TCP
+      targetPort: mysqlx
+      {{- if (and (or (eq .Values.primary.service.type "NodePort") (eq .Values.primary.service.type "LoadBalancer")) .Values.primary.service.nodePorts.mysqlx) }}
+      nodePort: {{ .Values.primary.service.nodePorts.mysqlx }}
+      {{- else if eq .Values.primary.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
     {{- if .Values.primary.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.primary.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mysql
     app.kubernetes.io/component: primary

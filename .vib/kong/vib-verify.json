@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/kong"
         },
-        "runtime_parameters": "InBvZEFmZmluaXR5UHJlc2V0IjogImhhcmQiCiJwb2RBbnRpQWZmaW5pdHlQcmVzZXQiOiAiIgoicG9zdGdyZXNxbCI6CiAgInBvc3RncmVzcWxQYXNzd29yZCI6ICI3ZE14TGZjcXhOIgoicmVwbGljYUNvdW50IjogMQoic2VydmljZSI6CiAgInByb3h5SHR0cFBvcnQiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -32,16 +31,40 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "kong/goss/goss.yaml",
+            "vars_file": "kong/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-kong"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
-            "endpoint": "lb-kong-http-proxy"
+            "resources": {
+              "path": "/.vib/kong/cypress"
+            },
+            "endpoint": "lb-kong-http-proxy",
+            "app_protocol": "HTTP",
+            "env": {
+              "apikey": "ComplicatedPassword123!4",
+              "ingressHost": "www.example.com",
+              "ingressPath": "/nginx",
+              "adminHttpPort": "443"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

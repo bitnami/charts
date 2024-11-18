@@ -1,0 +1,39 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  licenses: Apache-2.0
+  images: |
+    - name: alertmanager
+      image: docker.io/bitnami/alertmanager:0.27.0-debian-12-r25
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:12-debian-12-r32
+    - name: prometheus
+      image: docker.io/bitnami/prometheus:2.55.1-debian-12-r1
+    - name: thanos
+      image: docker.io/bitnami/thanos:0.36.1-debian-12-r4
+apiVersion: v2
+appVersion: 2.55.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Prometheus is an open source monitoring and alerting system. It enables sysadmins to monitor their infrastructures by collecting metrics from configured targets at given intervals.
+home: https://github.com/prometheus/prometheus
+icon: https://bitnami.com/assets/stacks/prometheus/img/prometheus-stack-220x234.png
+keywords:
+- prometheus
+- monitoring
+maintainers:
+- name: Bitnami
+  url: https://github.com/bitnami/charts
+name: prometheus
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/prometheus
+- https://github.com/bitnami/containers/tree/main/bitnami/prometheus
+- https://github.com/prometheus/prometheus
+- https://github.com/prometheus-community/helm-charts
+version: 1.3.27

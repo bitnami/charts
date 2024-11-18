@@ -142,6 +142,37 @@
         }
       }
     },
+    "secondaryIngress": {
+      "type": "object",
+      "form": true,
+      "title": "Ingress Configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Use a custom hostname",
+          "description": "Enable the ingress resource that allows you to access the WordPress installation."
+        },
+        "hostname": {
+          "type": "string",
+          "form": true,
+          "title": "Hostname",
+          "hidden": {
+            "value": false,
+            "path": "ingress/enabled"
+          }
+        },
+        "tls": {
+          "type": "boolean",
+          "form": true,
+          "title": "Create a TLS secret",
+          "hidden": {
+            "value": false,
+            "path": "ingress/enabled"
+          }
+        }
+      }
+    },
     "service": {
       "type": "object",
       "form": true,

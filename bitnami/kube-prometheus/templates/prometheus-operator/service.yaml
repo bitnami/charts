@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.operator.enabled }}
 apiVersion: v1
 kind: Service
@@ -5,20 +10,20 @@ metadata:
   name: {{ template "kube-prometheus.operator.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.operator.service.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.operator.service.labels "context" $ ) | nindent 4 }}
     {{- end }}
-  annotations:
-    {{- if .Values.operator.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.operator.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.operator.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.operator.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.operator.service.type }}
   {{- if and (eq .Values.operator.service.type "LoadBalancer") (not (empty .Values.operator.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.operator.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.operator.service.type "LoadBalancer") (not (empty .Values.operator.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.operator.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.operator.service.type "LoadBalancer") (not (empty .Values.operator.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.operator.service.loadBalancerSourceRanges }}

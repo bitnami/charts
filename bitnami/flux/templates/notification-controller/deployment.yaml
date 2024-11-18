@@ -1,0 +1,186 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.notificationController.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "flux.notification-controller.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.notificationController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: notification-controller
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.notificationController.autoscaling.enabled }}
+  replicas: {{ .Values.notificationController.replicaCount }}
+  {{- end }}
+  {{- if .Values.notificationController.updateStrategy }}
+  strategy: {{- toYaml .Values.notificationController.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notificationController.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: notification-controller
+  template:
+    metadata:
+      {{- if .Values.notificationController.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
+        app.kubernetes.io/component: notification-controller
+    spec:
+      serviceAccountName: {{ template "flux.notification-controller.serviceAccountName" . }}
+      {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.notificationController.automountServiceAccountToken }}
+      {{- if .Values.notificationController.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notificationController.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.notificationController.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notificationController.podAffinityPreset "component" "notification-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notificationController.podAntiAffinityPreset "component" "notification-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.notificationController.nodeAffinityPreset.type "key" .Values.notificationController.nodeAffinityPreset.key "values" .Values.notificationController.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.notificationController.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.notificationController.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notificationController.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notificationController.priorityClassName }}
+      priorityClassName: {{ .Values.notificationController.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.notificationController.schedulerName }}
+      schedulerName: {{ .Values.notificationController.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.notificationController.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notificationController.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notificationController.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notificationController.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.notificationController.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.notificationController.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: notification-controller
+          image: {{ template "flux.notification-controller.image" . }}
+          imagePullPolicy: {{ .Values.notificationController.image.pullPolicy }}
+          {{- if .Values.notificationController.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notificationController.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.notificationController.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.notificationController.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --watch-all-namespaces={{ .Values.notificationController.watchAllNamespaces }}
+            {{- if .Values.notificationController.image.debug }}
+            - --log-level=debug
+            {{- else }}
+            - --log-level=info
+            {{- end }}
+            - --metrics-addr=:{{ .Values.notificationController.containerPorts.metrics }}
+            - --health-addr=:{{ .Values.notificationController.containerPorts.health }}
+            - --events-addr=:{{ .Values.notificationController.containerPorts.webhook }}
+            - --receiverAddr=:{{ .Values.notificationController.containerPorts.receiver }}
+            - --log-encoding=json
+            - --enable-leader-election
+          {{- end }}
+          env:
+            - name: RUNTIME_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            {{- if .Values.notificationController.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.notificationController.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.notificationController.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.notificationController.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.notificationController.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.notificationController.resources }}
+          resources: {{- toYaml .Values.notificationController.resources | nindent 12 }}
+          {{- else if ne .Values.notificationController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.notificationController.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http-metrics
+              containerPort: {{ .Values.notificationController.containerPorts.metrics }}
+            - name: http-health
+              containerPort: {{ .Values.notificationController.containerPorts.health }}
+            - name: http-webhook
+              containerPort: {{ .Values.notificationController.containerPorts.webhook }}
+            - name: http-receiver
+              containerPort: {{ .Values.notificationController.containerPorts.receiver }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.notificationController.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notificationController.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notificationController.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-health
+          {{- end }}
+          {{- if .Values.notificationController.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notificationController.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notificationController.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /readyz
+              port: http-health
+          {{- end }}
+          {{- if .Values.notificationController.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notificationController.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notificationController.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-health
+          {{- end }}
+          {{- end }}
+          {{- if .Values.notificationController.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+          {{- if .Values.notificationController.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.notificationController.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.notificationController.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.notificationController.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

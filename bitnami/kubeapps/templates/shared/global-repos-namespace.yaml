@@ -1,6 +1,0 @@
-{{- if .Values.apprepository.globalReposNamespaceSuffix }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ include "kubeapps.globalReposNamespace" . | quote }}
-{{- end }}

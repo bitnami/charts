@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/oauth2-proxy"
         },
-        "runtime_parameters": "InJlZGlzIjoKICAiYXV0aCI6CiAgICAicGFzc3dvcmQiOiAiam5kZkRGZiIKInNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -32,17 +31,39 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "oauth2-proxy/goss/goss.yaml",
+            "vars_file": "oauth2-proxy/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-oauth2-proxy"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
+            "resources": {
+              "path": "/.vib/oauth2-proxy/cypress"
+            },
             "endpoint": "lb-oauth2-proxy-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "env": {
+              "upstreamURL": "/bitnami/oauth2-proxy/conf/",
+              "upstreamContent": "oauth2_proxy.cfg",
+              "dexPort": "5556"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

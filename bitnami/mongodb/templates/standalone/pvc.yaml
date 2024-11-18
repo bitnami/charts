@@ -1,26 +1,24 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (not (eq .Values.architecture "replicaset")) (not .Values.useStatefulSet) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "mongodb.fullname" . }}
   namespace: {{ include "mongodb.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mongodb
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if or .Values.persistence.annotations  .Values.commonAnnotations .Values.persistence.resourcePolicy }}
   annotations:
-  {{- if .Values.commonAnnotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.persistence.annotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.persistence.resourcePolicy }}
+    {{- if .Values.persistence.resourcePolicy }}
     helm.sh/resource-policy: {{ .Values.persistence.resourcePolicy | quote }}
-  {{- end }}
-  {{- end }}
+    {{- end }}
+    {{- if or .Values.persistence.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   accessModes:
   {{- range .Values.persistence.accessModes }}

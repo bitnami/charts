@@ -1,0 +1,54 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.query.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thanos.query.fullname" . }}-grpc
+  namespace: {{ include "common.names.namespace" . }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.serviceGrpc.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query
+  {{- if or .Values.query.serviceGrpc.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.serviceGrpc.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.query.serviceGrpc.type }}
+  {{- if and .Values.query.serviceGrpc.clusterIP (eq .Values.query.serviceGrpc.type "ClusterIP") }}
+  clusterIP: {{ .Values.query.serviceGrpc.clusterIP }}
+  {{- end }}
+  {{- if ne .Values.query.serviceGrpc.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.query.serviceGrpc.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and .Values.query.serviceGrpc.loadBalancerIP (eq .Values.query.serviceGrpc.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.query.serviceGrpc.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.query.serviceGrpc.type "LoadBalancer") .Values.query.serviceGrpc.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.query.serviceGrpc.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.query.serviceGrpc.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      {{- if and (or (eq .Values.query.serviceGrpc.type "NodePort") (eq .Values.query.serviceGrpc.type "LoadBalancer")) .Values.query.serviceGrpc.nodePorts.grpc }}
+      nodePort: {{ .Values.query.serviceGrpc.nodePorts.grpc }}
+      {{- else if eq .Values.query.serviceGrpc.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.query.serviceGrpc.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.serviceGrpc.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector:
+    {{- if .Values.query.serviceGrpc.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.serviceGrpc.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- end }}
+{{- end }}

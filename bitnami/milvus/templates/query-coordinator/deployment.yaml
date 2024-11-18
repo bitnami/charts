@@ -1,0 +1,239 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.queryCoord.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "milvus.query-coordinator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: query-coordinator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.queryCoord.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.queryCoord.replicaCount }}
+  {{- end }}
+  {{- if .Values.queryCoord.updateStrategy }}
+  strategy: {{- toYaml .Values.queryCoord.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryCoord.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: milvus
+      app.kubernetes.io/component: query-coordinator
+  template:
+    metadata:
+      annotations:
+        checksum/common-config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/common-config-extra: {{ include (print $.Template.BasePath "/extra-configmap.yaml") . | sha256sum }}
+        checksum/config-extra: {{ include (print $.Template.BasePath "/query-coordinator/extra-configmap.yaml") . | sha256sum }}
+        {{- if .Values.queryCoord.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: milvus
+        app.kubernetes.io/component: query-coordinator
+    spec:
+      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- end }}
+      serviceAccountName: {{ template "milvus.query-coordinator.serviceAccountName" . }}
+      {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.queryCoord.automountServiceAccountToken }}
+      {{- if .Values.queryCoord.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryCoord.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.queryCoord.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryCoord.podAffinityPreset "component" "query-coordinator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryCoord.podAntiAffinityPreset "component" "query-coordinator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryCoord.nodeAffinityPreset.type "key" .Values.queryCoord.nodeAffinityPreset.key "values" .Values.queryCoord.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryCoord.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.queryCoord.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryCoord.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryCoord.runtimeClassName }}
+      runtimeClassName: {{ .Values.queryCoord.runtimeClassName | quote }}
+      {{- end }}
+      {{- if .Values.queryCoord.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryCoord.priorityClassName }}
+      priorityClassName: {{ .Values.queryCoord.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.queryCoord.schedulerName }}
+      schedulerName: {{ .Values.queryCoord.schedulerName }}
+      {{- end }}
+      {{- if .Values.queryCoord.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryCoord.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.queryCoord.enableDefaultInitContainers }}
+        {{- include "milvus.waitForETCDInitContainer" . | nindent 8 }}
+        {{- include "milvus.waitForKafkaInitContainer" . | nindent 8 }}
+        {{- include "milvus.waitForS3InitContainer" . | nindent 8 }}
+        {{- include "milvus.prepareMilvusInitContainer" (dict "component" "queryCoord" "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.queryCoord.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: milvus
+          image: {{ template "milvus.image" . }}
+          imagePullPolicy: {{ .Values.milvus.image.pullPolicy }}
+          {{- if .Values.queryCoord.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryCoord.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.queryCoord.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.queryCoord.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - run
+            - querycoord
+          {{- end }}
+          env:
+            - name: METRICS_PORT
+              value: {{ .Values.queryCoord.containerPorts.metrics | quote }}
+            {{- if .Values.queryCoord.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.queryCoord.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryCoord.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.queryCoord.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryCoord.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.queryCoord.containerPorts.grpc }}
+              name: grpc
+            - containerPort: {{ .Values.queryCoord.containerPorts.metrics }}
+              name: http-metrics
+          {{- if .Values.queryCoord.resources }}
+          resources: {{- toYaml .Values.queryCoord.resources | nindent 12 }}
+          {{- else if ne .Values.queryCoord.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.queryCoord.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.queryCoord.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryCoord.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryCoord.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-metrics
+          {{- end }}
+          {{- if .Values.queryCoord.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryCoord.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryCoord.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http-metrics
+          {{- end }}
+          {{- if .Values.queryCoord.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryCoord.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryCoord.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-metrics
+          {{- end }}
+          {{- end }}
+          {{- if .Values.queryCoord.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/milvus/configs
+              subPath: app-rendered-conf-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/milvus/tmp
+              subPath: app-tmp-dir
+              # We are using a s3 backend, so this data dir is temporary
+            - name: empty-dir
+              mountPath: /bitnami/milvus/data
+              subPath: app-data-dir
+            {{- if and (not .Values.etcd.enabled) .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
+            - name: etcd-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/etcd/client
+              readOnly: true
+            {{- end }}
+            {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+            - name: kafka-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/kafka/client
+              readOnly: true
+            {{- end }}
+            {{- if and (not .Values.minio.enabled) .Values.externalS3.tls.enabled .Values.externalS3.tls.existingSecret }}
+            - name: minio-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/minio/client
+              readOnly: true
+            {{- end }}
+          {{- if .Values.queryCoord.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.queryCoord.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.queryCoord.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: config-common
+          configMap:
+            name: {{ template "milvus.configmapName" . }}
+        {{- if or .Values.milvus.extraConfig .Values.milvus.extraConfigExistingConfigMap }}
+        - name: extra-config-common
+          configMap:
+            name: {{ template "milvus.extraConfigmapName" . }}
+        {{- end }}
+        - name: component-config-default
+          configMap:
+            name: {{ template "milvus.query-coordinator.configmapName" . }}
+        {{- if or .Values.queryCoord.extraConfig .Values.queryCoord.extraConfigExistingConfigMap }}
+        - name: component-extra-config
+          configMap:
+            name: {{ template "milvus.query-coordinator.extraConfigmapName" . }}
+        {{- end }}
+        {{- if and (not .Values.etcd.enabled) .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
+        - name: etcd-client-certs
+          secret:
+            secretName: {{ .Values.externalEtcd.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and (not .Values.kafka.enabled) .Values.externalKafka.tls.enabled .Values.externalKafka.tls.existingSecret }}
+        - name: kafka-client-certs
+          secret:
+            secretName: {{ .Values.externalKafka.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and (not .Values.minio.enabled) .Values.externalS3.tls.enabled .Values.externalS3.tls.existingSecret }}
+        - name: minio-client-certs
+          secret:
+            secretName: {{ .Values.externalS3.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.queryCoord.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

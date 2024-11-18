@@ -24,7 +24,7 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-  Consul can be accessed within the cluster on port {{ .Values.containerPorts.rpcServer }} at {{ printf "%s-headless" (include "common.names.fullname" .) }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+  Consul can be accessed within the cluster on port {{ .Values.containerPorts.rpcServer }} at {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 {{- if .Values.service.enabled }}
 
@@ -35,8 +35,8 @@ In order to access to the Consul Web UI:
 1. Get the Consul URL and associate its hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "Consul URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
-   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+   echo "Consul URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ tpl .Values.ingress.hostname . }}"
+   echo "$CLUSTER_IP  {{ tpl .Values.ingress.hostname . }}" | sudo tee -a /etc/hosts
 
 {{- else }}
 
@@ -45,21 +45,21 @@ In order to access to the Consul Web UI:
 {{- if contains "NodePort" .Values.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-ui" (include "common.names.fullname" .) }})
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-ui" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }})
     echo "Consul URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ printf "%s-ui" (include "common.names.fullname" .) }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ printf "%s-ui" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-ui" (include "common.names.fullname" .) }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-ui" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
     echo "Consul URL: http://$SERVICE_IP:{{ .Values.service.ports.http }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-ui" (include "common.names.fullname" .) }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-ui" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }}
     echo "Consul URL: http://127.0.0.1:{{ .Values.service.ports.http }}"
 
 {{- end }}
@@ -83,3 +83,5 @@ Furthermore, to know which Consul node is the cluster leader run this other comm
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "metrics" "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

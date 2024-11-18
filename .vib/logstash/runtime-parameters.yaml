@@ -1,0 +1,48 @@
+enableMonitoringAPI: true
+monitoringAPIPort: 9600
+input: |-
+  http { port => 8081 }
+  file {
+    path => "/tmp/test_input"
+    mode => "tail"
+  }
+filter: |-
+  grok {
+    match => { "message" => "%{COMBINEDAPACHELOG}" }
+  }
+  date {
+    match => [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]
+  }
+output: |-
+  stdout {}
+  file {
+    path => "/tmp/test_log"
+  }
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+containerPorts:
+  - name: http
+    containerPort: 8081
+    protocol: TCP
+replicaCount: 1
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+service:
+  ports:
+    - name: http
+      port: 8081
+      targetPort: http
+      protocol: TCP
+  extraPorts:
+    - name: monitoring
+      port: 80
+      targetPort: monitoring
+      protocol: TCP
+  type: LoadBalancer
+persistence:
+  mountPath: /bitnami/logstash/data

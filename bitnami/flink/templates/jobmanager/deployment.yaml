@@ -1,0 +1,186 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name:  {{ include "flink.jobmanager.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flink
+    app.kubernetes.io/component: jobmanager
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.jobmanager.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: flink
+      app.kubernetes.io/component: jobmanager
+  replicas: {{ .Values.jobmanager.replicaCount }}
+  {{- if .Values.jobmanager.updateStrategy }}
+  strategy: {{- toYaml .Values.jobmanager.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flink
+        app.kubernetes.io/component: jobmanager
+      {{- if or .Values.jobmanager.podAnnotations .Values.commonAnnotations }}
+      {{- $podAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.jobmanager.podAnnotations .Values.commonAnnotations ) "context" . ) }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "flink.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.jobmanager.automountServiceAccountToken }}
+      {{- if .Values.jobmanager.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.jobmanager.schedulerName }}
+      schedulerName: {{ .Values.jobmanager.schedulerName }}
+      {{- end }}
+      priorityClassName: {{ .Values.jobmanager.priorityClassName | quote }}
+      {{- if .Values.jobmanager.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobmanager.podAffinityPreset "component" "jobmanager" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobmanager.podAntiAffinityPreset "component" "jobmanager" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.jobmanager.nodeAffinityPreset.type "key" .Values.jobmanager.nodeAffinityPreset.key "values" .Values.jobmanager.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.jobmanager.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jobmanager.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.jobmanager.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.jobmanager.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.jobmanager.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+      {{- if .Values.jobmanager.initContainers }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: flink-jobmanager
+          image: {{ include "flink.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.jobmanager.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jobmanager.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.jobmanager.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.jobmanager.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.jobmanager.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: rpc
+              containerPort: {{ .Values.jobmanager.containerPorts.rpc }}
+            - name: http
+              containerPort: {{ .Values.jobmanager.containerPorts.http }}
+            - name: blob
+              containerPort: {{ .Values.jobmanager.containerPorts.blob }}
+          env:
+            - name: FLINK_MODE
+              value: jobmanager
+            - name: FLINK_CFG_JOBMANAGER_RPC_ADDRESS
+              value: {{ include "flink.jobmanager.fullname" . | quote }}
+            - name: FLINK_CFG_JOBMANAGER_RPC_PORT
+              value: {{ .Values.jobmanager.service.ports.rpc | quote }}
+            - name: FLINK_CFG_JOBMANAGER_RPC_BIND__PORT
+              value: {{ .Values.jobmanager.containerPorts.rpc | quote }}
+            - name: FLINK_CFG_JOBMANAGER_BIND__HOST
+              value: 0.0.0.0
+            - name: FLINK_CFG_REST_ADDRESS
+              value: {{ include "flink.jobmanager.fullname" . | quote }}
+            - name: FLINK_CFG_REST_PORT
+              value: {{ .Values.jobmanager.containerPorts.http | quote }}
+            - name: FLINK_CFG_REST_BIND__ADDRESS
+              value: 0.0.0.0
+            - name: FLINK_CFG_BLOB_SERVER_PORT
+              value: {{ .Values.jobmanager.containerPorts.blob | quote }}
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if .Values.jobmanager.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.jobmanager.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.jobmanager.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.jobmanager.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.jobmanager.extraEnvVarsSecret }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.jobmanager.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobmanager.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobmanager.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: rpc
+          {{- end }}
+          {{- if .Values.jobmanager.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobmanager.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobmanager.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+              - pgrep
+              - -f
+              - jobmanager
+          {{- end }}
+          {{- if .Values.jobmanager.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobmanager.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobmanager.readinessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: rpc
+          {{- end }}
+          {{- end }}
+          {{- if .Values.jobmanager.resources }}
+          resources: {{- toYaml .Values.jobmanager.resources | nindent 12 }}
+          {{- else if ne .Values.jobmanager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.jobmanager.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/flink/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/flink/log
+              subPath: app-logs-dir
+            # HACK: Workaround to bypass the libflink.sh persist_app logic
+            - name: empty-dir
+              mountPath: /bitnami/flink/conf
+              subPath: app-conf-dir
+            {{- if .Values.jobmanager.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.jobmanager.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.jobmanager.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

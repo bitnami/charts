@@ -1,198 +1,29 @@
-{{- if .Values.compactor.enabled }}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.compactor.enabled (not .Values.compactor.cronJob.enabled) }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-compactor
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "thanos.compactor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.compactor.revisionHistoryLimit }}
   {{- if .Values.compactor.updateStrategy }}
   strategy: {{- toYaml .Values.compactor.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: compactor
   template:
-    metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: compactor
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.compactor.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-      annotations:
-        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
-        {{- if .Values.compactor.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
-    spec:
-      {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "compactor" "context" $) }}
-      automountServiceAccountToken: {{ .Values.compactor.automountServiceAccountToken }}
-      {{- if .Values.compactor.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.hostAliases "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.compactor.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.affinity "context" $) | nindent 8 }}
-      {{- else }}
-      affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.compactor.podAffinityPreset "component" "compactor" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.compactor.podAntiAffinityPreset "component" "compactor" "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.compactor.nodeAffinityPreset.type "key" .Values.compactor.nodeAffinityPreset.key "values" .Values.compactor.nodeAffinityPreset.values) | nindent 10 }}
-      {{- end }}
-      {{- if .Values.compactor.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.nodeSelector "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.compactor.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.tolerations "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.compactor.priorityClassName }}
-      priorityClassName: {{ .Values.compactor.priorityClassName | quote }}
-      {{- end }}
-      {{- if .Values.compactor.schedulerName }}
-      schedulerName: {{ .Values.compactor.schedulerName }}
-      {{- end }}
-      {{- if .Values.compactor.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.compactor.podSecurityContext "enabled" | toYaml | nindent 8 }}
-      {{- end }}
-      {{- if .Values.compactor.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.topologySpreadConstraints "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if or .Values.compactor.initContainers (and .Values.volumePermissions.enabled .Values.compactor.persistence.enabled) }}
-      initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.compactor.persistence.enabled }}
-        - name: init-chmod-data
-          image: {{ include "thanos.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - sh
-            - -c
-            - |
-              mkdir -p /data
-              chown -R "{{ .Values.compactor.containerSecurityContext.runAsUser }}:{{ .Values.compactor.podSecurityContext.fsGroup }}" /data
-          securityContext:
-            runAsUser: 0
-          volumeMounts:
-            - name: data
-              mountPath: /data
-        {{- end }}
-        {{- if .Values.compactor.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.initContainers "context" $) | nindent 8 }}
-        {{- end }}
-      {{- end }}
-      containers:
-        {{- if .Values.compactor.sidecars }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.sidecars "context" $) | nindent 8 }}
-        {{- end }}
-        - name: compactor
-          image: {{ include "thanos.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.compactor.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.compactor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.compactor.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.command "context" $) | nindent 12 }}
-          {{- end }}
-          args:
-            {{- if .Values.compactor.args }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.compactor.args "context" $) | nindent 12 }}
-            {{- else }}
-            - compact
-            - --log.level={{ .Values.compactor.logLevel }}
-            - --log.format={{ .Values.compactor.logFormat }}
-            - --http-address=0.0.0.0:10902
-            - --data-dir=/data
-            - --retention.resolution-raw={{ .Values.compactor.retentionResolutionRaw }}
-            - --retention.resolution-5m={{ .Values.compactor.retentionResolution5m }}
-            - --retention.resolution-1h={{ .Values.compactor.retentionResolution1h }}
-            - --consistency-delay={{ .Values.compactor.consistencyDelay }}
-            - --objstore.config-file=/conf/objstore.yml
-            {{- if .Values.compactor.extraFlags }}
-            {{- .Values.compactor.extraFlags | toYaml | nindent 12 }}
-            {{- end }}
-            - --wait
-            {{- end }}
-          {{- if .Values.compactor.extraEnvVars }}
-          env: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVars "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if or .Values.compactor.extraEnvVarsCM .Values.compactor.extraEnvVarsSecret }}
-          envFrom:
-            {{- if .Values.compactor.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVarsCM "context" $) }}
-            {{- end }}
-            {{- if .Values.compactor.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVarsSecret "context" $) }}
-            {{- end }}
-          {{- end }}
-          ports:
-            - name: http
-              containerPort: 10902
-              protocol: TCP
-          {{- if .Values.compactor.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /-/healthy
-              port: http
-          {{- else if .Values.compactor.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.compactor.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /-/ready
-              port: http
-          {{- else if .Values.compactor.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.compactor.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.startupProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /-/ready
-              port: http
-          {{- else if .Values.compactor.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customStartupProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.compactor.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.compactor.resources }}
-          resources: {{- toYaml .Values.compactor.resources | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: objstore-config
-              mountPath: /conf
-            - name: data
-              mountPath: /data
-            {{- if .Values.compactor.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraVolumeMounts "context" $) | nindent 12 }}
-            {{- end }}
-      volumes:
-        - name: objstore-config
-          secret:
-            secretName: {{ include "thanos.objstoreSecretName" . }}
-            {{- if .Values.existingObjstoreSecretItems }}
-            items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
-            {{- end }}
-        - name: data
-          {{- if .Values.compactor.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ include "thanos.compactor.pvcName" . }}
-          {{- else }}
-          emptyDir: {}
-          {{- end }}
-        {{- if .Values.compactor.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraVolumes "context" $) | nindent 8 }}
-        {{- end }}
+    {{- include "thanos.compactor.podTemplate" . | nindent 4 }}
 {{- end }}

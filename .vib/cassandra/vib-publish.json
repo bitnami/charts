@@ -16,38 +16,6 @@
         }
       ]
     },
-    "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/cassandra"
-        },
-        "runtime_parameters": "ImRiVXNlciI6CiAgInBhc3N3b3JkIjogIjBQVzFmbFlMIgogICJ1c2VyIjogImNhc3NhbmRyYSIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiY3FsIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
-      "actions": [
-        {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
-          }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-cassandra-cql"
-          }
-        }
-      ]
-    },
     "publish": {
       "actions": [
         {
@@ -56,8 +24,11 @@
             "repository": {
               "kind": "S3",
               "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
+              "authn": {
+                "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
+                "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}",
+                "role": "{VIB_ENV_S3_ROLE_ARN}"
+              }
             }
           }
         }

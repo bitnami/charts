@@ -1,0 +1,67 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+# Based on upstream configuration: https://github.com/prometheus-operator/kube-prometheus/commit/ed15614b0a08482caa5cecb82f56356086d96bdf
+{{- if and .Values.prometheus.enabled .Values.prometheus.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "kube-prometheus.prometheus.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels: {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.prometheus.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    {{- if .Values.prometheus.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        {{/* The deployed Prometheus objects have the ports hardcoded
+            https://github.com/prometheus-operator/prometheus-operator/blob/bdfc5ec0055471b2f626e63682ee7decd0c41db9/pkg/prometheus/statefulset.go#L243 */}}
+        - port: 9090
+        - port: 8080
+        {{- if .Values.prometheus.thanos.create }}
+        - port: {{ .Values.prometheus.thanos.containerPorts.grpc }}
+        - port: {{ .Values.prometheus.thanos.containerPorts.http }}
+        {{- end }}
+      {{- if not .Values.prometheus.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if .Values.prometheus.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.prometheus.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.prometheus.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.prometheus.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.prometheus.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

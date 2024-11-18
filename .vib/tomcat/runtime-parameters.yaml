@@ -1,0 +1,17 @@
+tomcatUsername: tomcatUser
+tomcatPassword: ComplicatedPassword123!4
+tomcatAllowRemoteManagement: 1
+deployment:
+  type: deployment
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+containerPorts:
+  http: 8080
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002

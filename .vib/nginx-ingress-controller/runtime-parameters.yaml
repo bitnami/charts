@@ -1,0 +1,86 @@
+containerPorts:
+  http: 8080
+  https: 8443
+ingressClassResource:
+  name: nginx
+  enabled: true
+  default: false
+  controllerClass: k8s.io/ingress-nginx
+kind: Deployment
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+  capabilities:
+    drop: [ALL]
+    add: [NET_BIND_SERVICE]
+defaultBackend:
+  enabled: true
+  containerPort: 8080
+  serverBlockConfig: |-
+    location /healthz {
+      return 200;
+    }
+    location / {
+      return 404;
+    }
+service:
+  ports: 
+    http: 80
+    https: 444
+  type: LoadBalancer
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+rbac:
+  create: true
+extraDeploy:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: dokuwiki
+    name: dokuwiki
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: dokuwiki
+    template:
+      metadata:
+        labels:
+          app: dokuwiki
+      spec:
+        containers:
+        - image: docker.io/bitnami/dokuwiki:latest
+          name: dokuwiki
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: dokuwiki
+    name: dokuwiki-vib
+  spec:
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+      name: http
+    - port: 443
+      protocol: TCP
+      targetPort: 8443
+      name: https
+    selector:
+      app: dokuwiki
+    sessionAffinity: None
+    type: ClusterIP

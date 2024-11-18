@@ -1,33 +1,32 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.portal" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.portal.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: portal
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.portal.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.portal.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: portal
   {{- if .Values.portal.updateStrategy }}
   strategy: {{- toYaml .Values.portal.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.portal.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.portal.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: portal
       annotations:
         {{- if and .Values.internalTLS.enabled (not .Values.portal.tls.existingSecret) }}
@@ -46,8 +45,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.portal.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.portal.podAffinityPreset "component" "portal" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.portal.podAntiAffinityPreset "component" "portal" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.portal.podAffinityPreset "component" "portal" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.portal.podAntiAffinityPreset "component" "portal" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.portal.nodeAffinityPreset.type "key" .Values.portal.nodeAffinityPreset.key "values" .Values.portal.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.portal.nodeSelector }}
@@ -65,18 +64,40 @@ spec:
       {{- if .Values.portal.schedulerName }}
       schedulerName: {{ .Values.portal.schedulerName }}
       {{- end }}
+      serviceAccountName: {{ include "harbor.portal.serviceAccountName" . }}
       {{- if .Values.portal.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.portal.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.portal.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.portal.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.portal.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        {{- if .Values.portal.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.portal.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        - name: certificate-volume
+          image: {{ include "harbor.portal.image" . }}
+          imagePullPolicy: {{ .Values.portal.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - cp -r /etc/ssl/certs/* /certs
+          {{- if .Values.portal.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.portal.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.certificateVolume.resources }}
+          resources: {{- toYaml .Values.certificateVolume.resources | nindent 12 }}
+          {{- else if ne .Values.certificateVolume.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.certificateVolume.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /certs
+              subPath: etc-ssl-certs
       containers:
         - name: portal
           image: {{ include "harbor.portal.image" . }}
           imagePullPolicy: {{ .Values.portal.image.pullPolicy | quote }}
           {{- if .Values.portal.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.portal.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.portal.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -107,30 +128,28 @@ spec:
             - containerPort: {{ ternary .Values.portal.containerPorts.https .Values.portal.containerPorts.http .Values.internalTLS.enabled }}
               name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.portal.startupProbe.enabled }}
+          {{- if .Values.portal.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.portal.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.portal.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.portal.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
-              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.portal.customLivenessProbe }}
+          {{- if .Values.portal.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.portal.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
           {{- end }}
-          {{- if .Values.portal.readinessProbe.enabled }}
+          {{- if .Values.portal.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.portal.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.portal.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.portal.lifecycleHooks }}
@@ -138,8 +157,16 @@ spec:
           {{- end }}
           {{- if .Values.portal.resources }}
           resources: {{- toYaml .Values.portal.resources | nindent 12 }}
+          {{- else if ne .Values.portal.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.portal.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssl/certs
+              subPath: etc-ssl-certs
             - name: portal-config
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
               subPath: nginx.conf
@@ -154,6 +181,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.portal.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: portal-config
           configMap:
             name: {{ include "harbor.portal" . }}

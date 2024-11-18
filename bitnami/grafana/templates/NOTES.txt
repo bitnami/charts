@@ -28,6 +28,8 @@ APP VERSION: {{ .Chart.AppVersion }}
     echo "Password: $(kubectl get secret {{ include "grafana.adminSecretName" . }} --namespace {{ .Release.Namespace }} -o jsonpath="{.data.{{ include "grafana.adminSecretPasswordKey" . }}}" | base64 -d)"
 
 {{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.imageRenderer.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{ include "grafana.validateValues" . }}
+{{ include "grafana.validateValues.database" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "grafana" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

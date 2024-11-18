@@ -1,34 +1,36 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.operator.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: operator
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.operator.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.operator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   {{- if .Values.operator.updateStrategy }}
   strategy: {{ toYaml .Values.operator.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.operator.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.operator.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: operator
       {{- if .Values.operator.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
-      {{- include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafana.pluginsInitContainerImage) "global" .Values.global) | nindent 6 }}
+      {{- include "common.images.pullSecrets" (dict "images" (list .Values.operator.image) "global" .Values.global) | nindent 6 }}
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName | quote }}
       {{- end }}
@@ -38,6 +40,7 @@ spec:
       {{- if .Values.operator.schedulerName }}
       schedulerName: {{ .Values.operator.schedulerName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.operator.automountServiceAccountToken }}
       {{- if .Values.operator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -49,10 +52,10 @@ spec:
       {{- else }}
       affinity:
         {{- if not (empty .Values.operator.podAffinityPreset) }}
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAffinityPreset "component" "grafana-operator" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         {{- end }}
         {{- if not (empty .Values.operator.podAntiAffinityPreset) }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAntiAffinityPreset "component" "grafana-operator" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         {{- end }}
         {{- if not (empty .Values.operator.nodeAffinityPreset.type) }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.operator.nodeAffinityPreset.type "key" .Values.operator.nodeAffinityPreset.key "values" .Values.operator.nodeAffinityPreset.values) | nindent 10 }}
@@ -63,7 +66,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "grafana-operator.serviceAccountName" . }}
       {{- if .Values.operator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.operator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.operator.terminationGracePeriodSeconds }}
@@ -76,7 +79,7 @@ spec:
           image: {{ include "common.images.image" (dict "imageRoot" .Values.operator.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           {{- if .Values.operator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.operator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.operator.command "context" $) | nindent 12 }}
@@ -88,17 +91,8 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.operator.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
-            - --grafana-image-tag={{ .Values.grafana.image.tag | trim }}
-            - --grafana-plugins-init-container-image={{ include "grafana-operator.grafana.pluginsInitContainerImage" . }}
-            - --grafana-plugins-init-container-tag={{ default .Values.grafana.image.tag .Values.grafana.pluginsInitContainerImage.tag | trim }}
             {{- if .Values.operator.leaderElect }}
             - --leader-elect=True
-            {{- end }}
-            {{- if (and .Values.operator.scanAllNamespaces (not .Values.operator.scanNamespaces)) }}
-            - --scan-all=True
-            {{- else if (and .Values.operator.scanNamespaces (not .Values.operator.scanAllNamespaces )) }}
-            - --namespaces={{ include "grafana-operator.joinListWithComma" .Values.operator.scanNamespaces }}
             {{- end }}
             {{- if .Values.operator.zapDevel }}
             - --zap-devel={{ .Values.operator.zapDevel }}
@@ -107,7 +101,7 @@ spec:
             - --zap-encoder={{ .Values.operator.zapEncoder }}
             {{- end }}
             {{- if .Values.operator.zapLevel }}
-            - --zap-level=True
+            - --zap-log-level={{ .Values.operator.zapLevel }}
             {{- end }}
             {{- if .Values.operator.zapSample }}
             - --zap-sample={{ .Values.operator.zapSample }}
@@ -118,6 +112,8 @@ spec:
             {{- if .Values.operator.zapTimeEncoding }}
             - --zap-time-encoding={{ .Values.operator.zapTimeEncoding }}
             {{- end }}
+            - --health-probe-bind-address=:{{ .Values.operator.containerPorts.health }}
+            - --metrics-bind-address=0.0.0.0:{{ .Values.operator.containerPorts.metrics }}
             {{- if .Values.operator.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -129,12 +125,12 @@ spec:
             - name: TEMPLATE_PATH
               value: /usr/local/bin/templates
             - name: WATCH_NAMESPACE
-              {{- if .Values.operator.watchNamespace }}
-              value: {{ .Values.operator.watchNamespace }}
+              {{- if .Values.operator.namespaceScope }}
+              value: {{ include "common.names.namespace" . | quote }}
+              {{- else if .Values.operator.watchNamespace }}
+              value: {{ default (include "common.names.namespace" .) .Values.operator.watchNamespace | quote }}
               {{- else }}
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+              value: ""
               {{- end }}
             - name: POD_NAME
               valueFrom:
@@ -156,42 +152,54 @@ spec:
             {{- end }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
+          {{- else if ne .Values.operator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.operator.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
+            - containerPort: {{ .Values.operator.containerPorts.health }}
+              name: health
+              protocol: TCP
             - containerPort: {{ .Values.operator.containerPorts.metrics }}
               name: metrics
               protocol: TCP
-          {{- if .Values.operator.livenessProbe.enabled }}
+          {{- if .Values.operator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.operator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
-              port: 8081
-          {{- else if .Values.operator.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customLivenessProbe "context" $) | nindent 12 }}
+              port: health
           {{- end }}
-          {{- if .Values.operator.readinessProbe.enabled }}
+          {{- if .Values.operator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.operator.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
-              port: metrics
-          {{- else if .Values.operator.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customReadinessProbe "context" $) | nindent 12 }}
+              path: /readyz
+              port: health
           {{- end }}
-          {{- if .Values.operator.startupProbe.enabled }}
+          {{- if .Values.operator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.operator.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
-              port: metrics
-          {{- else if .Values.operator.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customStartupProbe "context" $) | nindent 12 }}
+              path: /healthz
+              port: health
           {{- end }}
-          {{- if .Values.operator.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.operator.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.operator.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.operator.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.operator.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.operator.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

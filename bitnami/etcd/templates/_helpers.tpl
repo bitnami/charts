@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -69,9 +74,9 @@ Return the etcd configuration configmap
 */}}
 {{- define "etcd.configmapName" -}}
 {{- if .Values.existingConfigmap -}}
-    {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
+    {{- printf "%s" (tpl .Values.existingConfigmap $) | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-    {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
+    {{- printf "%s-configuration" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -89,7 +94,7 @@ Return the secret with etcd credentials
 */}}
 {{- define "etcd.secretName" -}}
     {{- if .Values.auth.rbac.existingSecret -}}
-        {{- printf "%s" .Values.auth.rbac.existingSecret -}}
+        {{- printf "%s" .Values.auth.rbac.existingSecret | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
         {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
@@ -110,7 +115,7 @@ Get the secret password key to be retrieved from etcd secret.
 Return true if a secret object should be created for the etcd token private key
 */}}
 {{- define "etcd.token.createSecret" -}}
-{{- if and (eq .Values.auth.token.type "jwt") (empty .Values.auth.token.privateKey.existingSecret) }}
+{{- if and (eq .Values.auth.token.enabled true) (eq .Values.auth.token.type "jwt") (empty .Values.auth.token.privateKey.existingSecret) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -120,9 +125,9 @@ Return the secret with etcd token private key
 */}}
 {{- define "etcd.token.secretName" -}}
     {{- if .Values.auth.token.privateKey.existingSecret -}}
-        {{- printf "%s" .Values.auth.token.privateKey.existingSecret -}}
+        {{- printf "%s" .Values.auth.token.privateKey.existingSecret | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
-        {{- printf "%s-jwt-token" (include "common.names.fullname" .) -}}
+        {{- printf "%s-jwt-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- end -}}
 {{- end -}}
 
@@ -131,11 +136,11 @@ Return the proper Disaster Recovery PVC name
 */}}
 {{- define "etcd.disasterRecovery.pvc.name" -}}
 {{- if .Values.disasterRecovery.pvc.existingClaim -}}
-    {{- printf "%s" (tpl .Values.disasterRecovery.pvc.existingClaim $) -}}
+    {{- printf "%s" (tpl .Values.disasterRecovery.pvc.existingClaim $) | trunc 63 | trimSuffix "-" -}}
 {{- else if .Values.startFromSnapshot.existingClaim -}}
-    {{- printf "%s" (tpl .Values.startFromSnapshot.existingClaim $) -}}
+    {{- printf "%s" (tpl .Values.startFromSnapshot.existingClaim $) | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-    {{- printf "%s-snapshotter" (include "common.names.fullname" .) }}
+    {{- printf "%s-snapshotter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 {{- end -}}
 
@@ -144,9 +149,9 @@ Return the proper Disaster Recovery PVC name
  */}}
 {{- define "etcd.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-{{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{ default (include "common.names.fullname" .) .Values.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
-{{ default "default" .Values.serviceAccount.name }}
+{{ default "default" .Values.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 {{- end -}}
 
@@ -168,18 +173,18 @@ Compile all warnings into a single message, and call fail.
 
 {{/* Validate values of etcd - an existing claim must be provided when startFromSnapshot is enabled */}}
 {{- define "etcd.validateValues.startFromSnapshot.existingClaim" -}}
-{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.existingClaim) -}}
+{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.existingClaim) (not .Values.disasterRecovery.enabled) -}}
 etcd: startFromSnapshot.existingClaim
-    An existing claim must be provided when startFromSnapshot is enabled!!
+    An existing claim must be provided when startFromSnapshot is enabled and disasterRecovery is disabled!!
     Please provide it (--set startFromSnapshot.existingClaim="xxxx")
 {{- end -}}
 {{- end -}}
 
 {{/* Validate values of etcd - the snapshot filename must be provided when startFromSnapshot is enabled */}}
 {{- define "etcd.validateValues.startFromSnapshot.snapshotFilename" -}}
-{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.snapshotFilename) -}}
+{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.snapshotFilename) (not .Values.disasterRecovery.enabled) -}}
 etcd: startFromSnapshot.snapshotFilename
-    The snapshot filename must be provided when startFromSnapshot is enabled!!
+    The snapshot filename must be provided when startFromSnapshot is enabled and disasterRecovery is disabled!!
     Please provide it (--set startFromSnapshot.snapshotFilename="xxxx")
 {{- end -}}
 {{- end -}}
@@ -190,5 +195,16 @@ etcd: startFromSnapshot.snapshotFilename
 etcd: disasterRecovery
     Persistence must be enabled when disasterRecovery is enabled!!
     Please enable persistence (--set persistence.enabled=true)
+{{- end -}}
+{{- end -}}
+
+{{- define "etcd.token.jwtToken" -}}
+{{- if (include "etcd.token.createSecret" .) -}}
+{{- $jwtToken := lookup "v1" "Secret" .Release.Namespace (printf "%s-jwt-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" ) -}}
+{{- if $jwtToken -}}
+{{ index $jwtToken "data" "jwt-token.pem" | b64dec }}
+{{- else -}}
+{{ genPrivateKey "rsa" }}
+{{- end -}}
 {{- end -}}
 {{- end -}}

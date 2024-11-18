@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/contour"
         },
-        "runtime_parameters": "ImNvbnRvdXIiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJ4ZHMiOiA4MAogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoiZW52b3kiOgogICJzZXJ2aWNlIjoKICAgICJ0eXBlIjogIk5vZGVQb3J0Ig==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -32,16 +31,37 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "contour/goss/goss.yaml",
+            "vars_file": "contour/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-contour-contour"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "ginkgo",
           "params": {
-            "endpoint": "lb-contour-tcp-xds"
+            "resources": {
+              "path": "/.vib/contour/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "ingress-name": "contour-vib-test"
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

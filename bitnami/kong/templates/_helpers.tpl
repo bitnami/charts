@@ -1,4 +1,9 @@
 {{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper kong image name
 */}}
 {{- define "kong.image" -}}
@@ -208,6 +213,28 @@ Return true if a secret for a external database should be created
 {{- end -}}
 
 {{/*
+Return database type
+*/}}
+{{- define "kong.database" -}}
+{{- if eq .Values.database "postgresql" -}}
+  {{- print "postgres" -}}
+{{- else -}}
+  {{- print .Values.database -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the name of the configmap to be used for declarative configuration
+*/}}
+{{- define "kong.declarativeConfigMap" -}}
+{{- if .Values.kong.declarativeConfigCM -}}
+  {{- include "common.tplvalues.render" (dict "value" .Values.kong.declarativeConfigCM "context" $) -}}
+{{- else if .Values.kong.declarativeConfig -}}
+  {{- printf "%s-declarative-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-"  -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get proper service account
 */}}
 {{- define "kong.ingressController.serviceAccountName" -}}
@@ -251,9 +278,13 @@ Function to validate the external database
 */}}
 {{- define "kong.validateValues.database" -}}
 
-{{- if and (not (eq .Values.database "postgresql")) (not (eq .Values.database "cassandra")) -}}
+{{- if and (not (eq .Values.database "postgresql")) (not (eq .Values.database "cassandra")) (not (eq .Values.database "off")) -}}
 INVALID DATABASE: The value "{{ .Values.database }}" is not allowed for the "database" value. It
-must be one either "postgresql" or "cassandra".
+must be one either "postgresql", "cassandra" or "off".
+{{- end }}
+
+{{- if and (eq .Values.database "off") (or (.Values.postgresql.enabled) (.Values.postgresql.external.host) .Values.cassandra.enabled .Values.cassandra.external.hosts) -}}
+CONFLICT: You enabled the db-less mode but deployed a database. Ensure that postgresql.enabled=false and cassandra.enabled=false.
 {{- end }}
 
 {{- if and (eq .Values.database "postgresql") (not .Values.postgresql.enabled) (not .Values.postgresql.external.host) -}}

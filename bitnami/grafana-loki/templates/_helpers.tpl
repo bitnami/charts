@@ -1,4 +1,9 @@
 {{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper Grafana Loki image name
 */}}
 {{- define "grafana-loki.image" -}}
@@ -52,6 +57,12 @@ Return the proper Grafana Loki query-frontend fullname
 */}}
 {{- define "grafana-loki.query-frontend.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "query-frontend" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{/*
+Return the proper Grafana Loki query-scheduler fullname
+*/}}
+{{- define "grafana-loki.query-scheduler.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "query-scheduler" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -107,7 +118,7 @@ Return the proper Grafana Loki image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana-loki.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.loki.image .Values.gateway.image .Values.promtail.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.loki.image .Values.gateway.image .Values.promtail.image .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -159,7 +170,7 @@ Create the name of the service account to use
 */}}
 {{- define "grafana-loki.promtail.serviceAccountName" -}}
 {{- if .Values.promtail.serviceAccount.create -}}
-    {{ default (printf "%s" (include "common.names.fullname" .)) .Values.promtail.serviceAccount.name }}
+    {{ default (printf "%s" (include "grafana-loki.promtail.fullname" .)) .Values.promtail.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.promtail.serviceAccount.name }}
 {{- end -}}

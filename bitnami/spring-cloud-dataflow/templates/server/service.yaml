@@ -1,19 +1,18 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "scdf.fullname" . }}-server
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "scdf.server.fullname" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  namespace: {{ .Release.Namespace }}
-  annotations:
-  {{- if .Values.commonAnnotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.server.service.annotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.server.service.annotations "context" $) | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- if or .Values.server.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.server.service.type }}
@@ -24,7 +23,7 @@ spec:
   loadBalancerIP: {{ .Values.server.service.loadBalancerIP }}
   {{- end }}
   {{- if and (eq .Values.server.service.type "LoadBalancer") .Values.server.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.server.service.loadBalancerSourceRanges | nindent 4 }}
+  loadBalancerSourceRanges: {{- include "common.tplvalues.render" (dict "value" .Values.server.service.loadBalancerSourceRanges "context" $) | nindent 4 }}
   {{- end }}
   {{- if or (eq .Values.server.service.type "LoadBalancer") (eq .Values.server.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.server.service.externalTrafficPolicy | quote }}
@@ -37,7 +36,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.server.service.port }}
+      port: {{ coalesce .Values.server.service.ports.http .Values.server.service.port }}
       targetPort: http
       {{- if (and (or (eq .Values.server.service.type "NodePort") (eq .Values.server.service.type "LoadBalancer")) (not (empty .Values.server.service.nodePort))) }}
       nodePort: {{ .Values.server.service.nodePort }}
@@ -47,5 +46,6 @@ spec:
     {{- if .Values.server.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.server.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server

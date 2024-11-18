@@ -1,0 +1,30 @@
+auth:
+  password: ComplicatedPassword123!4
+loadExamples: true
+web:
+  containerPorts:
+    http: 8080
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+service:
+  ports:
+    http: 80
+  type: LoadBalancer
+dagProcessor:
+  enabled: true
+triggerer:
+  enabled: true
+dags:
+  enabled: true
+  repositories:
+    - repository: https://github.com/astronomer/2-9-example-dags
+      branch: main
+      name: toys
+      path: dags/toys
+metrics:
+  enabled: true
+  service:
+    ports:
+      metrics: 9102

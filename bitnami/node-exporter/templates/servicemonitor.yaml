@@ -1,26 +1,29 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.serviceMonitor.namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.labels "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
   annotations:
-    {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- end }}
 spec:
+  {{- if .Values.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ .Values.serviceMonitor.sampleLimit }}
+  {{- end }}
   {{- if .Values.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.serviceMonitor.jobLabel }}
   {{- end }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- if .Values.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
@@ -31,6 +34,9 @@ spec:
       {{- end }}
       {{- if .Values.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.basicAuth }}
+      basicAuth: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.basicAuth "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.serviceMonitor.honorLabels }}
@@ -44,4 +50,7 @@ spec:
   namespaceSelector:
     matchNames:
     - {{ include "common.names.namespace" . }}
+  {{- if .Values.serviceMonitor.attachMetadata }}
+  attachMetadata: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.attachMetadata "context" $) | nindent 4 }}
+  {{- end }}
 {{- end }}

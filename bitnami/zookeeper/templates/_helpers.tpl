@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -90,20 +95,6 @@ Return true if a ZooKeeper server-server authentication credentials secret objec
     {{- true -}}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
-*/}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
-    {{- else -}}
-        {{- randAlphaNum $len -}}
-    {{- end -}}
-{{- end }}
 
 {{/*
 Return the ZooKeeper configuration ConfigMap name

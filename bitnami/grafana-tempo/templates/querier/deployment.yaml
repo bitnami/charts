@@ -1,13 +1,15 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "grafana-tempo.querier.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: querier
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -16,8 +18,9 @@ spec:
   {{- if .Values.querier.updateStrategy }}
   strategy: {{- toYaml .Values.querier.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.querier.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: querier
   template:
     metadata:
@@ -26,15 +29,13 @@ spec:
         {{- if .Values.querier.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.querier.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: querier
         tempo-gossip-member: "true"
-        {{- if .Values.querier.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.querier.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.querier.automountServiceAccountToken }}
       {{- if .Values.querier.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.querier.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -42,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.querier.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.querier.podAffinityPreset "component" "querier" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.querier.podAntiAffinityPreset "component" "querier" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.querier.podAffinityPreset "component" "querier" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.querier.podAntiAffinityPreset "component" "querier" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.querier.nodeAffinityPreset.type "key" .Values.querier.nodeAffinityPreset.key "values" .Values.querier.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.querier.nodeSelector }}
@@ -62,8 +63,9 @@ spec:
       schedulerName: {{ .Values.querier.schedulerName }}
       {{- end }}
       {{- if .Values.querier.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.querier.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.querier.enableServiceLinks }}
       initContainers:
         {{- if .Values.querier.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.querier.initContainers "context" $) | nindent 8 }}
@@ -73,7 +75,7 @@ spec:
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
           {{- if .Values.querier.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.querier.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -110,45 +112,51 @@ spec:
             - containerPort: {{ .Values.tempo.containerPorts.grpc }}
               name: grpc
           {{- if .Values.querier.resources }}
-          resources: {{- toYaml .Values.querier.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.querier.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.querier.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.querier.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.querier.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
-              port: {{ .Values.tempo.containerPorts.web }}
-          {{- else if .Values.querier.customLivenessProbe }}
+          {{- if .Values.querier.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.querier.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
-          {{- if .Values.querier.readinessProbe.enabled }}
+          {{- if .Values.querier.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.querier.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: {{ .Values.tempo.containerPorts.web }}
-          {{- else if .Values.querier.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.querier.startupProbe.enabled }}
+          {{- if .Values.querier.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.querier.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.querier.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.querier.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.querier.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
             - name: overrides-config
               mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
               subPath: overrides.yaml
-            - name: data
+            # NOTE: The upstream chart does not create a PVC for this, we assume that it is just for tmp data
+            - name: empty-dir
               mountPath: {{ .Values.tempo.dataDir }}
+              subPath: app-data-dir
           {{- if .Values.querier.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -156,8 +164,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.querier.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        # NOTE: The upstream chart does not create a PVC for this, we assume that it is just for tmp data
-        - name: data
+        - name: empty-dir
           emptyDir: {}
         - name: tempo-config
           configMap:

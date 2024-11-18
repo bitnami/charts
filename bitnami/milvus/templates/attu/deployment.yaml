@@ -1,0 +1,178 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.attu.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "milvus.attu.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.attu.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: attu
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.attu.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.attu.replicaCount }}
+  {{- end }}
+  {{- if .Values.attu.updateStrategy }}
+  strategy: {{- toYaml .Values.attu.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.attu.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: milvus
+      app.kubernetes.io/component: attu
+  template:
+    metadata:
+      {{- if .Values.attu.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.attu.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: milvus
+        app.kubernetes.io/component: attu
+    spec:
+      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- end }}
+      serviceAccountName: {{ template "milvus.attu.serviceAccountName" . }}
+      {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.attu.automountServiceAccountToken }}
+      {{- if .Values.attu.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.attu.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.attu.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.attu.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.attu.podAffinityPreset "component" "attu" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.attu.podAntiAffinityPreset "component" "attu" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.attu.nodeAffinityPreset.type "key" .Values.attu.nodeAffinityPreset.key "values" .Values.attu.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.attu.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.attu.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.attu.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.attu.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.attu.runtimeClassName }}
+      runtimeClassName: {{ .Values.attu.runtimeClassName | quote }}
+      {{- end }}
+      {{- if .Values.attu.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.attu.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.attu.priorityClassName }}
+      priorityClassName: {{ .Values.attu.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.attu.schedulerName }}
+      schedulerName: {{ .Values.attu.schedulerName }}
+      {{- end }}
+      {{- if .Values.attu.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.attu.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.attu.enableDefaultInitContainers }}
+        {{- include "milvus.waitForProxyInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.attu.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.attu.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: attu
+          image: {{ template "milvus.attu.image" . }}
+          imagePullPolicy: {{ .Values.attu.image.pullPolicy }}
+          {{- if .Values.attu.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.attu.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.attu.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.attu.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.attu.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.attu.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MILVUS_URL
+              value: {{ printf "http://%s:%v" (include "milvus.proxy.fullname" .) .Values.proxy.service.ports.grpc }}
+            {{- if .Values.attu.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.attu.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.attu.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.attu.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.attu.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.attu.containerPorts.http }}
+              name: http
+          {{- if .Values.attu.resources }}
+          resources: {{- toYaml .Values.attu.resources | nindent 12 }}
+          {{- else if ne .Values.attu.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.attu.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.attu.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.attu.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.attu.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.attu.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.attu.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.attu.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.attu.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.attu.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          {{- if .Values.attu.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.attu.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.attu.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.attu.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.attu.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.attu.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /.npm
+              subPath: npm-tmp-dir
+            - name: empty-dir
+              mountPath: /.yarn
+              subPath: yarn-dir
+            - name: empty-dir
+              mountPath: /.cache
+              subPath: yarn-cache-dir
+          {{- if .Values.attu.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.attu.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.attu.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.attu.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

@@ -1,0 +1,89 @@
+service:
+  type: LoadBalancer
+  port: 80
+configuration:
+  clientID: vib-dex-client
+  clientSecret: ZXhhbXBsZS1hcHAtc2VjcmV0
+  cookieSecret: vib-tests-cookie
+  content: |
+    email_domains = [ "*" ]
+    provider = "oidc"
+    oidc_issuer_url = "http://vmware-oauth2-proxy.my:5556/dex"
+    redirect_url = "http://vmware-oauth2-proxy.my/oauth2/callback"
+    cookie_secure = false
+    skip_auth_routes = [ "^/dex/.*" ]
+    upstreams = [ "file:///bitnami/oauth2-proxy/conf/", "http://vmware-oauth2-proxy.my:5556/dex/" ]
+containerPort: 4181
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - vmware-oauth2-proxy.my
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: oauth2-vib-password
+sidecars:
+  - name: dex
+    image: bitnami/dex
+    args: [serve, /config/config.yaml]
+    ports:
+      - name: http
+        containerPort: 5556
+    volumeMounts:
+      - name: dex-vib-config
+        mountPath: /config
+    securityContext:
+      runAsNonRoot: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+
+extraVolumes:
+  - name: dex-vib-config
+    configMap:
+      name: dex-vib-config
+extraDeploy:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: dex-vib-config
+    data:
+      config.yaml: |-
+        issuer: http://vmware-oauth2-proxy.my:5556/dex
+        storage:
+          type: sqlite3
+          config:
+            file: /tmp/dex.db
+        web:
+          http: 0.0.0.0:5556
+        frontend:
+          dir: /opt/bitnami/dex/web
+        staticClients:
+          - id: vib-dex-client
+            redirectURIs:
+              - "http://vmware-oauth2-proxy.my/oauth2/callback"
+            name: 'VIB-Dex'
+            secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+        connectors:
+          - type: mockCallback
+            id: mock
+            name: Example
+        enablePasswordDB: true
+        staticPasswords:
+          - email: "admin@example.com"
+            hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+            username: "admin"
+            userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"

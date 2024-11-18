@@ -1,20 +1,25 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.defaultBackend.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "nginx-ingress-controller.defaultBackend.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.defaultBackend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: default-backend
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.defaultBackend.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: default-backend
   replicas: {{ .Values.defaultBackend.replicaCount }}
   template:
@@ -22,16 +27,14 @@ spec:
       {{- if .Values.defaultBackend.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: default-backend
-        {{- if .Values.defaultBackend.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       {{- include "nginx-ingress-controller.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.defaultBackend.priorityClassName }}
       priorityClassName: {{ .Values.defaultBackend.priorityClassName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.defaultBackend.automountServiceAccountToken }}
       {{- if .Values.defaultBackend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -39,8 +42,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAffinityPreset "component" "default-backend" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAntiAffinityPreset "component" "default-backend" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAffinityPreset "component" "default-backend" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAntiAffinityPreset "component" "default-backend" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.defaultBackend.nodeAffinityPreset.type "key" .Values.defaultBackend.nodeAffinityPreset.key "values" .Values.defaultBackend.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.defaultBackend.nodeSelector }}
@@ -56,7 +59,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.defaultBackend.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.defaultBackend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultBackend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "nginx-ingress-controller.serviceAccountName" . }}
       {{- if .Values.defaultBackend.terminationGracePeriodSeconds }}
@@ -70,7 +73,7 @@ spec:
           image: {{ template "nginx-ingress-controller.defaultBackend.image" . }}
           imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy | quote }}
           {{- if .Values.defaultBackend.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.defaultBackend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultBackend.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.defaultBackend.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.command "context" $) | nindent 12 }}
@@ -103,30 +106,28 @@ spec:
           {{- if .Values.defaultBackend.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.defaultBackend.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
-              port: http
-              scheme: HTTP
-          {{- else if .Values.defaultBackend.customLivenessProbe }}
+          {{- if .Values.defaultBackend.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
           {{- end }}
-          {{- if .Values.defaultBackend.readinessProbe.enabled }}
+          {{- if .Values.defaultBackend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: http
               scheme: HTTP
-          {{- else if .Values.defaultBackend.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.defaultBackend.startupProbe.enabled }}
+          {{- if .Values.defaultBackend.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.defaultBackend.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -134,11 +135,20 @@ spec:
               protocol: TCP
           {{- if .Values.defaultBackend.resources }}
           resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
+          {{- else if ne .Values.defaultBackend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.defaultBackend.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: app-tmp-dir
             {{- if .Values.defaultBackend.serverBlockConfig }}
             - name: nginx-config-volume
-              mountPath: /opt/bitnami/nginx/conf/bitnami/
+              mountPath: /opt/bitnami/nginx/conf/bitnami/defaultBackend.conf
+              subPath: defaultBackend.conf
               readOnly: true
             {{- end }}
             {{- if .Values.defaultBackend.extraVolumeMounts }}
@@ -148,6 +158,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.defaultBackend.serverBlockConfig }}
         - name: nginx-config-volume
           configMap:

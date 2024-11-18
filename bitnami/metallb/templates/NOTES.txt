@@ -20,12 +20,16 @@ Access the pod you want to debug by executing
 
 In order to replicate the container startup scripts execute these commands in their respective pods:
 
-    speaker --port={{ .Values.speaker.containerPorts.metrics }} --config={{ include "metallb.configMapName" . }}
-    controller --port={{ .Values.controller.containerPorts.metrics }} --config={{ include "metallb.configMapName" . }}
+    speaker --port={{ .Values.speaker.containerPorts.metrics }}
+    controller --port={{ .Values.controller.containerPorts.metrics }} --cert-service-name=metallb-webhook-service
 
 {{- else }}
 
 MetalLB is now running in the cluster
+
+MetalLB can be configured using CRDs. Please refer to the README.md file or the MetalLB official documentation on how to use them
+
+https://metallb.universe.tf/configuration/
 
 LoadBalancer Services in your cluster are now available on the IPs you
 defined in MetalLB's configuration. To see IP assignments,
@@ -33,26 +37,6 @@ defined in MetalLB's configuration. To see IP assignments,
     kubectl get services -o wide --all-namespaces | grep --color=never -E 'LoadBalancer|NAMESPACE'
 
 should be executed.
-
-To see the currently configured configuration for metallb run
-
-    kubectl get configmaps --namespace {{ include "common.names.namespace" . }} {{ include "metallb.configMapName" . }} -o yaml
-
-in your preferred shell.
-
-{{- if .Values.existingConfigMap }}
-WARNING: you specified a ConfigMap that isn't managed by
-Helm. LoadBalancer services will not function until you add that
-ConfigMap to your cluster yourself.
-
-Ensure you put the configmap in place
-
-    kubectl get configmaps --namespace {{ include "common.names.namespace" . }} | grep --color=never -E "{{ include "metallb.configMapName" . }}|NAME"
-
-If it is missing create it with:
-
-    kubectl create configmap {{ include "metallb.configMapName" . }} --namespace {{ include "common.names.namespace" . }} --from-file=config
-{{- end }}
 
 {{- if .Values.speaker.secretName }}
 WARNING: you specified a secretName that isn't managed by
@@ -65,3 +49,5 @@ If it is missing create it with:
     kubectl create secret {{ include "metallb.speaker.secretName" . }} --from-file={{ include "metallb.speaker.secretKey" . }}
 {{- end }}
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "controller" "speaker") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.controller.image .Values.speaker.image .Values.speaker.frr.image) "context" $) }}

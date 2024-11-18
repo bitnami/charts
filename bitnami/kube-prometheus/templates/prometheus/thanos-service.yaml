@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.prometheus.enabled .Values.prometheus.thanos.create }}
 apiVersion: v1
 kind: Service
@@ -6,20 +11,20 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
     app.kubernetes.io/subcomponent: thanos
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.prometheus.thanos.service.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.thanos.service.labels "context" $ ) | nindent 4 }}
     {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.prometheus.thanos.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.prometheus.thanos.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.thanos.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.prometheus.thanos.service.type }}
   {{- if and (eq .Values.prometheus.thanos.service.type "LoadBalancer") (not (empty .Values.prometheus.thanos.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.prometheus.thanos.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.prometheus.thanos.service.type "LoadBalancer") (not (empty .Values.prometheus.thanos.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.prometheus.thanos.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.prometheus.thanos.service.type "LoadBalancer") (not (empty .Values.prometheus.thanos.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.prometheus.thanos.service.loadBalancerSourceRanges }}
@@ -47,7 +52,5 @@ spec:
     {{- if .Values.prometheus.thanos.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector:
-    app.kubernetes.io/name: prometheus
-    prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
+  selector: {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 4 }}
 {{- end }}

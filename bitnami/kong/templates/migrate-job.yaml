@@ -1,25 +1,26 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if or (eq .Values.database "postgresql") (eq .Values.database "cassandra") }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "common.names.fullname" . }}-migrate
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.migration.annotations "context" $ ) | nindent 4 }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.migration.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: migration
-        {{- if .Values.migration.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.migration.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       {{- if .Values.migration.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -27,8 +28,9 @@ spec:
       {{- include "kong.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.migration.automountServiceAccountToken }}
       {{- if .Values.migration.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.migration.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -43,9 +45,11 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.migration.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
+            - name: KONG_PREFIX
+              value: /opt/bitnami/kong/server
             - name: KONG_MIGRATE
               value: "yes"
             - name: BITNAMI_DEBUG
@@ -53,7 +57,7 @@ spec:
             - name: KONG_EXIT_AFTER_MIGRATE
               value: "yes"
             - name: KONG_DATABASE
-              value: {{ ternary "postgres" "cassandra" (eq .Values.database "postgresql") | quote }}
+              value: {{ include "kong.database" . | quote }}
             {{- if (eq .Values.database "postgresql") }}
             {{- if .Values.postgresql.auth.usePasswordFiles }}
             - name: KONG_POSTGRESQL_PASSWORD_FILE
@@ -104,14 +108,25 @@ spec:
                 name: {{ .Values.migration.extraEnvVarsSecret }}
             {{- end }}
           {{- end }}
-          {{- if .Values.migration.extraVolumeMounts }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/kong/server
+              subPath: app-server-dir
+            {{- if .Values.migration.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- end }}
           {{- if .Values.migration.resources }}
           resources: {{- toYaml .Values.migration.resources | nindent 12 }}
+          {{- else if ne .Values.migration.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.migration.resourcesPreset) | nindent 12 }}
           {{- end }}
-      {{- if .Values.extraVolumes }}
       volumes:
-      {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
-      {{- end }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

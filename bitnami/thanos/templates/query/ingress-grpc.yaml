@@ -1,35 +1,34 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.query.ingress.grpc.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-grpc
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.query.ingress.grpc.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.query.ingress.grpc.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.query.ingress.grpc.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.ingress.grpc.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.query.ingress.grpc.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.query.ingress.grpc.ingressClassName | quote }}
   {{- end }}
   rules:
     {{- if .Values.query.ingress.grpc.hostname }}
-    - host: {{ .Values.query.ingress.grpc.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.query.ingress.grpc.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.query.ingress.grpc.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.query.ingress.grpc.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "query") "servicePort" "grpc" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "query-grpc") "servicePort" "grpc" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.query.ingress.grpc.extraHosts }}
     - host: {{ .name }}
@@ -39,7 +38,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "query") "servicePort" "grpc" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "query-grpc") "servicePort" "grpc" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.query.ingress.grpc.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.query.ingress.grpc.extraRules "context" $) | nindent 4 }}
@@ -49,10 +48,10 @@ spec:
     {{- if and .Values.query.ingress.grpc.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.query.ingress.grpc.annotations )) .Values.query.ingress.grpc.selfSigned) }}
     - hosts:
         - {{ .Values.query.ingress.grpc.hostname }}
-      secretName: {{ printf "%s-tls" .Values.query.ingress.grpc.hostname }}
+      secretName: {{ .Values.query.ingress.grpc.secretName | default (printf "%s-tls" .Values.query.ingress.grpc.hostname) }}
     {{- end }}
     {{- if .Values.query.ingress.grpc.extraTls }}
-    {{- toYaml .Values.query.ingress.grpc.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.ingress.grpc.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

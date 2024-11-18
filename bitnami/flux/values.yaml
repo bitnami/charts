@@ -1,0 +1,3468 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+## @section Kustomize Controller Parameters
+##
+kustomizeController:
+  ## @param kustomizeController.enabled Enable Kustomize Controller
+  ##
+  enabled: true
+  ## @param kustomizeController.installCRDs Flag to install Kustomize Controller CRDs
+  ##
+  installCRDs: true
+  ## @param kustomizeController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## Bitnami Kustomize Controller image
+  ## ref: https://hub.docker.com/r/bitnami/fluxcd-kustomize-controller/tags/
+  ## @param kustomizeController.image.registry [default: REGISTRY_NAME] Kustomize Controller image registry
+  ## @param kustomizeController.image.repository [default: REPOSITORY_NAME/fluxcd-kustomize-controller] Kustomize Controller image repository
+  ## @skip kustomizeController.image.tag Kustomize Controller image tag (immutable tags are recommended)
+  ## @param kustomizeController.image.digest Kustomize Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param kustomizeController.image.pullPolicy Kustomize Controller image pull policy
+  ## @param kustomizeController.image.pullSecrets Kustomize Controller image pull secrets
+  ## @param kustomizeController.image.debug Enable Kustomize Controller image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/fluxcd-kustomize-controller
+    tag: 1.4.0-debian-12-r2
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param kustomizeController.replicaCount Number of Kustomize Controller replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param kustomizeController.containerPorts.metrics Kustomize Controller metrics container port
+  ## @param kustomizeController.containerPorts.health Kustomize Controller health container port
+  ##
+  containerPorts:
+    metrics: 8080
+    health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param kustomizeController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param kustomizeController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param kustomizeController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param kustomizeController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param kustomizeController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param kustomizeController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param kustomizeController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param kustomizeController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Configure extra options for Kustomize Controller containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param kustomizeController.livenessProbe.enabled Enable livenessProbe on Kustomize Controller containers
+  ## @param kustomizeController.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param kustomizeController.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param kustomizeController.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param kustomizeController.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param kustomizeController.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param kustomizeController.readinessProbe.enabled Enable readinessProbe on Kustomize Controller containers
+  ## @param kustomizeController.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param kustomizeController.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param kustomizeController.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param kustomizeController.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param kustomizeController.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param kustomizeController.startupProbe.enabled Enable startupProbe on Kustomize Controller containers
+  ## @param kustomizeController.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param kustomizeController.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param kustomizeController.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param kustomizeController.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param kustomizeController.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param kustomizeController.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param kustomizeController.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param kustomizeController.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Kustomize Controller resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param kustomizeController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if kustomizeController.resources is set (kustomizeController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param kustomizeController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param kustomizeController.podSecurityContext.enabled Enabled Kustomize Controller pods' Security Context
+  ## @param kustomizeController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param kustomizeController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param kustomizeController.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param kustomizeController.podSecurityContext.fsGroup Set Kustomize Controller pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param kustomizeController.containerSecurityContext.enabled Enabled Kustomize Controller containers' Security Context
+  ## @param kustomizeController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param kustomizeController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param kustomizeController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param kustomizeController.containerSecurityContext.runAsNonRoot Set Kustomize Controller containers' Security Context runAsNonRoot
+  ## @param kustomizeController.containerSecurityContext.privileged Set Kustomize Controller containers' Security Context privileged
+  ## @param kustomizeController.containerSecurityContext.readOnlyRootFilesystem Set Kustomize Controller containers' Security Context runAsNonRoot
+  ## @param kustomizeController.containerSecurityContext.allowPrivilegeEscalation Set Kustomize Controller container's privilege escalation
+  ## @param kustomizeController.containerSecurityContext.capabilities.drop Set Kustomize Controller container's Security Context runAsNonRoot
+  ## @param kustomizeController.containerSecurityContext.seccompProfile.type Set Kustomize Controller container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param kustomizeController.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param kustomizeController.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param kustomizeController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param kustomizeController.hostAliases Kustomize Controller pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param kustomizeController.podLabels Extra labels for Kustomize Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param kustomizeController.podAnnotations Annotations for Kustomize Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param kustomizeController.podAffinityPreset Pod affinity preset. Ignored if `kustomizeController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param kustomizeController.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `kustomizeController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param kustomizeController.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param kustomizeController.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param kustomizeController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param kustomizeController.autoscaling.enabled Enable autoscaling for kustomizeController
+  ## @param kustomizeController.autoscaling.minReplicas Minimum number of kustomizeController replicas
+  ## @param kustomizeController.autoscaling.maxReplicas Maximum number of kustomizeController replicas
+  ## @param kustomizeController.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param kustomizeController.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+  ## Node kustomizeController.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param kustomizeController.nodeAffinityPreset.type Node affinity preset type. Ignored if `kustomizeController.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param kustomizeController.nodeAffinityPreset.key Node label key to match. Ignored if `kustomizeController.affinity` is set
+    ##
+    key: ""
+    ## @param kustomizeController.nodeAffinityPreset.values Node label values to match. Ignored if `kustomizeController.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param kustomizeController.affinity Affinity for Kustomize Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `kustomizeController.podAffinityPreset`, `kustomizeController.podAntiAffinityPreset`, and `kustomizeController.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param kustomizeController.nodeSelector Node labels for Kustomize Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param kustomizeController.tolerations Tolerations for Kustomize Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param kustomizeController.updateStrategy.type Kustomize Controller statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param kustomizeController.priorityClassName Kustomize Controller pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param kustomizeController.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param kustomizeController.schedulerName Name of the k8s scheduler (other than default) for Kustomize Controller pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param kustomizeController.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param kustomizeController.lifecycleHooks for the Kustomize Controller container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param kustomizeController.extraEnvVars Array with extra environment variables to add to Kustomize Controller nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param kustomizeController.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Kustomize Controller nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param kustomizeController.extraEnvVarsSecret Name of existing Secret containing extra env vars for Kustomize Controller nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param kustomizeController.extraVolumes Optionally specify extra list of additional volumes for the Kustomize Controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param kustomizeController.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Kustomize Controller container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param kustomizeController.sidecars Add additional sidecar containers to the Kustomize Controller pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param kustomizeController.initContainers Add additional init containers to the Kustomize Controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @section Kustomize Controller RBAC Parameters
+  ##
+
+  ## RBAC configuration
+  ##
+  rbac:
+    ## @param kustomizeController.rbac.create Specifies whether RBAC resources should be created
+    ##
+    create: true
+    ## @param kustomizeController.rbac.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param kustomizeController.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param kustomizeController.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param kustomizeController.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param kustomizeController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section Kustomize Controller Metrics Parameters
+  ##
+
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param kustomizeController.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: true
+    ## Kustomize Controller service parameters
+    ##
+    service:
+      ## @param kustomizeController.metrics.service.type Kustomize Controller service type
+      ##
+      type: ClusterIP
+      ## @param kustomizeController.metrics.service.ports.metrics Kustomize Controller service metrics port
+      ##
+      ports:
+        metrics: 80
+      ## Node ports to expose
+      ## @param kustomizeController.metrics.service.nodePorts.metrics Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        metrics: ""
+      ## @param kustomizeController.metrics.service.clusterIP Kustomize Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param kustomizeController.metrics.service.loadBalancerIP Kustomize Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param kustomizeController.metrics.service.loadBalancerSourceRanges Kustomize Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param kustomizeController.metrics.service.externalTrafficPolicy Kustomize Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param kustomizeController.metrics.service.annotations [object] Additional custom annotations for Kustomize Controller service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.kustomizeController.metrics.service.ports.metrics }}"
+      ## @param kustomizeController.metrics.service.extraPorts Extra ports to expose in Kustomize Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param kustomizeController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param kustomizeController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param kustomizeController.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param kustomizeController.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param kustomizeController.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param kustomizeController.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param kustomizeController.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param kustomizeController.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param kustomizeController.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param kustomizeController.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param kustomizeController.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param kustomizeController.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param kustomizeController.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+## @section Helm Controller Parameters
+##
+helmController:
+  ## @param helmController.enabled Enable Helm Controller
+  ##
+  enabled: true
+  ## @param helmController.installCRDs Flag to install Helm Controller CRDs
+  ##
+  installCRDs: true
+  ## @param helmController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## Bitnami Helm Controller image
+  ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
+  ## @param helmController.image.registry [default: REGISTRY_NAME] Helm Controller image registry
+  ## @param helmController.image.repository [default: REPOSITORY_NAME/fluxcd-helm-controller] Helm Controller image repository
+  ## @skip helmController.image.tag Helm Controller image tag (immutable tags are recommended)
+  ## @param helmController.image.digest Helm Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param helmController.image.pullPolicy Helm Controller image pull policy
+  ## @param helmController.image.pullSecrets Helm Controller image pull secrets
+  ## @param helmController.image.debug Enable Helm Controller image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/fluxcd-helm-controller
+    tag: 1.1.0-debian-12-r2
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param helmController.replicaCount Number of Helm Controller replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param helmController.containerPorts.metrics Helm Controller metrics container port
+  ## @param helmController.containerPorts.health Helm Controller health container port
+  ##
+  containerPorts:
+    metrics: 8080
+    health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param helmController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param helmController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param helmController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param helmController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param helmController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param helmController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param helmController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param helmController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Configure extra options for Helm Controller containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param helmController.livenessProbe.enabled Enable livenessProbe on Helm Controller containers
+  ## @param helmController.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param helmController.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param helmController.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param helmController.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param helmController.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param helmController.readinessProbe.enabled Enable readinessProbe on Helm Controller containers
+  ## @param helmController.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param helmController.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param helmController.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param helmController.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param helmController.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param helmController.startupProbe.enabled Enable startupProbe on Helm Controller containers
+  ## @param helmController.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param helmController.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param helmController.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param helmController.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param helmController.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param helmController.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param helmController.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param helmController.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Helm Controller resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param helmController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if helmController.resources is set (helmController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param helmController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param helmController.podSecurityContext.enabled Enabled Helm Controller pods' Security Context
+  ## @param helmController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param helmController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param helmController.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param helmController.podSecurityContext.fsGroup Set Helm Controller pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param helmController.containerSecurityContext.enabled Enabled Helm Controller containers' Security Context
+  ## @param helmController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param helmController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param helmController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param helmController.containerSecurityContext.runAsNonRoot Set Helm Controller containers' Security Context runAsNonRoot
+  ## @param helmController.containerSecurityContext.privileged Set Helm Controller containers' Security Context privileged
+  ## @param helmController.containerSecurityContext.readOnlyRootFilesystem Set Helm Controller containers' Security Context runAsNonRoot
+  ## @param helmController.containerSecurityContext.allowPrivilegeEscalation Set Helm Controller container's privilege escalation
+  ## @param helmController.containerSecurityContext.capabilities.drop Set Helm Controller container's Security Context runAsNonRoot
+  ## @param helmController.containerSecurityContext.seccompProfile.type Set Helm Controller container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param helmController.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param helmController.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param helmController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param helmController.hostAliases Helm Controller pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param helmController.podLabels Extra labels for Helm Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param helmController.podAnnotations Annotations for Helm Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param helmController.podAffinityPreset Pod affinity preset. Ignored if `helmController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param helmController.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `helmController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param helmController.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param helmController.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param helmController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param helmController.autoscaling.enabled Enable autoscaling for helmController
+  ## @param helmController.autoscaling.minReplicas Minimum number of helmController replicas
+  ## @param helmController.autoscaling.maxReplicas Maximum number of helmController replicas
+  ## @param helmController.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param helmController.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+  ## Node helmController.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param helmController.nodeAffinityPreset.type Node affinity preset type. Ignored if `helmController.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param helmController.nodeAffinityPreset.key Node label key to match. Ignored if `helmController.affinity` is set
+    ##
+    key: ""
+    ## @param helmController.nodeAffinityPreset.values Node label values to match. Ignored if `helmController.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param helmController.affinity Affinity for Helm Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `helmController.podAffinityPreset`, `helmController.podAntiAffinityPreset`, and `helmController.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param helmController.nodeSelector Node labels for Helm Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param helmController.tolerations Tolerations for Helm Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param helmController.updateStrategy.type Helm Controller statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param helmController.priorityClassName Helm Controller pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param helmController.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param helmController.schedulerName Name of the k8s scheduler (other than default) for Helm Controller pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param helmController.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param helmController.lifecycleHooks for the Helm Controller container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param helmController.extraEnvVars Array with extra environment variables to add to Helm Controller nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param helmController.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Helm Controller nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param helmController.extraEnvVarsSecret Name of existing Secret containing extra env vars for Helm Controller nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param helmController.extraVolumes Optionally specify extra list of additional volumes for the Helm Controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param helmController.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Helm Controller container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param helmController.sidecars Add additional sidecar containers to the Helm Controller pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param helmController.initContainers Add additional init containers to the Helm Controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @section Helm Controller RBAC Parameters
+  ##
+
+  ## RBAC configuration
+  ##
+  rbac:
+    ## @param helmController.rbac.create Specifies whether RBAC resources should be created
+    ##
+    create: true
+    ## @param helmController.rbac.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param helmController.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param helmController.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param helmController.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param helmController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section Helm Controller Metrics Parameters
+  ##
+
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param helmController.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: true
+    ## Helm Controller service parameters
+    ##
+    service:
+      ## @param helmController.metrics.service.type Helm Controller service type
+      ##
+      type: ClusterIP
+      ## @param helmController.metrics.service.ports.metrics Helm Controller service metrics port
+      ##
+      ports:
+        metrics: 80
+      ## Node ports to expose
+      ## @param helmController.metrics.service.nodePorts.metrics Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        metrics: ""
+      ## @param helmController.metrics.service.clusterIP Helm Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param helmController.metrics.service.loadBalancerIP Helm Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param helmController.metrics.service.loadBalancerSourceRanges Helm Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param helmController.metrics.service.externalTrafficPolicy Helm Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param helmController.metrics.service.annotations [object] Additional custom annotations for Helm Controller service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.helmController.metrics.service.ports.metrics }}"
+      ## @param helmController.metrics.service.extraPorts Extra ports to expose in Helm Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param helmController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param helmController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param helmController.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param helmController.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param helmController.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param helmController.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param helmController.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param helmController.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param helmController.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param helmController.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param helmController.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param helmController.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param helmController.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+## @section Source Controller Parameters
+##
+sourceController:
+  ## @param sourceController.enabled Enable Source Controller
+  ##
+  enabled: true
+  ## @param sourceController.installCRDs Flag to install Source Controller CRDs
+  ##
+  installCRDs: true
+  ## @param sourceController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## Bitnami Source Controller image
+  ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
+  ## @param sourceController.image.registry [default: REGISTRY_NAME] Source Controller image registry
+  ## @param sourceController.image.repository [default: REPOSITORY_NAME/fluxcd-source-controller] Source Controller image repository
+  ## @skip sourceController.image.tag Source Controller image tag (immutable tags are recommended)
+  ## @param sourceController.image.digest Source Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param sourceController.image.pullPolicy Source Controller image pull policy
+  ## @param sourceController.image.pullSecrets Source Controller image pull secrets
+  ## @param sourceController.image.debug Enable Source Controller image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/fluxcd-source-controller
+    tag: 1.4.1-debian-12-r3
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param sourceController.replicaCount Number of Source Controller replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param sourceController.containerPorts.http Source Controller http container port
+  ## @param sourceController.containerPorts.metrics Source Controller metrics container port
+  ## @param sourceController.containerPorts.health Source Controller health container port
+  ##
+  containerPorts:
+    http: 9090
+    metrics: 8080
+    health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param sourceController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param sourceController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param sourceController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param sourceController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param sourceController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param sourceController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param sourceController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param sourceController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Configure extra options for Source Controller containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param sourceController.livenessProbe.enabled Enable livenessProbe on Source Controller containers
+  ## @param sourceController.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param sourceController.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param sourceController.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param sourceController.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param sourceController.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param sourceController.readinessProbe.enabled Enable readinessProbe on Source Controller containers
+  ## @param sourceController.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param sourceController.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param sourceController.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param sourceController.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param sourceController.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param sourceController.startupProbe.enabled Enable startupProbe on Source Controller containers
+  ## @param sourceController.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param sourceController.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param sourceController.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param sourceController.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param sourceController.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param sourceController.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param sourceController.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param sourceController.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Source Controller resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param sourceController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sourceController.resources is set (sourceController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param sourceController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param sourceController.podSecurityContext.enabled Enabled Source Controller pods' Security Context
+  ## @param sourceController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param sourceController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param sourceController.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param sourceController.podSecurityContext.fsGroup Set Source Controller pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param sourceController.containerSecurityContext.enabled Enabled Source Controller containers' Security Context
+  ## @param sourceController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param sourceController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param sourceController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param sourceController.containerSecurityContext.runAsNonRoot Set Source Controller containers' Security Context runAsNonRoot
+  ## @param sourceController.containerSecurityContext.privileged Set Source Controller containers' Security Context privileged
+  ## @param sourceController.containerSecurityContext.readOnlyRootFilesystem Set Source Controller containers' Security Context runAsNonRoot
+  ## @param sourceController.containerSecurityContext.allowPrivilegeEscalation Set Source Controller container's privilege escalation
+  ## @param sourceController.containerSecurityContext.capabilities.drop Set Source Controller container's Security Context runAsNonRoot
+  ## @param sourceController.containerSecurityContext.seccompProfile.type Set Source Controller container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param sourceController.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param sourceController.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param sourceController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param sourceController.hostAliases Source Controller pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param sourceController.podLabels Extra labels for Source Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param sourceController.podAnnotations Annotations for Source Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param sourceController.podAffinityPreset Pod affinity preset. Ignored if `sourceController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param sourceController.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `sourceController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param sourceController.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param sourceController.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param sourceController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param sourceController.autoscaling.enabled Enable autoscaling for sourceController
+  ## @param sourceController.autoscaling.minReplicas Minimum number of sourceController replicas
+  ## @param sourceController.autoscaling.maxReplicas Maximum number of sourceController replicas
+  ## @param sourceController.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param sourceController.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+  ## Node sourceController.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param sourceController.nodeAffinityPreset.type Node affinity preset type. Ignored if `sourceController.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param sourceController.nodeAffinityPreset.key Node label key to match. Ignored if `sourceController.affinity` is set
+    ##
+    key: ""
+    ## @param sourceController.nodeAffinityPreset.values Node label values to match. Ignored if `sourceController.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param sourceController.affinity Affinity for Source Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `sourceController.podAffinityPreset`, `sourceController.podAntiAffinityPreset`, and `sourceController.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param sourceController.nodeSelector Node labels for Source Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param sourceController.tolerations Tolerations for Source Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param sourceController.updateStrategy.type Source Controller statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param sourceController.priorityClassName Source Controller pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param sourceController.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param sourceController.schedulerName Name of the k8s scheduler (other than default) for Source Controller pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param sourceController.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param sourceController.lifecycleHooks for the Source Controller container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param sourceController.extraEnvVars Array with extra environment variables to add to Source Controller nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param sourceController.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Source Controller nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param sourceController.extraEnvVarsSecret Name of existing Secret containing extra env vars for Source Controller nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param sourceController.extraVolumes Optionally specify extra list of additional volumes for the Source Controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param sourceController.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Source Controller container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param sourceController.sidecars Add additional sidecar containers to the Source Controller pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param sourceController.initContainers Add additional init containers to the Source Controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @section Source Controller service parameters
+  ##
+  service:
+    ## @param sourceController.service.type Source Controller service type
+    ##
+    type: ClusterIP
+    ## @param sourceController.service.ports.http Source Controller service metrics port
+    ##
+    ports:
+      http: 80
+    ## Node ports to expose
+    ## @param sourceController.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param sourceController.service.clusterIP Source Controller service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param sourceController.service.loadBalancerIP Source Controller service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param sourceController.service.loadBalancerSourceRanges Source Controller service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param sourceController.service.externalTrafficPolicy Source Controller service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param sourceController.service.annotations [object] Additional custom annotations for Source Controller service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.sourceController.service.ports }}"
+    ## @param sourceController.service.extraPorts Extra ports to expose in Source Controller service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param sourceController.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param sourceController.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## @section Source Conttroller Persistence Parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param sourceController.persistence.enabled Enable persistence using Persistent Volume Claims
+    ## (NOTE: Disabled by default in upstream flux configuration)
+    ##
+    enabled: false
+    ## @param sourceController.persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+    ##
+    resourcePolicy: ""
+    ## @param sourceController.persistence.mountPath Persistent Volume mount root path
+    ##
+    mountPath: /bitnami/fluxcd-source-controller/data
+    ## @param sourceController.persistence.storageClass Persistent Volume storage class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+    ##
+    storageClass: ""
+    ## @param sourceController.persistence.accessModes [array] Persistent Volume access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param sourceController.persistence.size Persistent Volume size
+    ##
+    size: 10Gi
+    ## @param sourceController.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param sourceController.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param sourceController.persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param sourceController.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+  ## @section Source Controller RBAC Parameters
+  ##
+
+  ## RBAC configuration
+  ##
+  rbac:
+    ## @param sourceController.rbac.create Specifies whether RBAC resources should be created
+    ##
+    create: true
+    ## @param sourceController.rbac.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param sourceController.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param sourceController.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param sourceController.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param sourceController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section Source Controller Metrics Parameters
+  ##
+
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param sourceController.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: true
+    ## Source Controller service parameters
+    ##
+    service:
+      ## @param sourceController.metrics.service.type Source Controller service type
+      ##
+      type: ClusterIP
+      ## @param sourceController.metrics.service.ports.metrics Source Controller service metrics port
+      ##
+      ports:
+        metrics: 80
+      ## Node ports to expose
+      ## @param sourceController.metrics.service.nodePorts.metrics Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        metrics: ""
+      ## @param sourceController.metrics.service.clusterIP Source Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param sourceController.metrics.service.loadBalancerIP Source Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param sourceController.metrics.service.loadBalancerSourceRanges Source Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param sourceController.metrics.service.externalTrafficPolicy Source Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param sourceController.metrics.service.annotations [object] Additional custom annotations for Source Controller service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.sourceController.metrics.service.ports.metrics }}"
+      ## @param sourceController.metrics.service.extraPorts Extra ports to expose in Source Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param sourceController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param sourceController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param sourceController.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param sourceController.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param sourceController.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param sourceController.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param sourceController.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param sourceController.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param sourceController.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param sourceController.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param sourceController.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param sourceController.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param sourceController.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+## @section Notification Controller Parameters
+##
+notificationController:
+  ## @param notificationController.enabled Enable Notification Controller
+  ##
+  enabled: true
+  ## @param notificationController.installCRDs Flag to install Notification Controller CRDs
+  ##
+  installCRDs: true
+  ## @param notificationController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## Bitnami Notification Controller image
+  ## ref: https://hub.docker.com/r/bitnami/fluxcd-notification-controller/tags/
+  ## @param notificationController.image.registry [default: REGISTRY_NAME] Notification Controller image registry
+  ## @param notificationController.image.repository [default: REPOSITORY_NAME/fluxcd-notification-controller] Notification Controller image repository
+  ## @skip notificationController.image.tag Notification Controller image tag (immutable tags are recommended)
+  ## @param notificationController.image.digest Notification Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param notificationController.image.pullPolicy Notification Controller image pull policy
+  ## @param notificationController.image.pullSecrets Notification Controller image pull secrets
+  ## @param notificationController.image.debug Enable Notification Controller image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/fluxcd-notification-controller
+    tag: 1.4.0-debian-12-r3
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param notificationController.replicaCount Number of Notification Controller replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param notificationController.containerPorts.metrics Notification Controller metrics container port
+  ## @param notificationController.containerPorts.receiver Notification Controller receiver container port
+  ## @param notificationController.containerPorts.health Notification Controller health container port
+  ## @param notificationController.containerPorts.webhook Notification Controller webhook container port
+  ##
+  containerPorts:
+    metrics: 8080
+    receiver: 9090
+    health: 9440
+    webhook: 9292
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param notificationController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param notificationController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param notificationController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param notificationController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param notificationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param notificationController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param notificationController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param notificationController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Configure extra options for Notification Controller containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param notificationController.livenessProbe.enabled Enable livenessProbe on Notification Controller containers
+  ## @param notificationController.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param notificationController.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param notificationController.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param notificationController.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param notificationController.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param notificationController.readinessProbe.enabled Enable readinessProbe on Notification Controller containers
+  ## @param notificationController.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param notificationController.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param notificationController.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param notificationController.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param notificationController.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param notificationController.startupProbe.enabled Enable startupProbe on Notification Controller containers
+  ## @param notificationController.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param notificationController.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param notificationController.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param notificationController.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param notificationController.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param notificationController.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param notificationController.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param notificationController.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Notification Controller resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param notificationController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if notificationController.resources is set (notificationController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param notificationController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param notificationController.podSecurityContext.enabled Enabled Notification Controller pods' Security Context
+  ## @param notificationController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param notificationController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param notificationController.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param notificationController.podSecurityContext.fsGroup Set Notification Controller pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param notificationController.containerSecurityContext.enabled Enabled Notification Controller containers' Security Context
+  ## @param notificationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param notificationController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param notificationController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param notificationController.containerSecurityContext.runAsNonRoot Set Notification Controller containers' Security Context runAsNonRoot
+  ## @param notificationController.containerSecurityContext.readOnlyRootFilesystem Set Notification Controller containers' Security Context runAsNonRoot
+  ## @param notificationController.containerSecurityContext.privileged Set Notification Controller containers' Security Context privileged
+  ## @param notificationController.containerSecurityContext.allowPrivilegeEscalation Set Notification Controller container's privilege escalation
+  ## @param notificationController.containerSecurityContext.capabilities.drop Set Notification Controller container's Security Context runAsNonRoot
+  ## @param notificationController.containerSecurityContext.seccompProfile.type Set Notification Controller container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param notificationController.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param notificationController.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param notificationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param notificationController.hostAliases Notification Controller pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param notificationController.podLabels Extra labels for Notification Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param notificationController.podAnnotations Annotations for Notification Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param notificationController.podAffinityPreset Pod affinity preset. Ignored if `notificationController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param notificationController.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `notificationController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param notificationController.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param notificationController.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param notificationController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param notificationController.autoscaling.enabled Enable autoscaling for notificationController
+  ## @param notificationController.autoscaling.minReplicas Minimum number of notificationController replicas
+  ## @param notificationController.autoscaling.maxReplicas Maximum number of notificationController replicas
+  ## @param notificationController.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param notificationController.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+  ## Node notificationController.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param notificationController.nodeAffinityPreset.type Node affinity preset type. Ignored if `notificationController.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param notificationController.nodeAffinityPreset.key Node label key to match. Ignored if `notificationController.affinity` is set
+    ##
+    key: ""
+    ## @param notificationController.nodeAffinityPreset.values Node label values to match. Ignored if `notificationController.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param notificationController.affinity Affinity for Notification Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `notificationController.podAffinityPreset`, `notificationController.podAntiAffinityPreset`, and `notificationController.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param notificationController.nodeSelector Node labels for Notification Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param notificationController.tolerations Tolerations for Notification Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param notificationController.updateStrategy.type Notification Controller statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param notificationController.priorityClassName Notification Controller pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param notificationController.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param notificationController.schedulerName Name of the k8s scheduler (other than default) for Notification Controller pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param notificationController.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param notificationController.lifecycleHooks for the Notification Controller container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param notificationController.extraEnvVars Array with extra environment variables to add to Notification Controller nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param notificationController.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Notification Controller nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param notificationController.extraEnvVarsSecret Name of existing Secret containing extra env vars for Notification Controller nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param notificationController.extraVolumes Optionally specify extra list of additional volumes for the Notification Controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param notificationController.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Notification Controller container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param notificationController.sidecars Add additional sidecar containers to the Notification Controller pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param notificationController.initContainers Add additional init containers to the Notification Controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @section Notification Controller Traffic Exposure Parameters
+  service:
+    ## Notification Controller Receiver service parameters
+    ##
+    receiver:
+      ## @param notificationController.service.receiver.type Notification Controller service type
+      ##
+      type: ClusterIP
+      ## @param notificationController.service.receiver.ports.http Notification Controller service receiver port
+      ##
+      ports:
+        http: 80
+      ## Node ports to expose
+      ## @param notificationController.service.receiver.nodePorts.http Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param notificationController.service.receiver.clusterIP Notification Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param notificationController.service.receiver.loadBalancerIP Notification Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param notificationController.service.receiver.loadBalancerSourceRanges Notification Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param notificationController.service.receiver.externalTrafficPolicy Notification Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param notificationController.service.receiver.annotations [object] Additional custom annotations for Notification Controller service
+      ##
+      annotations: {}
+      ## @param notificationController.service.receiver.extraPorts Extra ports to expose in Notification Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param notificationController.service.receiver.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param notificationController.service.receiver.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Notification Controller webhook service parameters
+    ##
+    webhook:
+      ## @param notificationController.service.webhook.type Notification Controller service type
+      ##
+      type: ClusterIP
+      ## @param notificationController.service.webhook.ports.http Notification Controller service webhook port
+      ##
+      ports:
+        http: 80
+      ## Node ports to expose
+      ## @param notificationController.service.webhook.nodePorts.http Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param notificationController.service.webhook.clusterIP Notification Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param notificationController.service.webhook.loadBalancerIP Notification Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param notificationController.service.webhook.loadBalancerSourceRanges Notification Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param notificationController.service.webhook.externalTrafficPolicy Notification Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param notificationController.service.webhook.annotations [object] Additional custom annotations for Notification Controller service
+      ##
+      annotations: {}
+      ## @param notificationController.service.webhook.extraPorts Extra ports to expose in Notification Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param notificationController.service.webhook.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param notificationController.service.webhook.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+  ## @section Notification Controller RBAC Parameters
+  ##
+
+  ## RBAC configuration
+  ##
+  rbac:
+    ## @param notificationController.rbac.create Specifies whether RBAC resources should be created
+    ##
+    create: true
+    ## @param notificationController.rbac.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param notificationController.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param notificationController.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param notificationController.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param notificationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section Notification Controller Metrics Parameters
+  ##
+
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param notificationController.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: true
+    ## Notification Controller service parameters
+    ##
+    service:
+      ## @param notificationController.metrics.service.type Notification Controller service type
+      ##
+      type: ClusterIP
+      ## @param notificationController.metrics.service.ports.metrics Notification Controller service metrics port
+      ##
+      ports:
+        metrics: 80
+      ## Node ports to expose
+      ## @param notificationController.metrics.service.nodePorts.metrics Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        metrics: ""
+      ## @param notificationController.metrics.service.clusterIP Notification Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param notificationController.metrics.service.loadBalancerIP Notification Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param notificationController.metrics.service.loadBalancerSourceRanges Notification Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param notificationController.metrics.service.externalTrafficPolicy Notification Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param notificationController.metrics.service.annotations [object] Additional custom annotations for Notification Controller service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.notificationController.metrics.service.ports.metrics }}"
+      ## @param notificationController.metrics.service.extraPorts Extra ports to expose in Notification Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param notificationController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param notificationController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param notificationController.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param notificationController.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param notificationController.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param notificationController.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param notificationController.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param notificationController.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param notificationController.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param notificationController.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param notificationController.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param notificationController.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param notificationController.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+## @section Image Automation Controller Parameters
+##
+imageAutomationController:
+  ## @param imageAutomationController.enabled Enable Image Automation Controller
+  ##
+  enabled: true
+  ## @param imageAutomationController.installCRDs Flag to install Image Automation Controller CRDs
+  ##
+  installCRDs: true
+  ## @param imageAutomationController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## Bitnami Image Automation Controller image
+  ## ref: https://hub.docker.com/r/bitnami/fluxcd-image-automation-controller/tags/
+  ## @param imageAutomationController.image.registry [default: REGISTRY_NAME] Image Automation Controller image registry
+  ## @param imageAutomationController.image.repository [default: REPOSITORY_NAME/fluxcd-image-automation-controller] Image Automation Controller image repository
+  ## @skip imageAutomationController.image.tag Image Automation Controller image tag (immutable tags are recommended)
+  ## @param imageAutomationController.image.digest Image Automation Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param imageAutomationController.image.pullPolicy Image Automation Controller image pull policy
+  ## @param imageAutomationController.image.pullSecrets Image Automation Controller image pull secrets
+  ## @param imageAutomationController.image.debug Enable Image Automation Controller image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/fluxcd-image-automation-controller
+    tag: 0.39.0-debian-12-r2
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param imageAutomationController.replicaCount Number of Image Automation Controller replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param imageAutomationController.containerPorts.metrics Image Automation Controller metrics container port
+  ## @param imageAutomationController.containerPorts.health Image Automation Controller health container port
+  ##
+  containerPorts:
+    metrics: 8080
+    health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param imageAutomationController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param imageAutomationController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param imageAutomationController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param imageAutomationController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param imageAutomationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param imageAutomationController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param imageAutomationController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param imageAutomationController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Configure extra options for Image Automation Controller containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param imageAutomationController.livenessProbe.enabled Enable livenessProbe on Image Automation Controller containers
+  ## @param imageAutomationController.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param imageAutomationController.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param imageAutomationController.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param imageAutomationController.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param imageAutomationController.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param imageAutomationController.readinessProbe.enabled Enable readinessProbe on Image Automation Controller containers
+  ## @param imageAutomationController.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param imageAutomationController.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param imageAutomationController.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param imageAutomationController.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param imageAutomationController.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param imageAutomationController.startupProbe.enabled Enable startupProbe on Image Automation Controller containers
+  ## @param imageAutomationController.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param imageAutomationController.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param imageAutomationController.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param imageAutomationController.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param imageAutomationController.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param imageAutomationController.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param imageAutomationController.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param imageAutomationController.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Image Automation Controller resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param imageAutomationController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if imageAutomationController.resources is set (imageAutomationController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param imageAutomationController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param imageAutomationController.podSecurityContext.enabled Enabled Image Automation Controller pods' Security Context
+  ## @param imageAutomationController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param imageAutomationController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param imageAutomationController.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param imageAutomationController.podSecurityContext.fsGroup Set Image Automation Controller pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param imageAutomationController.containerSecurityContext.enabled Enabled Image Automation Controller containers' Security Context
+  ## @param imageAutomationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param imageAutomationController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imageAutomationController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param imageAutomationController.containerSecurityContext.runAsNonRoot Set Image Automation Controller containers' Security Context runAsNonRoot
+  ## @param imageAutomationController.containerSecurityContext.readOnlyRootFilesystem Set Image Automation Controller containers' Security Context runAsNonRoot
+  ## @param imageAutomationController.containerSecurityContext.privileged Set Image Automation Controller containers' Security Context privileged
+  ## @param imageAutomationController.containerSecurityContext.allowPrivilegeEscalation Set Image Automation Controller container's privilege escalation
+  ## @param imageAutomationController.containerSecurityContext.capabilities.drop Set Image Automation Controller container's Security Context runAsNonRoot
+  ## @param imageAutomationController.containerSecurityContext.seccompProfile.type Set Image Automation Controller container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param imageAutomationController.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param imageAutomationController.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param imageAutomationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param imageAutomationController.hostAliases Image Automation Controller pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param imageAutomationController.podLabels Extra labels for Image Automation Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param imageAutomationController.podAnnotations Annotations for Image Automation Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param imageAutomationController.podAffinityPreset Pod affinity preset. Ignored if `imageAutomationController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param imageAutomationController.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `imageAutomationController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param imageAutomationController.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param imageAutomationController.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param imageAutomationController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param imageAutomationController.autoscaling.enabled Enable autoscaling for imageAutomationController
+  ## @param imageAutomationController.autoscaling.minReplicas Minimum number of imageAutomationController replicas
+  ## @param imageAutomationController.autoscaling.maxReplicas Maximum number of imageAutomationController replicas
+  ## @param imageAutomationController.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param imageAutomationController.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+  ## Node imageAutomationController.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param imageAutomationController.nodeAffinityPreset.type Node affinity preset type. Ignored if `imageAutomationController.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param imageAutomationController.nodeAffinityPreset.key Node label key to match. Ignored if `imageAutomationController.affinity` is set
+    ##
+    key: ""
+    ## @param imageAutomationController.nodeAffinityPreset.values Node label values to match. Ignored if `imageAutomationController.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param imageAutomationController.affinity Affinity for Image Automation Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `imageAutomationController.podAffinityPreset`, `imageAutomationController.podAntiAffinityPreset`, and `imageAutomationController.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param imageAutomationController.nodeSelector Node labels for Image Automation Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param imageAutomationController.tolerations Tolerations for Image Automation Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param imageAutomationController.updateStrategy.type Image Automation Controller statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param imageAutomationController.priorityClassName Image Automation Controller pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param imageAutomationController.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param imageAutomationController.schedulerName Name of the k8s scheduler (other than default) for Image Automation Controller pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param imageAutomationController.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param imageAutomationController.lifecycleHooks for the Image Automation Controller container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param imageAutomationController.extraEnvVars Array with extra environment variables to add to Image Automation Controller nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param imageAutomationController.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Image Automation Controller nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param imageAutomationController.extraEnvVarsSecret Name of existing Secret containing extra env vars for Image Automation Controller nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param imageAutomationController.extraVolumes Optionally specify extra list of additional volumes for the Image Automation Controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param imageAutomationController.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Image Automation Controller container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param imageAutomationController.sidecars Add additional sidecar containers to the Image Automation Controller pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param imageAutomationController.initContainers Add additional init containers to the Image Automation Controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @section Image Automation Controller RBAC Parameters
+  ##
+
+  ## RBAC configuration
+  ##
+  rbac:
+    ## @param imageAutomationController.rbac.create Specifies whether RBAC resources should be created
+    ##
+    create: true
+    ## @param imageAutomationController.rbac.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param imageAutomationController.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param imageAutomationController.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param imageAutomationController.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param imageAutomationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section Image Automation Controller Metrics Parameters
+  ##
+
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param imageAutomationController.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: true
+    ## Image Automation Controller service parameters
+    ##
+    service:
+      ## @param imageAutomationController.metrics.service.type Image Automation Controller service type
+      ##
+      type: ClusterIP
+      ## @param imageAutomationController.metrics.service.ports.metrics Image Automation Controller service metrics port
+      ##
+      ports:
+        metrics: 80
+      ## Node ports to expose
+      ## @param imageAutomationController.metrics.service.nodePorts.metrics Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        metrics: ""
+      ## @param imageAutomationController.metrics.service.clusterIP Image Automation Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param imageAutomationController.metrics.service.loadBalancerIP Image Automation Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param imageAutomationController.metrics.service.loadBalancerSourceRanges Image Automation Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param imageAutomationController.metrics.service.externalTrafficPolicy Image Automation Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param imageAutomationController.metrics.service.annotations [object] Additional custom annotations for Image Automation Controller service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.imageAutomationController.metrics.service.ports.metrics }}"
+      ## @param imageAutomationController.metrics.service.extraPorts Extra ports to expose in Image Automation Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param imageAutomationController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param imageAutomationController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param imageAutomationController.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param imageAutomationController.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param imageAutomationController.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param imageAutomationController.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param imageAutomationController.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param imageAutomationController.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param imageAutomationController.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param imageAutomationController.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param imageAutomationController.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param imageAutomationController.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param imageAutomationController.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+## @section Image Reflector Controller Parameters
+##
+imageReflectorController:
+  ## @param imageReflectorController.enabled Enable Image Reflector Controller
+  ##
+  enabled: true
+  ## @param imageReflectorController.installCRDs Flag to install Image Reflector Controller CRDs
+  ##
+  installCRDs: true
+  ## @param imageReflectorController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## Bitnami Image Reflector Controller image
+  ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
+  ## @param imageReflectorController.image.registry [default: REGISTRY_NAME] Image Reflector Controller image registry
+  ## @param imageReflectorController.image.repository [default: REPOSITORY_NAME/fluxcd-image-reflector-controller] Image Reflector Controller image repository
+  ## @skip imageReflectorController.image.tag Image Reflector Controller image tag (immutable tags are recommended)
+  ## @param imageReflectorController.image.digest Image Reflector Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param imageReflectorController.image.pullPolicy Image Reflector Controller image pull policy
+  ## @param imageReflectorController.image.pullSecrets Image Reflector Controller image pull secrets
+  ## @param imageReflectorController.image.debug Enable Image Reflector Controller image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/fluxcd-image-reflector-controller
+    tag: 0.33.0-debian-12-r2
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param imageReflectorController.replicaCount Number of Image Reflector Controller replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param imageReflectorController.containerPorts.metrics Image Reflector Controller metrics container port
+  ## @param imageReflectorController.containerPorts.health Image Reflector Controller health container port
+  ##
+  containerPorts:
+    metrics: 8080
+    health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param imageReflectorController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param imageReflectorController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param imageReflectorController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param imageReflectorController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param imageReflectorController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param imageReflectorController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param imageReflectorController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param imageReflectorController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Configure extra options for Image Reflector Controller containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param imageReflectorController.livenessProbe.enabled Enable livenessProbe on Image Reflector Controller containers
+  ## @param imageReflectorController.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param imageReflectorController.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param imageReflectorController.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param imageReflectorController.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param imageReflectorController.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param imageReflectorController.readinessProbe.enabled Enable readinessProbe on Image Reflector Controller containers
+  ## @param imageReflectorController.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param imageReflectorController.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param imageReflectorController.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param imageReflectorController.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param imageReflectorController.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param imageReflectorController.startupProbe.enabled Enable startupProbe on Image Reflector Controller containers
+  ## @param imageReflectorController.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param imageReflectorController.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param imageReflectorController.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param imageReflectorController.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param imageReflectorController.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param imageReflectorController.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param imageReflectorController.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param imageReflectorController.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Image Reflector Controller resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param imageReflectorController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if imageReflectorController.resources is set (imageReflectorController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param imageReflectorController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param imageReflectorController.podSecurityContext.enabled Enabled Image Reflector Controller pods' Security Context
+  ## @param imageReflectorController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param imageReflectorController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param imageReflectorController.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param imageReflectorController.podSecurityContext.fsGroup Set Image Reflector Controller pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param imageReflectorController.containerSecurityContext.enabled Enabled Image Reflector Controller containers' Security Context
+  ## @param imageReflectorController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param imageReflectorController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imageReflectorController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param imageReflectorController.containerSecurityContext.runAsNonRoot Set Image Reflector Controller containers' Security Context runAsNonRoot
+  ## @param imageReflectorController.containerSecurityContext.privileged Set Image Reflector Controller containers' Security Context privileged
+  ## @param imageReflectorController.containerSecurityContext.readOnlyRootFilesystem Set Image Reflector Controller containers' Security Context runAsNonRoot
+  ## @param imageReflectorController.containerSecurityContext.allowPrivilegeEscalation Set Image Reflector Controller container's privilege escalation
+  ## @param imageReflectorController.containerSecurityContext.capabilities.drop Set Image Reflector Controller container's Security Context runAsNonRoot
+  ## @param imageReflectorController.containerSecurityContext.seccompProfile.type Set Image Reflector Controller container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param imageReflectorController.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param imageReflectorController.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param imageReflectorController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
+  ## @param imageReflectorController.hostAliases Image Reflector Controller pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param imageReflectorController.podLabels Extra labels for Image Reflector Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param imageReflectorController.podAnnotations Annotations for Image Reflector Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param imageReflectorController.podAffinityPreset Pod affinity preset. Ignored if `imageReflectorController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param imageReflectorController.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `imageReflectorController.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param imageReflectorController.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param imageReflectorController.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param imageReflectorController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param imageReflectorController.autoscaling.enabled Enable autoscaling for imageReflectorController
+  ## @param imageReflectorController.autoscaling.minReplicas Minimum number of imageReflectorController replicas
+  ## @param imageReflectorController.autoscaling.maxReplicas Maximum number of imageReflectorController replicas
+  ## @param imageReflectorController.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param imageReflectorController.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+  ## Node imageReflectorController.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param imageReflectorController.nodeAffinityPreset.type Node affinity preset type. Ignored if `imageReflectorController.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param imageReflectorController.nodeAffinityPreset.key Node label key to match. Ignored if `imageReflectorController.affinity` is set
+    ##
+    key: ""
+    ## @param imageReflectorController.nodeAffinityPreset.values Node label values to match. Ignored if `imageReflectorController.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param imageReflectorController.affinity Affinity for Image Reflector Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `imageReflectorController.podAffinityPreset`, `imageReflectorController.podAntiAffinityPreset`, and `imageReflectorController.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param imageReflectorController.nodeSelector Node labels for Image Reflector Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param imageReflectorController.tolerations Tolerations for Image Reflector Controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param imageReflectorController.updateStrategy.type Image Reflector Controller statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param imageReflectorController.priorityClassName Image Reflector Controller pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param imageReflectorController.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param imageReflectorController.schedulerName Name of the k8s scheduler (other than default) for Image Reflector Controller pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param imageReflectorController.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param imageReflectorController.lifecycleHooks for the Image Reflector Controller container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param imageReflectorController.extraEnvVars Array with extra environment variables to add to Image Reflector Controller nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param imageReflectorController.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Image Reflector Controller nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param imageReflectorController.extraEnvVarsSecret Name of existing Secret containing extra env vars for Image Reflector Controller nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param imageReflectorController.extraVolumes Optionally specify extra list of additional volumes for the Image Reflector Controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param imageReflectorController.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Image Reflector Controller container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param imageReflectorController.sidecars Add additional sidecar containers to the Image Reflector Controller pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param imageReflectorController.initContainers Add additional init containers to the Image Reflector Controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @section Image Reflector Conttroller Persistence Parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param imageReflectorController.persistence.enabled Enable persistence using Persistent Volume Claims
+    ## (NOTE: Disabled by default in upstream flux configuration)
+    ##
+    enabled: false
+    ## @param imageReflectorController.persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+    ##
+    resourcePolicy: ""
+    ## @param imageReflectorController.persistence.mountPath Persistent Volume mount root path
+    ##
+    mountPath: /bitnami/fluxcd-image-reflector-controller/data
+    ## @param imageReflectorController.persistence.storageClass Persistent Volume storage class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+    ##
+    storageClass: ""
+    ## @param imageReflectorController.persistence.accessModes [array] Persistent Volume access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param imageReflectorController.persistence.size Persistent Volume size
+    ##
+    size: 10Gi
+    ## @param imageReflectorController.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param imageReflectorController.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param imageReflectorController.persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param imageReflectorController.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+  ## @section Image Reflector Controller RBAC Parameters
+  ##
+
+  ## RBAC configuration
+  ##
+  rbac:
+    ## @param imageReflectorController.rbac.create Specifies whether RBAC resources should be created
+    ##
+    create: true
+    ## @param imageReflectorController.rbac.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param imageReflectorController.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param imageReflectorController.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param imageReflectorController.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param imageReflectorController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: false
+  ## @section Image Reflector Controller Metrics Parameters
+  ##
+
+  ## Prometheus metrics
+  ##
+  metrics:
+    ## @param imageReflectorController.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: true
+    ## Image Reflector Controller service parameters
+    ##
+    service:
+      ## @param imageReflectorController.metrics.service.type Image Reflector Controller service type
+      ##
+      type: ClusterIP
+      ## @param imageReflectorController.metrics.service.ports.metrics Image Reflector Controller service metrics port
+      ##
+      ports:
+        metrics: 80
+      ## Node ports to expose
+      ## @param imageReflectorController.metrics.service.nodePorts.metrics Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        metrics: ""
+      ## @param imageReflectorController.metrics.service.clusterIP Image Reflector Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param imageReflectorController.metrics.service.loadBalancerIP Image Reflector Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param imageReflectorController.metrics.service.loadBalancerSourceRanges Image Reflector Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param imageReflectorController.metrics.service.externalTrafficPolicy Image Reflector Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param imageReflectorController.metrics.service.annotations [object] Additional custom annotations for Image Reflector Controller service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.imageReflectorController.metrics.service.ports.metrics }}"
+      ## @param imageReflectorController.metrics.service.extraPorts Extra ports to expose in Image Reflector Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param imageReflectorController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param imageReflectorController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param imageReflectorController.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param imageReflectorController.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param imageReflectorController.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param imageReflectorController.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param imageReflectorController.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param imageReflectorController.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param imageReflectorController.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param imageReflectorController.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param imageReflectorController.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param imageReflectorController.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param imageReflectorController.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the podSecurityContext/containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r32
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 0

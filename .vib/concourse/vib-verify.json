@@ -17,12 +17,63 @@
       ]
     },
     "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/concourse"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "concourse/goss/web/goss.yaml",
+            "vars_file": "concourse/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-concourse-web"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "concourse/goss/worker/goss.yaml",
+            "vars_file": "concourse/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-concourse-worker"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/concourse/cypress"
+            },
+            "endpoint": "lb-concourse-web-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

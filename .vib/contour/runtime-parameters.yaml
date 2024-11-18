@@ -1,0 +1,97 @@
+contour:
+  enabled: true
+  manageCRDs: true
+  serviceAccount:
+    create: true
+  automountServiceAccountToken: true
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  containerPorts:
+    xds: 8002
+  service:
+    ports:
+      xds: 8002
+    type: ClusterIP
+  extraVolumes:
+    - name: empty-dir
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+envoy:
+  enabled: true
+  containerPorts:
+    http: 8080
+    https: 8443
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    ports:
+      http: 80
+      https: 444
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+rbac:
+  create: true
+extraDeploy:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: apache
+    name: apache
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: apache
+    template:
+      metadata:
+        labels:
+          app: apache
+      spec:
+        containers:
+        - image: bitnami/apache
+          name: apache
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: apache
+    name: apache
+  spec:
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: apache
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: contour-vib-test
+    labels:
+      app: apache
+  spec:
+    ingressClassName: contour
+    defaultBackend:
+      service:
+        name: apache
+        port:
+          number: 80

@@ -1,17 +1,21 @@
-{{- if .Values.rbac.create -}}
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.rbac.create .Values.server.clusterAdminAccess -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "argocd.server" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  name: {{ include "argocd.namespace.server" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  {{- if .Values.server.clusterRoleRules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.server.clusterRoleRules "context" $ ) | nindent 2 }}
+  {{ else }}
   - apiGroups:
       - '*'
     resources:
@@ -26,6 +30,8 @@ rules:
       - events
     verbs:
       - list
+      # Needed for multi-tenancy namespace
+      - create
   - apiGroups:
       - ""
     resources:
@@ -33,4 +39,18 @@ rules:
       - pods/log
     verbs:
       - get
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - applications
+    verbs:
+      - get
+      - list
+      - update
+      - watch
+      # Needed for multi-tenancy namespace
+      - create
+      - delete
+      - patch
+  {{- end }}
 {{- end }}

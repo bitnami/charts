@@ -1,25 +1,31 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ template "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: etcd
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
-    matchLabels: {{- include "common.labels.standard" . | nindent 6 }}
-      {{- if .Values.podLabels }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 6 }}
-      {{- end }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: etcd
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -32,14 +38,13 @@ spec:
         - port: {{ .Values.containerPorts.client }}
         - port: {{ .Values.containerPorts.peer }}
       to:
-        - podSelector:
-            matchLabels: {{- include "common.labels.standard" . | nindent 14 }}
-              {{- if .Values.podLabels }}
-              {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 14 }}
-              {{- end }}
+        - podSelector: 
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: etcd
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     # Allow inbound connections
     - ports:
@@ -51,10 +56,8 @@ spec:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
-            matchLabels: {{- include "common.labels.standard" . | nindent 14 }}
-              {{- if .Values.podLabels }}
-              {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 14 }}
-              {{- end }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: etcd
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
@@ -73,7 +76,7 @@ spec:
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:
-        - port: 2379
+        - port: {{ .Values.metrics.useSeparateEndpoint | ternary .Values.containerPorts.metrics .Values.containerPorts.client }}
     {{- end }}
     {{- if .Values.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}

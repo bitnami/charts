@@ -1,3 +1,8 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Create a default fully qualified app name.
@@ -198,7 +203,11 @@ Add environment variables to configure database values
             {{- print "password" -}}
         {{- end -}}
     {{- else -}}
-        {{- print "password" -}}
+        {{- if eq .Values.databaseType "mariadb" -}}
+            {{- print "mariadb-password" -}}
+        {{- else -}}
+            {{- print "password" -}}
+        {{- end -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}

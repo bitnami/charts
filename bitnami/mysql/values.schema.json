@@ -13,7 +13,19 @@
       "type": "object",
       "title": "Authentication configuration",
       "form": true,
-      "required": ["database", "username", "password"],
+      "required": ["username", "password"],
+      "if": {
+        "properties": {
+          "createDatabase":  { "enum": [ true ] }
+        }
+      },
+      "then": {
+        "properties": {
+          "database": {
+            "pattern": "[a-zA-Z0-9]{1,64}"
+          }
+        }
+      },
       "properties": {
         "rootPassword": {
           "type": "string",
@@ -22,7 +34,8 @@
         },
         "database": {
           "type": "string",
-          "title": "MySQL custom database name"
+          "title": "MySQL custom database name",
+          "maxLength": 64
         },
         "username": {
           "type": "string",
@@ -39,6 +52,10 @@
         "replicationPassword": {
           "type": "string",
           "title": "MySQL replication password"
+        },
+        "createDatabase": {
+          "type": "boolean",
+          "title": "MySQL create custom database"
         }
       }
     },

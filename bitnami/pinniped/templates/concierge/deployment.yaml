@@ -1,15 +1,17 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.concierge.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "pinniped.concierge.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: concierge
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -18,8 +20,9 @@ spec:
   {{- if .Values.concierge.updateStrategy }}
   strategy: {{- toYaml .Values.concierge.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.concierge.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: concierge
   template:
     metadata:
@@ -27,14 +30,14 @@ spec:
         {{- if .Values.concierge.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.concierge.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app: pinniped-concierge
         app.kubernetes.io/component: concierge
-        {{- if .Values.concierge.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.concierge.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+        app.kubernetes.io/part-of: pinniped
     spec:
       serviceAccountName: {{ template "pinniped.concierge.serviceAccountName" . }}
       {{- include "pinniped.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.concierge.automountServiceAccountToken }}
       {{- if .Values.concierge.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -42,8 +45,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.concierge.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.concierge.podAffinityPreset "component" "concierge" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.concierge.podAntiAffinityPreset "component" "concierge" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.concierge.podAffinityPreset "component" "concierge" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.concierge.podAntiAffinityPreset "component" "concierge" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.concierge.nodeAffinityPreset.type "key" .Values.concierge.nodeAffinityPreset.key "values" .Values.concierge.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.concierge.nodeSelector }}
@@ -62,7 +65,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.concierge.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.concierge.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.concierge.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.concierge.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.concierge.terminationGracePeriodSeconds }}
@@ -71,12 +74,18 @@ spec:
         {{- if .Values.concierge.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.concierge.initContainers "context" $) | nindent 8 }}
         {{- end }}
+      {{- if .Values.concierge.hostNetwork }}
+      hostNetwork: {{ .Values.concierge.hostNetwork }}
+      {{- end }}
+      {{- if .Values.concierge.dnsPolicy }}
+      dnsPolicy: {{ .Values.concierge.dnsPolicy }}
+      {{- end }}
       containers:
         - name: concierge
           image: {{ template "pinniped.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.concierge.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.concierge.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.concierge.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.concierge.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.command "context" $) | nindent 12 }}
@@ -106,54 +115,51 @@ spec:
             {{- end }}
           {{- if .Values.concierge.resources }}
           resources: {{- toYaml .Values.concierge.resources | nindent 12 }}
+          {{- else if ne .Values.concierge.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.concierge.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: https-proxy
               containerPort: {{ .Values.concierge.containerPorts.proxy }}
             - name: https-api
               containerPort: {{ .Values.concierge.containerPorts.api }}
-          {{- if .Values.concierge.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.concierge.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
-              port: https-api
-              scheme: HTTPS
-          {{- else if .Values.concierge.customLivenessProbe }}
+          {{- if .Values.concierge.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.concierge.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.concierge.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: https-api
           {{- end }}
-          {{- if .Values.concierge.readinessProbe.enabled }}
+          {{- if .Values.concierge.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.concierge.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.concierge.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https-api
               scheme: HTTPS
-          {{- else if .Values.concierge.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.concierge.startupProbe.enabled }}
+          {{- if .Values.concierge.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.concierge.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.concierge.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https-api
               scheme: HTTPS
-          {{- else if .Values.concierge.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.concierge.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
             - name: config-volume
               mountPath: /bitnami/pinniped/conf
               readOnly: true
             - name: podinfo
               mountPath: /etc/podinfo
-              readOnly: true
-            - name: impersonation-proxy
-              # This mount path is hardcoded in the pinniped source code
-              mountPath: /var/run/secrets/impersonation-proxy.concierge.pinniped.dev/serviceaccount
               readOnly: true
           {{- if .Values.concierge.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.concierge.extraVolumeMounts "context" $) | nindent 12 }}
@@ -162,19 +168,11 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.concierge.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
-          emptyDir:
-            medium: Memory
-            sizeLimit: 100Mi
+        - name: empty-dir
+          emptyDir: {}
         - name: config-volume
           configMap:
             name: {{ template "pinniped.concierge.configmapName" . }}
-        - name: impersonation-proxy
-          secret:
-            secretName: {{ template "pinniped.concierge.impersonation-proxy.fullname" . }}
-            items:
-              - key: token
-                path: token
         - name: podinfo
           downwardAPI:
             items:

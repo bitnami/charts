@@ -31,16 +31,34 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
+          "action_id": "goss",
           "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "haproxy/goss/goss.yaml",
+            "vars_file": "haproxy/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-haproxy"
+              }
+            }
           }
         },
         {
-          "action_id": "health-check",
+          "action_id": "cypress",
           "params": {
-            "endpoint": "lb-haproxy-http"
+            "resources": {
+              "path": "/.vib/haproxy/cypress"
+            },
+            "endpoint": "lb-haproxy-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
           }
         }
       ]

@@ -1,12 +1,14 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.agent.enabled }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: agent
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   name: {{ template "common.names.fullname" . }}-agent
   namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
@@ -16,21 +18,20 @@ spec:
   {{- if .Values.agent.updateStrategy }}
   updateStrategy: {{- toYaml .Values.agent.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.agent.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: agent
   template:
     metadata:
       {{- if .Values.agent.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.agent.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: agent
-        {{- if .Values.agent.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.agent.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       {{- include "kiam.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.agent.automountServiceAccountToken }}
       {{- if .Values.agent.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.agent.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -41,8 +42,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.agent.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.agent.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.agent.podAffinityPreset "component" "agent" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.agent.podAntiAffinityPreset "component" "agent" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.agent.nodeAffinityPreset.type "key" .Values.agent.nodeAffinityPreset.key "values" .Values.agent.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.agent.nodeSelector }}
@@ -61,7 +62,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.agent.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.agent.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.agent.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.agent.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.agent.initContainers "context" $) | nindent 8 }}
@@ -74,7 +75,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.agent.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.agent.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.agent.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -157,9 +158,13 @@ spec:
             {{- end }}
           {{- if .Values.agent.resources }}
           resources: {{- toYaml .Values.agent.resources | nindent 12 }}
+          {{- else if ne .Values.agent.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.agent.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.agent.startupProbe.enabled }}
+          {{- if .Values.agent.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.agent.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.agent.containerPort }}
@@ -168,16 +173,16 @@ spec:
             timeoutSeconds: {{ .Values.agent.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.agent.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.agent.startupProbe.failureThreshold }}
-          {{- else if .Values.agent.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.agent.livenessProbe.enabled }}
+          {{- if .Values.agent.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.agent.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               {{- if .Values.agent.enableDeepProbe }}
               path: /health?deep=1
               {{- else }}
-              path: /ping
+              path: /health
               {{- end }}
               port: {{ .Values.agent.containerPort }}
             initialDelaySeconds: {{ .Values.agent.livenessProbe.initialDelaySeconds }}
@@ -185,28 +190,25 @@ spec:
             timeoutSeconds: {{ .Values.agent.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.agent.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.agent.livenessProbe.failureThreshold }}
-          {{- else if .Values.agent.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.agent.readinessProbe.enabled }}
+          {{- if .Values.agent.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.agent.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              {{- if .Values.agent.enableDeepProbe }}
-              path: /health?deep=1
-              {{- else }}
               path: /ping
-              {{- end }}
               port: {{ .Values.agent.containerPort }}
             initialDelaySeconds: {{ .Values.agent.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.agent.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.agent.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}
-          {{- else if .Values.agent.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - mountPath: /bitnami/kiam/tls
               name: tls
             {{- if .Values.server.sslCertHostPath }}
@@ -223,6 +225,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: tls
           secret:
             {{- if .Values.agent.tlsSecret }}

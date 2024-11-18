@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.prometheus.enabled .Values.prometheus.ingress.enabled }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
@@ -5,24 +10,17 @@ metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.prometheus.ingress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.ingress.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.prometheus.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.prometheus.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.prometheus.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
     {{- if .Values.prometheus.ingress.hostname }}
-    - host: {{ .Values.prometheus.ingress.hostname }}
-      http:
+    - http:
         paths:
           {{- if .Values.prometheus.ingress.extraPaths }}
           {{- toYaml .Values.prometheus.ingress.extraPaths | nindent 10 }}
@@ -32,6 +30,9 @@ spec:
             pathType: {{ .Values.prometheus.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.prometheus.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
+      {{- if ne .Values.prometheus.ingress.hostname "*" }}
+      host: {{ .Values.prometheus.ingress.hostname }}
+      {{- end}}
     {{- end }}
     {{- range .Values.prometheus.ingress.extraHosts }}
     - host: {{ .name | quote }}
@@ -46,9 +47,9 @@ spec:
     {{- if .Values.prometheus.ingress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.prometheus.ingress.extraTls (and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations )) .Values.prometheus.ingress.selfSigned)) }}
+  {{- if or .Values.prometheus.ingress.extraTls (and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations )) .Values.prometheus.ingress.secrets .Values.prometheus.ingress.selfSigned)) }}
   tls:
-    {{- if and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations )) .Values.prometheus.ingress.selfSigned) }}
+    {{- if and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations ))  .Values.prometheus.ingress.secrets .Values.prometheus.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.prometheus.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.prometheus.ingress.hostname }}

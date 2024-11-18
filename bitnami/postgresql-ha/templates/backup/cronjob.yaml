@@ -1,0 +1,131 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.backup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "postgresql-ha.postgresql" . }}-pgdumpall
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.backup.cronjob.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: pg_dumpall
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.backup.cronjob.annotations .Values.commonAnnotations ) "context" . ) }}
+  {{- if $annotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: {{ .Values.backup.cronjob.schedule | quote }}
+  {{- if .Values.backup.cronjob.timezone }}
+  timeZone: {{ .Values.backup.cronjob.timezone | quote }}
+  {{- end }}
+  concurrencyPolicy: {{ .Values.backup.cronjob.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ .Values.backup.cronjob.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.backup.cronjob.successfulJobsHistoryLimit }}
+  {{- if .Values.backup.cronjob.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ .Values.backup.cronjob.startingDeadlineSeconds }}
+  {{- end }}
+  jobTemplate:
+    spec:
+      {{- if .Values.backup.cronjob.ttlSecondsAfterFinished }}
+      ttlSecondsAfterFinished: {{ .Values.backup.cronjob.ttlSecondsAfterFinished }}
+      {{- end }}
+      template:
+        metadata:
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 12 }}
+            app.kubernetes.io/component: pg_dumpall
+          {{- if $annotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 12 }}
+          {{- end }}
+        spec:
+          {{- include "postgresql-ha.image.pullSecrets" . | nindent 10 }}
+          {{- if .Values.backup.cronjob.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.backup.cronjob.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.tolerations "context" $) | nindent 12 }}
+          {{- end }}
+          containers:
+          - name: {{ include "postgresql-ha.postgresql" . }}-pgdumpall
+            image: {{ include "postgresql-ha.postgresql.image" . }}
+            imagePullPolicy: {{ .Values.postgresql.image.pullPolicy | quote }}
+            env:
+              - name: PGUSER
+                value: "postgres"
+              {{- if .Values.postgresql.usePasswordFile }}
+              - name: PGPASSFILE
+                value: "/opt/bitnami/postgresql/secrets/postgres-password"
+              {{- else }}
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                    {{- if (include "postgresql-ha.postgresqlSeparatePostgresPassword" .) }}
+                    key: postgres-password
+                    {{- else }}
+                    key: password
+                    {{- end }}
+              {{- end }}
+              - name: PGHOST
+                value: {{ include "postgresql-ha.postgresql" . }}
+              - name: PGPORT
+                value: {{ .Values.service.ports.postgresql | quote }}
+              - name: PGDUMP_DIR
+                value: {{ .Values.backup.cronjob.storage.mountPath }}
+              {{- if .Values.postgresql.tls.enabled }}
+              - name:  PGSSLROOTCERT
+                values: {{ include "postgresql-ha.pgpool.tlsCACert" . }}
+              {{- end }}
+              {{- if .Values.backup.cronjob.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.extraEnvVars "context" $) | nindent 14 }}
+              {{- end }}
+            envFrom:
+              {{- if .Values.backup.cronjob.extraEnvVarsCM }}
+              - configMapRef:
+                  name: {{ .Values.backup.cronjob.extraEnvVarsCM }}
+              {{- end }}
+              {{- if .Values.backup.cronjob.extraEnvVarsSecret }}
+              - secretRef:
+                  name: {{ .Values.backup.cronjob.extraEnvVarsSecret }}
+              {{- end }}
+            command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
+            volumeMounts:
+              - name: empty-dir
+                mountPath: /tmp
+                subPath: tmp-dir
+              {{- if .Values.postgresql.tls.enabled }}
+              - name: certs
+                mountPath: /certs
+              {{- end }}
+              - name: datadir
+                mountPath: {{ .Values.backup.cronjob.storage.mountPath }}
+                subPath: {{ .Values.backup.cronjob.storage.subPath }}
+              {{- if .Values.backup.cronjob.extraVolumeMounts }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.extraVolumeMounts "context" $) | nindent 14 }}
+              {{- end }}
+            {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
+            securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 14 }}
+            {{- end }}
+          restartPolicy: {{ .Values.backup.cronjob.restartPolicy }}
+          {{- if .Values.backup.cronjob.podSecurityContext.enabled }}
+          securityContext:
+            fsGroup: {{ .Values.backup.cronjob.podSecurityContext.fsGroup }}
+          {{- end }}
+          volumes:
+            - name: empty-dir
+              emptyDir: {}
+            {{- if .Values.backup.cronjob.storage.existingClaim }}
+            - name: datadir
+              persistentVolumeClaim:
+                claimName: {{ printf "%s" (tpl .Values.backup.cronjob.storage.existingClaim .) }}
+            {{- else }}
+            - name: datadir
+              persistentVolumeClaim:
+                claimName: {{ include "postgresql-ha.postgresql" . }}-pgdumpall
+            {{- end }}
+          {{- if .Values.backup.cronjob.extraVolumes }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.extraVolumes "context" $) | nindent 12 }}
+          {{- end }}
+{{- end }}
