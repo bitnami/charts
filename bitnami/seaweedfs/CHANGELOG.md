@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.1.1 (2024-11-18)
+
+* [bitnami/seaweedfs] Release 4.1.1 ([#30510](https://github.com/bitnami/charts/pull/30510))
+
 ## 4.1.0 (2024-11-18)
 
-* [bitnami/seaweedfs] feat: add support for customizing PVC retention policies ([#30495](https://github.com/bitnami/charts/pull/30495))
+* [bitnami/seaweedfs] feat: add support for customizing PVC retention policies (#30495) ([8a54fb8](https://github.com/bitnami/charts/commit/8a54fb8b17818a6237d3cadbe55fe956a0bc8c6c)), closes [#30495](https://github.com/bitnami/charts/issues/30495)
 
 ## 4.0.0 (2024-11-12)
 
