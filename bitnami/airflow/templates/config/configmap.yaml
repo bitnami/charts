@@ -16,7 +16,7 @@ metadata:
 data:
   airflow.cfg: |-
   {{- if .Values.configuration }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) | nindent 4 }}
   {{- else }}
     [core]
     load_examples={{ ternary "True" "False" .Values.loadExamples }}
@@ -53,7 +53,11 @@ data:
     worker_container_tag={{ .Values.image.tag }}
     delete_worker_pods=True
     delete_worker_pods_on_failure=True
-    pod_template_file="/opt/bitnami/airflow/pod_template.yaml"
+    pod_template_file="/opt/bitnami/airflow/config/pod_template.yaml"
   {{- end }}
+  {{- end }}
+  {{- if .Values.localSettings }}
+  airflow_local_settings.py: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.localSettings "context" .) | nindent 4 }}
   {{- end }}
 {{- end }}

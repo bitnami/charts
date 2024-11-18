@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.0.1 (2024-11-18)
+## 22.1.0 (2024-11-18)
 
-* [bitnami/airflow] Improve Goss tests ([#30492](https://github.com/bitnami/charts/pull/30492))
+* [bitnami/airflow] feat: add support for custom local settings ([#30496](https://github.com/bitnami/charts/pull/30496))
+
+## <small>22.0.1 (2024-11-18)</small>
+
+* [bitnami/airflow] Improve Goss tests (#30492) ([c9c33f8](https://github.com/bitnami/charts/commit/c9c33f849aa2b02f0857e65e82bf2e0779413dea)), closes [#30492](https://github.com/bitnami/charts/issues/30492)
+* [bitnami/airflow] Metrics based on StatsD (#30459) ([5c88481](https://github.com/bitnami/charts/commit/5c884817bcabe57ff93e91bc2b9ca411f21f615a)), closes [#30459](https://github.com/bitnami/charts/issues/30459)
 
 ## 21.9.0 (2024-11-14)
 

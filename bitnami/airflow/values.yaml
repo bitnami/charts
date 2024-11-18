@@ -142,7 +142,14 @@ loadExamples: false
 ##   ...
 ##
 configuration: ""
-## @param existingConfigmap Name of an existing ConfigMap with the Airflow config file
+## @param localSettings Specify content for Airflow local settings (airflow_local_settings.py)
+## ref: https://airflow.apache.org/docs/apache-airflow/stable/howto/set-config.html#configuring-local-settings
+## e.g:
+## localSettings: |-
+##   ...
+##
+localSettings: ""
+## @param existingConfigmap Name of an existing ConfigMap with the Airflow config file and, optionally, the local settings file
 ##
 existingConfigmap: ""
 ## Load custom DAGs files from a ConfigMap or Git repositories
