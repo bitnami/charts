@@ -1,6 +1,13 @@
 auth:
   password: ComplicatedPassword123!4
 loadExamples: true
+web:
+  containerPorts:
+    http: 8080
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
 service:
   ports:
     http: 80

@@ -11,12 +11,26 @@ file:
     mode: "0644"
     filetype: file
     exists: true
+  /opt/bitnami/airflow/webserver_config.py:
+    mode: "0644"
+    filetype: file
+    exists: true
   /opt/bitnami/airflow/dags:
     filetype: directory
     exists: true
-{{- if .Vars.metrics.enabled }}
 http:
+  http://127.0.0.1:{{ .Vars.web.containerPorts.http }}:
+    status: 200
+  {{- if .Vars.metrics.enabled }}
   http://airflow-statsd-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
     status: 200
     timeout: 30000
-{{- end }}
+  {{- end }}
+command:
+  {{- $uid := .Vars.web.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.web.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
