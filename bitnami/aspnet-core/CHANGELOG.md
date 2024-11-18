@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.19 (2024-11-09)
+## 6.2.20 (2024-11-18)
 
-* [bitnami/aspnet-core] Release 6.2.19 ([#30379](https://github.com/bitnami/charts/pull/30379))
+* [bitnami/aspnet-core] Release 6.2.20 ([#30501](https://github.com/bitnami/charts/pull/30501))
+
+## <small>6.2.19 (2024-11-09)</small>
+
+* [bitnami/aspnet-core] Release 6.2.19 (#30379) ([83fc324](https://github.com/bitnami/charts/commit/83fc32473b9e5ecbf873d00daa653b18805b0215)), closes [#30379](https://github.com/bitnami/charts/issues/30379)
 
 ## <small>6.2.18 (2024-11-09)</small>
 
