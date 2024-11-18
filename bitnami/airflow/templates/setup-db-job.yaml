@@ -113,10 +113,14 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
       volumes:
         - name: empty-dir
           emptyDir: {}
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
+            optional: true
 {{- end }}

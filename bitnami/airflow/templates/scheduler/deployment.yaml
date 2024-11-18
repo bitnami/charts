@@ -213,9 +213,12 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
             {{- if $kube }}
             - name: pod-template
-              mountPath: /opt/bitnami/airflow/pod_template.yaml
+              mountPath: /opt/bitnami/airflow/config/pod_template.yaml
               subPath: pod_template.yaml
             {{- end }}
             {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
@@ -248,6 +251,7 @@ spec:
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
+            optional: true
         {{- if $kube }}
         - name: pod-template
           configMap:
