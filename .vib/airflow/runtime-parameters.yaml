@@ -16,6 +16,8 @@ dagProcessor:
   enabled: true
 triggerer:
   enabled: true
+worker:
+  resourcesPreset: small
 dags:
   enabled: true
   repositories:
