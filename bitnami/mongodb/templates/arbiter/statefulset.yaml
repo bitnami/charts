@@ -250,7 +250,7 @@ spec:
         - name: common-scripts
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
-            defaultMode: 0555
+            defaultMode: 0o555
         {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap }}
         - name: config
           configMap:
@@ -265,10 +265,10 @@ spec:
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
-              mode: 0600
+              mode: 0o600
             - key: mongodb-ca-key
               path: mongodb-ca-key
-              mode: 0600
+              mode: 0o600
         {{- end }}
         {{- if .Values.arbiter.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.extraVolumes "context" $) | nindent 8 }}
