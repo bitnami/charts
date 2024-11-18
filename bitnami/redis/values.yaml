@@ -51,6 +51,15 @@ namespaceOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
+## configure umbrella chart to set name and version as label
+##
+umbrellaChart:
+  ## @param umbrellaChart.name Name of the umbrella chart, Can be passed as {{ .Chart.Name }}
+  ##
+  name: ""
+  ## @param umbrellaChart.version Version of the umbrella chart, Can be passed as {{ .Chart.Version }}
+  ##
+  version: ""
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
