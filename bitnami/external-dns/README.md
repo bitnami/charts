@@ -107,16 +107,16 @@ helm install my-release \
 
 ### Common parameters
 
-| Name                    | Description                                                                                  | Value           |
-| ----------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`          | String to partially override external-dns.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride`      | String to fully override external-dns.fullname template                                      | `""`            |
-| `clusterDomain`         | Kubernetes Cluster Domain                                                                    | `cluster.local` |
-| `commonLabels`          | Labels to add to all deployed objects                                                        | `{}`            |
-| `commonAnnotations`     | Annotations to add to all deployed objects                                                   | `{}`            |
-| `extraDeploy`           | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
-| `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
-| `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
+| Name                | Description                                                                                  | Value           |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                              | `""`            |
+| `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 
 ### external-dns parameters
 
@@ -140,6 +140,7 @@ helm install my-release \
 | `dnsConfig`                                         | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                                                                                                 | `{}`                           |
 | `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                 | `[]`                           |
 | `namespace`                                         | Limit sources of endpoints to a specific namespace (default: all namespaces)                                                                                                                                      | `""`                           |
+| `watchReleaseNamespace`                             | Watch only namespace used for the release                                                                                                                                                                         | `false`                        |
 | `fqdnTemplates`                                     | Templated strings that are used to generate DNS names from sources that don't define a hostname themselves                                                                                                        | `[]`                           |
 | `containerPorts.http`                               | HTTP Container port                                                                                                                                                                                               | `7979`                         |
 | `combineFQDNAnnotation`                             | Combine FQDN template and annotations instead of overwriting                                                                                                                                                      | `false`                        |
@@ -370,7 +371,7 @@ helm install my-release \
 | `networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                            | `{}`                           |
 | `networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                        | `{}`                           |
 | `serviceAccount.create`                             | Determine whether a Service Account should be created or it should reuse a exiting one.                                                                                                                           | `true`                         |
-| `serviceAccount.name`                               | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set                                                                                                              | `""`                           |
+| `serviceAccount.name`                               | ServiceAccount to use. A name is generated using the common.names.fullname template if it is not set                                                                                                              | `""`                           |
 | `serviceAccount.annotations`                        | Additional Service Account annotations                                                                                                                                                                            | `{}`                           |
 | `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                                                                                                  | `false`                        |
 | `serviceAccount.labels`                             | Additional labels to be included on the service account                                                                                                                                                           | `{}`                           |
