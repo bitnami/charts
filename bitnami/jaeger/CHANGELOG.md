@@ -1,8 +1,12 @@
 # Changelog
 
+## 5.0.0 (2024-11-19)
+
+* [bitnami/jaeger] Release 5.0.0 ([#30529](https://github.com/bitnami/charts/pull/30529))
+
 ## 4.0.0 (2024-11-13)
 
-* [bitnami/jaeger] chore!: :arrow_up: :fire: :boom: Update Jaeger to 1.63.0 and deprecate jaeger-agent ([#30439](https://github.com/bitnami/charts/pull/30439))
+* [bitnami/jaeger] chore!: :arrow_up: :fire: :boom: Update Jaeger to 1.63.0 and deprecate jaeger-agent ([ab89e33](https://github.com/bitnami/charts/commit/ab89e33385cf98a4de67c6795d4ab970d16a1f33)), closes [#30439](https://github.com/bitnami/charts/issues/30439)
 
 ## <small>3.0.6 (2024-11-08)</small>
 
