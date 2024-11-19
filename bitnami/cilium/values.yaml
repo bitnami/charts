@@ -126,7 +126,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/cilium
-    tag: 1.16.3-debian-12-r3
+    tag: 1.16.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1003,7 +1003,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/cilium-operator
-    tag: 1.16.3-debian-12-r4
+    tag: 1.16.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1506,7 +1506,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/cilium-proxy
-    tag: 1.29.10-debian-12-r1
+    tag: 1.29.10-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2103,7 +2103,7 @@ hubble:
     image:
       registry: docker.io
       repository: bitnami/hubble-relay
-      tag: 1.16.3-debian-12-r1
+      tag: 1.16.4-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2696,7 +2696,7 @@ hubble:
       image:
         registry: docker.io
         repository: bitnami/hubble-ui
-        tag: 0.13.1-debian-12-r9
+        tag: 0.13.1-debian-12-r10
         digest: ""
         ## Specify a imagePullPolicy
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2876,7 +2876,7 @@ hubble:
       image:
         registry: docker.io
         repository: bitnami/hubble-ui-backend
-        tag: 0.13.1-debian-12-r13
+        tag: 0.13.1-debian-12-r15
         digest: ""
         ## Specify a imagePullPolicy
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
