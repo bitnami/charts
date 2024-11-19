@@ -102,8 +102,8 @@ spec:
             {{- end }}
             - --metrics-addr=:{{ .Values.notificationController.containerPorts.metrics }}
             - --health-addr=:{{ .Values.notificationController.containerPorts.health }}
-            - --events-addr=:{{ .Values.notificationController.containerPorts.webhook }}
-            - --receiverAddr=:{{ .Values.notificationController.containerPorts.receiver }}
+            - --events-addr=:{{ .Values.notificationController.containerPorts.receiver }}
+            - --receiverAddr=:{{ .Values.notificationController.containerPorts.webhook }}
             - --log-encoding=json
             - --enable-leader-election
           {{- end }}
