@@ -134,14 +134,20 @@ executor: CeleryExecutor
 ## @param loadExamples Switch to load some Airflow examples
 ##
 loadExamples: false
-## @param configuration Specify content for Airflow config file (auto-generated based on other env. vars otherwise)
-## e.g:
-## configuration: |-
-##   [core]
-##   dags_folder=/opt/bitnami/airflow/dags
-##   ...
+## @param configuration Specify content for Airflow config file (auto-generated based on other parameters otherwise)
+## ref: https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html
+## Use YAML format, then it's transformed to .cfg format by the chart. e.g:
+##    configuration:
+##      core:
+##        dags_folder: "/opt/bitnami/airflow/dags"
+## ... will be transformed to:
+##    [core]
+##    dags_folder = "/opt/bitnami/airflow/dags"
 ##
-configuration: ""
+configuration: {}
+## @param overrideConfiguration Airflow common configuration override. Values defined here takes precedence over the ones defined at `configuration`
+##
+overrideConfiguration: {}
 ## @param localSettings Specify content for Airflow local settings (airflow_local_settings.py)
 ## ref: https://airflow.apache.org/docs/apache-airflow/stable/howto/set-config.html#configuring-local-settings
 ## e.g:

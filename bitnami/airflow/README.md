@@ -91,6 +91,27 @@ executor=SequentialExecutor
 redis.enabled=false
 ```
 
+### Airflow configuration file
+
+By default, the Airflow configuration file is auto-generated based on the chart parameters you set. For instance, the `executor` parameter will be used to set the `executor` class under the `[core]` section.
+
+You can also provider your own configuration by setting the `configuration` parameter. This parameter expects the configuration as a sections/keys/values dictionary on YAML format, then it's converted to .cfg format by the chart. For instance, using a configuration like the one below...
+
+```yaml
+configuration:
+  core:
+    dags_folder: "/opt/bitnami/airflow/dags"
+```
+
+... the chart will translate it to the following configuration file:
+
+```ini
+[core]
+dags_folder = "/opt/bitnami/airflow/dags"
+```
+
+As an alternative to providing the whole configuration, you can also extend the default configuration using the `overrideConfiguration` parameter. The values set in this parameter, which also expects YAML format, will be merged with the default configuration or those set in the `configuration` parameter taking precedence.
+
 ### Scaling worker pods
 
 Sometime when using large workloads a fixed number of worker pods may make task to take a long time to be executed. This chart provide two ways for scaling worker pods.
@@ -374,7 +395,8 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 | `auth.existingSecret`                                                                         | Name of an existing secret to use for Airflow credentials                                                                                                                                                                                                                                                                            | `""`                      |
 | `executor`                                                                                    | Airflow executor. Allowed values: `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor`, `CeleryKubernetesExecutor` and `LocalKubernetesExecutor`                                                                                                                                                            | `CeleryExecutor`          |
 | `loadExamples`                                                                                | Switch to load some Airflow examples                                                                                                                                                                                                                                                                                                 | `false`                   |
-| `configuration`                                                                               | Specify content for Airflow config file (auto-generated based on other env. vars otherwise)                                                                                                                                                                                                                                          | `""`                      |
+| `configuration`                                                                               | Specify content for Airflow config file (auto-generated based on other parameters otherwise)                                                                                                                                                                                                                                         | `{}`                      |
+| `overrideConfiguration`                                                                       | Airflow common configuration override. Values defined here takes precedence over the ones defined at `configuration`                                                                                                                                                                                                                 | `{}`                      |
 | `localSettings`                                                                               | Specify content for Airflow local settings (airflow_local_settings.py)                                                                                                                                                                                                                                                               | `""`                      |
 | `existingConfigmap`                                                                           | Name of an existing ConfigMap with the Airflow config file and, optionally, the local settings file                                                                                                                                                                                                                                  | `""`                      |
 | `dags.enabled`                                                                                | Enable loading DAGs from a ConfigMap or Git repositories                                                                                                                                                                                                                                                                             | `false`                   |
@@ -1242,6 +1264,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/airfl
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 22.2.0
+
+This minor version no longer expects custom Airflow configuration (set via the `configuration` parameter) to be provided as a string. Instead, it expects a dictionary with the configuration sections/keys/values. Find more info in the [section](#airflow-configuration-file) above.
 
 ### To 22.0.0
 
