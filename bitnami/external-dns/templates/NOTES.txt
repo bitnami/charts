@@ -6,7 +6,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 To verify that external-dns has started, run:
 
-  kubectl --namespace={{ .Release.Namespace }} get pods -l "app.kubernetes.io/name={{ template "external-dns.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+  kubectl --namespace={{ include "common.names.namespace" . }} get pods -l "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ include "common.names.namespace" . }}"
 
 {{ include "external-dns.validateValues" . }}
 {{ include "external-dns.checkRollingTags" . }}

@@ -6,7 +6,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "external-dns.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -27,7 +27,8 @@ spec:
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (include "external-dns.createSecret" .) (and (eq .Values.provider "designate") .Values.designate.customCA.enabled) }}
       annotations:
         {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
-        {{- include "external-dns.podAnnotations" . | trim | nindent 8 }}
+        {{- $podAnnotations := include "common.tplvalues.merge" (dict "values" (list .Values.podAnnotations .Values.metrics.podAnnotations) "context" .) }}
+        {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if (include "external-dns.createSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
@@ -868,10 +869,10 @@ spec:
             secretName: {{ template "external-dns.secretName" . }}
           {{- else if .Values.azure.useWorkloadIdentityExtension }}
           secret:
-            secretName: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "common.names.fullname" . }}
           {{- else if .Values.azure.useManagedIdentityExtension }}
           secret:
-            secretName: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "common.names.fullname" . }}
           {{- else }}
           hostPath:
             path: /etc/kubernetes/azure.json
@@ -906,7 +907,7 @@ spec:
         {{- if .Values.designate.customCA.enabled }}
         - name: designate-custom-ca
           configMap:
-            name: {{ template "external-dns.fullname" . }}
+            name: {{ template "common.names.fullname" . }}
             items:
             - key: {{ .Values.designate.customCA.filename }}
               path: {{ .Values.designate.customCA.filename }}
@@ -920,7 +921,7 @@ spec:
         # Kerberos config volume
         - name: krb5config
           configMap:
-            name: {{ template "external-dns.fullname" . }}
+            name: {{ template "common.names.fullname" . }}
             items:
             - key: "krb5.conf"
               path: "krb5.conf"
@@ -929,7 +930,7 @@ spec:
         # TransIP volume(s)
         - name: transip-api-key
           secret:
-            secretName: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "common.names.fullname" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)
