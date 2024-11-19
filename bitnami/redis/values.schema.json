@@ -74,7 +74,7 @@
             "default": ""
         },
         "commonLabels": {
-            "type": "object",
+            "type": ["object", "string"],
             "description": "Labels to add to all deployed objects",
             "default": {}
         },
@@ -748,7 +748,7 @@
                             "default": {}
                         },
                         "labels": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "description": "Additional custom labels for the PVC",
                             "default": {}
                         },
@@ -1467,7 +1467,7 @@
                             "default": {}
                         },
                         "labels": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "description": "Additional custom labels for the PVC",
                             "default": {}
                         },
@@ -1979,7 +1979,7 @@
                             "default": {}
                         },
                         "labels": {
-                            "type": "object",
+                            "type": ["object", "string"],
                             "description": "Additional custom labels for the PVC",
                             "default": {}
                         },
