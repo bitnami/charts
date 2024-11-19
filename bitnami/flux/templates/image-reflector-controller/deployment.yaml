@@ -125,6 +125,7 @@ spec:
             {{- else }}
             - --log-level=info
             {{- end }}
+            - --events-addr=http://{{ include "flux.notification-controller.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}.
             - --metrics-addr=:{{ .Values.imageReflectorController.containerPorts.metrics }}
             - --health-addr=:{{ .Values.imageReflectorController.containerPorts.health }}
             - --storage-path={{ .Values.imageReflectorController.persistence.mountPath }}
