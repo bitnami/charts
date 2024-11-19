@@ -2625,6 +2625,14 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
+    ## @param metrics.serviceMonitor.targetLabels Defines the labels which are transferred from the associated Kubernetes Service object onto the ingested metrics.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec
+    ##
+    targetLabels: []
+    ## @param metrics.serviceMonitor.podTargetLabels Defines the labels which are transferred from the associated Kubernetes Pod object onto the ingested metrics.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec
+    ##
+    podTargetLabels: []
   ## Custom PrometheusRule to be defined
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
   ##
