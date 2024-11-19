@@ -1,8 +1,12 @@
 # Changelog
 
+## 20.3.1 (2024-11-19)
+
+* [bitnami/redis] CA shouldn't be mandatory when TLS is enabled ([#30520](https://github.com/bitnami/charts/pull/30520))
+
 ## 20.3.0 (2024-11-14)
 
-* [bitnami/redis] feat: :sparkles: Allow updating credentials via values.yaml ([#30452](https://github.com/bitnami/charts/pull/30452))
+* [bitnami/redis] feat: :sparkles: Allow updating credentials via values.yaml (#30452) ([d6a3118](https://github.com/bitnami/charts/commit/d6a3118e42a9a481d4429defbd628015a3b8f755)), closes [#30452](https://github.com/bitnami/charts/issues/30452)
 
 ## <small>20.2.2 (2024-11-11)</small>
 
