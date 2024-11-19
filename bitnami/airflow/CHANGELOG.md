@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.2.0 (2024-11-19)
+
+* [bitnami/airflow] Add support for extending default configuration ([#30525](https://github.com/bitnami/charts/pull/30525))
+
 ## 22.1.0 (2024-11-18)
 
-* [bitnami/airflow] feat: add support for custom local settings ([#30496](https://github.com/bitnami/charts/pull/30496))
+* [bitnami/airflow] feat: add support for custom local settings (#30496) ([6c3060e](https://github.com/bitnami/charts/commit/6c3060e024a7fdcfe5b4eb07ec699cf425858e9f)), closes [#30496](https://github.com/bitnami/charts/issues/30496)
 
 ## <small>22.0.1 (2024-11-18)</small>
 
