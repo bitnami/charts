@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.0.2 (2024-11-08)
+## 22.0.3 (2024-11-20)
 
-* [bitnami/wildfly] Unify seLinuxOptions default value ([#30319](https://github.com/bitnami/charts/pull/30319))
+* [bitnami/wildfly] Release 22.0.3 ([#30551](https://github.com/bitnami/charts/pull/30551))
+
+## <small>22.0.2 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/wildfly] Unify seLinuxOptions default value (#30319) ([d3e81f9](https://github.com/bitnami/charts/commit/d3e81f9e50f70fffbe93c6213d239366341a07fd)), closes [#30319](https://github.com/bitnami/charts/issues/30319)
 
 ## <small>22.0.1 (2024-10-26)</small>
 
