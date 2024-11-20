@@ -35,7 +35,7 @@ data:
       {{- include "common.tplvalues.render" (dict "value" $path "context" $) }}
     {{- end }}
   {{- end }}
-  {{- if and .Values.ingress.enabled (and .Values.ingress.hostname (not (empty .Values.proxyHeaders))) }}
+  {{- if and .Values.ingress.enabled .Values.ingress.hostname (empty .Values.proxyHeaders) }}
   KEYCLOAK_HOSTNAME: |-
     {{ ternary "https://" "http://" ( or .Values.ingress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) ) -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.hostname "context" $) -}}
