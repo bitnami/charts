@@ -371,6 +371,7 @@ spec:
             - name: restore-data
               persistentVolumeClaim:
                 claimName: {{ include "influxdb.restore.claimName" . }}
+              mountPath: {{ .Values.backup.directory | quote }}
             {{- end }}
             {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
             - name: custom-init-scripts
