@@ -71,14 +71,14 @@ spec:
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.scheduler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- include "airflow.defaultInitContainers.createDefaultConfig" . | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
         {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
         {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
         {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.defaultInitContainers.loadPlugins" . | nindent 8 }}
         {{- end }}
-        {{- include "airflow.defaultInitContainers.waitForWebServer" . | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.waitForDBMigrations" . | nindent 8 }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
@@ -104,17 +104,16 @@ spec:
           {{- end }}
           env:
             {{- include "airflow.configure.airflow.common" . | nindent 12 }}
-            {{- include "airflow.configure.database" . | nindent 12 }}
-            {{- include "airflow.configure.redis" . | nindent 12 }}
-            {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
             - name: AIRFLOW_COMPONENT_TYPE
               value: "scheduler"
             - name: AIRFLOW_EXECUTOR
               value: {{ .Values.executor }}
-            - name: AIRFLOW_WEBSERVER_HOST
-              value: {{ include "common.names.fullname" . }}
-            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.service.ports.http | quote }}
+            {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+            - name: REDIS_HOST
+              value: {{ include "airflow.redis.host" . | quote }}
+            - name: REDIS_PORT_NUMBER
+              value: {{ include "airflow.redis.port" . | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -197,6 +196,9 @@ spec:
           {{- end }}
           volumeMounts:
             - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/airflow/nss-wrapper
               subPath: app-nss-wrapper-dir
             - name: empty-dir
@@ -207,22 +209,16 @@ spec:
               subPath: app-tmp-dir
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.db
-              subPath: app-default-conf-dir/airflow.db
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            {{- if or .Values.configuration .Values.existingConfigmap }}
-            - name: custom-configuration-file
-              mountPath: /opt/bitnami/airflow/airflow.cfg
-              subPath: airflow.cfg
-            {{- else }}
+              subPath: app-base-dir/airflow.db
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
-              subPath: app-default-conf-dir/airflow.cfg
-            {{- end }}
+              subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
             {{- if $kube }}
-            - name: custom-configuration-file
-              mountPath: /opt/bitnami/airflow/pod_template.yaml
+            - name: pod-template
+              mountPath: /opt/bitnami/airflow/config/pod_template.yaml
               subPath: pod_template.yaml
             {{- end }}
             {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
@@ -252,16 +248,20 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: configuration
+          configMap:
+            name: {{ include "airflow.configMapName"  . }}
+            optional: true
+        {{- if $kube }}
+        - name: pod-template
+          configMap:
+            name: {{ printf "%s-pod-template" (include "common.names.fullname" .) }}
+        {{- end }}
         {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
         {{- include "airflow.dags.volumes" . | nindent 8 }}
         {{- end }}
         {{- if .Values.plugins.enabled }}
         {{- include "airflow.plugins.volumes" . | nindent 8 }}
-        {{- end }}
-        {{- if or .Values.configuration .Values.existingConfigmap $kube }}
-        - name: custom-configuration-file
-          configMap:
-            name: {{ include "airflow.configMapName"  . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

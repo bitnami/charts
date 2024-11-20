@@ -1,8 +1,18 @@
 # Changelog
 
-## 1.2.6 (2024-11-07)
+## 1.2.8 (2024-11-19)
 
-* [bitnami/cilium] Release 1.2.6 ([#30257](https://github.com/bitnami/charts/pull/30257))
+* [bitnami/cilium] Release 1.2.8 ([#30528](https://github.com/bitnami/charts/pull/30528))
+
+## <small>1.2.7 (2024-11-11)</small>
+
+* [bitnami/cilium] Fix typos with clusterName and certificates (#30316) ([1024066](https://github.com/bitnami/charts/commit/1024066f65e09505b31925b504a9457ed6a49c0c)), closes [#30316](https://github.com/bitnami/charts/issues/30316)
+
+## <small>1.2.6 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/cilium] Release 1.2.6 (#30257) ([3c229a3](https://github.com/bitnami/charts/commit/3c229a35932ce356dcaf81fd11897c45726f330b)), closes [#30257](https://github.com/bitnami/charts/issues/30257)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>1.2.5 (2024-10-16)</small>
 

@@ -112,16 +112,6 @@ Create the name of the service account to use for the collector
 {{- end -}}
 {{- end -}}
 
-{{/*
-Create the name of the service account to use for the agent
-*/}}
-{{- define "jaeger.agent.serviceAccountName" -}}
-{{- if .Values.agent.serviceAccount.create -}}
-    {{ default (include "jaeger.agent.fullname" .) .Values.agent.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.agent.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
 
 {{/*
 Create the name of the service account to use for the query
@@ -139,15 +129,6 @@ Create the name of the collector deployment
 */}}
 {{- define "jaeger.collector.fullname" -}}
     {{ printf "%s-collector" (include "common.names.fullname" .) }}
-{{- end -}}
-
-{{/*
-Create the name of the collector deployment. This name includes 2 hyphens due to
-an issue about env vars collision with the chart name when the release name is set to just 'jaeger'
-ref. https://github.com/jaegertracing/jaeger-operator/issues/1158
-*/}}
-{{- define "jaeger.agent.fullname" -}}
-    {{ printf "%s--agent" (include "common.names.fullname" .) }}
 {{- end -}}
 
 {{/*

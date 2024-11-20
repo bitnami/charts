@@ -1,8 +1,41 @@
 # Changelog
 
-## 23.1.28 (2024-11-06)
+## 24.0.6 (2024-11-19)
 
-* [bitnami/wordpress] Release 23.1.28 ([#30248](https://github.com/bitnami/charts/pull/30248))
+* [bitnami/wordpress] Release 24.0.6 ([#30524](https://github.com/bitnami/charts/pull/30524))
+
+## <small>24.0.5 (2024-11-19)</small>
+
+* [bitnami/wordpress] Release 24.0.5 (#30513) ([4aad2bb](https://github.com/bitnami/charts/commit/4aad2bbfff55e9763857f2e876ebd70957d34e7c)), closes [#30513](https://github.com/bitnami/charts/issues/30513)
+
+## <small>24.0.4 (2024-11-14)</small>
+
+* [bitnami/wordpress] Release 24.0.4 (#30464) ([8f22391](https://github.com/bitnami/charts/commit/8f223919acbc8d3044a3ab60e08410f105a45e64)), closes [#30464](https://github.com/bitnami/charts/issues/30464)
+
+## <small>24.0.3 (2024-11-13)</small>
+
+* [bitnami/wordpress] Release 24.0.3 (#30446) ([8e683cf](https://github.com/bitnami/charts/commit/8e683cf80951c4e01a69be2f81f5c8a881fc4828)), closes [#30446](https://github.com/bitnami/charts/issues/30446)
+
+## <small>24.0.2 (2024-11-13)</small>
+
+* [bitnami/wordpress] Release 24.0.2 (#30436) ([c13cd6a](https://github.com/bitnami/charts/commit/c13cd6acf135918f9057be16a25a49d3df2c8ca3)), closes [#30436](https://github.com/bitnami/charts/issues/30436)
+
+## <small>24.0.1 (2024-11-12)</small>
+
+* [bitnami/wordpress] Release 24.0.1 (#30435) ([632af7f](https://github.com/bitnami/charts/commit/632af7ffbd480f52a1b127e06fde2ddabf9eadc4)), closes [#30435](https://github.com/bitnami/charts/issues/30435)
+
+## 24.0.0 (2024-11-12)
+
+* [bitnami/wordpress] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30360) ([f3ecd60](https://github.com/bitnami/charts/commit/f3ecd60118343ce00c81ab2843671ac4e1094af0)), closes [#30360](https://github.com/bitnami/charts/issues/30360)
+
+## <small>23.1.29 (2024-11-11)</small>
+
+* [bitnami/wordpress] Release 23.1.29 (#30310) ([bab05f7](https://github.com/bitnami/charts/commit/bab05f726f165eb2c21946b15747c8ff6f35d446)), closes [#30310](https://github.com/bitnami/charts/issues/30310)
+
+## <small>23.1.28 (2024-11-06)</small>
+
+* [bitnami/wordpress] Release 23.1.27 (#30247) ([853f100](https://github.com/bitnami/charts/commit/853f10042bad20ab1350b0c42cef59a5223218fb)), closes [#30247](https://github.com/bitnami/charts/issues/30247)
+* [bitnami/wordpress] Release 23.1.28 (#30248) ([0038884](https://github.com/bitnami/charts/commit/003888458b9cde73a9616354ba1ccc0a70b93405)), closes [#30248](https://github.com/bitnami/charts/issues/30248)
 
 ## <small>23.1.26 (2024-11-04)</small>
 

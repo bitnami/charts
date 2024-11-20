@@ -1,8 +1,16 @@
 # Changelog
 
-## 10.0.2 (2024-11-07)
+## 11.0.1 (2024-11-15)
 
-* [bitnami/argo-workflows] Release 10.0.2 ([#30254](https://github.com/bitnami/charts/pull/30254))
+* [bitnami/argo-workflows] Release 11.0.1 ([#30474](https://github.com/bitnami/charts/pull/30474))
+
+## 11.0.0 (2024-11-12)
+
+* [bitnami/argo-workflows] chore!: :arrow_up: :boom: Bump MySQL subchart to 12 (#30430) ([2486b2b](https://github.com/bitnami/charts/commit/2486b2b6cdd82475b8b4ea9c4672092c7ec2eb9a)), closes [#30430](https://github.com/bitnami/charts/issues/30430)
+
+## <small>10.0.2 (2024-11-07)</small>
+
+* [bitnami/argo-workflows] Release 10.0.2 (#30254) ([cb88066](https://github.com/bitnami/charts/commit/cb88066e9a869f78b5f4cea63512ea700f1aa348)), closes [#30254](https://github.com/bitnami/charts/issues/30254)
 
 ## <small>10.0.1 (2024-10-31)</small>
 

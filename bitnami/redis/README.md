@@ -173,6 +173,13 @@ One way of achieving this is by setting `master.service.internalTrafficPolicy=Lo
 It's recommended to only change `master.count` if you know what you are doing.
 `master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
 
+### Update credentials
+
+The Bitnami Redis chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `auth.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `auth.password`
+- Run `helm upgrade` specifying a new secret in `auth.existingSecret`
+
 ### Using a password file
 
 To use a password file for Redis&reg; you need to create a secret containing the password and then deploy the chart using that secret. Follow these instructions:

@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.20 (2024-11-07)
+## 11.3.21 (2024-11-09)
 
-* [bitnami/consul] Release 11.3.20 ([#30259](https://github.com/bitnami/charts/pull/30259))
+* [bitnami/consul] Release 11.3.21 ([#30374](https://github.com/bitnami/charts/pull/30374))
+
+## <small>11.3.20 (2024-11-07)</small>
+
+* [bitnami/consul] Release 11.3.20 (#30259) ([6c44b4c](https://github.com/bitnami/charts/commit/6c44b4c00afd32f6178260d90e1f2096c854b22f)), closes [#30259](https://github.com/bitnami/charts/issues/30259)
 
 ## <small>11.3.19 (2024-10-31)</small>
 

@@ -1,8 +1,26 @@
 # Changelog
 
-## 6.2.17 (2024-10-16)
+## 6.2.21 (2024-11-18)
 
-* [bitnami/aspnet-core] Remove wrong entries from image verification ([#29912](https://github.com/bitnami/charts/pull/29912))
+* [bitnami/aspnet-core] Release 6.2.21 ([#30502](https://github.com/bitnami/charts/pull/30502))
+
+## <small>6.2.20 (2024-11-18)</small>
+
+* [bitnami/aspnet-core] Release 6.2.20 (#30501) ([e2685b6](https://github.com/bitnami/charts/commit/e2685b62db0efbae283988628a8f58e14f34cff9)), closes [#30501](https://github.com/bitnami/charts/issues/30501)
+
+## <small>6.2.19 (2024-11-09)</small>
+
+* [bitnami/aspnet-core] Release 6.2.19 (#30379) ([83fc324](https://github.com/bitnami/charts/commit/83fc32473b9e5ecbf873d00daa653b18805b0215)), closes [#30379](https://github.com/bitnami/charts/issues/30379)
+
+## <small>6.2.18 (2024-11-09)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/aspnet-core] Release 6.2.18 (#30378) ([e9f2836](https://github.com/bitnami/charts/commit/e9f28365f922b2cd01f7cc600cd559abc7358aca)), closes [#30378](https://github.com/bitnami/charts/issues/30378)
+
+## <small>6.2.17 (2024-10-18)</small>
+
+* [bitnami/aspnet-core] Remove wrong entries from image verification (#29912) ([a4750e4](https://github.com/bitnami/charts/commit/a4750e497887c5a1e52b0b7ccc933087d68492a1)), closes [#29912](https://github.com/bitnami/charts/issues/29912)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>6.2.16 (2024-10-08)</small>
 

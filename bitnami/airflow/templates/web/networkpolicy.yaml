@@ -37,6 +37,9 @@ spec:
     - ports:
         - port: {{ .Values.web.containerPorts.http }}
         - port: {{ .Values.service.ports.http }}
+        {{- if .Values.metrics.enabled }}
+        - port: {{ .Values.metrics.service.ports.ingest }}
+        {{- end }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}

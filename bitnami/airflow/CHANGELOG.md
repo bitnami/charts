@@ -1,8 +1,37 @@
 # Changelog
 
-## 21.5.1 (2024-11-07)
+## 22.2.0 (2024-11-19)
 
-* [bitnami/airflow] Release 21.5.1 ([#30306](https://github.com/bitnami/charts/pull/30306))
+* [bitnami/airflow] Add support for extending default configuration ([#30525](https://github.com/bitnami/charts/pull/30525))
+
+## 22.1.0 (2024-11-18)
+
+* [bitnami/airflow] feat: add support for custom local settings (#30496) ([6c3060e](https://github.com/bitnami/charts/commit/6c3060e024a7fdcfe5b4eb07ec699cf425858e9f)), closes [#30496](https://github.com/bitnami/charts/issues/30496)
+
+## <small>22.0.1 (2024-11-18)</small>
+
+* [bitnami/airflow] Improve Goss tests (#30492) ([c9c33f8](https://github.com/bitnami/charts/commit/c9c33f849aa2b02f0857e65e82bf2e0779413dea)), closes [#30492](https://github.com/bitnami/charts/issues/30492)
+* [bitnami/airflow] Metrics based on StatsD (#30459) ([5c88481](https://github.com/bitnami/charts/commit/5c884817bcabe57ff93e91bc2b9ca411f21f615a)), closes [#30459](https://github.com/bitnami/charts/issues/30459)
+
+## 21.9.0 (2024-11-14)
+
+* [bitnami/airflow] Add support to setup db on k8s job (#30440) ([1a7d623](https://github.com/bitnami/charts/commit/1a7d623709ba680e7d049e81bddc44d9115f5f1f)), closes [#30440](https://github.com/bitnami/charts/issues/30440)
+
+## 21.8.0 (2024-11-13)
+
+* [bitnami/airflow] Add support for setting a SQL connection string with exiting databases (#30417) ([6d994bd](https://github.com/bitnami/charts/commit/6d994bda41a369b340eabc8b170db30ff8f130c8)), closes [#30417](https://github.com/bitnami/charts/issues/30417)
+
+## 21.7.0 (2024-11-12)
+
+* [bitnami/airflow] feat: Add support for HTTPS on Airflow Webserver (#30400) ([636cfb3](https://github.com/bitnami/charts/commit/636cfb385cb0d404c56859dec4c289ec51b642b9)), closes [#30400](https://github.com/bitnami/charts/issues/30400)
+
+## 21.6.0 (2024-11-11)
+
+* [bitnami/airflow] Consistency on Airflow configuration & init improvements (#30349) ([6074846](https://github.com/bitnami/charts/commit/6074846d3e528c1db5cbf6f9480ba13fdcb28515)), closes [#30349](https://github.com/bitnami/charts/issues/30349)
+
+## <small>21.5.1 (2024-11-07)</small>
+
+* [bitnami/airflow] Release 21.5.1 (#30306) ([ac89917](https://github.com/bitnami/charts/commit/ac89917b636f342db76e10496306ce03fe6a19ae)), closes [#30306](https://github.com/bitnami/charts/issues/30306)
 
 ## 21.5.0 (2024-11-07)
 

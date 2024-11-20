@@ -1,8 +1,17 @@
 # Changelog
 
-## 14.0.4 (2024-11-07)
+## 14.0.6 (2024-11-19)
 
-* [bitnami/kong] Release 14.0.4 ([#30276](https://github.com/bitnami/charts/pull/30276))
+* [bitnami/kong] Release 14.0.6 ([#30511](https://github.com/bitnami/charts/pull/30511))
+
+## <small>14.0.5 (2024-11-09)</small>
+
+* [bitnami/kong] Release 14.0.5 (#30381) ([097a935](https://github.com/bitnami/charts/commit/097a9359c2b21f2de2e919d8ddd5b68733244af5)), closes [#30381](https://github.com/bitnami/charts/issues/30381)
+
+## <small>14.0.4 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kong] Release 14.0.4 (#30276) ([5d37187](https://github.com/bitnami/charts/commit/5d37187597f35f33ea254f333e740d8a2963a440)), closes [#30276](https://github.com/bitnami/charts/issues/30276)
 
 ## <small>14.0.3 (2024-10-28)</small>
 

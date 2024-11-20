@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: airflow
-      image: docker.io/bitnami/airflow:2.10.3-debian-12-r1
-    - name: airflow-exporter
-      image: docker.io/bitnami/airflow-exporter:0.20220314.0-debian-12-r51
+      image: docker.io/bitnami/airflow:2.10.3-debian-12-r5
+    - name: statsd-exporter
+      image: docker.io/bitnami/statsd-exporter:0.28.0-debian-12-r0
 apiVersion: v2
 appVersion: 2.10.3
 dependencies:
@@ -39,4 +39,4 @@ maintainers:
 name: airflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 21.5.1
+version: 22.2.0

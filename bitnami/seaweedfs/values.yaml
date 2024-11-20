@@ -10,7 +10,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -82,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/seaweedfs
-  tag: 3.79.0-debian-12-r1
+  tag: 3.80.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -340,7 +338,7 @@ master:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param master.statefulsetAnnotations Annotations for Master Server statefulset
+  ## @param master.statefulsetAnnotations Annotations for Master Server StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   statefulsetAnnotations: {}
@@ -390,14 +388,14 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param master.updateStrategy.type Master Server statefulset strategy type
+  ## @param master.updateStrategy.type Master Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param master.podManagementPolicy Pod management policy for Master Server statefulset
+  ## @param master.podManagementPolicy Pod management policy for Master Server StatefulSet
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
@@ -758,6 +756,16 @@ master:
     ## @param master.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param master.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of the Master Server StatefulSet
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
 
   ## @section Master Server Metrics Parameters
   ##
@@ -980,7 +988,7 @@ volume:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param volume.statefulsetAnnotations Annotations for Volume Server statefulset
+  ## @param volume.statefulsetAnnotations Annotations for Volume Server StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   statefulsetAnnotations: {}
@@ -1030,14 +1038,14 @@ volume:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param volume.updateStrategy.type Volume Server statefulset strategy type
+  ## @param volume.updateStrategy.type Volume Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param volume.podManagementPolicy Pod management policy for Volume Server statefulset
+  ## @param volume.podManagementPolicy Pod management policy for Volume Server StatefulSet
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
@@ -1408,6 +1416,16 @@ volume:
         ## @param volume.dataVolumes[0].persistence.dataSource Custom PVC data source
         ##
         dataSource: {}
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param volume.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of the Volume Server StatefulSet
+  ## @param volume.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param volume.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
 
   ## @section Volume Server Metrics Parameters
   ##
@@ -1632,7 +1650,7 @@ filer:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param filer.statefulsetAnnotations Annotations for Filer Server statefulset
+  ## @param filer.statefulsetAnnotations Annotations for Filer Server StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   statefulsetAnnotations: {}
@@ -1682,14 +1700,14 @@ filer:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param filer.updateStrategy.type Filer Server statefulset strategy type
+  ## @param filer.updateStrategy.type Filer Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param filer.podManagementPolicy Pod management policy for Filer Server statefulset
+  ## @param filer.podManagementPolicy Pod management policy for Filer Server StatefulSet
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
@@ -3222,7 +3240,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r32
+    tag: 12-debian-12-r33
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3306,7 +3324,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 11.4.4-debian-12-r0
+    tag: 11.4.4-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3407,7 +3425,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 17.0.0-debian-12-r11
+    tag: 17.1.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

@@ -1,8 +1,18 @@
 # Changelog
 
-## 15.0.8 (2024-11-08)
+## 16.0.1 (2024-11-16)
 
-* [bitnami/ejbca] Unify seLinuxOptions default value ([#30345](https://github.com/bitnami/charts/pull/30345))
+* [bitnami/ejbca] Release 16.0.1 ([#30485](https://github.com/bitnami/charts/pull/30485))
+
+## 16.0.0 (2024-11-12)
+
+* [bitnami/ejbca] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30353) ([2a3ac05](https://github.com/bitnami/charts/commit/2a3ac052276cd11e387062525b5a9aa902d2263b)), closes [#30353](https://github.com/bitnami/charts/issues/30353)
+
+## <small>15.0.8 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/ejbca] Unify seLinuxOptions default value (#30345) ([ab673bb](https://github.com/bitnami/charts/commit/ab673bba8586f42cf8ba3829cb36c65b7ecb6123)), closes [#30345](https://github.com/bitnami/charts/issues/30345)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>15.0.7 (2024-10-07)</small>
 

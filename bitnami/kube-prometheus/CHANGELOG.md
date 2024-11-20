@@ -1,8 +1,20 @@
 # Changelog
 
-## 10.0.1 (2024-11-07)
+## 10.0.4 (2024-11-12)
 
-* [bitnami/kube-prometheus] Release 10.0.1 ([#30252](https://github.com/bitnami/charts/pull/30252))
+* [bitnami/kube-prometheus] Fix update-crds CI job ([#30413](https://github.com/bitnami/charts/pull/30413))
+
+## <small>10.0.3 (2024-11-11)</small>
+
+* [bitnami/kube-prometheus] Release 10.0.3 (#30295) ([36a5b01](https://github.com/bitnami/charts/commit/36a5b01ed167623695583a36a8b403c889cbf217)), closes [#30295](https://github.com/bitnami/charts/issues/30295)
+
+## <small>10.0.2 (2024-11-11)</small>
+
+* [bitnami/kube-prometheus] Add dummy values.yaml to CRDs subchart (#30397) ([b12bddb](https://github.com/bitnami/charts/commit/b12bddb0436eda5e84fdce3ebf0a3d7b42b6706d)), closes [#30397](https://github.com/bitnami/charts/issues/30397)
+
+## <small>10.0.1 (2024-11-07)</small>
+
+* [bitnami/kube-prometheus] Release 10.0.1 (#30252) ([4aea338](https://github.com/bitnami/charts/commit/4aea3383732b4f2e90d3f8f8b59d5f7a7d976f65)), closes [#30252](https://github.com/bitnami/charts/issues/30252)
 
 ## 10.0.0 (2024-11-06)
 

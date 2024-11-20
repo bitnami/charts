@@ -37,6 +37,7 @@
               "path": "/.vib"
             },
             "tests_file": "airflow/goss/goss.yaml",
+            "vars_file": "airflow/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-airflow-web"

@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.1 (2024-11-09)
+## 24.2.1 (2024-11-19)
 
-* [bitnami/keycloak] KEYCLOAK_HOSTNAME present even if KEYCLOAK_PROXY_HEADERS is set ([#30368](https://github.com/bitnami/charts/pull/30368))
+* [bitnami/keycloak] Release 24.2.1 ([#30522](https://github.com/bitnami/charts/pull/30522))
+
+## 24.2.0 (2024-11-12)
+
+* [bitnami/keycloak] Fix metrics ports and servicemonitor (#30303) ([c289b97](https://github.com/bitnami/charts/commit/c289b97caddc8e511e00d46937b508204f41de9a)), closes [#30303](https://github.com/bitnami/charts/issues/30303)
 
 ## 24.1.0 (2024-11-06)
 

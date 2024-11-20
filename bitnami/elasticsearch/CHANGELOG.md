@@ -1,8 +1,22 @@
 # Changelog
 
-## 21.3.22 (2024-10-17)
+## 21.3.25 (2024-11-15)
 
-* [bitnami/elasticsearch] Release 21.3.22 ([#29972](https://github.com/bitnami/charts/pull/29972))
+* [bitnami/elasticsearch] Release 21.3.25 ([#30476](https://github.com/bitnami/charts/pull/30476))
+
+## <small>21.3.24 (2024-11-12)</small>
+
+* [bitnami/elasticsearch] Release 21.3.24 (#30423) ([9ab2b81](https://github.com/bitnami/charts/commit/9ab2b8116b9a2084182c7af6f23912169e2cf41e)), closes [#30423](https://github.com/bitnami/charts/issues/30423)
+
+## <small>21.3.23 (2024-11-09)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/elasticsearch] Release 21.3.23 (#30377) ([7a1e13f](https://github.com/bitnami/charts/commit/7a1e13f1bd3fc976dfc74da013d868332e5948dc)), closes [#30377](https://github.com/bitnami/charts/issues/30377)
+
+## <small>21.3.22 (2024-10-17)</small>
+
+* [bitnami/elasticsearch] Release 21.3.22 (#29972) ([bdbf734](https://github.com/bitnami/charts/commit/bdbf7345d2c20043ae663b107901f8fdad79f704)), closes [#29972](https://github.com/bitnami/charts/issues/29972)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>21.3.21 (2024-10-08)</small>
 

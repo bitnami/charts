@@ -29,12 +29,15 @@ global:
 ## @section Common parameters
 ##
 
-## @param nameOverride String to partially override external-dns.fullname template (will maintain the release name)
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override external-dns.fullname template
+## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -51,9 +54,7 @@ extraDeploy: []
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
-## @param watchReleaseNamespace Watch only namepsace used for the release
-##
-watchReleaseNamespace: false
+
 ## @section external-dns parameters
 ##
 
@@ -148,6 +149,9 @@ sidecars: []
 ## @param namespace Limit sources of endpoints to a specific namespace (default: all namespaces)
 ##
 namespace: ""
+## @param watchReleaseNamespace Watch only namespace used for the release
+##
+watchReleaseNamespace: false
 ## @param fqdnTemplates Templated strings that are used to generate DNS names from sources that don't define a hostname themselves
 ##
 fqdnTemplates: []
@@ -1069,7 +1073,7 @@ serviceAccount:
   ## @param serviceAccount.create Determine whether a Service Account should be created or it should reuse a exiting one.
   ##
   create: true
-  ## @param serviceAccount.name ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set
+  ## @param serviceAccount.name ServiceAccount to use. A name is generated using the common.names.fullname template if it is not set
   ##
   name: ""
   ## @param serviceAccount.annotations Additional Service Account annotations

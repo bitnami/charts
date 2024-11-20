@@ -167,6 +167,44 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
+Return true if a secret object should be created for PostgreSQL
+*/}}
+{{- define "postgresql.v1.createPreviousSecret" -}}
+{{- if and .Values.passwordUpdateJob.previousPasswords.postgresPassword (not .Values.passwordUpdateJob.previousPasswords.existingSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret with previous PostgreSQL credentials
+*/}}
+{{- define "postgresql.v1.update-job.previousSecretName" -}}
+    {{- if .Values.passwordUpdateJob.previousPasswords.existingSecret -}}
+        {{- /* The secret with the new password is managed externally */ -}}
+        {{- tpl .Values.passwordUpdateJob.previousPasswords.existingSecret $ -}}
+    {{- else if .Values.passwordUpdateJob.previousPasswords.postgresPassword -}}
+        {{- /* The secret with the new password is managed externally */ -}}
+        {{- printf "%s-previous-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- /* The secret with the new password is managed by the helm chart. We use the current secret name as it has the old password */ -}}
+        {{- include "common.names.fullname" . -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret with new PostgreSQL credentials
+*/}}
+{{- define "postgresql.v1.update-job.newSecretName" -}}
+    {{- if and (not .Values.passwordUpdateJob.previousPasswords.existingSecret) (not .Values.passwordUpdateJob.previousPasswords.postgresPassword) -}}
+        {{- /* The secret with the new password is managed by the helm chart. We create a new secret as the current one has the old password */ -}}
+        {{- printf "%s-new-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- /* The secret with the new password is managed externally */ -}}
+        {{- include "postgresql.v1.secretName" . -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Return PostgreSQL service port
 */}}
 {{- define "postgresql.v1.service.port" -}}

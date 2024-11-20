@@ -1,8 +1,36 @@
 # Changelog
 
-## 2.0.21 (2024-11-08)
+## 2.0.28 (2024-11-19)
 
-* [bitnami/chainloop] Release 2.0.21 ([#30317](https://github.com/bitnami/charts/pull/30317))
+* [bitnami/chainloop] Release 2.0.28 ([#30534](https://github.com/bitnami/charts/pull/30534))
+
+## <small>2.0.27 (2024-11-19)</small>
+
+* [bitnami/chainloop] Release 2.0.27 (#30532) ([22d854d](https://github.com/bitnami/charts/commit/22d854dff90b38f57bcff3e0c1abc6a3ee004fda)), closes [#30532](https://github.com/bitnami/charts/issues/30532)
+
+## <small>2.0.26 (2024-11-19)</small>
+
+* [bitnami/chainloop] Release 2.0.26 (#30530) ([b850cea](https://github.com/bitnami/charts/commit/b850ceaa528d777b796aa782c7ad59ba814d21c3)), closes [#30530](https://github.com/bitnami/charts/issues/30530)
+
+## <small>2.0.25 (2024-11-19)</small>
+
+* [bitnami/chainloop] Release 2.0.25 (#30521) ([1f47d76](https://github.com/bitnami/charts/commit/1f47d7627b03d37f290ed792891fd554af7246ee)), closes [#30521](https://github.com/bitnami/charts/issues/30521)
+
+## <small>2.0.24 (2024-11-18)</small>
+
+* [bitnami/chainloop] Release 2.0.24 (#30500) ([8bbdddf](https://github.com/bitnami/charts/commit/8bbdddfb52fc6eb70618fe638964caad6091bc26)), closes [#30500](https://github.com/bitnami/charts/issues/30500)
+
+## <small>2.0.23 (2024-11-14)</small>
+
+* [bitnami/chainloop] Release 2.0.23 (#30458) ([1d3c837](https://github.com/bitnami/charts/commit/1d3c837541adc5682cfad6b93f8008f8da26ee15)), closes [#30458](https://github.com/bitnami/charts/issues/30458)
+
+## <small>2.0.22 (2024-11-11)</small>
+
+* [bitnami/chainloop] Release 2.0.22 (#30404) ([7e838d5](https://github.com/bitnami/charts/commit/7e838d58ce589160af84ac0451cd61c272af4097)), closes [#30404](https://github.com/bitnami/charts/issues/30404)
+
+## <small>2.0.21 (2024-11-08)</small>
+
+* [bitnami/chainloop] Release 2.0.21 (#30317) ([f2baa23](https://github.com/bitnami/charts/commit/f2baa23c9c5bbc0f4e4b920bcf70df46df321f29)), closes [#30317](https://github.com/bitnami/charts/issues/30317)
 
 ## <small>2.0.20 (2024-11-07)</small>
 

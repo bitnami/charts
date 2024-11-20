@@ -3405,3 +3405,181 @@ dashboards:
     ## @param dashboards.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+
+## @section OpenSearch Snapshots Parameters
+snapshots:
+  ## @param snapshots.enabled Enable automatic setup of repositories and snapshot policies
+  ##
+  enabled: false
+  ## @param snapshots.command Override default container command (useful when using custom images)
+  ##
+  command:
+    - /usr/bin/curl
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param snapshots.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param snapshots.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param snapshots.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param snapshots.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param snapshots.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param snapshots.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param snapshots.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param snapshots.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param snapshots.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param snapshots.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: null
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param snapshots.fullnameOverride String to fully override opensearch.snapshots.fullname
+  ##
+  fullnameOverride: ""
+  ## Bitnami OpenSearch Snapshots image
+  ## @param snapshots.image.registry [default: REGISTRY_NAME] OpenSearch Snapshots image registry
+  ## @param snapshots.image.repository [default: REPOSITORY_NAME/os-shell] OpenSearch Snapshots image repository
+  ## @skip snapshots.image.tag OpenSearch Snapshots image tag (immutable tags are recommended)
+  ## @param snapshots.image.digest OpenSearch Snapshots image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param snapshots.image.pullPolicy OpenSearch Snapshots image pull policy
+  ## @param snapshots.image.pullSecrets OpenSearch Snapshots image pull secrets
+  ## @param snapshots.image.debug Enable OpenSearch Snapshots image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r30
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param snapshots.nameOverride String to partially override common.names.fullname
+  ##
+  nameOverride: ""
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param snapshots.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param snapshots.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteMany
+    ## @param snapshots.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param snapshots.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param snapshots.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param snapshots.persistence.labels Extra labels for the Persistent Volume Claim
+    ##
+    labels: {}
+    ## @param snapshots.persistence.selector Selector to match an existing Persistent Volume for OpenSearch data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param snapshots.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param snapshots.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param snapshots.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param snapshots.podSecurityContext.enabled Enabled data pods' Security Context
+  ## @param snapshots.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param snapshots.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param snapshots.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param snapshots.podSecurityContext.fsGroup Set snapshots pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param snapshots.policies [default: SNAPSHOT_POLICY_API_BODY] Each object represents a snapshot policy in YAML form, which will be converted to JSON and then passed as the HTTP body data to the OpenSearch REST API.
+  ## NOTE: The field `snapshot_config.repository` in each policy must match a repo name in `snapshots.repositories`.
+  ##
+  policies:
+    default:
+      creation:
+        schedule:
+          cron:
+            expression: "0 20 * * *"
+            timezone: UTC
+      deletion:
+        condition:
+          max_age: 7d
+          min_count: 1
+        schedule:
+          cron:
+            expression: 0 20 * * *
+            timezone: UTC
+      description: Default snapshot policy
+      enabled: true
+      snapshot_config:
+        repository: default
+  ## @param snapshots.repositories [default: SNAPSHOT_REPO_API_BODY] Each object represents a snapshot repository in YAML form, which will be converted to JSON and then passed as the HTTP body data to the OpenSearch REST API.
+  ## NOTE: The field `settings.location` in each repo must match the snapshot repo path configured in `snapshotRepoPath`, if its `type` is `fs`.
+  ##
+  repositories:
+    default:
+      settings:
+        location: /snapshots
+      type: fs
+  ## OpenSearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param snapshots.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if snapshots.resources is set (snapshots.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param snapshots.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 100m
+  ##     memory: 10Mi
+  ##   limits:
+  ##     cpu: 200m
+  ##     memory: 20Mi
+  ##
+  resources: {}

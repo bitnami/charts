@@ -83,7 +83,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 2.10.3-debian-12-r1
+  tag: 2.10.3-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -134,15 +134,28 @@ executor: CeleryExecutor
 ## @param loadExamples Switch to load some Airflow examples
 ##
 loadExamples: false
-## @param configuration Specify content for Airflow config file (auto-generated based on other env. vars otherwise)
+## @param configuration Specify content for Airflow config file (auto-generated based on other parameters otherwise)
+## ref: https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html
+## Use YAML format, then it's transformed to .cfg format by the chart. e.g:
+##    configuration:
+##      core:
+##        dags_folder: "/opt/bitnami/airflow/dags"
+## ... will be transformed to:
+##    [core]
+##    dags_folder = "/opt/bitnami/airflow/dags"
+##
+configuration: {}
+## @param overrideConfiguration Airflow common configuration override. Values defined here takes precedence over the ones defined at `configuration`
+##
+overrideConfiguration: {}
+## @param localSettings Specify content for Airflow local settings (airflow_local_settings.py)
+## ref: https://airflow.apache.org/docs/apache-airflow/stable/howto/set-config.html#configuring-local-settings
 ## e.g:
-## configuration: |-
-##   [core]
-##   dags_folder=/opt/bitnami/airflow/dags
+## localSettings: |-
 ##   ...
 ##
-configuration: ""
-## @param existingConfigmap Name of an existing ConfigMap with the Airflow config file
+localSettings: ""
+## @param existingConfigmap Name of an existing ConfigMap with the Airflow config file and, optionally, the local settings file
 ##
 existingConfigmap: ""
 ## Load custom DAGs files from a ConfigMap or Git repositories
@@ -196,23 +209,23 @@ plugins:
 ## Default init Containers
 ##
 defaultInitContainers:
-  ## Airflow "create-default-config" init container
-  ## Used to copy the default configuration files so they are writable
+  ## Airflow "prepare-config" init container
+  ## Used to prepare the Airflow configuration files for main containers to use them
   ##
-  createDefaultConfig:
-    ## Configure "create-default-config" init-container Security Context
+  prepareConfig:
+    ## Configure "prepare-config" init-container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.enabled Enabled "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "create-default-config" init-containers
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.runAsUser Set runAsUser in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.runAsGroup Set runAsUser in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.privileged Set privileged in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "create-default-config" init-containers' Security Context
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.capabilities.add List of capabilities to be added in "create-default-config" init-containers
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "create-default-config" init-containers
-    ## @param defaultInitContainers.createDefaultConfig.containerSecurityContext.seccompProfile.type Set seccomp profile in "create-default-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.enabled Enabled "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "prepare-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.runAsUser Set runAsUser in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.runAsGroup Set runAsUser in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.privileged Set privileged in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "prepare-config" init-containers' Security Context
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.capabilities.add List of capabilities to be added in "prepare-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "prepare-config" init-containers
+    ## @param defaultInitContainers.prepareConfig.containerSecurityContext.seccompProfile.type Set seccomp profile in "prepare-config" init-containers
     ##
     containerSecurityContext:
       enabled: true
@@ -228,13 +241,13 @@ defaultInitContainers:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-    ## Airflow "create-default-config" init container resource requests and limits
+    ## Airflow "prepare-config" init container resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param defaultInitContainers.createDefaultConfig.resourcesPreset Set Airflow "create-default-config" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.createDefaultConfig.resources is set (defaultInitContainers.createDefaultConfig.resources is recommended for production).
+    ## @param defaultInitContainers.prepareConfig.resourcesPreset Set Airflow "prepare-config" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.prepareConfig.resources is set (defaultInitContainers.prepareConfig.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
-    ## @param defaultInitContainers.createDefaultConfig.resources Set Airflow "create-default-config" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param defaultInitContainers.prepareConfig.resources Set Airflow "prepare-config" init container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## E.g:
     ## resources:
     ##   requests:
@@ -245,23 +258,23 @@ defaultInitContainers:
     ##     memory: 1024Mi
     ##
     resources: {}
-  ## Airflow "wait-for-web-server" init container
-  ## Used to wait for web server to be ready
+  ## Airflow "wait-for-db-migrations" init container
+  ## Used to wait for db migrations to be ready
   ##
-  waitForWebServer:
-    ## Configure "wait-for-web-server" init-container Security Context
+  waitForDBMigrations:
+    ## Configure "wait-for-db-migrations" init-container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.enabled Enabled "wait-for-web-server" init-containers' Security Context
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "wait-for-web-server" init-containers
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.runAsUser Set runAsUser in "wait-for-web-server" init-containers' Security Context
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.runAsGroup Set runAsUser in "wait-for-web-server" init-containers' Security Context
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "wait-for-web-server" init-containers' Security Context
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "wait-for-web-server" init-containers' Security Context
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.privileged Set privileged in "wait-for-web-server" init-containers' Security Context
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "wait-for-web-server" init-containers' Security Context
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.capabilities.add List of capabilities to be added in "wait-for-web-server" init-containers
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "wait-for-web-server" init-containers
-    ## @param defaultInitContainers.waitForWebServer.containerSecurityContext.seccompProfile.type Set seccomp profile in "wait-for-web-server" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.enabled Enabled "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "wait-for-db-migrations" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.runAsUser Set runAsUser in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.runAsGroup Set runAsUser in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.privileged Set privileged in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "wait-for-db-migrations" init-containers' Security Context
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.capabilities.add List of capabilities to be added in "wait-for-db-migrations" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "wait-for-db-migrations" init-containers
+    ## @param defaultInitContainers.waitForDBMigrations.containerSecurityContext.seccompProfile.type Set seccomp profile in "wait-for-db-migrations" init-containers
     ##
     containerSecurityContext:
       enabled: true
@@ -277,13 +290,13 @@ defaultInitContainers:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-    ## Airflow "wait-for-web-server" init container resource requests and limits
+    ## Airflow "wait-for-db-migrations" init container resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param defaultInitContainers.waitForWebServer.resourcesPreset Set Airflow "wait-for-web-server" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.waitForWebServer.resources is set (defaultInitContainers.waitForWebServer.resources is recommended for production).
+    ## @param defaultInitContainers.waitForDBMigrations.resourcesPreset Set Airflow "wait-for-db-migrations" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.waitForDBMigrations.resources is set (defaultInitContainers.waitForDBMigrations.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "nano"
-    ## @param defaultInitContainers.waitForWebServer.resources Set Airflow "wait-for-web-server" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    resourcesPreset: "micro"
+    ## @param defaultInitContainers.waitForDBMigrations.resources Set Airflow "wait-for-db-migrations" init container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## E.g:
     ## resources:
     ##   requests:
@@ -462,43 +475,76 @@ extraVolumeMounts: []
 ##
 extraVolumes: []
 
-## @section Airflow web parameters
+## @section Airflow webserver parameters
 ##
 web:
-  ## @param web.baseUrl URL used to access to Airflow web ui
+  ## @param web.baseUrl URL used to access to Airflow webserver
   ##
   baseUrl: ""
-  ## @param web.existingConfigmap Name of an existing config map containing the Airflow web config file
+  ## @param web.configuration Specify content for webserver_config.py (auto-generated based on other env. vars otherwise)
+  ##
+  configuration: ""
+  ## @param web.existingConfigmap Name of an existing config map containing the Airflow webserver config file
   ##
   existingConfigmap: ""
+  ## @param web.tls.enabled Enable TLS configuration for Airflow webserver
+  ## @param web.tls.autoGenerated.enabled Enable automatic generation of TLS certificates
+  ## @param web.tls.autoGenerated.engine Mechanism to generate the certificates (allowed values: helm, cert-manager)
+  ## @param web.tls.autoGenerated.certManager.existingIssuer The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.existingIssuerKind Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.keyAlgorithm Key algorithm for the certificates (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.keySize Key size for the certificates (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.duration Duration for the certificates (only for `cert-manager` engine)
+  ## @param web.tls.autoGenerated.certManager.renewBefore Renewal period for the certificates (only for `cert-manager` engine)
+  ## @param web.tls.ca CA certificate for TLS. Ignored if `tls.existingSecret` is set
+  ## @param web.tls.cert TLS certificate for Airflow webserver. Ignored if `tls.master.existingSecret` is set
+  ## @param web.tls.key TLS key for Airflow webserver. Ignored if `tls.master.existingSecret` is set
+  ## @param web.tls.existingSecret The name of an existing Secret containing the Airflow webserver certificates for TLS
+  ##
+  tls:
+    enabled: false
+    autoGenerated:
+      enabled: true
+      engine: helm
+      certManager:
+        existingIssuer: ""
+        existingIssuerKind: ""
+        keySize: 2048
+        keyAlgorithm: RSA
+        duration: 2160h
+        renewBefore: 360h
+    ca: ""
+    cert: ""
+    key: ""
+    existingSecret: ""
   ## @param web.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param web.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param web.extraEnvVars Array with extra environment variables to add Airflow web pods
+  ## @param web.extraEnvVars Array with extra environment variables to add Airflow webserver pods
   ##
   extraEnvVars: []
-  ## @param web.extraEnvVarsCM ConfigMap containing extra environment variables for Airflow web pods
+  ## @param web.extraEnvVarsCM ConfigMap containing extra environment variables for Airflow webserver pods
   ##
   extraEnvVarsCM: ""
-  ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow web pods
+  ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow webserver pods
   ##
   extraEnvVarsSecret: ""
-  ## @param web.extraEnvVarsSecrets List of secrets with extra environment variables for Airflow web pods
+  ## @param web.extraEnvVarsSecrets List of secrets with extra environment variables for Airflow webserver pods
   ##
   extraEnvVarsSecrets: []
-  ## @param web.containerPorts.http Airflow web HTTP container port
+  ## @param web.containerPorts.http Airflow webserver HTTP container port
   ##
   containerPorts:
     http: 8080
-  ## @param web.replicaCount Number of Airflow web replicas
+  ## @param web.replicaCount Number of Airflow webserver replicas
   ##
   replicaCount: 1
-  ## Configure extra options for Airflow web containers' liveness, readiness and startup probes
+  ## Configure extra options for Airflow webserver containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param web.livenessProbe.enabled Enable livenessProbe on Airflow web containers
+  ## @param web.livenessProbe.enabled Enable livenessProbe on Airflow webserver containers
   ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param web.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param web.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -512,7 +558,7 @@ web:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## @param web.readinessProbe.enabled Enable readinessProbe on Airflow web containers
+  ## @param web.readinessProbe.enabled Enable readinessProbe on Airflow webserver containers
   ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -526,7 +572,7 @@ web:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## @param web.startupProbe.enabled Enable startupProbe on Airflow web containers
+  ## @param web.startupProbe.enabled Enable startupProbe on Airflow webserver containers
   ## @param web.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param web.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param web.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -549,7 +595,7 @@ web:
   ## @param web.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Airflow web resource requests and limits
+  ## Airflow webserver resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param web.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if web.resources is set (web.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -566,13 +612,13 @@ web:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Configure Airflow web pods Security Context
+  ## Configure Airflow webserver pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param web.podSecurityContext.enabled Enabled Airflow web pods' Security Context
+  ## @param web.podSecurityContext.enabled Enabled Airflow webserver pods' Security Context
   ## @param web.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param web.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param web.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param web.podSecurityContext.fsGroup Set Airflow web pod's Security Context fsGroup
+  ## @param web.podSecurityContext.fsGroup Set Airflow webserver pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -580,13 +626,13 @@ web:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-  ## Configure Airflow web containers (only main one) Security Context
+  ## Configure Airflow webserver containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param web.containerSecurityContext.enabled Enabled Airflow web containers' Security Context
+  ## @param web.containerSecurityContext.enabled Enabled Airflow webserver containers' Security Context
   ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param web.containerSecurityContext.runAsUser Set Airflow web containers' Security Context runAsUser
-  ## @param web.containerSecurityContext.runAsGroup Set Airflow web containers' Security Context runAsGroup
-  ## @param web.containerSecurityContext.runAsNonRoot Set Airflow web containers' Security Context runAsNonRoot
+  ## @param web.containerSecurityContext.runAsUser Set Airflow webserver containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.runAsGroup Set Airflow webserver containers' Security Context runAsGroup
+  ## @param web.containerSecurityContext.runAsNonRoot Set Airflow webserver containers' Security Context runAsNonRoot
   ## @param web.containerSecurityContext.privileged Set web container's Security Context privileged
   ## @param web.containerSecurityContext.allowPrivilegeEscalation Set web container's Security Context allowPrivilegeEscalation
   ## @param web.containerSecurityContext.readOnlyRootFilesystem Set web container's Security Context readOnlyRootFilesystem
@@ -606,7 +652,7 @@ web:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param web.lifecycleHooks for the Airflow web container(s) to automate configuration before or after startup
+  ## @param web.lifecycleHooks for the Airflow webserver container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param web.automountServiceAccountToken Mount Service Account token in pod
@@ -616,13 +662,13 @@ web:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param web.podLabels Add extra labels to the Airflow web pods
+  ## @param web.podLabels Add extra labels to the Airflow webserver pods
   ##
   podLabels: {}
-  ## @param web.podAnnotations Add extra annotations to the Airflow web pods
+  ## @param web.podAnnotations Add extra annotations to the Airflow webserver pods
   ##
   podAnnotations: {}
-  ## @param web.affinity Affinity for Airflow web pods assignment (evaluated as a template)
+  ## @param web.affinity Affinity for Airflow webserver pods assignment (evaluated as a template)
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: `web.podAffinityPreset`, `web.podAntiAffinityPreset`, and `web.nodeAffinityPreset` will be ignored when it's set
   ##
@@ -645,7 +691,7 @@ web:
     ##   - e2e-az2
     ##
     values: []
-  ## @param web.nodeSelector Node labels for Airflow web pods assignment
+  ## @param web.nodeSelector Node labels for Airflow webserver pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
@@ -657,7 +703,7 @@ web:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## @param web.tolerations Tolerations for Airflow web pods assignment
+  ## @param web.tolerations Tolerations for Airflow webserver pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -673,18 +719,18 @@ web:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param web.terminationGracePeriodSeconds Seconds Airflow web pod needs to terminate gracefully
+  ## @param web.terminationGracePeriodSeconds Seconds Airflow webserver pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param web.updateStrategy.type Airflow web deployment strategy type
-  ## @param web.updateStrategy.rollingUpdate Airflow web deployment rolling update configuration parameters
+  ## @param web.updateStrategy.type Airflow webserver deployment strategy type
+  ## @param web.updateStrategy.rollingUpdate Airflow webserver deployment rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param web.sidecars Add additional sidecar containers to the Airflow web pods
+  ## @param web.sidecars Add additional sidecar containers to the Airflow webserver pods
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -695,7 +741,7 @@ web:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param web.initContainers Add additional init containers to the Airflow web pods
+  ## @param web.initContainers Add additional init containers to the Airflow webserver pods
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -706,17 +752,17 @@ web:
   ##         containerPort: 1234
   ##
   initContainers: []
-  ## @param web.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow web pods
+  ## @param web.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow webserver pods
   ##
   extraVolumeMounts: []
-  ## @param web.extraVolumes Optionally specify extra list of additional volumes for the Airflow web pods
+  ## @param web.extraVolumes Optionally specify extra list of additional volumes for the Airflow webserver pods
   ##
   extraVolumes: []
-  ## Airflow web Pod Disruption Budget
+  ## Airflow webserver Pod Disruption Budget
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
-  ## @param web.pdb.create Deploy a pdb object for the Airflow web pods
-  ## @param web.pdb.minAvailable Maximum number/percentage of unavailable Airflow web replicas
-  ## @param web.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow web replicas
+  ## @param web.pdb.create Deploy a pdb object for the Airflow webserver pods
+  ## @param web.pdb.minAvailable Maximum number/percentage of unavailable Airflow webserver replicas
+  ## @param web.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow webserver replicas
   ##
   pdb:
     create: true
@@ -726,7 +772,7 @@ web:
   ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
-    ## @param web.autoscaling.vpa.enabled Enable VPA for Airflow web
+    ## @param web.autoscaling.vpa.enabled Enable VPA for Airflow webserver
     ## @param web.autoscaling.vpa.annotations Annotations for VPA resource
     ## @param web.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
     ## @param web.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
@@ -744,7 +790,7 @@ web:
       ##
       updatePolicy:
         updateMode: Auto
-    ## @param web.autoscaling.hpa.enabled Enable HPA for Airflow web
+    ## @param web.autoscaling.hpa.enabled Enable HPA for Airflow webserver
     ## @param web.autoscaling.hpa.minReplicas Minimum number of replicas
     ## @param web.autoscaling.hpa.maxReplicas Maximum number of replicas
     ## @param web.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -2311,6 +2357,108 @@ worker:
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
 
+## @section Airflow "setup-db" K8s Job parameters
+##
+setupDBJob:
+  ## @param setupDBJob.enabled Enable setting up the Airflow database using a K8s job (otherwise it's done by the Webserver on startup)
+  ##
+  enabled: true
+  ## @param setupDBJob.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param setupDBJob.command Override default container command on "setup-db" job's containers
+  ##
+  command: []
+  ## @param setupDBJob.args Override default container args on "setup-db" job's containers
+  ##
+  args: []
+  ## Configure "setup-db" job's container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param setupDBJob.containerSecurityContext.enabled Enabled "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "setup-db" job's containers
+  ## @param setupDBJob.containerSecurityContext.runAsUser Set runAsUser in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.runAsGroup Set runAsUser in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.privileged Set privileged in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "setup-db" job's containers' Security Context
+  ## @param setupDBJob.containerSecurityContext.capabilities.add List of capabilities to be added in "setup-db" job's containers
+  ## @param setupDBJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "setup-db" job's containers
+  ## @param setupDBJob.containerSecurityContext.seccompProfile.type Set seccomp profile in "setup-db" job's containers
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      add: []
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure "setup-db" job's pod Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param setupDBJob.podSecurityContext.enabled Enabled "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.fsGroupChangePolicy Set fsGroupChangePolicy in "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.sysctls List of sysctls to allow in "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.supplementalGroups List of supplemental groups to add to "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.fsGroup Set fsGroup in "setup-db" job's pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## @param setupDBJob.extraEnvVars Array containing extra env vars to configure the Airflow "setup-db" job's container
+  ##
+  extraEnvVars: []
+  ## @param setupDBJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the Airflow "setup-db" job's container
+  ##
+  extraEnvVarsCM: ""
+  ## @param setupDBJob.extraEnvVarsSecret Secret containing extra env vars to configure the Airflow "setup-db" job's container (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## Airflow "setup-db" job's container resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param setupDBJob.resourcesPreset Set Airflow "setup-db" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if setupDBJob.resources is set (setupDBJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param setupDBJob.resources Set Airflow "setup-db" job's container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## E.g:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param setupDBJob.automountServiceAccountToken Mount Service Account token in Airflow "setup-db" job's pods
+  ##
+  automountServiceAccountToken: false
+  ## @param setupDBJob.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param setupDBJob.annotations [object] Add annotations to the Airflow "setup-db" job
+  ##
+  annotations: {}
+  ## @param setupDBJob.podLabels Additional pod labels for Airflow "setup-db" job
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param setupDBJob.podAnnotations Additional pod annotations for Airflow "setup-db" job
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
 ## @section Airflow ldap parameters
 
 ## LDAP configuration
@@ -2510,6 +2658,7 @@ ingress:
   ##             name: http
   ##
   extraRules: []
+
 ## @section Other Parameters
 
 ## Service account for Airflow pods to use.
@@ -2548,24 +2697,26 @@ rbac:
   ##       - list
   ##
   rules: []
-## @section Airflow metrics parameters
+
+## @section StatsD metrics parameters
+##
 metrics:
-  ## @param metrics.enabled Whether or not to create a standalone Airflow exporter to expose Airflow metrics
+  ## @param metrics.enabled Enable a StatsD exporter that collects StatsD metrics from Airflow components and expose them as Prometheus metrics
   ##
   enabled: false
-  ## Bitnami Airflow exporter image
-  ## ref: https://hub.docker.com/r/bitnami/airflow-exporter/tags/
-  ## @param metrics.image.registry [default: REGISTRY_NAME] Airflow exporter image registry
-  ## @param metrics.image.repository [default: REPOSITORY_NAME/airflow-exporter] Airflow exporter image repository
-  ## @skip metrics.image.tag Airflow exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.digest Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param metrics.image.pullPolicy Airflow exporter image pull policy
-  ## @param metrics.image.pullSecrets Airflow exporter image pull secrets
+  ## Bitnami StatsD exporter image
+  ## ref: https://hub.docker.com/r/bitnami/statsd-exporter/tags/
+  ## @param metrics.image.registry [default: REGISTRY_NAME] StatsD exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/statsd-exporter] StatsD exporter image repository
+  ## @skip metrics.image.tag StatsD exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest StatsD exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy StatsD exporter image pull policy
+  ## @param metrics.image.pullSecrets StatsD exporter image pull secrets
   ##
   image:
     registry: docker.io
-    repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-12-r51
+    repository: bitnami/statsd-exporter
+    tag: 0.28.0-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2576,20 +2727,19 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.extraEnvVars Array with extra environment variables to add Airflow exporter pods
+  ## @param metrics.configuration Specify content for StatsD exporter's mappings.yml
   ##
-  extraEnvVars: []
-  ## @param metrics.extraEnvVarsCM ConfigMap containing extra environment variables for Airflow exporter pods
+  configuration: ""
+  ## @param metrics.existingConfigmap Name of an existing config map containing the StatsD exporter's mappings.yml
   ##
-  extraEnvVarsCM: ""
-  ## @param metrics.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow exporter pods
-  ##
-  extraEnvVarsSecret: ""
-  ## @param metrics.containerPorts.http Airflow exporter metrics container port
+  existingConfigmap: ""
+  ## @param metrics.containerPorts.ingest StatsD exporter ingest container port (used for the metrics ingestion from Airflow components)
+  ## @param metrics.containerPorts.metrics StatsD exporter metrics container port (used to expose Prometheus metrics)
   ##
   containerPorts:
-    http: 9112
-  ## Airflow exporter resource requests and limits
+    ingest: 9125
+    metrics: 9102
+  ## StatsD exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -2606,13 +2756,13 @@ metrics:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Airflow exporter pods' Security Context
+  ## StatsD exporter pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.podSecurityContext.enabled Enable security context for the pods
   ## @param metrics.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param metrics.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param metrics.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param metrics.podSecurityContext.fsGroup Set Airflow exporter pod's Security Context fsGroup
+  ## @param metrics.podSecurityContext.fsGroup Set StatsD exporter pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -2620,18 +2770,18 @@ metrics:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-  ## Airflow exporter containers' Security Context
+  ## StatsD exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param metrics.containerSecurityContext.enabled Enable Airflow exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.enabled Enable StatsD exporter containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param metrics.containerSecurityContext.runAsUser Set Airflow exporter containers' Security Context runAsUser
-  ## @param metrics.containerSecurityContext.runAsGroup Set Airflow exporter containers' Security Context runAsGroup
-  ## @param metrics.containerSecurityContext.runAsNonRoot Set Airflow exporter containers' Security Context runAsNonRoot
-  ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
-  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
-  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set metrics container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.runAsUser Set StatsD exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set StatsD exporter containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set StatsD exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set StatsD exporter containers' Security Context privileged
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set StatsD exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set StatsD exporter containers' Security Context readOnlyRootFilesystem
   ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set containers' Security Context seccomp profile
   ## e.g:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -2652,21 +2802,74 @@ metrics:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param metrics.lifecycleHooks for the Airflow exporter container(s) to automate configuration before or after startup
+  ## Configure extra options for StatsD exporter containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on StatsD exporter containers
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on StatsD exporter containers
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param metrics.startupProbe.enabled Enable startupProbe on StatsD exporter containers
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param metrics.lifecycleHooks for the StatsD exporter containers' to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param metrics.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
-  ## @param metrics.hostAliases Airflow exporter pods host aliases
+  ## @param metrics.hostAliases StatsD exporter pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param metrics.podLabels Extra labels for Airflow exporter pods
+  ## @param metrics.podLabels Extra labels for StatsD exporter pods
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param metrics.podAnnotations Extra annotations for Airflow exporter pods
+  ## @param metrics.podAnnotations Extra annotations for StatsD exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -2697,16 +2900,16 @@ metrics:
     ##   - e2e-az2
     ##
     values: []
-  ## @param metrics.affinity Affinity for pod assignment
+  ## @param metrics.affinity Affinity for StatsD exporter pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: metrics.podAffinityPreset, metrics.podAntiAffinityPreset, and metrics.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## @param metrics.nodeSelector Node labels for pod assignment
+  ## @param metrics.nodeSelector Node labels for StatsD exporter pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
-  ## @param metrics.priorityClassName Airflow exporter pods' priorityClassName
+  ## @param metrics.priorityClassName StatsD exporter pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param metrics.tolerations Tolerations for pod assignment
@@ -2717,23 +2920,29 @@ metrics:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param metrics.schedulerName Name of the k8s scheduler (other than default) for Airflow exporter
+  ## @param metrics.schedulerName Name of the k8s scheduler (other than default) for StatsD exporter
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Airflow exporter pods
+  ## @param metrics.terminationGracePeriodSeconds Seconds StatsD exporter pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the StatsD exporter pods
   ##
   extraVolumes: []
-  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow exporter containers
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the StatsD exporter containers
   ##
   extraVolumeMounts: []
-  ## Airflow exporter service configuration
+  ## StatsD metrics service configuration
   ##
   service:
-    ## @param metrics.service.ports.http Airflow exporter metrics service port
+    ## @param metrics.service.ports.ingest StatsD exporter ingest service port (used for the metrics ingestion from Airflow components)
+    ## @param metrics.service.ports.metrics StatsD exporter metrics service port (used to expose Prometheus metrics)
     ##
     ports:
-      http: 9112
+      ingest: 9125
+      metrics: 9102
     ## @param metrics.service.clusterIP Static clusterIP or None for headless services
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
     ##
@@ -2743,11 +2952,11 @@ metrics:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
-    ## @param metrics.service.annotations [object] Annotations for the Airflow exporter service
+    ## @param metrics.service.annotations [object] Annotations for the StatsD metrics service
     ##
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.ports.http }}"
+      prometheus.io/port: "{{ .Values.metrics.service.ports.metrics }}"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -2839,6 +3048,7 @@ metrics:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+
 ## @section Airflow database parameters
 
 ## PostgreSQL chart configuration
@@ -2880,13 +3090,15 @@ postgresql:
     resources: {}
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
-## @param externalDatabase.host Database host
-## @param externalDatabase.port Database port number
-## @param externalDatabase.user Non-root username for Airflow
-## @param externalDatabase.password Password for the non-root username for Airflow
-## @param externalDatabase.database Airflow database name
+## @param externalDatabase.host Database host (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.port Database port number (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.user Non-root username for Airflow (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.password Password for the non-root username for Airflow (ignored if externalDatabase.sqlConnection or externalDatabase.existingSecret are set)
+## @param externalDatabase.database Airflow database name (ignored if externalDatabase.sqlConnection is set)
+## @param externalDatabase.sqlConnection SQL connection string
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
-## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials (ignored if externalDatabase.existingSecretSqlConnectionKey is set)
+## @param externalDatabase.existingSecretSqlConnectionKey Name of an existing secret key containing the SQL connection string
 ##
 externalDatabase:
   host: localhost
@@ -2894,8 +3106,10 @@ externalDatabase:
   user: bn_airflow
   database: bitnami_airflow
   password: ""
+  sqlConnection: ""
   existingSecret: ""
   existingSecretPasswordKey: ""
+  existingSecretSqlConnectionKey: ""
 ## Redis&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
 ## @param redis.enabled Switch to enable or disable the Redis&reg; helm
