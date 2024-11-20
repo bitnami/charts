@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.4.0 (2024-11-16)
+## 19.4.0 (2024-11-20)
 
 * [bitnami/contour] Add support for deploying GatewayClass and Gateway ([#30455](https://github.com/bitnami/charts/pull/30455))
 
