@@ -144,6 +144,8 @@ spec:
                   name: {{ include "common.names.fullname" . }}-backup-aws
                   {{- end }}
                   key: endpoint
+            - name: AWS_CA_BUNDLE
+              value: {{ .Values.backup.cronjob.caBundle.mountPath }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
