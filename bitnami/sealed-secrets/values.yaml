@@ -520,12 +520,12 @@ ingress:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   ## e.g:
   ## extraRules:
-  ## - host: airflow.local
+  ## - host: sealed-secrets.local
   ##     http:
   ##       path: /
   ##       backend:
   ##         service:
-  ##           name: airflow-svc
+  ##           name: sealed-secrets
   ##           port:
   ##             name: http
   ##

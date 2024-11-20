@@ -712,12 +712,12 @@ ingress:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   ## e.g:
   ## extraRules:
-  ## - host: airflow.local
+  ## - host: keycloak.local
   ##     http:
   ##       path: /
   ##       backend:
   ##         service:
-  ##           name: airflow-svc
+  ##           name: keycloak
   ##           port:
   ##             name: http
   ##
@@ -824,12 +824,12 @@ adminIngress:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   ## e.g:
   ## extraRules:
-  ## - host: airflow.local
+  ## - host: keycloak.local
   ##     http:
   ##       path: /
   ##       backend:
   ##         service:
-  ##           name: airflow-svc
+  ##           name: keycloak
   ##           port:
   ##             name: http
   ##

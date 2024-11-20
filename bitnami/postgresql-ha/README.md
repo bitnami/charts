@@ -750,7 +750,7 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Airflow pods                                                                                          | `true`  |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                      | `""`    |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false` |
