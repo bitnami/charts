@@ -370,7 +370,7 @@ spec:
             {{- if and .Values.backup.enabled .Values.backup.restore.enabled }}
             - name: restore-data
               persistentVolumeClaim:
-                claimName: {{ include "influxdb.restore.claimName" . }}
+                claimName: {{ include "influxdb.backup.claimName" . }}
               mountPath: {{ .Values.backup.directory | quote }}
             {{- end }}
             {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
@@ -407,7 +407,7 @@ spec:
         {{- if and .Values.backup.enabled .Values.backup.restore.enabled }}
         - name: restore-data
           persistentVolumeClaim:
-            claimName: {{ include "influxdb.restore.claimName" . }}
+            claimName: {{ include "influxdb.backup.claimName" . }}
         {{- end }}
         {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
         - name: influxdb-config

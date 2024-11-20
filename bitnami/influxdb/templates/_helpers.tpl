@@ -104,19 +104,6 @@ Return the InfluxDB&trade; backup PVC name.
 {{- end -}}
 
 {{/*
-Return the InfluxDB&trade; Restore PVC name.
-*/}}
-{{- define "influxdb.restore.claimName" -}}
-{{- if .Values.backup.restore.existingClaim }}
-    {{- printf "%s" (tpl .Values.backup.restore.existingClaim $) -}}
-{{- else if .Values.backup.persistence.ownConfig .Values.backup.persistence.existingClaim -}}
-    {{- printf "%s" (tpl .Values.backup.persistence.existingClaim $) -}}
-{{- else -}}
-    {{- printf "%s-backups" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the InfluxDB&trade; initialization scripts configmap.
 */}}
 {{- define "influxdb.initdbScriptsConfigmapName" -}}
