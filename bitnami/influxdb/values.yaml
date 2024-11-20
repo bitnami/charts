@@ -945,10 +945,6 @@ backup:
     ## @param Enable restore. Should be used when backup is enabled
     ##
     enabled: false
-    ## @param backup.restore.exisitingClaim Exisiting PVC where restored data will be stored temporarily. Should be created beforehand
-    ## If not specified backup PVC is used to restore data
-    exisitingClaim: ""
-
 
   ## Persistence parameters
   ##

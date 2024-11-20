@@ -20,6 +20,6 @@ data:
 
     set -e
 
-    aws s3 sync {{ .Values.backup.uploadProviders.aws.bucketName }} {{ .Values.backup.directory }}
+    aws s3 sync {{ .Values.backup.uploadProviders.aws.bucketName }} {{ .Values.backup.directory }}/restore
 {{ end }}
 
