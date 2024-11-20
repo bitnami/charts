@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.2.1 (2024-11-19)
+## 24.2.2 (2024-11-20)
 
-* [bitnami/keycloak] Release 24.2.1 ([#30522](https://github.com/bitnami/charts/pull/30522))
+* [bitnami/keycloak] KEYCLOAK_HOSTNAME present even if KEYCLOAK_PROXY_HEADERS is set ([#30368](https://github.com/bitnami/charts/pull/30368))
+
+## <small>24.2.1 (2024-11-19)</small>
+
+* [bitnami/keycloak] Release 24.2.1 (#30522) ([6702319](https://github.com/bitnami/charts/commit/670231902a194d5585ab06283e45592353b07142)), closes [#30522](https://github.com/bitnami/charts/issues/30522)
 
 ## 24.2.0 (2024-11-12)
 
