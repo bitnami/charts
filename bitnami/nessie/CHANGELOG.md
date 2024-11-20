@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.4 (2024-11-19)
+## 1.0.4 (2024-11-20)
 
 * [bitnami/nessie] Release 1.0.4 ([#30535](https://github.com/bitnami/charts/pull/30535))
 
