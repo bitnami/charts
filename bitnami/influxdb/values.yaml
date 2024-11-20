@@ -1273,13 +1273,4 @@ backup:
       ##     memory: 1024Mi
       ##
       resources: {}
-## @section InfluxDB&trade; restore parameters
-## 
-restore:
-  ## @param Enable restore. Should be enabled when backup is enabled.
-  ##
-  enabled: false
-  ## @param subPath in the backup persistence volume where restored data is tempororily stored
-  ## Should be provided if the cloud provider is enabled. If not provided backup.directory is used as absolute path
-  restoreSubPath: ""
   
