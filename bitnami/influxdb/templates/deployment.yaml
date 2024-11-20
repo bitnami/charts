@@ -91,16 +91,16 @@ spec:
         {{- if .Values.influxdb.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
-        {{- if and .Values.backup.enabled .Values.backup.restore.enabled .Values.uploadProviders.aws.enabled }}
+        {{- if and .Values.backup.enabled .Values.backup.restore.enabled }}
         {{- if .Values.backup.uploadProviders.aws.enabled }}
-        - name: aws-cli
+        - name: aws-cli-restore
           image: {{ include "awsCli.image" . }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
           {{- else }}
           command:
-          - "/tmp/restore-from-aws.sh.sh"
+          - "/tmp/restore-from-aws.sh"
           {{- end }}
           {{- if .Values.backup.uploadProviders.aws.resources }}
           resources: {{- toYaml .Values.backup.uploadProviders.aws.resources | nindent 16 }}
@@ -151,15 +151,11 @@ spec:
             - name: empty-dir
               mountPath: /.aws
               subPath: aws-dir
-            - name: {{ include "common.names.fullname" . }}-backups
-              mountPath: {{ .Values.backup.directory | quote }}
             - name: restore-scripts
               mountPath: /tmp/restore-from-aws.sh
               subPath: restore-from-aws.sh
-            {{- if and .Values.backup.enabled .Values.backup.restore.enabled }}
-            - name: restored-data
+            - name: restore-data
               mountPath: {{ .Values.backup.directory | quote }}
-            {{- end }}
           {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
           {{- end }}
@@ -371,6 +367,11 @@ spec:
               mountPath: /opt/bitnami/influxdb/etc
               subPath: app-conf-dir
             {{- end }}
+            {{- if and .Values.backup.enabled .Values.backup.restore.enabled }}
+            - name: restore-data
+              persistentVolumeClaim:
+                claimName: {{ include "influxdb.restore.claimName" . }}
+            {{- end }}
             {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
@@ -396,14 +397,14 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.backup.enabled .Values.backup.restore.enabled .Values.uploadProviders.aws.enabled }}
+        {{- if and .Values.backup.enabled .Values.backup.restore.enabled }}
         - name: restore-scripts
           configMap:
             name: {{ include "common.names.fullname" . }}-restore
             defaultMode: 0755
         {{- end }}
         {{- if and .Values.backup.enabled .Values.backup.restore.enabled }}
-        - name: restored-data
+        - name: restore-data
           persistentVolumeClaim:
             claimName: {{ include "influxdb.restore.claimName" . }}
         {{- end }}
