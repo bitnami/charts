@@ -156,6 +156,11 @@ spec:
               subPath: restore-from-aws.sh
             - name: restore-data
               mountPath: {{ .Values.backup.directory | quote }}
+            {{- if .Values.backup.cronjob.caBundle.enabled }}
+            - name: ca-bundle
+              mountPath: {{ .Values.backup.cronjob.caBundle.mountPath }}
+              subPath: {{ .Values.backup.cronjob.caBundle.subPath }}
+            {{- end }}
           {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
           {{- end }}
@@ -428,6 +433,11 @@ spec:
         - name: influxdb-credentials
           secret:
             secretName: {{ include "influxdb.secretName" . }}
+        {{- end }}
+        {{- if .Values.backup.cronjob.caBundle.enabled }}
+        - name: ca-bundle
+          configMap:
+            name: {{ .Values.backup.cronjob.caBundle.existingConfigMap }}
         {{- end }}
         - name: data
           {{- if .Values.persistence.enabled }}
