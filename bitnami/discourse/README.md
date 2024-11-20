@@ -745,7 +745,7 @@ export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -
 export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 
-1. Delete the Airflow worker & PostgreSQL statefulset (notice the option _--cascade=false_):
+1. Delete the Discourse worker & PostgreSQL statefulset (notice the option _--cascade=false_):
 
 ```console
 kubectl delete statefulsets.apps --cascade=false discourse-postgresql
@@ -769,7 +769,7 @@ helm upgrade discourse bitnami/discourse \
   --set redis.cluster.enabled=true
 ```
 
-1. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing Discourse worker & PostgreSQL pods and the new statefulset will create a new one:
 
 ```console
 kubectl delete pod discourse-postgresql-0
