@@ -216,6 +216,9 @@ spec:
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: app-base-dir/airflow.cfg
             - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
+            - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
             {{- if .Values.dags.enabled }}
@@ -253,6 +256,7 @@ spec:
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
+            optional: true
         - name: webserver-configuration
           configMap:
             name: {{ include "airflow.web.configMapName" . }}

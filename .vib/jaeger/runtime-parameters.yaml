@@ -1,7 +1,7 @@
 query:
   sidecars: |-
     - name: hotrod-example
-      image: jaegertracing/example-hotrod:{{ .Chart.AppVersion }}
+      image: jaegertracing/example-hotrod:latest
       args: ['all']
       env:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT

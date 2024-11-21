@@ -201,6 +201,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
             {{- if .Values.dags.enabled }}
             {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
             {{- end }}
@@ -231,6 +234,7 @@ spec:
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
+            optional: true
         {{- if .Values.dags.enabled }}
         {{- include "airflow.dags.volumes" . | nindent 8 }}
         {{- end }}

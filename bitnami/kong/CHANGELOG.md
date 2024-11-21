@@ -1,8 +1,20 @@
 # Changelog
 
-## 14.0.5 (2024-11-09)
+## 14.0.8 (2024-11-21)
 
-* [bitnami/kong] Release 14.0.5 ([#30381](https://github.com/bitnami/charts/pull/30381))
+* [bitnami/kong] Release 14.0.8 ([#30560](https://github.com/bitnami/charts/pull/30560))
+
+## <small>14.0.7 (2024-11-21)</small>
+
+* [bitnami/kong] Release 14.0.7 (#30558) ([2f93e0e](https://github.com/bitnami/charts/commit/2f93e0e7a4cf274137bbe8fcb87716326b638dff)), closes [#30558](https://github.com/bitnami/charts/issues/30558)
+
+## <small>14.0.6 (2024-11-19)</small>
+
+* [bitnami/kong] Release 14.0.6 (#30511) ([2cbf54a](https://github.com/bitnami/charts/commit/2cbf54a295ebd343bb41b074641d7b640ff58807)), closes [#30511](https://github.com/bitnami/charts/issues/30511)
+
+## <small>14.0.5 (2024-11-09)</small>
+
+* [bitnami/kong] Release 14.0.5 (#30381) ([097a935](https://github.com/bitnami/charts/commit/097a9359c2b21f2de2e919d8ddd5b68733244af5)), closes [#30381](https://github.com/bitnami/charts/issues/30381)
 
 ## <small>14.0.4 (2024-11-07)</small>
 

@@ -27,7 +27,7 @@ Returns an init-container that prepares the Airflow configuration files for main
     - |
       . /opt/bitnami/scripts/libairflow.sh
 
-      mkdir -p /emptydir/app-base-dir
+      mkdir -p /emptydir/app-base-dir /emptydir/app-conf-dir
 
       # Copy the configuration files to the writable directory
       cp /opt/bitnami/airflow/airflow.cfg /emptydir/app-base-dir/airflow.cfg
@@ -52,6 +52,12 @@ Returns an init-container that prepares the Airflow configuration files for main
       airflow_conf_set "celery" "broker_url" "redis://${redis_credentials}@${REDIS_HOST}:${REDIS_PORT_NUMBER}/${REDIS_DATABASE}"
     {{- end }}
       info "Airflow configuration ready"
+
+      if [[ -f "/opt/bitnami/airflow/config/airflow_local_settings.py" ]]; then
+          cp /opt/bitnami/airflow/config/airflow_local_settings.py /emptydir/app-conf-dir/airflow_local_settings.py
+      else
+          touch /emptydir/app-conf-dir/airflow_local_settings.py
+      fi
 
       # HACK: When testing the db connection it creates an empty airflow.db file at the
       # application root
@@ -101,6 +107,9 @@ Returns an init-container that prepares the Airflow configuration files for main
     - name: configuration
       mountPath: /opt/bitnami/airflow/airflow.cfg
       subPath: airflow.cfg
+    - name: configuration
+      mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+      subPath: airflow_local_settings.py
 {{- end -}}
 
 {{/*

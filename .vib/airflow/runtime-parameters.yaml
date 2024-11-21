@@ -1,6 +1,16 @@
 auth:
   password: ComplicatedPassword123!4
+overrideConfiguration:
+  logging:
+    colored_console_log: 'True'
 loadExamples: true
+web:
+  containerPorts:
+    http: 8080
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
 service:
   ports:
     http: 80
@@ -20,4 +30,5 @@ metrics:
   enabled: true
   service:
     ports:
+      ingest: 9125
       metrics: 9102
