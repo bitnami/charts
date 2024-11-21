@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.33 (2024-11-20)
+## 2.0.34 (2024-11-21)
 
-* [bitnami/chainloop] Release 2.0.33 ([#30554](https://github.com/bitnami/charts/pull/30554))
+* [bitnami/chainloop] Release 2.0.34 ([#30564](https://github.com/bitnami/charts/pull/30564))
+
+## <small>2.0.33 (2024-11-20)</small>
+
+* [bitnami/chainloop] Release 2.0.33 (#30554) ([0aa971e](https://github.com/bitnami/charts/commit/0aa971edce9b7ae453875fd6ddea102cd8fc4eb9)), closes [#30554](https://github.com/bitnami/charts/issues/30554)
 
 ## <small>2.0.32 (2024-11-20)</small>
 
