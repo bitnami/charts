@@ -1,8 +1,12 @@
 # Changelog
 
+## 35.0.0 (2024-11-22)
+
+* [bitnami/spring-cloud-dataflow] Use MariaDB 11.4 ([#30589](https://github.com/bitnami/charts/pull/30589))
+
 ## 34.0.0 (2024-11-12)
 
-* [bitnami/spring-cloud-dataflow] Update kafka subchart to 31.0.0 ([#30426](https://github.com/bitnami/charts/pull/30426))
+* [bitnami/spring-cloud-dataflow] Update kafka subchart to 31.0.0 (#30426) ([01bfb98](https://github.com/bitnami/charts/commit/01bfb98c9b21baf9c18d15ef67e8a116979994e9)), closes [#30426](https://github.com/bitnami/charts/issues/30426)
 
 ## 33.0.0 (2024-11-12)
 
