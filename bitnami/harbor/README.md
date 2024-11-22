@@ -1220,6 +1220,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 25.0.0
+
+This major updates the PostgreSQL version from 14.x.x to 17.x.x. Instead of overwritting it in this chart values, it will automatically use the version defined in the postgresql subchart.
+
 ### To 24.0.0
 
 This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x. Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
