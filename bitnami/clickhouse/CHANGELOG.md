@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.3 (2024-11-18)
+## 7.0.0 (2024-11-22)
 
-* [bitnami/clickhouse] Release 6.3.3 ([#30505](https://github.com/bitnami/charts/pull/30505))
+* [bitnami/clickhouse] Remove subchart image from values.yaml ([#30586](https://github.com/bitnami/charts/pull/30586))
+
+## <small>6.3.3 (2024-11-18)</small>
+
+* [bitnami/clickhouse] Release 6.3.3 (#30505) ([5f728aa](https://github.com/bitnami/charts/commit/5f728aaf56f76877c5f00b48e1f546bc2050614b)), closes [#30505](https://github.com/bitnami/charts/issues/30505)
 
 ## <small>6.3.2 (2024-11-08)</small>
 
