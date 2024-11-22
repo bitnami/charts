@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.0.2 (2024-11-14)
+## 25.0.0 (2024-11-22)
 
-* [bitnami/harbor] Release 24.0.2 ([#30461](https://github.com/bitnami/charts/pull/30461))
+* [bitnami/harbor] Remove subchart image from values.yaml ([#30587](https://github.com/bitnami/charts/pull/30587))
+
+## <small>24.0.2 (2024-11-14)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/harbor] Release 24.0.2 (#30461) ([ec025a7](https://github.com/bitnami/charts/commit/ec025a7cc5a9dbde506653609ddb41d5941cd682)), closes [#30461](https://github.com/bitnami/charts/issues/30461)
 
 ## <small>24.0.1 (2024-10-21)</small>
 
