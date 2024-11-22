@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.6 (2024-11-08)
+## 15.0.7 (2024-11-22)
 
-* [bitnami/rabbitmq] Unify seLinuxOptions default value ([#30327](https://github.com/bitnami/charts/pull/30327))
+* [bitnami/rabbitmq] Release 15.0.7 ([#30572](https://github.com/bitnami/charts/pull/30572))
+
+## <small>15.0.6 (2024-11-08)</small>
+
+* [bitnami/rabbitmq] Unify seLinuxOptions default value (#30327) ([9537964](https://github.com/bitnami/charts/commit/95379640c83645c2b37e8cebc18823cf5984308b)), closes [#30327](https://github.com/bitnami/charts/issues/30327)
 
 ## <small>15.0.5 (2024-10-31)</small>
 
