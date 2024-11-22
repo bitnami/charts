@@ -54,7 +54,7 @@ data:
     set -e
 
     gcloud auth activate-service-account --key-file /var/secrets/google/{{ .Values.backup.uploadProviders.google.secretKey }}
-    gsutil -m rsync -r -d {{ .Values.backup.directory }}/ {{ .Values.backup.uploadProviders.google.bucketName }}
+    gcloud storage rsync -r {{ .Values.backup.directory }}/ {{ .Values.backup.uploadProviders.google.bucketName }} --delete-unmatched-destination-objects
   upload-azure.sh: |-
     #!/bin/sh
 
