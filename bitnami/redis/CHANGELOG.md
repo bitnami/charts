@@ -1,5 +1,9 @@
 # Changelog
 
+## <small>20.3.1 (2024-11-22)</small>
+
+* [bitnami/redis] add label for umbrella chart in case redis chart is being used as dependency ([#30491](https://github.com/bitnami/charts/pull/30491))
+
 ## 20.3.0 (2024-11-14)
 
 * [bitnami/redis] feat: :sparkles: Allow updating credentials via values.yaml ([#30452](https://github.com/bitnami/charts/pull/30452))
