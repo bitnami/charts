@@ -543,16 +543,13 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 
 ### Zookeeper subchart parameters
 
-| Name                             | Description                                                                                                                                                                                                | Value                       |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `zookeeper.enabled`              | Deploy Zookeeper subchart                                                                                                                                                                                  | `true`                      |
-| `zookeeper.replicaCount`         | Number of Zookeeper instances                                                                                                                                                                              | `3`                         |
-| `zookeeper.service.ports.client` | Zookeeper client port                                                                                                                                                                                      | `2181`                      |
-| `zookeeper.image.registry`       | Zookeeper image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
-| `zookeeper.image.repository`     | Zookeeper image repository                                                                                                                                                                                 | `REPOSITORY_NAME/zookeeper` |
-| `zookeeper.image.pullPolicy`     | Zookeeper image pull policy                                                                                                                                                                                | `IfNotPresent`              |
-| `zookeeper.resourcesPreset`      | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`                     |
-| `zookeeper.resources`            | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
+| Name                             | Description                                                                                                                                                                                                | Value   |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `zookeeper.enabled`              | Deploy Zookeeper subchart                                                                                                                                                                                  | `true`  |
+| `zookeeper.replicaCount`         | Number of Zookeeper instances                                                                                                                                                                              | `3`     |
+| `zookeeper.service.ports.client` | Zookeeper client port                                                                                                                                                                                      | `2181`  |
+| `zookeeper.resourcesPreset`      | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro` |
+| `zookeeper.resources`            | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`    |
 
 ### Network Policies
 
