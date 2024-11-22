@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.29 (2024-11-08)
+## 1.4.30 (2024-11-22)
 
-* [bitnami/vault] Unify seLinuxOptions default value ([#30323](https://github.com/bitnami/charts/pull/30323))
+* [bitnami/vault] Release 1.4.30 ([#30573](https://github.com/bitnami/charts/pull/30573))
+
+## <small>1.4.29 (2024-11-08)</small>
+
+* [bitnami/vault] Unify seLinuxOptions default value (#30323) ([c107a0d](https://github.com/bitnami/charts/commit/c107a0dab0e4b0a692cbe458903bf0bdaa2a855f)), closes [#30323](https://github.com/bitnami/charts/issues/30323)
 
 ## <small>1.4.28 (2024-11-07)</small>
 
