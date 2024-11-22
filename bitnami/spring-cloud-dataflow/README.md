@@ -765,6 +765,10 @@ Find more information about how to deal with common errors related to Bitnami He
 
 ## Upgrading
 
+### To 35.0.0
+
+This major updates the MariaDB version from 10.11.x to 11.4.x. Instead of overwritting it in this chart values, it will automatically use the version defined in the MariaDB subchart.
+
 ### To 34.0.0
 
 This major updates the Kafka subchart to its newest major, 31.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3100).
