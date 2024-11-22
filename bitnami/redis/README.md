@@ -458,6 +458,8 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `fullnameOverride`        | String to fully override common.names.fullname                                                                 | `""`            |
 | `namespaceOverride`       | String to fully override common.names.namespace                                                                | `""`            |
 | `commonLabels`            | Labels to add to all deployed objects                                                                          | `{}`            |
+| `umbrellaChart.name`      | Name of the umbrella chart, Can be passed as {{ .Chart.Name }}                                                 | `""`            |
+| `umbrellaChart.version`   | Version of the umbrella chart, Can be passed as {{ .Chart.Version }}                                           | `""`            |
 | `commonAnnotations`       | Annotations to add to all deployed objects                                                                     | `{}`            |
 | `secretAnnotations`       | Annotations to add to secret                                                                                   | `{}`            |
 | `clusterDomain`           | Kubernetes cluster domain name                                                                                 | `cluster.local` |
