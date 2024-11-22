@@ -4055,32 +4055,6 @@ rbac:
 ## Redis parameters
 ##
 redis:
-  ## Bitnami Redis image
-  ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-  ## @param redis.image.registry [default: REGISTRY_NAME] Redis image registry
-  ## @param redis.image.repository [default: REPOSITORY_NAME/redis] Redis image repository
-  ## @skip redis.image.tag Redis image tag (immutable tags are recommended)
-  ## @param redis.image.digest Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param redis.image.pullPolicy Redis image pull policy
-  ## @param redis.image.pullSecrets Redis image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/redis
-    tag: 7.4.1-debian-12-r2
-    digest: ""
-    ## Specify a imagePullPolicy
-    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
   ## @param redis.enabled Enable Redis dependency
   ##
   enabled: true
