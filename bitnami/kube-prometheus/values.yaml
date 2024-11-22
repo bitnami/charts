@@ -1179,6 +1179,10 @@ prometheus:
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
   scrapeConfigNamespaceSelector: {}
+  ## @param prometheus.scrapeClasses List of scrape classes to expose to scraping objects
+  ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#scrapeclass for usage
+  ##
+  scrapeClasses: []
   ## @param prometheus.retention Metrics retention days
   ##
   retention: 10d
