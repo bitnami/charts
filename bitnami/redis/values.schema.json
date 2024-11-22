@@ -78,6 +78,21 @@
             "description": "Labels to add to all deployed objects",
             "default": {}
         },
+        "umbrellaChart": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the umbrella chart, Can be passed as {{ .Chart.Name }}",
+                    "default": ""
+                },
+                "version": {
+                    "type": "string",
+                    "description": "Version of the umbrella chart, Can be passed as {{ .Chart.Version }}",
+                    "default": ""
+                }
+            }
+        },
         "commonAnnotations": {
             "type": "object",
             "description": "Annotations to add to all deployed objects",
@@ -926,6 +941,11 @@
                             "default": true
                         }
                     }
+                },
+                "extraPodSpec": {
+                    "type": "object",
+                    "description": "Optionally specify extra PodSpec for the Redis&reg; master pod(s)",
+                    "default": {}
                 }
             }
         },
@@ -1659,6 +1679,11 @@
                             "default": true
                         }
                     }
+                },
+                "extraPodSpec": {
+                    "type": "object",
+                    "description": "Optionally specify extra PodSpec for the Redis&reg; replicas pod(s)",
+                    "default": {}
                 }
             }
         },
@@ -2300,6 +2325,11 @@
                     "type": "number",
                     "description": "Integer setting the termination grace period for the redis-node pods",
                     "default": 30
+                },
+                "extraPodSpec": {
+                    "type": "object",
+                    "description": "Optionally specify extra PodSpec for the Redis&reg; Sentinel pod(s)",
+                    "default": {}
                 }
             }
         },
@@ -3060,6 +3090,12 @@
                             "default": 0
                         }
                     }
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to volume permissions init container.",
+                    "default": [],
+                    "items": {}
                 }
             }
         },
