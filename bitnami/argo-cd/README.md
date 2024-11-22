@@ -1256,40 +1256,35 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Other Parameters
 
-| Name                                                          | Description                                                                                           | Value                   |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
-| `rbac.create`                                                 | Specifies whether RBAC resources should be created                                                    | `true`                  |
-| `redis.image.registry`                                        | Redis image registry                                                                                  | `REGISTRY_NAME`         |
-| `redis.image.repository`                                      | Redis image repository                                                                                | `REPOSITORY_NAME/redis` |
-| `redis.image.digest`                                          | Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `redis.image.pullPolicy`                                      | Redis image pull policy                                                                               | `IfNotPresent`          |
-| `redis.image.pullSecrets`                                     | Redis image pull secrets                                                                              | `[]`                    |
-| `redis.enabled`                                               | Enable Redis dependency                                                                               | `true`                  |
-| `redis.nameOverride`                                          | Name override for the Redis dependency                                                                | `""`                    |
-| `redis.service.ports.redis`                                   | Service port for Redis dependency                                                                     | `6379`                  |
-| `redis.auth.enabled`                                          | Enable Redis dependency authentication                                                                | `true`                  |
-| `redis.auth.existingSecret`                                   | Existing secret to load redis dependency password                                                     | `""`                    |
-| `redis.auth.existingSecretPasswordKey`                        | Pasword key name inside the existing secret                                                           | `redis-password`        |
-| `redis.architecture`                                          | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                | `standalone`            |
-| `externalRedis.enabled`                                       | Enables External Redis                                                                                | `false`                 |
-| `externalRedis.host`                                          | External Redis host                                                                                   | `""`                    |
-| `externalRedis.port`                                          | External Redis port                                                                                   | `6379`                  |
-| `externalRedis.password`                                      | External Redis password                                                                               | `""`                    |
-| `externalRedis.existingSecret`                                | Existing secret for the external redis                                                                | `""`                    |
-| `externalRedis.existingSecretPasswordKey`                     | Password key for the existing secret containing the external redis password                           | `redis-password`        |
-| `externalRedis.selector`                                      | External Redis selector labels                                                                        | `{}`                    |
-| `redisWait.enabled`                                           | Enables waiting for redis                                                                             | `true`                  |
-| `redisWait.extraArgs`                                         | Additional arguments for the redis-cli call, such as TLS                                              | `""`                    |
-| `redisWait.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                              | `true`                  |
-| `redisWait.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`                    |
-| `redisWait.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                                        | `1001`                  |
-| `redisWait.containerSecurityContext.runAsGroup`               | Set Argo CD repo server containers' Security Context runAsGroup                                       | `1001`                  |
-| `redisWait.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD repo server containers' Security Context allowPrivilegeEscalation                         | `false`                 |
-| `redisWait.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped                       | `["ALL"]`               |
-| `redisWait.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' repo server Security Context readOnlyRootFilesystem                           | `true`                  |
-| `redisWait.containerSecurityContext.runAsNonRoot`             | Set Argo CD repo server containers' Security Context runAsNonRoot                                     | `true`                  |
-| `redisWait.containerSecurityContext.privileged`               | Set redisWait container's Security Context privileged                                                 | `false`                 |
-| `redisWait.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                      | `RuntimeDefault`        |
+| Name                                                          | Description                                                                     | Value            |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------- | ---------------- |
+| `rbac.create`                                                 | Specifies whether RBAC resources should be created                              | `true`           |
+| `redis.enabled`                                               | Enable Redis dependency                                                         | `true`           |
+| `redis.nameOverride`                                          | Name override for the Redis dependency                                          | `""`             |
+| `redis.service.ports.redis`                                   | Service port for Redis dependency                                               | `6379`           |
+| `redis.auth.enabled`                                          | Enable Redis dependency authentication                                          | `true`           |
+| `redis.auth.existingSecret`                                   | Existing secret to load redis dependency password                               | `""`             |
+| `redis.auth.existingSecretPasswordKey`                        | Pasword key name inside the existing secret                                     | `redis-password` |
+| `redis.architecture`                                          | Redis&reg; architecture. Allowed values: `standalone` or `replication`          | `standalone`     |
+| `externalRedis.enabled`                                       | Enables External Redis                                                          | `false`          |
+| `externalRedis.host`                                          | External Redis host                                                             | `""`             |
+| `externalRedis.port`                                          | External Redis port                                                             | `6379`           |
+| `externalRedis.password`                                      | External Redis password                                                         | `""`             |
+| `externalRedis.existingSecret`                                | Existing secret for the external redis                                          | `""`             |
+| `externalRedis.existingSecretPasswordKey`                     | Password key for the existing secret containing the external redis password     | `redis-password` |
+| `externalRedis.selector`                                      | External Redis selector labels                                                  | `{}`             |
+| `redisWait.enabled`                                           | Enables waiting for redis                                                       | `true`           |
+| `redisWait.extraArgs`                                         | Additional arguments for the redis-cli call, such as TLS                        | `""`             |
+| `redisWait.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                        | `true`           |
+| `redisWait.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                | `{}`             |
+| `redisWait.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                  | `1001`           |
+| `redisWait.containerSecurityContext.runAsGroup`               | Set Argo CD repo server containers' Security Context runAsGroup                 | `1001`           |
+| `redisWait.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD repo server containers' Security Context allowPrivilegeEscalation   | `false`          |
+| `redisWait.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped | `["ALL"]`        |
+| `redisWait.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' repo server Security Context readOnlyRootFilesystem     | `true`           |
+| `redisWait.containerSecurityContext.runAsNonRoot`             | Set Argo CD repo server containers' Security Context runAsNonRoot               | `true`           |
+| `redisWait.containerSecurityContext.privileged`               | Set redisWait container's Security Context privileged                           | `false`          |
+| `redisWait.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                | `RuntimeDefault` |
 
 The above parameters map to the env variables defined in [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd). For more information please refer to the [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd) image documentation.
 
