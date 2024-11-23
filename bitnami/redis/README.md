@@ -835,7 +835,6 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `sentinel.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                                | `None`                           |
 | `sentinel.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                                                                                                         | `{}`                             |
 | `sentinel.service.headless.annotations`                      | Annotations for the headless service.                                                                                                                                                                                               | `{}`                             |
-| `sentinel.service.headless.extraPortsEnabled`                | Enable or disable exposing extraPorts in the headless service.                                                                                                                                                                      | `false`                          |
 | `sentinel.masterService.enabled`                             | Enable master service pointing to the current master (experimental)                                                                                                                                                                 | `false`                          |
 | `sentinel.masterService.type`                                | Redis&reg; Sentinel master service type                                                                                                                                                                                             | `ClusterIP`                      |
 | `sentinel.masterService.ports.redis`                         | Redis&reg; service port for Redis&reg;                                                                                                                                                                                              | `6379`                           |
@@ -1029,6 +1028,12 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `useExternalDNS.additionalAnnotations` | Extra annotations to be utilized when `external-dns` is enabled.                                                                         | `{}`                                |
 | `useExternalDNS.annotationKey`         | The annotation key utilized when `external-dns` is enabled. Setting this to `false` will disable annotations.                            | `external-dns.alpha.kubernetes.io/` |
 | `useExternalDNS.suffix`                | The DNS suffix utilized when `external-dns` is enabled.  Note that we prepend the suffix with the full name of the release.              | `""`                                |
+
+### service configuration parameters
+
+| Name                          | Description                                     | Value |
+| ----------------------------- | ----------------------------------------------- | ----- |
+| `service.headless.extraPorts` | Extra ports to expose for the headless service. | `[]`  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -1461,8 +1461,6 @@ sentinel:
       ## @param sentinel.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-      ## @param sentinel.service.headless.extraPortsEnabled Enable or disable exposing extraPorts in the headless service.
-      extraPortsEnabled: false
 
   ## Redis&reg; master service parameters
   ##
@@ -2254,3 +2252,17 @@ useExternalDNS:
   suffix: ""
   annotationKey: external-dns.alpha.kubernetes.io/
   additionalAnnotations: {}
+
+## @section service configuration parameters
+##
+service:
+  headless:
+    ## @param service.headless.extraPorts Extra ports to expose for the headless service.
+    ## Example:
+    ## extraPorts:
+    ##   - name: my-custom-port
+    ##     port: 12345
+    ##     protocol: TCP
+    ##     targetPort: 12345
+    ##
+    extraPorts: []

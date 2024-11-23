@@ -2202,18 +2202,13 @@
                             "description": "Additional settings for the sessionAffinity",
                             "default": {}
                         },
-                        "headless": {
-                            "type": "object",
-                            "properties": {
-                                "annotations": {
-                                    "type": "object",
-                                    "description": "Annotations for the headless service.",
-                                    "default": {}
-                                },
-                                "extraPortsEnabled": {
-                                    "type": "boolean",
-                                    "description": "Enable or disable exposing extraPorts in the headless service.",
-                                    "default": false
+                            "headless": {
+                                "type": "object",
+                                "properties": {
+                                    "annotations": {
+                                        "type": "object",
+                                        "description": "Annotations for the headless service.",
+                                        "default": {}
                                 }
                             }
                         }
@@ -3274,6 +3269,22 @@
                     "description": "The DNS suffix utilized when `external-dns` is enabled.  Note that we prepend the suffix with the full name of the release.",
                     "default": ""
                 }
+            }
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+              "headless": {
+                "type": "object",
+                "properties": {
+                    "extraPorts": {
+                        "type": "array",
+                        "description": "Extra ports to expose for the headless service",
+                        "default": [],
+                        "items": {}
+                    }
+                }
+              }
             }
         }
     }

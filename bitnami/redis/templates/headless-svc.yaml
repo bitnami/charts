@@ -32,11 +32,12 @@ spec:
       port: {{ .Values.sentinel.service.ports.sentinel }}
       targetPort: redis-sentinel
     {{- end }}
-    {{- if and .Values.sentinel.service.headless.extraPortsEnabled .Values.sentinel.service.extraPorts }}
-    {{- range .Values.sentinel.service.extraPorts }}
-    - name: {{ .name }}
+    {{- if .Values.service.headless.extraPorts }}
+    {{- range .Values.service.headless.extraPorts }}
+    - name: "{{ .name }}"
       port: {{ .port }}
-      targetPort: {{ .targetPort }}
+      protocol: "{{ .protocol | default "TCP" }}"
+      targetPort: {{ .targetPort | default .port }}
     {{- end }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
