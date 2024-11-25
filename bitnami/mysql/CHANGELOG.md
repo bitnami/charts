@@ -1,8 +1,12 @@
 # Changelog
 
+## 12.0.1 (2024-11-25)
+
+* [bitnami/mysql] Release 12.0.1 ([#30614](https://github.com/bitnami/charts/pull/30614))
+
 ## 12.0.0 (2024-11-12)
 
-* [bitnami/mysql] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job ([#30351](https://github.com/bitnami/charts/pull/30351))
+* [bitnami/mysql] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job (# ([21e98a5](https://github.com/bitnami/charts/commit/21e98a53e0163afef595094d9161509729db6fa4)), closes [#30351](https://github.com/bitnami/charts/issues/30351)
 
 ## <small>11.1.20 (2024-11-04)</small>
 
