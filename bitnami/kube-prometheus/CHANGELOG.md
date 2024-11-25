@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.1.0 (2024-11-22)
+## 10.1.0 (2024-11-25)
 
 * [bitnami/kube-prometheus] Add support for scrapeClasses ([#30579](https://github.com/bitnami/charts/pull/30579))
 
