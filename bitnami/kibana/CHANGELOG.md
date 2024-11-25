@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.1 (2024-11-18)
+## 11.3.2 (2024-11-22)
 
-* [bitnami/kibana] Release 11.3.1 ([#30499](https://github.com/bitnami/charts/pull/30499))
+* [bitnami/kibana] Release 11.3.2 ([#30593](https://github.com/bitnami/charts/pull/30593))
+
+## <small>11.3.1 (2024-11-18)</small>
+
+* [bitnami/kibana] Release 11.3.1 (#30499) ([078f638](https://github.com/bitnami/charts/commit/078f638b0d091ac39ff4425f1cf609f95e00711c)), closes [#30499](https://github.com/bitnami/charts/issues/30499)
 
 ## 11.3.0 (2024-10-31)
 
