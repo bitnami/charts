@@ -222,6 +222,8 @@ spec:
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME)"
             {{- end }}
+            - name: RABBITMQ_UPDATE_PASSWORD
+              value: {{ ternary "yes" "no" .Values.auth.updatePassword | quote }}
             - name: RABBITMQ_MNESIA_DIR
               value: "{{ .Values.persistence.mountPath }}/$(RABBITMQ_NODE_NAME)"
             - name: RABBITMQ_LDAP_ENABLE

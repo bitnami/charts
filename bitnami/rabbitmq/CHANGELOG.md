@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.7 (2024-11-22)
+## 15.1.0 (2024-11-25)
 
-* [bitnami/rabbitmq] Release 15.0.7 ([#30572](https://github.com/bitnami/charts/pull/30572))
+* [bitnami/rabbitmq] feat: :sparkles: Allow password updates ([#30615](https://github.com/bitnami/charts/pull/30615))
+
+## <small>15.0.7 (2024-11-22)</small>
+
+* [bitnami/rabbitmq] Release 15.0.7 (#30572) ([212993b](https://github.com/bitnami/charts/commit/212993b0c06a0f0a3ccafdc8c253fe260b525b73)), closes [#30572](https://github.com/bitnami/charts/issues/30572)
 
 ## <small>15.0.6 (2024-11-08)</small>
 

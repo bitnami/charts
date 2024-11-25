@@ -176,6 +176,13 @@ extraConfiguration: |
   load_definitions = /app/load_definition.json
 ```
 
+### Update credentials
+
+The Bitnami RabbitMQ chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `auth.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `auth.password` and `auth.updatePassword=true`.
+- Run `helm upgrade` specifying a new secret in `auth.existingSecret` and `auth.updatePassword=true`.
+
 ### Configure LDAP support
 
 LDAP support can be enabled in the chart by specifying the `ldap.*` parameters while creating a release. For example:
@@ -387,6 +394,7 @@ Because they expose different sets of data, a valid use case is to scrape metric
 | `auth.username`                              | RabbitMQ application username                                                                                                                                           | `user`                                            |
 | `auth.password`                              | RabbitMQ application password                                                                                                                                           | `""`                                              |
 | `auth.securePassword`                        | Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions and 'true' when not setting the auth.password parameter. | `true`                                            |
+| `auth.updatePassword`                        | Update RabbitMQ password on secret change                                                                                                                               | `false`                                           |
 | `auth.existingPasswordSecret`                | Existing secret with RabbitMQ credentials (existing secret must contain a value for `rabbitmq-password` key or override with setting auth.existingSecretPasswordKey)    | `""`                                              |
 | `auth.existingSecretPasswordKey`             | Password key to be retrieved from existing secret                                                                                                                       | `rabbitmq-password`                               |
 | `auth.enableLoopbackUser`                    | If enabled, the user `auth.username` can only connect from localhost                                                                                                    | `false`                                           |
