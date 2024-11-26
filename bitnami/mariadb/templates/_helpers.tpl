@@ -68,6 +68,29 @@ Create the name of the service account to use
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+Return the MariaDB TLS credentials secret
+*/}}
+{{- define "mariadb.tlsSecretName" -}}
+{{- if .Values.tls.existingSecret -}}
+    {{- print (tpl .Values.tls.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB TLS credentials secret
+*/}}
+{{- define "mariadb.tlsCASecretName" -}}
+{{- if .Values.tls.existingCASecret -}}
+    {{- print (tpl .Values.tls.existingCASecret $) -}}
+{{- else -}}
+    {{- printf "%s-ca-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Return the configmap with the MariaDB Primary configuration
 */}}
