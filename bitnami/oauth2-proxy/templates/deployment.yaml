@@ -103,7 +103,7 @@ spec:
             - --google-use-application-default-credentials=true
             {{- else }}
             - --google-service-account-json=/bitnami/oauth2-proxy/conf/google/service-account.json
-+            {{- end }}
+            {{- end }}
             {{- if .Values.configuration.google.groups }}
             {{- range $group := .Values.configuration.google.groups }}
             - --google-group={{ $group }}
