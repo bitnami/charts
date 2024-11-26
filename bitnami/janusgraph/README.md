@@ -314,15 +314,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Cassandra storage sub-chart
 
-| Name                          | Description                                                                                               | Value                       |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `cassandra.image.registry`    | Cassandra image registry                                                                                  | `REGISTRY_NAME`             |
-| `cassandra.image.repository`  | Cassandra image repository                                                                                | `REPOSITORY_NAME/cassandra` |
-| `cassandra.image.digest`      | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
-| `cassandra.keyspace`          | Name for cassandra's janusgraph keyspace                                                                  | `bitnami_janusgraph`        |
-| `cassandra.dbUser.user`       | Cassandra admin user                                                                                      | `bn_janusgraph`             |
-| `cassandra.dbUser.password`   | Password for `dbUser.user`. Randomly generated if empty                                                   | `""`                        |
-| `cassandra.service.ports.cql` | Cassandra cql port                                                                                        | `9043`                      |
+| Name                          | Description                                             | Value                |
+| ----------------------------- | ------------------------------------------------------- | -------------------- |
+| `cassandra.keyspace`          | Name for cassandra's janusgraph keyspace                | `bitnami_janusgraph` |
+| `cassandra.dbUser.user`       | Cassandra admin user                                    | `bn_janusgraph`      |
+| `cassandra.dbUser.password`   | Password for `dbUser.user`. Randomly generated if empty | `""`                 |
+| `cassandra.service.ports.cql` | Cassandra cql port                                      | `9043`               |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
@@ -439,6 +436,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+This major updates the Cassandra version from 4.1.x to 5.0.x. Instead of overwritting it in this chart values, it will automatically use the version defined in the cassandra subchart.
 
 ## License
 

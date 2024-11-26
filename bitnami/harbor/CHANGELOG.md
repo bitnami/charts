@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.0.1 (2024-10-21)
+## 24.0.2 (2024-11-14)
 
-* [bitnami/harbor] Release 24.0.1 ([#30007](https://github.com/bitnami/charts/pull/30007))
+* [bitnami/harbor] Release 24.0.2 ([#30461](https://github.com/bitnami/charts/pull/30461))
+
+## <small>24.0.1 (2024-10-21)</small>
+
+* [bitnami/harbor] Release 24.0.1 (#30007) ([3ce23ef](https://github.com/bitnami/charts/commit/3ce23ef70ae1054732b2445d0175ed854eedb8e5)), closes [#30007](https://github.com/bitnami/charts/issues/30007)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 24.0.0 (2024-10-03)
 

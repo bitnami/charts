@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.5 (2024-10-08)
+## 0.1.6 (2024-11-17)
 
-* [bitnami/keydb] Release 0.1.5 ([#29814](https://github.com/bitnami/charts/pull/29814))
+* [bitnami/keydb] Release 0.1.6 ([#30489](https://github.com/bitnami/charts/pull/30489))
+
+## <small>0.1.5 (2024-10-08)</small>
+
+* [bitnami/keydb] Release 0.1.5 (#29814) ([8ecfbad](https://github.com/bitnami/charts/commit/8ecfbadb2b93576772fd134aeedcb13ad20221d2)), closes [#29814](https://github.com/bitnami/charts/issues/29814)
 
 ## <small>0.1.4 (2024-09-09)</small>
 

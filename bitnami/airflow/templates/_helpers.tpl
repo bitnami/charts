@@ -41,6 +41,13 @@ Return the proper Airflow Worker fullname
 {{- end -}}
 
 {{/*
+Return the proper Airflow metrics fullname
+*/}}
+{{- define "airflow.metrics.fullname" -}}
+{{- printf "%s-statsd-metrics" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper Airflow image name
 */}}
 {{- define "airflow.image" -}}
@@ -164,6 +171,17 @@ Get the configmap name for Airflow Webserver
     {{- print (tpl .Values.web.existingConfigmap .) -}}
 {{- else -}}
     {{- print (include "airflow.web.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the configmap name for StatsD exporter
+*/}}
+{{- define "airflow.metrics.configMapName" -}}
+{{- if .Values.metrics.existingConfigmap -}}
+    {{- print (tpl .Values.metrics.existingConfigmap .) -}}
+{{- else -}}
+    {{- print (include "airflow.metrics.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

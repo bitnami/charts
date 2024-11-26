@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.14 (2024-11-08)
+## 1.4.0 (2024-11-15)
 
-* [bitnami/opensearch] Unify seLinuxOptions default value ([#30336](https://github.com/bitnami/charts/pull/30336))
+* [bitnami/opensearch] Enable automated setup of snapshot policies ([#29796](https://github.com/bitnami/charts/pull/29796))
+
+## <small>1.3.14 (2024-11-08)</small>
+
+* [bitnami/opensearch] Unify seLinuxOptions default value (#30336) ([2b670fc](https://github.com/bitnami/charts/commit/2b670fc5c17e0dd5ddafef2c062c1a474d07eb21)), closes [#30336](https://github.com/bitnami/charts/issues/30336)
 
 ## <small>1.3.13 (2024-11-06)</small>
 

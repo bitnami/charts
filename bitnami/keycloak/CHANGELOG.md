@@ -1,8 +1,16 @@
 # Changelog
 
-## 24.2.0 (2024-11-08)
+## 24.2.2 (2024-11-22)
 
-* [bitnami/keycloak] Fix metrics ports and servicemonitor ([#30303](https://github.com/bitnami/charts/pull/30303))
+* [bitnami/keycloak] Release 24.2.2 ([#30576](https://github.com/bitnami/charts/pull/30576))
+
+## <small>24.2.1 (2024-11-19)</small>
+
+* [bitnami/keycloak] Release 24.2.1 (#30522) ([6702319](https://github.com/bitnami/charts/commit/670231902a194d5585ab06283e45592353b07142)), closes [#30522](https://github.com/bitnami/charts/issues/30522)
+
+## 24.2.0 (2024-11-12)
+
+* [bitnami/keycloak] Fix metrics ports and servicemonitor (#30303) ([c289b97](https://github.com/bitnami/charts/commit/c289b97caddc8e511e00d46937b508204f41de9a)), closes [#30303](https://github.com/bitnami/charts/issues/30303)
 
 ## 24.1.0 (2024-11-06)
 

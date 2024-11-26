@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.3.0 (2024-10-30)
+## 11.3.2 (2024-11-22)
 
-* [bitnami/kibana] set base host to 0.0.0.0 ([#30131](https://github.com/bitnami/charts/pull/30131))
+* [bitnami/kibana] Release 11.3.2 ([#30593](https://github.com/bitnami/charts/pull/30593))
+
+## <small>11.3.1 (2024-11-18)</small>
+
+* [bitnami/kibana] Release 11.3.1 (#30499) ([078f638](https://github.com/bitnami/charts/commit/078f638b0d091ac39ff4425f1cf609f95e00711c)), closes [#30499](https://github.com/bitnami/charts/issues/30499)
+
+## 11.3.0 (2024-10-31)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kibana] set base host to 0.0.0.0 (#30131) ([66abb23](https://github.com/bitnami/charts/commit/66abb2368868203990ff96fd0bc95e888b2dd977)), closes [#30131](https://github.com/bitnami/charts/issues/30131)
 
 ## <small>11.2.24 (2024-10-17)</small>
 

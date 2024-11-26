@@ -3,6 +3,48 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{/*
+Return the Airflow common configuration.
+ref: https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html
+*/}}
+{{- define "airflow.configuration" -}}
+{{- if .Values.configuration }}
+{{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) }}
+{{- else }}
+core:
+  load_examples: {{ ternary "True" "False" .Values.loadExamples | squote }}
+  executor: {{ .Values.executor | quote }}
+logging:
+  colored_console_log: 'False'
+metrics:
+  statsd_on: {{ ternary "True" "False" (.Values.metrics.enabled) | squote }}
+  statsd_port: {{ .Values.metrics.service.ports.ingest | quote }}
+  statsd_prefix: airflow
+  statsd_host: {{ include "airflow.metrics.fullname" . | quote }}
+scheduler:
+  standalone_dag_processor: {{ ternary "True" "False" .Values.dagProcessor.enabled | squote }}
+triggerer:
+  default_capacity: {{ .Values.triggerer.defaultCapacity | quote }}
+webserver:
+  base_url: {{ include "airflow.baseUrl" . | quote }}
+  enable_proxy_fix: {{ ternary "True" "False" (and .Values.ingress.enabled .Values.ingress.tls) | squote }}
+  web_server_port: {{ .Values.web.containerPorts.http | quote }}
+  {{- if .Values.web.tls.enabled }}
+  web_server_ssl_cert: "/opt/bitnami/airflow/certs/tls.crt"
+  web_server_ssl_key: "/opt/bitnami/airflow/certs/tls.key"
+  {{- end }}
+{{- if contains "KubernetesExecutor" .Values.executor }}
+kubernetes_executor:
+  namespace: {{ include "common.names.namespace" . | quote }}
+  worker_container_repository: {{ printf "%s/%s" .Values.image.registry .Values.image.repository | quote }}
+  worker_container_tag: {{ .Values.image.tag | quote }}
+  delete_worker_pods: 'True'
+  delete_worker_pods_on_failure: 'True'
+  pod_template_file: "/opt/bitnami/airflow/config/pod_template.yaml"
+{{- end }}
+{{- end }}
+{{- end }}
+
 {{- if not .Values.existingConfigmap }}
 apiVersion: v1
 kind: ConfigMap
@@ -14,40 +56,20 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 data:
+  {{- $configuration := include "airflow.configuration" . | fromYaml -}}
+  {{- if .Values.overrideConfiguration }}
+  {{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.overrideConfiguration "context" .) | fromYaml }}
+  {{- $configuration = mustMergeOverwrite $configuration $overrideConfiguration }}
+  {{- end }}
   airflow.cfg: |-
-  {{- if .Values.configuration }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) }}
-  {{- else }}
-    [core]
-    load_examples={{ ternary "True" "False" .Values.loadExamples }}
-    executor={{ .Values.executor }}
-
-    [logging]
-    colored_console_log=False
-
-    [scheduler]
-    standalone_dag_processor={{ ternary "True" "False" .Values.dagProcessor.enabled }}
-
-    [triggerer]
-    default_capacity={{ .Values.triggerer.defaultCapacity }}
-
-    [webserver]
-    base_url={{ include "airflow.baseUrl" . }}
-    enable_proxy_fix={{ ternary "True" "False" (and .Values.ingress.enabled .Values.ingress.tls) }}
-    web_server_port={{ .Values.web.containerPorts.http}}
-  {{- if .Values.web.tls.enabled }}
-    web_server_ssl_cert="/opt/bitnami/airflow/certs/tls.crt"
-    web_server_ssl_key="/opt/bitnami/airflow/certs/tls.key"
-  {{- end }}
-
-  {{- if contains "KubernetesExecutor" .Values.executor }}
-    [kubernetes_executor]
-    namespace={{ include "common.names.namespace" . }}
-    worker_container_repository={{ printf "%s/%s" .Values.image.registry .Values.image.repository }}
-    worker_container_tag={{ .Values.image.tag }}
-    delete_worker_pods=True
-    delete_worker_pods_on_failure=True
-    pod_template_file="/opt/bitnami/airflow/pod_template.yaml"
-  {{- end }}
+    {{- range $section, $settings := $configuration }}
+    [{{ $section }}]
+    {{- range $key, $val := $settings }}
+    {{ $key }} = {{ $val }}
+    {{- end }}
+    {{- end }}
+  {{- if .Values.localSettings }}
+  airflow_local_settings.py: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.localSettings "context" .) | nindent 4 }}
   {{- end }}
 {{- end }}

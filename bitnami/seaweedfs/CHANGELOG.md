@@ -1,8 +1,16 @@
 # Changelog
 
+## 4.1.1 (2024-11-18)
+
+* [bitnami/seaweedfs] Release 4.1.1 ([#30510](https://github.com/bitnami/charts/pull/30510))
+
+## 4.1.0 (2024-11-18)
+
+* [bitnami/seaweedfs] feat: add support for customizing PVC retention policies (#30495) ([8a54fb8](https://github.com/bitnami/charts/commit/8a54fb8b17818a6237d3cadbe55fe956a0bc8c6c)), closes [#30495](https://github.com/bitnami/charts/issues/30495)
+
 ## 4.0.0 (2024-11-12)
 
-* [bitnami/seaweedfs] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30358](https://github.com/bitnami/charts/pull/30358))
+* [bitnami/seaweedfs] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30358) ([1d471fd](https://github.com/bitnami/charts/commit/1d471fd9fae99cf2e3b9a6e2230b0102046193e7)), closes [#30358](https://github.com/bitnami/charts/issues/30358)
 
 ## 3.2.0 (2024-11-08)
 

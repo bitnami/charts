@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.2.2 (2024-11-12)
+## 16.3.1 (2024-11-19)
 
-* [bitnami/mongodb] allow setting the timezone for backup cronjob ([#30421](https://github.com/bitnami/charts/pull/30421))
+* [bitnami/mongodb] fix: Modify access modes to match YAML 1.2 schema ([#30512](https://github.com/bitnami/charts/pull/30512))
+
+## 16.3.0 (2024-11-14)
+
+* [bitnami/mongodb] feat: :sparkles: Add password update job (#30460) ([a4d8d5b](https://github.com/bitnami/charts/commit/a4d8d5b3c164f946901b91651a7bd5cc338a11c0)), closes [#30460](https://github.com/bitnami/charts/issues/30460)
+
+## <small>16.2.2 (2024-11-13)</small>
+
+* [bitnami/mongodb] allow setting the timezone for backup cronjob (#30421) ([f001424](https://github.com/bitnami/charts/commit/f001424f6aad534d5fe5a9ad09265b24b1fd6fe7)), closes [#30421](https://github.com/bitnami/charts/issues/30421)
 
 ## <small>16.2.1 (2024-10-30)</small>
 

@@ -35,6 +35,9 @@ spec:
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- if .Values.setupDBJob.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.initContainers "context" $) | trim | nindent 8 }}
+        {{- end }}
       containers:
         - name: setup-db
           image: {{ include "airflow.image" . }}
@@ -113,10 +116,20 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: app-base-dir/airflow.cfg
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
+              subPath: app-conf-dir/airflow_local_settings.py
+            {{- if .Values.setupDBJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
         - name: empty-dir
           emptyDir: {}
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
+            optional: true
+        {{- if .Values.setupDBJob.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

@@ -35,10 +35,13 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: mongodb
-      {{- if or (include "mongodb.createConfigmap" .) .Values.podAnnotations }}
+      {{- if or (include "mongodb.createConfigmap" .) .Values.podAnnotations .Values.passwordUpdateJob.enabled }}
       annotations:
         {{- if (include "mongodb.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
         {{- end }}
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
@@ -469,7 +472,7 @@ spec:
         - name: common-scripts
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
-            defaultMode: 0550
+            defaultMode: 0o550
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts
           configMap:
@@ -487,7 +490,7 @@ spec:
         - name: scripts
           configMap:
             name: {{ printf "%s-scripts" (include "mongodb.fullname" .) }}
-            defaultMode: 0755
+            defaultMode: 0o755
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
@@ -501,10 +504,10 @@ spec:
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
-              mode: 0600
+              mode: 0o600
             - key: mongodb-ca-key
               path: mongodb-ca-key
-              mode: 0600
+              mode: 0o600
         {{- else }}
         {{- range $index, $secret := .Values.tls.replicaset.existingSecrets }}
         - name: mongodb-certs-{{ $index }}

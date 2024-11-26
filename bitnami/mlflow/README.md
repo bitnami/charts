@@ -472,6 +472,24 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 | `externalGCS.existingSecretKey`      | Key in the existing secret containing the application credentials (required when useCredentialsInSecret is true)          | `""`    |
 | `externalGCS.serveArtifacts`         | Whether artifact serving is enabled                                                                                       | `true`  |
 
+### External Azure Blob Storage parameters
+
+| Name                                            | Description                                                                                                                   | Value    |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `externalAzureBlob.storageAccount`              | Azure Blob Storage account name. Activate azure artifact storage if set,                                                      | `""`     |
+| `externalAzureBlob.accessKey`                   | Azure Blob Storage access key. Optional if connectionString is set                                                            | `""`     |
+| `externalAzureBlob.connectionString`            | Azure Blob Storage connection string. Optional if accessKey is set.                                                           | `""`     |
+| `externalAzureBlob.containerName`               | Azure Blob Storage container name                                                                                             | `mlflow` |
+| `externalAzureBlob.clientId`                    | Azure Blob Storage client ID                                                                                                  | `""`     |
+| `externalAzureBlob.tenantId`                    | Azure Blob Storage tenant ID                                                                                                  | `""`     |
+| `externalAzureBlob.clientSecret`                | Azure Blob Storage client secret                                                                                              | `""`     |
+| `externalAzureBlob.useCredentialsInSecret`      | Whether to read the Azure Blob Storage credentials from a secret                                                              | `false`  |
+| `externalAzureBlob.existingSecret`              | Name of an existing secret key containing the Azure Blob Storage credentials (required when useCredentialsInSecret is true)   | `""`     |
+| `externalAzureBlob.existingAccessKeyKey`        | Key in the existing secret containing the Azure Blob Storage access key (required when useCredentialsInSecret is true)        | `""`     |
+| `externalAzureBlob.existingConnectionStringKey` | Key in the existing secret containing the Azure Blob Storage connection string (required when useCredentialsInSecret is true) | `""`     |
+| `externalAzureBlob.clientSecretKey`             | Key in the existing secret containing the Azure Blob Storage client secret (required when useCredentialsInSecret is true)     | `""`     |
+| `externalAzureBlob.serveArtifacts`              | Whether artifact serving is enabled                                                                                           | `true`   |
+
 The MLflow chart supports three different ways to load your files in the `run` deployment. In order of priority, they are:
 
 1. Existing config map

@@ -31,10 +31,13 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: arbiter
-      {{- if or (include "mongodb.arbiter.createConfigmap" .) .Values.arbiter.podAnnotations }}
+      {{- if or (include "mongodb.arbiter.createConfigmap" .) .Values.arbiter.podAnnotations .Values.passwordUpdateJob.enabled }}
       annotations:
         {{- if (include "mongodb.arbiter.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/arbiter/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
         {{- end }}
         {{- if .Values.arbiter.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.podAnnotations "context" $) | nindent 8 }}
@@ -284,7 +287,7 @@ spec:
         - name: common-scripts
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
-            defaultMode: 0555
+            defaultMode: 0o555
         {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap }}
         - name: config
           configMap:
@@ -300,10 +303,10 @@ spec:
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
-              mode: 0600
+              mode: 0o600
             - key: mongodb-ca-key
               path: mongodb-ca-key
-              mode: 0600
+              mode: 0o600
         {{- else }}
         - name: mongodb-certs-0
           secret:

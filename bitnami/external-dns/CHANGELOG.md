@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.5.1 (2024-11-07)
+## 8.6.0 (2024-11-19)
 
-* [bitnami/external-dns] Release 8.5.1 ([#30262](https://github.com/bitnami/charts/pull/30262))
+* [bitnami/external-dns] feat: add support to namespaceOverride and simplify name helpers ([#30515](https://github.com/bitnami/charts/pull/30515))
+
+## <small>8.5.1 (2024-11-07)</small>
+
+* [bitnami/external-dns] Release 8.5.1 (#30262) ([d21d425](https://github.com/bitnami/charts/commit/d21d425d121adeb175e925898bc9342f296dbd3f)), closes [#30262](https://github.com/bitnami/charts/issues/30262)
 
 ## 8.5.0 (2024-11-05)
 

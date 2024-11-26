@@ -10,6 +10,7 @@ metadata:
   name: {{ template "airflow.web.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: web
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
@@ -30,7 +31,7 @@ data:
     AUTH_TYPE = AUTH_LDAP
     AUTH_LDAP_SERVER = {{ .Values.ldap.uri | squote }}
     AUTH_LDAP_SEARCH = {{ .Values.ldap.basedn }}
-    AUTH_LDAP_UID_FIELD = {{ .Values.ldap.searchAttribute }}
+    AUTH_LDAP_UID_FIELD = {{ .Values.ldap.searchAttribute | squote }}
     AUTH_LDAP_BIND_USER = {{ .Values.ldap.binddn | squote }}
     AUTH_USER_REGISTRATION = {{ .Values.ldap.userRegistration }}
     AUTH_USER_REGISTRATION_ROLE = {{ .Values.ldap.userRegistrationRole | squote }}

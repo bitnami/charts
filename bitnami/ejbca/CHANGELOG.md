@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.0.1 (2024-11-16)
+
+* [bitnami/ejbca] Release 16.0.1 ([#30485](https://github.com/bitnami/charts/pull/30485))
+
 ## 16.0.0 (2024-11-12)
 
-* [bitnami/ejbca] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30353](https://github.com/bitnami/charts/pull/30353))
+* [bitnami/ejbca] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30353) ([2a3ac05](https://github.com/bitnami/charts/commit/2a3ac052276cd11e387062525b5a9aa902d2263b)), closes [#30353](https://github.com/bitnami/charts/issues/30353)
 
 ## <small>15.0.8 (2024-11-08)</small>
 
