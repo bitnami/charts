@@ -86,6 +86,7 @@ Return the MariaDB TLS credentials secret
     {{- ternary "" (printf "/opt/bitnami/mariadb/certs/%s" .Values.tls.certCAFilename) (empty .Values.tls.certCAFilename) }}
 {{- end -}}
 {{- end -}}
+
 {{/*
 Return the configmap with the MariaDB Primary configuration
 */}}
