@@ -265,7 +265,7 @@ As an alternative, this chart supports using an initContainer to change the owne
 | `tls.existingSecret`                               | Existing secret that contains TLS certificates                                                         | `""`      |
 | `tls.certFilename`                                 | The secret key from the existingSecret if 'cert' key different from the default (tls.crt)              | `tls.crt` |
 | `tls.certKeyFilename`                              | The secret key from the existingSecret if 'key' key different from the default (tls.key)               | `tls.key` |
-| `tls.certCAFilename`                               | The secret key from the existingSecret if 'ca' key different from the default (tls.crt)                | `ca.crt`  |
+| `tls.certCAFilename`                               | The secret key from the existingSecret if 'ca' key different from the default (tls.crt)                | `""`      |
 | `tls.ca`                                           | CA certificate for TLS. Ignored if `tls.existingSecret` is set                                         | `""`      |
 | `tls.cert`                                         | TLS certificate for Airflow webserver. Ignored if `tls.master.existingSecret` is set                   | `""`      |
 | `tls.key`                                          | TLS key for Airflow webserver. Ignored if `tls.master.existingSecret` is set                           | `""`      |
