@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.3.0 (2024-11-26)
+
+* [bitnami/airflow] Support extra customizations at setup-db job ([#30624](https://github.com/bitnami/charts/pull/30624))
+
 ## 22.2.0 (2024-11-19)
 
-* [bitnami/airflow] Add support for extending default configuration ([#30525](https://github.com/bitnami/charts/pull/30525))
+* [bitnami/airflow] Add support for extending default configuration (#30525) ([e84395d](https://github.com/bitnami/charts/commit/e84395d6c829a0fe56ca7242bdaa90afb8e0e352)), closes [#30525](https://github.com/bitnami/charts/issues/30525)
 
 ## 22.1.0 (2024-11-18)
 
