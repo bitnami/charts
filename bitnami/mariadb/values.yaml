@@ -187,7 +187,7 @@ tls:
   existingSecret: ""
   certFilename: tls.crt
   certKeyFilename: tls.key
-  certCAFilename: ca.crt
+  certCAFilename: ""
   ca: ""
   cert: ""
   key: ""
@@ -262,9 +262,11 @@ primary:
     long_query_time=10.0
     binlog_expire_logs_seconds=2592000
     {{- if .Values.tls.enabled }}
-    ssl_cert=/opt/bitnami/mariadb/cert/{{ .Values.tls.certFilename }}
-    ssl_key=/opt/bitnami/mariadb/cert/{{ .Values.tls.certKeyFilename }}
-    ssl_ca=/opt/bitnami/mariadb/cert/{{ .Values.tls.certCAFilename }}
+    ssl_cert=/opt/bitnami/mariadb/certs/{{ .Values.tls.certFilename }}
+    ssl_key=/opt/bitnami/mariadb/certs/{{ .Values.tls.certKeyFilename }}
+    {{- if (include "mariadb.tlsCACert" .) }}
+    ssl_ca={{ include "mariadb.tlsCACert" . }}
+    {{- end }}
     {{- end }}
     [client]
     port=3306
@@ -691,9 +693,11 @@ secondary:
     long_query_time=10.0
     binlog_expire_logs_seconds=2592000
     {{- if .Values.tls.enabled }}
-    ssl_cert=/opt/bitnami/mariadb/cert/{{ .Values.tls.certFilename }}
-    ssl_key=/opt/bitnami/mariadb/cert/{{ .Values.tls.certKeyFilename }}
-    ssl_ca=/opt/bitnami/mariadb/cert/{{ .Values.tls.certCAFilename }}
+    ssl_cert=/opt/bitnami/mariadb/certs/{{ .Values.tls.certFilename }}
+    ssl_key=/opt/bitnami/mariadb/certs/{{ .Values.tls.certKeyFilename }}
+    {{- if (include "mariadb.tlsCACert" .) }}
+    ssl_ca={{ include "mariadb.tlsCACert" . }}
+    {{- end }}
     {{- end }}
 
     [client]

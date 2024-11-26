@@ -191,6 +191,10 @@ spec:
               value: {{ .Values.auth.database | quote }}
             - name: MARIADB_ENABLE_SSL
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if and .Values.tls.enabled (include "mariadb.tlsCACert" .) }}
+            - name: MYSQL_CLIENT_CA_FILE
+              value: {{ include "mariadb.tlsCACert" . | quote }}
+            {{- end }}
             {{- if eq .Values.architecture "replication" }}
             - name: MARIADB_REPLICATION_MODE
               value: "master"
