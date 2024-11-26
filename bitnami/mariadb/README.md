@@ -137,7 +137,7 @@ initdbScripts:
 
 This chart supports encrypting communications using TLS. To enable this feature, set the `tls.enabled`.
 
-It is necessary to create a secret containing the TLS certificates and pass it to the chart via the `tls.existingSecret` parameter. Every secret should contain a `tls.crt` and `tls.key` keys including the certificate and key files respectively. For example: create the CA secret with the certificates files:
+It is necessary to create a secret containing the TLS certificates and pass it to the chart via the `tls.existingSecret` parameter. Every secret should contain a `tls.crt` and `tls.key` keys including the certificate and key files respectively and, optionally, a `ca.crt` key including the CA certificate. For example: create the secret with the certificates files:
 
 ```console
 kubectl create secret generic tls-secret --from-file=./tls.crt --from-file=./tls.key --from-file=./ca.crt

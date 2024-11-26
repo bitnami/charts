@@ -81,17 +81,6 @@ Return the MariaDB TLS credentials secret
 {{- end -}}
 
 {{/*
-Return the MariaDB TLS CA credentials secret
-*/}}
-{{- define "mariadb.tlsCASecretName" -}}
-{{- if .Values.tls.existingCASecret -}}
-    {{- print (tpl .Values.tls.existingCASecret $) -}}
-{{- else -}}
-    {{- printf "%s-ca-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the configmap with the MariaDB Primary configuration
 */}}
 {{- define "mariadb.primary.configmapName" -}}
