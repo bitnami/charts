@@ -1,8 +1,12 @@
 # Changelog
 
+## 20.1.0 (2024-11-26)
+
+* [bitnami/mariadb] feat: :sparkles: Add TLS support ([#30629](https://github.com/bitnami/charts/pull/30629))
+
 ## 20.0.0 (2024-11-08)
 
-* [bitnami/mariadb] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job ([#30300](https://github.com/bitnami/charts/pull/30300))
+* [bitnami/mariadb] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job  ([b90422b](https://github.com/bitnami/charts/commit/b90422bd86f34d4c94d8b9da41ebf89e03dbf384)), closes [#30300](https://github.com/bitnami/charts/issues/30300)
 
 ## <small>19.1.2 (2024-11-04)</small>
 
