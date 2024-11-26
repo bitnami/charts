@@ -264,7 +264,7 @@ primary:
     {{- if .Values.tls.enabled }}
     ssl_cert=/opt/bitnami/mariadb/cert/{{ .Values.tls.certFilename }}
     ssl_key=/opt/bitnami/mariadb/cert/{{ .Values.tls.certKeyFilename }}
-    ssl_ca=/opt/bitnami/mariadb/ca/{{ .Values.tls.certCAFilename }}
+    ssl_ca=/opt/bitnami/mariadb/cert/{{ .Values.tls.certCAFilename }}
     {{- end }}
     [client]
     port=3306
@@ -693,7 +693,7 @@ secondary:
     {{- if .Values.tls.enabled }}
     ssl_cert=/opt/bitnami/mariadb/cert/{{ .Values.tls.certFilename }}
     ssl_key=/opt/bitnami/mariadb/cert/{{ .Values.tls.certKeyFilename }}
-    ssl_ca=/opt/bitnami/mariadb/ca/{{ .Values.tls.certCAFilename }}
+    ssl_ca=/opt/bitnami/mariadb/cert/{{ .Values.tls.certCAFilename }}
     {{- end }}
 
     [client]

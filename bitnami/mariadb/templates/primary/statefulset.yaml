@@ -193,7 +193,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: MYSQL_CLIENT_CA_FILE
-              value: {{ printf "/opt/bitnami/mariadb/ca/%s" .Values.tls.certCAFilename | quote }}
+              value: {{ printf "/opt/bitnami/mariadb/cert/%s" .Values.tls.certCAFilename | quote }}
             {{- end }}
             {{- if eq .Values.architecture "replication" }}
             - name: MARIADB_REPLICATION_MODE
@@ -312,8 +312,6 @@ spec:
             {{- if .Values.tls.enabled }}
             - name: cert
               mountPath: /opt/bitnami/mariadb/cert
-            - name: ca-cert
-              mountPath: /opt/bitnami/mariadb/ca
             {{- end }}
             - name: empty-dir
               mountPath: /tmp
@@ -427,10 +425,6 @@ spec:
               {{- end }}
         {{- end }}
         {{- if .Values.tls.enabled }}
-        - name: ca-cert
-          secret:
-            secretName: {{ template "mariadb.tlsCASecretName" . }}
-            defaultMode: 256
         - name: cert
           secret:
             secretName: {{ include "mariadb.tlsSecretName" . }}
