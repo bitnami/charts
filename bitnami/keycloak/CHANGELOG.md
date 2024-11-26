@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.2.2 (2024-11-22)
+## 25.0.0 (2024-11-26)
 
-* [bitnami/keycloak] Release 24.2.2 ([#30576](https://github.com/bitnami/charts/pull/30576))
+* [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation ([#30636](https://github.com/bitnami/charts/pull/30636))
+
+## <small>24.2.2 (2024-11-22)</small>
+
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/keycloak] Release 24.2.2 (#30576) ([c3f8e59](https://github.com/bitnami/charts/commit/c3f8e596428f2f546dd3479570e7d39958b16f3b)), closes [#30576](https://github.com/bitnami/charts/issues/30576)
 
 ## <small>24.2.1 (2024-11-19)</small>
 
