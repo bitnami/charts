@@ -81,7 +81,7 @@ Return the MariaDB TLS credentials secret
 {{- end -}}
 
 {{/*
-Return the MariaDB TLS credentials secret
+Return the MariaDB TLS CA credentials secret
 */}}
 {{- define "mariadb.tlsCASecretName" -}}
 {{- if .Values.tls.existingCASecret -}}

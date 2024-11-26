@@ -206,7 +206,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: MYSQL_CLIENT_CA_FILE
-              value: {{ printf "/bitnami/mariadb/ca/%s" .Values.tls.certCAFilename | quote }}
+              value: {{ printf "/opt/bitnami/mariadb/ca/%s" .Values.tls.certCAFilename | quote }}
             {{- end }}
             {{- if .Values.secondary.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraEnvVars "context" $) | nindent 12 }}
@@ -309,9 +309,9 @@ spec:
               subPath: app-logs-dir
             {{- if .Values.tls.enabled }}
             - name: cert
-              mountPath: /bitnami/mariadb/cert
+              mountPath: /opt/bitnami/mariadb/cert
             - name: ca-cert
-              mountPath: /bitnami/mariadb/ca
+              mountPath: /opt/bitnami/mariadb/ca
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics

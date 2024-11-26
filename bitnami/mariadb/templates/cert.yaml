@@ -23,7 +23,7 @@ spec:
     kind: Issuer
   subject:
     organizations:
-      - "ScyllaDB"
+      - "MariaDB"
   dnsNames:
     - '*.{{ include "common.names.namespace" . }}'
     - '*.{{ include "common.names.namespace" . }}.svc'
