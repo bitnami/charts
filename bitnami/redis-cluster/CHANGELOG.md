@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.1.0 (2024-11-25)
+## 11.1.0 (2024-11-26)
 
 * [bitnami/redis-cluster] feat: Set custom terminationGracePeriodSeconds for redis ([#30470](https://github.com/bitnami/charts/pull/30470))
 
