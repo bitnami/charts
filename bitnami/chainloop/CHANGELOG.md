@@ -1,8 +1,40 @@
 # Changelog
 
-## 2.0.34 (2024-11-21)
+## 2.0.42 (2024-11-25)
 
-* [bitnami/chainloop] Release 2.0.34 ([#30564](https://github.com/bitnami/charts/pull/30564))
+* [bitnami/chainloop] Release 2.0.42 ([#30612](https://github.com/bitnami/charts/pull/30612))
+
+## <small>2.0.41 (2024-11-24)</small>
+
+* [bitnami/chainloop] Release 2.0.41 (#30611) ([7449373](https://github.com/bitnami/charts/commit/74493731a8cdca2095beb6cd5e68a548d051a3f1)), closes [#30611](https://github.com/bitnami/charts/issues/30611)
+
+## <small>2.0.40 (2024-11-24)</small>
+
+* [bitnami/chainloop] Release 2.0.40 (#30605) ([f29e7aa](https://github.com/bitnami/charts/commit/f29e7aa40d82f5ee914ca9f642743e5b1c4ce128)), closes [#30605](https://github.com/bitnami/charts/issues/30605)
+
+## <small>2.0.39 (2024-11-23)</small>
+
+* [bitnami/chainloop] Release 2.0.39 (#30604) ([8d56c6b](https://github.com/bitnami/charts/commit/8d56c6b725e91614e055650ea42a17cc4d0bb43b)), closes [#30604](https://github.com/bitnami/charts/issues/30604)
+
+## <small>2.0.38 (2024-11-23)</small>
+
+* [bitnami/chainloop] Release 2.0.38 (#30603) ([655c3f6](https://github.com/bitnami/charts/commit/655c3f639f04867b04e24f8583fdb6932b35bea8)), closes [#30603](https://github.com/bitnami/charts/issues/30603)
+
+## <small>2.0.37 (2024-11-23)</small>
+
+* [bitnami/chainloop] Release 2.0.37 (#30601) ([762e13c](https://github.com/bitnami/charts/commit/762e13c8d26d483c2b9c55d05ae35e414e317699)), closes [#30601](https://github.com/bitnami/charts/issues/30601)
+
+## <small>2.0.36 (2024-11-22)</small>
+
+* [bitnami/chainloop] Release 2.0.36 (#30598) ([f456dd9](https://github.com/bitnami/charts/commit/f456dd9a7b4f8ca3c024b3b73b1dfda4a326f762)), closes [#30598](https://github.com/bitnami/charts/issues/30598)
+
+## <small>2.0.35 (2024-11-22)</small>
+
+* [bitnami/chainloop] Release 2.0.35 (#30581) ([c52ccd4](https://github.com/bitnami/charts/commit/c52ccd47ba9334bd99eeb438d2dc188497e50703)), closes [#30581](https://github.com/bitnami/charts/issues/30581)
+
+## <small>2.0.34 (2024-11-21)</small>
+
+* [bitnami/chainloop] Release 2.0.34 (#30564) ([0b466db](https://github.com/bitnami/charts/commit/0b466dbbcae85115aebfb00f69127a3d4c801e79)), closes [#30564](https://github.com/bitnami/charts/issues/30564)
 
 ## <small>2.0.33 (2024-11-20)</small>
 

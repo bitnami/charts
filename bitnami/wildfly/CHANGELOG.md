@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.3 (2024-11-20)
+## 22.0.4 (2024-11-22)
 
-* [bitnami/wildfly] Release 22.0.3 ([#30551](https://github.com/bitnami/charts/pull/30551))
+* [bitnami/wildfly] Release 22.0.4 ([#30599](https://github.com/bitnami/charts/pull/30599))
+
+## <small>22.0.3 (2024-11-20)</small>
+
+* [bitnami/wildfly] Release 22.0.3 (#30551) ([31bd900](https://github.com/bitnami/charts/commit/31bd90097261d7c9fe4113077f671ee0a37b9e27)), closes [#30551](https://github.com/bitnami/charts/issues/30551)
 
 ## <small>22.0.2 (2024-11-08)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 14.3.10 (2024-11-21)
+## 15.0.0 (2024-11-25)
 
-* [bitnami/postgresql-ha] Release 14.3.10 ([#30568](https://github.com/bitnami/charts/pull/30568))
+* [bitnami/postgresql-ha] Release 15.0.0 ([#30618](https://github.com/bitnami/charts/pull/30618))
+
+## <small>14.3.10 (2024-11-21)</small>
+
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/postgresql-ha] Release 14.3.10 (#30568) ([5aeafc7](https://github.com/bitnami/charts/commit/5aeafc7e9aaf2b23831c84b823be1f11d49e97eb)), closes [#30568](https://github.com/bitnami/charts/issues/30568)
 
 ## <small>14.3.9 (2024-11-14)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.0.9 (2024-11-22)
+## 15.0.0 (2024-11-22)
 
-* [bitnami/kong] Release 14.0.9 ([#30574](https://github.com/bitnami/charts/pull/30574))
+* [bitnami/kong] Use postgresql 17 for Kong ([#30584](https://github.com/bitnami/charts/pull/30584))
+
+## <small>14.0.9 (2024-11-22)</small>
+
+* [bitnami/kong] Release 14.0.9 (#30574) ([1966baa](https://github.com/bitnami/charts/commit/1966baacadf3f66d9e52319e22d7269ba72b742a)), closes [#30574](https://github.com/bitnami/charts/issues/30574)
 
 ## <small>14.0.8 (2024-11-21)</small>
 
