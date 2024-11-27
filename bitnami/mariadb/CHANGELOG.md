@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.1.0 (2024-11-26)
+## 20.1.1 (2024-11-27)
 
-* [bitnami/mariadb] feat: :sparkles: Add TLS support ([#30629](https://github.com/bitnami/charts/pull/30629))
+* [bitnami/mariadb] fix: :bug: Set correct TLS mountPath ([#30641](https://github.com/bitnami/charts/pull/30641))
+
+## 20.1.0 (2024-11-27)
+
+* [bitnami/mariadb] feat: :sparkles: Add TLS support (#30629) ([13c518f](https://github.com/bitnami/charts/commit/13c518ffc9cfefc10110317d9aa13ddc84a2d6ec)), closes [#30629](https://github.com/bitnami/charts/issues/30629)
 
 ## 20.0.0 (2024-11-08)
 
