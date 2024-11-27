@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.0.2 (2024-11-22)
+## 10.0.3 (2024-11-27)
 
-* [bitnami/milvus] Release 10.0.2 ([#30580](https://github.com/bitnami/charts/pull/30580))
+* [bitnami/milvus] feat: update chart deps ([#30651](https://github.com/bitnami/charts/pull/30651))
+
+## <small>10.0.2 (2024-11-22)</small>
+
+* [bitnami/milvus] Release 10.0.2 (#30580) ([c3d8e1f](https://github.com/bitnami/charts/commit/c3d8e1f5f50f49e33f1f051baeb7c1b3d2e461b1)), closes [#30580](https://github.com/bitnami/charts/issues/30580)
 
 ## <small>10.0.1 (2024-11-19)</small>
 
