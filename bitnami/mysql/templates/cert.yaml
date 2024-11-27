@@ -23,7 +23,7 @@ spec:
     kind: Issuer
   subject:
     organizations:
-      - "MariaDB"
+      - "MySQL"
   dnsNames:
     - '*.{{ include "common.names.namespace" . }}'
     - '*.{{ include "common.names.namespace" . }}.svc'
