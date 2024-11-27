@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.27.1 (2024-11-26)
+## 2.27.2 (2024-11-27)
 
-* [bitnami/common] Fix VPA apiVersion ([#30625](https://github.com/bitnami/charts/pull/30625))
+* [bitnami/common]: bump patch version ([#30639](https://github.com/bitnami/charts/pull/30639))
+
+## <small>2.27.1 (2024-11-26)</small>
+
+* [bitnami/common] Fix VPA apiVersion (#30625) ([8c24438](https://github.com/bitnami/charts/commit/8c24438a2f6e8ec646cad9901ed82d71d4196e3e)), closes [#30625](https://github.com/bitnami/charts/issues/30625)
 
 ## 2.27.0 (2024-11-07)
 
