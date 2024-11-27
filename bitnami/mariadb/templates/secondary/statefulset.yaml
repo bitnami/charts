@@ -309,7 +309,7 @@ spec:
               subPath: app-logs-dir
             {{- if .Values.tls.enabled }}
             - name: cert
-              mountPath: /opt/bitnami/mariadb/cert
+              mountPath: /opt/bitnami/mariadb/certs
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics

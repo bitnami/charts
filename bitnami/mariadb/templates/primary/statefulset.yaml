@@ -311,7 +311,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: cert
-              mountPath: /opt/bitnami/mariadb/cert
+              mountPath: /opt/bitnami/mariadb/certs
             {{- end }}
             - name: empty-dir
               mountPath: /tmp
