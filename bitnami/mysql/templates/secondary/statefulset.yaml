@@ -177,6 +177,12 @@ spec:
               value: {{ .Values.secondary.containerPorts.mysql | quote}}
             - name: MYSQL_REPLICATION_USER
               value: {{ .Values.auth.replicationUser | quote }}
+            - name: MYSQL_ENABLE_SSL
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if and .Values.tls.enabled (include "mysql.tlsCACert" .) }}
+            - name: MYSQL_CLIENT_CA_FILE
+              value: {{ include "mysql.tlsCACert" . | quote }}
+            {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MYSQL_MASTER_ROOT_PASSWORD_FILE
               value: {{ default "/opt/bitnami/mysql/secrets/mysql-root-password" .Values.auth.customPasswordFiles.root }}
@@ -278,6 +284,10 @@ spec:
               {{- if .Values.secondary.persistence.subPath }}
               subPath: {{ .Values.secondary.persistence.subPath }}
               {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: cert
+              mountPath: /opt/bitnami/mysql/certs
+            {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
@@ -401,6 +411,12 @@ spec:
                 path: mysql-root-password
               - key: mysql-replication-password
                 path: mysql-replication-password
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: cert
+          secret:
+            secretName: {{ include "mysql.tlsSecretName" . }}
+            defaultMode: 256
         {{- end }}
         - name: empty-dir
           emptyDir: {}
