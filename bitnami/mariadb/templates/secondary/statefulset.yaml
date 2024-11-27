@@ -202,6 +202,12 @@ spec:
             - name: MARIADB_STARTUP_WAIT_SLEEP_TIME
               value: "{{ .Values.secondary.startupWaitOptions.sleepTime | default 2 }}"
             {{- end }}
+            - name: MARIADB_ENABLE_SSL
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if and .Values.tls.enabled (include "mariadb.tlsCACert" .) }}
+            - name: MYSQL_CLIENT_CA_FILE
+              value: {{ include "mariadb.tlsCACert" . | quote }}
+            {{- end }}
             {{- if .Values.secondary.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -301,6 +307,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/mariadb/logs
               subPath: app-logs-dir
+            {{- if .Values.tls.enabled }}
+            - name: cert
+              mountPath: /opt/bitnami/mariadb/cert
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mariadb.metrics.image" . }}
@@ -385,6 +395,12 @@ spec:
                 path: mariadb-root-password
               - key: mariadb-replication-password
                 path: mariadb-replication-password
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: cert
+          secret:
+            secretName: {{ include "mariadb.tlsSecretName" . }}
+            defaultMode: 256
         {{- end }}
         - name: empty-dir
           emptyDir: {}
