@@ -945,6 +945,12 @@ backup:
     ## @param Enable restore. Should be used when backup is enabled
     ##
     enabled: false
+    ## @param Restored data path
+    #
+    directory: "/restore"
+    ## @param This PVC should be created manually
+    #
+    existingClaim: ""
 
   ## Persistence parameters
   ##

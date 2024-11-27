@@ -157,7 +157,7 @@ spec:
               mountPath: /tmp/restore-from-aws.sh
               subPath: restore-from-aws.sh
             - name: restore-data
-              mountPath: {{ .Values.backup.directory | quote }}
+              mountPath: {{ .Values.backup.restore.directory | quote }}
             {{- if .Values.backup.cronjob.caBundle.enabled }}
             - name: ca-bundle
               mountPath: {{ .Values.backup.cronjob.caBundle.mountPath }}
@@ -377,8 +377,8 @@ spec:
             {{- if and .Values.backup.enabled .Values.backup.restore.enabled }}
             - name: restore-data
               persistentVolumeClaim:
-                claimName: {{ include "influxdb.backup.claimName" . }}
-              mountPath: {{ .Values.backup.directory | quote }}
+                claimName: {{ .Values.backup.restore.existingClaim }}
+              mountPath: {{ .Values.backup.restore.directory | quote }}
             {{- end }}
             {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
             - name: custom-init-scripts
@@ -414,7 +414,7 @@ spec:
         {{- if and .Values.backup.enabled .Values.backup.restore.enabled }}
         - name: restore-data
           persistentVolumeClaim:
-            claimName: {{ include "influxdb.backup.claimName" . }}
+            claimName: {{ .Values.backup.restore.existingClaim }}
         {{- end }}
         {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
         - name: influxdb-config
