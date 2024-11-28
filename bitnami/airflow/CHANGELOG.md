@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.3.1 (2024-11-27)
+
+* [bitnami/airflow] bugfix: extra volume/mounts should apply to setup-db job and wait-for-db init-container… ([#30646](https://github.com/bitnami/charts/pull/30646))
+
 ## 22.3.0 (2024-11-26)
 
-* [bitnami/airflow] Support extra customizations at setup-db job ([#30624](https://github.com/bitnami/charts/pull/30624))
+* [bitnami/airflow] Support extra customizations at setup-db job (#30624) ([0397460](https://github.com/bitnami/charts/commit/03974600c3d801ab8b747c5f4daf3b5069293809)), closes [#30624](https://github.com/bitnami/charts/issues/30624)
 
 ## 22.2.0 (2024-11-19)
 
