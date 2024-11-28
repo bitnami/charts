@@ -62,7 +62,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose Kiam native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `server` and `agent` sections) to `true`. This will expose Kiam native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
@@ -70,7 +70,7 @@ It is necessary to have a working installation of Prometheus or Prometheus Opera
 
 #### Integration with Prometheus Operator
 
-The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `server` and `agent` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
 
 ```text
 no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
