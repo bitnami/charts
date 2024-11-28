@@ -86,7 +86,7 @@ You can manually create the required TLS certificates or relying on the chart au
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `agent`, `envoy`, `operator`, `hubble.peers` and `hubble.relay` sections) to `true`. This will expose the Cilium, Hubble and Envoy native Prometheus ports in the containers. Additionally, it will deploy several `metrics` services, which can be configured under the `*.metrics.service` section (under the `agent`, `envoy`, `operator`, `hubble.peers` and `hubble.relay` sections). These `metrics` services will be have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `agent`, `envoy`, `operator`, `hubble.peers` and `hubble.relay` sections) to `true`. This will expose the Cilium, Hubble and Envoy native Prometheus ports in the containers. Additionally, it will deploy several `metrics` services, which can be configured under the `*.metrics.service` section (under the `agent`, `envoy`, `operator`, `hubble.peers` and `hubble.relay` sections). These `metrics` services will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 

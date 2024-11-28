@@ -69,7 +69,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose cert-manager native Prometheus endpoint in the service. It will be have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose cert-manager native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
