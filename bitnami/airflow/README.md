@@ -251,7 +251,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` true. This will configure Airflow components to send StatsD metrics to the [StatsD exporter](https://github.com/prometheus/statsd_exporter) that transforms them into Prometheus metrics. The StatsD exporter is deployed as a standalone deployment and service in the same namespace as the Airflow deployment.
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will configure Airflow components to send StatsD metrics to the [StatsD exporter](https://github.com/prometheus/statsd_exporter) that transforms them into Prometheus metrics. The StatsD exporter is deployed as a standalone deployment and service in the same namespace as the Airflow deployment.
 
 #### Prometheus requirements
 

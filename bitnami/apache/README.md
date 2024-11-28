@@ -85,6 +85,24 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, you can use  the preset configurations for pod affinity, pod anti-affinity, and node affinity available in the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [apache-exporter](https://github.com/Lusitaniae/apache_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will be have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
 ## Parameters
 
 ### Global parameters

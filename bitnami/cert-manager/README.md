@@ -67,6 +67,24 @@ extraEnvVars:
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose cert-manager native Prometheus endpoint in the service. It will be have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
 ### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as the cert-manager app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
