@@ -55,7 +55,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `tracking.metrics.enabled` to `true`. This will expose MLFlow native Prometheus endpoint in the service. It will be have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `tracking.metrics.enabled` to `true`. This will expose MLFlow native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 

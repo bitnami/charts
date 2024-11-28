@@ -54,7 +54,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mysqld_exporter](https://github.com/prometheus/mysqld_exporter) in all pods and will expose it via the MariaDB service. This service will be have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mysqld_exporter](https://github.com/prometheus/mysqld_exporter) in all pods and will expose it via the MariaDB service. This service will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
