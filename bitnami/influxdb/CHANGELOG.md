@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.3.23 (2024-11-27)
+## 6.3.23 (2024-11-28)
 
 * [bitnam/influxdb] gcloud backups, replace gsutil ([#30595](https://github.com/bitnami/charts/pull/30595))
 
