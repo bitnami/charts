@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.1 (2024-11-27)
+## 15.0.2 (2024-11-28)
 
-* [bitnami/postgresql-ha] Release 15.0.1 ([#30644](https://github.com/bitnami/charts/pull/30644))
+* [bitnami/postgresql-ha] Release 15.0.2 ([#30676](https://github.com/bitnami/charts/pull/30676))
+
+## <small>15.0.1 (2024-11-27)</small>
+
+* [bitnami/postgresql-ha] Release 15.0.1 (#30644) ([ebb2f96](https://github.com/bitnami/charts/commit/ebb2f960e7220e80e4f3fcaf98cf7bc332d81c8a)), closes [#30644](https://github.com/bitnami/charts/issues/30644)
 
 ## 15.0.0 (2024-11-25)
 
