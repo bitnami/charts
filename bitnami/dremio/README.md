@@ -1180,7 +1180,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                |
 | `minio.service.ports.api`          | MinIO&reg; service port                                                                                                           | `9000`                                              |
 
-### Prometheus metrics
+### Prometheus metrics parameters
 
 | Name                                                        | Description                                                                                                                                                                                                                | Value                          |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
