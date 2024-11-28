@@ -54,7 +54,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `controller` and `speaker` sections) to true. This will expose the MetalLB native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `controller`, `speaker` and `speaker.frr` sections) to true. This will expose the MetalLB native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
@@ -62,7 +62,7 @@ It is necessary to have a working installation of Prometheus or Prometheus Opera
 
 #### Integration with Prometheus Operator
 
-The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `controller` and `speaker` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `controller`, `speaker` and `speaker.frr` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
 
 ```text
 no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
