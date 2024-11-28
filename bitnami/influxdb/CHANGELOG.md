@@ -1,8 +1,8 @@
 # Changelog
 
-## 6.4.0 (2024-10-25)
+## 6.4.0 (2024-11-28)
 
-* [bitnami/influxdb] Feature - Add CA bundle option to influxdb backup job ([#30085](https://github.com/bitnami/charts/pull/30085))
+* [bitnami/influxdb] Feature - Add CA bundle option to influxdb backup job ([#30659](https://github.com/bitnami/charts/pull/30659))
 
 ## 6.3.23 (2024-11-28)
 
