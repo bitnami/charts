@@ -54,7 +54,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `dataPlane` and `controlPlane` sections) to true. This will expose the Contour and Envoy native Prometheus ports in the containers. Additionally, it will deploy several `metrics` services. These `metrics` services will have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the Contour and Envoy (if `envoy.service.exposeMetrics=true`) native Prometheus ports in the containers. Additionally, it will deploy several `metrics` services. These `metrics` services will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 

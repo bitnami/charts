@@ -59,7 +59,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `repoServer`, `controller`, `applicationSet` and `dex` sections) to `true`. This will expose the Argo CD native Prometheus ports, as well as create a special metrics service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `repoServer`, `controller`, `applicationSet`, `server`, `notification` and `dex` sections) to `true`. This will expose the Argo CD native Prometheus ports, as well as create a special metrics service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
@@ -67,7 +67,7 @@ It is necessary to have a working installation of Prometheus or Prometheus Opera
 
 #### Integration with Prometheus Operator
 
-The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `repoServer`, `controller`, `applicationSet` and `dex` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `repoServer`, `controller`, `applicationSet`, `server`, `notifications` and `dex` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
 
 ```text
 no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
