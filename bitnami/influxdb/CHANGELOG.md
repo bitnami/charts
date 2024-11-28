@@ -1,6 +1,12 @@
 # Changelog
 
+## 6.4.0 (2024-10-25)
+
+* [bitnami/influxdb] Feature - Add CA bundle option to influxdb backup job ([#30085](https://github.com/bitnami/charts/pull/30085))
+
 ## 6.3.23 (2024-11-28)
+
+## 6.3.22 (2024-11-07)
 
 * [bitnam/influxdb] gcloud backups, replace gsutil ([#30595](https://github.com/bitnami/charts/pull/30595))
 
