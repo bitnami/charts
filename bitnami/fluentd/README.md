@@ -145,7 +145,7 @@ aggregator.extraEnvVars[1].value=your-port-here
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose Fliend native Prometheus endpoint in a metrics service that can be configured under the `metrics.service` section. It will have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose Fluentd native Prometheus endpoint in a metrics service that can be configured under the `metrics.service` section. It will have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
