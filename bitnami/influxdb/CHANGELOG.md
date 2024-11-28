@@ -1,8 +1,14 @@
 # Changelog
 
-## 6.3.22 (2024-11-07)
+## 6.3.23 (2024-11-28)
 
-* [bitnami/influxdb] Release 6.3.22 ([#30272](https://github.com/bitnami/charts/pull/30272))
+* [bitnam/influxdb] gcloud backups, replace gsutil ([#30595](https://github.com/bitnami/charts/pull/30595))
+
+## <small>6.3.22 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/influxdb] Release 6.3.22 (#30272) ([761fe02](https://github.com/bitnami/charts/commit/761fe022b2837b47c4d6174b6c0ace93a600ea4a)), closes [#30272](https://github.com/bitnami/charts/issues/30272)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>6.3.21 (2024-10-02)</small>
 
