@@ -71,6 +71,13 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Update credentials
+
+The Bitnami APISIX chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `auth.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `dashboard.password`
+- Run `helm upgrade` specifying a new secret in `dashboard.existingSecret`
+
 ### Deployment modes
 
 Apache APISIX supports [multiple deployment modes](https://apisix.apache.org/docs/apisix/deployment-modes/). The Bitnami APISIX chart deploys the `decoupled` mode by default, but it is possible to deploy in `traditional` or `standalone` modes as well.
