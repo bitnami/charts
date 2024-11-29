@@ -91,6 +91,13 @@ no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
 
 Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
+### Update credentials
+
+The Bitnami KeyDB chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `auth.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `auth.password`
+- Run `helm upgrade` specifying a new secret in `auth.existingSecret`
+
 ### Using a password file
 
 To use a password file for KeyDB you need to create a secret containing the password and then deploy the chart using that secret. Follow these instructions:
