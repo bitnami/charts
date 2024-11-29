@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.5.2 (2024-10-21)
+## 3.6.0 (2024-11-29)
 
-* [bitnami/apisix] Release 3.5.2 ([#30014](https://github.com/bitnami/charts/pull/30014))
+* [bitnami/apisix] feat: :sparkles: :memo: Allow password update via values.yaml ([#30682](https://github.com/bitnami/charts/pull/30682))
+
+## <small>3.5.2 (2024-10-21)</small>
+
+* [bitnami/apisix] Release 3.5.2 (#30014) ([53d7503](https://github.com/bitnami/charts/commit/53d7503654c7179d92e4352fc85d50db202a15f8)), closes [#30014](https://github.com/bitnami/charts/issues/30014)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.5.1 (2024-09-29)</small>
 
