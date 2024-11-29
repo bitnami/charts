@@ -58,6 +58,17 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://docs.keyfactor.com/ejbca/latest/ejbca-security)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=ejbca-admin-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Set up replication
 
 By default, this chart only deploys a single pod running EJBCA. To increase the number of replicas, follow the steps below:
