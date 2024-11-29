@@ -339,7 +339,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `persistence.dataSource`     | Custom PVC data source                                                                                                                | `{}`                       |
 | `persistence.resourcePolicy` | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                       |
 
-### Prometheus Metrics Parameters
+### Prometheus metrics parameters
 
 | Name                                                        | Description                                                                                                                                                                                                                | Value                          |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |

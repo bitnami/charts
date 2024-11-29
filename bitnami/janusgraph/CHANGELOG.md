@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.0.1 (2024-11-29)
+
+* [bitnami/janusgraph] chore: :bulb: :memo: :rotating_light: Rename prometheus "@section" to avoid linter problems ([#30684](https://github.com/bitnami/charts/pull/30684))
+
 ## 1.0.0 (2024-11-22)
 
-* [bitnami/janusgraph] Remove subchart image from values.yaml ([#30590](https://github.com/bitnami/charts/pull/30590))
+* [bitnami/janusgraph] Remove subchart image from values.yaml (#30590) ([01871b7](https://github.com/bitnami/charts/commit/01871b7fa6479528609a785189a09af0186744a4)), closes [#30590](https://github.com/bitnami/charts/issues/30590)
 
 ## <small>0.3.26 (2024-11-09)</small>
 
