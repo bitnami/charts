@@ -53,6 +53,17 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://neo4j.com/docs/operations-manual/current/authentication-authorization/password-and-user-recovery/)
+- Update the password secret with the new values (replace the SECRET_NAME and PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Ingress
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.

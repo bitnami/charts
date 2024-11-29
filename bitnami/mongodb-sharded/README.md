@@ -55,6 +55,17 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://www.mongodb.com/docs/manual/reference/method/db.changeUserPassword/)
+- Update the password secret with the new values (replace the SECRET_NAME, ROOT_PASSWORD and REPLICA_SET_KEY placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=mongodb-root-password=ROOT_PASSWORD --from-literal=mongodb-replica-set-key=REPLICA_SET_KEY --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Prometheus metrics
 
 This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mongodb_exporter](https://github.com/percona/mongodb_exporter) in all pods. The pods will have the necessary annotations to be automatically scraped by Prometheus.

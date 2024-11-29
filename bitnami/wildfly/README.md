@@ -59,14 +59,25 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-## Persistence
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://docs.wildfly.org/)
+- Update the password secret with the new values (replace the SECRET_NAME and PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=wildfly-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Persistence
 
 The [Bitnami WildFly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) image stores the WildFly data and configurations at the `/bitnami/wildfly` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
-### Adjust permissions of persistent volume mountpoint
+#### Adjust permissions of persistent volume mountpoint
 
 As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
 
