@@ -79,6 +79,17 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://mariadb.com/kb/en/set-password/)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD, ROOT_PASSWORD and BACKUP_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=mariadb-root-password=ROOT_PASSWORD --from-literal=mariadb-password=PASSWORD --from-literal=mariadb-galera-mariabackup-password=BACKUP_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Prometheus metrics
 
 This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mysqld_exporter](https://github.com/prometheus/mysqld_exporter) in all pods and will expose it via a `metrics` service configurable under the `metrics.service` section. This service will have the necessary annotations to be automatically scraped by Prometheus.
