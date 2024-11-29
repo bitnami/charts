@@ -213,6 +213,13 @@ When deploying, you will need to sign up to set the password for the `test`` use
 
 For more information on Authenticators, check the [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/getting-started/authenticators-users-basics.html).
 
+### Update credentials
+
+The Bitnami Jupyterhub chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `hub.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `hub.configuration` in the proper [authentication section](#configure-authentication)
+- Run `helm upgrade` specifying a new secret in `hub.existingSecret`
+
 ### Configure the Single User instances
 
 As explained in this [section](#understand-the-default-configuration), the Hub is responsible for deploying the Single User instances. The configuration of these instances is passed to the Hub instance via the `hub.configuration` chart parameter.
