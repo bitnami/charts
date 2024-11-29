@@ -59,6 +59,17 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://community.appsmith.com/content/guide/how-reset-appsmith-account-password-without-email)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD, ENCRYPTION_SALT and ENCRYPTION_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=admin-password=PASSWORD --from-literal=encryption-salt=ENCRYPTION_SALT --from-literal=encryption-password=ENCRYPTION_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### External database support
 
 You may want to have appsmith connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MongoDB installation with the `mongodb.enabled` option. Here is an example:
