@@ -2458,6 +2458,23 @@ setupDBJob:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param setupDBJob.extraVolumes Optionally specify extra list of additional volumes for Airflow "setup-db" job's pods
+  ##
+  extraVolumes: []
+  ## @param setupDBJob.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow "setup-db" job's containers
+  ##
+  extraVolumeMounts: []
+  ## @param setupDBJob.initContainers Add additional init containers to the Airflow "setup-db" job's pods
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
 
 ## @section Airflow ldap parameters
 

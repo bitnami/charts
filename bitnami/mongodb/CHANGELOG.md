@@ -1,8 +1,8 @@
 # Changelog
 
-## 16.4.0 (2024-11-19)
+## 16.3.1 (2024-11-19)
 
-* [bitnami/mongodb] feat: allow setting `targetLabel` and `podTargetLabels` array on ServiceMonitor ([#30531](https://github.com/bitnami/charts/pull/30531))
+* [bitnami/mongodb] fix: Modify access modes to match YAML 1.2 schema ([#30512](https://github.com/bitnami/charts/pull/30512))
 
 ## 16.3.0 (2024-11-14)
 

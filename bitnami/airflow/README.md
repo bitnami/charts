@@ -65,7 +65,7 @@ redis.enabled=false
 
 > NOTE: Redis&reg; is not needed to be deployed when using KubernetesExecutor so you can disable it using `redis.enabled=false`.
 
-### CeleryKubernetesExecutor
+#### CeleryKubernetesExecutor
 
 The CeleryKubernetesExecutor (introduced in Airflow 2.0) is a combination of both the Celery and the Kubernetes executors. Tasks will be executed using Celery by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
 
@@ -78,7 +78,7 @@ executor=LocalExecutor
 redis.enabled=false
 ```
 
-### LocalKubernetesExecutor
+#### LocalKubernetesExecutor
 
 The LocalKubernetesExecutor (introduced in Airflow 2.3) is a combination of both the Local and the Kubernetes executors. Tasks will be executed in the scheduler by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
 
@@ -89,6 +89,17 @@ This executor will only run one task instance at a time in the Scheduler pods. F
 ```console
 executor=SequentialExecutor
 redis.enabled=false
+```
+
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://airflow.apache.org/docs/apache-airflow-providers-fab/stable/cli-ref.html#reset-password)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD, FERNET_KEY and SECRET_KEY placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=airflow-password=PASSWORD --from-literal=airflow-fernet-key=FERNET_KEY --from-literal=airflow-secret-key=SECRET_KEY --dry-run -o yaml | kubectl apply -f -
 ```
 
 ### Airflow configuration file
@@ -251,7 +262,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` true. This will configure Airflow components to send StatsD metrics to the [StatsD exporter](https://github.com/prometheus/statsd_exporter) that transforms them into Prometheus metrics. The StatsD exporter is deployed as a standalone deployment and service in the same namespace as the Airflow deployment.
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will configure Airflow components to send StatsD metrics to the [StatsD exporter](https://github.com/prometheus/statsd_exporter) that transforms them into Prometheus metrics. The StatsD exporter is deployed as a standalone deployment and service in the same namespace as the Airflow deployment.
 
 #### Prometheus requirements
 
@@ -1039,6 +1050,9 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 | `setupDBJob.annotations`                                       | Add annotations to the Airflow "setup-db" job                                                                                                                                                                                                             | `{}`             |
 | `setupDBJob.podLabels`                                         | Additional pod labels for Airflow "setup-db" job                                                                                                                                                                                                          | `{}`             |
 | `setupDBJob.podAnnotations`                                    | Additional pod annotations for Airflow "setup-db" job                                                                                                                                                                                                     | `{}`             |
+| `setupDBJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for Airflow "setup-db" job's pods                                                                                                                                                                     | `[]`             |
+| `setupDBJob.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Airflow "setup-db" job's containers                                                                                                                                                      | `[]`             |
+| `setupDBJob.initContainers`                                    | Add additional init containers to the Airflow "setup-db" job's pods                                                                                                                                                                                       | `[]`             |
 
 ### Airflow ldap parameters
 

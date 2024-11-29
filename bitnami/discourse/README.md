@@ -59,6 +59,17 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://meta.discourse.org/t/administrators-index/322712)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and SMTP_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=discourse-password=PASSWORD --from-literal=smtp-password=SMTP_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Setting up replication
 
 By default, this Chart only deploys a single pod running Discourse. Should you want to increase the number of replicas, you may follow these simple steps to ensure everything works smoothly:
@@ -745,7 +756,7 @@ export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -
 export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 
-1. Delete the Airflow worker & PostgreSQL statefulset (notice the option _--cascade=false_):
+1. Delete the Discourse worker & PostgreSQL statefulset (notice the option _--cascade=false_):
 
 ```console
 kubectl delete statefulsets.apps --cascade=false discourse-postgresql
@@ -769,7 +780,7 @@ helm upgrade discourse bitnami/discourse \
   --set redis.cluster.enabled=true
 ```
 
-1. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing Discourse worker & PostgreSQL pods and the new statefulset will create a new one:
 
 ```console
 kubectl delete pod discourse-postgresql-0

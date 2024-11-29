@@ -148,6 +148,9 @@ spec:
   {{- else }}
   scrapeConfigNamespaceSelector: {}
   {{- end }}
+  {{- if .Values.prometheus.scrapeClasses }}
+  scrapeClasses: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.scrapeClasses "context" $) | nindent 4 }}
+  {{- end }}
   enableRemoteWriteReceiver: {{ .Values.prometheus.enableRemoteWriteReceiver }}
   {{- if .Values.prometheus.remoteRead }}
   remoteRead: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.remoteRead "context" $) | nindent 4 }}

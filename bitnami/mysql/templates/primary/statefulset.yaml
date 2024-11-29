@@ -174,6 +174,12 @@ spec:
                   name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
+            - name: MYSQL_ENABLE_SSL
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if and .Values.tls.enabled (include "mysql.tlsCACert" .) }}
+            - name: MYSQL_CLIENT_CA_FILE
+              value: {{ include "mysql.tlsCACert" . | quote }}
+            {{- end }}
             {{- if not (empty .Values.auth.username) }}
             - name: MYSQL_USER
               value: {{ .Values.auth.username | quote }}
@@ -306,6 +312,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/mysql/logs
               subPath: app-logs-dir
+            {{- if .Values.tls.enabled }}
+            - name: cert
+              mountPath: /opt/bitnami/mysql/certs
+            {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
@@ -421,6 +431,12 @@ spec:
               - key: mysql-replication-password
                 path: mysql-replication-password
               {{- end }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: cert
+          secret:
+            secretName: {{ include "mysql.tlsSecretName" . }}
+            defaultMode: 256
         {{- end }}
         - name: empty-dir
           emptyDir: {}

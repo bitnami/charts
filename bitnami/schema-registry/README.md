@@ -210,18 +210,18 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Common parameters
 
-| Name                     | Description                                                                                          | Value           |
-| ------------------------ | ---------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override airflow.fullname template with a string (will prepend the release name) | `""`            |
-| `fullnameOverride`       | String to fully override airflow.fullname template with a string                                     | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                      | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                                | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                           | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                       | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                    | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                 | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                    | `["infinity"]`  |
+| Name                     | Description                                                                                               | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template with a string                                     | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                                     | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                            | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
 
 ### Schema Registry parameters
 

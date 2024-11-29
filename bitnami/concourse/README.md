@@ -70,6 +70,13 @@ externalDatabase.database=mydatabase
 externalDatabase.port=5432
 ```
 
+### Update credentials
+
+The Bitnami Concourse chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `web.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new "user:password" in `secrets.localUsers`
+- Run `helm upgrade` specifying a new secret in `web.existingSecret`
+
 ### Configure Ingress
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.

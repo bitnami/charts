@@ -203,6 +203,9 @@ Returns an init-container that waits for db migrations to be ready
     - name: empty-dir
       mountPath: /opt/bitnami/airflow/airflow.cfg
       subPath: app-base-dir/airflow.cfg
+    {{- if .Values.extraVolumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 4 }}
+    {{- end }}
 {{- end -}}
 
 {{/*

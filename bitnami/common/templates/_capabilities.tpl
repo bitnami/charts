@@ -157,14 +157,12 @@ Return the appropriate apiVersion for Vertical Pod Autoscaler.
 */}}
 {{- define "common.capabilities.vpa.apiVersion" -}}
 {{- $kubeVersion := include "common.capabilities.kubeVersion" .context -}}
-{{- if and (not (empty $kubeVersion)) (semverCompare "<1.23-0" $kubeVersion) -}}
-{{- if .beta2 -}}
-{{- print "autoscaling/v2beta2" -}}
+{{- if and (not (empty $kubeVersion)) (semverCompare "<1.11-0" $kubeVersion) -}}
+{{- print "autoscaling/v1beta1" -}}
+{{- else if and (not (empty $kubeVersion)) (semverCompare "<1.25-0" $kubeVersion) -}}
+{{- print "autoscaling/v1beta2" -}}
 {{- else -}}
-{{- print "autoscaling/v2beta1" -}}
-{{- end -}}
-{{- else -}}
-{{- print "autoscaling/v2" -}}
+{{- print "autoscaling/v1" -}}
 {{- end -}}
 {{- end -}}
 

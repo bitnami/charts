@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.8 (2024-11-12)
+## 6.3.9 (2024-11-22)
 
-* [bitnami/logstash] Release 6.3.8 ([#30433](https://github.com/bitnami/charts/pull/30433))
+* [bitnami/logstash] Release 6.3.9 ([#30591](https://github.com/bitnami/charts/pull/30591))
+
+## <small>6.3.8 (2024-11-12)</small>
+
+* [bitnami/logstash] Release 6.3.8 (#30433) ([760b0ed](https://github.com/bitnami/charts/commit/760b0edf16c6f76ef1e424ec1a6063335308d2a1)), closes [#30433](https://github.com/bitnami/charts/issues/30433)
 
 ## <small>6.3.7 (2024-11-12)</small>
 

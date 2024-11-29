@@ -40,6 +40,11 @@ spec:
               configMap:
                 name: {{ include "common.names.fullname" . }}-backup
                 defaultMode: 0755
+            {{- if .Values.backup.cronjob.caBundle.enabled }}
+            - name: ca-bundle
+              configMap:
+                name: {{ .Values.backup.cronjob.caBundle.existingConfigMap }}
+            {{- end }}
             {{- if .Values.backup.uploadProviders.google.enabled }}
             - name: google-cloud-key
               secret:
@@ -147,6 +152,11 @@ spec:
                   subPath: upload-google.sh
                 - name: google-cloud-key
                   mountPath: /var/secrets/google/
+                {{- if .Values.backup.cronjob.caBundle.enabled }}
+                - name: ca-bundle
+                  mountPath: {{ .Values.backup.cronjob.caBundle.mountPath }}
+                  subPath: {{ .Values.backup.cronjob.caBundle.subPath }}
+                {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
@@ -185,6 +195,11 @@ spec:
                 - name: backup-scripts
                   mountPath: /tmp/upload-azure.sh
                   subPath: upload-azure.sh
+                {{- if .Values.backup.cronjob.caBundle.enabled }}
+                - name: ca-bundle
+                  mountPath: {{ .Values.backup.cronjob.caBundle.mountPath }}
+                  subPath: {{ .Values.backup.cronjob.caBundle.subPath }}
+                {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
@@ -241,6 +256,10 @@ spec:
                       name: {{ include "common.names.fullname" . }}-backup-aws
                       {{- end }}
                       key: endpoint
+                {{- if .Values.backup.cronjob.caBundle.enabled }}
+                - name: AWS_CA_BUNDLE
+                  value: {{ .Values.backup.cronjob.caBundle.mountPath }}
+                {{- end }}
               volumeMounts:
                 - name: empty-dir
                   mountPath: /tmp
@@ -253,6 +272,11 @@ spec:
                 - name: backup-scripts
                   mountPath: /tmp/upload-aws.sh
                   subPath: upload-aws.sh
+                {{- if .Values.backup.cronjob.caBundle.enabled }}
+                - name: ca-bundle
+                  mountPath: {{ .Values.backup.cronjob.caBundle.mountPath }}
+                  subPath: {{ .Values.backup.cronjob.caBundle.subPath }}
+                {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}

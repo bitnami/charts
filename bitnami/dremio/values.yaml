@@ -2308,7 +2308,7 @@ minio:
     ports:
       api: 9000
 
-## @section Prometheus metrics
+## @section Prometheus metrics parameters
 ##
 metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics

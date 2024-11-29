@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.4.7 (2024-10-28)
+## 9.4.8 (2024-11-29)
 
-* [bitnami/solr] chore: Increase ginkgo test timeout ([#30109](https://github.com/bitnami/charts/pull/30109))
+* [bitnami/solr] Release 9.4.8 ([#30678](https://github.com/bitnami/charts/pull/30678))
+
+## <small>9.4.7 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/solr] chore: Increase ginkgo test timeout (#30109) ([387437d](https://github.com/bitnami/charts/commit/387437dff423c5a29e2a7314c838ccb2ac62ee46)), closes [#30109](https://github.com/bitnami/charts/issues/30109)
 
 ## <small>9.4.6 (2024-10-20)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.11 (2024-11-08)
+## 2.4.12 (2024-11-18)
 
-* [bitnami/sealed-secrets] Unify seLinuxOptions default value ([#30324](https://github.com/bitnami/charts/pull/30324))
+* [bitnami/sealed-secrets] Fix namespace in PodDisruptionBudget ([#30453](https://github.com/bitnami/charts/pull/30453))
+
+## <small>2.4.11 (2024-11-08)</small>
+
+* [bitnami/sealed-secrets] Unify seLinuxOptions default value (#30324) ([a6d2a10](https://github.com/bitnami/charts/commit/a6d2a108b51b9e92f73775bf262e806a2993b9ec)), closes [#30324](https://github.com/bitnami/charts/issues/30324)
 
 ## <small>2.4.10 (2024-11-07)</small>
 

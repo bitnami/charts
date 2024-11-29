@@ -118,4 +118,4 @@ WARNING: You made the Kong admin {{ if contains "ClusterIP" .Values.service.type
 {{- include "kong.validateValues" . }}
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" (list "ingressController" "kong" "migration") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.ingressController.image .Values.postgresql.image) "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.ingressController.image) "context" $) }}

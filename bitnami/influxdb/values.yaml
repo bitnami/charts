@@ -979,6 +979,24 @@ backup:
     ## @param backup.cronjob.historyLimit Number of successful finished jobs to retain
     ##
     historyLimit: 1
+    ##
+    ## Option to include ca-bundle
+    ##
+    caBundle:
+      ## @param backup.cronjob.caBundle.enabled Boolean flag to enable/disable the inclusion of a CA bundle for backup CronJob.
+      ## If enabled a configmap should be created with key as ca-bundle.crt and value to be the actual CA Bundle
+      ##
+      enabled: false
+      ## @param backup.cronjob.caBundle.existingConfigMap Name of the existing ConfigMap that contains the CA bundle for SSL Communication.
+      ##
+      existingConfigMap: ""
+      ## @param backup.cronjob.caBundle.mountPath The path inside the CronJob container where the CA bundle will be mounted.
+      ##
+      mountPath: "/opt/ca-certificates/ca-bundle.crt"
+      ## @param backup.cronjob.caBundle.subPath The filename within the mountPath directory where the CA bundle will be available.
+      ##
+      subPath: "ca-bundle.crt"
+    ##
     ## @param backup.cronjob.podAnnotations Pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##

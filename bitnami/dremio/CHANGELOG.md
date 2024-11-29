@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.13 (2024-10-28)
+## 0.1.14 (2024-11-29)
 
-* [bitnami/dremio] Release 0.1.13 ([#30103](https://github.com/bitnami/charts/pull/30103))
+* [bitnami/dremio] chore: :bulb: :memo: :rotating_light: Rename prometheus "@section" to avoid linter problems ([#30683](https://github.com/bitnami/charts/pull/30683))
+
+## <small>0.1.13 (2024-10-28)</small>
+
+* [bitnami/dremio] Release 0.1.13 (#30103) ([bd4ba0d](https://github.com/bitnami/charts/commit/bd4ba0d71d1b832528f956ffd4733ba7c82f7278)), closes [#30103](https://github.com/bitnami/charts/issues/30103)
 
 ## <small>0.1.12 (2024-10-25)</small>
 

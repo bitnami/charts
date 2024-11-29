@@ -99,7 +99,11 @@ spec:
             {{- end }}
             {{- if .Values.configuration.google.enabled }}
             - --google-admin-email={{ .Values.configuration.google.adminEmail }}
+            {{- if .Values.configuration.google.useApplicationDefaultCredentials }}
+            - --google-use-application-default-credentials=true
+            {{- else }}
             - --google-service-account-json=/bitnami/oauth2-proxy/conf/google/service-account.json
+            {{- end }}
             {{- if .Values.configuration.google.groups }}
             {{- range $group := .Values.configuration.google.groups }}
             - --google-group={{ $group }}

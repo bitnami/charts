@@ -75,6 +75,9 @@ spec:
       {{- if .Values.redis.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.redis.shareProcessNamespace }}
       {{- end }}
+      {{- if .Values.redis.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.redis.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.redis.schedulerName }}
       schedulerName: {{ .Values.redis.schedulerName | quote }}
       {{- end }}
