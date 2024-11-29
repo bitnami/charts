@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.2 (2024-10-30)
+## 2.1.0 (2024-11-29)
 
-* [bitnami/valkey] Fix default kukbectl.command when sentinel.service.createPrimary is true ([#30090](https://github.com/bitnami/charts/pull/30090))
+* [bitnami/valkey] feat: :sparkles: :memo: Allow password update via values.yaml ([#30690](https://github.com/bitnami/charts/pull/30690))
+
+## <small>2.0.2 (2024-11-04)</small>
+
+* [bitnami/valkey] Fix default kukbectl.command when sentinel.service.createPrimary is true (#30090) ([4bd6eb5](https://github.com/bitnami/charts/commit/4bd6eb5ffffb92361dd929289ee17430c815e87e)), closes [#30090](https://github.com/bitnami/charts/issues/30090)
 
 ## <small>2.0.1 (2024-10-29)</small>
 
