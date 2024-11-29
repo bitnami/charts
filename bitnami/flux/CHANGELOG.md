@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.3.22 (2024-11-19)
+## 2.3.22 (2024-11-29)
 
-* Fix Incorrect Argument Mapping and Add Missing events-addr Argument in Bitnami FluxCD Chart ([#30523](https://github.com/bitnami/charts/pull/30523))
+* [bitnami/flux] Fix incorrect argument mapping and add missing events-addr argument ([#30523](https://github.com/bitnami/charts/pull/30523))
 
 ## <small>2.3.21 (2024-11-07)</small>
 
