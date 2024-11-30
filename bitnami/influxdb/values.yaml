@@ -948,7 +948,7 @@ backup:
     ## @param Restored data path
     #
     directory: "/restore"
-    ## @param This PVC should be created manually
+    ## @param This PVC is used to store restored data. Should be created beforehand.
     #
     existingClaim: ""
 
