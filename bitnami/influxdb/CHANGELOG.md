@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.6.0 (2024-11-30)
+
+* [bitnami/influxdb] Feature to restore from AWS S3 ([#30696](https://github.com/bitnami/charts/pull/30696))
+
 ## 6.5.0 (2024-12-10)
 
 * [bitnami/influxdb] Detect non-standard images ([#30882](https://github.com/bitnami/charts/pull/30882))
