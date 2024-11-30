@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.5.2 (2024-10-21)
+## 7.5.3 (2024-11-30)
 
-* [bitnami/memcached] Release 7.5.2 ([#30004](https://github.com/bitnami/charts/pull/30004))
+* [bitnami/memcached] Release 7.5.3 ([#30694](https://github.com/bitnami/charts/pull/30694))
+
+## <small>7.5.2 (2024-10-21)</small>
+
+* [bitnami/memcached] Release 7.5.2 (#30004) ([e6b0940](https://github.com/bitnami/charts/commit/e6b0940f88502e985ca8ceda3c2c3e427da60f1b)), closes [#30004](https://github.com/bitnami/charts/issues/30004)
 
 ## <small>7.5.1 (2024-10-17)</small>
 
