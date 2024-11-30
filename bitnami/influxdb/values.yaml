@@ -939,16 +939,16 @@ backup:
   ## @param backup.retentionDays Retention time in days for backups (older backups are deleted)
   ##
   retentionDays: 10
-  ## @param backup.restore Parameter for restore
+  ## Restore parameters
   ## 
   restore:
-    ## @param Enable restore. Should be used when backup is enabled
+    ## @param backup.restore.enabled Enable restore. Should be used when backup is enabled
     ##
     enabled: false
-    ## @param Restored data path
+    ## @param backup.restore.directory Restored data path
     #
     directory: "/restore"
-    ## @param This PVC is used to store restored data. Should be created beforehand.
+    ## @param backup.restore.existingClaim This PVC is used to store restored data. Should be created beforehand.
     #
     existingClaim: ""
 
