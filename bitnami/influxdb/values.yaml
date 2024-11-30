@@ -1270,4 +1270,3 @@ backup:
       ##     memory: 1024Mi
       ##
       resources: {}
-  
