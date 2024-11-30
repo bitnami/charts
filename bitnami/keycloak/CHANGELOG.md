@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.0.0 (2024-11-27)
+## 24.2.3 (2024-11-30)
 
 * [bitnami/keycloak] Update KEYCLOAK_ADMIN env variables deprecation ([#30636](https://github.com/bitnami/charts/pull/30636))
 
