@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.5.0 (2024-11-30)
+
+* [bitnami/influxdb] Feature to restore from AWS S3 ([#30696](https://github.com/bitnami/charts/pull/30696))
+
 ## 6.4.2 (2024-12-04)
 
 * [bitnami/influxdb] Release 6.4.2 ([#30757](https://github.com/bitnami/charts/pull/30757))
