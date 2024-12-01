@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.4.0 (2024-11-25)
+## 20.4.0 (2024-12-01)
 
 * [bitnami/redis] add extraPortsEnabled ([#30607](https://github.com/bitnami/charts/pull/30607))
 
