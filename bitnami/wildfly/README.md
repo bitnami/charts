@@ -139,7 +139,7 @@ The [Bitnami WildFly](https://github.com/bitnami/containers/tree/main/bitnami/wi
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
-#### Adjust permissions of persistent volume mountpoint
+### Adjust permissions of persistent volume mountpoint
 
 As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
 
