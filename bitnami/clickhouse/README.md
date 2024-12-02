@@ -165,7 +165,7 @@ ingress:
         - clickhouse.domain.com
 ```
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 

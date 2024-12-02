@@ -130,7 +130,7 @@ initContainers:
         containerPort: 1234
 ```
 
-### TLS
+### Securing traffic using TLS
 
 This chart supports encrypting communications using TLS. To enable this feature, set the `tls.enabled`.
 

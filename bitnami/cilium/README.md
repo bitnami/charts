@@ -69,7 +69,7 @@ Please also note the chart installs the Cilium CNI plugin on the Kubernetes node
 
 It's also necessary to know the paths where the CNI binary and configuration files are located in your Kubernetes nodes. The chart assumes that the CNI binary is located in the `/opt/cni/bin` directory and the CNI configuration files are located in the `/etc/cni/net.d` directory. You can customize these paths using the `agent.cniPlugin.hostCNIBinDir` and `agent.cniPlugin.hostCNINetDir` parameters.
 
-### TLS
+### Securing traffic using TLS
 
 This chart supports encrypting communications between Hubble components using TLS. To enable this feature, set the `hubble.tls.enabled`.
 

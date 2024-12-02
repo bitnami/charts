@@ -108,6 +108,15 @@ Format: `protocol://domain[:port]`. Usually:
 
 If Harbor is deployed behind the proxy, set it as the URL of proxy.
 
+### Securing traffic using TLS
+
+It is possible to configure TLS communication in the `core`, `jobservice`, `portal`, `registry` and `trivy` components by setting `internalTLS.enabled=true`. The chart allows two configuration options:
+
+- Provide your own secrets for Harbor components using the `*.tls.existingSecret` (under the `core`, `jobservice`, `portal`, `registry` and `trivy' sections) values.
+- Have the chart auto-generate the certificates. This is done when not setting the `*.tls.existingSecret` values.
+
+Additionally, it is possible to add a custom authority to each component trust store. This is done using the `internalTLS.caBundleSecret` value with the name of a secret containing the corresponding `ca.crt` file.
+
 ### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as any of the Harbor components (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter inside each component subsection. Simply define your container according to the Kubernetes container spec.

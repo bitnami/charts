@@ -112,7 +112,7 @@ For instance, if RabbitMQ was initially installed with three replicas and then s
 
 > NOTE: It is mandatory to specify the password and Erlang cookie that was set the first time the chart was installed when upgrading the chart.
 
-### Enable TLS support
+### Securing traffic using TLS
 
 To enable TLS support, first generate the certificates as described in the [RabbitMQ documentation for SSL certificate generation](https://www.rabbitmq.com/ssl.html#automated-certificate-generation).
 

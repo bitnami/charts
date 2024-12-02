@@ -83,6 +83,8 @@ kafka.auth.jaas.clientUsers[0]=clientUser
 kafka.auth.jaas.clientPasswords[0]=clientPassword
 ```
 
+### Securing Traffic using TLS
+
 In order to configure TLS authentication/encryption, you **can** create a secret per Kafka broker you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `kafka.auth.tls.existingSecrets` parameter when deploying the chart.
 
 > **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `kafka.auth.tls.password` parameter to provide your password.
