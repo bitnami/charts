@@ -77,6 +77,17 @@ extraEnvVars:
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://docs.parseplatform.org/)
+- Update the password secret with the new values (replace the SECRET_NAME, MASTER_KEY and PARSE_DASHBOARD_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=master-key=PASSWORD --from-literal=parse-dashboard-password=PARSE_DASHBOARD_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Deploying extra resources
 
 There are cases where you may want to deploy extra objects, such as KongPlugins, KongConsumers, amongst others. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would activate a plugin at deployment time.

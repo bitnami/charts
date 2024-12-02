@@ -71,6 +71,17 @@ no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
 
 Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://github.com/seaweedfs/seaweedfs/wiki)
+- Update the password secret with the new values (replace the SECRET_NAME, ADMIN_ACCESS_KEY_ID, ADMIN_SECRET_KEY_ID, READ_ACCESS_KEY_ID and READ_SECRET_ACCESS_KEY placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=admin_access_key_id=ADMIN_ACCESS_KEY_ID --from-literal=admin_secret_access_key=ADMIN_SECRET_KEY_ID --from-literal=read_access_key_id=READ_ACCESS_KEY_ID --from-literal=read_secret_access_key=READ_SECRET_KEY_ID --dry-run -o yaml | kubectl apply -f -
+```
+
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.

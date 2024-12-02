@@ -56,6 +56,17 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://opster.com/guides/opensearch/opensearch-security/changing-admin-password-opensearch/)
+- Update the password secret with the new values (replace the SECRET_NAME PASSWORD, DASHBOARDS_PASSWORD, LOGSTASH_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=opensearch-password=PASSWORD --from-literal=opensearch-dashboards-password=DASHBOARDS_PASSWORD --from-literal=logstash-password=LOGSTASH_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Prometheus metrics
 
 This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `data`, `ingest`, `master` and `coordinating` sections) to `true`. This will expose a Prometheus endpoint using the [Opensearch Prometheus plugin](https://github.com/Aiven-Open/prometheus-exporter-plugin-for-opensearch). The Opensearch service will be have the necessary annotations to be automatically scraped by Prometheus.

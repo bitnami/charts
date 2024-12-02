@@ -81,6 +81,17 @@ no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
 
 Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://www.postgresql.org/docs/current/sql-alteruser.html)
+- Update the password secret with the new values (replace the SECRET_NAME, POSTGRES_PASSWORD and PASSWORD and REPMGR_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=postgres-password=POSTGRES_PASSWORD --from-literal=password=PASSWORD --from-literal=repmgr-password=REPMGR_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
