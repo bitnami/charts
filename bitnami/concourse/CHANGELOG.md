@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.11 (2024-11-21)
+## 5.0.12 (2024-12-02)
 
-* [bitnami/concourse] Release 5.0.11 ([#30569](https://github.com/bitnami/charts/pull/30569))
+* [bitnami/concourse] Release 5.0.12 ([#30716](https://github.com/bitnami/charts/pull/30716))
+
+## <small>5.0.11 (2024-11-21)</small>
+
+* [bitnami/concourse] Release 5.0.11 (#30569) ([864c4bb](https://github.com/bitnami/charts/commit/864c4bbda79fd01bf68b4e9e21f9447075a77bf0)), closes [#30569](https://github.com/bitnami/charts/issues/30569)
 
 ## <small>5.0.10 (2024-11-18)</small>
 
