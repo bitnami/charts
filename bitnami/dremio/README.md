@@ -345,7 +345,7 @@ externalZookeeper.hosts[0]=myexternalhost
 externalZookeeper.port=2181
 ```
 
-### TLS secrets
+### Securing traffic using TLS
 
 TLS support for the Web interface can be enabled in the chart by specifying the `dremio.tls.enabled=true`while creating a release. Two possible options are available:
 

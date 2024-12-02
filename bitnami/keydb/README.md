@@ -119,7 +119,7 @@ auth.existingSecretPasswordKey=keydb-password
 auth.usePasswordFiles=true
 ```
 
-### TLS
+### Securing traffic using TLS
 
 This chart supports encrypting communications using TLS. To enable this feature, set the `tls.enabled`.
 

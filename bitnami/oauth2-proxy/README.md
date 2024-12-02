@@ -65,7 +65,7 @@ This chart provides support for Ingress resources. If you have an ingress contro
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
 
-### TLS secrets
+### Securing traffic using TLS
 
 The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management.
 
