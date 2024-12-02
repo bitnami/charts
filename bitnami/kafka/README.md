@@ -172,6 +172,13 @@ By setting the following parameter: `listeners.client.protocol=SSL` and `listene
 
 As result, we will be able to see in kafka-authorizer.log the events specific Subject: `[...] Principal = User:CN=kafka,OU=...,O=...,L=...,C=..,ST=... is [...]`.
 
+### Update credentials
+
+The Bitnami Kafka chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `sasl.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying new credentials in the `sasl` section as explained in the [authentication section](#enable-security-for-kafka-and-zookeeper).
+- Run `helm upgrade` specifying a new secret in `sasl.existingSecret`
+
 ### Accessing Kafka brokers from outside the cluster
 
 In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.

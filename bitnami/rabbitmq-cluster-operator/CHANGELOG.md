@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.27 (2024-11-08)
+## 4.3.28 (2024-11-13)
 
-* [bitnami/rabbitmq-cluster-operator] Unify seLinuxOptions default value ([#30332](https://github.com/bitnami/charts/pull/30332))
+* [bitnami/rabbitmq-cluster-operator] Fix msg topology operator PodDisruptionBudget ([#30445](https://github.com/bitnami/charts/pull/30445))
+
+## <small>4.3.27 (2024-11-08)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Unify seLinuxOptions default value (#30332) ([1fabdf7](https://github.com/bitnami/charts/commit/1fabdf79e682fe49ac116aa65064bab744e6f429)), closes [#30332](https://github.com/bitnami/charts/issues/30332)
 
 ## <small>4.3.26 (2024-11-07)</small>
 

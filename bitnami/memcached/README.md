@@ -73,6 +73,13 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Update credentials
+
+The Bitnami Memcached chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `auth.existingPasswordSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `auth.password`
+- Run `helm upgrade` specifying a new secret in `auth.existingPasswordSecret`
+
 ### Use Sidecars and Init Containers
 
 If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.

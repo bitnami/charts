@@ -59,6 +59,17 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password in Elasticsearch following [the upstream documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/reset-password.html)
+- Update the password secret with the new values (replace the SECRET_NAME and PASSWORD)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=kibana-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Prometheus metrics
 
 This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose Kibana native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.

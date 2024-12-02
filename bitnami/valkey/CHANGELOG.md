@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.0.3 (2024-11-29)
+## 2.1.2 (2024-11-29)
 
 * [bitnami/valkey] Fix broken failover in sentinel setups ([#30689](https://github.com/bitnami/charts/pull/30689))
+
+## 2.1.1 (2024-12-01)
+
+* [bitnami/valkey] Release 2.1.1 ([#30703](https://github.com/bitnami/charts/pull/30703))
+
+## 2.1.0 (2024-11-29)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/valkey] feat: :sparkles: :memo: Allow password update via values.yaml (#30690) ([20a71ea](https://github.com/bitnami/charts/commit/20a71eadaf7dbb5a29ef3f83a1b5e14485206aad)), closes [#30690](https://github.com/bitnami/charts/issues/30690)
 
 ## <small>2.0.2 (2024-11-04)</small>
 

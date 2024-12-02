@@ -1,8 +1,12 @@
 # Changelog
 
+## 20.4.0 (2024-12-01)
+
+* [bitnami/redis] add extraPortsEnabled ([#30607](https://github.com/bitnami/charts/pull/30607))
+
 ## 20.3.0 (2024-11-14)
 
-* [bitnami/redis] feat: :sparkles: Allow updating credentials via values.yaml ([#30452](https://github.com/bitnami/charts/pull/30452))
+* [bitnami/redis] feat: :sparkles: Allow updating credentials via values.yaml (#30452) ([d6a3118](https://github.com/bitnami/charts/commit/d6a3118e42a9a481d4429defbd628015a3b8f755)), closes [#30452](https://github.com/bitnami/charts/issues/30452)
 
 ## <small>20.2.2 (2024-11-11)</small>
 
