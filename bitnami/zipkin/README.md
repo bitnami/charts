@@ -264,7 +264,7 @@ Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/worklo
 
 ### Securing traffic using TLS
 
-This chart supports encrypting communications using TLS. To enable this feature, set the `tls.enabled`.
+Zipkin can encrypt communications by setting `tls.enabled=true`.
 
 It is necessary to create a secret containing the TLS certificates and pass it to the chart via the `tls.existingSecret` parameter. The secret should contain a `tls.crt` and `tls.key` keys including the certificate and key files respectively.
 
