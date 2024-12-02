@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.30 (2024-11-22)
+## 1.4.31 (2024-12-02)
 
-* [bitnami/vault] Release 1.4.30 ([#30573](https://github.com/bitnami/charts/pull/30573))
+* bitnami/vault Parameterize mutating webhook caBundle values ([#30706](https://github.com/bitnami/charts/pull/30706))
+
+## <small>1.4.30 (2024-11-22)</small>
+
+* [bitnami/vault] Release 1.4.30 (#30573) ([c98e533](https://github.com/bitnami/charts/commit/c98e533c3061c98a5e8e7561c08114b8002d1dab)), closes [#30573](https://github.com/bitnami/charts/issues/30573)
 
 ## <small>1.4.29 (2024-11-08)</small>
 
