@@ -78,6 +78,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 To configure [Contour](https://projectcontour.io) please look into the configuration section [Contour Configuration](https://projectcontour.io/docs/main/configuration/).
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Example Quickstart Contour Confiuration
 
 ```yaml

@@ -56,6 +56,10 @@ The Bitnami NATS chart, when upgrading, reuses the secret previously rendered by
 - Run `helm upgrade` specifying a new password in `auth.password`
 - Run `helm upgrade` specifying a new secret in `existingSecret`
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Prometheus metrics
 
 This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [prometheus-nats-exporter](https://github.com/nats-io/prometheus-nats-exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.

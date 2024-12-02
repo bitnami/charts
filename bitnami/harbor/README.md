@@ -117,6 +117,10 @@ It is possible to configure TLS communication in the `core`, `jobservice`, `port
 
 Additionally, it is possible to add a custom authority to each component trust store. This is done using the `internalTLS.caBundleSecret` value with the name of a secret containing the corresponding `ca.crt` file.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as any of the Harbor components (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter inside each component subsection. Simply define your container according to the Kubernetes container spec.

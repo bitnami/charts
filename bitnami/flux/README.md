@@ -55,6 +55,10 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Prometheus metrics
 
 This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `helmController`, `imageAutomationController`, `imageReflectorController`, `kustomizeController`, `notificationController` and `sourceController` sections) to `true`. This will expose Flux native Prometheus ports in the containers. Additionally, it will deploy several `metrics` services, which can be configured under the `*.metrics.service` section (under the `helmController`, `imageAutomationController`, `imageReflectorController`, `kustomizeController`, `notificationController` and `sourceController` sections). These `metrics` services will have the necessary annotations to be automatically scraped by Prometheus.

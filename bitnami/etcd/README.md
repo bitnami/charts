@@ -213,7 +213,7 @@ If the `startFromSnapshot.*` parameters are used at the same time as the `disast
 
 > NOTE: The disaster recovery feature requires volumes with ReadWriteMany access mode.
 
-### Backup and restore the etcd keyspace
+### Backup and restore
 
 Two different approaches are available to back up and restore this Helm Chart:
 

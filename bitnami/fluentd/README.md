@@ -161,6 +161,10 @@ no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
 
 Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Using custom init scripts
 
 For advanced operations, the Bitnami Fluentd charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml`, depending on where you are going to initialize your scripts with `aggregator.initScripts` (or `forwarder.initScripts`), or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `aggregator.initScriptsCM` and `aggregator.initScriptsSecret` values (the same for `forwarder`).
