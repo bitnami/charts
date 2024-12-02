@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.8 (2024-11-19)
+## 1.2.9 (2024-12-02)
 
-* [bitnami/cilium] Release 1.2.8 ([#30528](https://github.com/bitnami/charts/pull/30528))
+* [bitnami/cilium] Release 1.2.9 ([#30714](https://github.com/bitnami/charts/pull/30714))
+
+## <small>1.2.8 (2024-11-19)</small>
+
+* [bitnami/cilium] Release 1.2.8 (#30528) ([99c9dd2](https://github.com/bitnami/charts/commit/99c9dd2454288475f0b4e5a4ed620599204d5e53)), closes [#30528](https://github.com/bitnami/charts/issues/30528)
 
 ## <small>1.2.7 (2024-11-11)</small>
 
