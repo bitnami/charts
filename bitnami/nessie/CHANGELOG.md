@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.4 (2024-11-21)
+## 1.0.5 (2024-12-02)
 
-* [bitnami/nessie] Release 1.0.4 ([#30555](https://github.com/bitnami/charts/pull/30555))
+* [bitnami/nessie] Release 1.0.5 ([#30712](https://github.com/bitnami/charts/pull/30712))
+
+## <small>1.0.4 (2024-11-21)</small>
+
+* [bitnami/nessie] Release 1.0.4 (#30555) ([180c7ee](https://github.com/bitnami/charts/commit/180c7ee1ca182f89df0ef185f5504428ab956e3d)), closes [#30555](https://github.com/bitnami/charts/issues/30555)
 
 ## <small>1.0.3 (2024-11-12)</small>
 
