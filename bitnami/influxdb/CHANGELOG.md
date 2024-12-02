@@ -1,8 +1,13 @@
 # Changelog
 
+## 6.4.1 (2024-12-02)
+
+* [bitnami/influxdb] Release 6.4.1 ([#30717](https://github.com/bitnami/charts/pull/30717))
+
 ## 6.4.0 (2024-11-29)
 
-* [bitnami/influxdb] Feature - Add CA bundle option to influxdb backup job ([#30659](https://github.com/bitnami/charts/pull/30659))
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/influxdb] Feature - Add CA bundle option to influxdb backup job (#30659) ([622f64d](https://github.com/bitnami/charts/commit/622f64d352e68038cd4f205a40922a08900c3014)), closes [#30659](https://github.com/bitnami/charts/issues/30659)
 
 ## <small>6.3.23 (2024-11-28)</small>
 
