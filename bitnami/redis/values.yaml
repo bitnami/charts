@@ -1459,7 +1459,15 @@ sentinel:
       ## @param sentinel.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-
+      ## @param sentinel.service.headless.extraPorts Optionally specify extra ports to expose for the headless service.
+      ## Example:
+      ## extraPorts:
+      ##   - name: my-custom-port
+      ##     port: 12345
+      ##     protocol: TCP
+      ##     targetPort: 12345
+      ##
+      extraPorts: []
   ## Redis&reg; master service parameters
   ##
   masterService:

@@ -2209,6 +2209,12 @@
                                     "type": "object",
                                     "description": "Annotations for the headless service.",
                                     "default": {}
+                                },
+                                "extraPorts": {
+                                    "type": "array",
+                                    "description": "Extra ports to expose for the headless service",
+                                    "default": [],
+                                    "items": {}
                                 }
                             }
                         }
