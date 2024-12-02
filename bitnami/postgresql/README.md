@@ -287,7 +287,7 @@ global.postgresql.auth.database=testdb
 
 This way, the credentials will be available in all of the subcharts.
 
-### Backup and restore PostgreSQL deployments
+### Backup and restore
 
 To back up and restore Bitnami PostgreSQL Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
 

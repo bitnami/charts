@@ -381,7 +381,7 @@ passwordUpdateJob:
 
 You can add extra update commands using the `passwordUpdateJob.extraCommands` value.
 
-### Backup and restore MongoDB(R) deployments
+### Backup and restore
 
 Two different approaches are available to back up and restore Bitnami MongoDB&reg; Helm chart deployments on Kubernetes:
 

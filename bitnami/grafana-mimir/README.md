@@ -84,6 +84,10 @@ The mimir configuration file `mimir.yaml` is shared across the different compone
 
 The [Bitnami grafana-mimir](https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir) image stores the data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `storeGateway`. This is very useful if you need to [use enviroment variables in your config file](https://grafana.com/docs/mimir/v2.6.x/reference-configuration-parameters/#use-environment-variables-in-the-configuration) for example to set

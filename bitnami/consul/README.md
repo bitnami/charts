@@ -199,6 +199,10 @@ initContainers:
         containerPort: 1234
 ```
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami HashiCorp Consul](https://github.com/bitnami/containers/tree/main/bitnami/consul) image stores the HashiCorp Consul data at the `/bitnami` path of the container.
