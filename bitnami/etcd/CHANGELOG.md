@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.5.3 (2024-11-12)
+## 10.6.0 (2024-12-02)
 
-* [bitnami/etcd] Release 10.5.3 ([#30432](https://github.com/bitnami/charts/pull/30432))
+* [bitnami/etcd] Add loadBalancerClass for Etcd chart ([#30697](https://github.com/bitnami/charts/pull/30697))
+
+## <small>10.5.3 (2024-11-12)</small>
+
+* [bitnami/etcd] Release 10.5.3 (#30432) ([5f6b173](https://github.com/bitnami/charts/commit/5f6b173360444a3d78b365f7346c373338db5a90)), closes [#30432](https://github.com/bitnami/charts/issues/30432)
 
 ## <small>10.5.2 (2024-11-07)</small>
 
