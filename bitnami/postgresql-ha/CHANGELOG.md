@@ -1,8 +1,14 @@
 # Changelog
 
-## 15.0.3 (2024-12-03)
+## 15.0.4 (2024-12-03)
 
-* [bitnami/postgresql-ha] Release 15.0.3 ([#30730](https://github.com/bitnami/charts/pull/30730))
+* [bitnami/postgresql-ha] Release 15.0.4 ([#30732](https://github.com/bitnami/charts/pull/30732))
+
+## <small>15.0.3 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/postgresql-ha] Release 15.0.3 (#30730) ([1e7e0de](https://github.com/bitnami/charts/commit/1e7e0dee586aa31d3b461996c35bb4a0b3a63048)), closes [#30730](https://github.com/bitnami/charts/issues/30730)
 
 ## <small>15.0.2 (2024-11-28)</small>
 
