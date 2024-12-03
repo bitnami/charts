@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.0.2 (2024-11-28)
+## 15.0.3 (2024-12-03)
 
-* [bitnami/postgresql-ha] Release 15.0.2 ([#30676](https://github.com/bitnami/charts/pull/30676))
+* [bitnami/postgresql-ha] Release 15.0.3 ([#30730](https://github.com/bitnami/charts/pull/30730))
+
+## <small>15.0.2 (2024-11-28)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/postgresql-ha] Release 15.0.2 (#30676) ([de62c88](https://github.com/bitnami/charts/commit/de62c88da5a70863d53786a71c8a2614f3b0a3de)), closes [#30676](https://github.com/bitnami/charts/issues/30676)
 
 ## <small>15.0.1 (2024-11-27)</small>
 
