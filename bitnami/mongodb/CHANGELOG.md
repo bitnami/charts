@@ -1,8 +1,16 @@
 # Changelog
 
+## 16.4.0 (2024-12-03)
+
+* [bitnami/mongodb] feat: allow setting `targetLabel` and `podTargetLabels` array on ServiceMonitor ([#30531](https://github.com/bitnami/charts/pull/30531))
+
+## <small>16.3.1 (2024-11-26)</small>
+
+* [bitnami/mongodb] Modify access modes to match YAML 1.2 schema (#30512) ([7cd0bfa](https://github.com/bitnami/charts/commit/7cd0bfa7a78bb1c97c5658a31ecf3b54d60a1812)), closes [#30512](https://github.com/bitnami/charts/issues/30512)
+
 ## 16.3.0 (2024-11-14)
 
-* [bitnami/mongodb] feat: :sparkles: Add password update job ([#30460](https://github.com/bitnami/charts/pull/30460))
+* [bitnami/mongodb] feat: :sparkles: Add password update job (#30460) ([a4d8d5b](https://github.com/bitnami/charts/commit/a4d8d5b3c164f946901b91651a7bd5cc338a11c0)), closes [#30460](https://github.com/bitnami/charts/issues/30460)
 
 ## <small>16.2.2 (2024-11-13)</small>
 
