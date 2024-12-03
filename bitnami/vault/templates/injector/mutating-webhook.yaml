@@ -28,7 +28,7 @@ webhooks:
         name: {{ include "vault.injector.fullname" . }}
         namespace: {{ include "common.names.namespace" . | quote }}
         path: "/mutate"
-      {{- if and (hasKey .Values.injector.webhook.clientConfig "caBundle") .Values.injector.webhook.clientConfig.caBundle }}
+      {{- if and .Values.injector.webhook.clientConfig (hasKey .Values.injector.webhook.clientConfig "caBundle") }}
       caBundle: {{ .Values.injector.webhook.clientConfig.caBundle }}
       {{- end }}
     rules:
