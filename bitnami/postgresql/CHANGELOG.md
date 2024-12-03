@@ -1,8 +1,14 @@
 # Changelog
 
-## 16.2.4 (2024-12-03)
+## 16.2.5 (2024-12-03)
 
-* [bitnami/postgresql] use adminPassword for metrics user when custom user is not set ([#30720](https://github.com/bitnami/charts/pull/30720))
+* [bitnami/postgresql] Release 16.2.5 ([#30733](https://github.com/bitnami/charts/pull/30733))
+
+## <small>16.2.4 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/postgresql] use adminPassword for metrics user when custom user is not set (#30720) ([8f4bc7b](https://github.com/bitnami/charts/commit/8f4bc7b46b0ce02286cc9973ff8f054a1f9c3fde)), closes [#30720](https://github.com/bitnami/charts/issues/30720)
 
 ## <small>16.2.3 (2024-11-28)</small>
 
