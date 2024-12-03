@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.3.21 (2024-11-07)
+## 2.3.22 (2024-12-03)
 
-* [bitnami/flux] Release 2.3.21 ([#30263](https://github.com/bitnami/charts/pull/30263))
+* [bitnami/flux] Release 2.3.22 ([#30749](https://github.com/bitnami/charts/pull/30749))
+
+## <small>2.3.21 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/flux] Release 2.3.21 (#30263) ([0a49b81](https://github.com/bitnami/charts/commit/0a49b81709b631dcd2e3f4c71d2c33deb52fdd91)), closes [#30263](https://github.com/bitnami/charts/issues/30263)
 
 ## <small>2.3.20 (2024-10-02)</small>
 
