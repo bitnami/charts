@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.8.2 (2024-11-26)
+## 15.9.0 (2024-12-03)
 
-* [bitnami/thanos] Release 15.8.2 ([#30626](https://github.com/bitnami/charts/pull/30626))
+* [bitnami/thanos] Add concurrency value to compactor ([#30722](https://github.com/bitnami/charts/pull/30722))
+
+## <small>15.8.2 (2024-11-26)</small>
+
+* [bitnami/thanos] Release 15.8.2 (#30626) ([82d9517](https://github.com/bitnami/charts/commit/82d95175682e86d300667a1c75999a8acfa39ce5)), closes [#30626](https://github.com/bitnami/charts/issues/30626)
 
 ## <small>15.8.1 (2024-11-07)</small>
 
