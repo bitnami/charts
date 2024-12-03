@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.3 (2024-11-27)
+## 16.2.4 (2024-12-03)
 
-* [bitnami/postgresql] Release 16.2.3 ([#30645](https://github.com/bitnami/charts/pull/30645))
+* [bitnami/postgresql] use adminPassword for metrics user when custom user is not set ([#30720](https://github.com/bitnami/charts/pull/30720))
+
+## <small>16.2.3 (2024-11-28)</small>
+
+* [bitnami/postgresql] Release 16.2.3 (#30645) ([22a4c51](https://github.com/bitnami/charts/commit/22a4c51dc3b85e73b017cb6f6c73e15e6e4b811c)), closes [#30645](https://github.com/bitnami/charts/issues/30645)
 
 ## <small>16.2.2 (2024-11-21)</small>
 
