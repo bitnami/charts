@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.0.7 (2024-11-29)
+## 22.0.8 (2024-12-03)
 
-* [bitnami/ghost] Release 22.0.7 ([#30692](https://github.com/bitnami/charts/pull/30692))
+* [bitnami/ghost] Release 22.0.8 ([#30737](https://github.com/bitnami/charts/pull/30737))
+
+## <small>22.0.7 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/ghost] Release 22.0.7 (#30692) ([d1a39d4](https://github.com/bitnami/charts/commit/d1a39d40eae979582c8d159845115101800c32cd)), closes [#30692](https://github.com/bitnami/charts/issues/30692)
 
 ## <small>22.0.6 (2024-11-28)</small>
 
