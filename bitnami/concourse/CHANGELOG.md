@@ -1,8 +1,14 @@
 # Changelog
 
-## 5.0.12 (2024-12-02)
+## 5.0.13 (2024-12-03)
 
-* [bitnami/concourse] Release 5.0.12 ([#30716](https://github.com/bitnami/charts/pull/30716))
+* [bitnami/concourse] Release 5.0.13 ([#30719](https://github.com/bitnami/charts/pull/30719))
+
+## <small>5.0.12 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/concourse] Release 5.0.12 (#30716) ([dd849ee](https://github.com/bitnami/charts/commit/dd849eee5251131ce0be3f5837a15ce42952151d)), closes [#30716](https://github.com/bitnami/charts/issues/30716)
 
 ## <small>5.0.11 (2024-11-21)</small>
 
