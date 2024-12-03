@@ -94,6 +94,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.args "context" $) | nindent 12 }}
           {{- else }}
           args:
+            - --events-addr=http://{{ include "flux.notification-controller.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}.
             - --watch-all-namespaces={{ .Values.imageAutomationController.watchAllNamespaces }}
             {{- if .Values.imageAutomationController.image.debug }}
             - --log-level=debug

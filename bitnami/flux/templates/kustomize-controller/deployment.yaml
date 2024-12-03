@@ -100,6 +100,7 @@ spec:
             {{- else }}
             - --log-level=info
             {{- end }}
+            - --events-addr=http://{{ include "flux.notification-controller.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}.
             - --metrics-addr=:{{ .Values.kustomizeController.containerPorts.metrics }}
             - --health-addr=:{{ .Values.kustomizeController.containerPorts.health }}
             - --log-encoding=json
