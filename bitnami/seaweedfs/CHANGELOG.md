@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.1.1 (2024-11-18)
+## 4.1.2 (2024-12-04)
 
-* [bitnami/seaweedfs] Release 4.1.1 ([#30510](https://github.com/bitnami/charts/pull/30510))
+* [bitnami/seaweedfs] Release 4.1.2 ([#30778](https://github.com/bitnami/charts/pull/30778))
+
+## <small>4.1.1 (2024-11-18)</small>
+
+* [bitnami/seaweedfs] Release 4.1.1 (#30510) ([990d46e](https://github.com/bitnami/charts/commit/990d46e857dbca7ff3181675cebb1f7509f7e698)), closes [#30510](https://github.com/bitnami/charts/issues/30510)
 
 ## 4.1.0 (2024-11-18)
 
