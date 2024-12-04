@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.5 (2024-11-08)
+## 2.3.6 (2024-12-04)
 
-* [bitnami/pinniped] Unify seLinuxOptions default value ([#30334](https://github.com/bitnami/charts/pull/30334))
+* [bitnami/pinniped] Release 2.3.6 ([#30772](https://github.com/bitnami/charts/pull/30772))
+
+## <small>2.3.5 (2024-11-08)</small>
+
+* [bitnami/pinniped] Unify seLinuxOptions default value (#30334) ([06e2318](https://github.com/bitnami/charts/commit/06e2318131efc03e6c67b942d087c94586121925)), closes [#30334](https://github.com/bitnami/charts/issues/30334)
 
 ## <small>2.3.4 (2024-11-07)</small>
 
