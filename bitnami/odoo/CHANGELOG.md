@@ -1,8 +1,14 @@
 # Changelog
 
-## 28.0.1 (2024-11-05)
+## 28.0.2 (2024-12-04)
 
-* [bitnami/odoo] Release 28.0.1 ([#30221](https://github.com/bitnami/charts/pull/30221))
+* [bitnami/odoo] Release 28.0.2 ([#30790](https://github.com/bitnami/charts/pull/30790))
+
+## <small>28.0.1 (2024-11-05)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/odoo] Release 28.0.1 (#30221) ([cf059d0](https://github.com/bitnami/charts/commit/cf059d077104d47020af6aa9c1ffd4c25d731001)), closes [#30221](https://github.com/bitnami/charts/issues/30221)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 28.0.0 (2024-10-08)
 
