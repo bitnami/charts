@@ -1,8 +1,14 @@
 # Changelog
 
-## 2.4.12 (2024-11-18)
+## 2.4.13 (2024-12-04)
 
-* [bitnami/sealed-secrets] Fix namespace in PodDisruptionBudget ([#30453](https://github.com/bitnami/charts/pull/30453))
+* [bitnami/sealed-secrets] Release 2.4.13 ([#30777](https://github.com/bitnami/charts/pull/30777))
+
+## <small>2.4.12 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/sealed-secrets] Fix namespace in PodDisruptionBudget (#30453) ([0c54dae](https://github.com/bitnami/charts/commit/0c54dae262ef15de14bbbd3b6509f9b8621eb211)), closes [#30453](https://github.com/bitnami/charts/issues/30453)
 
 ## <small>2.4.11 (2024-11-08)</small>
 
