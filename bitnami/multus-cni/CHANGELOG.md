@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.1.19 (2024-11-07)
+## 2.1.20 (2024-12-04)
 
-* [bitnami/multus-cni] Release 2.1.19 ([#30284](https://github.com/bitnami/charts/pull/30284))
+* [bitnami/multus-cni] Release 2.1.20 ([#30767](https://github.com/bitnami/charts/pull/30767))
+
+## <small>2.1.19 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/multus-cni] Release 2.1.19 (#30284) ([3d6966b](https://github.com/bitnami/charts/commit/3d6966bf4434f1bdba64b552fa41442c93b00785)), closes [#30284](https://github.com/bitnami/charts/issues/30284)
 
 ## <small>2.1.18 (2024-10-16)</small>
 
