@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.28 (2024-11-19)
+## 1.3.29 (2024-12-04)
 
-* [bitnami/prometheus] Release 1.3.28 ([#30518](https://github.com/bitnami/charts/pull/30518))
+* [bitnami/prometheus] Release 1.3.29 ([#30774](https://github.com/bitnami/charts/pull/30774))
+
+## <small>1.3.28 (2024-11-19)</small>
+
+* [bitnami/prometheus] Release 1.3.28 (#30518) ([8a90ea8](https://github.com/bitnami/charts/commit/8a90ea87706d89c78bcaa0bb08ca6a0d96512b5c)), closes [#30518](https://github.com/bitnami/charts/issues/30518)
 
 ## <small>1.3.27 (2024-11-08)</small>
 
