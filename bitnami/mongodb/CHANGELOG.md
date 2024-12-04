@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.3.1 (2024-11-19)
+## 16.3.2 (2024-12-04)
 
-* [bitnami/mongodb] fix: Modify access modes to match YAML 1.2 schema ([#30512](https://github.com/bitnami/charts/pull/30512))
+* [bitnami/mongodb] Release 16.3.2 ([#30785](https://github.com/bitnami/charts/pull/30785))
+
+## <small>16.3.1 (2024-11-26)</small>
+
+* [bitnami/mongodb] Modify access modes to match YAML 1.2 schema (#30512) ([7cd0bfa](https://github.com/bitnami/charts/commit/7cd0bfa7a78bb1c97c5658a31ecf3b54d60a1812)), closes [#30512](https://github.com/bitnami/charts/issues/30512)
 
 ## 16.3.0 (2024-11-14)
 
