@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.16 (2024-11-08)
+## 1.1.17 (2024-12-04)
 
-* [bitnami/whereabouts] Unify seLinuxOptions default value ([#30318](https://github.com/bitnami/charts/pull/30318))
+* [bitnami/whereabouts] Release 1.1.17 ([#30781](https://github.com/bitnami/charts/pull/30781))
+
+## <small>1.1.16 (2024-11-08)</small>
+
+* [bitnami/whereabouts] Unify seLinuxOptions default value (#30318) ([5f02b3c](https://github.com/bitnami/charts/commit/5f02b3c19acb3e4bf7c74c4315e634321ef07284)), closes [#30318](https://github.com/bitnami/charts/issues/30318)
 
 ## <small>1.1.15 (2024-11-07)</small>
 
