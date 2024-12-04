@@ -143,10 +143,10 @@ spec:
 
               mc admin service restart {{ $minioAlias }} --wait --json;
 
-              # Adding a sleep to ensure that the check below does not cause
+              # Adding a sleep and templating it to ensure that the check below does not cause
               # a race condition. We check for the MinIO port because the
               # "mc admin service restart --wait" command is not working as expected
-              sleep 5;
+              sleep {{ .Values.provisioning.sleepTime | default 5 }};
               echo "Waiting for Minio to be available after restart";
               wait-for-port \
                 --host={{ include "common.names.fullname" . }} \
