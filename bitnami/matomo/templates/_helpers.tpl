@@ -139,7 +139,7 @@ Return the database password key
 {{- if .Values.mariadb.enabled -}}
 mariadb-password
 {{- else -}}
-db-password
+    {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
 {{- end -}}
 {{- end -}}
 

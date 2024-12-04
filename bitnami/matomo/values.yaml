@@ -721,6 +721,7 @@ mariadb:
 ## @param externalDatabase.password Password for the above username
 ## @param externalDatabase.database Name of the existing database
 ## @param externalDatabase.existingSecret Name of a secret containing the database credentials
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database password
 ##
 externalDatabase:
   host: ""
@@ -729,6 +730,7 @@ externalDatabase:
   password: ""
   database: bitnami_matomo
   existingSecret: ""
+  existingSecretPasswordKey: "db-password"
 ## @section Volume Permissions parameters
 ##
 
