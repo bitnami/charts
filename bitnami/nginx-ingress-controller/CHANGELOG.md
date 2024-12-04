@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.5.4 (2024-11-08)
+## 11.5.5 (2024-12-04)
 
-* [bitnami/nginx-ingress-controller] Unify seLinuxOptions default value ([#30338](https://github.com/bitnami/charts/pull/30338))
+* [bitnami/nginx-ingress-controller] Release 11.5.5 ([#30768](https://github.com/bitnami/charts/pull/30768))
+
+## <small>11.5.4 (2024-11-08)</small>
+
+* [bitnami/nginx-ingress-controller] Unify seLinuxOptions default value (#30338) ([ca6b0cb](https://github.com/bitnami/charts/commit/ca6b0cb98a493d8a3b9ffc8b5cbd77b83a13ecac)), closes [#30338](https://github.com/bitnami/charts/issues/30338)
 
 ## <small>11.5.3 (2024-11-07)</small>
 
