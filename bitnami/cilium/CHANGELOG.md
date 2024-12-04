@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.10 (2024-12-03)
+## 1.2.10 (2024-12-04)
 
 * [bitnami/cilium] Release 1.2.10 ([#30742](https://github.com/bitnami/charts/pull/30742))
 
