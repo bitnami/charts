@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.6.1 (2024-12-03)
+## 10.6.1 (2024-12-04)
 
 * [bitnami/etcd] Release 10.6.1 ([#30746](https://github.com/bitnami/charts/pull/30746))
 
