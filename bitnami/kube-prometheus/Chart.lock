@@ -7,9 +7,9 @@ dependencies:
   version: 4.2.16
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.27.0
+  version: 2.27.2
 - name: kube-prometheus-crds
   repository: file://./charts/kube-prometheus-crds
   version: 0.1.0
-digest: sha256:5fd9585c87105cd5730476f01651dfd67c7a06e1a22317f607f4038c01f9b10a
-generated: "2024-11-21T15:36:41.402324834Z"
+digest: sha256:d93646b514e7ea806e1cf75f4f00d3aa473d08e4ec070f6115be1de10ff7580a
+generated: "2024-12-04T03:08:23.050503504Z"
