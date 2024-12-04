@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.8.2 (2024-11-26)
+## 15.8.3 (2024-12-04)
 
-* [bitnami/thanos] Release 15.8.2 ([#30626](https://github.com/bitnami/charts/pull/30626))
+* [bitnami/thanos] Release 15.8.3 ([#30779](https://github.com/bitnami/charts/pull/30779))
+
+## <small>15.8.2 (2024-11-26)</small>
+
+* [bitnami/thanos] Release 15.8.2 (#30626) ([82d9517](https://github.com/bitnami/charts/commit/82d95175682e86d300667a1c75999a8acfa39ce5)), closes [#30626](https://github.com/bitnami/charts/issues/30626)
 
 ## <small>15.8.1 (2024-11-07)</small>
 
