@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.1.0 (2024-11-26)
+## 6.1.1 (2024-12-04)
 
-* [bitnami/oauth2-proxy] add useApplicationDefaultCredentials google ([#30309](https://github.com/bitnami/charts/pull/30309))
+* [bitnami/oauth2-proxy] Release 6.1.1 ([#30770](https://github.com/bitnami/charts/pull/30770))
+
+## 6.1.0 (2024-11-28)
+
+* [bitnami/oauth2-proxy] add useApplicationDefaultCredentials google (#30309) ([5ee114c](https://github.com/bitnami/charts/commit/5ee114cbf81aa174da2fd4e62cd3f1af10c96417)), closes [#30309](https://github.com/bitnami/charts/issues/30309)
 
 ## <small>6.0.6 (2024-11-07)</small>
 
