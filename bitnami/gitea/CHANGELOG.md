@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.3 (2024-11-27)
+## 3.0.4 (2024-12-03)
 
-* [bitnami/gitea] Release 3.0.3 ([#30642](https://github.com/bitnami/charts/pull/30642))
+* [bitnami/gitea] Release 3.0.4 ([#30750](https://github.com/bitnami/charts/pull/30750))
+
+## <small>3.0.3 (2024-11-27)</small>
+
+* [bitnami/gitea] Release 3.0.3 (#30642) ([6278bcc](https://github.com/bitnami/charts/commit/6278bcc27deabce0d3bf6c9f475974c78d4441a1)), closes [#30642](https://github.com/bitnami/charts/issues/30642)
 
 ## <small>3.0.2 (2024-11-07)</small>
 

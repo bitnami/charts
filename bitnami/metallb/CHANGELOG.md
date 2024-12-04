@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.15 (2024-11-08)
+## 6.3.16 (2024-12-04)
 
-* [bitnami/metallb] Unify seLinuxOptions default value ([#30339](https://github.com/bitnami/charts/pull/30339))
+* [bitnami/metallb] Release 6.3.16 ([#30763](https://github.com/bitnami/charts/pull/30763))
+
+## <small>6.3.15 (2024-11-08)</small>
+
+* [bitnami/metallb] Unify seLinuxOptions default value (#30339) ([f1cc8ce](https://github.com/bitnami/charts/commit/f1cc8ce1d4d3c8e0da0c4aa799bcaab62177f9d1)), closes [#30339](https://github.com/bitnami/charts/issues/30339)
 
 ## <small>6.3.14 (2024-11-07)</small>
 

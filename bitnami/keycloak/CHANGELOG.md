@@ -1,9 +1,5 @@
 # Changelog
 
-## 24.2.3 (2024-12-04)
-
-* [bitnami/keycloak] fix external-db-secret not using the specified namespace ([#30725](https://github.com/bitnami/charts/pull/30725))
-
 ## <small>24.2.3 (2024-12-03)</small>
 
 * [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)

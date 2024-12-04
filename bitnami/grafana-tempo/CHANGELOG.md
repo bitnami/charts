@@ -1,8 +1,14 @@
 # Changelog
 
-## 3.7.13 (2024-11-07)
+## 3.7.14 (2024-12-03)
 
-* [bitnami/grafana-tempo] Release 3.7.13 ([#30269](https://github.com/bitnami/charts/pull/30269))
+* [bitnami/grafana-tempo] Release 3.7.14 ([#30755](https://github.com/bitnami/charts/pull/30755))
+
+## <small>3.7.13 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-tempo] Release 3.7.13 (#30269) ([7a5479f](https://github.com/bitnami/charts/commit/7a5479f60aa186487878ef21269be6e898ccb45c)), closes [#30269](https://github.com/bitnami/charts/issues/30269)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.7.12 (2024-10-16)</small>
 
