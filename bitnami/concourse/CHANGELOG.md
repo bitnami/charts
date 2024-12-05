@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.15 (2024-12-04)
+## 5.0.15 (2024-12-05)
 
 * [bitnami/concourse] Release 5.0.15 ([#30792](https://github.com/bitnami/charts/pull/30792))
 
