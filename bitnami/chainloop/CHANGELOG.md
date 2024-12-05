@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.48 (2024-12-03)
+## 2.0.49 (2024-12-05)
 
-* [bitnami/chainloop] Release 2.0.48 ([#30741](https://github.com/bitnami/charts/pull/30741))
+* [bitnami/chainloop] Release 2.0.49 ([#30808](https://github.com/bitnami/charts/pull/30808))
+
+## <small>2.0.48 (2024-12-03)</small>
+
+* [bitnami/chainloop] Release 2.0.48 (#30741) ([6798264](https://github.com/bitnami/charts/commit/67982640075dededecca85819163000efda1f995)), closes [#30741](https://github.com/bitnami/charts/issues/30741)
 
 ## <small>2.0.47 (2024-11-29)</small>
 
