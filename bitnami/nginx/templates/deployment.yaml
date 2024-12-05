@@ -84,8 +84,9 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
+      {{- if or .Values.containerSecurityContext.readOnlyRootFilesystem .Values.cloneStaticSiteFromGit.enabled .Values.initContainers }}
       initContainers:
+      {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
         - name: preserve-logs-symlinks
           image: {{ include "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -161,6 +162,7 @@ spec:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
       {{- end }}
       containers:
         {{- if .Values.cloneStaticSiteFromGit.enabled }}
