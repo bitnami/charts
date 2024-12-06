@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.2 (2024-12-05)
+## 2.2.2 (2024-12-06)
 
 * fix: azure secrets ([#30802](https://github.com/bitnami/charts/pull/30802))
 
