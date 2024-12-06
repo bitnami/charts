@@ -1,8 +1,42 @@
 # Changelog
 
-## 2.3.20 (2024-09-11)
+## 3.0.4 (2024-12-03)
 
-* [bitnami/gitea] Update externaldb-secret logic ([#27596](https://github.com/bitnami/charts/pull/27596))
+* [bitnami/gitea] Release 3.0.4 ([#30750](https://github.com/bitnami/charts/pull/30750))
+
+## <small>3.0.3 (2024-11-27)</small>
+
+* [bitnami/gitea] Release 3.0.3 (#30642) ([6278bcc](https://github.com/bitnami/charts/commit/6278bcc27deabce0d3bf6c9f475974c78d4441a1)), closes [#30642](https://github.com/bitnami/charts/issues/30642)
+
+## <small>3.0.2 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/gitea] Release 3.0.2 (#30265) ([a65be9e](https://github.com/bitnami/charts/commit/a65be9e30f7a4906a97afbf56c8df31ab46c0eb1)), closes [#30265](https://github.com/bitnami/charts/issues/30265)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.0.1 (2024-10-09)</small>
+
+* [bitnami/gitea] Release 3.0.1 (#29853) ([06bc529](https://github.com/bitnami/charts/commit/06bc529e30553869e3414c900eee6c8cf9dbd300)), closes [#29853](https://github.com/bitnami/charts/issues/29853)
+
+## 3.0.0 (2024-10-03)
+
+* [bitnami/gitea] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29732) ([d7f95fe](https://github.com/bitnami/charts/commit/d7f95fe48347c4cdb0a63f19752db52b5d7f9612)), closes [#29732](https://github.com/bitnami/charts/issues/29732)
+
+## <small>2.3.23 (2024-10-02)</small>
+
+* [bitnami/gitea] Release 2.3.23 (#29692) ([b9087cc](https://github.com/bitnami/charts/commit/b9087cc758df039fd5a47f74271d608f577e8697)), closes [#29692](https://github.com/bitnami/charts/issues/29692)
+
+## <small>2.3.22 (2024-09-19)</small>
+
+* [bitnami/gitea] Release 2.3.22 (#29512) ([5b8e97d](https://github.com/bitnami/charts/commit/5b8e97dae372b47f3ff2df5f9826373f3cc778e0)), closes [#29512](https://github.com/bitnami/charts/issues/29512)
+
+## <small>2.3.21 (2024-09-15)</small>
+
+* [bitnami/gitea] Release 2.3.21 (#29427) ([fc69df6](https://github.com/bitnami/charts/commit/fc69df6f756458aa4f2b769460fd43f2249654d8)), closes [#29427](https://github.com/bitnami/charts/issues/29427)
+
+## <small>2.3.20 (2024-09-11)</small>
+
+* [bitnami/gitea] Update externaldb-secret logic (#27596) ([c247305](https://github.com/bitnami/charts/commit/c2473057525a51f5177c3da0fc9ae03c0e4577dc)), closes [#27596](https://github.com/bitnami/charts/issues/27596)
 
 ## <small>2.3.19 (2024-09-06)</small>
 

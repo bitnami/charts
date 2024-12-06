@@ -1,8 +1,30 @@
 # Changelog
 
-## 6.3.4 (2024-09-06)
+## 6.3.9 (2024-11-22)
 
-* [bitnami/logstash] fix #29129 missing protocol in networkPolicy ([#29277](https://github.com/bitnami/charts/pull/29277))
+* [bitnami/logstash] Release 6.3.9 ([#30591](https://github.com/bitnami/charts/pull/30591))
+
+## <small>6.3.8 (2024-11-12)</small>
+
+* [bitnami/logstash] Release 6.3.8 (#30433) ([760b0ed](https://github.com/bitnami/charts/commit/760b0edf16c6f76ef1e424ec1a6063335308d2a1)), closes [#30433](https://github.com/bitnami/charts/issues/30433)
+
+## <small>6.3.7 (2024-11-12)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/logstash] Release 6.3.7 (#30420) ([2324895](https://github.com/bitnami/charts/commit/232489503324b0cc7e1fa60cc334da2fffb6de02)), closes [#30420](https://github.com/bitnami/charts/issues/30420)
+
+## <small>6.3.6 (2024-10-17)</small>
+
+* [bitnami/logstash] Release 6.3.6 (#29969) ([75a26c7](https://github.com/bitnami/charts/commit/75a26c75d7fbb96b71598ae495d85482984981cf)), closes [#29969](https://github.com/bitnami/charts/issues/29969)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>6.3.5 (2024-09-26)</small>
+
+* [bitnami/logstash] Release 6.3.5 (#29633) ([abd6fed](https://github.com/bitnami/charts/commit/abd6fedf0711acaa28f61094575057255965ff14)), closes [#29633](https://github.com/bitnami/charts/issues/29633)
+
+## <small>6.3.4 (2024-09-11)</small>
+
+* [bitnami/logstash] fix #29129 missing protocol in networkPolicy (#29277) ([3501538](https://github.com/bitnami/charts/commit/35015385d5abc694ceafb77f232303cffcb6f2e3)), closes [#29129](https://github.com/bitnami/charts/issues/29129) [#29277](https://github.com/bitnami/charts/issues/29277) [#29129](https://github.com/bitnami/charts/issues/29129)
 
 ## <small>6.3.3 (2024-09-06)</small>
 

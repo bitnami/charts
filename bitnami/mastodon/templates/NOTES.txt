@@ -102,6 +102,6 @@ To access your Mastodon site from outside the cluster follow the steps below:
 
 {{- include "mastodon.validateValues" . }}
 {{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
-{{- include "common.warnings.resources" (dict "sections" (list "initJob" "sidekiq" "streaming" "volumePermissions" "web") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.warnings.rollingTag" .Values.defaultInitContainers.volumePermissions.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "initJob.precompileAssets" "initJob.migrateAndCreateAdmin" "sidekiq" "streaming" "defaultInitContainers.volumePermissions" "defaultInitContainers.prepareDirs" "defaultInitContainers.waitForBackends" "web") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image) "context" $) }}

@@ -1,8 +1,22 @@
 # Changelog
 
-## 4.4.15 (2024-09-06)
+## 4.4.18 (2024-12-04)
 
-* [bitnami/node-exporter] Release 4.4.15 ([#29255](https://github.com/bitnami/charts/pull/29255))
+* [bitnami/node-exporter] Release 4.4.18 ([#30769](https://github.com/bitnami/charts/pull/30769))
+
+## <small>4.4.17 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/node-exporter] Release 4.4.17 (#30287) ([7b2f581](https://github.com/bitnami/charts/commit/7b2f581869ba457e0707cff46254630af2ecae16)), closes [#30287](https://github.com/bitnami/charts/issues/30287)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.4.16 (2024-10-02)</small>
+
+* [bitnami/node-exporter] Release 4.4.16 (#29712) ([0167536](https://github.com/bitnami/charts/commit/01675369336bd56efd76864c5aa69546805fa7af)), closes [#29712](https://github.com/bitnami/charts/issues/29712)
+
+## <small>4.4.15 (2024-09-06)</small>
+
+* [bitnami/node-exporter] Release 4.4.15 (#29255) ([6223523](https://github.com/bitnami/charts/commit/62235233ff4b93efa89a730fbe8f4653d0421ad3)), closes [#29255](https://github.com/bitnami/charts/issues/29255)
 
 ## <small>4.4.14 (2024-08-28)</small>
 

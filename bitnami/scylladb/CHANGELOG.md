@@ -1,8 +1,26 @@
 # Changelog
 
-## 2.0.3 (2024-09-09)
+## 3.0.1 (2024-11-14)
 
-* [bitnami/scylladb] Release 2.0.3 ([#29315](https://github.com/bitnami/charts/pull/29315))
+* [bitnami/scylladb] Release 3.0.1 ([#30448](https://github.com/bitnami/charts/pull/30448))
+
+## 3.0.0 (2024-10-29)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/scylladb] Release 3.0.0 (#30111) ([6646a0b](https://github.com/bitnami/charts/commit/6646a0bd42f871ea68eef66153037a036b0cbb0f)), closes [#30111](https://github.com/bitnami/charts/issues/30111)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.0.5 (2024-10-01)</small>
+
+* [bitnami/scylladb] test: :white_check_mark: Improve ginkgo test resiliency ([c021eb5](https://github.com/bitnami/charts/commit/c021eb5139b6519d65f006b9a45aba55178d9343))
+
+## <small>2.0.4 (2024-10-01)</small>
+
+* [bitnami/scylladb] Release 2.0.4 (#29592) ([ca7fa39](https://github.com/bitnami/charts/commit/ca7fa39a7c3b6dfbbdbbbeb1f8da6ca840c5b7c0)), closes [#29592](https://github.com/bitnami/charts/issues/29592)
+
+## <small>2.0.3 (2024-09-09)</small>
+
+* [bitnami/scylladb] Release 2.0.3 (#29315) ([bb6c8e3](https://github.com/bitnami/charts/commit/bb6c8e3e8a7bbf630506ea477681a890bb8d3fa6)), closes [#29315](https://github.com/bitnami/charts/issues/29315)
 
 ## <small>2.0.2 (2024-08-29)</small>
 

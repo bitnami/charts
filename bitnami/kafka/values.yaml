@@ -89,10 +89,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.8.0-debian-12-r3
+  tag: 3.9.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -146,9 +145,9 @@ log4j: ""
 ## NOTE: this will override `log4j`
 ##
 existingLog4jConfigMap: ""
-## @param heapOpts Kafka Java Heap size
+## @param heapOpts Kafka Java Heap configuration
 ##
-heapOpts: -Xmx1024m -Xms1024m
+heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75
 ## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`
 ## ref: https://cwiki.apache.org/confluence/display/KAFKA/KIP-392%3A+Allow+consumers+to+fetch+from+closest+replica
 ##
@@ -857,7 +856,7 @@ controller:
   ## Kafka Pod Disruption Budget
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
   ## @param controller.pdb.create Deploy a pdb object for the Kafka pod
-  ## @param controller.pdb.minAvailable Maximum number/percentage of unavailable Kafka replicas
+  ## @param controller.pdb.minAvailable Minimum number/percentage of available Kafka replicas
   ## @param controller.pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
   ##
   pdb:
@@ -1513,10 +1512,9 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.31.0-debian-12-r0
+      tag: 1.31.2-debian-12-r6
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -1832,7 +1830,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r27
+    tag: 12-debian-12-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1926,10 +1924,9 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.0.1-debian-12-r5
+      tag: 1.0.1-debian-12-r9
       digest: ""
       ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent

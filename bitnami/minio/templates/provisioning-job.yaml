@@ -79,7 +79,7 @@ spec:
           command:
             - /bin/bash
             - -c
-            - >-
+            - |-
               set -e;
               echo "Start Minio provisioning";
 
@@ -142,6 +142,18 @@ spec:
               {{- end }}
 
               mc admin service restart {{ $minioAlias }} --wait --json;
+
+              # Adding a sleep to ensure that the check below does not cause
+              # a race condition. We check for the MinIO port because the
+              # "mc admin service restart --wait" command is not working as expected
+              sleep 5;
+              echo "Waiting for Minio to be available after restart";
+              wait-for-port \
+                --host={{ include "common.names.fullname" . }} \
+                --state=inuse \
+                --timeout=120 \
+                {{ .Values.service.ports.api | int64 }};
+              echo "Minio is available. Executing provisioning commands";
 
               {{- range $policy := .Values.provisioning.policies }}
               mc admin policy create {{ $minioAlias }} {{ $policy.name }} /etc/ilm/policy-{{ $policy.name }}.json;

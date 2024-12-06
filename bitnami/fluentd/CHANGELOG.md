@@ -1,8 +1,31 @@
 # Changelog
 
-## 6.5.12 (2024-08-19)
+## 7.0.3 (2024-11-29)
 
-* [bitnami/fluentd] Release 6.5.12 ([#28921](https://github.com/bitnami/charts/pull/28921))
+* [bitnami/fluentd] Release 7.0.3 ([#30679](https://github.com/bitnami/charts/pull/30679))
+
+## <small>7.0.2 (2024-11-09)</small>
+
+* [bitnami/fluentd] Release 7.0.2 (#30376) ([aa6e830](https://github.com/bitnami/charts/commit/aa6e830ebf892edd21bd7fb45594d4a674bbc370)), closes [#30376](https://github.com/bitnami/charts/issues/30376)
+
+## <small>7.0.1 (2024-11-05)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/fluentd] Release 7.0.1 (#30212) ([f6e469a](https://github.com/bitnami/charts/commit/f6e469a3894493edc1276df342e339c1146f6c49)), closes [#30212](https://github.com/bitnami/charts/issues/30212)
+
+## 7.0.0 (2024-10-22)
+
+* [bitnami/fluentd] Major release 7.x.x (#30031) ([d1b9a1f](https://github.com/bitnami/charts/commit/d1b9a1f3e9eb822b16643667316db02d1eeb5308)), closes [#30031](https://github.com/bitnami/charts/issues/30031)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>6.5.13 (2024-09-26)</small>
+
+* [bitnami/fluentd] Release 6.5.13 (#29609) ([a2c9129](https://github.com/bitnami/charts/commit/a2c9129e34f88135b43534ce63066db9860f1872)), closes [#29609](https://github.com/bitnami/charts/issues/29609)
+
+## <small>6.5.12 (2024-08-19)</small>
+
+* [bitnami/fluentd] Release 6.5.12 (#28921) ([2387691](https://github.com/bitnami/charts/commit/2387691e2b09ebc2e19967123544255e9060ed6a)), closes [#28921](https://github.com/bitnami/charts/issues/28921)
+* docs: update README.md (#28797) ([82058a3](https://github.com/bitnami/charts/commit/82058a3792fb3ba078ebcaeb83b48b54a688489b)), closes [#28797](https://github.com/bitnami/charts/issues/28797)
 
 ## <small>6.5.11 (2024-07-25)</small>
 

@@ -1,8 +1,38 @@
 # Changelog
 
-## 11.1.16 (2024-09-03)
+## 12.1.0 (2024-11-27)
 
-* [bitnami/mysql] Release 11.1.16 ([#29168](https://github.com/bitnami/charts/pull/29168))
+* [bitnami/mysql] feat: :sparkles: Add TLS support ([#30640](https://github.com/bitnami/charts/pull/30640))
+
+## <small>12.0.1 (2024-11-25)</small>
+
+* [bitnami/mysql] Release 12.0.1 (#30614) ([cb712f4](https://github.com/bitnami/charts/commit/cb712f4fa72499975e813673edc0fa76927bbfd2)), closes [#30614](https://github.com/bitnami/charts/issues/30614)
+
+## 12.0.0 (2024-11-12)
+
+* [bitnami/mysql] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job (# ([21e98a5](https://github.com/bitnami/charts/commit/21e98a53e0163afef595094d9161509729db6fa4)), closes [#30351](https://github.com/bitnami/charts/issues/30351)
+
+## <small>11.1.20 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mysql] Drop unused `getValueFromSecret` local helper (#29962) ([1879393](https://github.com/bitnami/charts/commit/18793934bc234cab61b24c02497591f03e4b0beb)), closes [#29962](https://github.com/bitnami/charts/issues/29962)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.1.19 (2024-10-16)</small>
+
+* [bitnami/mysql] Release 11.1.19 (#29929) ([1381f66](https://github.com/bitnami/charts/commit/1381f665f7a58bd3c2abae738b05c3be1da0062b)), closes [#29929](https://github.com/bitnami/charts/issues/29929)
+
+## <small>11.1.18 (2024-10-14)</small>
+
+* [bitnami/mysql] Release 11.1.18 (#29887) ([57306e6](https://github.com/bitnami/charts/commit/57306e6212ae61b7140d67c41effb9e5fffb66d7)), closes [#29887](https://github.com/bitnami/charts/issues/29887)
+
+## <small>11.1.17 (2024-09-17)</small>
+
+* [bitnami/mysql] test: :white_check_mark: Improve reliability of ginkgo tests (#29470) ([a233966](https://github.com/bitnami/charts/commit/a233966beb176cddf29dfe71f19228873bd99bac)), closes [#29470](https://github.com/bitnami/charts/issues/29470)
+
+## <small>11.1.16 (2024-09-03)</small>
+
+* [bitnami/mysql] Release 11.1.16 (#29168) ([27551d7](https://github.com/bitnami/charts/commit/27551d76ef425175540319c9f14fef8e09530a0c)), closes [#29168](https://github.com/bitnami/charts/issues/29168)
 
 ## <small>11.1.15 (2024-08-07)</small>
 

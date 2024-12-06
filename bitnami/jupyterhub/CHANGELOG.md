@@ -1,8 +1,20 @@
 # Changelog
 
-## 7.2.17 (2024-08-27)
+## 8.0.1 (2024-11-09)
 
-* [bitnami/jupyterhub] Fix indents of singleuser extra volumes & mounts for #24458 ([#29032](https://github.com/bitnami/charts/pull/29032))
+* [bitnami/jupyterhub] Release 8.0.1 ([#30372](https://github.com/bitnami/charts/pull/30372))
+
+## 8.0.0 (2024-10-03)
+
+* [bitnami/jupyterhub] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29734) ([35c8281](https://github.com/bitnami/charts/commit/35c8281022485fa8e2c4debd1ccdf9ea07f2c76c)), closes [#29734](https://github.com/bitnami/charts/issues/29734)
+
+## <small>7.2.18 (2024-09-30)</small>
+
+* [bitnami/jupyterhub] Release 7.2.18 (#29655) ([f7d0390](https://github.com/bitnami/charts/commit/f7d0390059a17e17d6d0e5b0d9fc2f2d6aa4f2c2)), closes [#29655](https://github.com/bitnami/charts/issues/29655)
+
+## <small>7.2.17 (2024-08-28)</small>
+
+* [bitnami/jupyterhub] Fix indents of singleuser extra volumes & mounts for #24458 (#29032) ([0592bba](https://github.com/bitnami/charts/commit/0592bbaa59bc68adbd322d4cc3101249d582fde9)), closes [#24458](https://github.com/bitnami/charts/issues/24458) [#29032](https://github.com/bitnami/charts/issues/29032)
 
 ## <small>7.2.16 (2024-08-24)</small>
 

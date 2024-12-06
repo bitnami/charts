@@ -1,8 +1,30 @@
 # Changelog
 
-## 5.2.13 (2024-08-30)
+## 6.0.2 (2024-11-09)
 
-* [bitnami/sonarqube] Release 5.2.13 ([#29136](https://github.com/bitnami/charts/pull/29136))
+* [bitnami/sonarqube] Release 6.0.2 ([#30375](https://github.com/bitnami/charts/pull/30375))
+
+## <small>6.0.1 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/sonarqube] Unify seLinuxOptions default value (#30325) ([7dee7da](https://github.com/bitnami/charts/commit/7dee7dab2ed0e923d60cf0e90cf57b922769f4de)), closes [#30325](https://github.com/bitnami/charts/issues/30325)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 6.0.0 (2024-10-03)
+
+* [bitnami/sonarqube] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29745) ([e60b387](https://github.com/bitnami/charts/commit/e60b3875153fc37fee4c794e1316886968ce045f)), closes [#29745](https://github.com/bitnami/charts/issues/29745)
+
+## <small>5.2.15 (2024-10-02)</small>
+
+* [bitnami/sonarqube] Release 5.2.15 (#29674) ([f10a047](https://github.com/bitnami/charts/commit/f10a047eb8c3ad9d5cd63aeeda31116258c3015b)), closes [#29674](https://github.com/bitnami/charts/issues/29674)
+
+## <small>5.2.14 (2024-09-30)</small>
+
+* [bitnami/sonarqube] Release 5.2.14 (#29658) ([4ede9f7](https://github.com/bitnami/charts/commit/4ede9f7579051bd78142cf62b39b5cbe42fa93a4)), closes [#29658](https://github.com/bitnami/charts/issues/29658)
+
+## <small>5.2.13 (2024-08-30)</small>
+
+* [bitnami/sonarqube] Release 5.2.13 (#29136) ([a79c6b8](https://github.com/bitnami/charts/commit/a79c6b891f909c2c53d4a8c9dfeee5a14b3ce3ce)), closes [#29136](https://github.com/bitnami/charts/issues/29136)
 
 ## <small>5.2.12 (2024-07-25)</small>
 

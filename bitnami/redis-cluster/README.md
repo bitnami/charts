@@ -69,7 +69,25 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [redis_exporter](https://github.com/oliver006/redis_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -308,7 +326,7 @@ These are the steps you will usually follow to back up and restore your Redis Cl
 - Use Velero to restore the backed-up PVs on the destination cluster.
 - Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
 
-Refer to our detailed [tutorial on backing up and restoring Redis Cluster deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-backup-restore-data-redis-cluster-kubernetes-index.html) for more information.
+Refer to our detailed [tutorial on backing up and restoring Redis Cluster deployments on Kubernetes](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-data-redis-cluster-kubernetes-index.html) for more information.
 
 ### NetworkPolicy
 
@@ -424,7 +442,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `pdb.minAvailable`                                          | Min number of pods that must still be available after the eviction.                                                                                                                                                                                   | `""`                            |
 | `pdb.maxUnavailable`                                        | Max number of pods that can be unavailable after the eviction.                                                                                                                                                                                        | `""`                            |
 | `containerSecurityContext.enabled`                          | Enabled containers' Security Context                                                                                                                                                                                                                  | `true`                          |
-| `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                                                                                                                      | `nil`                           |
+| `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                                                                                                                      | `{}`                            |
 | `containerSecurityContext.runAsUser`                        | Set containers' Security Context runAsUser                                                                                                                                                                                                            | `1001`                          |
 | `containerSecurityContext.runAsGroup`                       | Set containers' Security Context runAsGroup                                                                                                                                                                                                           | `1001`                          |
 | `containerSecurityContext.runAsNonRoot`                     | Set container's Security Context runAsNonRoot                                                                                                                                                                                                         | `true`                          |
@@ -480,7 +498,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `volumePermissions.image.pullPolicy`                        | Init container volume-permissions image pull policy                                                                                                                                                                                                   | `IfNotPresent`                  |
 | `volumePermissions.image.pullSecrets`                       | Specify docker-registry secret names as an array                                                                                                                                                                                                      | `[]`                            |
 | `volumePermissions.containerSecurityContext.enabled`        | Enable Containers' Security Context                                                                                                                                                                                                                   | `true`                          |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `nil`                           |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `{}`                            |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the containers.                                                                                                                                                                                                                           | `0`                             |
 | `volumePermissions.containerSecurityContext.privileged`     | Run container as privileged                                                                                                                                                                                                                           | `false`                         |
 | `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                          |
@@ -522,6 +540,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `redis.resources`                              | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                             | `{}`            |
 | `redis.schedulerName`                          | Use an alternate scheduler, e.g. "stork".                                                                                                                                                                                     | `""`            |
 | `redis.shareProcessNamespace`                  | Enable shared process namespace in a pod.                                                                                                                                                                                     | `false`         |
+| `redis.terminationGracePeriodSeconds`          | Set custom gracefull termination period for redis container.                                                                                                                                                                  | `30`            |
 | `redis.livenessProbe.enabled`                  | Enable livenessProbe                                                                                                                                                                                                          | `true`          |
 | `redis.livenessProbe.initialDelaySeconds`      | Initial delay seconds for livenessProbe                                                                                                                                                                                       | `5`             |
 | `redis.livenessProbe.periodSeconds`            | Period seconds for livenessProbe                                                                                                                                                                                              | `5`             |
@@ -621,7 +640,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `metrics.podAnnotations`                                    | Additional annotations for Metrics exporter pod                                                                                                                                                                                   | `{}`                             |
 | `metrics.podLabels`                                         | Additional labels for Metrics exporter pod                                                                                                                                                                                        | `{}`                             |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                              | `true`                           |
-| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                  | `nil`                            |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                  | `{}`                             |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                        | `1001`                           |
 | `metrics.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                       | `1001`                           |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                     | `true`                           |
@@ -666,7 +685,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `sysctlImage.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                                                                                                                          | `[]`                       |
 | `sysctlImage.mountHostSys`                            | Mount the host `/sys` folder to `/host-sys`                                                                                                                                                                                               | `false`                    |
 | `sysctlImage.containerSecurityContext.enabled`        | Enable Containers' Security Context                                                                                                                                                                                                       | `true`                     |
-| `sysctlImage.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                          | `nil`                      |
+| `sysctlImage.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                          | `{}`                       |
 | `sysctlImage.containerSecurityContext.runAsUser`      | User ID for the containers.                                                                                                                                                                                                               | `0`                        |
 | `sysctlImage.containerSecurityContext.privileged`     | Run privileged as privileged                                                                                                                                                                                                              | `true`                     |
 | `sysctlImage.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sysctlImage.resources is set (sysctlImage.resources is recommended for production). | `nano`                     |
@@ -761,7 +780,7 @@ This major version updates the Redis&reg; docker image version used from `6.0` t
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

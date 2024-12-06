@@ -1,8 +1,46 @@
 # Changelog
 
-## 19.1.0 (2024-09-15)
+## 19.4.0 (2024-09-15)
 
 * [bitnami/contour] Allow replacing certgen with cert-manager ([#29416](https://github.com/bitnami/charts/pull/29416))
+
+## 19.3.2 (2024-12-03)
+
+* [bitnami/contour] Release 19.3.2 ([#30745](https://github.com/bitnami/charts/pull/30745))
+
+## <small>19.3.1 (2024-11-07)</small>
+
+* [bitnami/contour] Release 19.3.1 (#30260) ([4910a21](https://github.com/bitnami/charts/commit/4910a21b12108eec0195cf6388334d09ad3c81c0)), closes [#30260](https://github.com/bitnami/charts/issues/30260)
+
+## 19.3.0 (2024-11-06)
+
+* [bitnami/contour] Add Gateway API CRDs (#30166) ([07b77f3](https://github.com/bitnami/charts/commit/07b77f3cd37719392b3f71489a6a9e2d235304bc)), closes [#30166](https://github.com/bitnami/charts/issues/30166)
+
+## <small>19.2.2 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/contour] Release 19.2.2 (#30198) ([f91ea1b](https://github.com/bitnami/charts/commit/f91ea1bfb5bfadb6616ff169b66fabfa525e5828)), closes [#30198](https://github.com/bitnami/charts/issues/30198)
+
+## <small>19.2.1 (2024-10-21)</small>
+
+* [bitnami/contour]: Fix invalid volume indentation (#29890) ([d135756](https://github.com/bitnami/charts/commit/d135756e51a90a958255a4551c5d79dfb468402d)), closes [#29890](https://github.com/bitnami/charts/issues/29890)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 19.2.0 (2024-10-14)
+
+* fixed wrong envoy-service-name arg value in contour when envoy service name is changed (#29556) ([268d5b8](https://github.com/bitnami/charts/commit/268d5b84cba4ce10cc6132de86f6e209cd0068f6)), closes [#29556](https://github.com/bitnami/charts/issues/29556)
+
+## 19.1.0 (2024-10-10)
+
+* [bitnami/contour] Expose NodePort for the metrics port in the Envoy service (#29818) ([1b98ba2](https://github.com/bitnami/charts/commit/1b98ba2878d323a74e28a11540a4a483f6afe450)), closes [#29818](https://github.com/bitnami/charts/issues/29818)
+
+## <small>19.0.5 (2024-10-09)</small>
+
+* [bitnami/contour]: Fix invalid extraVolumeMounts (#29817) ([b445bd3](https://github.com/bitnami/charts/commit/b445bd37a6c255363ba790ea37cc380a55f6c49b)), closes [#29817](https://github.com/bitnami/charts/issues/29817)
+
+## <small>19.0.4 (2024-10-04)</small>
+
+* [bitnami/contour] Release 19.0.4 (#29688) ([ad308c2](https://github.com/bitnami/charts/commit/ad308c2fcc162182933038eeff9a8880c0923991)), closes [#29688](https://github.com/bitnami/charts/issues/29688)
 
 ## <small>19.0.3 (2024-09-05)</small>
 

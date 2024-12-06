@@ -1,8 +1,26 @@
 # Changelog
 
-## 3.2.12 (2024-09-06)
+## 3.2.16 (2024-12-04)
 
-* [bitnami/kubernetes-event-exporter] Release 3.2.12 ([#29247](https://github.com/bitnami/charts/pull/29247))
+* [bitnami/kubernetes-event-exporter] Release 3.2.16 ([#30761](https://github.com/bitnami/charts/pull/30761))
+
+## <small>3.2.15 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kubernetes-event-exporter] Release 3.2.15 (#30279) ([71e04cf](https://github.com/bitnami/charts/commit/71e04cfdd3a035a210bd8ead7b4b726734249d2b)), closes [#30279](https://github.com/bitnami/charts/issues/30279)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.2.14 (2024-10-08)</small>
+
+* [bitnami/kubernetes-event-exporter] Add  to leader election RoleBinding (#29804) ([cf29d5f](https://github.com/bitnami/charts/commit/cf29d5fdff96884c7c94ad19875745f7ad664679)), closes [#29804](https://github.com/bitnami/charts/issues/29804)
+
+## <small>3.2.13 (2024-10-02)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.13 (#29704) ([6eae2ee](https://github.com/bitnami/charts/commit/6eae2eef6d1ebef26305ec5238b49adf650cc359)), closes [#29704](https://github.com/bitnami/charts/issues/29704)
+
+## <small>3.2.12 (2024-09-06)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.12 (#29247) ([58f2aa9](https://github.com/bitnami/charts/commit/58f2aa96397d7ca84d7652a26b984ce765a87a36)), closes [#29247](https://github.com/bitnami/charts/issues/29247)
 
 ## <small>3.2.11 (2024-08-27)</small>
 

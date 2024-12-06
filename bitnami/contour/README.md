@@ -52,13 +52,35 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the Contour and Envoy (if `envoy.service.exposeMetrics=true`) native Prometheus ports in the containers. Additionally, it will deploy several `metrics` services. These `metrics` services will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 To configure [Contour](https://projectcontour.io) please look into the configuration section [Contour Configuration](https://projectcontour.io/docs/main/configuration/).
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Example Quickstart Contour Confiuration
 
@@ -217,7 +239,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `contour.resources`                                           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                      |
 | `contour.manageCRDs`                                          | Manage the creation, upgrade and deletion of Contour CRDs.                                                                                                                                                                        | `true`                    |
 | `contour.envoyServiceNamespace`                               | Namespace of the envoy service to inspect for Ingress status details.                                                                                                                                                             | `""`                      |
-| `contour.envoyServiceName`                                    | Name of the envoy service to inspect for Ingress status details.                                                                                                                                                                  | `""`                      |
+| `contour.envoyServiceName`                                    | DEPRECATED: use envoy.service.name                                                                                                                                                                                                | `""`                      |
 | `contour.leaderElectionResourceName`                          | Name of the contour (Lease) leader election will lease.                                                                                                                                                                           | `""`                      |
 | `contour.ingressStatusAddress`                                | Address to set in Ingress object status. It is exclusive with `envoyServiceName` and `envoyServiceNamespace`.                                                                                                                     | `""`                      |
 | `contour.podAffinityPreset`                                   | Contour Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                       | `""`                      |
@@ -486,9 +508,11 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `envoy.service.ports.metrics`                                             | Sets service metrics port                                                                                                                                                                                                                                     | `8002`                  |
 | `envoy.service.nodePorts.http`                                            | HTTP Port. If `envoy.service.type` is NodePort and this is non-empty                                                                                                                                                                                          | `""`                    |
 | `envoy.service.nodePorts.https`                                           | HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty                                                                                                                                                                                         | `""`                    |
+| `envoy.service.nodePorts.metrics`                                         | Metrics Port. If `envoy.service.type` is NodePort and this is non-empty                                                                                                                                                                                       | `""`                    |
 | `envoy.service.extraPorts`                                                | Extra ports to expose (normally used with the `sidecar` value)                                                                                                                                                                                                | `[]`                    |
 | `envoy.service.sessionAffinity`                                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                                                          | `None`                  |
 | `envoy.service.sessionAffinityConfig`                                     | Additional settings for the sessionAffinity                                                                                                                                                                                                                   | `{}`                    |
+| `envoy.service.exposeMetrics`                                             | Setting to expose the metrics port in the service                                                                                                                                                                                                             | `false`                 |
 | `envoy.networkPolicy.enabled`                                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                                           | `true`                  |
 | `envoy.networkPolicy.allowExternal`                                       | Don't require server label for connections                                                                                                                                                                                                                    | `true`                  |
 | `envoy.networkPolicy.allowExternalEgress`                                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                               | `true`                  |
@@ -519,6 +543,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `envoy.pdb.create`                                                        | Enable Pod Disruption Budget configuration                                                                                                                                                                                                                    | `true`                  |
 | `envoy.pdb.minAvailable`                                                  | Minimum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                                | `""`                    |
 | `envoy.pdb.maxUnavailable`                                                | Maximum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                                | `""`                    |
+
+### Gateway API parameters
+
+| Name                    | Description                                                    | Value   |
+| ----------------------- | -------------------------------------------------------------- | ------- |
+| `gatewayAPI.manageCRDs` | Manage the creation, upgrade and deletion of Gateway API CRDs. | `false` |
 
 ### Default backend parameters
 
@@ -794,7 +824,7 @@ kubectl apply -f backup.yaml
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

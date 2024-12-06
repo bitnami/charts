@@ -50,7 +50,25 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.jmx.enabled` to `true`. This will deploy a sidecar container with [jmx_exporter](https://github.com/prometheus/jmx_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -153,6 +171,13 @@ If you are using Kafka ACLs, you might encounter in kafka-authorizer.log the fol
 By setting the following parameter: `listeners.client.protocol=SSL` and `listener.client.sslClientAuth=required`, Kafka will require the clients to authenticate to Kafka brokers via certificate.
 
 As result, we will be able to see in kafka-authorizer.log the events specific Subject: `[...] Principal = User:CN=kafka,OU=...,O=...,L=...,C=..,ST=... is [...]`.
+
+### Update credentials
+
+The Bitnami Kafka chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `sasl.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying new credentials in the `sasl` section as explained in the [authentication section](#enable-security-for-kafka-and-zookeeper).
+- Run `helm upgrade` specifying a new secret in `sasl.existingSecret`
 
 ### Accessing Kafka brokers from outside the cluster
 
@@ -393,6 +418,10 @@ RUN mkdir -p /opt/bitnami/kafka/plugins && \
 CMD /opt/bitnami/kafka/bin/connect-standalone.sh /opt/bitnami/kafka/config/connect-standalone.properties /opt/bitnami/kafka/config/mongo.properties
 ```
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami Kafka](https://github.com/bitnami/containers/tree/main/bitnami/kafka) image stores the Kafka data at the `/bitnami/kafka` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
@@ -436,46 +465,46 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Kafka parameters
 
-| Name                                  | Description                                                                                                                                                                                                | Value                   |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`                      | Kafka image registry                                                                                                                                                                                       | `REGISTRY_NAME`         |
-| `image.repository`                    | Kafka image repository                                                                                                                                                                                     | `REPOSITORY_NAME/kafka` |
-| `image.digest`                        | Kafka image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                      | `""`                    |
-| `image.pullPolicy`                    | Kafka image pull policy                                                                                                                                                                                    | `IfNotPresent`          |
-| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                           | `[]`                    |
-| `image.debug`                         | Specify if debug values should be set                                                                                                                                                                      | `false`                 |
-| `extraInit`                           | Additional content for the kafka init script, rendered as a template.                                                                                                                                      | `""`                    |
-| `config`                              | Configuration file for Kafka, rendered as a template. Auto-generated based on chart values when not specified.                                                                                             | `""`                    |
-| `existingConfigmap`                   | ConfigMap with Kafka Configuration                                                                                                                                                                         | `""`                    |
-| `extraConfig`                         | Additional configuration to be appended at the end of the generated Kafka configuration file.                                                                                                              | `""`                    |
-| `extraConfigYaml`                     | Additional configuration in yaml format to be appended at the end of the generated Kafka configuration file.                                                                                               | `{}`                    |
-| `secretConfig`                        | Additional configuration to be appended at the end of the generated Kafka configuration file.                                                                                                              | `""`                    |
-| `existingSecretConfig`                | Secret with additonal configuration that will be appended to the end of the generated Kafka configuration file                                                                                             | `""`                    |
-| `log4j`                               | An optional log4j.properties file to overwrite the default of the Kafka brokers                                                                                                                            | `""`                    |
-| `existingLog4jConfigMap`              | The name of an existing ConfigMap containing a log4j.properties file                                                                                                                                       | `""`                    |
-| `heapOpts`                            | Kafka Java Heap size                                                                                                                                                                                       | `-Xmx1024m -Xms1024m`   |
-| `brokerRackAssignment`                | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`                                                                                                                                | `""`                    |
-| `interBrokerProtocolVersion`          | Override the setting 'inter.broker.protocol.version' during the ZK migration.                                                                                                                              | `""`                    |
-| `listeners.client.name`               | Name for the Kafka client listener                                                                                                                                                                         | `CLIENT`                |
-| `listeners.client.containerPort`      | Port for the Kafka client listener                                                                                                                                                                         | `9092`                  |
-| `listeners.client.protocol`           | Security protocol for the Kafka client listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'                                                                                    | `SASL_PLAINTEXT`        |
-| `listeners.client.sslClientAuth`      | Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'      | `""`                    |
-| `listeners.controller.name`           | Name for the Kafka controller listener                                                                                                                                                                     | `CONTROLLER`            |
-| `listeners.controller.containerPort`  | Port for the Kafka controller listener                                                                                                                                                                     | `9093`                  |
-| `listeners.controller.protocol`       | Security protocol for the Kafka controller listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'                                                                                | `SASL_PLAINTEXT`        |
-| `listeners.controller.sslClientAuth`  | Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'      | `""`                    |
-| `listeners.interbroker.name`          | Name for the Kafka inter-broker listener                                                                                                                                                                   | `INTERNAL`              |
-| `listeners.interbroker.containerPort` | Port for the Kafka inter-broker listener                                                                                                                                                                   | `9094`                  |
-| `listeners.interbroker.protocol`      | Security protocol for the Kafka inter-broker listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'                                                                              | `SASL_PLAINTEXT`        |
-| `listeners.interbroker.sslClientAuth` | Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'      | `""`                    |
-| `listeners.external.containerPort`    | Port for the Kafka external listener                                                                                                                                                                       | `9095`                  |
-| `listeners.external.protocol`         | Security protocol for the Kafka external listener. . Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'                                                                                | `SASL_PLAINTEXT`        |
-| `listeners.external.name`             | Name for the Kafka external listener                                                                                                                                                                       | `EXTERNAL`              |
-| `listeners.external.sslClientAuth`    | Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.sslClientAuth for this listener. Allowed values are 'none', 'requested' and 'required' | `""`                    |
-| `listeners.extraListeners`            | Array of listener objects to be appended to already existing listeners                                                                                                                                     | `[]`                    |
-| `listeners.overrideListeners`         | Overrides the Kafka 'listeners' configuration setting.                                                                                                                                                     | `""`                    |
-| `listeners.advertisedListeners`       | Overrides the Kafka 'advertised.listener' configuration setting.                                                                                                                                           | `""`                    |
-| `listeners.securityProtocolMap`       | Overrides the Kafka 'security.protocol.map' configuration setting.                                                                                                                                         | `""`                    |
+| Name                                  | Description                                                                                                                                                                                                | Value                                                 |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `image.registry`                      | Kafka image registry                                                                                                                                                                                       | `REGISTRY_NAME`                                       |
+| `image.repository`                    | Kafka image repository                                                                                                                                                                                     | `REPOSITORY_NAME/kafka`                               |
+| `image.digest`                        | Kafka image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                      | `""`                                                  |
+| `image.pullPolicy`                    | Kafka image pull policy                                                                                                                                                                                    | `IfNotPresent`                                        |
+| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                           | `[]`                                                  |
+| `image.debug`                         | Specify if debug values should be set                                                                                                                                                                      | `false`                                               |
+| `extraInit`                           | Additional content for the kafka init script, rendered as a template.                                                                                                                                      | `""`                                                  |
+| `config`                              | Configuration file for Kafka, rendered as a template. Auto-generated based on chart values when not specified.                                                                                             | `""`                                                  |
+| `existingConfigmap`                   | ConfigMap with Kafka Configuration                                                                                                                                                                         | `""`                                                  |
+| `extraConfig`                         | Additional configuration to be appended at the end of the generated Kafka configuration file.                                                                                                              | `""`                                                  |
+| `extraConfigYaml`                     | Additional configuration in yaml format to be appended at the end of the generated Kafka configuration file.                                                                                               | `{}`                                                  |
+| `secretConfig`                        | Additional configuration to be appended at the end of the generated Kafka configuration file.                                                                                                              | `""`                                                  |
+| `existingSecretConfig`                | Secret with additonal configuration that will be appended to the end of the generated Kafka configuration file                                                                                             | `""`                                                  |
+| `log4j`                               | An optional log4j.properties file to overwrite the default of the Kafka brokers                                                                                                                            | `""`                                                  |
+| `existingLog4jConfigMap`              | The name of an existing ConfigMap containing a log4j.properties file                                                                                                                                       | `""`                                                  |
+| `heapOpts`                            | Kafka Java Heap configuration                                                                                                                                                                              | `-XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75` |
+| `brokerRackAssignment`                | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`                                                                                                                                | `""`                                                  |
+| `interBrokerProtocolVersion`          | Override the setting 'inter.broker.protocol.version' during the ZK migration.                                                                                                                              | `""`                                                  |
+| `listeners.client.name`               | Name for the Kafka client listener                                                                                                                                                                         | `CLIENT`                                              |
+| `listeners.client.containerPort`      | Port for the Kafka client listener                                                                                                                                                                         | `9092`                                                |
+| `listeners.client.protocol`           | Security protocol for the Kafka client listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'                                                                                    | `SASL_PLAINTEXT`                                      |
+| `listeners.client.sslClientAuth`      | Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'      | `""`                                                  |
+| `listeners.controller.name`           | Name for the Kafka controller listener                                                                                                                                                                     | `CONTROLLER`                                          |
+| `listeners.controller.containerPort`  | Port for the Kafka controller listener                                                                                                                                                                     | `9093`                                                |
+| `listeners.controller.protocol`       | Security protocol for the Kafka controller listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'                                                                                | `SASL_PLAINTEXT`                                      |
+| `listeners.controller.sslClientAuth`  | Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'      | `""`                                                  |
+| `listeners.interbroker.name`          | Name for the Kafka inter-broker listener                                                                                                                                                                   | `INTERNAL`                                            |
+| `listeners.interbroker.containerPort` | Port for the Kafka inter-broker listener                                                                                                                                                                   | `9094`                                                |
+| `listeners.interbroker.protocol`      | Security protocol for the Kafka inter-broker listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'                                                                              | `SASL_PLAINTEXT`                                      |
+| `listeners.interbroker.sslClientAuth` | Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'      | `""`                                                  |
+| `listeners.external.containerPort`    | Port for the Kafka external listener                                                                                                                                                                       | `9095`                                                |
+| `listeners.external.protocol`         | Security protocol for the Kafka external listener. . Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'                                                                                | `SASL_PLAINTEXT`                                      |
+| `listeners.external.name`             | Name for the Kafka external listener                                                                                                                                                                       | `EXTERNAL`                                            |
+| `listeners.external.sslClientAuth`    | Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.sslClientAuth for this listener. Allowed values are 'none', 'requested' and 'required' | `""`                                                  |
+| `listeners.extraListeners`            | Array of listener objects to be appended to already existing listeners                                                                                                                                     | `[]`                                                  |
+| `listeners.overrideListeners`         | Overrides the Kafka 'listeners' configuration setting.                                                                                                                                                     | `""`                                                  |
+| `listeners.advertisedListeners`       | Overrides the Kafka 'advertised.listener' configuration setting.                                                                                                                                           | `""`                                                  |
+| `listeners.securityProtocolMap`       | Overrides the Kafka 'security.protocol.map' configuration setting.                                                                                                                                         | `""`                                                  |
 
 ### Kafka SASL parameters
 
@@ -649,7 +678,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `controller.autoscaling.hpa.targetCPU`               | Target CPU utilization percentage                                                                                                                                      | `""`                      |
 | `controller.autoscaling.hpa.targetMemory`            | Target Memory utilization percentage                                                                                                                                   | `""`                      |
 | `controller.pdb.create`                              | Deploy a pdb object for the Kafka pod                                                                                                                                  | `true`                    |
-| `controller.pdb.minAvailable`                        | Maximum number/percentage of unavailable Kafka replicas                                                                                                                | `""`                      |
+| `controller.pdb.minAvailable`                        | Minimum number/percentage of available Kafka replicas                                                                                                                  | `""`                      |
 | `controller.pdb.maxUnavailable`                      | Maximum number/percentage of unavailable Kafka replicas                                                                                                                | `""`                      |
 | `controller.persistence.enabled`                     | Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected                                                                                 | `true`                    |
 | `controller.persistence.existingClaim`               | A manually managed Persistent Volume and Claim                                                                                                                         | `""`                      |
@@ -1068,6 +1097,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 31.0.0
+
+This major release bumps the Kafka version to 3.9. Find notable changes in [kafka upgrade notes](https://kafka.apache.org/39/documentation.html#upgrade).
+
 ### To 30.0.0
 
 This major release bumps the Kafka version to 3.8. Find notable changes in [kafka upgrade notes](https://kafka.apache.org/38/documentation.html#upgrade).
@@ -1394,7 +1427,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

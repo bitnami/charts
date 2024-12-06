@@ -1,8 +1,53 @@
 # Changelog
 
-## 9.1.15 (2024-09-05)
+## 11.0.3 (2024-12-03)
 
-* [bitnami/argo-workflows] Release 9.1.15 ([#29225](https://github.com/bitnami/charts/pull/29225))
+* [bitnami/argo-workflows] Release 11.0.3 ([#30740](https://github.com/bitnami/charts/pull/30740))
+
+## <small>11.0.2 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/argo-workflows] Release 11.0.2 (#30715) ([c186498](https://github.com/bitnami/charts/commit/c18649871d5e3d7b757dffd00b3b9bf4a71dc95f)), closes [#30715](https://github.com/bitnami/charts/issues/30715)
+
+## <small>11.0.1 (2024-11-15)</small>
+
+* [bitnami/argo-workflows] Release 11.0.1 (#30474) ([1c7a861](https://github.com/bitnami/charts/commit/1c7a8616140ab171241f0e0896aa1e74ac31fcc0)), closes [#30474](https://github.com/bitnami/charts/issues/30474)
+
+## 11.0.0 (2024-11-12)
+
+* [bitnami/argo-workflows] chore!: :arrow_up: :boom: Bump MySQL subchart to 12 (#30430) ([2486b2b](https://github.com/bitnami/charts/commit/2486b2b6cdd82475b8b4ea9c4672092c7ec2eb9a)), closes [#30430](https://github.com/bitnami/charts/issues/30430)
+
+## <small>10.0.2 (2024-11-07)</small>
+
+* [bitnami/argo-workflows] Release 10.0.2 (#30254) ([cb88066](https://github.com/bitnami/charts/commit/cb88066e9a869f78b5f4cea63512ea700f1aa348)), closes [#30254](https://github.com/bitnami/charts/issues/30254)
+
+## <small>10.0.1 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/argo-workflows] Release 10.0.1 (#30156) ([844a5df](https://github.com/bitnami/charts/commit/844a5df12aab12876d5822155d9c0c0f0dcb0aa5)), closes [#30156](https://github.com/bitnami/charts/issues/30156)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 10.0.0 (2024-10-03)
+
+* [bitnami/argo-workflows] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29728) ([25732e6](https://github.com/bitnami/charts/commit/25732e6386f7b52adf8a444ba587790b97972622)), closes [#29728](https://github.com/bitnami/charts/issues/29728)
+
+## <small>9.1.18 (2024-10-02)</small>
+
+* [bitnami/argo-workflows] Release 9.1.18 (#29753) ([fad625d](https://github.com/bitnami/charts/commit/fad625d3fd348d62dd6abf2d20f5ac9f4deb23a3)), closes [#29753](https://github.com/bitnami/charts/issues/29753)
+
+## <small>9.1.17 (2024-09-27)</small>
+
+* [bitnami/argo-workflows] Update Workflow RBAC to Use Recommended `workflowtaskresults` CRD (#29620) ([76885b6](https://github.com/bitnami/charts/commit/76885b6c21ac601009c827dfc76ca94a40a25bc4)), closes [#29620](https://github.com/bitnami/charts/issues/29620)
+
+## <small>9.1.16 (2024-09-23)</small>
+
+* [bitnami/argo-workflows] Release 9.1.16 (#29576) ([c07a61e](https://github.com/bitnami/charts/commit/c07a61e36623a0bf4816790a65f376452a4bdc6d)), closes [#29576](https://github.com/bitnami/charts/issues/29576)
+
+## <small>9.1.15 (2024-09-05)</small>
+
+* [bitnami/argo-workflows] Release 9.1.15 (#29225) ([33115a7](https://github.com/bitnami/charts/commit/33115a72f0cf52c4bd31aa7f7f0bc7807a87c8f6)), closes [#29225](https://github.com/bitnami/charts/issues/29225)
 
 ## <small>9.1.14 (2024-08-27)</small>
 

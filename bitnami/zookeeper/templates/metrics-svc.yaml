@@ -18,7 +18,7 @@ metadata:
 spec:
   type: {{ .Values.metrics.service.type }}
   ports:
-    - name: tcp-metrics
+    - name: http-metrics
       port: {{ .Values.metrics.service.port }}
       targetPort: metrics
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}

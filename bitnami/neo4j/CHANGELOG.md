@@ -1,8 +1,37 @@
 # Changelog
 
-## 0.1.9 (2024-09-11)
+## 0.1.16 (2024-10-31)
 
-* [bitnami/neo4j] fix: add apiVersion and kind to volumeClaimTemplates ([#29361](https://github.com/bitnami/charts/pull/29361))
+* [bitnami/neo4j] Release 0.1.16 ([#30153](https://github.com/bitnami/charts/pull/30153))
+
+## <small>0.1.15 (2024-10-18)</small>
+
+* [bitnami/neo4j] Remove wrong entries from image verification (#29915) ([0d3586a](https://github.com/bitnami/charts/commit/0d3586acf10b4ab410e00608c832c59b4f2febc4)), closes [#29915](https://github.com/bitnami/charts/issues/29915)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>0.1.14 (2024-10-16)</small>
+
+* [bitnami/neo4j] Release 0.1.14 (#29930) ([b371cca](https://github.com/bitnami/charts/commit/b371cca9ab0e0865cff14cf4d9b05745d093576c)), closes [#29930](https://github.com/bitnami/charts/issues/29930)
+
+## <small>0.1.13 (2024-10-02)</small>
+
+* [bitnami/neo4j] Release 0.1.13 (#29757) ([70a1e5e](https://github.com/bitnami/charts/commit/70a1e5e1240b563ec29150ff8db66bd4e6cba22e)), closes [#29757](https://github.com/bitnami/charts/issues/29757)
+
+## <small>0.1.12 (2024-10-02)</small>
+
+* [bitnami/neo4j] Release 0.1.12 (#29754) ([33502ac](https://github.com/bitnami/charts/commit/33502ac29cb4505d4f3f67fe91c06067a4d36873)), closes [#29754](https://github.com/bitnami/charts/issues/29754)
+
+## <small>0.1.11 (2024-09-30)</small>
+
+* [bitnami/neo4j] Release 0.1.11 (#29659) ([bd8f396](https://github.com/bitnami/charts/commit/bd8f396328ac5b066d30cc4e987ee1a2c75468bb)), closes [#29659](https://github.com/bitnami/charts/issues/29659)
+
+## <small>0.1.10 (2024-09-26)</small>
+
+* [bitnami/neo4j] Release 0.1.10 (#29635) ([bf5a4b3](https://github.com/bitnami/charts/commit/bf5a4b3d9abc819ab50dfc5ed23a15f6026adf93)), closes [#29635](https://github.com/bitnami/charts/issues/29635)
+
+## <small>0.1.9 (2024-09-12)</small>
+
+* [bitnami/neo4j] fix: add apiVersion and kind to volumeClaimTemplates (#29361) ([d914733](https://github.com/bitnami/charts/commit/d9147330c652f867a430ac8e6751e31cc5f606b0)), closes [#29361](https://github.com/bitnami/charts/issues/29361)
 
 ## <small>0.1.8 (2024-08-28)</small>
 

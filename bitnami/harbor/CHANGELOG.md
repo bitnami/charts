@@ -1,8 +1,25 @@
 # Changelog
 
-## 23.0.3 (2024-09-11)
+## 24.0.2 (2024-11-14)
 
-* [bitnami/harbor] Release 23.0.3 ([#29349](https://github.com/bitnami/charts/pull/29349))
+* [bitnami/harbor] Release 24.0.2 ([#30461](https://github.com/bitnami/charts/pull/30461))
+
+## <small>24.0.1 (2024-10-21)</small>
+
+* [bitnami/harbor] Release 24.0.1 (#30007) ([3ce23ef](https://github.com/bitnami/charts/commit/3ce23ef70ae1054732b2445d0175ed854eedb8e5)), closes [#30007](https://github.com/bitnami/charts/issues/30007)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 24.0.0 (2024-10-03)
+
+* [bitnami/harbor] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29733) ([017c8c3](https://github.com/bitnami/charts/commit/017c8c368e4740be7e4d465cbb9b0c54b2ca829a)), closes [#29733](https://github.com/bitnami/charts/issues/29733)
+
+## <small>23.0.4 (2024-09-19)</small>
+
+* [bitnami/harbor] Fix REGISTRY_HTTP_SECRET encoding when declared on an existing secret (#29494) ([1691323](https://github.com/bitnami/charts/commit/169132300077d028414938924d25000cb21e4ffc)), closes [#29494](https://github.com/bitnami/charts/issues/29494)
+
+## <small>23.0.3 (2024-09-11)</small>
+
+* [bitnami/harbor] Release 23.0.3 (#29349) ([1f523e4](https://github.com/bitnami/charts/commit/1f523e4fcd930b31748457de8ee95289e72064da)), closes [#29349](https://github.com/bitnami/charts/issues/29349)
 
 ## <small>23.0.2 (2024-09-03)</small>
 
@@ -11,6 +28,9 @@
 ## <small>23.0.1 (2024-08-24)</small>
 
 * [bitnami/harbor] Release 23.0.1 (#29012) ([e8508d7](https://github.com/bitnami/charts/commit/e8508d7e47f9d7f88ae3081067451df61320792c)), closes [#29012](https://github.com/bitnami/charts/issues/29012)
+
+## 23.0.0 (2024-08-13)
+
 * [bitnami/harbor] Update dependencies (#28853) ([52607e4](https://github.com/bitnami/charts/commit/52607e4c3580532b172089da96302513014af1f4)), closes [#28853](https://github.com/bitnami/charts/issues/28853)
 
 ## <small>22.0.12 (2024-08-08)</small>

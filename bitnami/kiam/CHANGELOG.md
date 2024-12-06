@@ -1,8 +1,26 @@
 # Changelog
 
-## 2.2.14 (2024-09-06)
+## 2.2.18 (2024-12-04)
 
-* [bitnami/kiam] Release 2.2.14 ([#29246](https://github.com/bitnami/charts/pull/29246))
+* [bitnami/kiam] Release 2.2.18 ([#30762](https://github.com/bitnami/charts/pull/30762))
+
+## <small>2.2.17 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kiam] Release 2.2.17 (#30275) ([d173b06](https://github.com/bitnami/charts/commit/d173b065454e4e92e7a37c2cce3e891f2cecfc9d)), closes [#30275](https://github.com/bitnami/charts/issues/30275)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.2.16 (2024-10-10)</small>
+
+* [bitnami/kiam] Release 2.2.16 (#29861) ([155fb66](https://github.com/bitnami/charts/commit/155fb66f79e7e24ad1f804c8ed6c57c2472c6172)), closes [#29861](https://github.com/bitnami/charts/issues/29861)
+
+## <small>2.2.15 (2024-10-02)</small>
+
+* [bitnami/kiam] Release 2.2.15 (#29701) ([99fefd2](https://github.com/bitnami/charts/commit/99fefd2e1a27fb5321ba372c5e826ce4e6baf203)), closes [#29701](https://github.com/bitnami/charts/issues/29701)
+
+## <small>2.2.14 (2024-09-06)</small>
+
+* [bitnami/kiam] Release 2.2.14 (#29246) ([48b7c0c](https://github.com/bitnami/charts/commit/48b7c0c546be24f2ff760d16de6543a8853f78eb)), closes [#29246](https://github.com/bitnami/charts/issues/29246)
 
 ## <small>2.2.13 (2024-08-27)</small>
 

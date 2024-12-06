@@ -1,8 +1,26 @@
 # Changelog
 
-## 8.0.11 (2024-09-04)
+## 9.0.0 (2024-11-12)
 
-* [bitnami/matomo] add serviceAccountName parameter to CronJob pods ([#29182](https://github.com/bitnami/charts/pull/29182))
+* [bitnami/matomo] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30354](https://github.com/bitnami/charts/pull/30354))
+
+## <small>8.0.14 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/matomo] Release 8.0.14 (#30207) ([3809c46](https://github.com/bitnami/charts/commit/3809c46ba76d04b054f39c1a8d6857d708f023af)), closes [#30207](https://github.com/bitnami/charts/issues/30207)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>8.0.13 (2024-09-25)</small>
+
+* [bitnami/matomo] Release 8.0.13 (#29605) ([a5a89c9](https://github.com/bitnami/charts/commit/a5a89c9685b585b6ddfecdf4c2e067da163563d0)), closes [#29605](https://github.com/bitnami/charts/issues/29605)
+
+## <small>8.0.12 (2024-09-19)</small>
+
+* [bitnami/matomo] Release 8.0.12 (#29522) ([2f7ff7c](https://github.com/bitnami/charts/commit/2f7ff7c36bf21598bd1d8b6b7843213a21d4df47)), closes [#29522](https://github.com/bitnami/charts/issues/29522)
+
+## <small>8.0.11 (2024-09-04)</small>
+
+* [bitnami/matomo] add serviceAccountName parameter to CronJob pods (#29182) ([dafec18](https://github.com/bitnami/charts/commit/dafec184dcd1c57e48f617306d5f345d61a40fd2)), closes [#29182](https://github.com/bitnami/charts/issues/29182)
 
 ## <small>8.0.10 (2024-08-22)</small>
 

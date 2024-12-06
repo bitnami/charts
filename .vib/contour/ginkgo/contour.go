@@ -133,7 +133,10 @@ var _ = Describe("Contour:", func() {
 			for _, contourVersion := range compatibilityMatrixSRC.Versions {
 				if contourVersion.Version == ("v" + contourPodVersion) {
 					contourVersionFound = true
-					if contourVersion.Dependencies.Envoy == envoyPodVersion {
+					envoyDepVersionParts := strings.Split(contourVersion.Dependencies.Envoy, ".")
+					envoyPodVersionParts := strings.Split(envoyPodVersion, ".")
+					// Check that Envoy uses the same branch and it is greater or equal than the version listed in the compatibility matrix
+					if envoyPodVersionParts[0] == envoyDepVersionParts[0] && envoyPodVersionParts[1] == envoyDepVersionParts[1] && envoyPodVersionParts[2] >= envoyDepVersionParts[2] {
 						envoyCompatibleVersion = true
 					}
 				}

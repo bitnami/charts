@@ -1,8 +1,50 @@
 # Changelog
 
-## 21.3.16 (2024-09-11)
+## 21.3.26 (2024-11-22)
 
-* [bitnami/elasticsearch] fix: add apiVersion and kind to volumeClaimTemplates ([#29362](https://github.com/bitnami/charts/pull/29362))
+* [bitnami/elasticsearch] Release 21.3.26 ([#30594](https://github.com/bitnami/charts/pull/30594))
+
+## <small>21.3.25 (2024-11-15)</small>
+
+* [bitnami/elasticsearch] Release 21.3.25 (#30476) ([d5f2f92](https://github.com/bitnami/charts/commit/d5f2f9289c10138367cac2f17383fb3ed63d8f37)), closes [#30476](https://github.com/bitnami/charts/issues/30476)
+
+## <small>21.3.24 (2024-11-12)</small>
+
+* [bitnami/elasticsearch] Release 21.3.24 (#30423) ([9ab2b81](https://github.com/bitnami/charts/commit/9ab2b8116b9a2084182c7af6f23912169e2cf41e)), closes [#30423](https://github.com/bitnami/charts/issues/30423)
+
+## <small>21.3.23 (2024-11-09)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/elasticsearch] Release 21.3.23 (#30377) ([7a1e13f](https://github.com/bitnami/charts/commit/7a1e13f1bd3fc976dfc74da013d868332e5948dc)), closes [#30377](https://github.com/bitnami/charts/issues/30377)
+
+## <small>21.3.22 (2024-10-17)</small>
+
+* [bitnami/elasticsearch] Release 21.3.22 (#29972) ([bdbf734](https://github.com/bitnami/charts/commit/bdbf7345d2c20043ae663b107901f8fdad79f704)), closes [#29972](https://github.com/bitnami/charts/issues/29972)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>21.3.21 (2024-10-08)</small>
+
+* [bitnami/elasticsearch] Release 21.3.21 (#29832) ([104e9a7](https://github.com/bitnami/charts/commit/104e9a736297e7701970bec9813246d703026d3e)), closes [#29832](https://github.com/bitnami/charts/issues/29832)
+
+## <small>21.3.20 (2024-10-03)</small>
+
+* [bitnami/elasticsearch] Release 21.3.20 (#29765) ([a4ae3dc](https://github.com/bitnami/charts/commit/a4ae3dc6a83bce166b670e2bb3732cfa03c07b70)), closes [#29765](https://github.com/bitnami/charts/issues/29765)
+
+## <small>21.3.19 (2024-10-03)</small>
+
+* [bitnami/elasticsearch] Release 21.3.19 (#29764) ([8af879a](https://github.com/bitnami/charts/commit/8af879a0b69f5ed056fbfe63ed1f26eb4aff5d0d)), closes [#29764](https://github.com/bitnami/charts/issues/29764)
+
+## <small>21.3.18 (2024-09-26)</small>
+
+* [bitnami/elasticsearch] Release 21.3.18 (#29634) ([3ae31b7](https://github.com/bitnami/charts/commit/3ae31b7ab6059661bc799f50ea9cdcc0e2acc0db)), closes [#29634](https://github.com/bitnami/charts/issues/29634)
+
+## <small>21.3.17 (2024-09-17)</small>
+
+* [bitnami/elasticsearch] test: :white_check_mark: Improve reliability of ginkgo tests (#29465) ([958ed7f](https://github.com/bitnami/charts/commit/958ed7f0d11d5d91f63948aa050f813f32903f76)), closes [#29465](https://github.com/bitnami/charts/issues/29465)
+
+## <small>21.3.16 (2024-09-12)</small>
+
+* [bitnami/elasticsearch] fix: add apiVersion and kind to volumeClaimTemplates (#29362) ([cf547d6](https://github.com/bitnami/charts/commit/cf547d6743e7db4e771ff1d7d6393c5f70a63799)), closes [#29362](https://github.com/bitnami/charts/issues/29362)
 
 ## <small>21.3.15 (2024-09-09)</small>
 

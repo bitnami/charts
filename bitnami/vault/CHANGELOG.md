@@ -1,8 +1,46 @@
 # Changelog
 
-## 1.4.22 (2024-09-11)
+## 1.4.31 (2024-12-04)
 
-* [bitnami/vault] fix: add apiVersion and kind to volumeClaimTemplates ([#29353](https://github.com/bitnami/charts/pull/29353))
+* [bitnami/vault] Release 1.4.31 ([#30780](https://github.com/bitnami/charts/pull/30780))
+
+## <small>1.4.30 (2024-11-22)</small>
+
+* [bitnami/vault] Release 1.4.30 (#30573) ([c98e533](https://github.com/bitnami/charts/commit/c98e533c3061c98a5e8e7561c08114b8002d1dab)), closes [#30573](https://github.com/bitnami/charts/issues/30573)
+
+## <small>1.4.29 (2024-11-08)</small>
+
+* [bitnami/vault] Unify seLinuxOptions default value (#30323) ([c107a0d](https://github.com/bitnami/charts/commit/c107a0dab0e4b0a692cbe458903bf0bdaa2a855f)), closes [#30323](https://github.com/bitnami/charts/issues/30323)
+
+## <small>1.4.28 (2024-11-07)</small>
+
+* [bitnami/vault] Release 1.4.28 (#30297) ([28c047d](https://github.com/bitnami/charts/commit/28c047d7a7c101da6b0f45cac2d940e11417a6f7)), closes [#30297](https://github.com/bitnami/charts/issues/30297)
+
+## <small>1.4.27 (2024-11-01)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/vault] Release 1.4.27 (#30167) ([3f157ed](https://github.com/bitnami/charts/commit/3f157edcff98a7f7c694b043a6ff3e36e0e515b5)), closes [#30167](https://github.com/bitnami/charts/issues/30167)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.4.26 (2024-10-09)</small>
+
+* [bitnami/vault] Release 1.4.26 (#29839) ([545c006](https://github.com/bitnami/charts/commit/545c006dff7f6fcdaf4d875a903f56a643f8d8fd)), closes [#29839](https://github.com/bitnami/charts/issues/29839)
+
+## <small>1.4.25 (2024-10-02)</small>
+
+* [bitnami/vault] Release 1.4.25 (#29721) ([692d7a2](https://github.com/bitnami/charts/commit/692d7a2287c4fe16692384f80064e368e8c5e44a)), closes [#29721](https://github.com/bitnami/charts/issues/29721)
+
+## <small>1.4.24 (2024-10-02)</small>
+
+* [bitnami/vault] Fix documentation in README.md (#29665) ([3cf178a](https://github.com/bitnami/charts/commit/3cf178a2d8ba3d6002ed076044b221f548b5e868)), closes [#29665](https://github.com/bitnami/charts/issues/29665)
+
+## <small>1.4.23 (2024-09-26)</small>
+
+* [bitnami/vault] Release 1.4.23 (#29608) ([155118f](https://github.com/bitnami/charts/commit/155118f32248d78de3dbee0412c0350bccf849c2)), closes [#29608](https://github.com/bitnami/charts/issues/29608)
+
+## <small>1.4.22 (2024-09-11)</small>
+
+* [bitnami/vault] fix: add apiVersion and kind to volumeClaimTemplates (#29353) ([e870d71](https://github.com/bitnami/charts/commit/e870d71f3b5f8bb0c5ed174cdaca739af4aaa83b)), closes [#29353](https://github.com/bitnami/charts/issues/29353)
 
 ## <small>1.4.21 (2024-09-06)</small>
 

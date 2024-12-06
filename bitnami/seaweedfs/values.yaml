@@ -10,7 +10,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -82,10 +80,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/seaweedfs
-  tag: 3.73.0-debian-12-r0
+  tag: 3.80.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -318,6 +315,9 @@ master:
   ## @param master.bindAddress Master Server bind address
   ##
   bindAddress: 0.0.0.0
+  ## @param master.volumeSizeLimitMB Limit (in MB) to stop directing writes to oversized volumes
+  ##
+  volumeSizeLimitMB: 1000
   ## @param master.config Master Server configuration
   ## Specify content for master.yml
   ##
@@ -338,7 +338,7 @@ master:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param master.statefulsetAnnotations Annotations for Master Server statefulset
+  ## @param master.statefulsetAnnotations Annotations for Master Server StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   statefulsetAnnotations: {}
@@ -388,14 +388,14 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param master.updateStrategy.type Master Server statefulset strategy type
+  ## @param master.updateStrategy.type Master Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param master.podManagementPolicy Pod management policy for Master Server statefulset
+  ## @param master.podManagementPolicy Pod management policy for Master Server StatefulSet
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
@@ -756,6 +756,16 @@ master:
     ## @param master.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param master.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of the Master Server StatefulSet
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
 
   ## @section Master Server Metrics Parameters
   ##
@@ -978,7 +988,7 @@ volume:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param volume.statefulsetAnnotations Annotations for Volume Server statefulset
+  ## @param volume.statefulsetAnnotations Annotations for Volume Server StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   statefulsetAnnotations: {}
@@ -1028,14 +1038,14 @@ volume:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param volume.updateStrategy.type Volume Server statefulset strategy type
+  ## @param volume.updateStrategy.type Volume Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param volume.podManagementPolicy Pod management policy for Volume Server statefulset
+  ## @param volume.podManagementPolicy Pod management policy for Volume Server StatefulSet
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
@@ -1362,6 +1372,11 @@ volume:
       ## @param volume.dataVolumes[0].subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
       ##
       subPath: ""
+      ## @param volume.dataVolumes[0].maxVolumes Max number of SeaweedFS volumes this data volume can be divided into. If set to 0, the limit will be auto configured as free disk space divided by default volume size (30GB)
+      ## ref: https://github.com/seaweedfs/seaweedfs/wiki/FAQ#how-many-volumes-do-i-need
+      ## ref: https://github.com/seaweedfs/seaweedfs/blob/master/weed/util/constants_4bytes.go#L8
+      ##
+      maxVolumes: 8
       ## Enable persistence using Persistent Volume Claims
       ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
       ##
@@ -1401,6 +1416,16 @@ volume:
         ## @param volume.dataVolumes[0].persistence.dataSource Custom PVC data source
         ##
         dataSource: {}
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param volume.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of the Volume Server StatefulSet
+  ## @param volume.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param volume.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
 
   ## @section Volume Server Metrics Parameters
   ##
@@ -1625,7 +1650,7 @@ filer:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param filer.statefulsetAnnotations Annotations for Filer Server statefulset
+  ## @param filer.statefulsetAnnotations Annotations for Filer Server StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   statefulsetAnnotations: {}
@@ -1675,14 +1700,14 @@ filer:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param filer.updateStrategy.type Filer Server statefulset strategy type
+  ## @param filer.updateStrategy.type Filer Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param filer.podManagementPolicy Pod management policy for Filer Server statefulset
+  ## @param filer.podManagementPolicy Pod management policy for Filer Server StatefulSet
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
@@ -3215,7 +3240,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r30
+    tag: 12-debian-12-r33
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3274,7 +3299,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## @section Database Parameters
 ##
@@ -3287,6 +3312,31 @@ mariadb:
   ## To use an external database set this to false and configure the `externalDatabase.*` parameters
   ##
   enabled: true
+  ## Bitnami MariaDB image
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
+  ## @param mariadb.image.registry [default: REGISTRY_NAME] MariaDB image registry
+  ## @param mariadb.image.repository [default: REPOSITORY_NAME/mariadb] MariaDB image repository
+  ## @skip mariadb.image.tag MariaDB image tag (immutable tags are recommended)
+  ## @param mariadb.image.digest MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param mariadb.image.pullPolicy MariaDB image pull policy
+  ## @param mariadb.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/mariadb
+    tag: 11.4.4-debian-12-r1
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
@@ -3311,7 +3361,7 @@ mariadb:
   initdbScripts:
     create_table.sql: |
       USE bitnami_seaweedfs;
-      CREATE TABLE IF NOT EXISTS `filemeta` (
+      CREATE TABLE IF NOT EXISTS filemeta (
         `dirhash`   BIGINT NOT NULL       COMMENT 'first 64 bits of MD5 hash value of directory field',
         `name`      VARCHAR(766) NOT NULL COMMENT 'directory or file name',
         `directory` TEXT NOT NULL         COMMENT 'full path to parent directory',
@@ -3355,6 +3405,104 @@ mariadb:
     ##     memory: 1024Mi
     ##
     resources: {}
+## PostgresSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+##
+postgresql:
+  ## @param postgresql.enabled Deploy a PostgresSQL server to satisfy the Filer server database requirements
+  ## To use an external database set this to false and configure the `externalDatabase.*` parameters
+  ##
+  enabled: false
+  ## Bitnami PostgreSQL image version
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql
+  ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL image registry
+  ## @param postgresql.image.repository [default: REPOSITORY_NAME/postgresql] PostgreSQL image repository
+  ## @skip postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
+  ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param postgresql.image.pullPolicy PostgreSQL image pull policy
+  ## @param postgresql.image.pullSecrets Specify image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: 17.2.0-debian-12-r2
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
+  ## @param postgresql.auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided
+  ## @param postgresql.auth.database Name for a custom database to create
+  ## @param postgresql.auth.username Name for a custom user to create
+  ## @param postgresql.auth.password Password for the custom user to create
+  ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+  ## @param postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+  auth:
+    postgresPassword: ""
+    database: bitnami_seaweedfs
+    username: bn_seaweedfs
+    password: some-password
+    existingSecret: ""
+    secretKeys:
+      userPasswordKey: password
+  ## PostgreSQL Primary configuration
+  ##
+  primary:
+    ## PostgreSQL Primary resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if postgresql.primary.resources is set (postgresql.primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param postgresql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## @param postgresql.primary.initdb.scripts [object] Dictionary of initdb scripts
+    ##
+    initdb:
+      scripts:
+        create_table.sql: |
+          \c bitnami_seaweedfs;
+          CREATE TABLE IF NOT EXISTS filemeta (
+            dirhash     BIGINT,
+            name        VARCHAR(65535),
+            directory   VARCHAR(65535),
+            meta        bytea,
+            PRIMARY KEY (dirhash, name)
+          );
+    ## PostgreSQL Primary Persistence parameters
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+    ## @param postgresql.primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC(s)
+    ## @param postgresql.primary.persistence.storageClass Persistent Volume storage class
+    ## @param postgresql.primary.persistence.accessModes [array] Persistent Volume access modes
+    ## @param postgresql.primary.persistence.size Persistent Volume size
+    ##
+    persistence:
+      enabled: true
+      storageClass: ""
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
+
 ## External Database Configuration
 ## All of these values are only used if `mariadb.enabled=false` and `externalDatabase.enabled=true`.
 ##
@@ -3385,3 +3533,80 @@ externalDatabase:
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
+  ## Init external database job
+  ##
+  initDatabaseJob:
+    ## @param externalDatabase.initDatabaseJob.enabled Enable the init external database job
+    ##
+    enabled: false
+    ## @param externalDatabase.initDatabaseJob.labels Extra labels for the init external database job
+    ##
+    labels: {}
+    ## @param externalDatabase.initDatabaseJob.annotations [object] Extra annotations for the init external database job
+    ##
+    annotations:
+      helm.sh/hook: post-install
+      helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    ## @param externalDatabase.initDatabaseJob.backoffLimit Set backoff limit of the init external database job
+    ##
+    backoffLimit: 10
+    ## Configure Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.enabled Enabled init external database job containers' Security Context
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.runAsUser Set init external database job containers' Security Context runAsUser
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.runAsGroup Set init external database job containers' Security Context runAsGroup
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.runAsNonRoot Set init external database job containers' Security Context runAsNonRoot
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.privileged Set init external database job containers' Security Context privileged
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.readOnlyRootFilesystem Set init external database job containers' Security Context readOnlyRootFilesystem
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.allowPrivilegeEscalation Set init external database job containers' Security Context allowPrivilegeEscalation
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param externalDatabase.initDatabaseJob.containerSecurityContext.seccompProfile.type Set init external database job containers' Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## Configure Pods Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.enabled Enabled init external database job pods' Security Context
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param externalDatabase.initDatabaseJob.podSecurityContext.fsGroup Set init external database job pod's Security Context fsGroup
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
+    ## Container resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param externalDatabase.initDatabaseJob.resourcesPreset Set init external database job container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if externalDatabase.initDatabaseJob.resources is set (externalDatabase.initDatabaseJob.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param externalDatabase.initDatabaseJob.resources Set init external database job container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## @param externalDatabase.initDatabaseJob.automountServiceAccountToken Mount Service Account token in external database job pod
+    ##
+    automountServiceAccountToken: false

@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/ray-project/kuberay/v{version}/ray-operator/config/crd/bases/ray.io_rayjobs.yaml
-# Version: 1.2.1
+# Version: 1.2.2
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -11383,8 +11383,6 @@ spec:
                 default: 0
                 format: int32
                 type: integer
-            required:
-            - entrypoint
             type: object
           status:
             properties:

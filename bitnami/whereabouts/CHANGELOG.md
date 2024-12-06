@@ -1,8 +1,26 @@
 # Changelog
 
-## 1.1.13 (2024-09-06)
+## 1.1.17 (2024-12-04)
 
-* [bitnami/whereabouts] Release 1.1.13 ([#29264](https://github.com/bitnami/charts/pull/29264))
+* [bitnami/whereabouts] Release 1.1.17 ([#30781](https://github.com/bitnami/charts/pull/30781))
+
+## <small>1.1.16 (2024-11-08)</small>
+
+* [bitnami/whereabouts] Unify seLinuxOptions default value (#30318) ([5f02b3c](https://github.com/bitnami/charts/commit/5f02b3c19acb3e4bf7c74c4315e634321ef07284)), closes [#30318](https://github.com/bitnami/charts/issues/30318)
+
+## <small>1.1.15 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/whereabouts] Release 1.1.15 (#30296) ([61ae225](https://github.com/bitnami/charts/commit/61ae2253fe142864212fb920a4efe971f501c755)), closes [#30296](https://github.com/bitnami/charts/issues/30296)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.1.14 (2024-10-02)</small>
+
+* [bitnami/whereabouts] Release 1.1.14 (#29722) ([e0090fc](https://github.com/bitnami/charts/commit/e0090fc97f4ef258d78e6c45803d666f0364a923)), closes [#29722](https://github.com/bitnami/charts/issues/29722)
+
+## <small>1.1.13 (2024-09-06)</small>
+
+* [bitnami/whereabouts] Release 1.1.13 (#29264) ([73655d1](https://github.com/bitnami/charts/commit/73655d160953c3ee0771508db48cd1dc307558a5)), closes [#29264](https://github.com/bitnami/charts/issues/29264)
 
 ## <small>1.1.12 (2024-08-27)</small>
 

@@ -1,8 +1,34 @@
 # Changelog
 
-## 1.3.18 (2024-09-05)
+## 1.3.24 (2024-12-03)
 
-* [bitnami/cert-manager] Release 1.3.18 ([#29226](https://github.com/bitnami/charts/pull/29226))
+* [bitnami/cert-manager] Release 1.3.24 ([#30739](https://github.com/bitnami/charts/pull/30739))
+
+## <small>1.3.23 (2024-11-20)</small>
+
+* [bitnami/cert-manager] Release 1.3.23 (#30552) ([555fa36](https://github.com/bitnami/charts/commit/555fa36440a6344259ca94a1890029d476552c55)), closes [#30552](https://github.com/bitnami/charts/issues/30552)
+
+## <small>1.3.22 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/cert-manager] Release 1.3.22 (#30255) ([8964c61](https://github.com/bitnami/charts/commit/8964c611d3b11e684ac2f3f478fcea601f4b7321)), closes [#30255](https://github.com/bitnami/charts/issues/30255)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.3.21 (2024-10-09)</small>
+
+* [bitnami/cert-manager] Release 1.3.21 (#29846) ([8bf3be7](https://github.com/bitnami/charts/commit/8bf3be7d9d892616f60e203f65c8a640141e0287)), closes [#29846](https://github.com/bitnami/charts/issues/29846)
+
+## <small>1.3.20 (2024-10-03)</small>
+
+* [bitnami/cert-manager] Release 1.3.20 (#29766) ([af95117](https://github.com/bitnami/charts/commit/af951172a56c854135e1e6bddb89324b14e41fa7)), closes [#29766](https://github.com/bitnami/charts/issues/29766)
+
+## <small>1.3.19 (2024-10-01)</small>
+
+* [bitnami/cert-manager] Release 1.3.19 (#29684) ([b813a20](https://github.com/bitnami/charts/commit/b813a20baf8e1eaeda1f8b7419fc4e21b7c4cc5a)), closes [#29684](https://github.com/bitnami/charts/issues/29684)
+
+## <small>1.3.18 (2024-09-05)</small>
+
+* [bitnami/cert-manager] Release 1.3.18 (#29226) ([f6b20d0](https://github.com/bitnami/charts/commit/f6b20d0411d099e9d27b27fcf0f76b6da79121bf)), closes [#29226](https://github.com/bitnami/charts/issues/29226)
 
 ## <small>1.3.17 (2024-08-16)</small>
 

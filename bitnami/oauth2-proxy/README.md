@@ -53,7 +53,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -65,7 +65,7 @@ This chart provides support for Ingress resources. If you have an ingress contro
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
 
-### TLS secrets
+### Securing traffic using TLS
 
 The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management.
 
@@ -126,6 +126,10 @@ Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/worklo
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ## Persistence
 
@@ -209,28 +213,29 @@ The [Bitnami OAuth2 Proxy](https://github.com/bitnami/containers/tree/main/bitna
 
 ### OAuth2 Proxy configuration parameters
 
-| Name                                                   | Description                                                                                              | Value              |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------ |
-| `configuration.clientID`                               | OAuth client ID                                                                                          | `XXXXXXX`          |
-| `configuration.clientSecret`                           | OAuth client secret                                                                                      | `XXXXXXXX`         |
-| `configuration.cookieSecret`                           | OAuth cookie secret                                                                                      | `XXXXXXXXXXXXXXXX` |
-| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret                                                      | `""`               |
-| `configuration.google.enabled`                         | Enable Google service account                                                                            | `false`            |
-| `configuration.google.adminEmail`                      | Google admin email                                                                                       | `""`               |
-| `configuration.google.groups`                          | Restrict logins to members of these google groups                                                        | `[]`               |
-| `configuration.google.serviceAccountJson`              | Google Service account JSON                                                                              | `""`               |
-| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account                                                        | `""`               |
-| `configuration.content`                                | Default configuration                                                                                    | `""`               |
-| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration                                                            | `""`               |
-| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                                                                         | `false`            |
-| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)                                                              | `""`               |
-| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file                                                                | `""`               |
-| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                                                                     | `false`            |
-| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                                                                        | `""`               |
-| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)                                                                 | `""`               |
-| `configuration.oidcIssuerUrl`                          | OpenID Connect issuer URL                                                                                | `""`               |
-| `configuration.redirectUrl`                            | OAuth Redirect URL                                                                                       | `""`               |
-| `configuration.whiteList`                              | Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains | `""`               |
+| Name                                                    | Description                                                                                                         | Value              |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `configuration.clientID`                                | OAuth client ID                                                                                                     | `XXXXXXX`          |
+| `configuration.clientSecret`                            | OAuth client secret                                                                                                 | `XXXXXXXX`         |
+| `configuration.cookieSecret`                            | OAuth cookie secret                                                                                                 | `XXXXXXXXXXXXXXXX` |
+| `configuration.existingSecret`                          | Secret with the client ID, secret and cookie secret                                                                 | `""`               |
+| `configuration.google.enabled`                          | Enable Google service account                                                                                       | `false`            |
+| `configuration.google.useApplicationDefaultCredentials` | Use the application-default credentials (i.e. Workload Identity on GKE) instead of providing a service account JSON | `false`            |
+| `configuration.google.adminEmail`                       | Google admin email                                                                                                  | `""`               |
+| `configuration.google.groups`                           | Restrict logins to members of these google groups                                                                   | `[]`               |
+| `configuration.google.serviceAccountJson`               | Google Service account JSON                                                                                         | `""`               |
+| `configuration.google.existingSecret`                   | Existing secret containing Google Service Account                                                                   | `""`               |
+| `configuration.content`                                 | Default configuration                                                                                               | `""`               |
+| `configuration.existingConfigmap`                       | Configmap with the OAuth2 Proxy configuration                                                                       | `""`               |
+| `configuration.authenticatedEmailsFile.enabled`         | Enable authenticated emails file                                                                                    | `false`            |
+| `configuration.authenticatedEmailsFile.content`         | Restricted access list (one email per line)                                                                         | `""`               |
+| `configuration.authenticatedEmailsFile.existingSecret`  | Secret with the authenticated emails file                                                                           | `""`               |
+| `configuration.htpasswdFile.enabled`                    | Enable htpasswd file                                                                                                | `false`            |
+| `configuration.htpasswdFile.existingSecret`             | Existing secret for htpasswd file                                                                                   | `""`               |
+| `configuration.htpasswdFile.content`                    | htpasswd file entries (one row per user)                                                                            | `""`               |
+| `configuration.oidcIssuerUrl`                           | OpenID Connect issuer URL                                                                                           | `""`               |
+| `configuration.redirectUrl`                             | OAuth Redirect URL                                                                                                  | `""`               |
+| `configuration.whiteList`                               | Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains            | `""`               |
 
 ### OAuth2 Proxy deployment parameters
 

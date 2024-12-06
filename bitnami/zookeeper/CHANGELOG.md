@@ -1,8 +1,38 @@
 # Changelog
 
-## 13.4.12 (2024-09-07)
+## 13.6.1 (2024-12-04)
 
-* [bitnami/zookeeper] fix: add apiVersion and kind to volumeClaimTemplates ([#29289](https://github.com/bitnami/charts/pull/29289))
+* [bitnami/zookeeper] Release 13.6.1 ([#30786](https://github.com/bitnami/charts/pull/30786))
+
+## 13.6.0 (2024-11-05)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/zookeeper] Make the ZOO_SERVERS environment variable configurable (#29921) ([1cfa790](https://github.com/bitnami/charts/commit/1cfa790448007d7e2976ac73fad063b21c29736e)), closes [#29921](https://github.com/bitnami/charts/issues/29921)
+
+## <small>13.5.1 (2024-10-26)</small>
+
+* [bitnami/zookeeper] Release 13.5.1 (#30094) ([671cf5e](https://github.com/bitnami/charts/commit/671cf5e571a5e86d0943d002da4f8bef72a54fed)), closes [#30094](https://github.com/bitnami/charts/issues/30094)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 13.5.0 (2024-10-10)
+
+* [bitnami/zookeeper] Rename metrics port and expose scheme, and tlsConfig for Istio compatibility (#2 ([0bcfc6d](https://github.com/bitnami/charts/commit/0bcfc6d635eb09f0cc2f7d8187254b5a4ffe95be)), closes [#29683](https://github.com/bitnami/charts/issues/29683)
+
+## <small>13.4.15 (2024-10-09)</small>
+
+* [bitnami/zookeeper] Release 13.4.15 (#29850) ([f3af6eb](https://github.com/bitnami/charts/commit/f3af6ebad051648b856f45e54e6c86858265b766)), closes [#29850](https://github.com/bitnami/charts/issues/29850)
+
+## <small>13.4.14 (2024-09-23)</small>
+
+* [bitnami/zookeeper] Drop unused `getValueFromSecret` local helper (#29440) ([630e4cb](https://github.com/bitnami/charts/commit/630e4cb5e4af4fda0bc633cd9ffe3930a93f13b3)), closes [#29440](https://github.com/bitnami/charts/issues/29440)
+
+## <small>13.4.13 (2024-09-17)</small>
+
+* [bitnami/zookeeper] test: :white_check_mark: Improve reliability of ginkgo tests (#29475) ([2c66097](https://github.com/bitnami/charts/commit/2c6609778ffdea57b4d0b4aaba193e451e2186bc)), closes [#29475](https://github.com/bitnami/charts/issues/29475)
+
+## <small>13.4.12 (2024-09-09)</small>
+
+* [bitnami/zookeeper] fix: add apiVersion and kind to volumeClaimTemplates (#29289) ([f393472](https://github.com/bitnami/charts/commit/f393472ab8514b93c8e0f0de9f6b022d43d16142)), closes [#29289](https://github.com/bitnami/charts/issues/29289)
 
 ## <small>13.4.11 (2024-08-30)</small>
 

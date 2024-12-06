@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ printf "%s-exporter" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ template "airflow.metrics.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.metrics.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -24,8 +24,12 @@ spec:
   clusterIP: {{ .Values.metrics.service.clusterIP }}
   {{- end }}
   ports:
+    - name: udp-ingest
+      port: {{ .Values.metrics.service.ports.ingest }}
+      protocol: UDP
+      targetPort: ingest
     - name: http-metrics
-      port: {{ .Values.metrics.service.ports.http }}
+      port: {{ .Values.metrics.service.ports.metrics }}
       protocol: TCP
       targetPort: metrics
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.podLabels .Values.commonLabels ) "context" . ) }}

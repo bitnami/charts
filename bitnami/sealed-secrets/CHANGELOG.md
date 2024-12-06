@@ -1,8 +1,46 @@
 # Changelog
 
-## 2.4.6 (2024-09-06)
+## 2.4.14 (2024-12-05)
 
-* [bitnami/sealed-secrets] Release 2.4.6 ([#29261](https://github.com/bitnami/charts/pull/29261))
+* [bitnami/sealed-secrets] Release 2.4.14 ([#30805](https://github.com/bitnami/charts/pull/30805))
+
+## <small>2.4.13 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/sealed-secrets] Release 2.4.13 (#30777) ([719f912](https://github.com/bitnami/charts/commit/719f91265e8023c0740b014010f171237d3c0b4d)), closes [#30777](https://github.com/bitnami/charts/issues/30777)
+
+## <small>2.4.12 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/sealed-secrets] Fix namespace in PodDisruptionBudget (#30453) ([0c54dae](https://github.com/bitnami/charts/commit/0c54dae262ef15de14bbbd3b6509f9b8621eb211)), closes [#30453](https://github.com/bitnami/charts/issues/30453)
+
+## <small>2.4.11 (2024-11-08)</small>
+
+* [bitnami/sealed-secrets] Unify seLinuxOptions default value (#30324) ([a6d2a10](https://github.com/bitnami/charts/commit/a6d2a108b51b9e92f73775bf262e806a2993b9ec)), closes [#30324](https://github.com/bitnami/charts/issues/30324)
+
+## <small>2.4.10 (2024-11-07)</small>
+
+* [bitnami/sealed-secrets] Release 2.4.10 (#30291) ([92a9dea](https://github.com/bitnami/charts/commit/92a9deaf61af1a32d6b89c20a92770925e5c7706)), closes [#30291](https://github.com/bitnami/charts/issues/30291)
+
+## <small>2.4.9 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/sealed-secrets] Release 2.4.9 (#30197) ([a70ef11](https://github.com/bitnami/charts/commit/a70ef116b49c5245ea437c56f952c9207bd132ef)), closes [#30197](https://github.com/bitnami/charts/issues/30197)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.4.8 (2024-10-14)</small>
+
+* [bitnami/sealed-secrets] Fix combination of additionalNamespaces, rbac.clusterRole=false and rbac.na ([fe28f29](https://github.com/bitnami/charts/commit/fe28f29f49af0227dbc7b27e5a0045e21e5aceae)), closes [#29872](https://github.com/bitnami/charts/issues/29872)
+
+## <small>2.4.7 (2024-10-02)</small>
+
+* [bitnami/sealed-secrets] Release 2.4.7 (#29718) ([656a8f8](https://github.com/bitnami/charts/commit/656a8f88e3a3f9e4322d619e1547f67766df7363)), closes [#29718](https://github.com/bitnami/charts/issues/29718)
+
+## <small>2.4.6 (2024-09-06)</small>
+
+* [bitnami/sealed-secrets] Release 2.4.6 (#29261) ([be159de](https://github.com/bitnami/charts/commit/be159def7b6b29b9df2c0e5c14d214c2a8fe1b7c)), closes [#29261](https://github.com/bitnami/charts/issues/29261)
 
 ## <small>2.4.5 (2024-08-07)</small>
 

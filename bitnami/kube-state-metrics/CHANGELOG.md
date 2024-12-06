@@ -1,8 +1,26 @@
 # Changelog
 
-## 4.2.13 (2024-09-06)
+## 4.2.17 (2024-12-04)
 
-* [bitnami/kube-state-metrics] Release 4.2.13 ([#29242](https://github.com/bitnami/charts/pull/29242))
+* [bitnami/kube-state-metrics] Release 4.2.17 ([#30759](https://github.com/bitnami/charts/pull/30759))
+
+## <small>4.2.16 (2024-11-08)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.16 (#30365) ([decfaea](https://github.com/bitnami/charts/commit/decfaea1cd0a5e2d6c8caa33301946b03e2fbbd4)), closes [#30365](https://github.com/bitnami/charts/issues/30365)
+
+## <small>4.2.15 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kube-state-metrics] Release 4.2.15 (#30277) ([068ec88](https://github.com/bitnami/charts/commit/068ec88147390ea823af22ead339ab4e0e5b42d8)), closes [#30277](https://github.com/bitnami/charts/issues/30277)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.2.14 (2024-10-02)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.14 (#29702) ([ae112cf](https://github.com/bitnami/charts/commit/ae112cfdf05f6648bdbc0725e7d75ec26a1abd55)), closes [#29702](https://github.com/bitnami/charts/issues/29702)
+
+## <small>4.2.13 (2024-09-06)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.13 (#29242) ([f7b9ec5](https://github.com/bitnami/charts/commit/f7b9ec5f70e160a861a8d8cae03a47aeeb403e80)), closes [#29242](https://github.com/bitnami/charts/issues/29242)
 
 ## <small>4.2.12 (2024-08-07)</small>
 

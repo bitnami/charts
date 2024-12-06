@@ -1,8 +1,132 @@
 # Changelog
 
-## 19.0.5 (2024-09-06)
+## 22.3.1 (2024-11-27)
 
-* [bitnami/airflow] Release 19.0.5 ([#29291](https://github.com/bitnami/charts/pull/29291))
+* [bitnami/airflow] bugfix: extra volume/mounts should apply to setup-db job and wait-for-db init-container… ([#30646](https://github.com/bitnami/charts/pull/30646))
+
+## 22.3.0 (2024-11-26)
+
+* [bitnami/airflow] Support extra customizations at setup-db job (#30624) ([0397460](https://github.com/bitnami/charts/commit/03974600c3d801ab8b747c5f4daf3b5069293809)), closes [#30624](https://github.com/bitnami/charts/issues/30624)
+
+## 22.2.0 (2024-11-19)
+
+* [bitnami/airflow] Add support for extending default configuration (#30525) ([e84395d](https://github.com/bitnami/charts/commit/e84395d6c829a0fe56ca7242bdaa90afb8e0e352)), closes [#30525](https://github.com/bitnami/charts/issues/30525)
+
+## 22.1.0 (2024-11-18)
+
+* [bitnami/airflow] feat: add support for custom local settings (#30496) ([6c3060e](https://github.com/bitnami/charts/commit/6c3060e024a7fdcfe5b4eb07ec699cf425858e9f)), closes [#30496](https://github.com/bitnami/charts/issues/30496)
+
+## <small>22.0.1 (2024-11-18)</small>
+
+* [bitnami/airflow] Improve Goss tests (#30492) ([c9c33f8](https://github.com/bitnami/charts/commit/c9c33f849aa2b02f0857e65e82bf2e0779413dea)), closes [#30492](https://github.com/bitnami/charts/issues/30492)
+* [bitnami/airflow] Metrics based on StatsD (#30459) ([5c88481](https://github.com/bitnami/charts/commit/5c884817bcabe57ff93e91bc2b9ca411f21f615a)), closes [#30459](https://github.com/bitnami/charts/issues/30459)
+
+## 21.9.0 (2024-11-14)
+
+* [bitnami/airflow] Add support to setup db on k8s job (#30440) ([1a7d623](https://github.com/bitnami/charts/commit/1a7d623709ba680e7d049e81bddc44d9115f5f1f)), closes [#30440](https://github.com/bitnami/charts/issues/30440)
+
+## 21.8.0 (2024-11-13)
+
+* [bitnami/airflow] Add support for setting a SQL connection string with exiting databases (#30417) ([6d994bd](https://github.com/bitnami/charts/commit/6d994bda41a369b340eabc8b170db30ff8f130c8)), closes [#30417](https://github.com/bitnami/charts/issues/30417)
+
+## 21.7.0 (2024-11-12)
+
+* [bitnami/airflow] feat: Add support for HTTPS on Airflow Webserver (#30400) ([636cfb3](https://github.com/bitnami/charts/commit/636cfb385cb0d404c56859dec4c289ec51b642b9)), closes [#30400](https://github.com/bitnami/charts/issues/30400)
+
+## 21.6.0 (2024-11-11)
+
+* [bitnami/airflow] Consistency on Airflow configuration & init improvements (#30349) ([6074846](https://github.com/bitnami/charts/commit/6074846d3e528c1db5cbf6f9480ba13fdcb28515)), closes [#30349](https://github.com/bitnami/charts/issues/30349)
+
+## <small>21.5.1 (2024-11-07)</small>
+
+* [bitnami/airflow] Release 21.5.1 (#30306) ([ac89917](https://github.com/bitnami/charts/commit/ac89917b636f342db76e10496306ce03fe6a19ae)), closes [#30306](https://github.com/bitnami/charts/issues/30306)
+
+## 21.5.0 (2024-11-07)
+
+* [bitnami/airflow] docs: :memo: Add "Prometheus metrics" section (#30238) ([3d54bb6](https://github.com/bitnami/charts/commit/3d54bb6c7ee1b0076e1e40815707b03efa93a71a)), closes [#30238](https://github.com/bitnami/charts/issues/30238)
+* [bitnami/airflow] feat: add init container to wait for db migrations (#30246) ([df5f34d](https://github.com/bitnami/charts/commit/df5f34d09a825c8173d89347883e3f7f97721956)), closes [#30246](https://github.com/bitnami/charts/issues/30246)
+
+## <small>21.4.1 (2024-11-05)</small>
+
+* [bitnami/airflow] Release 21.4.1 (#30229) ([237ac1a](https://github.com/bitnami/charts/commit/237ac1afdb7ae7256fc1de97f315c7faaa27fbf8)), closes [#30229](https://github.com/bitnami/charts/issues/30229)
+
+## 21.4.0 (2024-11-05)
+
+* [bitnami/airflow] Support adding SSH keys to load DAGs/plugins from private repos (#30224) ([d5d454c](https://github.com/bitnami/charts/commit/d5d454cbdac891c68ae04b957ce2a53e90b742e8)), closes [#30224](https://github.com/bitnami/charts/issues/30224)
+
+## 21.3.0 (2024-11-05)
+
+* [bitnami/airflow] Standardize autoscaling (#30220) ([6b646c0](https://github.com/bitnami/charts/commit/6b646c0d538d9700218951da1fd043c6c5eb9319)), closes [#30220](https://github.com/bitnami/charts/issues/30220)
+
+## <small>21.2.1 (2024-11-05)</small>
+
+* [bitnami/airflow] bugfix: pod template (#30216) ([528d26f](https://github.com/bitnami/charts/commit/528d26f262befe7263b0f0e7728dbe706dd33c92)), closes [#30216](https://github.com/bitnami/charts/issues/30216)
+
+## 21.2.0 (2024-11-05)
+
+* [bitnami/airflow] Add support for Triggerer (#30211) ([fe4e81f](https://github.com/bitnami/charts/commit/fe4e81f3e56101d429903b805b3c487095492a5d)), closes [#30211](https://github.com/bitnami/charts/issues/30211)
+
+## <small>21.1.1 (2024-11-04)</small>
+
+* [bitnami/airflow] Release 21.1.1 (#30201) ([8cccffc](https://github.com/bitnami/charts/commit/8cccffc1a9618afbd5c3bc80b3b92933ddfd9851)), closes [#30201](https://github.com/bitnami/charts/issues/30201)
+
+## 21.1.0 (2024-11-04)
+
+* [bitnami/airflow] Add support to run Dag Processor in standalone mode (#30159) ([7eb2f51](https://github.com/bitnami/charts/commit/7eb2f519f77638c5e1b60aa62f3d3fa2f4cddbe8)), closes [#30159](https://github.com/bitnami/charts/issues/30159)
+
+## <small>21.0.3 (2024-10-31)</small>
+
+* [bitnami/airflow] Release 21.0.3 (#30161) ([89e392b](https://github.com/bitnami/charts/commit/89e392b7297346863c80c49ba2325c72321142e3)), closes [#30161](https://github.com/bitnami/charts/issues/30161)
+
+## <small>21.0.2 (2024-10-31)</small>
+
+* [bitnami/airflow] Release 21.0.2 (#30160) ([07568a9](https://github.com/bitnami/charts/commit/07568a9c3b6cff4fb6cec217b40ebdd24f349aa2)), closes [#30160](https://github.com/bitnami/charts/issues/30160)
+
+## <small>21.0.1 (2024-10-31)</small>
+
+* [bitnami/airflow] Split init containers (#30155) ([4945ae6](https://github.com/bitnami/charts/commit/4945ae6dd96d51a312a9b368cdfdbc6bb2c31fb6)), closes [#30155](https://github.com/bitnami/charts/issues/30155)
+
+## 21.0.0 (2024-10-31)
+
+* [bitnami/airflow] Use a single Airflow image (#30137) ([e9aed1b](https://github.com/bitnami/charts/commit/e9aed1bfed27dddaff454760ef3318d81e3bb05a)), closes [#30137](https://github.com/bitnami/charts/issues/30137)
+
+## <small>20.0.2 (2024-10-30)</small>
+
+* [bitnami/airflow] Release 20.0.2 (#30138) ([bd4b9b9](https://github.com/bitnami/charts/commit/bd4b9b984d012a85471d654329cb0c16b5b0f062)), closes [#30138](https://github.com/bitnami/charts/issues/30138)
+
+## <small>20.0.1 (2024-10-30)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/airflow] Support `nameOverride` and `fullnameOverride` for internal Redis® (#30081) ([7adff78](https://github.com/bitnami/charts/commit/7adff78a8a1a855b7978f6e65417e84807a9b427)), closes [#30081](https://github.com/bitnami/charts/issues/30081)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 20.0.0 (2024-10-03)
+
+* [bitnami/airflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29727) ([f70e935](https://github.com/bitnami/charts/commit/f70e93590e1f9247332f76d25abf81f562d8eb1f)), closes [#29727](https://github.com/bitnami/charts/issues/29727)
+
+## <small>19.0.10 (2024-09-23)</small>
+
+* [bitnami/airflow] Release 19.0.10 (#29581) ([c429dd7](https://github.com/bitnami/charts/commit/c429dd7864d0087bbc0d071ff7c9c4f6066f87b9)), closes [#29581](https://github.com/bitnami/charts/issues/29581)
+
+## <small>19.0.9 (2024-09-19)</small>
+
+* [bitnami/airflow] Release 19.0.9 (#29504) ([22aa911](https://github.com/bitnami/charts/commit/22aa911f7216b2810e2b5bd7c868a73d16f2420e)), closes [#29504](https://github.com/bitnami/charts/issues/29504)
+
+## <small>19.0.8 (2024-09-15)</small>
+
+* [bitnami/airflow] Release 19.0.8 (#29423) ([687e5f3](https://github.com/bitnami/charts/commit/687e5f305fac31bd7f75607e5cf1695d951c5198)), closes [#29423](https://github.com/bitnami/charts/issues/29423)
+
+## <small>19.0.7 (2024-09-15)</small>
+
+* [bitnami/airflow] Release 19.0.7 (#29422) ([006ca33](https://github.com/bitnami/charts/commit/006ca33a13dcb63267ac05086fa170e5071ba822)), closes [#29422](https://github.com/bitnami/charts/issues/29422)
+
+## <small>19.0.6 (2024-09-14)</small>
+
+* [bitnami/airflow] Release 19.0.6 (#29408) ([4bb3315](https://github.com/bitnami/charts/commit/4bb3315aaccd2be123432031b7b6f00c82c9dc75)), closes [#29408](https://github.com/bitnami/charts/issues/29408)
+
+## <small>19.0.5 (2024-09-06)</small>
+
+* [bitnami/airflow] Release 19.0.5 (#29291) ([06c98e8](https://github.com/bitnami/charts/commit/06c98e8b9a604f8ed998089751e2b56e363fd866)), closes [#29291](https://github.com/bitnami/charts/issues/29291)
 
 ## <small>19.0.4 (2024-09-02)</small>
 

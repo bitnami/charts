@@ -1,8 +1,28 @@
 # Changelog
 
-## 11.2.17 (2024-09-03)
+## 11.2.22 (2024-10-29)
 
-* [bitnami/apache] Release 11.2.17 ([#29183](https://github.com/bitnami/charts/pull/29183))
+* [bitnami/apache] Release 11.2.22 ([#30118](https://github.com/bitnami/charts/pull/30118))
+
+## <small>11.2.21 (2024-10-16)</small>
+
+* [bitnami/apache] Remove wrong entries from image verification (#29911) ([151e10e](https://github.com/bitnami/charts/commit/151e10e3fdeddeff730b70e709a681f96b82e584)), closes [#29911](https://github.com/bitnami/charts/issues/29911)
+
+## <small>11.2.20 (2024-09-19)</small>
+
+* [bitnami/apache] Release 11.2.20 (#29501) ([efd2c8f](https://github.com/bitnami/charts/commit/efd2c8f6e18240f7cde27a915627d5cf4f77189c)), closes [#29501](https://github.com/bitnami/charts/issues/29501)
+
+## <small>11.2.19 (2024-09-18)</small>
+
+* [bitnami/apache] Update templates to have conditionals for HPA (#29489) ([6882c22](https://github.com/bitnami/charts/commit/6882c22cc7e2831fd9a0c2adb412ecb5ade160bb)), closes [#29489](https://github.com/bitnami/charts/issues/29489)
+
+## <small>11.2.18 (2024-09-15)</small>
+
+* [bitnami/apache] Release 11.2.18 (#29418) ([665ff2b](https://github.com/bitnami/charts/commit/665ff2be8f372b4cf2a75c4d4c7e7c8bcd647310)), closes [#29418](https://github.com/bitnami/charts/issues/29418)
+
+## <small>11.2.17 (2024-09-03)</small>
+
+* [bitnami/apache] Release 11.2.17 (#29183) ([aa557a2](https://github.com/bitnami/charts/commit/aa557a2263807f74e02390739adaf1316771f6c2)), closes [#29183](https://github.com/bitnami/charts/issues/29183)
 
 ## <small>11.2.16 (2024-08-28)</small>
 

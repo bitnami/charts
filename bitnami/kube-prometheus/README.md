@@ -59,7 +59,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -84,7 +84,7 @@ prometheus.additionalScrapeConfigs.external.name=kube-prometheus-prometheus-scra
 prometheus.additionalScrapeConfigs.external.key=additional-scrape-configs.yaml
 ```
 
-It is also possible to define scrape configuratios to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
+It is also possible to define scrape configurations to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
 
 ```text
 prometheus.additionalScrapeConfigs.enabled=true
@@ -111,6 +111,10 @@ prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus
 prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
 ```
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Set Pod affinity
 
 This chart allows setting custom Pod affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
@@ -126,7 +130,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -419,6 +422,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.probeNamespaceSelector`                                   | Namespaces to be selected for Probe discovery                                                                                                                                                                                                         | `{}`                         |
 | `prometheus.scrapeConfigSelector`                                     | ScrapeConfig to be selected for target discovery.                                                                                                                                                                                                     | `{}`                         |
 | `prometheus.scrapeConfigNamespaceSelector`                            | Namespaces to be selected for ScrapeConfig discovery                                                                                                                                                                                                  | `{}`                         |
+| `prometheus.scrapeClasses`                                            | List of scrape classes to expose to scraping objects                                                                                                                                                                                                  | `[]`                         |
 | `prometheus.retention`                                                | Metrics retention days                                                                                                                                                                                                                                | `10d`                        |
 | `prometheus.retentionSize`                                            | Maximum size of metrics                                                                                                                                                                                                                               | `""`                         |
 | `prometheus.disableCompaction`                                        | Disable the compaction of the Prometheus TSDB                                                                                                                                                                                                         | `false`                      |
@@ -450,9 +454,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.additionalScrapeConfigs.external.name`                    | Name of the secret that Prometheus should use for the additional external scrape configuration                                                                                                                                                        | `""`                         |
 | `prometheus.additionalScrapeConfigs.external.key`                     | Name of the key inside the secret to be used for the additional external scrape configuration                                                                                                                                                         | `""`                         |
 | `prometheus.additionalScrapeConfigs.internal.jobList`                 | A list of Prometheus scrape jobs                                                                                                                                                                                                                      | `[]`                         |
-| `prometheus.additionalScrapeConfigsExternal.enabled`                  | Deprecated: Enable additional scrape configs that are managed externally to this chart                                                                                                                                                                | `false`                      |
-| `prometheus.additionalScrapeConfigsExternal.name`                     | Deprecated: Name of the secret that Prometheus should use for the additional scrape configuration                                                                                                                                                     | `""`                         |
-| `prometheus.additionalScrapeConfigsExternal.key`                      | Deprecated: Name of the key inside the secret to be used for the additional scrape configuration                                                                                                                                                      | `""`                         |
 | `prometheus.additionalAlertRelabelConfigsExternal.enabled`            | Enable additional Prometheus alert relabel configs that are managed externally to this chart                                                                                                                                                          | `false`                      |
 | `prometheus.additionalAlertRelabelConfigsExternal.name`               | Name of the secret that Prometheus should use for the additional Prometheus alert relabel configuration                                                                                                                                               | `""`                         |
 | `prometheus.additionalAlertRelabelConfigsExternal.key`                | Name of the key inside the secret to be used for the additional Prometheus alert relabel configuration                                                                                                                                                | `""`                         |
@@ -938,6 +939,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kube-prometheus
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+### To 10.0.0
+
+This major bump moves the crds to a local subchart called `kube-prometheus-crds`. This avoids an [installation issue](https://github.com/bitnami/charts/issues/29876) due to the size of the release secret created by helm. No issues are expected during upgrades.
 
 ### To 9.0.0
 

@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanadatasources.yaml
-# Version: 5.13.0
+# Version: 5.15.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: grafanadatasources.grafana.integreatly.org
 spec:
   group: grafana.integreatly.org
@@ -184,9 +184,7 @@ spec:
                                 This field is effectively required, but due to backwards compatibility is
                                 allowed to be empty. Instances of this type with an empty value here are
                                 almost certainly wrong.
-                                TODO: Add other useful fields. apiVersion, kind, uid?
                                 More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                               type: string
                             optional:
                               description: Specify whether the ConfigMap or its key
@@ -210,9 +208,7 @@ spec:
                                 This field is effectively required, but due to backwards compatibility is
                                 allowed to be empty. Instances of this type with an empty value here are
                                 almost certainly wrong.
-                                TODO: Add other useful fields. apiVersion, kind, uid?
                                 More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                               type: string
                             optional:
                               description: Specify whether the Secret or its key must
@@ -223,10 +219,15 @@ spec:
                           type: object
                           x-kubernetes-map-type: atomic
                       type: object
+                      x-kubernetes-validations:
+                      - message: Either configMapKeyRef or secretKeyRef must be set
+                        rule: (has(self.configMapKeyRef) && !has(self.secretKeyRef))
+                          || (!has(self.configMapKeyRef) && has(self.secretKeyRef))
                   required:
                   - targetPath
                   - valueFrom
                   type: object
+                maxItems: 99
                 type: array
             required:
             - datasource

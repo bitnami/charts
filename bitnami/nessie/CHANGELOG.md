@@ -1,8 +1,58 @@
 # Changelog
 
-## 0.1.28 (2024-09-12)
+## 1.0.5 (2024-12-02)
 
-* [bitnami/nessie] Release 0.1.28 ([#29387](https://github.com/bitnami/charts/pull/29387))
+* [bitnami/nessie] Release 1.0.5 ([#30712](https://github.com/bitnami/charts/pull/30712))
+
+## <small>1.0.4 (2024-11-21)</small>
+
+* [bitnami/nessie] Release 1.0.4 (#30555) ([180c7ee](https://github.com/bitnami/charts/commit/180c7ee1ca182f89df0ef185f5504428ab956e3d)), closes [#30555](https://github.com/bitnami/charts/issues/30555)
+
+## <small>1.0.3 (2024-11-12)</small>
+
+* [bitnami/nessie] Release 1.0.3 (#30422) ([08fe906](https://github.com/bitnami/charts/commit/08fe906aee737e07ddb30ea943ba29b1d1dfcb58)), closes [#30422](https://github.com/bitnami/charts/issues/30422)
+
+## <small>1.0.2 (2024-11-10)</small>
+
+* [bitnami/nessie] Release 1.0.2 (#30386) ([858bbe7](https://github.com/bitnami/charts/commit/858bbe76dc285aeb1bfa53f48a84dd2029800821)), closes [#30386](https://github.com/bitnami/charts/issues/30386)
+
+## <small>1.0.1 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/nessie] Unify seLinuxOptions default value (#30341) ([6461b44](https://github.com/bitnami/charts/commit/6461b44f25b3fd57cd50faea7532956474632127)), closes [#30341](https://github.com/bitnami/charts/issues/30341)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 1.0.0 (2024-10-03)
+
+* [bitnami/nessie] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29741) ([c62b315](https://github.com/bitnami/charts/commit/c62b31550a99d32365ded549c1c84cbf733661ab)), closes [#29741](https://github.com/bitnami/charts/issues/29741)
+
+## <small>0.1.34 (2024-10-01)</small>
+
+* [bitnami/nessie] Release 0.1.34 (#29679) ([3792cc1](https://github.com/bitnami/charts/commit/3792cc13fac27350bf3068105caabe86caa11ac5)), closes [#29679](https://github.com/bitnami/charts/issues/29679)
+
+## <small>0.1.33 (2024-10-01)</small>
+
+* [bitnami/nessie] Release 0.1.33 (#29677) ([3a06a36](https://github.com/bitnami/charts/commit/3a06a3620919767cfc377213527946587968da4e)), closes [#29677](https://github.com/bitnami/charts/issues/29677)
+
+## <small>0.1.32 (2024-09-26)</small>
+
+* [bitnami/nessie] Release 0.1.32 (#29636) ([98e1a81](https://github.com/bitnami/charts/commit/98e1a811d041ad1b58cd1ce27f7c838eda789e51)), closes [#29636](https://github.com/bitnami/charts/issues/29636)
+
+## <small>0.1.31 (2024-09-25)</small>
+
+* [bitnami/nessie] Release 0.1.31 (#29597) ([39004e7](https://github.com/bitnami/charts/commit/39004e718e6ba040f212d42f6413f1bee73a4ca9)), closes [#29597](https://github.com/bitnami/charts/issues/29597)
+
+## <small>0.1.30 (2024-09-19)</small>
+
+* [bitnami/nessie] Release 0.1.30 (#29536) ([552dda4](https://github.com/bitnami/charts/commit/552dda49d18d61247fac6347e7e570a9deae3642)), closes [#29536](https://github.com/bitnami/charts/issues/29536)
+
+## <small>0.1.29 (2024-09-19)</small>
+
+* [bitnami/nessie] Release 0.1.29 (#29527) ([330c8cc](https://github.com/bitnami/charts/commit/330c8cc1ba8535a12ab55d97d7c6b9f41a95814d)), closes [#29527](https://github.com/bitnami/charts/issues/29527)
+
+## <small>0.1.28 (2024-09-12)</small>
+
+* [bitnami/nessie] Release 0.1.28 (#29387) ([5e6e11b](https://github.com/bitnami/charts/commit/5e6e11bb4df9bc2c6904567a5c35e1e5bb1c055c)), closes [#29387](https://github.com/bitnami/charts/issues/29387)
 
 ## <small>0.1.27 (2024-09-12)</small>
 

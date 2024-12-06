@@ -1,8 +1,26 @@
 # Changelog
 
-## 16.0.1 (2024-09-03)
+## 17.0.3 (2024-11-08)
 
-* [bitnami/kubeapps] Release 16.0.1 ([#29165](https://github.com/bitnami/charts/pull/29165))
+* [bitnami/kubeapps] Unify seLinuxOptions default value ([#30343](https://github.com/bitnami/charts/pull/30343))
+
+## <small>17.0.2 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kubeapps] Release 17.0.2 (#30164) ([be30b31](https://github.com/bitnami/charts/commit/be30b315457e24fedb63ba336c73929fa8294c55)), closes [#30164](https://github.com/bitnami/charts/issues/30164)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>17.0.1 (2024-10-14)</small>
+
+* [bitnami/kubeapps] Release 17.0.1 (#29886) ([a1f4eb7](https://github.com/bitnami/charts/commit/a1f4eb71c2190feed6e047d7e28ba18e0e491e86)), closes [#29886](https://github.com/bitnami/charts/issues/29886)
+
+## 17.0.0 (2024-10-03)
+
+* [bitnami/kubeapps] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29738) ([5982481](https://github.com/bitnami/charts/commit/59824815c7e4575f70cfea81ad61d158c2a85c0e)), closes [#29738](https://github.com/bitnami/charts/issues/29738)
+
+## <small>16.0.1 (2024-09-03)</small>
+
+* [bitnami/kubeapps] Release 16.0.1 (#29165) ([f2fdc57](https://github.com/bitnami/charts/commit/f2fdc5769e04a670d66bc1227bd030b360723264)), closes [#29165](https://github.com/bitnami/charts/issues/29165)
 
 ## 16.0.0 (2024-08-13)
 

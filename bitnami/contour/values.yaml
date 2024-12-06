@@ -103,10 +103,9 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.30.0-debian-12-r5
+    tag: 1.30.1-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -194,7 +193,8 @@ contour:
   ## @param contour.envoyServiceNamespace Namespace of the envoy service to inspect for Ingress status details.
   ##
   envoyServiceNamespace: ""
-  ## @param contour.envoyServiceName Name of the envoy service to inspect for Ingress status details.
+  ## Name of the envoy service to inspect for Ingress status details.
+  ## @param contour.envoyServiceName DEPRECATED: use envoy.service.name
   ##
   envoyServiceName: ""
   ## @param contour.leaderElectionResourceName Name of the contour (Lease) leader election will lease.
@@ -663,10 +663,9 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.31.0-debian-12-r3
+    tag: 1.31.3-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1153,10 +1152,12 @@ envoy:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## @param envoy.service.nodePorts.http HTTP Port. If `envoy.service.type` is NodePort and this is non-empty
     ## @param envoy.service.nodePorts.https HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty
+    ## @param envoy.service.nodePorts.metrics Metrics Port. If `envoy.service.type` is NodePort and this is non-empty
     ##
     nodePorts:
       http: ""
       https: ""
+      metrics: ""
     ## @param envoy.service.extraPorts [array] Extra ports to expose (normally used with the `sidecar` value)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
     ##
@@ -1172,6 +1173,8 @@ envoy:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param envoy.service.exposeMetrics Setting to expose the metrics port in the service
+    exposeMetrics: false
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -1313,6 +1316,14 @@ envoy:
     minAvailable: ""
     maxUnavailable: ""
 
+## @section Gateway API parameters
+##
+
+gatewayAPI:
+  ## @param gatewayAPI.manageCRDs Manage the creation, upgrade and deletion of Gateway API CRDs.
+  ##
+  manageCRDs: false
+
 ## @section Default backend parameters
 ##
 
@@ -1334,10 +1345,9 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.27.1-debian-12-r3
+    tag: 1.27.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent

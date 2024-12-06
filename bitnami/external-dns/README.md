@@ -49,11 +49,33 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose external-dns native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Setting Pod's affinity
 
@@ -107,16 +129,16 @@ helm install my-release \
 
 ### Common parameters
 
-| Name                    | Description                                                                                  | Value           |
-| ----------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`          | String to partially override external-dns.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride`      | String to fully override external-dns.fullname template                                      | `""`            |
-| `clusterDomain`         | Kubernetes Cluster Domain                                                                    | `cluster.local` |
-| `commonLabels`          | Labels to add to all deployed objects                                                        | `{}`            |
-| `commonAnnotations`     | Annotations to add to all deployed objects                                                   | `{}`            |
-| `extraDeploy`           | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
-| `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
-| `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
+| Name                | Description                                                                                  | Value           |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                              | `""`            |
+| `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 
 ### external-dns parameters
 
@@ -140,6 +162,7 @@ helm install my-release \
 | `dnsConfig`                                         | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                                                                                                 | `{}`                           |
 | `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                 | `[]`                           |
 | `namespace`                                         | Limit sources of endpoints to a specific namespace (default: all namespaces)                                                                                                                                      | `""`                           |
+| `watchReleaseNamespace`                             | Watch only namespace used for the release                                                                                                                                                                         | `false`                        |
 | `fqdnTemplates`                                     | Templated strings that are used to generate DNS names from sources that don't define a hostname themselves                                                                                                        | `[]`                           |
 | `containerPorts.http`                               | HTTP Container port                                                                                                                                                                                               | `7979`                         |
 | `combineFQDNAnnotation`                             | Combine FQDN template and annotations instead of overwriting                                                                                                                                                      | `false`                        |
@@ -278,7 +301,8 @@ helm install my-release \
 | `scaleway.secretName`                               | Use an existing secret with keys "scaleway_access_key" and "scaleway_secret_key" defined (optional).                                                                                                              | `""`                           |
 | `rfc2136.host`                                      | When using the rfc2136 provider, specify the RFC2136 host (required when provider=rfc2136)                                                                                                                        | `""`                           |
 | `rfc2136.port`                                      | When using the rfc2136 provider, specify the RFC2136 port (optional)                                                                                                                                              | `53`                           |
-| `rfc2136.zone`                                      | When using the rfc2136 provider, specify the zone (required when provider=rfc2136)                                                                                                                                | `""`                           |
+| `rfc2136.zone`                                      | DEPRECATED: use rfc2136.zones instead.                                                                                                                                                                            | `""`                           |
+| `rfc2136.zones`                                     | When using the rfc2136 provider, specify the zones (required when provider=rfc2136 and `rfc2136.zone` is not provided.)                                                                                           | `[]`                           |
 | `rfc2136.tsigSecret`                                | When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)                                                                     | `""`                           |
 | `rfc2136.secretName`                                | When using the rfc2136 provider, specify the existing secret which contains your tsig secret in the key "rfc2136_tsig_secret". Disables the usage of `rfc2136.tsigSecret` (optional)                              | `""`                           |
 | `rfc2136.tsigSecretAlg`                             | When using the rfc2136 provider, specify the tsig secret to enable security (optional)                                                                                                                            | `hmac-sha256`                  |
@@ -369,7 +393,7 @@ helm install my-release \
 | `networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                            | `{}`                           |
 | `networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                        | `{}`                           |
 | `serviceAccount.create`                             | Determine whether a Service Account should be created or it should reuse a exiting one.                                                                                                                           | `true`                         |
-| `serviceAccount.name`                               | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set                                                                                                              | `""`                           |
+| `serviceAccount.name`                               | ServiceAccount to use. A name is generated using the common.names.fullname template if it is not set                                                                                                              | `""`                           |
 | `serviceAccount.annotations`                        | Additional Service Account annotations                                                                                                                                                                            | `{}`                           |
 | `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                                                                                                  | `false`                        |
 | `serviceAccount.labels`                             | Additional labels to be included on the service account                                                                                                                                                           | `{}`                           |
@@ -431,6 +455,8 @@ helm install my-release \
 | `metrics.serviceMonitor.relabelings`                | Prometheus relabeling rules                                                                                                                                                                                       | `[]`                           |
 | `metrics.serviceMonitor.honorLabels`                | Specify honorLabels parameter to add the scrape endpoint                                                                                                                                                          | `false`                        |
 | `metrics.serviceMonitor.labels`                     | Used to pass Labels that are required by the installed Prometheus Operator                                                                                                                                        | `{}`                           |
+| `metrics.serviceMonitor.targetLabels`               | Labels from the Kubernetes service to be transferred to the created metrics                                                                                                                                       | `[]`                           |
+| `metrics.serviceMonitor.podTargetLabels`            | Labels from the Kubernetes pod to be transferred to the created metrics                                                                                                                                           | `[]`                           |
 | `metrics.serviceMonitor.annotations`                | Additional custom annotations for the ServiceMonitor                                                                                                                                                              | `{}`                           |
 | `metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                 | `""`                           |
 | `metrics.googlePodMonitor.enabled`                  | Create Google Managed Prometheus PodMonitoring object                                                                                                                                                             | `false`                        |
@@ -512,7 +538,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

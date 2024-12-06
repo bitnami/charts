@@ -1,8 +1,30 @@
 # Changelog
 
-## 23.0.6 (2024-09-02)
+## 25.0.1 (2024-11-17)
 
-* [bitnami/moodle] Release 23.0.6 ([#29146](https://github.com/bitnami/charts/pull/29146))
+* [bitnami/moodle] Release 25.0.1 ([#30488](https://github.com/bitnami/charts/pull/30488))
+
+## 25.0.0 (2024-11-12)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/moodle] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30355) ([6e52794](https://github.com/bitnami/charts/commit/6e52794183ad3bfc8a529266223949af88b05f47)), closes [#30355](https://github.com/bitnami/charts/issues/30355)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 24.0.0 (2024-10-08)
+
+* [bitnami/moodle] Release 24.0.0 (#29813) ([336d3e5](https://github.com/bitnami/charts/commit/336d3e548b56380fc01db55c94dca689e61d387a)), closes [#29813](https://github.com/bitnami/charts/issues/29813)
+
+## <small>23.0.8 (2024-10-07)</small>
+
+* [bitnami/moodle] Release 23.0.8 (#29791) ([1cd63b4](https://github.com/bitnami/charts/commit/1cd63b45109343ffedc6289e7a030e9a3d1ba63d)), closes [#29791](https://github.com/bitnami/charts/issues/29791)
+
+## <small>23.0.7 (2024-09-19)</small>
+
+* [bitnami/moodle] Release 23.0.7 (#29521) ([8f12839](https://github.com/bitnami/charts/commit/8f128395fc07f7aefdd1a27ef96e064e8546ed53)), closes [#29521](https://github.com/bitnami/charts/issues/29521)
+
+## <small>23.0.6 (2024-09-02)</small>
+
+* [bitnami/moodle] Release 23.0.6 (#29146) ([53d9a60](https://github.com/bitnami/charts/commit/53d9a60fcffa8446cca173aa4d5f26ca725fa261)), closes [#29146](https://github.com/bitnami/charts/issues/29146)
 
 ## <small>23.0.5 (2024-08-23)</small>
 

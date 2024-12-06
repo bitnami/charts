@@ -131,6 +131,17 @@ The default envoy service spec
       {{- else if eq .Values.envoy.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.envoy.service.exposeMetrics }}
+    - name: metrics
+      port: {{ .Values.envoy.service.ports.metrics }}
+      protocol: TCP
+      targetPort: {{ .Values.envoy.service.targetPorts.metrics }}
+      {{- if and (or (eq .Values.envoy.service.type "NodePort") (eq .Values.envoy.service.type "LoadBalancer")) (not (empty .Values.envoy.service.nodePorts.metrics)) }}
+      nodePort: {{ .Values.envoy.service.nodePorts.metrics }}
+      {{- else if eq .Values.envoy.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
     {{- if .Values.envoy.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

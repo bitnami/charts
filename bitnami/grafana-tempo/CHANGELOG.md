@@ -1,8 +1,26 @@
 # Changelog
 
-## 3.7.10 (2024-09-11)
+## 3.7.14 (2024-12-03)
 
-* [bitnami/grafana-tempo] Allow rendering resources values ([#29344](https://github.com/bitnami/charts/pull/29344))
+* [bitnami/grafana-tempo] Release 3.7.14 ([#30755](https://github.com/bitnami/charts/pull/30755))
+
+## <small>3.7.13 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-tempo] Release 3.7.13 (#30269) ([7a5479f](https://github.com/bitnami/charts/commit/7a5479f60aa186487878ef21269be6e898ccb45c)), closes [#30269](https://github.com/bitnami/charts/issues/30269)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.7.12 (2024-10-16)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.12 (#29920) ([950333d](https://github.com/bitnami/charts/commit/950333dd301796e3361e87a5f644a8e215e17101)), closes [#29920](https://github.com/bitnami/charts/issues/29920)
+
+## <small>3.7.11 (2024-10-02)</small>
+
+* [bitnami/grafana-tempo] Release 3.7.11 (#29696) ([2005158](https://github.com/bitnami/charts/commit/20051588319b3f1ea172bb6792500886924a11cf)), closes [#29696](https://github.com/bitnami/charts/issues/29696)
+
+## <small>3.7.10 (2024-09-11)</small>
+
+* [bitnami/grafana-tempo] Allow rendering resources values (#29344) ([3df45d5](https://github.com/bitnami/charts/commit/3df45d51e716c35042594e76b8f00efc1b0f05f2)), closes [#29344](https://github.com/bitnami/charts/issues/29344)
 
 ## <small>3.7.9 (2024-09-06)</small>
 

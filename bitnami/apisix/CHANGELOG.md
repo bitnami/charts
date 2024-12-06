@@ -1,8 +1,31 @@
 # Changelog
 
+## 3.6.1 (2024-11-30)
+
+* [bitnami/apisix] Release 3.6.1 ([#30695](https://github.com/bitnami/charts/pull/30695))
+
+## 3.6.0 (2024-11-29)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/apisix] feat: :sparkles: :memo: Allow password update via values.yaml (#30682) ([e41a46c](https://github.com/bitnami/charts/commit/e41a46c06a70ddfe543c9afa1fd81cd8fd2d97cd)), closes [#30682](https://github.com/bitnami/charts/issues/30682)
+
+## <small>3.5.2 (2024-10-21)</small>
+
+* [bitnami/apisix] Release 3.5.2 (#30014) ([53d7503](https://github.com/bitnami/charts/commit/53d7503654c7179d92e4352fc85d50db202a15f8)), closes [#30014](https://github.com/bitnami/charts/issues/30014)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.5.1 (2024-09-29)</small>
+
+* [bitnami/apisix] Release 3.5.1 (#29652) ([d4851f4](https://github.com/bitnami/charts/commit/d4851f402eae31a590ec6275226b3cfb449a47c7)), closes [#29652](https://github.com/bitnami/charts/issues/29652)
+
+## 3.5.0 (2024-09-23)
+
+* [bitnami/apisix] Allow setting externalIPs for services (#29550) ([5b2d4c1](https://github.com/bitnami/charts/commit/5b2d4c132c34f01450069aec521b579a726708ec)), closes [#29550](https://github.com/bitnami/charts/issues/29550)
+
 ## 3.4.0 (2024-09-13)
 
-* [bitnami/apisix] Allow IngressClass to be created conditionally ([#29085](https://github.com/bitnami/charts/pull/29085))
+* [bitnami/apisix] Allow IngressClass to be created conditionally (#29085) ([32f63b4](https://github.com/bitnami/charts/commit/32f63b4d1574d344e568db396accdeef0d795d6e)), closes [#29085](https://github.com/bitnami/charts/issues/29085)
 
 ## <small>3.3.11 (2024-09-04)</small>
 

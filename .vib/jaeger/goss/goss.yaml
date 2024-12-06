@@ -1,14 +1,7 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
-addr:
-  tcp://localhost:{{ .Vars.agent.containerPorts.config }}:
-    reachable: true
 http:
-  http://jaeger--agent:{{ .Vars.agent.service.ports.admin }}/:
-    status: 200
-    body:
-      - Server available
   http://jaeger-collector:{{ .Vars.collector.service.ports.admin }}/:
     status: 200
     body:
@@ -17,14 +10,14 @@ http:
     status: 200
     body:
       - Server available
-  http://localhost:{{ .Vars.agent.containerPorts.admin }}/:
+  http://localhost:{{ .Vars.collector.containerPorts.admin }}/:
     status: 200
 command:
   check-cassandra-auth:
     exec: \[ $CASSANDRA_USERNAME = {{ .Vars.cassandra.dbUser.user }} ] && [ $CASSANDRA_PASSWORD = {{ .Vars.cassandra.dbUser.password }} ] && [ $CASSANDRA_KEYSPACE = {{ .Vars.cassandra.keyspace }} ];
     exit-status: 0
-  {{- $uid := .Vars.agent.containerSecurityContext.runAsUser }}
-  {{- $gid := .Vars.agent.podSecurityContext.fsGroup }}
+  {{- $uid := .Vars.collector.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.collector.podSecurityContext.fsGroup }}
   check-user-info:
     # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
     # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.

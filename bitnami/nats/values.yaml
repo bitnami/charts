@@ -76,10 +76,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.10.20-debian-12-r3
+  tag: 2.10.22-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -235,6 +234,7 @@ configuration: |-
   write_deadline: {{ .Values.writeDeadline | quote }}
   {{- end }}
 
+  {{- if gt (int .Values.replicaCount) 1 }}
   # Clustering definition
   cluster {
     name: {{ .Values.cluster.name | quote }}
@@ -262,6 +262,7 @@ configuration: |-
     connect_retries: {{ .Values.cluster.connectRetries }}
     {{- end }}
   }
+  {{- end }}
 
   {{- if .Values.jetstream.enabled }}
   # JetStream configuration
@@ -320,6 +321,9 @@ updateStrategy:
   ## @param updateStrategy.type StrategyType. Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
+## @param podManagementPolicy StatefulSet pod management policy
+##
+podManagementPolicy: OrderedReady
 ## @param containerPorts.client NATS client container port
 ## @param containerPorts.cluster NATS cluster container port
 ## @param containerPorts.monitoring NATS monitoring container port
@@ -357,7 +361,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true
@@ -617,6 +621,9 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
+    ## @param service.headless.publishNotReadyAddresses Publishes the addresses of not ready Pods
+    ##
+    publishNotReadyAddresses: false
 ## NATS ingress parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -813,7 +820,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.15.0-debian-12-r14
+    tag: 0.15.0-debian-12-r18
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

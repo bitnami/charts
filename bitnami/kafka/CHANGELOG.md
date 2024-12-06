@@ -1,8 +1,47 @@
 # Changelog
 
-## 30.1.0 (2024-09-06)
+## 31.0.0 (2024-11-12)
 
-* [bitnami/kafka] feature: NetworkPolicy review ([#29274](https://github.com/bitnami/charts/pull/29274))
+* [bitnami/kafka] Release 31.0.0 ([#30416](https://github.com/bitnami/charts/pull/30416))
+
+## <small>30.1.8 (2024-10-31)</small>
+
+* [bitnami/kafka] Release 30.1.8 (#30146) ([fabc523](https://github.com/bitnami/charts/commit/fabc5232c08c83e7766946bd16c761fd666f9650)), closes [#30146](https://github.com/bitnami/charts/issues/30146)
+
+## <small>30.1.7 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kafka] Release 30.1.7 (#30119) ([eee4d5b](https://github.com/bitnami/charts/commit/eee4d5b67fdbea9df74ef21bc2fc7d5214dbb2f4)), closes [#30119](https://github.com/bitnami/charts/issues/30119)
+
+## <small>30.1.6 (2024-10-18)</small>
+
+* [bitnami/kafka] broker-list option is deprecated, change to bootstrap-server (#29864) ([2e7b0bf](https://github.com/bitnami/charts/commit/2e7b0bfe8dc6245c573073d21afaf09eedb75b6c)), closes [#29864](https://github.com/bitnami/charts/issues/29864)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>30.1.5 (2024-10-07)</small>
+
+* [bitnami/kafka] Update default value of `heapOpts` to fit Kafka pod RAM limit while utilize its incr ([51a574e](https://github.com/bitnami/charts/commit/51a574e7a0f97ec479349080d5c137bdaa4bf033)), closes [#29670](https://github.com/bitnami/charts/issues/29670) [#29782](https://github.com/bitnami/charts/issues/29782) [#29670](https://github.com/bitnami/charts/issues/29670)
+
+## <small>30.1.4 (2024-09-22)</small>
+
+* Update values.yaml (#29557) ([40a12b6](https://github.com/bitnami/charts/commit/40a12b6f509a7f6894212eac200215c4ed7bc088)), closes [#29557](https://github.com/bitnami/charts/issues/29557)
+
+## <small>30.1.3 (2024-09-19)</small>
+
+* [bitnami/kafka] Release 30.1.3 (#29518) ([f88b375](https://github.com/bitnami/charts/commit/f88b37547aafb3e788603e4432f87dd421b91a9c)), closes [#29518](https://github.com/bitnami/charts/issues/29518)
+
+## <small>30.1.2 (2024-09-17)</small>
+
+* [bitnami/kafka] test: :white_check_mark: Improve reliability of ginkgo tests (#29466) ([a67fc13](https://github.com/bitnami/charts/commit/a67fc1332a7f545e512f7cfabe8d0f5e1b318669)), closes [#29466](https://github.com/bitnami/charts/issues/29466)
+
+## <small>30.1.1 (2024-09-14)</small>
+
+* [bitnami/kafka] Release 30.1.1 (#29417) ([798c4df](https://github.com/bitnami/charts/commit/798c4dfd7e236ac6f8d508e2f3ccf5fd405bd26c)), closes [#29417](https://github.com/bitnami/charts/issues/29417)
+
+## 30.1.0 (2024-09-13)
+
+* [bitnami/kafka] feature: NetworkPolicy review (#29274) ([e406f1f](https://github.com/bitnami/charts/commit/e406f1f45a60c4d12eab0266a30077856ea05c7a)), closes [#29274](https://github.com/bitnami/charts/issues/29274)
+* [bitnami/kafka] update readme with new architecture for externalAccess services (#29098) ([5e5609c](https://github.com/bitnami/charts/commit/5e5609c33e245478290c4f4a6e73380042c237ac)), closes [#29098](https://github.com/bitnami/charts/issues/29098)
 
 ## <small>30.0.5 (2024-08-23)</small>
 

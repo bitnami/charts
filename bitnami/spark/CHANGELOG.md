@@ -1,8 +1,26 @@
 # Changelog
 
-## 9.2.10 (2024-08-23)
+## 9.2.14 (2024-11-08)
 
-* [bitnami/spark] Release 9.2.10 ([#29011](https://github.com/bitnami/charts/pull/29011))
+* [bitnami/spark] Unify seLinuxOptions default value ([#30326](https://github.com/bitnami/charts/pull/30326))
+
+## <small>9.2.13 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/spark] Release 9.2.13 (#30189) ([68f8f1f](https://github.com/bitnami/charts/commit/68f8f1f9932a70137ce4b26fe2a5025e956b31fe)), closes [#30189](https://github.com/bitnami/charts/issues/30189)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>9.2.12 (2024-10-01)</small>
+
+* [bitnami/spark] Fix extraEgress being applied from master instead of worker (#29591) ([65b08b5](https://github.com/bitnami/charts/commit/65b08b500c0324ba079d1a8c18306330d4812026)), closes [#29591](https://github.com/bitnami/charts/issues/29591)
+
+## <small>9.2.11 (2024-09-25)</small>
+
+* [bitnami/spark] Release 9.2.11 (#29593) ([733c5e8](https://github.com/bitnami/charts/commit/733c5e8a5516fa46c6f86c5d503edc388fae2d7e)), closes [#29593](https://github.com/bitnami/charts/issues/29593)
+
+## <small>9.2.10 (2024-08-24)</small>
+
+* [bitnami/spark] Release 9.2.10 (#29011) ([2c919dc](https://github.com/bitnami/charts/commit/2c919dc748aba27b595f4aaf0a4c7f4270ff0ba7)), closes [#29011](https://github.com/bitnami/charts/issues/29011)
 
 ## <small>9.2.9 (2024-08-12)</small>
 

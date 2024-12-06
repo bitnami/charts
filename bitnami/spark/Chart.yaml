@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: spark
-      image: docker.io/bitnami/spark:3.5.2-debian-12-r1
+      image: docker.io/bitnami/spark:3.5.3-debian-12-r1
 apiVersion: v2
-appVersion: 3.5.2
+appVersion: 3.5.3
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -27,4 +27,4 @@ maintainers:
 name: spark
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spark
-version: 9.2.10
+version: 9.2.14

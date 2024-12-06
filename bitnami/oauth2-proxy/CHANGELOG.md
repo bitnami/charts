@@ -1,8 +1,34 @@
 # Changelog
 
-## 6.0.2 (2024-09-06)
+## 6.1.1 (2024-12-04)
 
-* [bitnami/oauth2-proxy] Release 6.0.2 ([#29259](https://github.com/bitnami/charts/pull/29259))
+* [bitnami/oauth2-proxy] Release 6.1.1 ([#30770](https://github.com/bitnami/charts/pull/30770))
+
+## 6.1.0 (2024-11-28)
+
+* [bitnami/oauth2-proxy] add useApplicationDefaultCredentials google (#30309) ([5ee114c](https://github.com/bitnami/charts/commit/5ee114cbf81aa174da2fd4e62cd3f1af10c96417)), closes [#30309](https://github.com/bitnami/charts/issues/30309)
+
+## <small>6.0.6 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/oauth2-proxy] Release 6.0.6 (#30288) ([763b6aa](https://github.com/bitnami/charts/commit/763b6aad5acfa854f0e62dfdb026ef78e2803f57)), closes [#30288](https://github.com/bitnami/charts/issues/30288)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>6.0.5 (2024-10-08)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.5 (#29826) ([f2bfdd7](https://github.com/bitnami/charts/commit/f2bfdd7e093b51b8c1dacfa31aa8ae2b2ca3c06e)), closes [#29826](https://github.com/bitnami/charts/issues/29826)
+
+## <small>6.0.4 (2024-10-02)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.4 (#29737) ([cfc1c86](https://github.com/bitnami/charts/commit/cfc1c8696d90e6b7b4f43b2e5ca9e167ae16e913)), closes [#29737](https://github.com/bitnami/charts/issues/29737)
+
+## <small>6.0.3 (2024-10-02)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.3 (#29713) ([7378dcc](https://github.com/bitnami/charts/commit/7378dcc902c2e6223f60754cdca78b752ce15b73)), closes [#29713](https://github.com/bitnami/charts/issues/29713)
+
+## <small>6.0.2 (2024-09-06)</small>
+
+* [bitnami/oauth2-proxy] Release 6.0.2 (#29259) ([c0e0c19](https://github.com/bitnami/charts/commit/c0e0c194514327f2777d586a9affadb57c4dcd44)), closes [#29259](https://github.com/bitnami/charts/issues/29259)
 
 ## <small>6.0.1 (2024-08-27)</small>
 

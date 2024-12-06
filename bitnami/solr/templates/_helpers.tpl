@@ -81,31 +81,6 @@ Return true if a Solr authentication credentials secret object should be created
 {{- end -}}
 
 {{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
-*/}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
-    {{- else -}}
-        {{- randAlphaNum $len -}}
-    {{- end -}}
-{{- end }}
-
-{{/*
-Return Solr admin password
-*/}}
-{{- define "solr.password" -}}
-{{- if not (empty .Values.auth.adminPassword) -}}
-    {{- .Values.auth.adminPassword -}}
-{{- else -}}
-    {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "common.names.fullname" .) "Length" 10 "Key" "solr-password")  -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return proper Zookeeper hosts
 */}}
 {{- define "solr.zookeeper.hosts" -}}

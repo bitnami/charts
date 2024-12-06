@@ -1,8 +1,39 @@
 # Changelog
 
-## 1.3.22 (2024-09-11)
+## 1.3.29 (2024-12-04)
 
-* [bitnami/prometheus] Allow rendering resources values ([#29342](https://github.com/bitnami/charts/pull/29342))
+* [bitnami/prometheus] Release 1.3.29 ([#30774](https://github.com/bitnami/charts/pull/30774))
+
+## <small>1.3.28 (2024-11-19)</small>
+
+* [bitnami/prometheus] Release 1.3.28 (#30518) ([8a90ea8](https://github.com/bitnami/charts/commit/8a90ea87706d89c78bcaa0bb08ca6a0d96512b5c)), closes [#30518](https://github.com/bitnami/charts/issues/30518)
+
+## <small>1.3.27 (2024-11-08)</small>
+
+* [bitnami/prometheus] Unify seLinuxOptions default value (#30330) ([09074d0](https://github.com/bitnami/charts/commit/09074d09e43535326e7c71d2d4c461d620bce784)), closes [#30330](https://github.com/bitnami/charts/issues/30330)
+
+## <small>1.3.26 (2024-11-07)</small>
+
+* [bitnami/mastodon][bitnami/prometheus] Fix README.md files typos (#30194) ([0ef19fb](https://github.com/bitnami/charts/commit/0ef19fb4ac61547d519c9cc029f39b7026ab70e2)), closes [#30194](https://github.com/bitnami/charts/issues/30194)
+* [bitnami/prometheus] Release 1.3.26 (#30289) ([ab4ecb0](https://github.com/bitnami/charts/commit/ab4ecb03466c1be4498052b9b7a3fbb1e743e36d)), closes [#30289](https://github.com/bitnami/charts/issues/30289)
+
+## <small>1.3.25 (2024-11-06)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/prometheus] Release 1.3.25 (#30239) ([0409456](https://github.com/bitnami/charts/commit/0409456f78ef40e4a4b60114db902a31244b3157)), closes [#30239](https://github.com/bitnami/charts/issues/30239)
+
+## <small>1.3.24 (2024-10-22)</small>
+
+* [bitnami/prometheus] Release 1.3.24 (#30045) ([a08faca](https://github.com/bitnami/charts/commit/a08facaa0f3050b722e4c8160c5e667eb28b5f7d)), closes [#30045](https://github.com/bitnami/charts/issues/30045)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.3.23 (2024-10-02)</small>
+
+* [bitnami/prometheus] Release 1.3.23 (#29716) ([b7bd1ad](https://github.com/bitnami/charts/commit/b7bd1ad379e8735003f5d180fc0c79bf773f9ea6)), closes [#29716](https://github.com/bitnami/charts/issues/29716)
+
+## <small>1.3.22 (2024-09-11)</small>
+
+* [bitnami/prometheus] Allow rendering resources values (#29342) ([c1d1852](https://github.com/bitnami/charts/commit/c1d185295aeaf8880d2b16c654026e78fefb4cf7)), closes [#29342](https://github.com/bitnami/charts/issues/29342)
 
 ## <small>1.3.21 (2024-09-09)</small>
 

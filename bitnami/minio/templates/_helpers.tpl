@@ -35,29 +35,13 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
-*/}}
-{{- define "getValueFromSecret" }}
-{{- $len := (default 16 .Length) | int -}}
-{{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-{{- if and $obj (hasKey $obj .Key)}}
-{{- index $obj .Key | b64dec -}}
-{{- else -}}
-{{- randAlphaNum $len -}}
-{{- end -}}
-{{- end }}
-
-{{/*
 Get the user to use to access MinIO&reg;
 */}}
 {{- define "minio.secret.userValue" -}}
-{{- if .Values.auth.rootUser }}
-    {{- .Values.auth.rootUser -}}
-{{- else if (not .Values.auth.forcePassword) }}
-    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
-{{- else -}}
+{{- if (and (empty .Values.auth.rootUser) .Values.auth.forcePassword) }}
     {{ required "A root username is required!" .Values.auth.rootUser }}
+{{- else -}}
+    {{- include "common.secrets.passwords.manage" (dict "secret" (include "common.names.fullname" .) "key" "root-user" "providedValues" (list "auth.rootUser") "context" $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -65,12 +49,10 @@ Get the user to use to access MinIO&reg;
 Get the password to use to access MinIO&reg;
 */}}
 {{- define "minio.secret.passwordValue" -}}
-{{- if .Values.auth.rootPassword }}
-    {{- .Values.auth.rootPassword -}}
-{{- else if (not .Values.auth.forcePassword) }}
-    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
-{{- else -}}
+{{- if (and (empty .Values.auth.rootPassword) .Values.auth.forcePassword) }}
     {{ required "A root password is required!" .Values.auth.rootPassword }}
+{{- else -}}
+    {{- include "common.secrets.passwords.manage" (dict "secret" (include "common.names.fullname" .) "key" "root-password" "providedValues" (list "auth.rootPassword") "context" $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -111,9 +93,8 @@ Get the root password key.
 Return true if a secret object should be created
 */}}
 {{- define "minio.createSecret" -}}
-{{- if .Values.auth.existingSecret -}}
-{{- else -}}
-    {{- .Values.auth.useSecret -}}
+{{- if and (not .Values.auth.existingSecret) .Values.auth.useSecret -}}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 

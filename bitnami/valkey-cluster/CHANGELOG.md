@@ -1,8 +1,38 @@
 # Changelog
 
-## 0.1.11 (2024-09-09)
+## 2.0.2 (2024-12-01)
 
-* [bitnami/valkey-cluster] Release 0.1.11 ([#29314](https://github.com/bitnami/charts/pull/29314))
+* [bitnami/valkey-cluster] Release 2.0.2 ([#30702](https://github.com/bitnami/charts/pull/30702))
+
+## <small>2.0.1 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/valkey-cluster] Unify seLinuxOptions default value (#30322) ([ec4be59](https://github.com/bitnami/charts/commit/ec4be591f3f0fcc52ddd9c4f0cf6d0ddc19f9db7)), closes [#30322](https://github.com/bitnami/charts/issues/30322)
+
+## 2.0.0 (2024-10-23)
+
+* [bitnami/valkey-cluster] Update all the references from  to master/slave to primary/replica (#30025) ([e273ef7](https://github.com/bitnami/charts/commit/e273ef7b416321d485e586b9f69ddf12f5964fcb)), closes [#30025](https://github.com/bitnami/charts/issues/30025)
+
+## <small>1.0.3 (2024-10-22)</small>
+
+* [bitnami/valkey-cluster] Release 1.0.3 (#30047) ([66979a1](https://github.com/bitnami/charts/commit/66979a1de5d865b84e614737f9a0c6955d3cccc0)), closes [#30047](https://github.com/bitnami/charts/issues/30047)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.0.2 (2024-10-03)</small>
+
+* [bitnami/valkey-cluster] Release 1.0.2 (#29769) ([6d4a548](https://github.com/bitnami/charts/commit/6d4a5487c8b744fe4219bbf4acec6698939ca885)), closes [#29769](https://github.com/bitnami/charts/issues/29769)
+
+## <small>1.0.1 (2024-09-26)</small>
+
+* [bitnami/valkey-cluster] the redis_url for redis_exporter should use rediss/redis scheme, not valkey ([ab5bc91](https://github.com/bitnami/charts/commit/ab5bc9156d158b0808ead47d7d67cf5704ed37ec)), closes [#29589](https://github.com/bitnami/charts/issues/29589)
+
+## 1.0.0 (2024-09-16)
+
+* [bitnami/valkey-cluster] Release 1.0.0 (#29450) ([a6c84c2](https://github.com/bitnami/charts/commit/a6c84c2362b2577ce78ead825292e6037e1a2c13)), closes [#29450](https://github.com/bitnami/charts/issues/29450)
+
+## <small>0.1.11 (2024-09-09)</small>
+
+* [bitnami/valkey-cluster] Release 0.1.11 (#29314) ([237b54e](https://github.com/bitnami/charts/commit/237b54eeb8fe80287e0b7a3749dac88db79b7733)), closes [#29314](https://github.com/bitnami/charts/issues/29314)
 
 ## <small>0.1.10 (2024-08-28)</small>
 

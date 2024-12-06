@@ -1,13 +1,42 @@
 # Changelog
 
-## 4.2.16 (2024-09-11)
+## 4.2.22 (2024-11-08)
 
-* [bitnami/pytorch] fix: add apiVersion and kind to volumeClaimTemplates ([#29359](https://github.com/bitnami/charts/pull/29359))
+* [bitnami/pytorch] Unify seLinuxOptions default value ([#30331](https://github.com/bitnami/charts/pull/30331))
+
+## <small>4.2.21 (2024-10-31)</small>
+
+* [bitnami/pytorch] Release 4.2.21 (#30158) ([68b3f32](https://github.com/bitnami/charts/commit/68b3f324b6b96947cf232b9f127677dbbb264c07)), closes [#30158](https://github.com/bitnami/charts/issues/30158)
+
+## <small>4.2.20 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/pytorch] Release 4.2.20 (#30120) ([ff3e238](https://github.com/bitnami/charts/commit/ff3e238ec2f00d406e23ce2576383c51a224d67e)), closes [#30120](https://github.com/bitnami/charts/issues/30120)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.2.19 (2024-10-16)</small>
+
+* [bitnami/pytorch] Remove wrong entries from image verification (#29916) ([a779521](https://github.com/bitnami/charts/commit/a779521612cf76395780acc0fed13690c6a6f603)), closes [#29916](https://github.com/bitnami/charts/issues/29916)
+
+## <small>4.2.18 (2024-09-19)</small>
+
+* [bitnami/pytorch] Release 4.2.18 (#29516) ([6d40617](https://github.com/bitnami/charts/commit/6d4061783e317fd6bdb13116bb694f3d200684f2)), closes [#29516](https://github.com/bitnami/charts/issues/29516)
+
+## <small>4.2.17 (2024-09-15)</small>
+
+* [bitnami/pytorch] Release 4.2.17 (#29426) ([5450664](https://github.com/bitnami/charts/commit/54506646c21bf39541a3eb6af8fdf74ffc71689d)), closes [#29426](https://github.com/bitnami/charts/issues/29426)
+
+## <small>4.2.16 (2024-09-11)</small>
+
+* [bitnami/pytorch] fix: add apiVersion and kind to volumeClaimTemplates (#29359) ([8b9888e](https://github.com/bitnami/charts/commit/8b9888e143016cec0fa028ac42b1c98696181c29)), closes [#29359](https://github.com/bitnami/charts/issues/29359)
 
 ## <small>4.2.15 (2024-09-06)</small>
 
-* [bitnami/pytorch] Release 4.2.14 (#29013) ([e075c08](https://github.com/bitnami/charts/commit/e075c0899c20e0bb4709a318e24f7d02673bd37c)), closes [#29013](https://github.com/bitnami/charts/issues/29013)
 * [bitnami/pytorch] Release 4.2.15 (#29271) ([9749d0c](https://github.com/bitnami/charts/commit/9749d0c7529d79c1e4fb264672c76626ad329e80)), closes [#29271](https://github.com/bitnami/charts/issues/29271)
+
+## <small>4.2.14 (2024-08-24)</small>
+
+* [bitnami/pytorch] Release 4.2.14 (#29013) ([e075c08](https://github.com/bitnami/charts/commit/e075c0899c20e0bb4709a318e24f7d02673bd37c)), closes [#29013](https://github.com/bitnami/charts/issues/29013)
 
 ## <small>4.2.13 (2024-07-25)</small>
 

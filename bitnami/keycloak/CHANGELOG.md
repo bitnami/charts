@@ -1,8 +1,67 @@
 # Changelog
 
-## 22.2.4 (2024-09-13)
+## 24.2.3 (2024-12-03)
 
-* [bitnami/keycloak] Fix app-volume-dir mount path ([#29397](https://github.com/bitnami/charts/pull/29397))
+* [bitnami/keycloak] Release 24.2.3 ([#30726](https://github.com/bitnami/charts/pull/30726))
+
+## <small>24.2.2 (2024-11-22)</small>
+
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/keycloak] Release 24.2.2 (#30576) ([c3f8e59](https://github.com/bitnami/charts/commit/c3f8e596428f2f546dd3479570e7d39958b16f3b)), closes [#30576](https://github.com/bitnami/charts/issues/30576)
+
+## <small>24.2.1 (2024-11-19)</small>
+
+* [bitnami/keycloak] Release 24.2.1 (#30522) ([6702319](https://github.com/bitnami/charts/commit/670231902a194d5585ab06283e45592353b07142)), closes [#30522](https://github.com/bitnami/charts/issues/30522)
+
+## 24.2.0 (2024-11-12)
+
+* [bitnami/keycloak] Fix metrics ports and servicemonitor (#30303) ([c289b97](https://github.com/bitnami/charts/commit/c289b97caddc8e511e00d46937b508204f41de9a)), closes [#30303](https://github.com/bitnami/charts/issues/30303)
+
+## 24.1.0 (2024-11-06)
+
+* [bitnami/keycloak] switches keycloak-metrics service to point to new port (#30095) ([8ca86ae](https://github.com/bitnami/charts/commit/8ca86ae9ecb2b375735787001188e5c7757d181b)), closes [#30095](https://github.com/bitnami/charts/issues/30095)
+
+## <small>24.0.5 (2024-11-04)</small>
+
+* [bitnami/keycloak] Added providers to the list of writable dirs (#29998) ([9de041c](https://github.com/bitnami/charts/commit/9de041c92e2788a108631052aa5401a9469e3592)), closes [#29998](https://github.com/bitnami/charts/issues/29998)
+
+## <small>24.0.4 (2024-11-01)</small>
+
+* [bitnami/keycloak] Release 24.0.4 (#30169) ([701a2b9](https://github.com/bitnami/charts/commit/701a2b96d7eff0b3d0c8a77c1ac14f24e0d3ccda)), closes [#30169](https://github.com/bitnami/charts/issues/30169)
+
+## <small>24.0.3 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/keycloak] Release 24.0.3 (#30147) ([1cec61e](https://github.com/bitnami/charts/commit/1cec61e327d14d3be91ca06357bc68ddcafeceb7)), closes [#30147](https://github.com/bitnami/charts/issues/30147)
+
+## <small>24.0.2 (2024-10-24)</small>
+
+* [bitnami/keycloak] Release 24.0.2 (#30075) ([d86c1ee](https://github.com/bitnami/charts/commit/d86c1eedb774206f0eaeb191ad34551764be498b)), closes [#30075](https://github.com/bitnami/charts/issues/30075)
+
+## <small>24.0.1 (2024-10-17)</small>
+
+* [bitnami/keycloak] Release 24.0.1 (#29968) ([fa1d5b2](https://github.com/bitnami/charts/commit/fa1d5b278cb43b38fd5105a94005ba9a840beacc)), closes [#29968](https://github.com/bitnami/charts/issues/29968)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 24.0.0 (2024-10-08)
+
+* [bitnami/keycloak] Release 24.0.0 (#29815) ([02bf8f8](https://github.com/bitnami/charts/commit/02bf8f8821a875ca3605705f9c092a077ef29772)), closes [#29815](https://github.com/bitnami/charts/issues/29815)
+
+## 23.0.0 (2024-10-03)
+
+* [bitnami/keycloak] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29735) ([8ce695d](https://github.com/bitnami/charts/commit/8ce695d44b25e3e2023c07961c66ae5b7b22ce4b)), closes [#29735](https://github.com/bitnami/charts/issues/29735)
+
+## <small>22.2.6 (2024-09-19)</small>
+
+* [bitnami/keycloak] Release 22.2.6 (#29542) ([754f9e2](https://github.com/bitnami/charts/commit/754f9e2365ab6d0786a997e4d582e2b6ce92c237)), closes [#29542](https://github.com/bitnami/charts/issues/29542)
+
+## <small>22.2.5 (2024-09-16)</small>
+
+* [bitnami/keycloak] Release 22.2.5 (#29449) ([704c76c](https://github.com/bitnami/charts/commit/704c76cb715c58a196407ad471b150e9a0148cf3)), closes [#29449](https://github.com/bitnami/charts/issues/29449)
+
+## <small>22.2.4 (2024-09-13)</small>
+
+* [bitnami/keycloak] Fix app-volume-dir mount path (#29397) ([665ea7c](https://github.com/bitnami/charts/commit/665ea7c362ca091d028320a62ae40891c319e223)), closes [#29397](https://github.com/bitnami/charts/issues/29397)
 
 ## <small>22.2.3 (2024-09-10)</small>
 

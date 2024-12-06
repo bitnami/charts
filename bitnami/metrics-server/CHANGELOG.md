@@ -1,8 +1,22 @@
 # Changelog
 
-## 7.2.14 (2024-09-06)
+## 7.2.17 (2024-12-04)
 
-* [bitnami/metrics-server] Release 7.2.14 ([#29254](https://github.com/bitnami/charts/pull/29254))
+* [bitnami/metrics-server] Release 7.2.17 ([#30764](https://github.com/bitnami/charts/pull/30764))
+
+## <small>7.2.16 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/metrics-server] Release 7.2.16 (#30281) ([5a9502a](https://github.com/bitnami/charts/commit/5a9502a778c63391b73632d618fbb5c30f93171d)), closes [#30281](https://github.com/bitnami/charts/issues/30281)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>7.2.15 (2024-10-02)</small>
+
+* [bitnami/metrics-server] Release 7.2.15 (#29705) ([1401a20](https://github.com/bitnami/charts/commit/1401a20a249384cf8605f800e89f57011732abf9)), closes [#29705](https://github.com/bitnami/charts/issues/29705)
+
+## <small>7.2.14 (2024-09-06)</small>
+
+* [bitnami/metrics-server] Release 7.2.14 (#29254) ([da64b51](https://github.com/bitnami/charts/commit/da64b5159c558e5b73585b968f4562931b66d8a3)), closes [#29254](https://github.com/bitnami/charts/issues/29254)
 
 ## <small>7.2.13 (2024-08-27)</small>
 

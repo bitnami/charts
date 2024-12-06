@@ -1,8 +1,29 @@
 # Changelog
 
-## 23.2.13 (2024-08-23)
+## 24.0.2 (2024-12-01)
 
-* [bitnami/parse] Release 23.2.13 ([#29006](https://github.com/bitnami/charts/pull/29006))
+* [bitnami/parse] Release 24.0.2 ([#30701](https://github.com/bitnami/charts/pull/30701))
+
+## <small>24.0.1 (2024-10-22)</small>
+
+* [bitnami/parse] Release 24.0.1 (#30039) ([eea1a8e](https://github.com/bitnami/charts/commit/eea1a8e5e6b2595d78d3885792a8827c43dac9a6)), closes [#30039](https://github.com/bitnami/charts/issues/30039)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 24.0.0 (2024-10-08)
+
+* [bitnami/parse] Update MongoDB chart to 16.0.0 (#29808) ([477a654](https://github.com/bitnami/charts/commit/477a654e1c0f3f6c91d7336306e2df1a4c35cc02)), closes [#29808](https://github.com/bitnami/charts/issues/29808)
+
+## <small>23.2.15 (2024-10-04)</small>
+
+* [bitnami/parse] Release 23.2.15 (#29771) ([35af86b](https://github.com/bitnami/charts/commit/35af86b8a8e0be491f80bce2c95c778e67f2b58f)), closes [#29771](https://github.com/bitnami/charts/issues/29771)
+
+## <small>23.2.14 (2024-09-26)</small>
+
+* [bitnami/parse] Release 23.2.14 (#29611) ([97d18a5](https://github.com/bitnami/charts/commit/97d18a5f9cc7f163e0f8e981588878baaf8bcbda)), closes [#29611](https://github.com/bitnami/charts/issues/29611)
+
+## <small>23.2.13 (2024-08-23)</small>
+
+* [bitnami/parse] Release 23.2.13 (#29006) ([3dbbf9f](https://github.com/bitnami/charts/commit/3dbbf9f4d3a0786256cb98371e27f11a6ce9e853)), closes [#29006](https://github.com/bitnami/charts/issues/29006)
 
 ## <small>23.2.12 (2024-07-25)</small>
 

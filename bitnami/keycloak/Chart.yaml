@@ -6,16 +6,16 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: keycloak
-      image: docker.io/bitnami/keycloak:25.0.5-debian-12-r0
+      image: docker.io/bitnami/keycloak:26.0.7-debian-12-r0
     - name: keycloak-config-cli
-      image: docker.io/bitnami/keycloak-config-cli:6.1.6-debian-12-r3
+      image: docker.io/bitnami/keycloak-config-cli:6.1.6-debian-12-r6
 apiVersion: v2
-appVersion: 25.0.5
+appVersion: 26.0.7
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
+  version: 16.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -33,4 +33,4 @@ maintainers:
 name: keycloak
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
-version: 22.2.4
+version: 24.2.3

@@ -1,8 +1,43 @@
 # Changelog
 
-## 19.0.5 (2024-08-26)
+## 20.1.1 (2024-11-27)
 
-* [bitnami/mariadb] Fix deprecation warnings in checks ([#29021](https://github.com/bitnami/charts/pull/29021))
+* [bitnami/mariadb] fix: :bug: Set correct TLS mountPath ([#30641](https://github.com/bitnami/charts/pull/30641))
+
+## 20.1.0 (2024-11-27)
+
+* [bitnami/mariadb] feat: :sparkles: Add TLS support (#30629) ([13c518f](https://github.com/bitnami/charts/commit/13c518ffc9cfefc10110317d9aa13ddc84a2d6ec)), closes [#30629](https://github.com/bitnami/charts/issues/30629)
+
+## 20.0.0 (2024-11-08)
+
+* [bitnami/mariadb] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job  ([b90422b](https://github.com/bitnami/charts/commit/b90422bd86f34d4c94d8b9da41ebf89e03dbf384)), closes [#30300](https://github.com/bitnami/charts/issues/30300)
+
+## <small>19.1.2 (2024-11-04)</small>
+
+* [bitnami/mariadb] Release 19.1.2 (#30203) ([86984d1](https://github.com/bitnami/charts/commit/86984d109d4bb2be040824fe362649b8678f7ae6)), closes [#30203](https://github.com/bitnami/charts/issues/30203)
+
+## <small>19.1.1 (2024-11-02)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mariadb] Release 19.1.1 (#30176) ([6e6c654](https://github.com/bitnami/charts/commit/6e6c654a7a0d175f9ae47aa6f70aef9bbe11fb65)), closes [#30176](https://github.com/bitnami/charts/issues/30176)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 19.1.0 (2024-10-10)
+
+* [bitnami/mariadb] add default binlog expiry configuration of 30 days (#29841) ([bb0c258](https://github.com/bitnami/charts/commit/bb0c258b0ee0965ab2b97f2bc30e3d8e0710be07)), closes [#29841](https://github.com/bitnami/charts/issues/29841)
+
+## <small>19.0.7 (2024-09-23)</small>
+
+* [bitnami/mariadb] Release 19.0.7 (#29571) ([a64fadf](https://github.com/bitnami/charts/commit/a64fadf42cc82f7468245ff87c61aa50356fbb47)), closes [#29571](https://github.com/bitnami/charts/issues/29571)
+
+## <small>19.0.6 (2024-09-17)</small>
+
+* [bitnami/mariadb] test: :white_check_mark: Improve reliability of ginkgo tests (#29467) ([c6cae80](https://github.com/bitnami/charts/commit/c6cae80e8a0cf7f3b0faad5782d13e75765daaf2)), closes [#29467](https://github.com/bitnami/charts/issues/29467)
+* Update README.md (typo fix) (#29334) ([2b03ac4](https://github.com/bitnami/charts/commit/2b03ac4952c06ae7001e89dcacca0cfdf81bc684)), closes [#29334](https://github.com/bitnami/charts/issues/29334)
+
+## <small>19.0.5 (2024-08-27)</small>
+
+* [bitnami/mariadb] Fix deprecation warnings in checks (#29021) ([213786f](https://github.com/bitnami/charts/commit/213786f3f87836b41e2e70fcedd007f08a4a012f)), closes [#29021](https://github.com/bitnami/charts/issues/29021)
 
 ## <small>19.0.4 (2024-08-14)</small>
 

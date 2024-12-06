@@ -1,8 +1,46 @@
 # Changelog
 
-## 18.1.13 (2024-09-13)
+## 18.2.6 (2024-11-26)
 
-* [bitnami/nginx] Release 18.1.13 ([#29390](https://github.com/bitnami/charts/pull/29390))
+* [bitnami/nginx] Release 18.2.6 ([#30632](https://github.com/bitnami/charts/pull/30632))
+
+## <small>18.2.5 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/nginx] Unify seLinuxOptions default value (#30337) ([964c10c](https://github.com/bitnami/charts/commit/964c10c6e9716d9b71aae091437c561805200230)), closes [#30337](https://github.com/bitnami/charts/issues/30337)
+
+## <small>18.2.4 (2024-10-21)</small>
+
+* [bitnami/nginx] Release 18.2.4 (#30017) ([c14b4ab](https://github.com/bitnami/charts/commit/c14b4ab38bf552b35713943432e4f96284ab8bdb)), closes [#30017](https://github.com/bitnami/charts/issues/30017)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>18.2.3 (2024-10-14)</small>
+
+* [bitnami/nginx] Remove duplicated (and wrong) image in verification (#29871) ([124709a](https://github.com/bitnami/charts/commit/124709a15fba391dabcc4bba849588466ecc70c4)), closes [#29871](https://github.com/bitnami/charts/issues/29871)
+
+## <small>18.2.2 (2024-10-02)</small>
+
+* [bitnami/nginx] Release 18.2.2 (#29751) ([4d4d930](https://github.com/bitnami/charts/commit/4d4d9301a856bd77ef908530ca99a3f5828906c0)), closes [#29751](https://github.com/bitnami/charts/issues/29751)
+
+## <small>18.2.1 (2024-10-01)</small>
+
+* [bitnami/nginx] templates/ingress.yaml: fix wrong www.www tls name (#29563) ([045d9d0](https://github.com/bitnami/charts/commit/045d9d0af47d34f293b64e8072345d3c793d0ca1)), closes [#29563](https://github.com/bitnami/charts/issues/29563)
+
+## 18.2.0 (2024-09-20)
+
+* [bitnami/nginx] stream server blocks (#29491) ([89e5604](https://github.com/bitnami/charts/commit/89e5604be18dff45ac2da9ff48383b97cb20a23d)), closes [#29491](https://github.com/bitnami/charts/issues/29491)
+
+## <small>18.1.15 (2024-09-19)</small>
+
+* [bitnami/nginx] Release 18.1.15 (#29510) ([3c8f5ec](https://github.com/bitnami/charts/commit/3c8f5ec0da4daef80d6781c11e019f0dddb49668)), closes [#29510](https://github.com/bitnami/charts/issues/29510)
+
+## <small>18.1.14 (2024-09-15)</small>
+
+* [bitnami/nginx] Release 18.1.14 (#29420) ([5c3aa0e](https://github.com/bitnami/charts/commit/5c3aa0e3cf41aed5bcbb1e5aed73a32847f3f05f)), closes [#29420](https://github.com/bitnami/charts/issues/29420)
+
+## <small>18.1.13 (2024-09-13)</small>
+
+* [bitnami/nginx] Release 18.1.13 (#29390) ([1167027](https://github.com/bitnami/charts/commit/1167027bfaf67c827815f9795db425ebe233a600)), closes [#29390](https://github.com/bitnami/charts/issues/29390)
 
 ## <small>18.1.12 (2024-09-11)</small>
 

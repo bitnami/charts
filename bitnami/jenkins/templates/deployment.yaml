@@ -244,9 +244,13 @@ spec:
             - name: JENKINS_PLUGINS
               value: {{ join ";"  $plugins | quote }}
             {{- end }}
-            {{- $paths := .Values.overridePaths }}
+            {{- $paths := .Values.overridePaths | default "" }}
             {{- if or .Values.initHookScripts .Values.initHookScriptsCM .Values.initHookScriptsSecret }}
-            {{- $paths = append $paths "init.groovy.d" }}
+              {{- if $paths }}
+                {{- $paths = printf "%s,init.groovy.d" $paths }}
+              {{- else }}
+                {{- $paths = "init.groovy.d" }}
+              {{- end }}
             {{- end }}
             {{- if $paths }}
             - name: JENKINS_OVERRIDE_PATHS
@@ -530,17 +534,13 @@ spec:
         - name: custom-init-scripts
           projected:
             sources:
-              {{- if .Values.initScripts }}
+              {{- if or .Values.initScripts .Values.initScriptsCM }}
               - configMap:
-                  name: {{ template "jenkins.initScripts" . }}
-              {{- end }}
-              {{- if .Values.initScriptsCM }}
-              - configMap:
-                  name: {{ template ".Values.initScriptsCM" . }}
+                  name: {{ template "jenkins.initScriptsName" . }}
               {{- end }}
               {{- if .Values.initScriptsSecret }}
               - secret:
-                  secretName: {{ template ".Values.initScriptsSecret" . }}
+                  secretName: {{ print (tpl .Values.initScriptsSecret .) }}
                   defaultMode: 0755
               {{- end }}
         {{- end }}
@@ -548,17 +548,13 @@ spec:
         - name: jenkins-init-hook-scripts
           projected:
             sources:
-              {{- if .Values.initHookScripts }}
+              {{- if or .Values.initHookScripts .Values.initHookScriptsCM }}
               - configMap:
-                  name: {{ template "jenkins.initHookScripts" . }}
-              {{- end }}
-              {{- if .Values.initHookScriptsCM }}
-              - configMap:
-                name: {{ template ".Values.initHookScriptsCM" . }}
+                  name: {{ template "jenkins.initHookScriptsName" . }}
               {{- end }}
               {{- if .Values.initHookScriptsSecret }}
               - secret:
-                  secretName: {{ template ".Values.initHookScriptsSecret" . }}
+                  secretName: {{ print (tpl .Values.initHookScriptsSecret .) }}
                   defaultMode: 0755
               {{- end }}
         {{- end }}

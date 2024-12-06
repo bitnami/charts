@@ -1,8 +1,38 @@
 # Changelog
 
-## 2.3.18 (2024-09-02)
+## 2.3.25 (2024-11-28)
 
-* [bitnami/fluent-bit] Release 2.3.18 ([#29147](https://github.com/bitnami/charts/pull/29147))
+* [bitnami/fluent-bit] Release 2.3.25 ([#30667](https://github.com/bitnami/charts/pull/30667))
+
+## <small>2.3.24 (2024-11-17)</small>
+
+* [bitnami/fluent-bit] Release 2.3.24 (#30487) ([e9951e3](https://github.com/bitnami/charts/commit/e9951e3c9022560eaea85da02882441811e9017f)), closes [#30487](https://github.com/bitnami/charts/issues/30487)
+
+## <small>2.3.23 (2024-11-15)</small>
+
+* [bitnami/fluent-bit] Release 2.3.23 (#30475) ([0d5b4b8](https://github.com/bitnami/charts/commit/0d5b4b8dac85dca9031cbbc35e4ea400c9eb5b75)), closes [#30475](https://github.com/bitnami/charts/issues/30475)
+
+## <small>2.3.22 (2024-11-05)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/fluent-bit] Release 2.3.22 (#30209) ([ed02c36](https://github.com/bitnami/charts/commit/ed02c36c58d089da94873026bea10f81fecea69b)), closes [#30209](https://github.com/bitnami/charts/issues/30209)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.3.21 (2024-09-27)</small>
+
+* [bitnami/fluent-bit] Release 2.3.21 (#29647) ([973a279](https://github.com/bitnami/charts/commit/973a2792e0bc5967e3180c6d44eebf223b9f1d83)), closes [#29647](https://github.com/bitnami/charts/issues/29647)
+
+## <small>2.3.20 (2024-09-27)</small>
+
+* [bitnami/fluent-bit] Release 2.3.20 (#29643) ([0a14a7c](https://github.com/bitnami/charts/commit/0a14a7c4bf815bd4e5a829a8de93c1b94fda7a43)), closes [#29643](https://github.com/bitnami/charts/issues/29643)
+
+## <small>2.3.19 (2024-09-16)</small>
+
+* [bitnami/fluent-bit] Release 2.3.19 (#29460) ([33dd6a6](https://github.com/bitnami/charts/commit/33dd6a6786fd234cf3d5b643b3db7f7b278a0105)), closes [#29460](https://github.com/bitnami/charts/issues/29460)
+
+## <small>2.3.18 (2024-09-02)</small>
+
+* [bitnami/fluent-bit] Release 2.3.18 (#29147) ([39609d1](https://github.com/bitnami/charts/commit/39609d1d483127e836fcad9dc4c35103762f1fea)), closes [#29147](https://github.com/bitnami/charts/issues/29147)
 
 ## <small>2.3.17 (2024-08-14)</small>
 

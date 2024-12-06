@@ -1,8 +1,70 @@
 # Changelog
 
-## 7.0.11 (2024-09-13)
+## 7.0.26 (2024-12-03)
 
-* [bitnami/argo-cd] Fix duplicate `selector:` in applicationset deployment ([#29386](https://github.com/bitnami/charts/pull/29386))
+* [bitnami/argo-cd] Release 7.0.26 ([#30743](https://github.com/bitnami/charts/pull/30743))
+
+## <small>7.0.25 (2024-11-20)</small>
+
+* [bitnami/argo-cd] Release 7.0.25 (#30549) ([eaccca8](https://github.com/bitnami/charts/commit/eaccca888523fc41578e5f5c0f16e200e94c61e2)), closes [#30549](https://github.com/bitnami/charts/issues/30549)
+
+## <small>7.0.24 (2024-11-15)</small>
+
+* [bitnami/argo-cd] Release 7.0.24 (#30471) ([7e640aa](https://github.com/bitnami/charts/commit/7e640aa47963982bd3432301a72ea8ee48573b97)), closes [#30471](https://github.com/bitnami/charts/issues/30471)
+
+## <small>7.0.23 (2024-11-14)</small>
+
+* [bitnami/argo-cd] Fix repo-server PDB label selector (#30391) ([d2b71c2](https://github.com/bitnami/charts/commit/d2b71c2cc92ea4c46c27c40781106b948d2194a6)), closes [#30391](https://github.com/bitnami/charts/issues/30391)
+
+## <small>7.0.22 (2024-11-07)</small>
+
+* [bitnami/argo-cd] Release 7.0.22 (#30253) ([981c935](https://github.com/bitnami/charts/commit/981c9350763c152831eaa8dc310b3abd585fd705)), closes [#30253](https://github.com/bitnami/charts/issues/30253)
+
+## <small>7.0.21 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/argo-cd] Release 7.0.21 (#30196) ([f6e62be](https://github.com/bitnami/charts/commit/f6e62be0823be6af54b6cad537adf03a91630e0d)), closes [#30196](https://github.com/bitnami/charts/issues/30196)
+
+## <small>7.0.20 (2024-10-18)</small>
+
+* [bitnami/argo-cd] Release 7.0.20 (#29997) ([668f286](https://github.com/bitnami/charts/commit/668f286b78912244294a66ca4d081a07e79634a8)), closes [#29997](https://github.com/bitnami/charts/issues/29997)
+
+## <small>7.0.19 (2024-10-17)</small>
+
+* [bitnami/argo-cd] Release 7.0.19 (#29977) ([83436f5](https://github.com/bitnami/charts/commit/83436f524ace533fd20d0bafec4b8411b444985f)), closes [#29977](https://github.com/bitnami/charts/issues/29977)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>7.0.18 (2024-10-09)</small>
+
+* [bitnami/argo-cd] Release 7.0.18 (#29845) ([0e2b67f](https://github.com/bitnami/charts/commit/0e2b67f8038c03b13c9f5e6ac200e38a853b5b8a)), closes [#29845](https://github.com/bitnami/charts/issues/29845)
+
+## <small>7.0.17 (2024-10-09)</small>
+
+* [bitnami/argo-cd] Release 7.0.17 (#29843) ([7cec653](https://github.com/bitnami/charts/commit/7cec653341ff906ef61ffc70bc30b1a5583d1dba)), closes [#29843](https://github.com/bitnami/charts/issues/29843)
+
+## <small>7.0.16 (2024-10-09)</small>
+
+* [bitnami/argo-cd] fix: provide a functional validation function for validation (#29724) ([6eac077](https://github.com/bitnami/charts/commit/6eac07766d63a2d2ec9713a8716d1ea394441e14)), closes [#29724](https://github.com/bitnami/charts/issues/29724)
+
+## <small>7.0.15 (2024-10-01)</small>
+
+* [bitnami/argo-cd] Release 7.0.15 (#29682) ([6b89f04](https://github.com/bitnami/charts/commit/6b89f04f14ccd7aa78811dea9642754899c102da)), closes [#29682](https://github.com/bitnami/charts/issues/29682)
+
+## <small>7.0.14 (2024-09-26)</small>
+
+* [bitnami/argo-cd] Release 7.0.14 (#29618) ([6f1e155](https://github.com/bitnami/charts/commit/6f1e1550bad7dcb0d5cf63e8280baa2d9d7787da)), closes [#29618](https://github.com/bitnami/charts/issues/29618)
+
+## <small>7.0.13 (2024-09-19)</small>
+
+* [bitnami/argo-cd] Release 7.0.13 (#29507) ([f590500](https://github.com/bitnami/charts/commit/f590500e460485aab7ac50f5e51fefb0d3ade9bd)), closes [#29507](https://github.com/bitnami/charts/issues/29507)
+
+## <small>7.0.12 (2024-09-15)</small>
+
+* [bitnami/argo-cd] Release 7.0.12 (#29429) ([0e6235b](https://github.com/bitnami/charts/commit/0e6235be7f2d0c76bc99785ae39eb9ac44fa0dd5)), closes [#29429](https://github.com/bitnami/charts/issues/29429)
+
+## <small>7.0.11 (2024-09-13)</small>
+
+* [bitnami/argo-cd] Fix duplicate `selector:` in applicationset deployment (#29386) ([dc6905f](https://github.com/bitnami/charts/commit/dc6905f9ca3d7ffaa59c0ac7d689ab91ade53a27)), closes [#29386](https://github.com/bitnami/charts/issues/29386)
 
 ## <small>7.0.10 (2024-09-05)</small>
 

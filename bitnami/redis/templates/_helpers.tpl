@@ -227,7 +227,7 @@ Return Redis&reg; password
 */}}
 {{- define "redis.password" -}}
 {{- if or .Values.auth.enabled .Values.global.redis.password -}}
-    {{- include "common.secrets.passwords.manage" (dict "secret" (include "redis.secretName" .) "key" (include "redis.secretPasswordKey" .) "providedValues" (list "global.redis.password" "auth.password") "length" 10 "skipB64enc" true "skipQuote" true "context" $) -}}
+    {{- include "common.secrets.passwords.manage" (dict "secret" (include "redis.secretName" .) "key" (include "redis.secretPasswordKey" .) "providedValues" (list "global.redis.password" "auth.password") "length" 10 "skipB64enc" true "skipQuote" true "honorProvidedValues" true "context" $) -}}
 {{- end }}
 {{- end }}
 

@@ -1,8 +1,50 @@
 # Changelog
 
-## 29.0.4 (2024-08-22)
+## 32.0.1 (2024-11-14)
 
-* [bitnami/redmine] Release 29.0.4 ([#28967](https://github.com/bitnami/charts/pull/28967))
+* [bitnami/redmine] Release 32.0.1 ([#30466](https://github.com/bitnami/charts/pull/30466))
+
+## 32.0.0 (2024-11-14)
+
+* [bitnami/redmine] Release 32.0.0 (#30457) ([0c71f6a](https://github.com/bitnami/charts/commit/0c71f6a443a11358ee40aba45cf980a885c476b7)), closes [#30457](https://github.com/bitnami/charts/issues/30457)
+
+## 31.0.0 (2024-11-12)
+
+* [bitnami/redmine] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30357) ([21e69a1](https://github.com/bitnami/charts/commit/21e69a11ee24b940361f41c9fc2be1e262717ae4)), closes [#30357](https://github.com/bitnami/charts/issues/30357)
+
+## <small>30.0.4 (2024-11-10)</small>
+
+* [bitnami/redmine] Release 30.0.4 (#30384) ([0571e4a](https://github.com/bitnami/charts/commit/0571e4ad81a91503e6783435ed473c711942418c)), closes [#30384](https://github.com/bitnami/charts/issues/30384)
+
+## <small>30.0.3 (2024-11-08)</small>
+
+* [bitnami/redmine] Unify seLinuxOptions default value (#30329) ([e6ad759](https://github.com/bitnami/charts/commit/e6ad7591f8c63f6da36a4ed5a5090ce88a1c7786)), closes [#30329](https://github.com/bitnami/charts/issues/30329)
+
+## <small>30.0.2 (2024-11-04)</small>
+
+* [bitnami/redmine] Release 30.0.2 (#30183) ([f5b7139](https://github.com/bitnami/charts/commit/f5b7139c7809e68c5e2ada3eb8f36d3ea02d69da)), closes [#30183](https://github.com/bitnami/charts/issues/30183)
+
+## <small>30.0.1 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/redmine] Release 30.0.1 (#30123) ([9503088](https://github.com/bitnami/charts/commit/950308815e986948340cc81465955a553680c23d)), closes [#30123](https://github.com/bitnami/charts/issues/30123)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 30.0.0 (2024-10-03)
+
+* [bitnami/redmine] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29743) ([7b0d784](https://github.com/bitnami/charts/commit/7b0d7841496ab356434cef5bb5f17b784bd7e999)), closes [#29743](https://github.com/bitnami/charts/issues/29743)
+
+## <small>29.0.6 (2024-09-19)</small>
+
+* [bitnami/redmine] Release 29.0.6 (#29526) ([6af9c32](https://github.com/bitnami/charts/commit/6af9c3276a58da6f825461e32f21cfd54c459f85)), closes [#29526](https://github.com/bitnami/charts/issues/29526)
+
+## <small>29.0.5 (2024-09-16)</small>
+
+* [bitnami/redmine] Release 29.0.5 (#29436) ([462c294](https://github.com/bitnami/charts/commit/462c294bef1d2bc1047627532ebe80b9ea849cf2)), closes [#29436](https://github.com/bitnami/charts/issues/29436)
+
+## <small>29.0.4 (2024-08-22)</small>
+
+* [bitnami/redmine] Release 29.0.4 (#28967) ([27be3a8](https://github.com/bitnami/charts/commit/27be3a846b785cfa87b302acd98293f06405f9ff)), closes [#28967](https://github.com/bitnami/charts/issues/28967)
 
 ## <small>29.0.3 (2024-07-25)</small>
 

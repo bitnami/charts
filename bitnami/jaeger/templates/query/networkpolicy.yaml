@@ -33,17 +33,6 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow outbound connections to other agent pods
-    - ports:
-        - port: {{ .Values.agent.containerPorts.binary }}
-        - port: {{ .Values.agent.containerPorts.zipkin }}
-        - port: {{ .Values.agent.containerPorts.admin }}
-        - port: {{ .Values.agent.containerPorts.compact }}
-        - port: {{ .Values.agent.containerPorts.config }}
-      to:
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: agent
     # Allow outbound connections to other collector pods
     - ports:
         - port: {{ .Values.collector.containerPorts.binary }}

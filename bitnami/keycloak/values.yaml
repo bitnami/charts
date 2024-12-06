@@ -103,10 +103,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 25.0.5-debian-12-r0
+  tag: 26.0.7-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -294,10 +293,12 @@ replicaCount: 1
 revisionHistoryLimitCount: 10
 ## @param containerPorts.http Keycloak HTTP container port
 ## @param containerPorts.https Keycloak HTTPS container port
+## @param containerPorts.metrics Keycloak metrics container port
 ##
 containerPorts:
   http: 8080
   https: 8443
+  metrics: 9000
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
 extraContainerPorts: []
@@ -711,12 +712,12 @@ ingress:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   ## e.g:
   ## extraRules:
-  ## - host: airflow.local
+  ## - host: keycloak.local
   ##     http:
   ##       path: /
   ##       backend:
   ##         service:
-  ##           name: airflow-svc
+  ##           name: keycloak
   ##           port:
   ##             name: http
   ##
@@ -823,12 +824,12 @@ adminIngress:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   ## e.g:
   ## extraRules:
-  ## - host: airflow.local
+  ## - host: keycloak.local
   ##     http:
   ##       path: /
   ##       backend:
   ##         service:
-  ##           name: airflow-svc
+  ##           name: keycloak
   ##           port:
   ##             name: http
   ##
@@ -1007,15 +1008,21 @@ metrics:
   ## Keycloak metrics service parameters
   ##
   service:
-    ## @param metrics.service.ports.http Metrics service HTTP port
-    ##
     ports:
+      ## @param metrics.service.ports.http Metrics service HTTP port
+      ##
       http: 8080
+      ## @param metrics.service.ports.https Metrics service HTTPS port
+      ##
+      https: 8443
+      ## @param metrics.service.ports.metrics Metrics service Metrics port
+      ##
+      metrics: 9000
     ## @param metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints
     ##
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.ports.http }}"
+      prometheus.io/port: "{{ .Values.metrics.service.ports.metrics }}"
     ## @param metrics.service.extraPorts [array] Add additional ports to the keycloak metrics service (i.e. admin port 9000)
     ##
     extraPorts: []
@@ -1027,12 +1034,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.port Metrics service HTTP port
     ##
-    port: http
-    ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten.
+    port: metrics
+    ## @param metrics.serviceMonitor.scheme Metrics service scheme
+    ##
+    scheme: http
+    ## @param metrics.serviceMonitor.tlsConfig Metrics service TLS configuration
+    ##
+    tlsConfig: {}
+    ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Port, scheme, tlsConfig, interval, timeout and labellings can be overwritten.
     ##
     endpoints:
       - path: '{{ include "keycloak.httpPath" . }}metrics'
       - path: '{{ include "keycloak.httpPath" . }}realms/{{ .Values.adminRealm }}/metrics'
+        port: http
     ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
     ##
     path: ""
@@ -1113,10 +1127,9 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 6.1.6-debian-12-r3
+    tag: 6.1.6-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent

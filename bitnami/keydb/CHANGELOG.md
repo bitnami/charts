@@ -1,8 +1,22 @@
 # Changelog
 
-## 0.1.4 (2024-09-08)
+## 0.2.0 (2024-11-29)
 
-* [bitnami/keydb] Adds metrics port to NetworkPolicy ([#29298](https://github.com/bitnami/charts/pull/29298))
+* [bitnami/keydb] feat: :sparkles: :memo: Allow password update via values.yaml ([#30691](https://github.com/bitnami/charts/pull/30691))
+
+## <small>0.1.6 (2024-11-17)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/keydb] Release 0.1.6 (#30489) ([656b7b8](https://github.com/bitnami/charts/commit/656b7b8735d4b9c966bcfcde17fcbc83bf569c1e)), closes [#30489](https://github.com/bitnami/charts/issues/30489)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>0.1.5 (2024-10-08)</small>
+
+* [bitnami/keydb] Release 0.1.5 (#29814) ([8ecfbad](https://github.com/bitnami/charts/commit/8ecfbadb2b93576772fd134aeedcb13ad20221d2)), closes [#29814](https://github.com/bitnami/charts/issues/29814)
+
+## <small>0.1.4 (2024-09-09)</small>
+
+* [bitnami/keydb] Adds metrics port to NetworkPolicy (#29298) ([7938d36](https://github.com/bitnami/charts/commit/7938d364b49c5ce80c135dc0d920a207782225e2)), closes [#29298](https://github.com/bitnami/charts/issues/29298)
 
 ## <small>0.1.3 (2024-08-29)</small>
 

@@ -25,14 +25,14 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 ### Choose between Valkey Helm Chart and Valkey Cluster Helm Chart
 
 You can choose any of the two Valkey Helm charts for deploying a Valkey cluster.
-While [Valkey Helm Chart](https://github.com/bitnami/charts/tree/main/bitnami/valkey) will deploy a master-slave cluster using Valkey Sentinel, the [Valkey Cluster Helm Chart](https://github.com/bitnami/charts/tree/main/bitnami/valkey-cluster) will deploy a Valkey Cluster with sharding.
+While [Valkey Helm Chart](https://github.com/bitnami/charts/tree/main/bitnami/valkey) will deploy a primary-replica cluster using Valkey Sentinel, the [Valkey Cluster Helm Chart](https://github.com/bitnami/charts/tree/main/bitnami/valkey-cluster) will deploy a Valkey Cluster with sharding.
 The main features of each chart are the following:
 
 | Valkey                                     | Valkey Cluster                                                   |
 |--------------------------------------------|------------------------------------------------------------------|
 | Supports multiple databases                | Supports only one database. Better if you have a big dataset     |
-| Single write point (single master)         | Multiple write points (multiple masters)                         |
-| ![Valkey Topology](img/valkey-topology.png) | ![Valkey Cluster Topology](img/valkey-cluster-topology.png)       |
+| Single write point (single primary)        | Multiple write points (multiple primary nodes)                   |
+| ![Valkey Topology](img/valkey-topology.png)| ![Valkey Cluster Topology](img/valkey-cluster-topology.png)      |
 
 ## Prerequisites
 
@@ -69,7 +69,32 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Update credentials
+
+The Bitnami Valkey Cluster chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `password`
+- Run `helm upgrade` specifying a new secret in `existingSecret`
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [redis_exporter](https://github.com/oliver006/redis_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -81,20 +106,20 @@ To modify the application version used in this chart, specify a different versio
 
 ### Cluster topology
 
-To successfully set the cluster up, it will need to have at least 3 master nodes. The total number of nodes is calculated like- `nodes = numOfMasterNodes + numOfMasterNodes * replicas`. Hence, the defaults `cluster.nodes = 6` and `cluster.replicas = 1` means, 3 master and 3 replica nodes will be deployed by the chart.
+To successfully set the cluster up, it will need to have at least 3 primary nodes. The total number of nodes is calculated like- `nodes = numOfPrimaryNodes + numOfPrimaryNodes * replicas`. Hence, the defaults `cluster.nodes = 6` and `cluster.replicas = 1` means, 3 primary and 3 replica nodes will be deployed by the chart.
 
 By default the Valkey Cluster is not accessible from outside the Kubernetes cluster, to access the Valkey Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Valkey node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
 
-The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper master node. For example, using `valkey-cli` you will need to provide the `-c` flag for `valkey-cli` to follow the redirection automatically.
+The replicas will be read-only replicas of the primary nodes. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper primary node. For example, using `valkey-cli` you will need to provide the `-c` flag for `valkey-cli` to follow the redirection automatically.
 
-Using the external access mode, you can connect to any of the pods and the slaves will redirect the client in the same way as explained before, but the all the IPs will be public.
+Using the external access mode, you can connect to any of the pods and the replicas will redirect the client in the same way as explained before, but the all the IPs will be public.
 
-In case the master crashes, one of his slaves will be promoted to master. The slots stored by the crashed master will be unavailable until the slave finish the promotion. If a master and all his slaves crash, the cluster will be down until one of them is up again. To avoid downtime, it is possible to configure the number of Valkey nodes with `cluster.nodes` and the number of replicas that will be assigned to each master with `cluster.replicas`. For example:
+In case the primary crashes, one of his replicas will be promoted to primary. The slots stored by the crashed primary will be unavailable until the replica finish the promotion. If a primary and all his replicas crash, the cluster will be down until one of them is up again. To avoid downtime, it is possible to configure the number of Valkey nodes with `cluster.nodes` and the number of replicas that will be assigned to each primary with `cluster.replicas`. For example:
 
-- `cluster.nodes=9` ( 3 master plus 2 replicas for each master)
+- `cluster.nodes=9` ( 3 primary plus 2 replicas for each primary)
 - `cluster.replicas=2`
 
-Providing the values above, the cluster will have 3 masters and, each master, will have 2 replicas.
+Providing the values above, the cluster will have 3 primarys and, each primary, will have 2 replicas.
 
 > NOTE: By default `cluster.init` will be set to `true` in order to initialize the Valkey Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
 
@@ -148,7 +173,7 @@ Note we are providing the new IPs at `cluster.update.newExternalIPs`, the flag `
 
 To scale down the Valkey Cluster, follow these steps:
 
-First perform a normal upgrade setting the `cluster.nodes` value to the desired number of nodes. It should not be less than `6` and the difference between current number of nodes and the desired should be less or equal to `cluster.replicas` to avoid removing master node an its slaves at the same time. Also it is needed to provide the password using the `password`. For example, having more than 6 nodes, to scale down the cluster to 6 nodes:
+First perform a normal upgrade setting the `cluster.nodes` value to the desired number of nodes. It should not be less than `6` and the difference between current number of nodes and the desired should be less or equal to `cluster.replicas` to avoid removing primary node an its replicas at the same time. Also it is needed to provide the password using the `password`. For example, having more than 6 nodes, to scale down the cluster to 6 nodes:
 
 ```console
 helm upgrade --timeout 600s <release> --set "password=${VALKEY_PASSWORD},cluster.nodes=6" .
@@ -282,7 +307,7 @@ sysctlImage:
       echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
 ```
 
-Alternatively, for Kubernetes 1.12+ you can set `podSecurityContext.sysctls` which will configure sysctls for master and slave pods. Example:
+Alternatively, for Kubernetes 1.12+ you can set `podSecurityContext.sysctls` which will configure sysctls for primary and replica pods. Example:
 
 ```yaml
 podSecurityContext:
@@ -346,7 +371,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at the `/bitnami` path. The volume is created using dynamic volume provisioning.
 
-If persistence is disabled, an emptyDir volume is used. **This is only recommended for testing environments** because the required information included in the nodes.conf file is missing. This file contains the relationship between the nodes and the cluster. For example, if any node is down or faulty, when it starts again, it is a self-proclaimed master and also acts as an independent node outside the main cluster as it doesn't have the necessary information to connect to it.
+If persistence is disabled, an emptyDir volume is used. **This is only recommended for testing environments** because the required information included in the nodes.conf file is missing. This file contains the relationship between the nodes and the cluster. For example, if any node is down or faulty, when it starts again, it is a self-proclaimed primary and also acts as an independent node outside the main cluster as it doesn't have the necessary information to connect to it.
 
 To reconnect the failed node, run the following:
 
@@ -420,7 +445,7 @@ OK
 | `pdb.minAvailable`                                          | Min number of pods that must still be available after the eviction.                                                                                                                                                                                   | `""`                             |
 | `pdb.maxUnavailable`                                        | Max number of pods that can be unavailable after the eviction.                                                                                                                                                                                        | `""`                             |
 | `containerSecurityContext.enabled`                          | Enabled containers' Security Context                                                                                                                                                                                                                  | `true`                           |
-| `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                                                                                                                      | `nil`                            |
+| `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                                                                                                                      | `{}`                             |
 | `containerSecurityContext.runAsUser`                        | Set containers' Security Context runAsUser                                                                                                                                                                                                            | `1001`                           |
 | `containerSecurityContext.runAsGroup`                       | Set containers' Security Context runAsGroup                                                                                                                                                                                                           | `1001`                           |
 | `containerSecurityContext.runAsNonRoot`                     | Set container's Security Context runAsNonRoot                                                                                                                                                                                                         | `true`                           |
@@ -476,7 +501,7 @@ OK
 | `volumePermissions.image.pullPolicy`                        | Init container volume-permissions image pull policy                                                                                                                                                                                                   | `IfNotPresent`                   |
 | `volumePermissions.image.pullSecrets`                       | Specify docker-registry secret names as an array                                                                                                                                                                                                      | `[]`                             |
 | `volumePermissions.containerSecurityContext.enabled`        | Enable Containers' Security Context                                                                                                                                                                                                                   | `true`                           |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `nil`                            |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `{}`                             |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the containers.                                                                                                                                                                                                                           | `0`                              |
 | `volumePermissions.containerSecurityContext.privileged`     | Run container as privileged                                                                                                                                                                                                                           | `false`                          |
 | `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                           |
@@ -506,7 +531,7 @@ OK
 | `valkey.initContainers`                         | Extra init containers to add to the deployment                                                                                                                                                                                  | `[]`            |
 | `valkey.sidecars`                               | Extra sidecar containers to add to the deployment                                                                                                                                                                               | `[]`            |
 | `valkey.podLabels`                              | Additional labels for Valkey pod                                                                                                                                                                                                | `{}`            |
-| `valkey.priorityClassName`                      | Valkey Master pod priorityClassName                                                                                                                                                                                             | `""`            |
+| `valkey.priorityClassName`                      | Valkey Primary pod priorityClassName                                                                                                                                                                                            | `""`            |
 | `valkey.defaultConfigOverride`                  | Optional default Valkey configuration for the nodes                                                                                                                                                                             | `""`            |
 | `valkey.configmap`                              | Additional Valkey configuration for the nodes                                                                                                                                                                                   | `""`            |
 | `valkey.extraEnvVars`                           | An array to add extra environment variables                                                                                                                                                                                     | `[]`            |
@@ -582,8 +607,8 @@ OK
 | Name                                                      | Description                                                                                                | Value          |
 | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
 | `cluster.init`                                            | Enable the initialization of the Valkey Cluster                                                            | `true`         |
-| `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail                     | `6`            |
-| `cluster.replicas`                                        | Number of replicas for every master in the cluster                                                         | `1`            |
+| `cluster.nodes`                                           | The number of primary nodes should always be >= 3, otherwise cluster creation will fail                    | `6`            |
+| `cluster.replicas`                                        | Number of replicas for every primary in the cluster                                                        | `1`            |
 | `cluster.externalAccess.enabled`                          | Enable access to the Valkey                                                                                | `false`        |
 | `cluster.externalAccess.hostMode`                         | Set cluster preferred endpoint type as hostname                                                            | `false`        |
 | `cluster.externalAccess.service.disableLoadBalancerIP`    | Disable use of `Service.spec.loadBalancerIP`                                                               | `false`        |
@@ -616,7 +641,7 @@ OK
 | `metrics.podAnnotations`                                    | Additional annotations for Metrics exporter pod                                                                                                                                                                                   | `{}`                             |
 | `metrics.podLabels`                                         | Additional labels for Metrics exporter pod                                                                                                                                                                                        | `{}`                             |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                              | `true`                           |
-| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                  | `nil`                            |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                  | `{}`                             |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                        | `1001`                           |
 | `metrics.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                       | `1001`                           |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                     | `true`                           |
@@ -660,7 +685,7 @@ OK
 | `sysctlImage.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                                                                                                                          | `[]`                       |
 | `sysctlImage.mountHostSys`                            | Mount the host `/sys` folder to `/host-sys`                                                                                                                                                                                               | `false`                    |
 | `sysctlImage.containerSecurityContext.enabled`        | Enable Containers' Security Context                                                                                                                                                                                                       | `true`                     |
-| `sysctlImage.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                          | `nil`                      |
+| `sysctlImage.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                          | `{}`                       |
 | `sysctlImage.containerSecurityContext.runAsUser`      | User ID for the containers.                                                                                                                                                                                                               | `0`                        |
 | `sysctlImage.containerSecurityContext.privileged`     | Run privileged as privileged                                                                                                                                                                                                              | `true`                     |
 | `sysctlImage.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sysctlImage.resources is set (sysctlImage.resources is recommended for production). | `nano`                     |
@@ -693,6 +718,19 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/valke
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 2.0.0
+
+This major updates all the references from `master/slave` to `primary/replica` to follow the upstream project strategy:
+
+- The term *master* has been replaced by the term *primary*. Therefore, parameters prefixed with `master` are now prefixed with `primary`.
+- Environment variables previously prefixed as `VALKEY_MASTER` or `VALKEY_SENTINEL_MASTER` use `VALKEY_PRIMARY` and `VALKEY_SENTINEL_PRIMARY` now.
+
+Consequences:
+
+Backwards compatibility is not guaranteed. To upgrade to `2.0.0`, install a new release of the Valkey chart, and migrate the data from your previous release. You have to create a backup of the database, and restore it on the new release as explained in the [Backup and restore](#backup-and-restore) section.
 
 ## License
 

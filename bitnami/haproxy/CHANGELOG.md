@@ -1,8 +1,42 @@
 # Changelog
 
-## 2.1.4 (2024-09-06)
+## 2.1.12 (2024-12-03)
 
-* [bitnami/haproxy] add missing template for tls-secrets ([#29151](https://github.com/bitnami/charts/pull/29151))
+* [bitnami/haproxy] Release 2.1.12 ([#30756](https://github.com/bitnami/charts/pull/30756))
+
+## <small>2.1.11 (2024-11-26)</small>
+
+* [bitnami/haproxy] Release 2.1.11 (#30630) ([51ca44b](https://github.com/bitnami/charts/commit/51ca44bc1fa53fa85937ed6c76ca44ac5d0180f0)), closes [#30630](https://github.com/bitnami/charts/issues/30630)
+
+## <small>2.1.10 (2024-11-07)</small>
+
+* [bitnami/haproxy] Release 2.1.10 (#30308) ([34c58ba](https://github.com/bitnami/charts/commit/34c58baea2f41efc7792fc9a9201067856790d51)), closes [#30308](https://github.com/bitnami/charts/issues/30308)
+
+## <small>2.1.9 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/haproxy] Release 2.1.9 (#30271) ([254fe9d](https://github.com/bitnami/charts/commit/254fe9d19425834baf2fc3f8200435f98c7f9dbb)), closes [#30271](https://github.com/bitnami/charts/issues/30271)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.1.8 (2024-10-16)</small>
+
+* [bitnami/haproxy] Release 2.1.8 (#29924) ([788bb4a](https://github.com/bitnami/charts/commit/788bb4a7ba51e14a1a08abac4300332b21688936)), closes [#29924](https://github.com/bitnami/charts/issues/29924)
+
+## <small>2.1.7 (2024-10-02)</small>
+
+* [bitnami/haproxy] Release 2.1.7 (#29698) ([ff2073e](https://github.com/bitnami/charts/commit/ff2073ecc190cc836b43f47326bb4f3086e925db)), closes [#29698](https://github.com/bitnami/charts/issues/29698)
+
+## <small>2.1.6 (2024-09-26)</small>
+
+* [bitnami/haproxy] Release 2.1.6 (#29631) ([ae2a2f6](https://github.com/bitnami/charts/commit/ae2a2f6077ed6e871174355ba2491e2393278b06)), closes [#29631](https://github.com/bitnami/charts/issues/29631)
+
+## <small>2.1.5 (2024-09-19)</small>
+
+* [bitnami/haproxy] Release 2.1.5 (#29539) ([a990bec](https://github.com/bitnami/charts/commit/a990beca56b1a50ae4a442b12d0f5b47e3b37149)), closes [#29539](https://github.com/bitnami/charts/issues/29539)
+
+## <small>2.1.4 (2024-09-06)</small>
+
+* [bitnami/haproxy] add missing template for tls-secrets (#29151) ([432a93b](https://github.com/bitnami/charts/commit/432a93b59bca161620e8980a3ba7f882f26258fa)), closes [#29151](https://github.com/bitnami/charts/issues/29151)
 
 ## <small>2.1.3 (2024-09-06)</small>
 

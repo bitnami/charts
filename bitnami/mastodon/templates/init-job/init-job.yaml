@@ -36,6 +36,7 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
+        {{- if .Values.defaultInitContainers.prepareDirs.enabled }}
         - name: copy-assets-dir
           image: {{ template "mastodon.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -46,13 +47,13 @@ spec:
             - |
               #!/bin/bash
               cp -r /opt/bitnami/mastodon/public/* /public
-          {{- if .Values.initJob.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.defaultInitContainers.prepareDirs.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.defaultInitContainers.prepareDirs.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.initJob.resources }}
-          resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
-          {{- else if ne .Values.initJob.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
+          {{- if .Values.defaultInitContainers.prepareDirs.resources }}
+          resources: {{- toYaml .Values.defaultInitContainers.prepareDirs.resources | nindent 12 }}
+          {{- else if ne .Values.defaultInitContainers.prepareDirs.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.prepareDirs.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
@@ -61,6 +62,8 @@ spec:
             - name: empty-dir
               mountPath: /public
               subPath: app-public-dir
+        {{- end }}
+        {{- if .Values.defaultInitContainers.waitForBackends.enabled }}
         - name: wait-for-backend
           image: {{ template "mastodon.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -69,13 +72,13 @@ spec:
             - -ec
           args:
             - /scripts/wait-for-backend.sh
-          {{- if .Values.initJob.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.defaultInitContainers.waitForBackends.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.defaultInitContainers.waitForBackends.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.initJob.resources }}
-          resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
-          {{- else if ne .Values.initJob.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
+          {{- if .Values.defaultInitContainers.waitForBackends.resources }}
+          resources: {{- toYaml .Values.defaultInitContainers.waitForBackends.resources | nindent 12 }}
+          {{- else if ne .Values.defaultInitContainers.waitForBackends.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForBackends.resourcesPreset) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -100,7 +103,7 @@ spec:
                   name: {{ include "mastodon.elasticsearch.secretName" . }}
                   key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
             {{- end }}
-            {{- if and .Values.initJob.precompileAssets .Values.enableS3 }}
+            {{- if and .Values.initJob.precompileAssets.enabled .Values.enableS3 }}
             - name: MASTODON_S3_HOSTNAME
               value: {{ include "mastodon.s3.host" . | quote }}
             - name: MASTODON_S3_PORT_NUMBER
@@ -127,11 +130,12 @@ spec:
               subPath: tmp-dir
             - name: scripts
               mountPath: /scripts
+        {{- end }}
       containers:
         # We separate the job in multiple containers to be able to run them in parallel. We put everything on the same job
         # as it follows the Job Pattern best practices
         # https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-patterns
-        {{- if or .Values.initJob.migrateDB .Values.initJob.createAdmin .Values.initJob.migrateElasticsearch }}
+        {{- if .Values.initJob.migrateAndCreateAdmin.enabled }}
         - name: migrate-and-create-admin
           image: {{ template "mastodon.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -140,8 +144,8 @@ spec:
             - -ec
           args:
             - /scripts/migrate-and-create-admin.sh
-          {{- if .Values.initJob.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.initJob.migrateAndCreateAdmin.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.migrateAndCreateAdmin.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -166,8 +170,8 @@ spec:
                   name: {{ include "mastodon.elasticsearch.secretName" . }}
                   key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
             {{- end }}
-            {{- if .Values.initJob.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- if .Values.initJob.migrateAndCreateAdmin.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.migrateAndCreateAdmin.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:
@@ -182,14 +186,14 @@ spec:
             - secretRef:
                 name: {{ include "mastodon.extraSecretName" . }}
             {{- end }}
-          {{- if or .Values.initJob.extraEnvVarsCM .Values.initJob.extraEnvVarsSecret }}
-            {{- if .Values.initJob.extraEnvVarsCM }}
+          {{- if or .Values.initJob.migrateAndCreateAdmin.extraEnvVarsCM .Values.initJob.migrateAndCreateAdmin.extraEnvVarsSecret }}
+            {{- if .Values.initJob.migrateAndCreateAdmin.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.initJob.extraEnvVarsCM }}
+                name: {{ .Values.initJob.migrateAndCreateAdmin.extraEnvVarsCM }}
             {{- end }}
-            {{- if .Values.initJob.extraEnvVarsSecret }}
+            {{- if .Values.initJob.migrateAndCreateAdmin.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.initJob.extraEnvVarsSecret }}
+                name: {{ .Values.initJob.migrateAndCreateAdmin.extraEnvVarsSecret }}
             {{- end }}
           {{- end }}
           volumeMounts:
@@ -198,16 +202,16 @@ spec:
               subPath: tmp-dir
             - name: scripts
               mountPath: /scripts
-          {{- if .Values.initJob.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- if .Values.initJob.migrateAndCreateAdmin.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.migrateAndCreateAdmin.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.initJob.resources }}
-          resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
-          {{- else if ne .Values.initJob.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
+          {{- if .Values.initJob.migrateAndCreateAdmin.resources }}
+          resources: {{- toYaml .Values.initJob.migrateAndCreateAdmin.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.migrateAndCreateAdmin.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.migrateAndCreateAdmin.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if .Values.initJob.precompileAssets }}
+        {{- if .Values.initJob.precompileAssets.enabled }}
         - name: mastodon-assets-precompile
           image: {{ template "mastodon.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -216,8 +220,8 @@ spec:
             - -ec
           args:
             - /scripts/precompile-assets.sh
-          {{- if .Values.initJob.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.initJob.precompileAssets.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.precompileAssets.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -238,8 +242,8 @@ spec:
                   name: {{ include "mastodon.s3.secretName" . }}
                   key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
             {{- end }}
-            {{- if .Values.initJob.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- if .Values.initJob.precompileAssets.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.precompileAssets.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:
@@ -254,14 +258,14 @@ spec:
             - secretRef:
                 name: {{ include "mastodon.extraSecretName" . }}
             {{- end }}
-          {{- if or .Values.initJob.extraEnvVarsCM .Values.initJob.extraEnvVarsSecret }}
-            {{- if .Values.initJob.extraEnvVarsCM }}
+          {{- if or .Values.initJob.precompileAssets.extraEnvVarsCM .Values.initJob.precompileAssets.extraEnvVarsSecret }}
+            {{- if .Values.initJob.precompileAssets.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.initJob.extraEnvVarsCM }}
+                name: {{ .Values.initJob.precompileAssets.extraEnvVarsCM }}
             {{- end }}
-            {{- if .Values.initJob.extraEnvVarsSecret }}
+            {{- if .Values.initJob.precompileAssets.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.initJob.extraEnvVarsSecret }}
+                name: {{ .Values.initJob.precompileAssets.extraEnvVarsSecret }}
             {{- end }}
           {{- end }}
           volumeMounts:
@@ -283,13 +287,13 @@ spec:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
           {{- end }}
-          {{- if .Values.initJob.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- if .Values.initJob.precompileAssets.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.precompileAssets.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.initJob.resources }}
-          resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
-          {{- else if ne .Values.initJob.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
+          {{- if .Values.initJob.precompileAssets.resources }}
+          resources: {{- toYaml .Values.initJob.precompileAssets.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.precompileAssets.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.precompileAssets.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- end }}
       volumes:

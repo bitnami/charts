@@ -1,8 +1,34 @@
 # Changelog
 
-## 11.2.21 (2024-09-13)
+## 11.3.2 (2024-11-22)
 
-* [bitnami/kibana] Release 11.2.21 ([#29401](https://github.com/bitnami/charts/pull/29401))
+* [bitnami/kibana] Release 11.3.2 ([#30593](https://github.com/bitnami/charts/pull/30593))
+
+## <small>11.3.1 (2024-11-18)</small>
+
+* [bitnami/kibana] Release 11.3.1 (#30499) ([078f638](https://github.com/bitnami/charts/commit/078f638b0d091ac39ff4425f1cf609f95e00711c)), closes [#30499](https://github.com/bitnami/charts/issues/30499)
+
+## 11.3.0 (2024-10-31)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kibana] set base host to 0.0.0.0 (#30131) ([66abb23](https://github.com/bitnami/charts/commit/66abb2368868203990ff96fd0bc95e888b2dd977)), closes [#30131](https://github.com/bitnami/charts/issues/30131)
+
+## <small>11.2.24 (2024-10-17)</small>
+
+* [bitnami/kibana] Release 11.2.24 (#29971) ([7029c3e](https://github.com/bitnami/charts/commit/7029c3e482067672e26d31ee3a0dbcf9b4f2a239)), closes [#29971](https://github.com/bitnami/charts/issues/29971)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.2.23 (2024-09-26)</small>
+
+* [bitnami/kibana] Release 11.2.23 (#29632) ([72d5491](https://github.com/bitnami/charts/commit/72d5491ddf081098e77e5bc6aeff137f516b339b)), closes [#29632](https://github.com/bitnami/charts/issues/29632)
+
+## <small>11.2.22 (2024-09-19)</small>
+
+* [bitnami/kibana] Release 11.2.22 (#29520) ([4f52c71](https://github.com/bitnami/charts/commit/4f52c710630ad665108878950047635ce75ad35e)), closes [#29520](https://github.com/bitnami/charts/issues/29520)
+
+## <small>11.2.21 (2024-09-13)</small>
+
+* [bitnami/kibana] Release 11.2.21 (#29401) ([76ddd43](https://github.com/bitnami/charts/commit/76ddd43ea5f0b80ac548e08bfb917432678a4d7f)), closes [#29401](https://github.com/bitnami/charts/issues/29401)
 
 ## <small>11.2.20 (2024-09-06)</small>
 

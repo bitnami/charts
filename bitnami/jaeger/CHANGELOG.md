@@ -1,8 +1,46 @@
 # Changelog
 
+## 5.0.1 (2024-12-04)
+
+* [bitnami/jaeger] Release 5.0.1 ([#30758](https://github.com/bitnami/charts/pull/30758))
+
+## 5.0.0 (2024-11-20)
+
+* [bitnami/jaeger] Release 5.0.0 (#30529) ([8e7120e](https://github.com/bitnami/charts/commit/8e7120edd246ee4e5bb6467ffef905446a8b27c3)), closes [#30529](https://github.com/bitnami/charts/issues/30529)
+
+## 4.0.0 (2024-11-13)
+
+* [bitnami/jaeger] chore!: :arrow_up: :fire: :boom: Update Jaeger to 1.63.0 and deprecate jaeger-agent ([ab89e33](https://github.com/bitnami/charts/commit/ab89e33385cf98a4de67c6795d4ab970d16a1f33)), closes [#30439](https://github.com/bitnami/charts/issues/30439)
+
+## <small>3.0.6 (2024-11-08)</small>
+
+* [bitnami/jaeger] Unify seLinuxOptions default value (#30347) ([31165b2](https://github.com/bitnami/charts/commit/31165b20a0d9d22744787b4379ae4f4eb5ec8860)), closes [#30347](https://github.com/bitnami/charts/issues/30347)
+
+## <small>3.0.5 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/jaeger] Release 3.0.5 (#30273) ([235579d](https://github.com/bitnami/charts/commit/235579d5e1bcef5c2e192d9e734b29b724b6d8dc)), closes [#30273](https://github.com/bitnami/charts/issues/30273)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.0.4 (2024-10-10)</small>
+
+* [bitnami/jaeger] Release 3.0.4 (#29860) ([aabab2a](https://github.com/bitnami/charts/commit/aabab2ab6a76bfd988b03ea54b679cac92143ce8)), closes [#29860](https://github.com/bitnami/charts/issues/29860)
+
+## <small>3.0.3 (2024-10-07)</small>
+
+* [bitnami/jaeger] Release 3.0.3 (#29800) ([f31a3fa](https://github.com/bitnami/charts/commit/f31a3faa2b2849cdc4a68228ce6f4409dad307fc)), closes [#29800](https://github.com/bitnami/charts/issues/29800)
+
+## <small>3.0.2 (2024-10-02)</small>
+
+* [bitnami/jaeger] Release 3.0.2 (#29700) ([4cef175](https://github.com/bitnami/charts/commit/4cef1759fc061799009c72d43a7ddf475cf32071)), closes [#29700](https://github.com/bitnami/charts/issues/29700)
+
+## <small>3.0.1 (2024-09-19)</small>
+
+* [bitnami/jaeger] Release 3.0.1 (#29535) ([4163372](https://github.com/bitnami/charts/commit/4163372fd1cb5cd3dc86353dacea5d0ab705171a)), closes [#29535](https://github.com/bitnami/charts/issues/29535)
+
 ## 3.0.0 (2024-09-10)
 
-* [bitnami/jaeger] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) ([#29324](https://github.com/bitnami/charts/pull/29324))
+* [bitnami/jaeger] Upgrade Cassandra to 12.x.x (appVersion 5.0.0) (#29324) ([40b54b0](https://github.com/bitnami/charts/commit/40b54b00a232074ba2b497823ce417c69ed78473)), closes [#29324](https://github.com/bitnami/charts/issues/29324)
 
 ## <small>2.5.12 (2024-09-06)</small>
 

@@ -1,8 +1,26 @@
 # Changelog
 
-## 1.2.16 (2024-09-06)
+## 1.2.20 (2024-12-04)
 
-* [bitnami/kuberay] Release 1.2.16 ([#29245](https://github.com/bitnami/charts/pull/29245))
+* [bitnami/kuberay] Release 1.2.20 ([#30760](https://github.com/bitnami/charts/pull/30760))
+
+## <small>1.2.19 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kuberay] Release 1.2.19 (#30278) ([f923bc9](https://github.com/bitnami/charts/commit/f923bc9d4a3120b8787da2e1d1db712e132897bc)), closes [#30278](https://github.com/bitnami/charts/issues/30278)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.2.18 (2024-10-02)</small>
+
+* [bitnami/kuberay] Release 1.2.18 (#29703) ([b971616](https://github.com/bitnami/charts/commit/b971616dbd1cb98e5319f2370c4d16cb18a7aeb2)), closes [#29703](https://github.com/bitnami/charts/issues/29703)
+
+## <small>1.2.17 (2024-09-29)</small>
+
+* [bitnami/kuberay] Release 1.2.17 (#29651) ([6635179](https://github.com/bitnami/charts/commit/6635179dc8b474d583c22337d3f076b9a5b7631d)), closes [#29651](https://github.com/bitnami/charts/issues/29651)
+
+## <small>1.2.16 (2024-09-06)</small>
+
+* [bitnami/kuberay] Release 1.2.16 (#29245) ([a7faa67](https://github.com/bitnami/charts/commit/a7faa6703781d406d18cd92b81dad24f12cfc260)), closes [#29245](https://github.com/bitnami/charts/issues/29245)
 
 ## <small>1.2.15 (2024-09-05)</small>
 

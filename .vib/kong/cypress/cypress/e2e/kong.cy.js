@@ -10,6 +10,8 @@ import { random } from '../support/utils';
 it('allows accessing a restricted service (CRD) when API key is presented', () => {
   const ROUTE_PATH = Cypress.env('ingressPath');
 
+  // Give the ingress controller some extra time to start
+  cy.wait(30000);
   cy.request({
     method: 'GET',
     url: ROUTE_PATH,

@@ -1,8 +1,50 @@
 # Changelog
 
-## 20.1.2 (2024-09-13)
+## 20.4.0 (2024-12-01)
 
-* [bitnami/redis] Use common password manager to handle password ([#29376](https://github.com/bitnami/charts/pull/29376))
+* [bitnami/redis] add extraPortsEnabled ([#30607](https://github.com/bitnami/charts/pull/30607))
+
+## 20.3.0 (2024-11-14)
+
+* [bitnami/redis] feat: :sparkles: Allow updating credentials via values.yaml (#30452) ([d6a3118](https://github.com/bitnami/charts/commit/d6a3118e42a9a481d4429defbd628015a3b8f755)), closes [#30452](https://github.com/bitnami/charts/issues/30452)
+
+## <small>20.2.2 (2024-11-11)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/redis] Release 20.2.2 (#30407) ([ae54e98](https://github.com/bitnami/charts/commit/ae54e980494b5431d98d72a672532fc36b7a21c4)), closes [#30407](https://github.com/bitnami/charts/issues/30407)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>20.2.1 (2024-10-15)</small>
+
+* [bitnami/redis] Fix preExecCmds parameter (#29898) ([6db8a2e](https://github.com/bitnami/charts/commit/6db8a2e736e2a60be2d3848d85f49d236a43136c)), closes [#29898](https://github.com/bitnami/charts/issues/29898)
+
+## 20.2.0 (2024-10-09)
+
+* [bitnami/redis] add extraPodSpec (#29725) ([0d2b826](https://github.com/bitnami/charts/commit/0d2b8269e0e5c1a287fcd8e44c623afa6311e761)), closes [#29725](https://github.com/bitnami/charts/issues/29725)
+
+## <small>20.1.7 (2024-10-02)</small>
+
+* [bitnami/redis] Release 20.1.7 (#29756) ([bc01e03](https://github.com/bitnami/charts/commit/bc01e03cea20cd93fdd43a4fece348aabb3f1ea4)), closes [#29756](https://github.com/bitnami/charts/issues/29756)
+
+## <small>20.1.6 (2024-10-02)</small>
+
+* [bitnami/redis] adds kind & apiVersion for pvc template in statefulset (#29678) ([13212d2](https://github.com/bitnami/charts/commit/13212d218c0eea9d60a3b9d08f8d5ca1b5951d74)), closes [#29678](https://github.com/bitnami/charts/issues/29678)
+
+## <small>20.1.5 (2024-09-26)</small>
+
+* [bitnami/redis] - fix additionalEndpoints in servicemonitor (#29595) ([6e674ff](https://github.com/bitnami/charts/commit/6e674ff9f082dc60676e4451917400a48c05a6ad)), closes [#29595](https://github.com/bitnami/charts/issues/29595)
+
+## <small>20.1.4 (2024-09-19)</small>
+
+* [bitnami/redis] Release 20.1.4 (#29530) ([8053b1a](https://github.com/bitnami/charts/commit/8053b1a13272f5485ca5c6ec0ace6741cf202262)), closes [#29530](https://github.com/bitnami/charts/issues/29530)
+
+## <small>20.1.3 (2024-09-14)</small>
+
+* [bitnami/redis] Release 20.1.3 (#29411) ([b0b5c88](https://github.com/bitnami/charts/commit/b0b5c88f48cbb67d367121d92cf44afd5ddb424f)), closes [#29411](https://github.com/bitnami/charts/issues/29411)
+
+## <small>20.1.2 (2024-09-13)</small>
+
+* [bitnami/redis] Use common password manager to handle password (#29376) ([6ec3657](https://github.com/bitnami/charts/commit/6ec365736a61521aeb8f44d475420bf529f7f1fd)), closes [#29376](https://github.com/bitnami/charts/issues/29376)
 
 ## <small>20.1.1 (2024-09-13)</small>
 

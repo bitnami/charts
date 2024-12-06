@@ -232,7 +232,9 @@ data:
     {{- end }}
 
     {{- if .Values.replica.preExecCmds }}
-    {{- .Values.replica.preExecCmds | nindent 4 }}
+    {{- range $command := .Values.replica.preExecCmds }}
+    {{- $command | nindent 4 }}
+    {{- end }}
     {{- end }}
 
     {{- if .Values.replica.command }}
@@ -440,7 +442,9 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.sentinel.preExecCmds }}
-    {{ .Values.sentinel.preExecCmds | nindent 4 }}
+    {{- range $command := .Values.sentinel.preExecCmds }}
+    {{- $command | nindent 4 }}
+    {{- end }}
     {{- end }}
     mv /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
     exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }} --sentinel
@@ -646,7 +650,9 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.master.preExecCmds }}
-    {{ .Values.master.preExecCmds | nindent 4 }}
+    {{- range $command := .Values.master.preExecCmds }}
+    {{- $command | nindent 4 }}
+    {{- end }}
     {{- end }}
     {{- if .Values.master.command }}
     exec {{ .Values.master.command }} "${ARGS[@]}"
@@ -754,8 +760,9 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.replica.preExecCmds }}
-    {{ .Values.replica.preExecCmds | nindent 4 }}
-    {{- end }}
+    {{- range $command := .Values.replica.preExecCmds }}
+    {{- $command | nindent 4 }}
+    {{- end }}    {{- end }}
     {{- if .Values.replica.command }}
     exec {{ .Values.replica.command }} "${ARGS[@]}"
     {{- else }}

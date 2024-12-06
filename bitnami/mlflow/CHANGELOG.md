@@ -1,8 +1,73 @@
 # Changelog
 
-## 1.5.0 (2024-09-05)
+## 2.2.1 (2024-11-18)
 
-* [bitnami/mlflow] Add support for Google Cloud Storage as artifact store ([#28938](https://github.com/bitnami/charts/pull/28938))
+* [bitnami/mlflow] Release 2.2.1 ([#30503](https://github.com/bitnami/charts/pull/30503))
+
+## 2.2.0 (2024-11-15)
+
+* [bitnami/mlflow] Adding missing Azure Storage configuration in the Helm Chart (#29626) ([6aa1ccb](https://github.com/bitnami/charts/commit/6aa1ccbdccc5f566f92e310b69133c2e697037a1)), closes [#29626](https://github.com/bitnami/charts/issues/29626) [#1](https://github.com/bitnami/charts/issues/1)
+
+## 2.1.0 (2024-11-04)
+
+* [bitnami/mlflow] Make mlflow host part of values (#29862) ([148ff74](https://github.com/bitnami/charts/commit/148ff74ddb1e0aa6c268f37a4a8f98d08fe821fb)), closes [#29862](https://github.com/bitnami/charts/issues/29862)
+
+## <small>2.0.5 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mlflow] Release 2.0.5 (#30157) ([6610a2d](https://github.com/bitnami/charts/commit/6610a2d1f4cf26b83ae86ce5b7171360c2f80007)), closes [#30157](https://github.com/bitnami/charts/issues/30157)
+
+## <small>2.0.4 (2024-10-26)</small>
+
+* [bitnami/mlflow] Release 2.0.4 (#30089) ([6156103](https://github.com/bitnami/charts/commit/615610351c0de5778f95da7169c3bb66adba2f5b)), closes [#30089](https://github.com/bitnami/charts/issues/30089)
+
+## <small>2.0.3 (2024-10-24)</small>
+
+* fixed doc string for mlflow container security context; fixes #30059 (#30060) ([c7811fe](https://github.com/bitnami/charts/commit/c7811fe1c1902bf29c35af70216cc7db2037586b)), closes [#30059](https://github.com/bitnami/charts/issues/30059) [#30060](https://github.com/bitnami/charts/issues/30060)
+
+## <small>2.0.2 (2024-10-16)</small>
+
+* [bitnami/mlflow] Release 2.0.2 (#29945) ([709da84](https://github.com/bitnami/charts/commit/709da84701cec3a9e448bd35ae4f6c288894eaf0)), closes [#29945](https://github.com/bitnami/charts/issues/29945)
+
+## <small>2.0.1 (2024-10-16)</small>
+
+* [bitnami/mlflow] Release 2.0.1 (#29927) ([d0b88fc](https://github.com/bitnami/charts/commit/d0b88fc101c00906458403db9246731258f6cbe3)), closes [#29927](https://github.com/bitnami/charts/issues/29927)
+
+## 2.0.0 (2024-10-03)
+
+* [bitnami/mlflow] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29740) ([366ae2b](https://github.com/bitnami/charts/commit/366ae2be83024c1fdbf09db44c6e99057e67c150)), closes [#29740](https://github.com/bitnami/charts/issues/29740)
+
+## <small>1.5.7 (2024-09-19)</small>
+
+* [bitnami/mlflow] Release 1.5.7 (#29534) ([706e4b6](https://github.com/bitnami/charts/commit/706e4b6cb60bdd595e209507f798868de6fd8777)), closes [#29534](https://github.com/bitnami/charts/issues/29534)
+
+## <small>1.5.6 (2024-09-19)</small>
+
+* [bitnami/mlflow] Release 1.5.6 (#29517) ([b5a4bf8](https://github.com/bitnami/charts/commit/b5a4bf89bdf7df7cd357830dcf31e9b0af495f16)), closes [#29517](https://github.com/bitnami/charts/issues/29517)
+
+## <small>1.5.5 (2024-09-17)</small>
+
+* [bitnami/mlflow] Release 1.5.5 (#29477) ([6182dc5](https://github.com/bitnami/charts/commit/6182dc59c2e0e0cc94e6cbca035161fc20bc12d2)), closes [#29477](https://github.com/bitnami/charts/issues/29477)
+
+## <small>1.5.4 (2024-09-17)</small>
+
+* [bitnami/mlflow] Release 1.5.4 (#29461) ([429ff90](https://github.com/bitnami/charts/commit/429ff903d4d62bd7382e8f6a3d0544a7177c80b8)), closes [#29461](https://github.com/bitnami/charts/issues/29461)
+
+## <small>1.5.3 (2024-09-16)</small>
+
+* [bitnami/mlflow] Release 1.5.3 (#29454) ([1a0c35a](https://github.com/bitnami/charts/commit/1a0c35a253d05c85ce49a6cbd991b701b732800d)), closes [#29454](https://github.com/bitnami/charts/issues/29454)
+
+## <small>1.5.2 (2024-09-16)</small>
+
+* [bitnami/mlflow] Release 1.5.2 (#29435) ([b9f4a56](https://github.com/bitnami/charts/commit/b9f4a563c176f1482d230efaef67f2930e6f0c68)), closes [#29435](https://github.com/bitnami/charts/issues/29435)
+
+## <small>1.5.1 (2024-09-15)</small>
+
+* [bitnami/mlflow] Release 1.5.1 (#29419) ([c4a8f6c](https://github.com/bitnami/charts/commit/c4a8f6cd95e3c12629e1d5e7571f58b20b5015cd)), closes [#29419](https://github.com/bitnami/charts/issues/29419)
+
+## 1.5.0 (2024-09-06)
+
+* [bitnami/mlflow] Add support for Google Cloud Storage as artifact store (#28938) ([2c6d076](https://github.com/bitnami/charts/commit/2c6d076252331b0ab641750cb0f742a5b3bb41d6)), closes [#28938](https://github.com/bitnami/charts/issues/28938)
 
 ## <small>1.4.25 (2024-08-31)</small>
 

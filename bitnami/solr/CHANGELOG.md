@@ -1,8 +1,30 @@
 # Changelog
 
-## 9.4.3 (2024-09-11)
+## 9.4.8 (2024-11-29)
 
-* [bitnami/solr] fix: add apiVersion and kind to volumeClaimTemplates ([#29356](https://github.com/bitnami/charts/pull/29356))
+* [bitnami/solr] Release 9.4.8 ([#30678](https://github.com/bitnami/charts/pull/30678))
+
+## <small>9.4.7 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/solr] chore: Increase ginkgo test timeout (#30109) ([387437d](https://github.com/bitnami/charts/commit/387437dff423c5a29e2a7314c838ccb2ac62ee46)), closes [#30109](https://github.com/bitnami/charts/issues/30109)
+
+## <small>9.4.6 (2024-10-20)</small>
+
+* [bitnami/solr] Release 9.4.6 (#30001) ([5e45cf2](https://github.com/bitnami/charts/commit/5e45cf25de1677d32d4b22ed09cbc8fc52e66611)), closes [#30001](https://github.com/bitnami/charts/issues/30001)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>9.4.5 (2024-09-17)</small>
+
+* [bitnami/solr] test: :white_check_mark: Improve reliability of ginkgo tests (#29463) ([1e01d4e](https://github.com/bitnami/charts/commit/1e01d4e63c18c978e9db4bbafa44dbbf5a89695b)), closes [#29463](https://github.com/bitnami/charts/issues/29463)
+
+## <small>9.4.4 (2024-09-16)</small>
+
+* [bitnami/solr] Use common password manager to handle password (#29430) ([3ecd8bd](https://github.com/bitnami/charts/commit/3ecd8bd03ceb15b03d06744989dc6aafab51c34d)), closes [#29430](https://github.com/bitnami/charts/issues/29430)
+
+## <small>9.4.3 (2024-09-11)</small>
+
+* [bitnami/solr] fix: add apiVersion and kind to volumeClaimTemplates (#29356) ([1e10d96](https://github.com/bitnami/charts/commit/1e10d964f28584ac5f9d4de6dc9118ca504e49ba)), closes [#29356](https://github.com/bitnami/charts/issues/29356)
 
 ## <small>9.4.2 (2024-09-10)</small>
 

@@ -6,7 +6,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "external-dns.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -27,7 +27,8 @@ spec:
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (include "external-dns.createSecret" .) (and (eq .Values.provider "designate") .Values.designate.customCA.enabled) }}
       annotations:
         {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
-        {{- include "external-dns.podAnnotations" . | trim | nindent 8 }}
+        {{- $podAnnotations := include "common.tplvalues.merge" (dict "values" (list .Values.podAnnotations .Values.metrics.podAnnotations) "context" .) }}
+        {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if (include "external-dns.createSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
@@ -308,7 +309,13 @@ spec:
             # RFC 2136 arguments
             - --rfc2136-host={{ required "rfc2136.host must be supplied for provider 'rfc2136'" .Values.rfc2136.host }}
             - --rfc2136-port={{ .Values.rfc2136.port }}
-            - --rfc2136-zone={{ required "rfc2136.zone must be supplied for provider 'rfc2136'" .Values.rfc2136.zone }}
+              {{- $rfc2136Zones := prepend .Values.rfc2136.zones .Values.rfc2136.zone | uniq | compact }}
+              {{- if empty $rfc2136Zones }}
+                {{ fail "rfc2136.zone or rfc2136.zones must be supplied for provider 'rfc2136'" }}
+              {{- end }}
+              {{- range $rfc2136Zones }}
+            - --rfc2136-zone={{ . }}
+              {{- end }}
             - --rfc2136-min-ttl={{ .Values.rfc2136.minTTL }}
               {{- if .Values.rfc2136.tsigAxfr }}
             - --rfc2136-tsig-axfr
@@ -346,12 +353,18 @@ spec:
             - --txt-encrypt-enabled
             - --txt-encrypt-aes-key=$(TXT_AES_ENCRYPTION_KEY)
             {{- end }}
-            {{- range $key, $value := .Values.extraArgs }}
-             # Extra arguments
-              {{- if $value }}
+            {{- if .Values.extraArgs }}
+              {{- range $key, $value := .Values.extraArgs }}
+            # Extra arguments
+                {{- if kindIs "slice" $value }}
+                  {{- range $val := $value }}
+            - --{{ $key }}={{ $val }}
+                  {{- end }}
+                {{- else if $value }}
             - --{{ $key }}={{ $value }}
-              {{- else }}
+                {{- else }}
             - --{{ $key }}
+                {{- end }}
               {{- end }}
             {{- end }}
           {{- end }}
@@ -856,10 +869,10 @@ spec:
             secretName: {{ template "external-dns.secretName" . }}
           {{- else if .Values.azure.useWorkloadIdentityExtension }}
           secret:
-            secretName: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "common.names.fullname" . }}
           {{- else if .Values.azure.useManagedIdentityExtension }}
           secret:
-            secretName: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "common.names.fullname" . }}
           {{- else }}
           hostPath:
             path: /etc/kubernetes/azure.json
@@ -894,7 +907,7 @@ spec:
         {{- if .Values.designate.customCA.enabled }}
         - name: designate-custom-ca
           configMap:
-            name: {{ template "external-dns.fullname" . }}
+            name: {{ template "common.names.fullname" . }}
             items:
             - key: {{ .Values.designate.customCA.filename }}
               path: {{ .Values.designate.customCA.filename }}
@@ -908,7 +921,7 @@ spec:
         # Kerberos config volume
         - name: krb5config
           configMap:
-            name: {{ template "external-dns.fullname" . }}
+            name: {{ template "common.names.fullname" . }}
             items:
             - key: "krb5.conf"
               path: "krb5.conf"
@@ -917,7 +930,7 @@ spec:
         # TransIP volume(s)
         - name: transip-api-key
           secret:
-            secretName: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "common.names.fullname" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)

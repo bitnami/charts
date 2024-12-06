@@ -166,5 +166,7 @@ The chart was deployed enabling WebDAV, to access it from outside the cluster fo
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.mariadb.image }}
+{{- include "common.warnings.rollingTag" .Values.postgresql.image }}
 {{- include "seaweedfs.validateValues" . }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.mariadb.image .Values.postgresql.image) "context" $) }}

@@ -1,8 +1,34 @@
 # Changelog
 
-## 2.1.14 (2024-09-06)
+## 2.1.20 (2024-12-04)
 
-* [bitnami/multus-cni] Release 2.1.14 ([#29262](https://github.com/bitnami/charts/pull/29262))
+* [bitnami/multus-cni] Release 2.1.20 ([#30767](https://github.com/bitnami/charts/pull/30767))
+
+## <small>2.1.19 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/multus-cni] Release 2.1.19 (#30284) ([3d6966b](https://github.com/bitnami/charts/commit/3d6966bf4434f1bdba64b552fa41442c93b00785)), closes [#30284](https://github.com/bitnami/charts/issues/30284)
+
+## <small>2.1.18 (2024-10-16)</small>
+
+* [bitnami/multus-cni] Release 2.1.18 (#29953) ([858b84e](https://github.com/bitnami/charts/commit/858b84ec9bc20f2775e01dbfe05d2eb190579f21)), closes [#29953](https://github.com/bitnami/charts/issues/29953)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.1.17 (2024-10-08)</small>
+
+* [bitnami/multus-cni] Release 2.1.17 (#29810) ([bc840b6](https://github.com/bitnami/charts/commit/bc840b623c9317a0c2c95602f0755301a7b8849c)), closes [#29810](https://github.com/bitnami/charts/issues/29810)
+
+## <small>2.1.16 (2024-10-02)</small>
+
+* [bitnami/multus-cni] Release 2.1.16 (#29709) ([5aa9aa4](https://github.com/bitnami/charts/commit/5aa9aa4bc1cb7aebb8cf2ddfa72fc221da5ebf6f)), closes [#29709](https://github.com/bitnami/charts/issues/29709)
+
+## <small>2.1.15 (2024-09-16)</small>
+
+* [bitnami/multus-cni] Release 2.1.15 (#29452) ([6d377f7](https://github.com/bitnami/charts/commit/6d377f7d0d502b901dc6248f9fa9577f07ba2255)), closes [#29452](https://github.com/bitnami/charts/issues/29452)
+
+## <small>2.1.14 (2024-09-06)</small>
+
+* [bitnami/multus-cni] Release 2.1.14 (#29262) ([a2c18c7](https://github.com/bitnami/charts/commit/a2c18c736e7d22cfa47284179d314958d1689927)), closes [#29262](https://github.com/bitnami/charts/issues/29262)
 
 ## <small>2.1.13 (2024-08-27)</small>
 

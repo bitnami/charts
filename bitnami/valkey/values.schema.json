@@ -31,9 +31,9 @@
         }
       }
     },
-    "master": {
+    "primary": {
       "type": "object",
-      "title": "Master replicas settings",
+      "title": "Primary replicas settings",
       "form": true,
       "properties": {
         "kind": {
@@ -45,7 +45,7 @@
         },
         "persistence": {
           "type": "object",
-          "title": "Persistence for master replicas",
+          "title": "Persistence for primary replicas",
           "form": true,
           "properties": {
             "enabled": {
@@ -64,7 +64,7 @@
               "sliderUnit": "Gi",
               "hidden": {
                 "value": false,
-                "path": "master/persistence/enabled"
+                "path": "primary/persistence/enabled"
               }
             }
           }
