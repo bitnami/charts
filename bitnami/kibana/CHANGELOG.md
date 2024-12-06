@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.4.0 (2024-12-05)
+## 11.4.0 (2024-12-06)
 
 * [bitnami/kibana] template server.publicBaseUrl in all variants ([#30807](https://github.com/bitnami/charts/pull/30807))
 
