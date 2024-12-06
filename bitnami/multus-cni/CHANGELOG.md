@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.1.20 (2024-12-04)
+## 2.1.21 (2024-12-06)
 
-* [bitnami/multus-cni] Release 2.1.20 ([#30767](https://github.com/bitnami/charts/pull/30767))
+* [bitnami/multus-cni] Release 2.1.21 ([#30823](https://github.com/bitnami/charts/pull/30823))
+
+## <small>2.1.20 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/multus-cni] Release 2.1.20 (#30767) ([f33ba05](https://github.com/bitnami/charts/commit/f33ba05a18232d34af20ed64cb74f85de406e042)), closes [#30767](https://github.com/bitnami/charts/issues/30767)
 
 ## <small>2.1.19 (2024-11-07)</small>
 
