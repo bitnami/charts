@@ -1,5 +1,9 @@
 # Changelog
 
+## 22.3.2 (2024-12-06)
+
+* [bitnami/airflow] Add Job Support to RBAC ([#30817](https://github.com/bitnami/charts/pull/30817))
+
 ## 22.3.1 (2024-11-27)
 
 * [bitnami/airflow] bugfix: extra volume/mounts should apply to setup-db job and wait-for-db init-container… ([#30646](https://github.com/bitnami/charts/pull/30646))
