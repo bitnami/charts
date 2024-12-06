@@ -1,6 +1,6 @@
 # Changelog
 
-## 18.2.7 (2024-12-05)
+## 18.2.7 (2024-12-06)
 
 * [bitnami/nginx] fix nginx init containers with writable file system ([#30810](https://github.com/bitnami/charts/pull/30810))
 
