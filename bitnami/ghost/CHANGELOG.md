@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.0.8 (2024-12-03)
+## 22.0.9 (2024-12-06)
 
-* [bitnami/ghost] Release 22.0.8 ([#30737](https://github.com/bitnami/charts/pull/30737))
+* [bitnami/ghost] Release 22.0.9 ([#30820](https://github.com/bitnami/charts/pull/30820))
+
+## <small>22.0.8 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/ghost] Release 22.0.8 (#30737) ([faf5cc9](https://github.com/bitnami/charts/commit/faf5cc9f40ad3a259812752d36790cf5a33d658d)), closes [#30737](https://github.com/bitnami/charts/issues/30737)
 
 ## <small>22.0.7 (2024-11-29)</small>
 
