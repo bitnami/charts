@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.6.2 (2024-12-06)
+## 10.6.2 (2024-12-07)
 
 * [bitnami/etcd] keep snapshot-pvc ([#30815](https://github.com/bitnami/charts/pull/30815))
 
