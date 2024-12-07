@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.3.2 (2024-12-06)
+## 22.3.2 (2024-12-07)
 
 * Add RBAC for Jobs in Airflow Role ([#30817](https://github.com/bitnami/charts/pull/30817))
 
