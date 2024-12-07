@@ -1,0 +1,50 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.worker.autoscaling.hpa.enabled }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: celery-worker
+    app.kubernetes.io/part-of: superset
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
+  minReplicas: {{ .Values.worker.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.worker.autoscaling.hpa.maxReplicas }}
+  metrics:
+    {{- if .Values.worker.autoscaling.hpa.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.worker.autoscaling.hpa.targetMemory  }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.worker.autoscaling.hpa.targetMemory }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.worker.autoscaling.hpa.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.worker.autoscaling.hpa.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.worker.autoscaling.hpa.targetCPU }}
+        {{- end }}
+    {{- end }}
+{{- end }}
