@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.4 (2024-11-17)
+## 1.0.5 (2024-12-05)
 
-* [bitnami/zipkin] Release 1.0.4 ([#30490](https://github.com/bitnami/charts/pull/30490))
+* [bitnami/zipkin] Release 1.0.5 ([#30796](https://github.com/bitnami/charts/pull/30796))
+
+## <small>1.0.4 (2024-11-17)</small>
+
+* [bitnami/zipkin] Release 1.0.4 (#30490) ([ec1cc79](https://github.com/bitnami/charts/commit/ec1cc794c1bda7408ba342029cea43194dc0ce2e)), closes [#30490](https://github.com/bitnami/charts/issues/30490)
 
 ## <small>1.0.3 (2024-11-08)</small>
 

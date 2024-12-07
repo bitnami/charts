@@ -1,8 +1,14 @@
 # Changelog
 
-## 0.1.14 (2024-11-29)
+## 0.1.15 (2024-12-07)
 
-* [bitnami/dremio] chore: :bulb: :memo: :rotating_light: Rename prometheus "@section" to avoid linter problems ([#30683](https://github.com/bitnami/charts/pull/30683))
+* [bitnami/dremio] Release 0.1.15 ([#30824](https://github.com/bitnami/charts/pull/30824))
+
+## <small>0.1.14 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/dremio] chore: :bulb: :memo: :rotating_light: Rename prometheus "@section" to avoid linter  ([2d4e2c3](https://github.com/bitnami/charts/commit/2d4e2c3f807ce5b892eed8a62643d76aef472abe)), closes [#30683](https://github.com/bitnami/charts/issues/30683)
 
 ## <small>0.1.13 (2024-10-28)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.4 (2024-11-09)
+## 9.0.5 (2024-12-03)
 
-* [bitnami/mastodon] Release 9.0.4 ([#30383](https://github.com/bitnami/charts/pull/30383))
+* [bitnami/mastodon] Release 9.0.5 ([#30738](https://github.com/bitnami/charts/pull/30738))
+
+## <small>9.0.4 (2024-11-09)</small>
+
+* [bitnami/mastodon] Release 9.0.4 (#30383) ([61061fc](https://github.com/bitnami/charts/commit/61061fc59a391e70de4782d64ce5e4a17d2115f1)), closes [#30383](https://github.com/bitnami/charts/issues/30383)
 
 ## <small>9.0.3 (2024-11-08)</small>
 

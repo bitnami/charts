@@ -164,7 +164,7 @@ controlplane:
   image:
     registry: docker.io
     repository: bitnami/chainloop-control-plane
-    tag: 0.134.0-debian-12-r0
+    tag: 0.135.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -241,7 +241,7 @@ controlplane:
     image:
       registry: docker.io
       repository: bitnami/chainloop-control-plane-migrations
-      tag: 0.134.0-debian-12-r0
+      tag: 0.135.0-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -988,7 +988,7 @@ cas:
   image:
     registry: docker.io
     repository: bitnami/chainloop-artifact-cas
-    tag: 0.134.0-debian-12-r0
+    tag: 0.135.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1741,7 +1741,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.41.1-debian-12-r8
+    tag: 2.41.1-debian-12-r9
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##

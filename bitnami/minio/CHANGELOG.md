@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.8.5 (2024-11-08)
+## 14.8.6 (2024-12-04)
 
-* [bitnami/minio] Release 14.8.5 ([#30312](https://github.com/bitnami/charts/pull/30312))
+* [bitnami/minio] Release 14.8.6 ([#30766](https://github.com/bitnami/charts/pull/30766))
+
+## <small>14.8.5 (2024-11-08)</small>
+
+* [bitnami/minio] Release 14.8.5 (#30312) ([b10ded8](https://github.com/bitnami/charts/commit/b10ded8570d4f70da7cc75a75685f4ff97a55717)), closes [#30312](https://github.com/bitnami/charts/issues/30312)
 
 ## <small>14.8.4 (2024-11-07)</small>
 

@@ -1,8 +1,14 @@
 # Changelog
 
-## 3.2.15 (2024-11-07)
+## 3.2.16 (2024-12-04)
 
-* [bitnami/kubernetes-event-exporter] Release 3.2.15 ([#30279](https://github.com/bitnami/charts/pull/30279))
+* [bitnami/kubernetes-event-exporter] Release 3.2.16 ([#30761](https://github.com/bitnami/charts/pull/30761))
+
+## <small>3.2.15 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kubernetes-event-exporter] Release 3.2.15 (#30279) ([71e04cf](https://github.com/bitnami/charts/commit/71e04cfdd3a035a210bd8ead7b4b726734249d2b)), closes [#30279](https://github.com/bitnami/charts/issues/30279)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.2.14 (2024-10-08)</small>
 
