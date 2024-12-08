@@ -468,7 +468,7 @@ thanos: objstore configuration
 {{- if and .Values.receive.enabled .Values.receive.autoscaling.enabled (eq .Values.receive.mode "standalone") -}}
 thanos: receive configuration
     Thanos receive component cannot be enabled with autoscaling and standalone mode at the same time or the receive hashring will not be properly configured.
-    To achieve autoscaling, 
+    To achieve autoscaling,
     1) Set the 'receive.mode' to 'dual-mode' (see ref: https://github.com/thanos-io/thanos/blob/release-0.22/docs/proposals-accepted/202012-receive-split.md)
     2) Set the 'receive.existingConfigMap' the same as here https://github.com/observatorium/thanos-receive-controller/blob/7140e9476289b57b815692c3ec2dfd95b5fb4b6b/examples/manifests/deployment.yaml#L29
     3) Set the 'receive.statefulsetLabels' to:
@@ -540,11 +540,15 @@ thanos: storegateway.sharded.service.grpc.nodePorts
 {{- define "thanos.validateValues.storegateway.sharded.length" -}}
 {{/* Get number of shards */}}
 {{- $shards := int 0 }}
+{{- $hashShards := int 1 }}
+{{- $timeShards := int 1 }}
 {{- if .context.Values.storegateway.sharded.hashPartitioning.shards }}
-  {{- $shards = int .context.Values.storegateway.sharded.hashPartitioning.shards }}
-{{- else }}
-  {{- $shards = len .context.Values.storegateway.sharded.timePartitioning }}
+  {{- $hashShards = int .context.Values.storegateway.sharded.hashPartitioning.shards }}
 {{- end }}
+{{- if not (empty .context.Values.storegateway.sharded.timePartitioning) }}
+  {{- $timeShards = len .context.Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+{{- $shards = mul $hashShards $timeShards }}
 {{- $propertyLength := (len .property) -}}
 {{/* Validate property */}}
 {{- if ne $shards $propertyLength -}}
