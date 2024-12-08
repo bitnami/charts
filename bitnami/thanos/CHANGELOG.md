@@ -1,5 +1,9 @@
 # Changelog
 
+## 15.8.5 (2024-12-07)
+
+* [bitnami/thanos] Allow for shards that are both time and hash partitioned. ([#30826](https://github.com/bitnami/charts/pull/30826))
+
 ## 15.8.4 (2024-12-04)
 
 * [bitnami/thanos] Release 15.8.4 ([#30783](https://github.com/bitnami/charts/pull/30783))
