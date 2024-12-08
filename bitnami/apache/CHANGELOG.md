@@ -1,8 +1,14 @@
 # Changelog
 
-## 11.2.22 (2024-10-29)
+## 11.2.23 (2024-12-08)
 
-* [bitnami/apache] Release 11.2.22 ([#30118](https://github.com/bitnami/charts/pull/30118))
+* [bitnami/apache] Release 11.2.23 ([#30827](https://github.com/bitnami/charts/pull/30827))
+
+## <small>11.2.22 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/apache] Release 11.2.22 (#30118) ([4d149a0](https://github.com/bitnami/charts/commit/4d149a0c7bb99f680887ae1184bf058b6a6a7fe5)), closes [#30118](https://github.com/bitnami/charts/issues/30118)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>11.2.21 (2024-10-16)</small>
 
