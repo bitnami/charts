@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.0.0 (2024-11-08)
+## 18.0.1 (2024-12-08)
 
-* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30356](https://github.com/bitnami/charts/pull/30356))
+* [bitnami/phpmyadmin] Release 18.0.1 ([#30828](https://github.com/bitnami/charts/pull/30828))
+
+## 18.0.0 (2024-11-12)
+
+* [bitnami/phpmyadmin] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30356) ([51d5755](https://github.com/bitnami/charts/commit/51d5755e62be68f8937c8b03c1efcee03272e785)), closes [#30356](https://github.com/bitnami/charts/issues/30356)
 
 ## <small>17.0.9 (2024-11-08)</small>
 
