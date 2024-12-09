@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.9 (2024-12-06)
+## 22.0.10 (2024-12-09)
 
-* [bitnami/ghost] Release 22.0.9 ([#30820](https://github.com/bitnami/charts/pull/30820))
+* [bitnami/ghost] Release 22.0.10 ([#30831](https://github.com/bitnami/charts/pull/30831))
+
+## <small>22.0.9 (2024-12-06)</small>
+
+* [bitnami/ghost] Release 22.0.9 (#30820) ([90a3c1f](https://github.com/bitnami/charts/commit/90a3c1f68f0c01c63fbcba8b79295388a0e0f544)), closes [#30820](https://github.com/bitnami/charts/issues/30820)
 
 ## <small>22.0.8 (2024-12-03)</small>
 
