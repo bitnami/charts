@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.3.1 (2024-11-07)
+## 19.3.2 (2024-12-03)
 
-* [bitnami/contour] Release 19.3.1 ([#30260](https://github.com/bitnami/charts/pull/30260))
+* [bitnami/contour] Release 19.3.2 ([#30745](https://github.com/bitnami/charts/pull/30745))
+
+## <small>19.3.1 (2024-11-07)</small>
+
+* [bitnami/contour] Release 19.3.1 (#30260) ([4910a21](https://github.com/bitnami/charts/commit/4910a21b12108eec0195cf6388334d09ad3c81c0)), closes [#30260](https://github.com/bitnami/charts/issues/30260)
 
 ## 19.3.0 (2024-11-06)
 

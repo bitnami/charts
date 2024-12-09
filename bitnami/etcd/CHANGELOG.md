@@ -1,8 +1,15 @@
 # Changelog
 
+## 10.6.1 (2024-12-04)
+
+* [bitnami/etcd] Release 10.6.1 ([#30746](https://github.com/bitnami/charts/pull/30746))
+
 ## 10.6.0 (2024-12-02)
 
-* [bitnami/etcd] Add loadBalancerClass for Etcd chart ([#30697](https://github.com/bitnami/charts/pull/30697))
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/etcd] Add loadBalancerClass for Etcd chart (#30697) ([7ee741a](https://github.com/bitnami/charts/commit/7ee741ab42e6d1f22c7f3dca386542d7be801dac)), closes [#30697](https://github.com/bitnami/charts/issues/30697)
 
 ## <small>10.5.3 (2024-11-12)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.1 (2024-12-01)
+## 2.1.2 (2024-12-02)
 
-* [bitnami/valkey] Release 2.1.1 ([#30703](https://github.com/bitnami/charts/pull/30703))
+* [bitnami/valkey] Fix broken failover in sentinel setups ([#30689](https://github.com/bitnami/charts/pull/30689))
+
+## <small>2.1.1 (2024-12-01)</small>
+
+* [bitnami/valkey] Release 2.1.1 (#30703) ([bfda05c](https://github.com/bitnami/charts/commit/bfda05c36504559d998d6f87a70d687c17741c09)), closes [#30703](https://github.com/bitnami/charts/issues/30703)
 
 ## 2.1.0 (2024-11-29)
 

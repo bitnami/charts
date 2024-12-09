@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.4.9 (2024-11-11)
+## 8.4.10 (2024-12-04)
 
-* [bitnami/nats] Expose `publishNotReadyAddresses` on headless service ([#30393](https://github.com/bitnami/charts/pull/30393))
+* [bitnami/nats] Release 8.4.10 ([#30771](https://github.com/bitnami/charts/pull/30771))
+
+## <small>8.4.9 (2024-11-12)</small>
+
+* [bitnami/nats] Expose `publishNotReadyAddresses` on headless service (#30393) ([1b34ff8](https://github.com/bitnami/charts/commit/1b34ff8d81fb1441ce91a92855b3834613ecefb8)), closes [#30393](https://github.com/bitnami/charts/issues/30393)
 
 ## <small>8.4.8 (2024-11-08)</small>
 

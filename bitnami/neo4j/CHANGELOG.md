@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.16 (2024-10-31)
+## 0.1.17 (2024-12-09)
 
-* [bitnami/neo4j] Release 0.1.16 ([#30153](https://github.com/bitnami/charts/pull/30153))
+* [bitnami/neo4j] Release 0.1.17 ([#30841](https://github.com/bitnami/charts/pull/30841))
+
+## <small>0.1.16 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/neo4j] Release 0.1.16 (#30153) ([d3bff55](https://github.com/bitnami/charts/commit/d3bff55c6eee70c87740fc60e26c3bb798f91e53)), closes [#30153](https://github.com/bitnami/charts/issues/30153)
 
 ## <small>0.1.15 (2024-10-18)</small>
 

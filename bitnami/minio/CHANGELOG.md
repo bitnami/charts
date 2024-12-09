@@ -1,8 +1,10 @@
 # Changelog
 
-## 14.8.6 (2024-12-03)
+
+## 14.8.9 (2024-12-03)
 
 * [bitnami/minio]: Templating sleep sleep time so that it can be passed using values.yaml ([#30718](https://github.com/bitnami/charts/pull/30718))
+
 
 ## <small>14.8.5 (2024-11-08)</small>
 

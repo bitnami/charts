@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.23 (2024-11-20)
+## 1.3.24 (2024-12-03)
 
-* [bitnami/cert-manager] Release 1.3.23 ([#30552](https://github.com/bitnami/charts/pull/30552))
+* [bitnami/cert-manager] Release 1.3.24 ([#30739](https://github.com/bitnami/charts/pull/30739))
+
+## <small>1.3.23 (2024-11-20)</small>
+
+* [bitnami/cert-manager] Release 1.3.23 (#30552) ([555fa36](https://github.com/bitnami/charts/commit/555fa36440a6344259ca94a1890029d476552c55)), closes [#30552](https://github.com/bitnami/charts/issues/30552)
 
 ## <small>1.3.22 (2024-11-07)</small>
 
