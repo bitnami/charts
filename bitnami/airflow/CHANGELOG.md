@@ -1,5 +1,9 @@
 # Changelog
 
+## 22.3.2 (2024-12-09)
+
+* [bitnami/airflow] bugfix: Fix Airflow HPA, VPA for Worker and Triggerer typo [#30834](https://github.com/bitnami/charts/issues/30834)
+
 ## 22.3.1 (2024-11-27)
 
 * [bitnami/airflow] bugfix: extra volume/mounts should apply to setup-db job and wait-for-db init-container… ([#30646](https://github.com/bitnami/charts/pull/30646))
