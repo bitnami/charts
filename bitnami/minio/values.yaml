@@ -236,7 +236,6 @@ provisioning:
   ##
   enabled: false
   sleepTime: 5
-  
   ## @param provisioning.schedulerName Name of the k8s scheduler (other than default) for MinIO&reg; provisioning
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
