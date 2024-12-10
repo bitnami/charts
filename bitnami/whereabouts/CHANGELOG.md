@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.1.17 (2024-12-04)
+## 1.2.0 (2024-12-10)
 
-* [bitnami/whereabouts] Release 1.1.17 ([#30781](https://github.com/bitnami/charts/pull/30781))
+* [bitnami/whereabouts] Detect non-standard images ([#30953](https://github.com/bitnami/charts/pull/30953))
+
+## <small>1.1.17 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/whereabouts] Release 1.1.17 (#30781) ([168257a](https://github.com/bitnami/charts/commit/168257a00e4a297ed4efadeddaafa395553fc71f)), closes [#30781](https://github.com/bitnami/charts/issues/30781)
 
 ## <small>1.1.16 (2024-11-08)</small>
 
