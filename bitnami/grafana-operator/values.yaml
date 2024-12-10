@@ -17,6 +17,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -772,11 +777,6 @@ grafana:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
-  ## Security parameters
-  ##
-  security:
-    ## @param global.security.allowInsecureImages Allows skipping image verification
-    allowInsecureImages: false
     ## @param grafana.persistence.existingVolume Define the existingVolume for the persistent storage provisioned outside this chart
     ## https://github.com/grafana-operator/grafana-operator/blob/master/deploy/examppersistentvolume/Grafana-existingVolume.yaml
     existingVolume: ""
