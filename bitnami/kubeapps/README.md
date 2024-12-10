@@ -1014,7 +1014,11 @@ After that you should be able to access the new version of Kubeapps. If the abov
 
 Feel free to [open an issue](https://github.com/vmware-tanzu/kubeapps/issues/new) if you have any questions!
 
-## Upgrading Kubeapps
+## Upgrading
+
+### To 17.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850). Kubeapps
 
 You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace in which Kubeapps is installed (`kubeapps` if you followed the instructions in this guide) and click on the "Upgrade" button. Select the new version and confirm.
 
