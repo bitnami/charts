@@ -1,8 +1,13 @@
 # Changelog
 
-## 10.1.1 (2024-12-04)
+## 10.2.0 (2024-12-10)
 
-* [bitnami/kube-prometheus] Release 10.1.1 ([#30773](https://github.com/bitnami/charts/pull/30773))
+* [bitnami/kube-prometheus] Detect non-standard images ([#30912](https://github.com/bitnami/charts/pull/30912))
+
+## <small>10.1.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/kube-prometheus] Release 10.1.1 (#30773) ([66daaac](https://github.com/bitnami/charts/commit/66daaace6d6db9320e863a225bafa8394bb5c0ea)), closes [#30773](https://github.com/bitnami/charts/issues/30773)
 
 ## 10.1.0 (2024-11-26)
 
