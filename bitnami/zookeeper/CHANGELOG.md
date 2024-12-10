@@ -1,8 +1,15 @@
 # Changelog
 
-## 13.6.1 (2024-12-04)
+## 13.7.0 (2024-12-10)
 
-* [bitnami/zookeeper] Release 13.6.1 ([#30786](https://github.com/bitnami/charts/pull/30786))
+* [bitnami/zookeeper] Detect non-standard images ([#30915](https://github.com/bitnami/charts/pull/30915))
+
+## <small>13.6.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/zookeeper] Release 13.6.1 (#30786) ([684e90c](https://github.com/bitnami/charts/commit/684e90c974b21a319ffdbd4aefec4d0eb97d55b6)), closes [#30786](https://github.com/bitnami/charts/issues/30786)
 
 ## 13.6.0 (2024-11-05)
 
