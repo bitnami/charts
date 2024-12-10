@@ -1065,6 +1065,11 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## @param persistence.accessModes PVC Access Mode for Parse volume
   ##
   accessModes:
