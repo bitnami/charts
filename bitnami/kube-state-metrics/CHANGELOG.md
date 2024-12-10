@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.2.17 (2024-12-04)
+## 4.3.0 (2024-12-10)
 
-* [bitnami/kube-state-metrics] Release 4.2.17 ([#30759](https://github.com/bitnami/charts/pull/30759))
+* [bitnami/kube-state-metrics] Detect non-standard images ([#30913](https://github.com/bitnami/charts/pull/30913))
+
+## <small>4.2.17 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/kube-state-metrics] Release 4.2.17 (#30759) ([7ac7caa](https://github.com/bitnami/charts/commit/7ac7caa6377a085be8d07a5cfc18be367ad266fd)), closes [#30759](https://github.com/bitnami/charts/issues/30759)
 
 ## <small>4.2.16 (2024-11-08)</small>
 
