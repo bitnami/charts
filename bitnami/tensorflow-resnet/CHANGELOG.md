@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.15 (2024-11-08)
+## 4.3.0 (2024-12-10)
 
-* [bitnami/tensorflow-resnet] Unify seLinuxOptions default value ([#30321](https://github.com/bitnami/charts/pull/30321))
+* [bitnami/tensorflow-resnet] Detect non-standard images ([#30969](https://github.com/bitnami/charts/pull/30969))
+
+## <small>4.2.15 (2024-11-11)</small>
+
+* [bitnami/tensorflow-resnet] Unify seLinuxOptions default value (#30321) ([e7c7a90](https://github.com/bitnami/charts/commit/e7c7a90baca50093843b502c12f45837ef0a7b6d)), closes [#30321](https://github.com/bitnami/charts/issues/30321)
 
 ## <small>4.2.14 (2024-11-01)</small>
 
