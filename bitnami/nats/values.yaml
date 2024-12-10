@@ -929,6 +929,11 @@ persistence:
   ##   set, choosing the default provisioner
   ##
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## @param persistence.accessModes PVC Access modes
   ##
   accessModes:
