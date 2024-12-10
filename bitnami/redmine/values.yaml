@@ -19,6 +19,11 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -578,11 +583,6 @@ persistence:
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
   storageClass: ""
-  ## Security parameters
-  ##
-  security:
-    ## @param global.security.allowInsecureImages Allows skipping image verification
-    allowInsecureImages: false
   ## @param persistence.accessModes [array] Persistent Volume access modes
   ##
   accessModes:
