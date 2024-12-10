@@ -269,11 +269,6 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## Security parameters
-  ##
-  security:
-    ## @param global.security.allowInsecureImages Allows skipping image verification
-    allowInsecureImages: false
   ## @param persistence.accessModes PVC Access Mode for Moodle
   ## Requires persistence.enabled: true
   ## If defined, and no customStorageClass is defined, then
