@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.2.4 (2024-12-09)
+## 24.2.4 (2024-12-10)
 
 * [bitnami/keycloak] Update Keycloak Config CLI ([#30840](https://github.com/bitnami/charts/pull/30840))
 
