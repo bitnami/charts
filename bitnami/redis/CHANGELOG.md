@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.4.1 (2024-12-10)
+## 20.5.0 (2024-12-10)
 
-* [bitnami/redis] CA shouldn't be mandatory when TLS is enabled ([#30520](https://github.com/bitnami/charts/pull/30520))
+* [bitnami/redis] Detect non-standard images ([#30942](https://github.com/bitnami/charts/pull/30942))
+
+## <small>20.4.1 (2024-12-10)</small>
+
+* [bitnami/redis] CA shouldn't be mandatory when TLS is enabled (#30520) ([85219eb](https://github.com/bitnami/charts/commit/85219eb721efa640075325a1812d9ca8316a0a1a)), closes [#30520](https://github.com/bitnami/charts/issues/30520)
 
 ## 20.4.0 (2024-12-02)
 
