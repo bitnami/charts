@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.51 (2024-12-10)
+## 2.1.0 (2024-12-10)
 
-* [bitnami/chainloop] Release 2.0.51 ([#30849](https://github.com/bitnami/charts/pull/30849))
+* [bitnami/chainloop] Detect non-standard images ([#30869](https://github.com/bitnami/charts/pull/30869))
+
+## <small>2.0.51 (2024-12-10)</small>
+
+* [bitnami/chainloop] Release 2.0.51 (#30849) ([e07a5ac](https://github.com/bitnami/charts/commit/e07a5aca0dc34bdbd4e1c074f529b6446563c860)), closes [#30849](https://github.com/bitnami/charts/issues/30849)
 
 ## <small>2.0.50 (2024-12-09)</small>
 
