@@ -141,4 +141,4 @@ In order to replicate the container startup scripts execute this command:
 {{- end }}
 {{ include "elasticsearch.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "coordinating" "copyTlsCerts" "data" "ingest" "master" "metrics" "sysctlImage" "volumePermissions") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.copyTlsCerts.image .Values.metrics.image .Values.volumePermissions.image .Values.sysctlImage ) "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.copyTlsCerts.image .Values.metrics.image .Values.volumePermissions.image .Values.sysctlImage ) "context" $) }}{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.copyTlsCerts.image .Values.metrics.image .Values.volumePermissions.image .Values.sysctlImage ) "context" $) }}
