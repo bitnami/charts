@@ -1133,6 +1133,11 @@ backend:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
     ## @param backend.persistence.annotations Persistent Volume Claim annotations
     ##
     annotations: {}
