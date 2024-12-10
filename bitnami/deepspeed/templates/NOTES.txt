@@ -79,4 +79,4 @@ Then configure your SSH client to use that key.
 {{ include "deepspeed.v0.validateValues" . }}
 {{ include "deepspeed.v0.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "client" "volumePermissions" "worker") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.gitImage .Values.volumePermissions.image) "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.gitImage .Values.volumePermissions.image) "context" $) }}{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.gitImage .Values.volumePermissions.image) "context" $) }}
