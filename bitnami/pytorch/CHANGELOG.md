@@ -1,8 +1,14 @@
 # Changelog
 
-## 4.2.23 (2024-12-10)
+## 4.3.0 (2024-12-10)
 
-* [bitnami/pytorch] Release 4.2.23 ([#30859](https://github.com/bitnami/charts/pull/30859))
+* [bitnami/pytorch] Detect non-standard images ([#30939](https://github.com/bitnami/charts/pull/30939))
+
+## <small>4.2.23 (2024-12-10)</small>
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/pytorch] Release 4.2.23 (#30859) ([d5fbf33](https://github.com/bitnami/charts/commit/d5fbf33084bb513868174b99340c16d49957b19a)), closes [#30859](https://github.com/bitnami/charts/issues/30859)
 
 ## <small>4.2.22 (2024-11-08)</small>
 
