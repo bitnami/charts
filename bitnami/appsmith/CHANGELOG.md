@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.12 (2024-12-06)
+## 5.1.0 (2024-12-10)
 
-* [bitnami/appsmith] Release 5.0.12 ([#30816](https://github.com/bitnami/charts/pull/30816))
+* [bitnami/appsmith] Detect non-standard images ([#30863](https://github.com/bitnami/charts/pull/30863))
+
+## <small>5.0.12 (2024-12-06)</small>
+
+* [bitnami/appsmith] Release 5.0.12 (#30816) ([e2cd722](https://github.com/bitnami/charts/commit/e2cd7226a84b5cb63b17d590e1000e36f2f893d4)), closes [#30816](https://github.com/bitnami/charts/issues/30816)
 
 ## <small>5.0.11 (2024-12-04)</small>
 
