@@ -172,3 +172,4 @@ The chart was deployed enabling WebDAV, to access it from outside the cluster fo
 {{- include "common.warnings.rollingTag" .Values.postgresql.image }}
 {{- include "seaweedfs.validateValues" . }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.mariadb.image .Values.postgresql.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.mariadb.image .Values.postgresql.image) "context" $) }}

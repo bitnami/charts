@@ -1,8 +1,13 @@
 # Changelog
 
+## 4.3.1 (2024-12-10)
+
+* [bitnami/kube-state-metrics] Fix typo in NOTES.txt ([#30930](https://github.com/bitnami/charts/pull/30930))
+
 ## 4.3.0 (2024-12-10)
 
-* [bitnami/kube-state-metrics] Detect non-standard images ([#30913](https://github.com/bitnami/charts/pull/30913))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kube-state-metrics] Detect non-standard images (#30913) ([ad6e78f](https://github.com/bitnami/charts/commit/ad6e78f46b05f345be2b8b03f288ba3cc64ead3a)), closes [#30913](https://github.com/bitnami/charts/issues/30913)
 
 ## <small>4.2.17 (2024-12-04)</small>
 

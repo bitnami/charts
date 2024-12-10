@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.4 (2024-12-10)
+## 17.1.1 (2024-12-10)
 
-* [bitnami/kubeapps] Release 17.0.4 ([#30972](https://github.com/bitnami/charts/pull/30972))
+* [bitnami/kubeapps] Release 17.1.1 ([#30972](https://github.com/bitnami/charts/pull/30972))
+
+## 17.1.0 (2024-12-10)
+
+* [bitnami/kubeapps] Detect non-standard images ([#30914](https://github.com/bitnami/charts/pull/30914))
 
 ## <small>17.0.3 (2024-11-08)</small>
 

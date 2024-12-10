@@ -1,8 +1,14 @@
 # Changelog
 
-## 6.3.16 (2024-12-04)
+## 6.4.0 (2024-12-10)
 
-* [bitnami/metallb] Release 6.3.16 ([#30763](https://github.com/bitnami/charts/pull/30763))
+* [bitnami/metallb] Detect non-standard images ([#30923](https://github.com/bitnami/charts/pull/30923))
+
+## <small>6.3.16 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/metallb] Release 6.3.16 (#30763) ([2b81e7f](https://github.com/bitnami/charts/commit/2b81e7f231fd340f909f3bc5c0fbb96ecfa0bb3a)), closes [#30763](https://github.com/bitnami/charts/issues/30763)
 
 ## <small>6.3.15 (2024-11-08)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
+## 11.2.0 (2024-12-10)
+
+* [bitnami/redis-cluster] Detect non-standard images ([#30943](https://github.com/bitnami/charts/pull/30943))
+
 ## 11.1.0 (2024-11-26)
 
-* [bitnami/redis-cluster] feat: Set custom terminationGracePeriodSeconds for redis ([#30470](https://github.com/bitnami/charts/pull/30470))
+* [bitnami/redis-cluster] feat: Set custom terminationGracePeriodSeconds for redis (#30470) ([1cacaa5](https://github.com/bitnami/charts/commit/1cacaa54741ef79e47c8ca402ad97c9dbaa5103d)), closes [#30470](https://github.com/bitnami/charts/issues/30470)
 
 ## <small>11.0.8 (2024-11-11)</small>
 
