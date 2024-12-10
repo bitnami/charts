@@ -1612,6 +1612,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.7.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 4.0.0
 
 This major bumps the Grafana Loki version to its newest major, 3.x.x. This version includes a new storage schema, among other features like structured metadata support. These changes could potentially break your deployments. Please refer to the official [release notes](https://grafana.com/docs/loki/latest/release-notes/v3-0/) and documentation website for further details.
