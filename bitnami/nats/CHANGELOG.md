@@ -1,8 +1,15 @@
 # Changelog
 
-## 8.4.10 (2024-12-04)
+## 8.5.0 (2024-12-10)
 
-* [bitnami/nats] Release 8.4.10 ([#30771](https://github.com/bitnami/charts/pull/30771))
+* [bitnami/nats] Detect non-standard images ([#30916](https://github.com/bitnami/charts/pull/30916))
+
+## <small>8.4.10 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/nats] Release 8.4.10 (#30771) ([2c67e6b](https://github.com/bitnami/charts/commit/2c67e6ba0bcd0b5a2603163a8ee932cf5efdd121)), closes [#30771](https://github.com/bitnami/charts/issues/30771)
 
 ## <small>8.4.9 (2024-11-12)</small>
 
