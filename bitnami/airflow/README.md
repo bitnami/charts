@@ -1283,6 +1283,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 22.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 22.2.0
 
 This minor version no longer expects custom Airflow configuration (set via the `configuration` parameter) to be provided as a string. Instead, it expects a dictionary with the configuration sections/keys/values. Find more info in the [section](#airflow-configuration-file) above.
