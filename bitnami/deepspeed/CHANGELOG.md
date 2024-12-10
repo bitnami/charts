@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.2.28 (2024-12-06)
+## 2.3.0 (2024-12-10)
 
-* [bitnami/deepspeed] Release 2.2.28 ([#30813](https://github.com/bitnami/charts/pull/30813))
+* [bitnami/deepspeed] Detect non-standard images ([#30875](https://github.com/bitnami/charts/pull/30875))
+
+## <small>2.2.28 (2024-12-06)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/deepspeed] Release 2.2.28 (#30813) ([c1702df](https://github.com/bitnami/charts/commit/c1702df266af754d4334c49caaac69100516a526)), closes [#30813](https://github.com/bitnami/charts/issues/30813)
 
 ## <small>2.2.27 (2024-11-26)</small>
 
