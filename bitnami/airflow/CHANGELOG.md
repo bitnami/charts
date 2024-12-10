@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.3.3 (2024-12-10)
+## 22.4.0 (2024-12-10)
 
-* [bitnami/airflow] Release 22.3.3 ([#30856](https://github.com/bitnami/charts/pull/30856))
+* [bitnami/airflow] Detect non-standard images ([#30860](https://github.com/bitnami/charts/pull/30860))
+
+## <small>22.3.3 (2024-12-10)</small>
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/airflow] Release 22.3.3 (#30856) ([651f475](https://github.com/bitnami/charts/commit/651f4751d1ac434c11b6706c894fa4cb535b8bbd)), closes [#30856](https://github.com/bitnami/charts/issues/30856)
 
 ## <small>22.3.2 (2024-12-10)</small>
 
