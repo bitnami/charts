@@ -596,6 +596,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### Upgrading CRDs
 
 By design, the `helm upgrade` command will not upgrade the `CustomResourceDefinition` objects, as stated in their [official documentation](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations). This is done to avoid the potential risks of upgrading CRD objects, such as data loss.
