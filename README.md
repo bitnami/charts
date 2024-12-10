@@ -70,7 +70,7 @@ Useful Helm Client Commands:
 
 ### A new commercial version of Bitnami open source containers and Helm charts
 
-Enterprises that love Bitnami can now purchase a Bitnami Premium subscription from [Arrow Electronics](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=bitnami&utm_medium=blog) and consume the containers and Helm charts right in Docker Hub. Bitnami Premium users will get access to private Docker Hub repositories with the same containers and Helm charts they are used to, plus new commercial features including:
+Enterprises that love Bitnami can now purchase a Bitnami Premium subscription from [Arrow Electronics](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=github&utm_medium=charts) and consume the containers and Helm charts right in Docker Hub. Bitnami Premium users will get access to private Docker Hub repositories with the same containers and Helm charts they are used to, plus new commercial features including:
 
 * Enterprise support for all 500+ Bitnami Premium packages
 * All LTS branches of all Bitnami application packages maintained up-to-date
@@ -89,7 +89,7 @@ Read on to learn more about Bitnami Premium and the coming changes to the free B
 
 ### New goodness in Bitnami Premium
 
-Bitnami Premium is a new version of the content packaged by Bitnami that is sold through [Arrow Electronics](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=bitnami&utm_medium=blog). You can connect to an Arrow salesperson if you have any questions or want to purchase access. Once you buy Bitnami Premium, you will be given access to the Bitnami Premium registries in Docker Hub. You can then return to Docker Hub where you will have access to the Bitnami Premium containers, Helm charts, and software supply chain metadata from the new **/bitnamiprem** and **/bitnamichartsprem** orgs. These private repos are what enable you to pull without limits or caps. You will also see containers for all LTS branches continuously maintained up-to-date: for example, you will see PostgreSQL containers for versions 12, 13, 14, 15, 16, and 17; while in the free Bitnami catalog, you will only find version 17.
+Bitnami Premium is a new version of the content packaged by Bitnami that is sold through [Arrow Electronics](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=github&utm_medium=charts). You can connect to an Arrow salesperson if you have any questions or want to purchase access. Once you buy Bitnami Premium, you will be given access to the Bitnami Premium registries in Docker Hub. You can then return to Docker Hub where you will have access to the Bitnami Premium containers, Helm charts, and software supply chain metadata from the new **/bitnamiprem** and **/bitnamichartsprem** orgs. These private repos are what enable you to pull without limits or caps. You will also see containers for all LTS branches continuously maintained up-to-date: for example, you will see PostgreSQL containers for versions 12, 13, 14, 15, 16, and 17; while in the free Bitnami catalog, you will only find version 17.
 
 #### A middle ground between free Bitnami Application Catalog and Tanzu Application Catalog customized packages
 
@@ -111,7 +111,7 @@ Bitnami Premium differs from Tanzu Application Catalog in that, just like our fr
 
 Since Bitnami’s beginning over a decade ago, our many partnerships have propelled us to be a leading publisher of open source software. Bitnami cloud images drive billions of compute hours annually for our hyperscale cloud partners, for example, and our containers and Helm charts are pulled hundreds of millions of times per month from our partners at Docker Hub.
 
-We now begin our newest endeavor with [Arrow Electronics](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=bitnami&utm_medium=blog). Arrow is a global leader in IT distribution. Arrow is known for its ability to help businesses navigate the complexities of modern IT landscapes, providing the tools, technology, and expertise needed to drive digital transformation and operational efficiency.
+We now begin our newest endeavor with [Arrow Electronics](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=github&utm_medium=charts). Arrow is a global leader in IT distribution. Arrow is known for its ability to help businesses navigate the complexities of modern IT landscapes, providing the tools, technology, and expertise needed to drive digital transformation and operational efficiency.
 
 Arrow will sell Bitnami Premium access through its website. Bitnami users interested in purchasing Bitnami Premium will find a streamlined process to pay, share their Docker Hub user identification, and gain access to the private Bitnami Premium repos in Docker Hub. Bitnami Premium customers can add and remove users through Arrow's support team, as well as submit tickets for enterprise support jointly delivered by the software packaging experts at Arrow and Bitnami.
 
@@ -131,7 +131,7 @@ Bitnami has invested hundreds of thousands of developer hours in constructing a 
 
 ### Keep an eye out for more updates
 
-We are excited to deliver an enhanced experience for [Bitnami Premium](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=bitnami&utm_medium=blog) users, but this is just the beginning. We will continue to build on the value that all of our Bitnami community members, both free and paid, realize through our many years of experience publishing high-quality open source software packages for the world’s developers.
+We are excited to deliver an enhanced experience for [Bitnami Premium](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=github&utm_medium=charts) users, but this is just the beginning. We will continue to build on the value that all of our Bitnami community members, both free and paid, realize through our many years of experience publishing high-quality open source software packages for the world’s developers.
 
 Keep abreast of our blog for new updates and features, and be sure to check to follow us on [X (formerly Twitter)](https://x.com/bitnami) and [LinkedIn](https://www.linkedin.com/company/bitnami/).
 
