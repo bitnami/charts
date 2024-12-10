@@ -1,8 +1,13 @@
 # Changelog
 
+## 5.1.1 (2024-12-10)
+
+* [bitnami/jaeger] Fix typo in NOTES.txt ([#30909](https://github.com/bitnami/charts/pull/30909))
+
 ## 5.1.0 (2024-12-10)
 
-* [bitnami/jaeger] Detect non-standard images ([#30881](https://github.com/bitnami/charts/pull/30881))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/jaeger] Detect non-standard images (#30881) ([4773008](https://github.com/bitnami/charts/commit/47730085e639cddd081ec93d62339322a36b0fc5)), closes [#30881](https://github.com/bitnami/charts/issues/30881)
 
 ## <small>5.0.1 (2024-12-04)</small>
 
