@@ -53,3 +53,4 @@ Read the upstream vault documentation for unsealing and initializing the instanc
 {{- include "vault.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "csiProvider.agent" "csiProvider.provider" "injector" "server" "volumePermissions") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.server.image .Values.csiProvider.image .Values.injector.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.server.image .Values.csiProvider.image .Values.injector.image .Values.volumePermissions.image) "context" $) }}
