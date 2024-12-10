@@ -1,8 +1,13 @@
 # Changelog
 
+## 8.5.1 (2024-12-10)
+
+* [bitnami/nats] Release 8.5.1 ([#30974](https://github.com/bitnami/charts/pull/30974))
+
 ## 8.5.0 (2024-12-10)
 
-* [bitnami/nats] Detect non-standard images ([#30916](https://github.com/bitnami/charts/pull/30916))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nats] Detect non-standard images (#30916) ([8dc032e](https://github.com/bitnami/charts/commit/8dc032e182d5e6c31d9973b88c583b6888fcaaad)), closes [#30916](https://github.com/bitnami/charts/issues/30916)
 
 ## <small>8.4.10 (2024-12-04)</small>
 
