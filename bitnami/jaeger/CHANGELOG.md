@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.0.1 (2024-12-04)
+## 5.1.0 (2024-12-10)
 
-* [bitnami/jaeger] Release 5.0.1 ([#30758](https://github.com/bitnami/charts/pull/30758))
+* [bitnami/jaeger] Detect non-standard images ([#30881](https://github.com/bitnami/charts/pull/30881))
+
+## <small>5.0.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/jaeger] Release 5.0.1 (#30758) ([1672922](https://github.com/bitnami/charts/commit/16729228545387e22171fe81cb0982202363a1db)), closes [#30758](https://github.com/bitnami/charts/issues/30758)
 
 ## 5.0.0 (2024-11-20)
 
