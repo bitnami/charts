@@ -542,6 +542,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 9.5.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 9.0.3
 
 This version uses solr container image version `9.5.0-debian-12-r7` which removes `HDFS` module due to CVEs found in it.
