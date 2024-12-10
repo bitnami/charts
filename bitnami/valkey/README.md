@@ -1038,6 +1038,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 2.2.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 2.0.0
 
 This major updates all the references from `master/slave` to `primary/replica` to follow the upstream project strategy:
