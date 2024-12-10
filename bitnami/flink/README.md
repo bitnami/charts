@@ -375,6 +375,10 @@ The [Bitnami Flink](https://github.com/bitnami/containers/tree/main/bitnami/flin
 
 ## Upgrading
 
+### To 1.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 1.0.0
 
 This major bump changes the following security defaults:
