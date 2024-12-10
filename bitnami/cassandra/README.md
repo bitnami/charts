@@ -450,10 +450,6 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-### To 12.1.0
-
-This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
-
 It's necessary to set the `dbUser.password` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password and run the command below to upgrade your chart:
 
 ```console
@@ -463,6 +459,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/cassandra --set dbUs
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
+
+### To 12.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 12.0.0
 
