@@ -1,8 +1,13 @@
 # Changelog
 
-## 20.4.0 (2024-12-01)
+## 20.4.1 (2024-12-10)
 
-* [bitnami/redis] add extraPortsEnabled ([#30607](https://github.com/bitnami/charts/pull/30607))
+* [bitnami/redis] CA shouldn't be mandatory when TLS is enabled ([#30520](https://github.com/bitnami/charts/pull/30520))
+
+## 20.4.0 (2024-12-02)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/redis] add extraPortsEnabled (#30607) ([77a98fa](https://github.com/bitnami/charts/commit/77a98fa631f21a49b0c013d856cfb21ba090a0a6)), closes [#30607](https://github.com/bitnami/charts/issues/30607)
 
 ## 20.3.0 (2024-11-14)
 
