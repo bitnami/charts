@@ -6,7 +6,9 @@
 
 ## 17.1.0 (2024-12-10)
 
-* [bitnami/kubeapps] Detect non-standard images ([#30914](https://github.com/bitnami/charts/pull/30914))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/kubeapps] Detect non-standard images (#30914) ([2ff6384](https://github.com/bitnami/charts/commit/2ff6384c57f0d270bbe8651fc9908fca1978aa28)), closes [#30914](https://github.com/bitnami/charts/issues/30914)
 
 ## <small>17.0.3 (2024-11-08)</small>
 
