@@ -704,6 +704,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 19.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 Please carefully read through the guide "Upgrading Contour" at <https://projectcontour.io/resources/upgrading/>.
 
 ### To 15.0.0
