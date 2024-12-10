@@ -1,8 +1,14 @@
 # Changelog
 
-## 3.7.14 (2024-12-03)
+## 3.8.0 (2024-12-10)
 
-* [bitnami/grafana-tempo] Release 3.7.14 ([#30755](https://github.com/bitnami/charts/pull/30755))
+* [bitnami/grafana-tempo] Detect non-standard images ([#30885](https://github.com/bitnami/charts/pull/30885))
+
+## <small>3.7.14 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/grafana-tempo] Release 3.7.14 (#30755) ([e824b8d](https://github.com/bitnami/charts/commit/e824b8dc038b776f5bc78dacbe4e74116bdb4447)), closes [#30755](https://github.com/bitnami/charts/issues/30755)
 
 ## <small>3.7.13 (2024-11-07)</small>
 
