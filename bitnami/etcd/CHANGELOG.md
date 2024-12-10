@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.6.1 (2024-12-04)
+## 10.7.0 (2024-12-10)
 
-* [bitnami/etcd] Release 10.6.1 ([#30746](https://github.com/bitnami/charts/pull/30746))
+* [bitnami/etcd] Detect non-standard images ([#30895](https://github.com/bitnami/charts/pull/30895))
+
+## <small>10.6.1 (2024-12-04)</small>
+
+* [bitnami/etcd] Release 10.6.1 (#30746) ([9d81d81](https://github.com/bitnami/charts/commit/9d81d81ddbf73b9453468972a8c1501879888d32)), closes [#30746](https://github.com/bitnami/charts/issues/30746)
 
 ## 10.6.0 (2024-12-02)
 
