@@ -1,8 +1,14 @@
 # Changelog
 
-## 11.2.23 (2024-12-08)
+## 11.3.0 (2024-12-10)
 
-* [bitnami/apache] Release 11.2.23 ([#30827](https://github.com/bitnami/charts/pull/30827))
+* [bitnami/apache] Detect non-standard images ([#30857](https://github.com/bitnami/charts/pull/30857))
+
+## <small>11.2.23 (2024-12-08)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/apache] Release 11.2.23 (#30827) ([f504f07](https://github.com/bitnami/charts/commit/f504f07780487955d3391075cc82721df6601bd8)), closes [#30827](https://github.com/bitnami/charts/issues/30827)
 
 ## <small>11.2.22 (2024-10-29)</small>
 
