@@ -439,6 +439,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 6.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 6.0.0
 
 This major release includes the changes and features available in MetalLB from version 0.14.x. This new version includes some breaking changes like AddressPool removal or the several changes about the `webhook-server-cert secret`. For more details about MetaLB changes please visit [the release notes](https://metallb.universe.tf/release-notes/).
