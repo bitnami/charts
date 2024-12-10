@@ -1097,6 +1097,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 31.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 31.0.0
 
 This major release bumps the Kafka version to 3.9. Find notable changes in [kafka upgrade notes](https://kafka.apache.org/39/documentation.html#upgrade).
