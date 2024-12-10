@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.4.1 (2024-12-10)
+
+* [bitnami/pinniped] Release 2.4.1 ([#30975](https://github.com/bitnami/charts/pull/30975))
+
 ## 2.4.0 (2024-12-10)
 
-* [bitnami/pinniped] Detect non-standard images ([#30935](https://github.com/bitnami/charts/pull/30935))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/pinniped] Detect non-standard images (#30935) ([337fe9c](https://github.com/bitnami/charts/commit/337fe9c6f22c1a3afab25eef28118528d24b3737)), closes [#30935](https://github.com/bitnami/charts/issues/30935)
 
 ## <small>2.3.6 (2024-12-04)</small>
 
