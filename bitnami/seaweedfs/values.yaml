@@ -732,6 +732,11 @@ master:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
     ## @param master.persistence.annotations Persistent Volume Claim annotations
     ##
     annotations: {}
