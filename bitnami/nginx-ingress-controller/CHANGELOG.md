@@ -1,8 +1,14 @@
 # Changelog
 
-## 11.5.5 (2024-12-04)
+## 11.6.0 (2024-12-10)
 
-* [bitnami/nginx-ingress-controller] Release 11.5.5 ([#30768](https://github.com/bitnami/charts/pull/30768))
+* [bitnami/nginx-ingress-controller] Detect non-standard images ([#30961](https://github.com/bitnami/charts/pull/30961))
+
+## <small>11.5.5 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/nginx-ingress-controller] Release 11.5.5 (#30768) ([4ad3036](https://github.com/bitnami/charts/commit/4ad3036671889e830f1c12e4b9e7697332412fe9)), closes [#30768](https://github.com/bitnami/charts/issues/30768)
 
 ## <small>11.5.4 (2024-11-08)</small>
 
