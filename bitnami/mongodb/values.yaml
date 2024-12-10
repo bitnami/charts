@@ -22,6 +22,11 @@ global:
   imagePullSecrets: []
   defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   namespaceOverride: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
