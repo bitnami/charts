@@ -934,6 +934,10 @@ While upgrading a chart, please note that there are certain limitations to upgra
 
 ## Upgrading
 
+### To 10.2.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ```console
 helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kube-prometheus
 ```

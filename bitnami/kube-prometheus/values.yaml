@@ -1254,6 +1254,11 @@ prometheus:
     ## set, choosing the default provisioner.
     ##
     storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
     ## @param prometheus.persistence.accessModes Persistent Volume Access Modes
     ##
     accessModes:
