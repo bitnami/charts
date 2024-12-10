@@ -1023,6 +1023,10 @@ service_registration "kubernetes" {}` |
 
 ## Upgrading
 
+### To 2.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 2.0.0
 
 This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x. Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
