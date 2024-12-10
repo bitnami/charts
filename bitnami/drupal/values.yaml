@@ -245,6 +245,11 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## @param persistence.accessModes PVC Access Mode for Drupal volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
