@@ -211,6 +211,11 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable
   ## e.g:
   ## existingClaim: your-claim
