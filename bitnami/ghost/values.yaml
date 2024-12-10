@@ -597,6 +597,11 @@ persistence:
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## @param persistence.annotations Additional custom annotations for the PVC
   ##
   annotations: {}
