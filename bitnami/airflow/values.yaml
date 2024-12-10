@@ -30,6 +30,11 @@ global:
     ## @param global.compatibility.omitEmptySeLinuxOptions If set to true, removes the seLinuxOptions from the securityContexts when it is set to an empty object
     ##
     omitEmptySeLinuxOptions: false
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
 
 ## @section Common parameters
 
@@ -1850,11 +1855,6 @@ triggerer:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
-  ## Security parameters
-  ##
-  security:
-    ## @param global.security.allowInsecureImages Allows skipping image verification
-    allowInsecureImages: false
     ## @param triggerer.persistence.annotations Additional Persistent Volume Claim annotations
     ##
     annotations: {}
