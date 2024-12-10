@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.7 (2024-12-09)
+## 1.1.0 (2024-12-10)
 
-* [bitnami/nessie] Release 1.0.7 ([#30845](https://github.com/bitnami/charts/pull/30845))
+* [bitnami/nessie] Detect non-standard images ([#30931](https://github.com/bitnami/charts/pull/30931))
+
+## <small>1.0.7 (2024-12-09)</small>
+
+* [bitnami/nessie] Release 1.0.7 (#30845) ([7df0c76](https://github.com/bitnami/charts/commit/7df0c769083e44d8847a9be82ad9731922fafbd4)), closes [#30845](https://github.com/bitnami/charts/issues/30845)
 
 ## <small>1.0.6 (2024-12-06)</small>
 
