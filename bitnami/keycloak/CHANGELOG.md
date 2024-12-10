@@ -1,8 +1,21 @@
 # Changelog
 
-## 24.2.0 (2024-11-08)
+## 24.2.3 (2024-12-03)
 
-* [bitnami/keycloak] Fix metrics ports and servicemonitor ([#30303](https://github.com/bitnami/charts/pull/30303))
+* [bitnami/keycloak] Release 24.2.3 ([#30726](https://github.com/bitnami/charts/pull/30726))
+
+## <small>24.2.2 (2024-11-22)</small>
+
+* [bitnami/*] docs: fix copy-paste typos with wrong references to Airflow (#30541) ([0a225d4](https://github.com/bitnami/charts/commit/0a225d44c1969429573b4e2630068eff129b6a96)), closes [#30541](https://github.com/bitnami/charts/issues/30541)
+* [bitnami/keycloak] Release 24.2.2 (#30576) ([c3f8e59](https://github.com/bitnami/charts/commit/c3f8e596428f2f546dd3479570e7d39958b16f3b)), closes [#30576](https://github.com/bitnami/charts/issues/30576)
+
+## <small>24.2.1 (2024-11-19)</small>
+
+* [bitnami/keycloak] Release 24.2.1 (#30522) ([6702319](https://github.com/bitnami/charts/commit/670231902a194d5585ab06283e45592353b07142)), closes [#30522](https://github.com/bitnami/charts/issues/30522)
+
+## 24.2.0 (2024-11-12)
+
+* [bitnami/keycloak] Fix metrics ports and servicemonitor (#30303) ([c289b97](https://github.com/bitnami/charts/commit/c289b97caddc8e511e00d46937b508204f41de9a)), closes [#30303](https://github.com/bitnami/charts/issues/30303)
 
 ## 24.1.0 (2024-11-06)
 

@@ -528,7 +528,7 @@ data:
     }
     is_primary() {
         VALKEY_ROLE=$(run_valkey_command role | head -1)
-        [[ "$VALKEY_ROLE" == "primary" ]]
+        [[ "$VALKEY_ROLE" == "master" ]]
     }
 
     HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{- include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"

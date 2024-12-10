@@ -83,6 +83,8 @@ kafka.auth.jaas.clientUsers[0]=clientUser
 kafka.auth.jaas.clientPasswords[0]=clientPassword
 ```
 
+### Securing Traffic using TLS
+
 In order to configure TLS authentication/encryption, you **can** create a secret per Kafka broker you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `kafka.auth.tls.existingSecrets` parameter when deploying the chart.
 
 > **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `kafka.auth.tls.password` parameter to provide your password.
@@ -116,6 +118,10 @@ In case you want to ignore hostname verification on Kafka certificates, set the 
 kubectl create secret generic schema-registry-jks --from-file=schema-registry.truststore.jks=common.truststore.jks --from-file=schema-registry-0.keystore.jks=common.keystore.jks
 kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.truststore.jks --from-file=kafka.keystore.jks=common.keystore.jks
 ```
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Adding extra flags
 
@@ -210,18 +216,18 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Common parameters
 
-| Name                     | Description                                                                                          | Value           |
-| ------------------------ | ---------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override airflow.fullname template with a string (will prepend the release name) | `""`            |
-| `fullnameOverride`       | String to fully override airflow.fullname template with a string                                     | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                      | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                                | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                           | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                       | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                    | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                 | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                    | `["infinity"]`  |
+| Name                     | Description                                                                                               | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template with a string                                     | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                                     | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                            | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
 
 ### Schema Registry parameters
 

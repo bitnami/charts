@@ -63,6 +63,24 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the Harbor native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
 ### Configure the way how to expose Harbor core
 
 You can expose Harbor core using two methods:
@@ -89,6 +107,19 @@ Format: `protocol://domain[:port]`. Usually:
 - if expose Harbor core via NGINX proxy using a `LoadBalancer` service type, set the `domain` as your own domain name and add a CNAME record to map the domain name to the one you got from the cloud provider.
 
 If Harbor is deployed behind the proxy, set it as the URL of proxy.
+
+### Securing traffic using TLS
+
+It is possible to configure TLS communication in the `core`, `jobservice`, `portal`, `registry` and `trivy` components by setting `internalTLS.enabled=true`. The chart allows two configuration options:
+
+- Provide your own secrets for Harbor components using the `*.tls.existingSecret` (under the `core`, `jobservice`, `portal`, `registry` and `trivy' sections) values.
+- Have the chart auto-generate the certificates. This is done when not setting the `*.tls.existingSecret` values.
+
+Additionally, it is possible to add a custom authority to each component trust store. This is done using the `internalTLS.caBundleSecret` value with the name of a secret containing the corresponding `ca.crt` file.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Sidecars and Init Containers
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.0.1 (2024-11-08)
+## 2.0.2 (2024-12-01)
 
-* [bitnami/valkey-cluster] Unify seLinuxOptions default value ([#30322](https://github.com/bitnami/charts/pull/30322))
+* [bitnami/valkey-cluster] Release 2.0.2 ([#30702](https://github.com/bitnami/charts/pull/30702))
+
+## <small>2.0.1 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/valkey-cluster] Unify seLinuxOptions default value (#30322) ([ec4be59](https://github.com/bitnami/charts/commit/ec4be591f3f0fcc52ddd9c4f0cf6d0ddc19f9db7)), closes [#30322](https://github.com/bitnami/charts/issues/30322)
 
 ## 2.0.0 (2024-10-23)
 

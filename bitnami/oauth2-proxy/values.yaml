@@ -309,7 +309,7 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.7.1-debian-12-r2
+  tag: 7.7.1-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -352,6 +352,7 @@ configuration:
   ## Alternatively, use an existing secret (see secret-google.yaml for required fields)
   ##
   ## @param configuration.google.enabled Enable Google service account
+  ## @param configuration.google.useApplicationDefaultCredentials Use the application-default credentials (i.e. Workload Identity on GKE) instead of providing a service account JSON
   ## @param configuration.google.adminEmail Google admin email
   ## @param configuration.google.groups Restrict logins to members of these google groups
   ## @param configuration.google.serviceAccountJson Google Service account JSON
@@ -359,6 +360,7 @@ configuration:
   ##
   google:
     enabled: false
+    useApplicationDefaultCredentials: false
     adminEmail: ""
     groups: []
     serviceAccountJson: ""

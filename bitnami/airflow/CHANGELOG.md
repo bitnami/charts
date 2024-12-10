@@ -1,8 +1,20 @@
 # Changelog
 
+## 22.3.1 (2024-11-27)
+
+* [bitnami/airflow] bugfix: extra volume/mounts should apply to setup-db job and wait-for-db init-container… ([#30646](https://github.com/bitnami/charts/pull/30646))
+
+## 22.3.0 (2024-11-26)
+
+* [bitnami/airflow] Support extra customizations at setup-db job (#30624) ([0397460](https://github.com/bitnami/charts/commit/03974600c3d801ab8b747c5f4daf3b5069293809)), closes [#30624](https://github.com/bitnami/charts/issues/30624)
+
+## 22.2.0 (2024-11-19)
+
+* [bitnami/airflow] Add support for extending default configuration (#30525) ([e84395d](https://github.com/bitnami/charts/commit/e84395d6c829a0fe56ca7242bdaa90afb8e0e352)), closes [#30525](https://github.com/bitnami/charts/issues/30525)
+
 ## 22.1.0 (2024-11-18)
 
-* [bitnami/airflow] feat: add support for custom local settings ([#30496](https://github.com/bitnami/charts/pull/30496))
+* [bitnami/airflow] feat: add support for custom local settings (#30496) ([6c3060e](https://github.com/bitnami/charts/commit/6c3060e024a7fdcfe5b4eb07ec699cf425858e9f)), closes [#30496](https://github.com/bitnami/charts/issues/30496)
 
 ## <small>22.0.1 (2024-11-18)</small>
 

@@ -1,8 +1,20 @@
 # Changelog
 
-## 21.0.1 (2024-11-12)
+## 21.0.4 (2024-11-24)
 
-* [bitnami/drupal] Release 21.0.1 ([#30418](https://github.com/bitnami/charts/pull/30418))
+* [bitnami/drupal] Release 21.0.4 ([#30610](https://github.com/bitnami/charts/pull/30610))
+
+## <small>21.0.3 (2024-11-22)</small>
+
+* [bitnami/drupal] Release 21.0.3 (#30596) ([e8fbaa1](https://github.com/bitnami/charts/commit/e8fbaa187334d9896e46f4766727be1da8bc8d02)), closes [#30596](https://github.com/bitnami/charts/issues/30596)
+
+## <small>21.0.2 (2024-11-20)</small>
+
+* [bitnami/drupal] Release 21.0.2 (#30553) ([d6dd241](https://github.com/bitnami/charts/commit/d6dd241721bf0d0d63622c254103fec53199bb79)), closes [#30553](https://github.com/bitnami/charts/issues/30553)
+
+## <small>21.0.1 (2024-11-12)</small>
+
+* [bitnami/drupal] Release 21.0.1 (#30418) ([52480cd](https://github.com/bitnami/charts/commit/52480cd42286e4c5f451413e6e2944587aab950b)), closes [#30418](https://github.com/bitnami/charts/issues/30418)
 
 ## 21.0.0 (2024-11-12)
 

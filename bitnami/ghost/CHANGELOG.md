@@ -1,8 +1,38 @@
 # Changelog
 
-## 22.0.3 (2024-11-18)
+## 22.0.10 (2024-12-09)
 
-* [bitnami/ghost] Release 22.0.3 ([#30509](https://github.com/bitnami/charts/pull/30509))
+* [bitnami/ghost] Release 22.0.10 ([#30831](https://github.com/bitnami/charts/pull/30831))
+
+## <small>22.0.9 (2024-12-06)</small>
+
+* [bitnami/ghost] Release 22.0.9 (#30820) ([90a3c1f](https://github.com/bitnami/charts/commit/90a3c1f68f0c01c63fbcba8b79295388a0e0f544)), closes [#30820](https://github.com/bitnami/charts/issues/30820)
+
+## <small>22.0.8 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/ghost] Release 22.0.8 (#30737) ([faf5cc9](https://github.com/bitnami/charts/commit/faf5cc9f40ad3a259812752d36790cf5a33d658d)), closes [#30737](https://github.com/bitnami/charts/issues/30737)
+
+## <small>22.0.7 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/ghost] Release 22.0.7 (#30692) ([d1a39d4](https://github.com/bitnami/charts/commit/d1a39d40eae979582c8d159845115101800c32cd)), closes [#30692](https://github.com/bitnami/charts/issues/30692)
+
+## <small>22.0.6 (2024-11-28)</small>
+
+* [bitnami/ghost] Release 22.0.6 (#30677) ([a617341](https://github.com/bitnami/charts/commit/a617341694fb124802f6a50a14a0b1a210d3bef8)), closes [#30677](https://github.com/bitnami/charts/issues/30677)
+
+## <small>22.0.5 (2024-11-27)</small>
+
+* [bitnami/ghost] Release 22.0.5 (#30638) ([349ecd5](https://github.com/bitnami/charts/commit/349ecd54c69d0d9f63ab2fa573ce0b885ca6747d)), closes [#30638](https://github.com/bitnami/charts/issues/30638)
+
+## <small>22.0.4 (2024-11-21)</small>
+
+* [bitnami/ghost] Release 22.0.4 (#30563) ([c7c1cb6](https://github.com/bitnami/charts/commit/c7c1cb6ea9c917d27e52a4bad99ddde1805fbb20)), closes [#30563](https://github.com/bitnami/charts/issues/30563)
+
+## <small>22.0.3 (2024-11-18)</small>
+
+* [bitnami/ghost] Release 22.0.3 (#30509) ([9ac3e72](https://github.com/bitnami/charts/commit/9ac3e72e3f1c8052d377ff6923fc0f2ad6b7eaec)), closes [#30509](https://github.com/bitnami/charts/issues/30509)
 
 ## <small>22.0.2 (2024-11-15)</small>
 

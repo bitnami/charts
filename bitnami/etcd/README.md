@@ -56,6 +56,35 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the etcd native Prometheus port in the container and service (if `metrics.useSeparateEndpoint=true`). It will all have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `PodMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.podMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "PodMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://etcd.io/docs/latest/op-guide/authentication/)
+- Update the password secret with the new values (replace the SECRET_NAME and PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=etcd-root-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
 ### Cluster configuration
 
 The Bitnami etcd chart can be used to bootstrap an etcd cluster, easy to scale and with available features to implement disaster recovery. It uses static discovery configured via environment variables to bootstrap the etcd cluster. Based on the number of initial replicas, and using the A records added to the DNS configuration by the headless service, the chart can calculate every advertised peer URL.
@@ -184,7 +213,7 @@ If the `startFromSnapshot.*` parameters are used at the same time as the `disast
 
 > NOTE: The disaster recovery feature requires volumes with ReadWriteMany access mode.
 
-### Backup and restore the etcd keyspace
+### Backup and restore
 
 Two different approaches are available to back up and restore this Helm Chart:
 
@@ -481,6 +510,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `service.peerPortNameOverride`     | etcd peer port name override                                                                                                                                   | `""`        |
 | `service.metricsPortNameOverride`  | etcd metrics port name override. The metrics port is only exposed when metrics.useSeparateEndpoint is true.                                                    | `""`        |
 | `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                                                                                                 | `""`        |
+| `service.loadBalancerClass`        | loadBalancerClass for the etcd service (optional, cloud specific)                                                                                              | `""`        |
 | `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                                                                                                    | `[]`        |
 | `service.externalIPs`              | External IPs                                                                                                                                                   | `[]`        |
 | `service.externalTrafficPolicy`    | %%MAIN_CONTAINER_NAME%% service external traffic policy                                                                                                        | `Cluster`   |

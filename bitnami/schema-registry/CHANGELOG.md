@@ -1,8 +1,12 @@
 # Changelog
 
+## 23.0.0 (2024-12-04)
+
+* [bitnami/schema-registry] Release 23.0.0 ([#30775](https://github.com/bitnami/charts/pull/30775))
+
 ## 22.0.0 (2024-11-12)
 
-* [bitnami/schema-registry] Update kafka subchart to 31.0.0 ([#30425](https://github.com/bitnami/charts/pull/30425))
+* [bitnami/schema-registry] Update kafka subchart to 31.0.0 (#30425) ([aeb7d43](https://github.com/bitnami/charts/commit/aeb7d430e5db1e05358978a7dffffca5b56298f1)), closes [#30425](https://github.com/bitnami/charts/issues/30425)
 
 ## <small>21.0.3 (2024-11-04)</small>
 

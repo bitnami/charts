@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.8.1 (2024-11-07)
+## 15.8.4 (2024-12-04)
 
-* [bitnami/thanos] Release 15.8.1 ([#30293](https://github.com/bitnami/charts/pull/30293))
+* [bitnami/thanos] Release 15.8.4 ([#30783](https://github.com/bitnami/charts/pull/30783))
+
+## <small>15.8.3 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/thanos] Release 15.8.3 (#30779) ([963e102](https://github.com/bitnami/charts/commit/963e102d0cd1a5a359b839505015d4e7360c92ef)), closes [#30779](https://github.com/bitnami/charts/issues/30779)
+
+## <small>15.8.2 (2024-11-26)</small>
+
+* [bitnami/thanos] Release 15.8.2 (#30626) ([82d9517](https://github.com/bitnami/charts/commit/82d95175682e86d300667a1c75999a8acfa39ce5)), closes [#30626](https://github.com/bitnami/charts/issues/30626)
+
+## <small>15.8.1 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/thanos] Release 15.8.1 (#30293) ([cd0e549](https://github.com/bitnami/charts/commit/cd0e5491be20d9fbc78f2732c81e5af6e73806d8)), closes [#30293](https://github.com/bitnami/charts/issues/30293)
 
 ## 15.8.0 (2024-10-24)
 

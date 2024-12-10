@@ -65,6 +65,10 @@ Alternatively, you can specify custom scripts using the `cloudCodeScripts` param
 
 In addition to these options, you can also set an external ConfigMap with all the Cloud Code scripts. This is done by setting the `existingCloudCodeScriptsCM` parameter. Note that this will override the two previous options.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Adding extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` (available in the `server` and `dashboard` sections) property.
@@ -76,6 +80,17 @@ extraEnvVars:
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://docs.parseplatform.org/)
+- Update the password secret with the new values (replace the SECRET_NAME, MASTER_KEY and PARSE_DASHBOARD_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=master-key=PASSWORD --from-literal=parse-dashboard-password=PARSE_DASHBOARD_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
 
 ### Deploying extra resources
 

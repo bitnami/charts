@@ -1,8 +1,19 @@
 # Changelog
 
-## 3.5.2 (2024-10-21)
+## 3.6.1 (2024-11-30)
 
-* [bitnami/apisix] Release 3.5.2 ([#30014](https://github.com/bitnami/charts/pull/30014))
+* [bitnami/apisix] Release 3.6.1 ([#30695](https://github.com/bitnami/charts/pull/30695))
+
+## 3.6.0 (2024-11-29)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/apisix] feat: :sparkles: :memo: Allow password update via values.yaml (#30682) ([e41a46c](https://github.com/bitnami/charts/commit/e41a46c06a70ddfe543c9afa1fd81cd8fd2d97cd)), closes [#30682](https://github.com/bitnami/charts/issues/30682)
+
+## <small>3.5.2 (2024-10-21)</small>
+
+* [bitnami/apisix] Release 3.5.2 (#30014) ([53d7503](https://github.com/bitnami/charts/commit/53d7503654c7179d92e4352fc85d50db202a15f8)), closes [#30014](https://github.com/bitnami/charts/issues/30014)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.5.1 (2024-09-29)</small>
 

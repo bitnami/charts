@@ -1,8 +1,23 @@
 # Changelog
 
-## 1.2.7 (2024-11-11)
+## 1.2.10 (2024-12-04)
 
-* [bitnami/cilium] Fix typos with clusterName and certificates ([#30316](https://github.com/bitnami/charts/pull/30316))
+* [bitnami/cilium] Release 1.2.10 ([#30742](https://github.com/bitnami/charts/pull/30742))
+
+## <small>1.2.9 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/cilium] Release 1.2.9 (#30714) ([5fa2e60](https://github.com/bitnami/charts/commit/5fa2e601f27c4e6321ae8b62782d97815bd2d4ad)), closes [#30714](https://github.com/bitnami/charts/issues/30714)
+
+## <small>1.2.8 (2024-11-19)</small>
+
+* [bitnami/cilium] Release 1.2.8 (#30528) ([99c9dd2](https://github.com/bitnami/charts/commit/99c9dd2454288475f0b4e5a4ed620599204d5e53)), closes [#30528](https://github.com/bitnami/charts/issues/30528)
+
+## <small>1.2.7 (2024-11-11)</small>
+
+* [bitnami/cilium] Fix typos with clusterName and certificates (#30316) ([1024066](https://github.com/bitnami/charts/commit/1024066f65e09505b31925b504a9457ed6a49c0c)), closes [#30316](https://github.com/bitnami/charts/issues/30316)
 
 ## <small>1.2.6 (2024-11-07)</small>
 

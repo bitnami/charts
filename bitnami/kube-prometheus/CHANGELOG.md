@@ -1,8 +1,20 @@
 # Changelog
 
-## 10.0.4 (2024-11-12)
+## 10.1.1 (2024-12-04)
 
-* [bitnami/kube-prometheus] Fix update-crds CI job ([#30413](https://github.com/bitnami/charts/pull/30413))
+* [bitnami/kube-prometheus] Release 10.1.1 ([#30773](https://github.com/bitnami/charts/pull/30773))
+
+## 10.1.0 (2024-11-26)
+
+* [bitnami/kube-prometheus] Add support for scrapeClasses (#30579) ([0e5573b](https://github.com/bitnami/charts/commit/0e5573b5dc58b3832a544646e4d4debfa8b0db7b)), closes [#30579](https://github.com/bitnami/charts/issues/30579)
+
+## <small>10.0.5 (2024-11-25)</small>
+
+* [bitnami/kube-prometheus] Release 10.0.5 (#30565) ([ce829ea](https://github.com/bitnami/charts/commit/ce829ea73180c41fae4f249214cd22faafdf92cc)), closes [#30565](https://github.com/bitnami/charts/issues/30565)
+
+## <small>10.0.4 (2024-11-14)</small>
+
+* [bitnami/kube-prometheus] Fix update-crds CI job (#30413) ([0842084](https://github.com/bitnami/charts/commit/0842084f5fd59fe09c69fd7883eaf2edada28647)), closes [#30413](https://github.com/bitnami/charts/issues/30413)
 
 ## <small>10.0.3 (2024-11-11)</small>
 

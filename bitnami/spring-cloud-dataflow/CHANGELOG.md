@@ -1,8 +1,12 @@
 # Changelog
 
+## 34.0.1 (2024-12-08)
+
+* [bitnami/spring-cloud-dataflow] Release 34.0.1 ([#30829](https://github.com/bitnami/charts/pull/30829))
+
 ## 34.0.0 (2024-11-12)
 
-* [bitnami/spring-cloud-dataflow] Update kafka subchart to 31.0.0 ([#30426](https://github.com/bitnami/charts/pull/30426))
+* [bitnami/spring-cloud-dataflow] Update kafka subchart to 31.0.0 (#30426) ([01bfb98](https://github.com/bitnami/charts/commit/01bfb98c9b21baf9c18d15ef67e8a116979994e9)), closes [#30426](https://github.com/bitnami/charts/issues/30426)
 
 ## 33.0.0 (2024-11-12)
 

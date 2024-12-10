@@ -164,6 +164,24 @@ After accessing the hub and creating a Single User instance, the deployment look
 
 For more information, check the official [JupyterHub documentation](https://github.com/jupyterhub/jupyterhub).
 
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `hub` and `proxy` sections) to `true`. This will expose the JupyterHub native Prometheus ports in the containers, as well as a `metrics` service. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `hub` and `proxy` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
 ### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -195,6 +213,13 @@ When deploying, you will need to sign up to set the password for the `test`` use
 
 For more information on Authenticators, check the [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/getting-started/authenticators-users-basics.html).
 
+### Update credentials
+
+The Bitnami Jupyterhub chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `hub.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `hub.configuration` in the proper [authentication section](#configure-authentication)
+- Run `helm upgrade` specifying a new secret in `hub.existingSecret`
+
 ### Configure the Single User instances
 
 As explained in this [section](#understand-the-default-configuration), the Hub is responsible for deploying the Single User instances. The configuration of these instances is passed to the Hub instance via the `hub.configuration` chart parameter.
@@ -202,6 +227,10 @@ As explained in this [section](#understand-the-default-configuration), the Hub i
 In order to make the chart follow standards and to ease the generation of this configuration file, the chart has a `singleuser` section, which is then used for generating the `hub.configuration` value. This value can be easily overridden by modifying its default value or by providing a secret via the `hub.existingSecret` value. In this case, all the settings in the `singleuser` section will be ignored.
 
 All the settings specified in the `hub.configuration` value are consumed by the `jupyter_config.py` script available in the [templates/hub/configmap.yaml](https://github.com/bitnami/charts/blob/main/bitnami/jupyterhub/templates/hub/configmap.yaml) file. This script can be changed by providing a custom ConfigMap via the `hub.existingConfigmap` value. The [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/reference/config-examples.html) has more examples of the `jupyter_config.py` script.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Restrict traffic using NetworkPolicies
 

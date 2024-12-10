@@ -1,8 +1,25 @@
 # Changelog
 
+## 10.0.4 (2024-12-04)
+
+* [bitnami/milvus] Release 10.0.4 ([#30765](https://github.com/bitnami/charts/pull/30765))
+
+## <small>10.0.3 (2024-11-28)</small>
+
+* [bitnami/milvus] feat: update chart deps (#30651) ([8f80dc6](https://github.com/bitnami/charts/commit/8f80dc6f00e679c7c182055ae6ed24b780410a95)), closes [#30651](https://github.com/bitnami/charts/issues/30651)
+
+## <small>10.0.2 (2024-11-22)</small>
+
+* [bitnami/milvus] Release 10.0.2 (#30580) ([c3d8e1f](https://github.com/bitnami/charts/commit/c3d8e1f5f50f49e33f1f051baeb7c1b3d2e461b1)), closes [#30580](https://github.com/bitnami/charts/issues/30580)
+
+## <small>10.0.1 (2024-11-19)</small>
+
+* [bitnami/milvus] Release 10.0.1 (#30533) ([80a27f1](https://github.com/bitnami/charts/commit/80a27f1b29ae77195e29d29ce1a0207dfbdd4c89)), closes [#30533](https://github.com/bitnami/charts/issues/30533)
+
 ## 10.0.0 (2024-11-12)
 
-* [bitnami/milvus] Update kafka subchart to 31.0.0 ([#30428](https://github.com/bitnami/charts/pull/30428))
+* [bitnami/milvus] docs: :memo: Add "Update credentials" section (#30241) ([5e0114a](https://github.com/bitnami/charts/commit/5e0114a6b39fa7bedcefba38e5e17c54e35361e9)), closes [#30241](https://github.com/bitnami/charts/issues/30241)
+* [bitnami/milvus] Update kafka subchart to 31.0.0 (#30428) ([81e0133](https://github.com/bitnami/charts/commit/81e013315ea356fe6dc8c4252854a77af48a649d)), closes [#30428](https://github.com/bitnami/charts/issues/30428)
 
 ## <small>9.0.12 (2024-11-07)</small>
 

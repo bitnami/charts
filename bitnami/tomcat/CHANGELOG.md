@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.3.1 (2024-11-12)
+## 11.3.3 (2024-12-10)
 
-* [bitnami/tomcat] Release 11.3.1 ([#30409](https://github.com/bitnami/charts/pull/30409))
+* [bitnami/tomcat] Release 11.3.3 ([#30847](https://github.com/bitnami/charts/pull/30847))
+
+## <small>11.3.2 (2024-11-20)</small>
+
+* [bitnami/tomcat] Release 11.3.2 (#30550) ([56f6abf](https://github.com/bitnami/charts/commit/56f6abf1123818096cc7834274a6d26057dbc748)), closes [#30550](https://github.com/bitnami/charts/issues/30550)
+
+## <small>11.3.1 (2024-11-12)</small>
+
+* [bitnami/tomcat] Release 11.3.1 (#30409) ([d1d0b6a](https://github.com/bitnami/charts/commit/d1d0b6a786fab4ab14e4926c3cfc99d24d6fd7bf)), closes [#30409](https://github.com/bitnami/charts/issues/30409)
 
 ## 11.3.0 (2024-10-30)
 

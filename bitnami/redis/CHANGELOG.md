@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.3.1 (2024-11-19)
+## 20.4.1 (2024-12-10)
 
 * [bitnami/redis] CA shouldn't be mandatory when TLS is enabled ([#30520](https://github.com/bitnami/charts/pull/30520))
+
+## 20.4.0 (2024-12-01)
+
+* [bitnami/redis] add extraPortsEnabled ([#30607](https://github.com/bitnami/charts/pull/30607))
 
 ## 20.3.0 (2024-11-14)
 

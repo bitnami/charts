@@ -73,7 +73,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.78.1-debian-12-r1
+    tag: 0.78.2-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -633,7 +633,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.55.1-debian-12-r1
+    tag: 2.55.1-debian-12-r4
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1179,6 +1179,10 @@ prometheus:
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
   scrapeConfigNamespaceSelector: {}
+  ## @param prometheus.scrapeClasses List of scrape classes to expose to scraping objects
+  ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#scrapeclass for usage
+  ##
+  scrapeClasses: []
   ## @param prometheus.retention Metrics retention days
   ##
   retention: 10d
@@ -1388,7 +1392,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.36.1-debian-12-r5
+      tag: 0.37.0-debian-12-r0
       digest: ""
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
@@ -1817,7 +1821,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.27.0-debian-12-r25
+    tag: 0.27.0-debian-12-r26
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2506,7 +2510,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.25.0-debian-12-r19
+    tag: 0.25.0-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

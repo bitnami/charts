@@ -1,8 +1,19 @@
 # Changelog
 
-## 11.0.1 (2024-11-15)
+## 11.0.3 (2024-12-03)
 
-* [bitnami/argo-workflows] Release 11.0.1 ([#30474](https://github.com/bitnami/charts/pull/30474))
+* [bitnami/argo-workflows] Release 11.0.3 ([#30740](https://github.com/bitnami/charts/pull/30740))
+
+## <small>11.0.2 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/argo-workflows] Release 11.0.2 (#30715) ([c186498](https://github.com/bitnami/charts/commit/c18649871d5e3d7b757dffd00b3b9bf4a71dc95f)), closes [#30715](https://github.com/bitnami/charts/issues/30715)
+
+## <small>11.0.1 (2024-11-15)</small>
+
+* [bitnami/argo-workflows] Release 11.0.1 (#30474) ([1c7a861](https://github.com/bitnami/charts/commit/1c7a8616140ab171241f0e0896aa1e74ac31fcc0)), closes [#30474](https://github.com/bitnami/charts/issues/30474)
 
 ## 11.0.0 (2024-11-12)
 

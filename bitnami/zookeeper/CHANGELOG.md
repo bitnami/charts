@@ -1,8 +1,13 @@
 # Changelog
 
+## 13.6.1 (2024-12-04)
+
+* [bitnami/zookeeper] Release 13.6.1 ([#30786](https://github.com/bitnami/charts/pull/30786))
+
 ## 13.6.0 (2024-11-05)
 
-* [bitnami/zookeeper] Make the ZOO_SERVERS environment variable configurable ([#29921](https://github.com/bitnami/charts/pull/29921))
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/zookeeper] Make the ZOO_SERVERS environment variable configurable (#29921) ([1cfa790](https://github.com/bitnami/charts/commit/1cfa790448007d7e2976ac73fad063b21c29736e)), closes [#29921](https://github.com/bitnami/charts/issues/29921)
 
 ## <small>13.5.1 (2024-10-26)</small>
 
