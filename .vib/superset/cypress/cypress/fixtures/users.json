@@ -1,0 +1,9 @@
+{
+  "newUser": {
+    "firstName": "Jane Jessica",
+    "lastName": "Doe",
+    "username": "janedoe",
+    "password": "someComplicatedPass12345!",
+    "role": "Public"
+  }
+}

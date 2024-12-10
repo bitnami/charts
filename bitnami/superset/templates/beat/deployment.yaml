@@ -1,0 +1,177 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.beat.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ printf "%s-beat" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: celery-beat
+    app.kubernetes.io/part-of: superset
+  {{- if or .Values.beat.deploymentAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.beat.deploymentAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  {{- if .Values.beat.updateStrategy }}
+  strategy: {{- toYaml .Values.beat.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.beat.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: celery-beat
+      app.kubernetes.io/part-of: superset
+  template:
+    metadata:
+      {{- if .Values.beat.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.beat.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: celery-beat
+        app.kubernetes.io/part-of: superset
+    spec:
+      {{- include "superset.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "superset.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.beat.automountServiceAccountToken }}
+      {{- if .Values.beat.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.beat.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.beat.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.beat.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.beat.podAffinityPreset "component" "celery-beat" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.beat.podAntiAffinityPreset "component" "celery-beat" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.beat.nodeAffinityPreset.type "key" .Values.beat.nodeAffinityPreset.key "values" .Values.beat.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.beat.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.beat.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.beat.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.beat.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.beat.priorityClassName }}
+      priorityClassName: {{ .Values.beat.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.beat.schedulerName }}
+      schedulerName: {{ .Values.beat.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.beat.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.beat.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.beat.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.beat.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.beat.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.beat.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.waitForDB.enabled }}
+        {{- include "superset.initContainers.waitForDB" . | nindent 8}}
+        {{- end }}
+        {{- if .Values.waitForRedis.enabled }}
+        {{- include "superset.initContainers.waitForRedis" . | nindent 8}}
+        {{- end }}
+        {{- if .Values.beat.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.beat.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: celery-beat
+          image: {{ template "superset.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.beat.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.beat.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.beat.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.beat.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.beat.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.beat.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "superset.configure.common" . | nindent 12 }}
+            {{- include "superset.configure.database" . | nindent 12 }}
+            {{- include "superset.configure.redis" . | nindent 12 }}
+            - name: SUPERSET_ROLE
+              value: "celery-beat"
+            {{- if .Values.beat.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.beat.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.beat.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.beat.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.beat.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.beat.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.beat.resources }}
+          resources: {{- toYaml .Values.beat.resources | nindent 12 }}
+          {{- else if ne .Values.beat.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.beat.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.beat.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.beat.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.beat.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.beat.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - celery
+          {{- end }}
+          {{- if .Values.beat.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.beat.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.beat.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.beat.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command: ["/bin/sh", "-c", "pgrep -f celery"]
+          {{- end }}
+          {{- if .Values.beat.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.beat.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.beat.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.beat.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - celery
+          {{- end }}
+          {{- end }}
+          {{- if .Values.beat.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.beat.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/superset/superset_home
+              subPath: superset-home
+            - name: empty-dir
+              mountPath: /opt/bitnami/superset/tmp
+              subPath: app-tmp-dir
+          {{- if .Values.beat.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.beat.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.beat.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.beat.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.beat.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.beat.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
