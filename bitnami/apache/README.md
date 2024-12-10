@@ -344,6 +344,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.3.0
+
+Starting from this minor version, the Bitnami Airflow chart verifies that the original container images that were designed, tested, and validated are used.
+This container image verification can be skipped by setting the global parameter `global.security.allowInsecureImages` to `true`. Further information can be obtained at [this GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 11.0.0
 
 This major bump changes the following security defaults:
