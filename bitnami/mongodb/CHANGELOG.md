@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.3.3 (2024-12-06)
+## 16.4.0 (2024-12-10)
 
-* [bitnami/mongodb] Release 16.3.3 ([#30822](https://github.com/bitnami/charts/pull/30822))
+* [bitnami/mongodb] Detect non-standard images ([#30926](https://github.com/bitnami/charts/pull/30926))
+
+## <small>16.3.3 (2024-12-06)</small>
+
+* [bitnami/mongodb] Release 16.3.3 (#30822) ([83e96a2](https://github.com/bitnami/charts/commit/83e96a2cd17a29f10230af3ec16e0451fc5f4d0c)), closes [#30822](https://github.com/bitnami/charts/issues/30822)
 
 ## <small>16.3.2 (2024-12-04)</small>
 
