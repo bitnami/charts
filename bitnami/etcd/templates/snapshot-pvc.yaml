@@ -11,11 +11,9 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   annotations:
+    helm.sh/resource-policy: keep
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    helm.sh/resource-policy: keep
-    {{- else }}
-    helm.sh/resource-policy: keep
     {{- end }}
 spec:
   accessModes:
