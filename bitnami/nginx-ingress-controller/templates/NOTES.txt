@@ -94,4 +94,5 @@ If TLS is enabled for the Ingress, a Secret containing the certificate and key m
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.defaultBackend.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "defaultBackend" "") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.defaultBackend.image) "context" $) }}{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.defaultBackend.image) "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.defaultBackend.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.defaultBackend.image) "context" $) }}
