@@ -15,3 +15,4 @@ Watch the Grafana Operator Deployment status using the command:
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" (list "grafana" "operator") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.operator.image .Values.grafana.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.operator.image .Values.grafana.image) "context" $) }}
