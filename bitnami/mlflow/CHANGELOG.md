@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.1 (2024-11-18)
+## 2.2.2 (2024-12-06)
 
-* [bitnami/mlflow] Release 2.2.1 ([#30503](https://github.com/bitnami/charts/pull/30503))
+* fix: azure secrets ([#30802](https://github.com/bitnami/charts/pull/30802))
+
+## <small>2.2.1 (2024-11-18)</small>
+
+* [bitnami/mlflow] Release 2.2.1 (#30503) ([2028aad](https://github.com/bitnami/charts/commit/2028aad4277a9a6c6e57219f67f457659c13da0a)), closes [#30503](https://github.com/bitnami/charts/issues/30503)
 
 ## 2.2.0 (2024-11-15)
 
