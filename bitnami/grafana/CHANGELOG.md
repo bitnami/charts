@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.3.26 (2024-11-07)
+## 11.4.0 (2024-12-10)
 
-* [bitnami/grafana] Release 11.3.26 ([#30270](https://github.com/bitnami/charts/pull/30270))
+* [bitnami/grafana] Detect non-standard images ([#30888](https://github.com/bitnami/charts/pull/30888))
+
+## <small>11.3.26 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana] Release 11.3.26 (#30270) ([95adc4d](https://github.com/bitnami/charts/commit/95adc4dc72da013e0a879bd195f1e32689535c7b)), closes [#30270](https://github.com/bitnami/charts/issues/30270)
 
 ## <small>11.3.25 (2024-10-24)</small>
 

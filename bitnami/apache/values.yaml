@@ -29,6 +29,13 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages By default, this chart verifies that the original container images that were designed, tested, and validated are used. This option makes the chart skip the verification step and proceed
+    ##
+    allowInsecureImages: false
+
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version

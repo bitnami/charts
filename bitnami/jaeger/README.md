@@ -476,6 +476,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 5.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 4.0.0
 
 This major updates Jaeger to version 1.63.0, which fully deprecates the [jaeger-agent component](https://github.com/jaegertracing/jaeger/issues/4739). When upgrading, all the jaeger-agent components will be fully removed. Check the [upstream documentation](https://www.jaegertracing.io/docs/1.62/architecture/) for alternatives.

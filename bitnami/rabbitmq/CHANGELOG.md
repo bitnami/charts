@@ -1,8 +1,12 @@
 # Changelog
 
+## 15.2.0 (2024-12-10)
+
+* [bitnami/rabbitmq] Detect non-standard images ([#30940](https://github.com/bitnami/charts/pull/30940))
+
 ## 15.1.0 (2024-11-25)
 
-* [bitnami/rabbitmq] feat: :sparkles: Allow password updates ([#30615](https://github.com/bitnami/charts/pull/30615))
+* [bitnami/rabbitmq] feat: :sparkles: Allow password updates (#30615) ([d98aecc](https://github.com/bitnami/charts/commit/d98aecce08aebd795cdace9bc1f814296a9aa873)), closes [#30615](https://github.com/bitnami/charts/issues/30615)
 
 ## <small>15.0.7 (2024-11-22)</small>
 

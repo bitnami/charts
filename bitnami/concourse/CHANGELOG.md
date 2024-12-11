@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.15 (2024-12-05)
+## 5.1.0 (2024-12-10)
 
-* [bitnami/concourse] Release 5.0.15 ([#30792](https://github.com/bitnami/charts/pull/30792))
+* [bitnami/concourse] Detect non-standard images ([#30872](https://github.com/bitnami/charts/pull/30872))
+
+## <small>5.0.15 (2024-12-05)</small>
+
+* [bitnami/concourse] Release 5.0.15 (#30792) ([51f0d05](https://github.com/bitnami/charts/commit/51f0d051baad14130026737253d1184cbddf43c7)), closes [#30792](https://github.com/bitnami/charts/issues/30792)
 
 ## <small>5.0.14 (2024-12-03)</small>
 

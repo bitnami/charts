@@ -1,8 +1,14 @@
 # Changelog
 
-## 0.1.15 (2024-12-07)
+## 0.2.0 (2024-12-10)
 
-* [bitnami/dremio] Release 0.1.15 ([#30824](https://github.com/bitnami/charts/pull/30824))
+* [bitnami/dremio] Detect non-standard images ([#30897](https://github.com/bitnami/charts/pull/30897))
+
+## <small>0.1.15 (2024-12-07)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/dremio] Release 0.1.15 (#30824) ([62722f1](https://github.com/bitnami/charts/commit/62722f170126f40264c8df03723543b8dda7f8a5)), closes [#30824](https://github.com/bitnami/charts/issues/30824)
 
 ## <small>0.1.14 (2024-11-29)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.0.1 (2024-11-29)
+## 1.1.0 (2024-12-10)
 
-* [bitnami/janusgraph] chore: :bulb: :memo: :rotating_light: Rename prometheus "@section" to avoid linter problems ([#30684](https://github.com/bitnami/charts/pull/30684))
+* [bitnami/janusgraph] Detect non-standard images ([#30906](https://github.com/bitnami/charts/pull/30906))
+
+## <small>1.0.1 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/janusgraph] chore: :bulb: :memo: :rotating_light: Rename prometheus "@section" to avoid lin ([5afb864](https://github.com/bitnami/charts/commit/5afb864a77fdf1069d28bd498e52e36b45c17e1b)), closes [#30684](https://github.com/bitnami/charts/issues/30684)
 
 ## 1.0.0 (2024-11-22)
 

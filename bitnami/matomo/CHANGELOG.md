@@ -1,8 +1,12 @@
 # Changelog
 
+## 9.1.0 (2024-12-10)
+
+* [bitnami/matomo] Detect non-standard images ([#30957](https://github.com/bitnami/charts/pull/30957))
+
 ## 9.0.0 (2024-11-12)
 
-* [bitnami/matomo] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30354](https://github.com/bitnami/charts/pull/30354))
+* [bitnami/matomo] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30354) ([a9c658d](https://github.com/bitnami/charts/commit/a9c658dc5fce8487df2a207fdb75baadd2b976b4)), closes [#30354](https://github.com/bitnami/charts/issues/30354)
 
 ## <small>8.0.14 (2024-11-04)</small>
 

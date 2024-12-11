@@ -1,8 +1,14 @@
 # Changelog
 
-## 34.0.1 (2024-12-08)
+## 34.1.0 (2024-12-10)
 
-* [bitnami/spring-cloud-dataflow] Release 34.0.1 ([#30829](https://github.com/bitnami/charts/pull/30829))
+* [bitnami/spring-cloud-dataflow] Detect non-standard images ([#30968](https://github.com/bitnami/charts/pull/30968))
+
+## <small>34.0.1 (2024-12-08)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/spring-cloud-dataflow] Release 34.0.1 (#30829) ([99bdcc4](https://github.com/bitnami/charts/commit/99bdcc485b97dd97b1e74836d6b32805aab7323f)), closes [#30829](https://github.com/bitnami/charts/issues/30829)
 
 ## 34.0.0 (2024-11-12)
 

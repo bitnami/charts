@@ -1,8 +1,13 @@
 # Changelog
 
+## 0.3.0 (2024-12-10)
+
+* [bitnami/keydb] Detect non-standard images ([#30901](https://github.com/bitnami/charts/pull/30901))
+
 ## 0.2.0 (2024-11-29)
 
-* [bitnami/keydb] feat: :sparkles: :memo: Allow password update via values.yaml ([#30691](https://github.com/bitnami/charts/pull/30691))
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/keydb] feat: :sparkles: :memo: Allow password update via values.yaml (#30691) ([adbd271](https://github.com/bitnami/charts/commit/adbd27134af8251569b8f463cf4d663d31f3b74d)), closes [#30691](https://github.com/bitnami/charts/issues/30691)
 
 ## <small>0.1.6 (2024-11-17)</small>
 
