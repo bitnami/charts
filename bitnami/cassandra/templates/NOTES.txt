@@ -93,3 +93,4 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "cassandra.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "" "tls" "volumePermissions") "context" $) }}
 {{- include "cassandra.warnings.jvm" . }}{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

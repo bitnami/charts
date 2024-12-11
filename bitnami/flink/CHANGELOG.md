@@ -1,8 +1,14 @@
 # Changelog
 
-## 1.3.16 (2024-11-16)
+## 1.4.0 (2024-12-10)
 
-* [bitnami/flink] Release 1.3.16 ([#30486](https://github.com/bitnami/charts/pull/30486))
+* [bitnami/flink] Detect non-standard images ([#30893](https://github.com/bitnami/charts/pull/30893))
+
+## <small>1.3.16 (2024-11-16)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/flink] Release 1.3.16 (#30486) ([1794591](https://github.com/bitnami/charts/commit/1794591109bfa996ede6717411d1737b277b63dc)), closes [#30486](https://github.com/bitnami/charts/issues/30486)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>1.3.15 (2024-10-07)</small>
 

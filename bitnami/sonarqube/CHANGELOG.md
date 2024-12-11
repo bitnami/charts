@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.0.2 (2024-11-09)
+## 6.1.0 (2024-12-10)
 
-* [bitnami/sonarqube] Release 6.0.2 ([#30375](https://github.com/bitnami/charts/pull/30375))
+* [bitnami/sonarqube] Detect non-standard images ([#30946](https://github.com/bitnami/charts/pull/30946))
+
+## <small>6.0.2 (2024-11-09)</small>
+
+* [bitnami/sonarqube] Release 6.0.2 (#30375) ([2d84f80](https://github.com/bitnami/charts/commit/2d84f800258959ee519399f59824ad8e9ddda13a)), closes [#30375](https://github.com/bitnami/charts/issues/30375)
 
 ## <small>6.0.1 (2024-11-08)</small>
 

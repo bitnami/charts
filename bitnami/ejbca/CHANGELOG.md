@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.1 (2024-11-16)
+## 16.1.0 (2024-12-10)
 
-* [bitnami/ejbca] Release 16.0.1 ([#30485](https://github.com/bitnami/charts/pull/30485))
+* [bitnami/ejbca] Detect non-standard images ([#30879](https://github.com/bitnami/charts/pull/30879))
+
+## <small>16.0.1 (2024-11-16)</small>
+
+* [bitnami/ejbca] Release 16.0.1 (#30485) ([efd14a3](https://github.com/bitnami/charts/commit/efd14a3db551878a23b069b1ef6f4ac37b145e32)), closes [#30485](https://github.com/bitnami/charts/issues/30485)
 
 ## 16.0.0 (2024-11-12)
 

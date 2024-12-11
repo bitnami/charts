@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.11 (2024-12-09)
+## 24.1.0 (2024-12-10)
 
-* [bitnami/wordpress] Release 24.0.11 ([#30846](https://github.com/bitnami/charts/pull/30846))
+* [bitnami/wordpress] Detect non-standard images ([#30970](https://github.com/bitnami/charts/pull/30970))
+
+## <small>24.0.11 (2024-12-09)</small>
+
+* [bitnami/wordpress] Release 24.0.11 (#30846) ([7940dc2](https://github.com/bitnami/charts/commit/7940dc2203aedd08e40afd739b749f4732f81a16)), closes [#30846](https://github.com/bitnami/charts/issues/30846)
 
 ## <small>24.0.10 (2024-12-04)</small>
 

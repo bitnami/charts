@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.2 (2024-11-22)
+## 11.4.0 (2024-12-10)
 
-* [bitnami/kibana] Release 11.3.2 ([#30593](https://github.com/bitnami/charts/pull/30593))
+* [bitnami/kibana] Detect non-standard images ([#30899](https://github.com/bitnami/charts/pull/30899))
+
+## <small>11.3.2 (2024-11-22)</small>
+
+* [bitnami/kibana] Release 11.3.2 (#30593) ([bfff921](https://github.com/bitnami/charts/commit/bfff9213692e93b60cb99da98c0aeadd935565ef)), closes [#30593](https://github.com/bitnami/charts/issues/30593)
 
 ## <small>11.3.1 (2024-11-18)</small>
 

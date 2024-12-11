@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.0 (2024-11-15)
+## 1.5.0 (2024-12-10)
 
-* [bitnami/opensearch] Enable automated setup of snapshot policies ([#29796](https://github.com/bitnami/charts/pull/29796))
+* [bitnami/opensearch] Detect non-standard images ([#30934](https://github.com/bitnami/charts/pull/30934))
+
+## 1.4.0 (2024-11-18)
+
+* [bitnami/opensearch] Enable automated setup of snapshot policies (#29796) ([39322b9](https://github.com/bitnami/charts/commit/39322b9054f3d88006a18c240165dfc7608f5aad)), closes [#29796](https://github.com/bitnami/charts/issues/29796)
 
 ## <small>1.3.14 (2024-11-08)</small>
 

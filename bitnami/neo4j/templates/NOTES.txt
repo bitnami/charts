@@ -98,3 +98,4 @@ To access your Neo4j site from outside the cluster follow the steps below:
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "neo4j.validateValues" . }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

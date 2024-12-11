@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.6.1 (2024-11-30)
+## 3.7.0 (2024-12-10)
 
-* [bitnami/apisix] Release 3.6.1 ([#30695](https://github.com/bitnami/charts/pull/30695))
+* [bitnami/apisix] Detect non-standard images ([#30861](https://github.com/bitnami/charts/pull/30861))
+
+## <small>3.6.1 (2024-11-30)</small>
+
+* [bitnami/apisix] Release 3.6.1 (#30695) ([292979c](https://github.com/bitnami/charts/commit/292979cddcab9e5228ff2e52f06f7559530ea7cd)), closes [#30695](https://github.com/bitnami/charts/issues/30695)
 
 ## 3.6.0 (2024-11-29)
 

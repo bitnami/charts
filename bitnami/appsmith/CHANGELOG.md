@@ -1,8 +1,17 @@
 # Changelog
 
-## 5.0.12 (2024-12-06)
+## 5.1.1 (2024-12-11)
 
-* [bitnami/appsmith] Release 5.0.12 ([#30816](https://github.com/bitnami/charts/pull/30816))
+* [bitnami/appsmith] Release 5.1.1 ([#30984](https://github.com/bitnami/charts/pull/30984))
+
+## 5.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/appsmith] Detect non-standard images (#30863) ([3f553da](https://github.com/bitnami/charts/commit/3f553da2a6361243e3c33142ce285e80aa50d1bc)), closes [#30863](https://github.com/bitnami/charts/issues/30863)
+
+## <small>5.0.12 (2024-12-06)</small>
+
+* [bitnami/appsmith] Release 5.0.12 (#30816) ([e2cd722](https://github.com/bitnami/charts/commit/e2cd7226a84b5cb63b17d590e1000e36f2f893d4)), closes [#30816](https://github.com/bitnami/charts/issues/30816)
 
 ## <small>5.0.11 (2024-12-04)</small>
 
