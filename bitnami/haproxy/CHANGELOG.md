@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.2.1 (2024-12-11)
+
+* [bitnami/haproxy] Release 2.2.1 ([#30995](https://github.com/bitnami/charts/pull/30995))
+
 ## 2.2.0 (2024-12-10)
 
-* [bitnami/haproxy] Detect non-standard images ([#30884](https://github.com/bitnami/charts/pull/30884))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/haproxy] Detect non-standard images (#30884) ([253b77d](https://github.com/bitnami/charts/commit/253b77de688baec7c5c6db00a8999129ad67cdc6)), closes [#30884](https://github.com/bitnami/charts/issues/30884)
 
 ## <small>2.1.12 (2024-12-03)</small>
 
