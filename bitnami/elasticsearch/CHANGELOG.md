@@ -1,8 +1,16 @@
 # Changelog
 
+## 21.4.1 (2024-12-11)
+
+* bitnami/elasticsearch: mount cerst to master node instead empty-dir ([#30989](https://github.com/bitnami/charts/pull/30989))
+
 ## 21.4.0 (2024-12-10)
 
-* [bitnami/elasticsearch] Detect non-standard images ([#30880](https://github.com/bitnami/charts/pull/30880))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/elasticsearch] Detect non-standard images (#30880) ([c74993f](https://github.com/bitnami/charts/commit/c74993fc926949dcc570189ce5bbdef4ec76334c)), closes [#30880](https://github.com/bitnami/charts/issues/30880)
 
 ## <small>21.3.26 (2024-11-22)</small>
 
