@@ -1,8 +1,15 @@
 # Changelog
 
+## 4.3.1 (2024-12-11)
+
+* [bitnami/tensorflow-resnet] Release 4.3.1 ([#30987](https://github.com/bitnami/charts/pull/30987))
+
 ## 4.3.0 (2024-12-10)
 
-* [bitnami/tensorflow-resnet] Detect non-standard images ([#30969](https://github.com/bitnami/charts/pull/30969))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/tensorflow-resnet] Detect non-standard images (#30969) ([65341d4](https://github.com/bitnami/charts/commit/65341d444cb3df3c1dda0b5a310e5a265fbaee2c)), closes [#30969](https://github.com/bitnami/charts/issues/30969)
 
 ## <small>4.2.15 (2024-11-11)</small>
 
