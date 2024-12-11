@@ -1,8 +1,14 @@
 # Changelog
 
-## 3.0.4 (2024-12-03)
+## 3.1.0 (2024-12-10)
 
-* [bitnami/gitea] Release 3.0.4 ([#30750](https://github.com/bitnami/charts/pull/30750))
+* [bitnami/gitea] Detect non-standard images ([#30889](https://github.com/bitnami/charts/pull/30889))
+
+## <small>3.0.4 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/gitea] Release 3.0.4 (#30750) ([61e17d8](https://github.com/bitnami/charts/commit/61e17d8e5b627d9bd2174a28708edfb2b611ca53)), closes [#30750](https://github.com/bitnami/charts/issues/30750)
 
 ## <small>3.0.3 (2024-11-27)</small>
 

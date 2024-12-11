@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.0.1 (2024-11-14)
+## 32.1.0 (2024-12-10)
 
-* [bitnami/redmine] Release 32.0.1 ([#30466](https://github.com/bitnami/charts/pull/30466))
+* [bitnami/redmine] Detect non-standard images ([#30964](https://github.com/bitnami/charts/pull/30964))
+
+## <small>32.0.1 (2024-11-14)</small>
+
+* [bitnami/redmine] Release 32.0.1 (#30466) ([a679e2f](https://github.com/bitnami/charts/commit/a679e2fbefd2547bfd6576b18a31e7f19ccfd49d)), closes [#30466](https://github.com/bitnami/charts/issues/30466)
 
 ## 32.0.0 (2024-11-14)
 

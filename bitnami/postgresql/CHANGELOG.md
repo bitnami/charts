@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.5 (2024-12-03)
+## 16.3.0 (2024-12-10)
 
-* [bitnami/postgresql] Release 16.2.5 ([#30733](https://github.com/bitnami/charts/pull/30733))
+* [bitnami/postgresql] Detect non-standard images ([#30936](https://github.com/bitnami/charts/pull/30936))
+
+## <small>16.2.5 (2024-12-03)</small>
+
+* [bitnami/postgresql] Release 16.2.5 (#30733) ([34606c1](https://github.com/bitnami/charts/commit/34606c10dedd06431182d0563fb61703e691ddf1)), closes [#30733](https://github.com/bitnami/charts/issues/30733)
 
 ## <small>16.2.4 (2024-12-03)</small>
 

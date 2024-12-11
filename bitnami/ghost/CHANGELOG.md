@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.10 (2024-12-09)
+## 22.1.0 (2024-12-10)
 
-* [bitnami/ghost] Release 22.0.10 ([#30831](https://github.com/bitnami/charts/pull/30831))
+* [bitnami/ghost] Detect non-standard images ([#30890](https://github.com/bitnami/charts/pull/30890))
+
+## <small>22.0.10 (2024-12-09)</small>
+
+* [bitnami/ghost] Release 22.0.10 (#30831) ([4e2d5d2](https://github.com/bitnami/charts/commit/4e2d5d2aaceeffbf2c255938e74810c1baf75c91)), closes [#30831](https://github.com/bitnami/charts/issues/30831)
 
 ## <small>22.0.9 (2024-12-06)</small>
 

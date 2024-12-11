@@ -80,3 +80,4 @@ WARNING: For Prometheus metrics to work, make sure that the kibana-prometheus-ex
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

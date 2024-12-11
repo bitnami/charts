@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.6 (2024-11-26)
+## 18.3.0 (2024-12-10)
 
-* [bitnami/nginx] Release 18.2.6 ([#30632](https://github.com/bitnami/charts/pull/30632))
+* [bitnami/nginx] Detect non-standard images ([#30907](https://github.com/bitnami/charts/pull/30907))
+
+## <small>18.2.6 (2024-11-26)</small>
+
+* [bitnami/nginx] Release 18.2.6 (#30632) ([b0b23d2](https://github.com/bitnami/charts/commit/b0b23d29797630a291c14b30c82c5b2ac0eece4a)), closes [#30632](https://github.com/bitnami/charts/issues/30632)
 
 ## <small>18.2.5 (2024-11-08)</small>
 

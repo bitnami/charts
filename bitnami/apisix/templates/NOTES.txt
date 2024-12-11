@@ -206,3 +206,4 @@ The Ingress Class name to use the APISIX Ingress Controller is: {{ .Values.ingre
 {{- include "apisix.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "controlPlane" "dashboard" "dataPlane" "ingressController") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.dashboard.image .Values.ingressController.image .Values.waitContainer.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.dashboard.image .Values.ingressController.image .Values.waitContainer.image) "context" $) }}

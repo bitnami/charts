@@ -1,8 +1,14 @@
 # Changelog
 
-## 2.3.22 (2024-12-03)
+## 2.4.0 (2024-12-10)
 
-* [bitnami/flux] Release 2.3.22 ([#30749](https://github.com/bitnami/charts/pull/30749))
+* [bitnami/flux] Detect non-standard images ([#30892](https://github.com/bitnami/charts/pull/30892))
+
+## <small>2.3.22 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/flux] Release 2.3.22 (#30749) ([1ecb342](https://github.com/bitnami/charts/commit/1ecb342be439ce78a2bddb4cf433a9384505c09b)), closes [#30749](https://github.com/bitnami/charts/issues/30749)
 
 ## <small>2.3.21 (2024-11-07)</small>
 

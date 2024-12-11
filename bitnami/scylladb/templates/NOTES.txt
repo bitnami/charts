@@ -94,3 +94,4 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "scylladb.warnings.jvm" . }}
 {{- include "scylladb.warnings.jmx" . }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctl.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctl.image) "context" $) }}
