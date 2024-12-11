@@ -55,3 +55,4 @@ To access zipkin from outside the cluster follow the steps below:
 {{- include "zipkin.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "" "defaultInitContainers.waitForCassandra" "defaultInitContainers.initCerts") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.defaultInitContainers.waitForCassandra.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.defaultInitContainers.waitForCassandra.image) "context" $) }}

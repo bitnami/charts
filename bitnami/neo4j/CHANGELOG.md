@@ -1,8 +1,15 @@
 # Changelog
 
-## 0.1.17 (2024-12-09)
+## 0.2.0 (2024-12-10)
 
-* [bitnami/neo4j] Release 0.1.17 ([#30841](https://github.com/bitnami/charts/pull/30841))
+* [bitnami/neo4j] Detect non-standard images ([#30917](https://github.com/bitnami/charts/pull/30917))
+
+## <small>0.1.17 (2024-12-09)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/neo4j] Release 0.1.17 (#30841) ([d67bdde](https://github.com/bitnami/charts/commit/d67bdde9423969d62ad7d95771c779b6aeb55989)), closes [#30841](https://github.com/bitnami/charts/issues/30841)
 
 ## <small>0.1.16 (2024-10-31)</small>
 

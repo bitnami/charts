@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.3 (2024-11-08)
+## 17.1.0 (2024-12-10)
 
-* [bitnami/kubeapps] Unify seLinuxOptions default value ([#30343](https://github.com/bitnami/charts/pull/30343))
+* [bitnami/kubeapps] Detect non-standard images ([#30914](https://github.com/bitnami/charts/pull/30914))
+
+## <small>17.0.3 (2024-11-08)</small>
+
+* [bitnami/kubeapps] Unify seLinuxOptions default value (#30343) ([bdebc92](https://github.com/bitnami/charts/commit/bdebc9238ffec5d47e805966811a3be84e4f0d79)), closes [#30343](https://github.com/bitnami/charts/issues/30343)
 
 ## <small>17.0.2 (2024-10-31)</small>
 

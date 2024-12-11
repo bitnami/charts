@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.21 (2024-12-06)
+## 2.2.0 (2024-12-10)
 
-* [bitnami/multus-cni] Release 2.1.21 ([#30823](https://github.com/bitnami/charts/pull/30823))
+* [bitnami/multus-cni] Detect non-standard images ([#30928](https://github.com/bitnami/charts/pull/30928))
+
+## <small>2.1.21 (2024-12-06)</small>
+
+* [bitnami/multus-cni] Release 2.1.21 (#30823) ([68cc34d](https://github.com/bitnami/charts/commit/68cc34d392e8ca36648bd1b0ac991bad11b46c84)), closes [#30823](https://github.com/bitnami/charts/issues/30823)
 
 ## <small>2.1.20 (2024-12-04)</small>
 

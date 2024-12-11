@@ -1,8 +1,14 @@
 # Changelog
 
-## 3.2.16 (2024-12-04)
+## 3.3.0 (2024-12-10)
 
-* [bitnami/kubernetes-event-exporter] Release 3.2.16 ([#30761](https://github.com/bitnami/charts/pull/30761))
+* [bitnami/kubernetes-event-exporter] Detect non-standard images ([#30955](https://github.com/bitnami/charts/pull/30955))
+
+## <small>3.2.16 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kubernetes-event-exporter] Release 3.2.16 (#30761) ([e5ae0b8](https://github.com/bitnami/charts/commit/e5ae0b83dc8f34ed2ebd6fca13f2026905d001f2)), closes [#30761](https://github.com/bitnami/charts/issues/30761)
 
 ## <small>3.2.15 (2024-11-07)</small>
 
