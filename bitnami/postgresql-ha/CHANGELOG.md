@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.4 (2024-12-03)
+## 15.1.0 (2024-12-10)
 
-* [bitnami/postgresql-ha] Release 15.0.4 ([#30732](https://github.com/bitnami/charts/pull/30732))
+* [bitnami/postgresql-ha] Detect non-standard images ([#30937](https://github.com/bitnami/charts/pull/30937))
+
+## <small>15.0.4 (2024-12-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.0.4 (#30732) ([dd65642](https://github.com/bitnami/charts/commit/dd6564295a9a3bf1e56ba16663ee6b6e92ff4721)), closes [#30732](https://github.com/bitnami/charts/issues/30732)
 
 ## <small>15.0.3 (2024-12-03)</small>
 

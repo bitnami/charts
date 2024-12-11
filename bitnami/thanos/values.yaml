@@ -20,6 +20,11 @@ global:
   imagePullSecrets: []
   defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -3229,7 +3234,7 @@ storegateway:
   ## @param storegateway.sharded.hashPartitioning.shards Setting hashPartitioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks
   ## @param storegateway.sharded.hashPartitioning.extraRelabelingConfigs Setting extra relabel config
   ## e,g:
-  ## extraRelabelingConfigs: 
+  ## extraRelabelingConfigs:
   ##   - action: keep
   ##     source_labels: ["region"]
   ##     regex: cn-zhangjiakou
@@ -4997,7 +5002,7 @@ volumePermissions:
     ##
     pullSecrets: []
 ## @section MinIO&reg; chart parameters
-## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
+## @extra minio For full list of MinIO&reg; values configurations please refer [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
 minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation
   ## to be used as an objstore for Thanos

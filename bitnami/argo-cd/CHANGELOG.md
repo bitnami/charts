@@ -1,8 +1,15 @@
 # Changelog
 
-## 7.0.26 (2024-12-03)
+## 7.1.0 (2024-12-10)
 
-* [bitnami/argo-cd] Release 7.0.26 ([#30743](https://github.com/bitnami/charts/pull/30743))
+* [bitnami/argo-cd] Detect non-standard images ([#30862](https://github.com/bitnami/charts/pull/30862))
+
+## <small>7.0.26 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/argo-cd] Release 7.0.26 (#30743) ([70bd184](https://github.com/bitnami/charts/commit/70bd184d88136b8a2e87c9eab5c11371c14d922d)), closes [#30743](https://github.com/bitnami/charts/issues/30743)
 
 ## <small>7.0.25 (2024-11-20)</small>
 

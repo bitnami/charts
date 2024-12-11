@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.14 (2024-11-08)
+## 9.3.0 (2024-12-10)
 
-* [bitnami/spark] Unify seLinuxOptions default value ([#30326](https://github.com/bitnami/charts/pull/30326))
+* [bitnami/spark] Detect non-standard images ([#30947](https://github.com/bitnami/charts/pull/30947))
+
+## <small>9.2.14 (2024-11-08)</small>
+
+* [bitnami/spark] Unify seLinuxOptions default value (#30326) ([f47256e](https://github.com/bitnami/charts/commit/f47256e1c1d90eecb1850ca453568e9c8990ea5c)), closes [#30326](https://github.com/bitnami/charts/issues/30326)
 
 ## <small>9.2.13 (2024-11-04)</small>
 

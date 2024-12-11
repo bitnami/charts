@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.3 (2024-12-03)
+## 11.1.0 (2024-12-10)
 
-* [bitnami/argo-workflows] Release 11.0.3 ([#30740](https://github.com/bitnami/charts/pull/30740))
+* [bitnami/argo-workflows] Detect non-standard images ([#30864](https://github.com/bitnami/charts/pull/30864))
+
+## <small>11.0.3 (2024-12-03)</small>
+
+* [bitnami/argo-workflows] Release 11.0.3 (#30740) ([a3c6c77](https://github.com/bitnami/charts/commit/a3c6c77e3ed1f94056b2fc4212167b326c66bff6)), closes [#30740](https://github.com/bitnami/charts/issues/30740)
 
 ## <small>11.0.2 (2024-12-02)</small>
 

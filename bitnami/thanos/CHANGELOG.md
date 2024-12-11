@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.8.4 (2024-12-04)
+## 15.9.0 (2024-12-10)
 
-* [bitnami/thanos] Release 15.8.4 ([#30783](https://github.com/bitnami/charts/pull/30783))
+* [bitnami/thanos] Detect non-standard images ([#30948](https://github.com/bitnami/charts/pull/30948))
+
+## <small>15.8.5 (2024-12-10)</small>
+
+* [bitnami/thanos] Allow for shards that are both time and hash partitioned. (#30826) ([bb42a7e](https://github.com/bitnami/charts/commit/bb42a7ebded506612dc56783d5f9c7c5ce0bc9b0)), closes [#30826](https://github.com/bitnami/charts/issues/30826)
+
+## <small>15.8.4 (2024-12-04)</small>
+
+* [bitnami/thanos] Release 15.8.4 (#30783) ([a172556](https://github.com/bitnami/charts/commit/a172556265fa310e0fdfbde50da4711b45019499)), closes [#30783](https://github.com/bitnami/charts/issues/30783)
 
 ## <small>15.8.3 (2024-12-04)</small>
 

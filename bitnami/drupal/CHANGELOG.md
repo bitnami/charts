@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.4 (2024-11-24)
+## 21.1.0 (2024-12-10)
 
-* [bitnami/drupal] Release 21.0.4 ([#30610](https://github.com/bitnami/charts/pull/30610))
+* [bitnami/drupal] Detect non-standard images ([#30878](https://github.com/bitnami/charts/pull/30878))
+
+## <small>21.0.4 (2024-11-24)</small>
+
+* [bitnami/drupal] Release 21.0.4 (#30610) ([dec99e6](https://github.com/bitnami/charts/commit/dec99e61d7a64043582daf4ff3507cf55d3e93ed)), closes [#30610](https://github.com/bitnami/charts/issues/30610)
 
 ## <small>21.0.3 (2024-11-22)</small>
 

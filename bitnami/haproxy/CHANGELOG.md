@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.1.12 (2024-12-03)
+## 2.2.0 (2024-12-10)
 
-* [bitnami/haproxy] Release 2.1.12 ([#30756](https://github.com/bitnami/charts/pull/30756))
+* [bitnami/haproxy] Detect non-standard images ([#30884](https://github.com/bitnami/charts/pull/30884))
+
+## <small>2.1.12 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/haproxy] Release 2.1.12 (#30756) ([fca70ce](https://github.com/bitnami/charts/commit/fca70ce28a049725afdf7c09312fc7bed14847db)), closes [#30756](https://github.com/bitnami/charts/issues/30756)
 
 ## <small>2.1.11 (2024-11-26)</small>
 

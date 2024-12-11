@@ -1,8 +1,15 @@
 # Changelog
 
-## 11.3.22 (2024-12-03)
+## 11.4.0 (2024-12-10)
 
-* [bitnami/consul] Release 11.3.22 ([#30744](https://github.com/bitnami/charts/pull/30744))
+* [bitnami/consul] Detect non-standard images ([#30873](https://github.com/bitnami/charts/pull/30873))
+
+## <small>11.3.22 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/consul] Release 11.3.22 (#30744) ([ac8988c](https://github.com/bitnami/charts/commit/ac8988cc3a6f252bda827aa7ce11ed7ebc1ff75a)), closes [#30744](https://github.com/bitnami/charts/issues/30744)
 
 ## <small>11.3.21 (2024-11-09)</small>
 

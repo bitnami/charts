@@ -1,8 +1,12 @@
 # Changelog
 
-## 28.0.3 (2024-12-05)
+## 28.1.0 (2024-12-10)
 
-* [bitnami/odoo] Release 28.0.3 ([#30806](https://github.com/bitnami/charts/pull/30806))
+* [bitnami/odoo] Detect non-standard images ([#30910](https://github.com/bitnami/charts/pull/30910))
+
+## <small>28.0.3 (2024-12-06)</small>
+
+* [bitnami/odoo] Release 28.0.3 (#30806) ([82182ac](https://github.com/bitnami/charts/commit/82182ac46fe08461ee98a7415ef12419363afbc4)), closes [#30806](https://github.com/bitnami/charts/issues/30806)
 
 ## <small>28.0.2 (2024-12-04)</small>
 

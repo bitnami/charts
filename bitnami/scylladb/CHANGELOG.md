@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.1 (2024-11-14)
+## 3.1.0 (2024-12-10)
 
-* [bitnami/scylladb] Release 3.0.1 ([#30448](https://github.com/bitnami/charts/pull/30448))
+* [bitnami/scylladb] Detect non-standard images ([#30944](https://github.com/bitnami/charts/pull/30944))
+
+## <small>3.0.1 (2024-11-14)</small>
+
+* [bitnami/scylladb] Release 3.0.1 (#30448) ([b27ef33](https://github.com/bitnami/charts/commit/b27ef3335324cf0d512aa97f45d4b469d814a45e)), closes [#30448](https://github.com/bitnami/charts/issues/30448)
 
 ## 3.0.0 (2024-10-29)
 
