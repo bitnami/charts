@@ -1,8 +1,13 @@
 # Changelog
 
+## 3.1.1 (2024-12-11)
+
+* [bitnami/gitea] Release 3.1.1 ([#31000](https://github.com/bitnami/charts/pull/31000))
+
 ## 3.1.0 (2024-12-10)
 
-* [bitnami/gitea] Detect non-standard images ([#30889](https://github.com/bitnami/charts/pull/30889))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/gitea] Detect non-standard images (#30889) ([00a7a4e](https://github.com/bitnami/charts/commit/00a7a4e5ed1d81a90cf5f5c9f1b816eb1b0becac)), closes [#30889](https://github.com/bitnami/charts/issues/30889)
 
 ## <small>3.0.4 (2024-12-03)</small>
 
