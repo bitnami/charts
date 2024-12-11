@@ -1,8 +1,13 @@
 # Changelog
 
+## 22.1.1 (2024-12-11)
+
+* [bitnami/ghost] Release 22.1.1 ([#30997](https://github.com/bitnami/charts/pull/30997))
+
 ## 22.1.0 (2024-12-10)
 
-* [bitnami/ghost] Detect non-standard images ([#30890](https://github.com/bitnami/charts/pull/30890))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/ghost] Detect non-standard images (#30890) ([156d8c6](https://github.com/bitnami/charts/commit/156d8c6d221dd477db64253f55666d1d29e7f95e)), closes [#30890](https://github.com/bitnami/charts/issues/30890)
 
 ## <small>22.0.10 (2024-12-09)</small>
 
