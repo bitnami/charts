@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.1.1 (2024-12-11)
+
+* [bitnami/chainloop] Release 2.1.1 ([#30991](https://github.com/bitnami/charts/pull/30991))
+
 ## 2.1.0 (2024-12-10)
 
-* [bitnami/chainloop] Detect non-standard images ([#30869](https://github.com/bitnami/charts/pull/30869))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/chainloop] Detect non-standard images (#30869) ([739c820](https://github.com/bitnami/charts/commit/739c820747264bf5a6c777af547c267191880c07)), closes [#30869](https://github.com/bitnami/charts/issues/30869)
 
 ## <small>2.0.51 (2024-12-10)</small>
 
