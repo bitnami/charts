@@ -1,8 +1,13 @@
 # Changelog
 
+## 15.9.1 (2024-12-11)
+
+* [bitnami/thanos] Release 15.9.1 ([#30983](https://github.com/bitnami/charts/pull/30983))
+
 ## 15.9.0 (2024-12-10)
 
-* [bitnami/thanos] Detect non-standard images ([#30948](https://github.com/bitnami/charts/pull/30948))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/thanos] Detect non-standard images (#30948) ([f094a30](https://github.com/bitnami/charts/commit/f094a30ae63cfd95ee365a01ad3425655e397996)), closes [#30948](https://github.com/bitnami/charts/issues/30948)
 
 ## <small>15.8.5 (2024-12-10)</small>
 
