@@ -1,12 +1,13 @@
 # Changelog
 
-## 6.6.0 (2024-11-30)
+## 6.6.0 (2024-12-11)
 
 * [bitnami/influxdb] Feature to restore from AWS S3 ([#30696](https://github.com/bitnami/charts/pull/30696))
 
 ## 6.5.0 (2024-12-10)
 
-* [bitnami/influxdb] Detect non-standard images ([#30882](https://github.com/bitnami/charts/pull/30882))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/influxdb] Detect non-standard images (#30882) ([9406b31](https://github.com/bitnami/charts/commit/9406b319964695555717ff20832743fd65c35c40)), closes [#30882](https://github.com/bitnami/charts/issues/30882)
 
 ## <small>6.4.2 (2024-12-04)</small>
 
