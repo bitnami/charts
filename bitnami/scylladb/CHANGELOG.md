@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.2 (2024-12-12)
+## 3.1.3 (2024-12-12)
 
-* [bitnami/scylladb] Release 3.1.2 ([#31011](https://github.com/bitnami/charts/pull/31011))
+* [bitnami/scylladb] Release 3.1.3 ([#31012](https://github.com/bitnami/charts/pull/31012))
+
+## <small>3.1.2 (2024-12-12)</small>
+
+* [bitnami/scylladb] Release 3.1.2 (#31011) ([e875c12](https://github.com/bitnami/charts/commit/e875c1268312b61204b6599a517c546130b41ea5)), closes [#31011](https://github.com/bitnami/charts/issues/31011)
 
 ## <small>3.1.1 (2024-12-11)</small>
 
