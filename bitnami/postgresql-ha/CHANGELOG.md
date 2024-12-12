@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.1 (2024-12-11)
+## 15.1.1 (2024-12-12)
 
 * [bitnami/postgresql-ha]Add Storage Class Configuration to Templates ([#30993](https://github.com/bitnami/charts/pull/30993))
 
