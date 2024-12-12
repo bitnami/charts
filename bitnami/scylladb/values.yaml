@@ -137,7 +137,7 @@ initDBConfigMap: ""
 ## @param initDBSecret Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data
 ##
 initDBSecret: ""
-## @param existingConfiguration ConfigMap with custom scylladb configuration files. This overrides any other Scylladb configuration set in the chart
+## @param existingConfiguration ConfigMap with custom scylla.yaml configuration file. This overrides any other Scylladb configuration set in the chart
 ##
 existingConfiguration: ""
 ## Cluster parameters
