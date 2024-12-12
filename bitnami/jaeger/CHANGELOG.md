@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.1 (2024-12-10)
+## 5.1.2 (2024-12-12)
 
-* [bitnami/jaeger] Fix typo in NOTES.txt ([#30909](https://github.com/bitnami/charts/pull/30909))
+* [bitnami/jaeger] Release 5.1.2 ([#31021](https://github.com/bitnami/charts/pull/31021))
+
+## <small>5.1.1 (2024-12-10)</small>
+
+* [bitnami/jaeger] Fix typo in NOTES.txt (#30909) ([b7f1b92](https://github.com/bitnami/charts/commit/b7f1b926ecabfec95ef6c081d8b12f40d950d30e)), closes [#30909](https://github.com/bitnami/charts/issues/30909)
 
 ## 5.1.0 (2024-12-10)
 
