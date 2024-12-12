@@ -1998,6 +1998,8 @@ compactor:
   retentionResolutionRaw: 30d
   retentionResolution5m: 30d
   retentionResolution1h: 10y
+  ## @param compactor.concurrency Number of goroutines to use when compacting groups.
+  concurrency: 1
   ## @param compactor.consistencyDelay Minimum age of fresh (non-compacted) blocks before they are being processed
   ##
   consistencyDelay: 30m
