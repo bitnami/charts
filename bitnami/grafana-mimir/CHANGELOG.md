@@ -1,8 +1,18 @@
 # Changelog
 
-## 1.2.22 (2024-11-14)
+## 1.3.0 (2024-12-10)
 
-* [bitnami/grafana-mimir] Release 1.2.22 ([#30450](https://github.com/bitnami/charts/pull/30450))
+* [bitnami/grafana-mimir] Detect non-standard images ([#30887](https://github.com/bitnami/charts/pull/30887))
+
+## <small>1.2.23 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/grafana-mimir] Release 1.2.23 (#30753) ([e68da81](https://github.com/bitnami/charts/commit/e68da81a7fd7ae43414ca2e4ed9f7d8e169acd6e)), closes [#30753](https://github.com/bitnami/charts/issues/30753)
+
+## <small>1.2.22 (2024-11-14)</small>
+
+* [bitnami/grafana-mimir] Release 1.2.22 (#30450) ([d9d2d92](https://github.com/bitnami/charts/commit/d9d2d921e046f4ad56e35f7739856e4c3f9819c5)), closes [#30450](https://github.com/bitnami/charts/issues/30450)
 
 ## <small>1.2.21 (2024-11-07)</small>
 

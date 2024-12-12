@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.21 (2024-11-18)
+## 6.3.0 (2024-12-10)
 
-* [bitnami/aspnet-core] Release 6.2.21 ([#30502](https://github.com/bitnami/charts/pull/30502))
+* [bitnami/aspnet-core] Detect non-standard images ([#30865](https://github.com/bitnami/charts/pull/30865))
+
+## <small>6.2.21 (2024-11-18)</small>
+
+* [bitnami/aspnet-core] Release 6.2.21 (#30502) ([29c2afd](https://github.com/bitnami/charts/commit/29c2afd7d4b4f664dc2e6e215ee3d784cb49eae7)), closes [#30502](https://github.com/bitnami/charts/issues/30502)
 
 ## <small>6.2.20 (2024-11-18)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.2 (2024-11-26)
+## 7.1.0 (2024-12-10)
 
-* [bitnami/clickhouse] Release 7.0.2 ([#30633](https://github.com/bitnami/charts/pull/30633))
+* [bitnami/clickhouse] Detect non-standard images ([#30871](https://github.com/bitnami/charts/pull/30871))
+
+## <small>7.0.2 (2024-11-26)</small>
+
+* [bitnami/clickhouse] Release 7.0.2 (#30633) ([ec3a99c](https://github.com/bitnami/charts/commit/ec3a99ca9eea5bebe982e22d6b18b83bfbdfc14a)), closes [#30633](https://github.com/bitnami/charts/issues/30633)
 
 ## <small>7.0.1 (2024-11-25)</small>
 

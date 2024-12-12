@@ -1,8 +1,20 @@
 # Changelog
 
-## 3.7.13 (2024-11-07)
+## 3.8.0 (2024-12-10)
 
-* [bitnami/grafana-tempo] Release 3.7.13 ([#30269](https://github.com/bitnami/charts/pull/30269))
+* [bitnami/grafana-tempo] Detect non-standard images ([#30885](https://github.com/bitnami/charts/pull/30885))
+
+## <small>3.7.14 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/grafana-tempo] Release 3.7.14 (#30755) ([e824b8d](https://github.com/bitnami/charts/commit/e824b8dc038b776f5bc78dacbe4e74116bdb4447)), closes [#30755](https://github.com/bitnami/charts/issues/30755)
+
+## <small>3.7.13 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-tempo] Release 3.7.13 (#30269) ([7a5479f](https://github.com/bitnami/charts/commit/7a5479f60aa186487878ef21269be6e898ccb45c)), closes [#30269](https://github.com/bitnami/charts/issues/30269)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.7.12 (2024-10-16)</small>
 

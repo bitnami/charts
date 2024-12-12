@@ -1,8 +1,32 @@
 # Changelog
 
-## 15.8.2 (2024-11-26)
+## 15.9.1 (2024-12-11)
 
-* [bitnami/thanos] Release 15.8.2 ([#30626](https://github.com/bitnami/charts/pull/30626))
+* [bitnami/thanos] Release 15.9.1 ([#30983](https://github.com/bitnami/charts/pull/30983))
+
+## 15.9.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/thanos] Detect non-standard images (#30948) ([f094a30](https://github.com/bitnami/charts/commit/f094a30ae63cfd95ee365a01ad3425655e397996)), closes [#30948](https://github.com/bitnami/charts/issues/30948)
+
+## <small>15.8.5 (2024-12-10)</small>
+
+* [bitnami/thanos] Allow for shards that are both time and hash partitioned. (#30826) ([bb42a7e](https://github.com/bitnami/charts/commit/bb42a7ebded506612dc56783d5f9c7c5ce0bc9b0)), closes [#30826](https://github.com/bitnami/charts/issues/30826)
+
+## <small>15.8.4 (2024-12-04)</small>
+
+* [bitnami/thanos] Release 15.8.4 (#30783) ([a172556](https://github.com/bitnami/charts/commit/a172556265fa310e0fdfbde50da4711b45019499)), closes [#30783](https://github.com/bitnami/charts/issues/30783)
+
+## <small>15.8.3 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/thanos] Release 15.8.3 (#30779) ([963e102](https://github.com/bitnami/charts/commit/963e102d0cd1a5a359b839505015d4e7360c92ef)), closes [#30779](https://github.com/bitnami/charts/issues/30779)
+
+## <small>15.8.2 (2024-11-26)</small>
+
+* [bitnami/thanos] Release 15.8.2 (#30626) ([82d9517](https://github.com/bitnami/charts/commit/82d95175682e86d300667a1c75999a8acfa39ce5)), closes [#30626](https://github.com/bitnami/charts/issues/30626)
 
 ## <small>15.8.1 (2024-11-07)</small>
 

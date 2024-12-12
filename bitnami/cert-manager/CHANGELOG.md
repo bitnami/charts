@@ -1,8 +1,18 @@
 # Changelog
 
-## 1.3.23 (2024-11-20)
+## 1.4.0 (2024-12-10)
 
-* [bitnami/cert-manager] Release 1.3.23 ([#30552](https://github.com/bitnami/charts/pull/30552))
+* [bitnami/cert-manager] Detect non-standard images ([#30867](https://github.com/bitnami/charts/pull/30867))
+
+## <small>1.3.24 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/cert-manager] Release 1.3.24 (#30739) ([51daadc](https://github.com/bitnami/charts/commit/51daadc4dff95588d7684acdb404db1dc6925945)), closes [#30739](https://github.com/bitnami/charts/issues/30739)
+
+## <small>1.3.23 (2024-11-20)</small>
+
+* [bitnami/cert-manager] Release 1.3.23 (#30552) ([555fa36](https://github.com/bitnami/charts/commit/555fa36440a6344259ca94a1890029d476552c55)), closes [#30552](https://github.com/bitnami/charts/issues/30552)
 
 ## <small>1.3.22 (2024-11-07)</small>
 
