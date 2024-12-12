@@ -19,6 +19,11 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -179,8 +184,8 @@ initdbScriptsConfigMap: ""
 ## @param tls.certKeyFilename The secret key from the existingSecret if 'key' key different from the default (tls.key)
 ## @param tls.certCAFilename The secret key from the existingSecret if 'ca' key different from the default (tls.crt)
 ## @param tls.ca CA certificate for TLS. Ignored if `tls.existingSecret` is set
-## @param tls.cert TLS certificate for Airflow webserver. Ignored if `tls.master.existingSecret` is set
-## @param tls.key TLS key for Airflow webserver. Ignored if `tls.master.existingSecret` is set
+## @param tls.cert TLS certificate. Ignored if `tls.master.existingSecret` is set
+## @param tls.key TLS key. Ignored if `tls.master.existingSecret` is set
 ##
 tls:
   enabled: false

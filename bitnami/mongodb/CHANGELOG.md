@@ -1,8 +1,23 @@
 # Changelog
 
-## 16.3.1 (2024-11-19)
+## 16.4.0 (2024-12-10)
 
-* [bitnami/mongodb] fix: Modify access modes to match YAML 1.2 schema ([#30512](https://github.com/bitnami/charts/pull/30512))
+* [bitnami/mongodb] Detect non-standard images ([#30926](https://github.com/bitnami/charts/pull/30926))
+
+## <small>16.3.3 (2024-12-06)</small>
+
+* [bitnami/mongodb] Release 16.3.3 (#30822) ([83e96a2](https://github.com/bitnami/charts/commit/83e96a2cd17a29f10230af3ec16e0451fc5f4d0c)), closes [#30822](https://github.com/bitnami/charts/issues/30822)
+
+## <small>16.3.2 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/mongodb] Release 16.3.2 (#30785) ([38df250](https://github.com/bitnami/charts/commit/38df25008477850e56123c286ff9daa5e28777e4)), closes [#30785](https://github.com/bitnami/charts/issues/30785)
+
+## <small>16.3.1 (2024-11-26)</small>
+
+* [bitnami/mongodb] Modify access modes to match YAML 1.2 schema (#30512) ([7cd0bfa](https://github.com/bitnami/charts/commit/7cd0bfa7a78bb1c97c5658a31ecf3b54d60a1812)), closes [#30512](https://github.com/bitnami/charts/issues/30512)
 
 ## 16.3.0 (2024-11-14)
 

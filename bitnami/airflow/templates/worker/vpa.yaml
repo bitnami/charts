@@ -33,7 +33,7 @@ spec:
       {{- end }}
   targetRef:
     apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
-    kind: Statefulset
+    kind: StatefulSet
     name: {{ template "airflow.worker.fullname" . }}
   {{- if .Values.worker.autoscaling.vpa.updatePolicy }}
   updatePolicy:

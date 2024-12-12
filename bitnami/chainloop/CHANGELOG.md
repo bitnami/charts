@@ -1,8 +1,33 @@
 # Changelog
 
-## 2.0.47 (2024-11-29)
+## 2.1.1 (2024-12-11)
 
-* [bitnami/chainloop] Release 2.0.47 ([#30693](https://github.com/bitnami/charts/pull/30693))
+* [bitnami/chainloop] Release 2.1.1 ([#30991](https://github.com/bitnami/charts/pull/30991))
+
+## 2.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/chainloop] Detect non-standard images (#30869) ([739c820](https://github.com/bitnami/charts/commit/739c820747264bf5a6c777af547c267191880c07)), closes [#30869](https://github.com/bitnami/charts/issues/30869)
+
+## <small>2.0.51 (2024-12-10)</small>
+
+* [bitnami/chainloop] Release 2.0.51 (#30849) ([e07a5ac](https://github.com/bitnami/charts/commit/e07a5aca0dc34bdbd4e1c074f529b6446563c860)), closes [#30849](https://github.com/bitnami/charts/issues/30849)
+
+## <small>2.0.50 (2024-12-09)</small>
+
+* [bitnami/chainloop] Release 2.0.50 (#30838) ([7540ba4](https://github.com/bitnami/charts/commit/7540ba484d3b120f2f9a00037cc05d85f63e1f83)), closes [#30838](https://github.com/bitnami/charts/issues/30838)
+
+## <small>2.0.49 (2024-12-05)</small>
+
+* [bitnami/chainloop] Release 2.0.49 (#30808) ([13c83d3](https://github.com/bitnami/charts/commit/13c83d3a773da9f89d213f88082dfecdbe5ac80f)), closes [#30808](https://github.com/bitnami/charts/issues/30808)
+
+## <small>2.0.48 (2024-12-03)</small>
+
+* [bitnami/chainloop] Release 2.0.48 (#30741) ([6798264](https://github.com/bitnami/charts/commit/67982640075dededecca85819163000efda1f995)), closes [#30741](https://github.com/bitnami/charts/issues/30741)
+
+## <small>2.0.47 (2024-11-29)</small>
+
+* [bitnami/chainloop] Release 2.0.47 (#30693) ([a9e83fe](https://github.com/bitnami/charts/commit/a9e83feabf7ccf40a7f0260693a099c327fd3073)), closes [#30693](https://github.com/bitnami/charts/issues/30693)
 
 ## <small>2.0.46 (2024-11-27)</small>
 

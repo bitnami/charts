@@ -1,8 +1,31 @@
 # Changelog
 
-## 5.0.12 (2024-12-02)
+## 5.1.1 (2024-12-11)
 
-* [bitnami/concourse] Release 5.0.12 ([#30716](https://github.com/bitnami/charts/pull/30716))
+* [bitnami/concourse] Release 5.1.1 ([#30977](https://github.com/bitnami/charts/pull/30977))
+
+## 5.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/concourse] Detect non-standard images (#30872) ([62a2bd4](https://github.com/bitnami/charts/commit/62a2bd4c512a859b75d765c846d5cb2a9fe694b2)), closes [#30872](https://github.com/bitnami/charts/issues/30872)
+
+## <small>5.0.15 (2024-12-05)</small>
+
+* [bitnami/concourse] Release 5.0.15 (#30792) ([51f0d05](https://github.com/bitnami/charts/commit/51f0d051baad14130026737253d1184cbddf43c7)), closes [#30792](https://github.com/bitnami/charts/issues/30792)
+
+## <small>5.0.14 (2024-12-03)</small>
+
+* [bitnami/concourse] Release 5.0.14 (#30748) ([fa06b8c](https://github.com/bitnami/charts/commit/fa06b8c9d3b3d9844a2b31ffa0190066e48985b8)), closes [#30748](https://github.com/bitnami/charts/issues/30748)
+
+## <small>5.0.13 (2024-12-03)</small>
+
+* [bitnami/concourse] Release 5.0.13 (#30719) ([a4108f5](https://github.com/bitnami/charts/commit/a4108f51cad86eb0df6e433123cac7cb9e611140)), closes [#30719](https://github.com/bitnami/charts/issues/30719)
+
+## <small>5.0.12 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/concourse] Release 5.0.12 (#30716) ([dd849ee](https://github.com/bitnami/charts/commit/dd849eee5251131ce0be3f5837a15ce42952151d)), closes [#30716](https://github.com/bitnami/charts/issues/30716)
 
 ## <small>5.0.11 (2024-11-21)</small>
 

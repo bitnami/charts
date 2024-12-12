@@ -1,8 +1,18 @@
 # Changelog
 
-## 6.4.1 (2024-12-02)
+## 6.5.0 (2024-12-10)
 
-* [bitnami/influxdb] Release 6.4.1 ([#30717](https://github.com/bitnami/charts/pull/30717))
+* [bitnami/influxdb] Detect non-standard images ([#30882](https://github.com/bitnami/charts/pull/30882))
+
+## <small>6.4.2 (2024-12-04)</small>
+
+* [bitnami/influxdb] Release 6.4.2 (#30757) ([a472136](https://github.com/bitnami/charts/commit/a472136ebbbcb99b0414275ca419ef47028e8970)), closes [#30757](https://github.com/bitnami/charts/issues/30757)
+
+## <small>6.4.1 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/influxdb] Release 6.4.1 (#30717) ([61c79ed](https://github.com/bitnami/charts/commit/61c79ed90c424650e432fcb52f51d6f2df51a564)), closes [#30717](https://github.com/bitnami/charts/issues/30717)
 
 ## 6.4.0 (2024-11-29)
 

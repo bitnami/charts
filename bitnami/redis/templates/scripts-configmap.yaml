@@ -80,34 +80,37 @@ data:
     fi
 
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
-    validate_quorum() {
+
+    redis_cli_command() {
+        local timeout="${1:-0}"
+
+        local args=("-h" "$REDIS_SERVICE" "-p" "$SENTINEL_SERVICE_PORT")
+        local command="redis-cli"
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
-        else
-            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
+            args+=("--tls" "--cert" "$REDIS_TLS_CERT_FILE" "--key" "$REDIS_TLS_KEY_FILE")
+            [ -n "$REDIS_TLS_CA_FILE" ] && args+=("--cacert" "$REDIS_TLS_CA_FILE")
         fi
+        if [ "$timeout" -gt 0 ]; then
+            command="timeout $timeout $command"
+        fi
+
+        echo "{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }} $command ${args[*]}"
+    }
+
+    validate_quorum() {
+        quorum_info_command="$(redis_cli_command) sentinel master {{ .Values.sentinel.masterSet }}"
         info "about to run the command: $quorum_info_command"
         eval $quorum_info_command | grep -Fq "s_down"
     }
 
     trigger_manual_failover() {
-        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
-        else
-            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
-        fi
-
+        failover_command="$(redis_cli_command) sentinel failover {{ .Values.sentinel.masterSet }}"
         info "about to run the command: $failover_command"
         eval $failover_command
     }
 
     get_sentinel_master_info() {
-        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
-        else
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
-        fi
-
+        sentinel_info_command="$(redis_cli_command {{ .Values.sentinel.getMasterTimeout }}) sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         info "about to run the command: $sentinel_info_command"
         retry_while "eval $sentinel_info_command" 2 5
     }
@@ -203,7 +206,9 @@ data:
     ARGS+=("--tls-port" "${REDIS_TLS_PORT}")
     ARGS+=("--tls-cert-file" "${REDIS_TLS_CERT_FILE}")
     ARGS+=("--tls-key-file" "${REDIS_TLS_KEY_FILE}")
+    {{- if not (empty (include "redis.tlsCACert" .)) }}
     ARGS+=("--tls-ca-cert-file" "${REDIS_TLS_CA_FILE}")
+    {{- end }}
     ARGS+=("--tls-auth-clients" "${REDIS_TLS_AUTH_CLIENTS}")
     ARGS+=("--tls-replication" "yes")
     {{- if .Values.tls.dhParamsFilename }}
@@ -523,11 +528,14 @@ data:
     . /opt/bitnami/scripts/libos.sh
 
     run_redis_command() {
+        local args=("-h" "127.0.0.1")
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            redis-cli -h 127.0.0.1 -p "$REDIS_TLS_PORT" --tls --cert "$REDIS_TLS_CERT_FILE" --key "$REDIS_TLS_KEY_FILE" --cacert "$REDIS_TLS_CA_FILE" "$@"
+            args+=("-p" "$REDIS_TLS_PORT" "--tls" "--cert" "$REDIS_TLS_CERT_FILE" "--key" "$REDIS_TLS_KEY_FILE")
+            [ -n "$REDIS_TLS_CA_FILE" ] && args+=("--cacert" "$REDIS_TLS_CA_FILE")
         else
-            redis-cli -h 127.0.0.1 -p "$REDIS_PORT" "$@"
+            args+=("-p" "$REDIS_PORT")
         fi
+        redis-cli "${args[@]}" "$@"
     }
     is_master() {
         REDIS_ROLE=$(run_redis_command role | head -1)
@@ -628,7 +636,9 @@ data:
     ARGS+=("--tls-port" "${REDIS_TLS_PORT}")
     ARGS+=("--tls-cert-file" "${REDIS_TLS_CERT_FILE}")
     ARGS+=("--tls-key-file" "${REDIS_TLS_KEY_FILE}")
+    {{- if not (empty (include "redis.tlsCACert" .)) }}
     ARGS+=("--tls-ca-cert-file" "${REDIS_TLS_CA_FILE}")
+    {{- end }}
     ARGS+=("--tls-auth-clients" "${REDIS_TLS_AUTH_CLIENTS}")
     {{- if .Values.tls.dhParamsFilename }}
     ARGS+=("--tls-dh-params-file" "${REDIS_TLS_DH_PARAMS_FILE}")
@@ -736,7 +746,9 @@ data:
     ARGS+=("--tls-port" "${REDIS_TLS_PORT}")
     ARGS+=("--tls-cert-file" "${REDIS_TLS_CERT_FILE}")
     ARGS+=("--tls-key-file" "${REDIS_TLS_KEY_FILE}")
+    {{- if not (empty (include "redis.tlsCACert" .)) }}
     ARGS+=("--tls-ca-cert-file" "${REDIS_TLS_CA_FILE}")
+    {{- end }}
     ARGS+=("--tls-auth-clients" "${REDIS_TLS_AUTH_CLIENTS}")
     ARGS+=("--tls-replication" "yes")
     {{- if .Values.tls.dhParamsFilename }}

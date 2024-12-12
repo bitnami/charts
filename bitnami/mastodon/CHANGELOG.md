@@ -1,8 +1,19 @@
 # Changelog
 
-## 9.0.4 (2024-11-09)
+## 9.1.0 (2024-12-10)
 
-* [bitnami/mastodon] Release 9.0.4 ([#30383](https://github.com/bitnami/charts/pull/30383))
+* [bitnami/mastodon] Detect non-standard images ([#30921](https://github.com/bitnami/charts/pull/30921))
+
+## <small>9.0.5 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/mastodon] Release 9.0.5 (#30738) ([aec6ca5](https://github.com/bitnami/charts/commit/aec6ca52a4f822a7f7ccfa26187d413e2acb3ffe)), closes [#30738](https://github.com/bitnami/charts/issues/30738)
+
+## <small>9.0.4 (2024-11-09)</small>
+
+* [bitnami/mastodon] Release 9.0.4 (#30383) ([61061fc](https://github.com/bitnami/charts/commit/61061fc59a391e70de4782d64ce5e4a17d2115f1)), closes [#30383](https://github.com/bitnami/charts/issues/30383)
 
 ## <small>9.0.3 (2024-11-08)</small>
 

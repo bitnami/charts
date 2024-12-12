@@ -1,8 +1,21 @@
 # Changelog
 
-## 14.8.5 (2024-11-08)
+## 14.9.0 (2024-12-10)
 
-* [bitnami/minio] Release 14.8.5 ([#30312](https://github.com/bitnami/charts/pull/30312))
+* [bitnami/minio] Detect non-standard images ([#30924](https://github.com/bitnami/charts/pull/30924))
+
+## <small>14.8.6 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/minio] Release 14.8.6 (#30766) ([fd14ff8](https://github.com/bitnami/charts/commit/fd14ff8a9f4621f35ca43b68e97dc5d856133ac8)), closes [#30766](https://github.com/bitnami/charts/issues/30766)
+
+## <small>14.8.5 (2024-11-08)</small>
+
+* [bitnami/minio] Release 14.8.5 (#30312) ([b10ded8](https://github.com/bitnami/charts/commit/b10ded8570d4f70da7cc75a75685f4ff97a55717)), closes [#30312](https://github.com/bitnami/charts/issues/30312)
 
 ## <small>14.8.4 (2024-11-07)</small>
 

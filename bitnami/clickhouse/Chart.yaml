@@ -33,4 +33,4 @@ maintainers:
 name: clickhouse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/clickhouse
-version: 7.0.2
+version: 7.1.0
