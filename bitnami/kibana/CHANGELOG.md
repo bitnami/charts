@@ -1,8 +1,17 @@
 # Changelog
 
+## 11.4.1 (2024-12-12)
+
+* [bitnami/kibana] Release 11.4.1 ([#31024](https://github.com/bitnami/charts/pull/31024))
+
 ## 11.4.0 (2024-12-10)
 
-* [bitnami/kibana] Detect non-standard images ([#30899](https://github.com/bitnami/charts/pull/30899))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/kibana] Detect non-standard images (#30899) ([b32661c](https://github.com/bitnami/charts/commit/b32661c012482459be444620c95bb6877f55207e)), closes [#30899](https://github.com/bitnami/charts/issues/30899)
 
 ## <small>11.3.2 (2024-11-22)</small>
 
