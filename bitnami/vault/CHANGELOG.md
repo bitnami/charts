@@ -1,8 +1,23 @@
 # Changelog
 
-## 1.4.29 (2024-11-08)
+## 1.5.0 (2024-12-10)
 
-* [bitnami/vault] Unify seLinuxOptions default value ([#30323](https://github.com/bitnami/charts/pull/30323))
+* [bitnami/vault] Detect non-standard images ([#30952](https://github.com/bitnami/charts/pull/30952))
+
+## <small>1.4.31 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/vault] Release 1.4.31 (#30780) ([46280fd](https://github.com/bitnami/charts/commit/46280fd8776323c22b2d0140da7e252b7cf6b31a)), closes [#30780](https://github.com/bitnami/charts/issues/30780)
+
+## <small>1.4.30 (2024-11-22)</small>
+
+* [bitnami/vault] Release 1.4.30 (#30573) ([c98e533](https://github.com/bitnami/charts/commit/c98e533c3061c98a5e8e7561c08114b8002d1dab)), closes [#30573](https://github.com/bitnami/charts/issues/30573)
+
+## <small>1.4.29 (2024-11-08)</small>
+
+* [bitnami/vault] Unify seLinuxOptions default value (#30323) ([c107a0d](https://github.com/bitnami/charts/commit/c107a0dab0e4b0a692cbe458903bf0bdaa2a855f)), closes [#30323](https://github.com/bitnami/charts/issues/30323)
 
 ## <small>1.4.28 (2024-11-07)</small>
 

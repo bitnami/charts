@@ -1,8 +1,28 @@
 # Changelog
 
-## 14.0.6 (2024-11-19)
+## 15.1.0 (2024-12-10)
 
-* [bitnami/kong] Release 14.0.6 ([#30511](https://github.com/bitnami/charts/pull/30511))
+* [bitnami/kong] Detect non-standard images ([#30898](https://github.com/bitnami/charts/pull/30898))
+
+## 15.0.0 (2024-11-22)
+
+* [bitnami/kong] Use postgresql 17 for Kong (#30584) ([66c3a1c](https://github.com/bitnami/charts/commit/66c3a1c7c70034befe21bf5f004ab040f264dca6)), closes [#30584](https://github.com/bitnami/charts/issues/30584)
+
+## <small>14.0.9 (2024-11-22)</small>
+
+* [bitnami/kong] Release 14.0.9 (#30574) ([1966baa](https://github.com/bitnami/charts/commit/1966baacadf3f66d9e52319e22d7269ba72b742a)), closes [#30574](https://github.com/bitnami/charts/issues/30574)
+
+## <small>14.0.8 (2024-11-21)</small>
+
+* [bitnami/kong] Release 14.0.8 (#30560) ([250a2ee](https://github.com/bitnami/charts/commit/250a2ee7562c5ecbbd1e1ff1562cb9728cf88aa3)), closes [#30560](https://github.com/bitnami/charts/issues/30560)
+
+## <small>14.0.7 (2024-11-21)</small>
+
+* [bitnami/kong] Release 14.0.7 (#30558) ([2f93e0e](https://github.com/bitnami/charts/commit/2f93e0e7a4cf274137bbe8fcb87716326b638dff)), closes [#30558](https://github.com/bitnami/charts/issues/30558)
+
+## <small>14.0.6 (2024-11-19)</small>
+
+* [bitnami/kong] Release 14.0.6 (#30511) ([2cbf54a](https://github.com/bitnami/charts/commit/2cbf54a295ebd343bb41b074641d7b640ff58807)), closes [#30511](https://github.com/bitnami/charts/issues/30511)
 
 ## <small>14.0.5 (2024-11-09)</small>
 

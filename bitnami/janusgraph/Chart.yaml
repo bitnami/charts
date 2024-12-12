@@ -5,8 +5,6 @@ annotations:
   category: Database
   licenses: Apache-2.0
   images: |
-    - name: cassandra
-      image: docker.io/bitnami/cassandra:4.1.7-debian-12-r1
     - name: janusgraph
       image: docker.io/bitnami/janusgraph:1.1.0-debian-12-r0
     - name: jmx-exporter
@@ -40,4 +38,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/janusgraph
 - https://github.com/bitnami/containers/tree/main/bitnami/janusgraph
 - https://github.com/janusgraph/janusgraph
-version: 0.3.26
+version: 1.1.0

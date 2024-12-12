@@ -177,8 +177,10 @@ spec:
               value: {{ template "redis.tlsCert" . }}
             - name:  REDIS_TLS_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
+            {{- if not (empty (include "redis.tlsCACert" .)) }}
             - name:  REDIS_TLS_CA_FILE
               value: {{ template "redis.tlsCACert" . }}
+            {{- end }}
             {{- if .Values.tls.dhParamsFilename }}
             - name:  REDIS_TLS_DH_PARAMS_FILE
               value: {{ template "redis.tlsDHParams" . }}
@@ -198,8 +200,10 @@ spec:
               value: {{ template "redis.tlsCert" . }}
             - name:  REDIS_SENTINEL_TLS_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
+            {{- if not (empty (include "redis.tlsCACert" .)) }}
             - name:  REDIS_SENTINEL_TLS_CA_FILE
               value: {{ template "redis.tlsCACert" . }}
+            {{- end }}
             {{- if .Values.tls.dhParamsFilename }}
             - name:  REDIS_SENTINEL_TLS_DH_PARAMS_FILE
               value: {{ template "redis.tlsDHParams" . }}
@@ -379,8 +383,10 @@ spec:
               value: {{ template "redis.tlsCert" . }}
             - name:  REDIS_SENTINEL_TLS_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
+            {{- if not (empty (include "redis.tlsCACert" .)) }}
             - name:  REDIS_SENTINEL_TLS_CA_FILE
               value: {{ template "redis.tlsCACert" . }}
+            {{- end }}
             {{- if .Values.tls.dhParamsFilename }}
             - name:  REDIS_SENTINEL_TLS_DH_PARAMS_FILE
               value: {{ template "redis.tlsDHParams" . }}
@@ -543,8 +549,10 @@ spec:
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis.tlsCert" . }}
             {{- end }}
+            {{- if not (empty (include "redis.tlsCACert" .)) }}
             - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "redis.tlsCACert" . }}
+            {{- end }}
             {{- end }}
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}

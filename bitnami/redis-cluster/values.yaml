@@ -22,6 +22,11 @@ global:
   imagePullSecrets: []
   defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   redis:
     password: ""
   ## Compatibility adaptations for Kubernetes platforms
@@ -609,6 +614,13 @@ redis:
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
   ##
   shareProcessNamespace: false
+  ## @param redis.terminationGracePeriodSeconds Set custom gracefull termination period for redis container.
+  ## If not set the kubernetes default will be applied.
+  ## Customize it based on your workload. Huge redis with high load may wants more than default time to dump
+  ## their data before complete termination.
+  ## Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+  ##
+  terminationGracePeriodSeconds: 30
   ## Configure extra options for Redis&reg; liveness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param redis.livenessProbe.enabled Enable livenessProbe

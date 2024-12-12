@@ -1,8 +1,28 @@
 # Changelog
 
-## 10.5.3 (2024-11-12)
+## 10.7.1 (2024-12-11)
 
-* [bitnami/etcd] Release 10.5.3 ([#30432](https://github.com/bitnami/charts/pull/30432))
+* [bitnami/etcd] keep snapshot-pvc ([#30815](https://github.com/bitnami/charts/pull/30815))
+
+## 10.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/etcd] Detect non-standard images (#30895) ([3e2009f](https://github.com/bitnami/charts/commit/3e2009f4310e4c3402df62e5dcc73d911fa4d0b7)), closes [#30895](https://github.com/bitnami/charts/issues/30895)
+
+## <small>10.6.1 (2024-12-04)</small>
+
+* [bitnami/etcd] Release 10.6.1 (#30746) ([9d81d81](https://github.com/bitnami/charts/commit/9d81d81ddbf73b9453468972a8c1501879888d32)), closes [#30746](https://github.com/bitnami/charts/issues/30746)
+
+## 10.6.0 (2024-12-02)
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/etcd] Add loadBalancerClass for Etcd chart (#30697) ([7ee741a](https://github.com/bitnami/charts/commit/7ee741ab42e6d1f22c7f3dca386542d7be801dac)), closes [#30697](https://github.com/bitnami/charts/issues/30697)
+
+## <small>10.5.3 (2024-11-12)</small>
+
+* [bitnami/etcd] Release 10.5.3 (#30432) ([5f6b173](https://github.com/bitnami/charts/commit/5f6b173360444a3d78b365f7346c373338db5a90)), closes [#30432](https://github.com/bitnami/charts/issues/30432)
 
 ## <small>10.5.2 (2024-11-07)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 13.4.27 (2024-11-04)
+## 13.5.0 (2024-12-10)
 
-* [bitnami/jenkins] Release 13.4.27 ([#30143](https://github.com/bitnami/charts/pull/30143))
+* [bitnami/jenkins] Detect non-standard images ([#30905](https://github.com/bitnami/charts/pull/30905))
+
+## <small>13.4.28 (2024-11-28)</small>
+
+* [bitnami/jenkins] Release 13.4.28 (#30664) ([4b3a80d](https://github.com/bitnami/charts/commit/4b3a80d615308fddf33150c42e35da20dfad6ebb)), closes [#30664](https://github.com/bitnami/charts/issues/30664)
+
+## <small>13.4.27 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/jenkins] Release 13.4.27 (#30143) ([d461ca0](https://github.com/bitnami/charts/commit/d461ca069a425d5bf77ac9e0ddce9054ce287aa9)), closes [#30143](https://github.com/bitnami/charts/issues/30143)
 
 ## <small>13.4.26 (2024-10-17)</small>
 

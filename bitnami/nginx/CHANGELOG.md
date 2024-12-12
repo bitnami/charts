@@ -1,8 +1,17 @@
 # Changelog
 
-## 18.2.5 (2024-11-08)
+## 18.3.0 (2024-12-10)
 
-* [bitnami/nginx] Unify seLinuxOptions default value ([#30337](https://github.com/bitnami/charts/pull/30337))
+* [bitnami/nginx] Detect non-standard images ([#30907](https://github.com/bitnami/charts/pull/30907))
+
+## <small>18.2.6 (2024-11-26)</small>
+
+* [bitnami/nginx] Release 18.2.6 (#30632) ([b0b23d2](https://github.com/bitnami/charts/commit/b0b23d29797630a291c14b30c82c5b2ac0eece4a)), closes [#30632](https://github.com/bitnami/charts/issues/30632)
+
+## <small>18.2.5 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/nginx] Unify seLinuxOptions default value (#30337) ([964c10c](https://github.com/bitnami/charts/commit/964c10c6e9716d9b71aae091437c561805200230)), closes [#30337](https://github.com/bitnami/charts/issues/30337)
 
 ## <small>18.2.4 (2024-10-21)</small>
 

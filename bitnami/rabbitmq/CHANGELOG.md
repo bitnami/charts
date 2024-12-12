@@ -1,8 +1,20 @@
 # Changelog
 
-## 15.0.6 (2024-11-08)
+## 15.2.0 (2024-12-10)
 
-* [bitnami/rabbitmq] Unify seLinuxOptions default value ([#30327](https://github.com/bitnami/charts/pull/30327))
+* [bitnami/rabbitmq] Detect non-standard images ([#30940](https://github.com/bitnami/charts/pull/30940))
+
+## 15.1.0 (2024-11-25)
+
+* [bitnami/rabbitmq] feat: :sparkles: Allow password updates (#30615) ([d98aecc](https://github.com/bitnami/charts/commit/d98aecce08aebd795cdace9bc1f814296a9aa873)), closes [#30615](https://github.com/bitnami/charts/issues/30615)
+
+## <small>15.0.7 (2024-11-22)</small>
+
+* [bitnami/rabbitmq] Release 15.0.7 (#30572) ([212993b](https://github.com/bitnami/charts/commit/212993b0c06a0f0a3ccafdc8c253fe260b525b73)), closes [#30572](https://github.com/bitnami/charts/issues/30572)
+
+## <small>15.0.6 (2024-11-08)</small>
+
+* [bitnami/rabbitmq] Unify seLinuxOptions default value (#30327) ([9537964](https://github.com/bitnami/charts/commit/95379640c83645c2b37e8cebc18823cf5984308b)), closes [#30327](https://github.com/bitnami/charts/issues/30327)
 
 ## <small>15.0.5 (2024-10-31)</small>
 

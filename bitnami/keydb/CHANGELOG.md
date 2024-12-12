@@ -1,8 +1,19 @@
 # Changelog
 
-## 0.1.6 (2024-11-17)
+## 0.3.0 (2024-12-10)
 
-* [bitnami/keydb] Release 0.1.6 ([#30489](https://github.com/bitnami/charts/pull/30489))
+* [bitnami/keydb] Detect non-standard images ([#30901](https://github.com/bitnami/charts/pull/30901))
+
+## 0.2.0 (2024-11-29)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/keydb] feat: :sparkles: :memo: Allow password update via values.yaml (#30691) ([adbd271](https://github.com/bitnami/charts/commit/adbd27134af8251569b8f463cf4d663d31f3b74d)), closes [#30691](https://github.com/bitnami/charts/issues/30691)
+
+## <small>0.1.6 (2024-11-17)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/keydb] Release 0.1.6 (#30489) ([656b7b8](https://github.com/bitnami/charts/commit/656b7b8735d4b9c966bcfcde17fcbc83bf569c1e)), closes [#30489](https://github.com/bitnami/charts/issues/30489)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>0.1.5 (2024-10-08)</small>
 

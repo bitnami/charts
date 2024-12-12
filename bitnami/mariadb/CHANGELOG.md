@@ -1,8 +1,20 @@
 # Changelog
 
+## 20.2.0 (2024-12-10)
+
+* [bitnami/mariadb] Detect non-standard images ([#30956](https://github.com/bitnami/charts/pull/30956))
+
+## <small>20.1.1 (2024-11-27)</small>
+
+* [bitnami/mariadb] fix: :bug: Set correct TLS mountPath (#30641) ([fc2dcd7](https://github.com/bitnami/charts/commit/fc2dcd711548553180d6fc1d5debc51f40aa4d22)), closes [#30641](https://github.com/bitnami/charts/issues/30641)
+
+## 20.1.0 (2024-11-27)
+
+* [bitnami/mariadb] feat: :sparkles: Add TLS support (#30629) ([13c518f](https://github.com/bitnami/charts/commit/13c518ffc9cfefc10110317d9aa13ddc84a2d6ec)), closes [#30629](https://github.com/bitnami/charts/issues/30629)
+
 ## 20.0.0 (2024-11-08)
 
-* [bitnami/mariadb] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job ([#30300](https://github.com/bitnami/charts/pull/30300))
+* [bitnami/mariadb] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job  ([b90422b](https://github.com/bitnami/charts/commit/b90422bd86f34d4c94d8b9da41ebf89e03dbf384)), closes [#30300](https://github.com/bitnami/charts/issues/30300)
 
 ## <small>19.1.2 (2024-11-04)</small>
 

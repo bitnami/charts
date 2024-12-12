@@ -1,8 +1,24 @@
 # Changelog
 
-## 6.3.3 (2024-11-18)
+## 7.1.0 (2024-12-10)
 
-* [bitnami/clickhouse] Release 6.3.3 ([#30505](https://github.com/bitnami/charts/pull/30505))
+* [bitnami/clickhouse] Detect non-standard images ([#30871](https://github.com/bitnami/charts/pull/30871))
+
+## <small>7.0.2 (2024-11-26)</small>
+
+* [bitnami/clickhouse] Release 7.0.2 (#30633) ([ec3a99c](https://github.com/bitnami/charts/commit/ec3a99ca9eea5bebe982e22d6b18b83bfbdfc14a)), closes [#30633](https://github.com/bitnami/charts/issues/30633)
+
+## <small>7.0.1 (2024-11-25)</small>
+
+* [bitnami/clickhouse] Release 7.0.1 (#30592) ([e044eec](https://github.com/bitnami/charts/commit/e044eec04c3ca9197fdcf5ef1a6c9dae59f76fa5)), closes [#30592](https://github.com/bitnami/charts/issues/30592)
+
+## 7.0.0 (2024-11-22)
+
+* [bitnami/clickhouse] Remove subchart image from values.yaml (#30586) ([1b9938f](https://github.com/bitnami/charts/commit/1b9938fc544ddeed48732822367ad8f5c7112833)), closes [#30586](https://github.com/bitnami/charts/issues/30586)
+
+## <small>6.3.3 (2024-11-18)</small>
+
+* [bitnami/clickhouse] Release 6.3.3 (#30505) ([5f728aa](https://github.com/bitnami/charts/commit/5f728aaf56f76877c5f00b48e1f546bc2050614b)), closes [#30505](https://github.com/bitnami/charts/issues/30505)
 
 ## <small>6.3.2 (2024-11-08)</small>
 

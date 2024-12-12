@@ -1,8 +1,20 @@
 # Changelog
 
+## 12.2.0 (2024-12-10)
+
+* [bitnami/mysql] Detect non-standard images ([#30929](https://github.com/bitnami/charts/pull/30929))
+
+## 12.1.0 (2024-11-27)
+
+* [bitnami/mysql] feat: :sparkles: Add TLS support (#30640) ([151c51c](https://github.com/bitnami/charts/commit/151c51cc2f297cf639d27b8eefbe5e98965cd3d5)), closes [#30640](https://github.com/bitnami/charts/issues/30640)
+
+## <small>12.0.1 (2024-11-25)</small>
+
+* [bitnami/mysql] Release 12.0.1 (#30614) ([cb712f4](https://github.com/bitnami/charts/commit/cb712f4fa72499975e813673edc0fa76927bbfd2)), closes [#30614](https://github.com/bitnami/charts/issues/30614)
+
 ## 12.0.0 (2024-11-12)
 
-* [bitnami/mysql] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job ([#30351](https://github.com/bitnami/charts/pull/30351))
+* [bitnami/mysql] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job (# ([21e98a5](https://github.com/bitnami/charts/commit/21e98a53e0163afef595094d9161509729db6fa4)), closes [#30351](https://github.com/bitnami/charts/issues/30351)
 
 ## <small>11.1.20 (2024-11-04)</small>
 

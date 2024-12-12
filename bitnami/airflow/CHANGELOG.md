@@ -1,8 +1,37 @@
 # Changelog
 
+## 22.4.1 (2024-12-11)
+
+* [bitnami/airflow]  Fix LDAP configuration ([#30911](https://github.com/bitnami/charts/pull/30911))
+
+## 22.4.0 (2024-12-10)
+
+* [bitnami/airflow] Detect non-standard images (#30860) ([eb6ce4a](https://github.com/bitnami/charts/commit/eb6ce4a32698012d3c488ba7202fe66a57a6b43b)), closes [#30860](https://github.com/bitnami/charts/issues/30860)
+
+## <small>22.3.3 (2024-12-10)</small>
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/airflow] Release 22.3.3 (#30856) ([651f475](https://github.com/bitnami/charts/commit/651f4751d1ac434c11b6706c894fa4cb535b8bbd)), closes [#30856](https://github.com/bitnami/charts/issues/30856)
+
+## <small>22.3.2 (2024-12-10)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/airflow] bugfix: Fix Airflow HPA, VPA for Worker and Triggerer typo (#30834) (#30836) ([4b5e443](https://github.com/bitnami/charts/commit/4b5e443c026be15e1e8236f6a098155d0dcea376)), closes [#30834](https://github.com/bitnami/charts/issues/30834) [#30836](https://github.com/bitnami/charts/issues/30836) [#30834](https://github.com/bitnami/charts/issues/30834)
+
+## <small>22.3.1 (2024-11-28)</small>
+
+* [bitnami/airflow] bugfix: extra volume/mounts should apply to setup-db job and wait-for-db init-cont ([442b7c4](https://github.com/bitnami/charts/commit/442b7c43d60ced7c7f0aaac3eb1d60b343bd07df)), closes [#30646](https://github.com/bitnami/charts/issues/30646)
+
+## 22.3.0 (2024-11-26)
+
+* [bitnami/airflow] Support extra customizations at setup-db job (#30624) ([0397460](https://github.com/bitnami/charts/commit/03974600c3d801ab8b747c5f4daf3b5069293809)), closes [#30624](https://github.com/bitnami/charts/issues/30624)
+
 ## 22.2.0 (2024-11-19)
 
-* [bitnami/airflow] Add support for extending default configuration ([#30525](https://github.com/bitnami/charts/pull/30525))
+* [bitnami/airflow] Add support for extending default configuration (#30525) ([e84395d](https://github.com/bitnami/charts/commit/e84395d6c829a0fe56ca7242bdaa90afb8e0e352)), closes [#30525](https://github.com/bitnami/charts/issues/30525)
 
 ## 22.1.0 (2024-11-18)
 

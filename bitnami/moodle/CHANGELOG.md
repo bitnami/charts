@@ -1,8 +1,19 @@
 # Changelog
 
-## 25.0.1 (2024-11-17)
+## 25.1.0 (2024-12-10)
 
-* [bitnami/moodle] Release 25.0.1 ([#30488](https://github.com/bitnami/charts/pull/30488))
+* [bitnami/moodle] Detect non-standard images ([#30960](https://github.com/bitnami/charts/pull/30960))
+
+## <small>25.0.2 (2024-12-09)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/moodle] Release 25.0.2 (#30832) ([c286d50](https://github.com/bitnami/charts/commit/c286d504065a13868548de4b972c1c6c2c42a64d)), closes [#30832](https://github.com/bitnami/charts/issues/30832)
+
+## <small>25.0.1 (2024-11-17)</small>
+
+* [bitnami/moodle] Release 25.0.1 (#30488) ([7e1cd00](https://github.com/bitnami/charts/commit/7e1cd00c937ddd7fdfc182735077a35909dba1ce)), closes [#30488](https://github.com/bitnami/charts/issues/30488)
 
 ## 25.0.0 (2024-11-12)
 

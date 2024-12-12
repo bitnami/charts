@@ -65,7 +65,7 @@ redis.enabled=false
 
 > NOTE: Redis&reg; is not needed to be deployed when using KubernetesExecutor so you can disable it using `redis.enabled=false`.
 
-### CeleryKubernetesExecutor
+#### CeleryKubernetesExecutor
 
 The CeleryKubernetesExecutor (introduced in Airflow 2.0) is a combination of both the Celery and the Kubernetes executors. Tasks will be executed using Celery by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
 
@@ -78,7 +78,7 @@ executor=LocalExecutor
 redis.enabled=false
 ```
 
-### LocalKubernetesExecutor
+#### LocalKubernetesExecutor
 
 The LocalKubernetesExecutor (introduced in Airflow 2.3) is a combination of both the Local and the Kubernetes executors. Tasks will be executed in the scheduler by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
 
@@ -89,6 +89,17 @@ This executor will only run one task instance at a time in the Scheduler pods. F
 ```console
 executor=SequentialExecutor
 redis.enabled=false
+```
+
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://airflow.apache.org/docs/apache-airflow-providers-fab/stable/cli-ref.html#reset-password)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD, FERNET_KEY and SECRET_KEY placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=airflow-password=PASSWORD --from-literal=airflow-fernet-key=FERNET_KEY --from-literal=airflow-secret-key=SECRET_KEY --dry-run -o yaml | kubectl apply -f -
 ```
 
 ### Airflow configuration file
@@ -251,7 +262,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` true. This will configure Airflow components to send StatsD metrics to the [StatsD exporter](https://github.com/prometheus/statsd_exporter) that transforms them into Prometheus metrics. The StatsD exporter is deployed as a standalone deployment and service in the same namespace as the Airflow deployment.
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will configure Airflow components to send StatsD metrics to the [StatsD exporter](https://github.com/prometheus/statsd_exporter) that transforms them into Prometheus metrics. The StatsD exporter is deployed as a standalone deployment and service in the same namespace as the Airflow deployment.
 
 #### Prometheus requirements
 
@@ -287,7 +298,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### HTTPS for Webserver
+### Securing traffic using TLS
 
 By default, this chart assumes TLS is managed by the Ingress Controller and terminates the TLS connection in the Ingress Controller. This can be done by setting `ingress.enabled` and `ingress.tls` parameters to `true` as explained in the section above. However, it is possible to configure TLS encryption for the Airflow Webserver directly by setting the `web.tls.enabled` parameter to `true`.
 
@@ -346,6 +357,10 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
@@ -359,6 +374,7 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 | `global.compatibility.omitEmptySeLinuxOptions`        | If set to true, removes the seLinuxOptions from the securityContexts when it is set to an empty object                                                                                                                                                                                                                                                              | `false` |
 
@@ -1039,6 +1055,9 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 | `setupDBJob.annotations`                                       | Add annotations to the Airflow "setup-db" job                                                                                                                                                                                                             | `{}`             |
 | `setupDBJob.podLabels`                                         | Additional pod labels for Airflow "setup-db" job                                                                                                                                                                                                          | `{}`             |
 | `setupDBJob.podAnnotations`                                    | Additional pod annotations for Airflow "setup-db" job                                                                                                                                                                                                     | `{}`             |
+| `setupDBJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for Airflow "setup-db" job's pods                                                                                                                                                                     | `[]`             |
+| `setupDBJob.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Airflow "setup-db" job's containers                                                                                                                                                      | `[]`             |
+| `setupDBJob.initContainers`                                    | Add additional init containers to the Airflow "setup-db" job's pods                                                                                                                                                                                       | `[]`             |
 
 ### Airflow ldap parameters
 
@@ -1264,6 +1283,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/airfl
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 22.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 22.2.0
 

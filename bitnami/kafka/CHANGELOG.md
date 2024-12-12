@@ -1,8 +1,12 @@
 # Changelog
 
+## 31.1.0 (2024-12-10)
+
+* [bitnami/kafka] Detect non-standard images ([#30903](https://github.com/bitnami/charts/pull/30903))
+
 ## 31.0.0 (2024-11-12)
 
-* [bitnami/kafka] Release 31.0.0 ([#30416](https://github.com/bitnami/charts/pull/30416))
+* [bitnami/kafka] Release 31.0.0 (#30416) ([765e563](https://github.com/bitnami/charts/commit/765e563c3e9e49d9617100ac9c9cfcb8cfe3a7bf)), closes [#30416](https://github.com/bitnami/charts/issues/30416)
 
 ## <small>30.1.8 (2024-10-31)</small>
 

@@ -1,8 +1,22 @@
 # Changelog
 
-## 2.3.5 (2024-11-08)
+## 2.4.1 (2024-12-10)
 
-* [bitnami/pinniped] Unify seLinuxOptions default value ([#30334](https://github.com/bitnami/charts/pull/30334))
+* [bitnami/pinniped] Release 2.4.1 ([#30975](https://github.com/bitnami/charts/pull/30975))
+
+## 2.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/pinniped] Detect non-standard images (#30935) ([337fe9c](https://github.com/bitnami/charts/commit/337fe9c6f22c1a3afab25eef28118528d24b3737)), closes [#30935](https://github.com/bitnami/charts/issues/30935)
+
+## <small>2.3.6 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/pinniped] Release 2.3.6 (#30772) ([ab55671](https://github.com/bitnami/charts/commit/ab556712be6547d1d1f722c9fa612413559659a2)), closes [#30772](https://github.com/bitnami/charts/issues/30772)
+
+## <small>2.3.5 (2024-11-08)</small>
+
+* [bitnami/pinniped] Unify seLinuxOptions default value (#30334) ([06e2318](https://github.com/bitnami/charts/commit/06e2318131efc03e6c67b942d087c94586121925)), closes [#30334](https://github.com/bitnami/charts/issues/30334)
 
 ## <small>2.3.4 (2024-11-07)</small>
 
