@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.1.1 (2024-11-27)
+## 20.2.0 (2024-12-10)
 
-* [bitnami/mariadb] fix: :bug: Set correct TLS mountPath ([#30641](https://github.com/bitnami/charts/pull/30641))
+* [bitnami/mariadb] Detect non-standard images ([#30956](https://github.com/bitnami/charts/pull/30956))
+
+## <small>20.1.1 (2024-11-27)</small>
+
+* [bitnami/mariadb] fix: :bug: Set correct TLS mountPath (#30641) ([fc2dcd7](https://github.com/bitnami/charts/commit/fc2dcd711548553180d6fc1d5debc51f40aa4d22)), closes [#30641](https://github.com/bitnami/charts/issues/30641)
 
 ## 20.1.0 (2024-11-27)
 

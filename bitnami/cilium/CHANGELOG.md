@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.10 (2024-12-04)
+## 1.3.0 (2024-12-10)
 
-* [bitnami/cilium] Release 1.2.10 ([#30742](https://github.com/bitnami/charts/pull/30742))
+* [bitnami/cilium] Detect non-standard images ([#30870](https://github.com/bitnami/charts/pull/30870))
+
+## <small>1.2.10 (2024-12-04)</small>
+
+* [bitnami/cilium] Release 1.2.10 (#30742) ([3dacf26](https://github.com/bitnami/charts/commit/3dacf2691af9ec913298ab440f5ab4d67620346f)), closes [#30742](https://github.com/bitnami/charts/issues/30742)
 
 ## <small>1.2.9 (2024-12-02)</small>
 

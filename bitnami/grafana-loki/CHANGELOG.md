@@ -1,8 +1,18 @@
 # Changelog
 
-## 4.6.24 (2024-12-03)
+## 4.7.0 (2024-12-10)
 
-* [bitnami/grafana-loki] Release 4.6.24 ([#30751](https://github.com/bitnami/charts/pull/30751))
+* [bitnami/grafana-loki] Detect non-standard images ([#30876](https://github.com/bitnami/charts/pull/30876))
+
+## <small>4.6.25 (2024-12-05)</small>
+
+* [bitnami/grafana-loki] Release 4.6.25 (#30793) ([6be9a41](https://github.com/bitnami/charts/commit/6be9a41c3c51a3fb33956354c6e07164d8dd05e5)), closes [#30793](https://github.com/bitnami/charts/issues/30793)
+
+## <small>4.6.24 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/grafana-loki] Release 4.6.24 (#30751) ([300ba4b](https://github.com/bitnami/charts/commit/300ba4b3c61532fe725a5eeee419b6f75e63214c)), closes [#30751](https://github.com/bitnami/charts/issues/30751)
 
 ## <small>4.6.23 (2024-11-20)</small>
 

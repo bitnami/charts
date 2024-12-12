@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.0.3 (2024-11-29)
+## 7.1.0 (2024-12-10)
 
-* [bitnami/fluentd] Release 7.0.3 ([#30679](https://github.com/bitnami/charts/pull/30679))
+* [bitnami/fluentd] Detect non-standard images ([#30877](https://github.com/bitnami/charts/pull/30877))
+
+## <small>7.0.3 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/fluentd] Release 7.0.3 (#30679) ([a427241](https://github.com/bitnami/charts/commit/a4272412d4d43d8921beda27403b38990b0dd95a)), closes [#30679](https://github.com/bitnami/charts/issues/30679)
 
 ## <small>7.0.2 (2024-11-09)</small>
 

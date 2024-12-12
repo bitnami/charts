@@ -1,8 +1,12 @@
 # Changelog
 
+## 15.1.0 (2024-12-10)
+
+* [bitnami/kong] Detect non-standard images ([#30898](https://github.com/bitnami/charts/pull/30898))
+
 ## 15.0.0 (2024-11-22)
 
-* [bitnami/kong] Use postgresql 17 for Kong ([#30584](https://github.com/bitnami/charts/pull/30584))
+* [bitnami/kong] Use postgresql 17 for Kong (#30584) ([66c3a1c](https://github.com/bitnami/charts/commit/66c3a1c7c70034befe21bf5f004ab040f264dca6)), closes [#30584](https://github.com/bitnami/charts/issues/30584)
 
 ## <small>14.0.9 (2024-11-22)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.0.14 (2024-12-03)
+## 14.1.0 (2024-12-10)
 
-* [bitnami/mariadb-galera] Release 14.0.14 ([#30736](https://github.com/bitnami/charts/pull/30736))
+* [bitnami/mariadb-galera] Detect non-standard images ([#30920](https://github.com/bitnami/charts/pull/30920))
+
+## <small>14.0.14 (2024-12-03)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.14 (#30736) ([a5cdf9b](https://github.com/bitnami/charts/commit/a5cdf9be50a545f51549780d3beaafe56b39d25a)), closes [#30736](https://github.com/bitnami/charts/issues/30736)
 
 ## <small>14.0.13 (2024-12-03)</small>
 

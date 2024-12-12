@@ -1,8 +1,21 @@
 # Changelog
 
-## 5.0.14 (2024-12-03)
+## 5.1.1 (2024-12-11)
 
-* [bitnami/concourse] Release 5.0.14 ([#30748](https://github.com/bitnami/charts/pull/30748))
+* [bitnami/concourse] Release 5.1.1 ([#30977](https://github.com/bitnami/charts/pull/30977))
+
+## 5.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/concourse] Detect non-standard images (#30872) ([62a2bd4](https://github.com/bitnami/charts/commit/62a2bd4c512a859b75d765c846d5cb2a9fe694b2)), closes [#30872](https://github.com/bitnami/charts/issues/30872)
+
+## <small>5.0.15 (2024-12-05)</small>
+
+* [bitnami/concourse] Release 5.0.15 (#30792) ([51f0d05](https://github.com/bitnami/charts/commit/51f0d051baad14130026737253d1184cbddf43c7)), closes [#30792](https://github.com/bitnami/charts/issues/30792)
+
+## <small>5.0.14 (2024-12-03)</small>
+
+* [bitnami/concourse] Release 5.0.14 (#30748) ([fa06b8c](https://github.com/bitnami/charts/commit/fa06b8c9d3b3d9844a2b31ffa0190066e48985b8)), closes [#30748](https://github.com/bitnami/charts/issues/30748)
 
 ## <small>5.0.13 (2024-12-03)</small>
 

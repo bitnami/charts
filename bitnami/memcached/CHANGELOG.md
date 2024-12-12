@@ -1,8 +1,20 @@
 # Changelog
 
-## 7.5.3 (2024-11-30)
+## 7.6.0 (2024-12-10)
 
-* [bitnami/memcached] Release 7.5.3 ([#30694](https://github.com/bitnami/charts/pull/30694))
+* [bitnami/memcached] Detect non-standard images ([#30922](https://github.com/bitnami/charts/pull/30922))
+
+## <small>7.5.4 (2024-12-05)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/memcached] Release 7.5.4 (#30797) ([567544f](https://github.com/bitnami/charts/commit/567544f75d5058b7c4ea239146942c0bd56e1848)), closes [#30797](https://github.com/bitnami/charts/issues/30797)
+
+## <small>7.5.3 (2024-11-30)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/memcached] Release 7.5.3 (#30694) ([2a6f5eb](https://github.com/bitnami/charts/commit/2a6f5eb1586274de78127fa11a8b7824f1d4f5c9)), closes [#30694](https://github.com/bitnami/charts/issues/30694)
 
 ## <small>7.5.2 (2024-10-21)</small>
 

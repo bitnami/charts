@@ -1,8 +1,14 @@
 # Changelog
 
-## 8.0.1 (2024-11-09)
+## 8.1.0 (2024-12-10)
 
-* [bitnami/jupyterhub] Release 8.0.1 ([#30372](https://github.com/bitnami/charts/pull/30372))
+* [bitnami/jupyterhub] Detect non-standard images ([#30904](https://github.com/bitnami/charts/pull/30904))
+
+## <small>8.0.1 (2024-11-09)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/jupyterhub] Release 8.0.1 (#30372) ([93410df](https://github.com/bitnami/charts/commit/93410df4913539709dce0b1f0ce450ab414650b9)), closes [#30372](https://github.com/bitnami/charts/issues/30372)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 8.0.0 (2024-10-03)
 

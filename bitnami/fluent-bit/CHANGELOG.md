@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.25 (2024-11-28)
+## 2.4.0 (2024-12-10)
 
-* [bitnami/fluent-bit] Release 2.3.25 ([#30667](https://github.com/bitnami/charts/pull/30667))
+* [bitnami/fluent-bit] Detect non-standard images ([#30891](https://github.com/bitnami/charts/pull/30891))
+
+## <small>2.3.25 (2024-11-28)</small>
+
+* [bitnami/fluent-bit] Release 2.3.25 (#30667) ([4ae0f96](https://github.com/bitnami/charts/commit/4ae0f9678d68f7cf1215ef7700b54eabbd8cf188)), closes [#30667](https://github.com/bitnami/charts/issues/30667)
 
 ## <small>2.3.24 (2024-11-17)</small>
 

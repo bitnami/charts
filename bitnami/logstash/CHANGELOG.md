@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.9 (2024-11-22)
+## 6.4.0 (2024-12-10)
 
-* [bitnami/logstash] Release 6.3.9 ([#30591](https://github.com/bitnami/charts/pull/30591))
+* [bitnami/logstash] Detect non-standard images ([#30919](https://github.com/bitnami/charts/pull/30919))
+
+## <small>6.3.9 (2024-11-22)</small>
+
+* [bitnami/logstash] Release 6.3.9 (#30591) ([266c704](https://github.com/bitnami/charts/commit/266c704facb55306a01fef15d69c7f3e722b2d06)), closes [#30591](https://github.com/bitnami/charts/issues/30591)
 
 ## <small>6.3.8 (2024-11-12)</small>
 
