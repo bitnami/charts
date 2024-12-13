@@ -1,8 +1,13 @@
 # Changelog
 
+## 22.1.1 (2024-12-12)
+
+* [bitnami/wildfly] Bump patch version to apply .vib tests changes ([#31006](https://github.com/bitnami/charts/pull/31006))
+
 ## 22.1.0 (2024-12-10)
 
-* [bitnami/wildfly] Detect non-standard images ([#30954](https://github.com/bitnami/charts/pull/30954))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/wildfly] Detect non-standard images (#30954) ([2f0f26d](https://github.com/bitnami/charts/commit/2f0f26da7b7386e7ed4398bd52379703e4c6972d)), closes [#30954](https://github.com/bitnami/charts/issues/30954)
 
 ## <small>22.0.5 (2024-12-04)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.3.1 (2024-12-11)
+
+* [bitnami/mlflow] Release 2.3.1 ([#30994](https://github.com/bitnami/charts/pull/30994))
+
 ## 2.3.0 (2024-12-10)
 
-* [bitnami/mlflow] Detect non-standard images ([#30925](https://github.com/bitnami/charts/pull/30925))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mlflow] Detect non-standard images (#30925) ([3beb92f](https://github.com/bitnami/charts/commit/3beb92fb9c3ee77b47b0bbb1e15b6298f5d4f87b)), closes [#30925](https://github.com/bitnami/charts/issues/30925)
 
 ## <small>2.2.2 (2024-12-10)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.6.0 (2024-12-12)
+
+* [bitnami/vault] Parametize caBundle in mutatingwebhook ([#30709](https://github.com/bitnami/charts/pull/30709))
+
 ## 1.5.0 (2024-12-10)
 
-* [bitnami/vault] Detect non-standard images ([#30952](https://github.com/bitnami/charts/pull/30952))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/vault] Detect non-standard images (#30952) ([b7d4d9c](https://github.com/bitnami/charts/commit/b7d4d9c133d90526e52d0cf39ea7096902af2979)), closes [#30952](https://github.com/bitnami/charts/issues/30952)
 
 ## <small>1.4.31 (2024-12-04)</small>
 

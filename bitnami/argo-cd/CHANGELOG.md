@@ -1,8 +1,13 @@
 # Changelog
 
+## 7.1.1 (2024-12-11)
+
+* [bitnami/argo-cd] Release 7.1.1 ([#30999](https://github.com/bitnami/charts/pull/30999))
+
 ## 7.1.0 (2024-12-10)
 
-* [bitnami/argo-cd] Detect non-standard images ([#30862](https://github.com/bitnami/charts/pull/30862))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/argo-cd] Detect non-standard images (#30862) ([bfac8cc](https://github.com/bitnami/charts/commit/bfac8cc4ac38af311b6f5d0eab29028a2431b68c)), closes [#30862](https://github.com/bitnami/charts/issues/30862)
 
 ## <small>7.0.26 (2024-12-03)</small>
 

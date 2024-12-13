@@ -1,8 +1,15 @@
 # Changelog
 
+## 32.1.1 (2024-12-12)
+
+* [bitnami/redmine] Release 32.1.1 ([#31001](https://github.com/bitnami/charts/pull/31001))
+
 ## 32.1.0 (2024-12-10)
 
-* [bitnami/redmine] Detect non-standard images ([#30964](https://github.com/bitnami/charts/pull/30964))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/redmine] Detect non-standard images (#30964) ([40d4031](https://github.com/bitnami/charts/commit/40d40316d170fd37866797c2a3d269fa69b980c6)), closes [#30964](https://github.com/bitnami/charts/issues/30964)
 
 ## <small>32.0.1 (2024-11-14)</small>
 

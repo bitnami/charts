@@ -1,8 +1,29 @@
 # Changelog
 
+## 3.1.4 (2024-12-12)
+
+* [bitnami/scylladb] Fix existingConfiguration parameter for scylladb ([#31014](https://github.com/bitnami/charts/pull/31014))
+
+## <small>3.1.3 (2024-12-12)</small>
+
+* [bitnami/scylladb] Release 3.1.3 (#31012) ([b6067b1](https://github.com/bitnami/charts/commit/b6067b1641d738898e0fd033ce38bec9ded58175)), closes [#31012](https://github.com/bitnami/charts/issues/31012)
+
+## <small>3.1.2 (2024-12-12)</small>
+
+* [bitnami/scylladb] Release 3.1.2 (#31011) ([e875c12](https://github.com/bitnami/charts/commit/e875c1268312b61204b6599a517c546130b41ea5)), closes [#31011](https://github.com/bitnami/charts/issues/31011)
+
+## <small>3.1.1 (2024-12-11)</small>
+
+* [bitnami/scylladb] Release 3.1.1 (#30992) ([26d19a0](https://github.com/bitnami/charts/commit/26d19a06d79c1e40d9c376eac26bc9b4a01d7e66)), closes [#30992](https://github.com/bitnami/charts/issues/30992)
+
 ## 3.1.0 (2024-12-10)
 
-* [bitnami/scylladb] Detect non-standard images ([#30944](https://github.com/bitnami/charts/pull/30944))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/scylladb] Detect non-standard images (#30944) ([59e1fbe](https://github.com/bitnami/charts/commit/59e1fbe4b62e9730d07ea6f0e22f52defe64940c)), closes [#30944](https://github.com/bitnami/charts/issues/30944)
 
 ## <small>3.0.1 (2024-11-14)</small>
 

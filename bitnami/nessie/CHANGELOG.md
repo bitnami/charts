@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.1.1 (2024-12-12)
+
+* [bitnami/nessie] Release 1.1.1 ([#31003](https://github.com/bitnami/charts/pull/31003))
+
 ## 1.1.0 (2024-12-10)
 
-* [bitnami/nessie] Detect non-standard images ([#30931](https://github.com/bitnami/charts/pull/30931))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nessie] Detect non-standard images (#30931) ([021372b](https://github.com/bitnami/charts/commit/021372bbc3ef6e718f7b581f335014369f4eb7df)), closes [#30931](https://github.com/bitnami/charts/issues/30931)
 
 ## <small>1.0.7 (2024-12-09)</small>
 

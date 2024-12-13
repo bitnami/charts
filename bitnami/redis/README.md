@@ -212,7 +212,7 @@ kubectl create secret generic redis-password-secret --from-file=redis-password.y
 
 ```text
 usePassword=true
-usePasswordFile=true
+usePasswordFiles=true
 existingSecret=redis-password-secret
 sentinels.enabled=true
 metrics.enabled=true
