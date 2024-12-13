@@ -1,8 +1,13 @@
 # Changelog
 
+## 20.6.0 (2024-12-13)
+
+* [bitname/redis] Add support for master and replicas resources to be annotated ([#31034](https://github.com/bitnami/charts/pull/31034))
+
 ## 20.5.0 (2024-12-10)
 
-* [bitnami/redis] Detect non-standard images ([#30942](https://github.com/bitnami/charts/pull/30942))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/redis] Detect non-standard images (#30942) ([f06f8db](https://github.com/bitnami/charts/commit/f06f8dbafe5eb3b22f689168d7ac9fb2fb0f707d)), closes [#30942](https://github.com/bitnami/charts/issues/30942)
 
 ## <small>20.4.1 (2024-12-10)</small>
 
