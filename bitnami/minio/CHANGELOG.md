@@ -1,8 +1,13 @@
 # Changelog
 
+## 14.10.0 (2024-12-12)
+
+* [bitnami/minio]: Templating sleep sleep time so that it can be passed using values.yaml ([#30718](https://github.com/bitnami/charts/pull/30718))
+
 ## 14.9.0 (2024-12-10)
 
-* [bitnami/minio] Detect non-standard images ([#30924](https://github.com/bitnami/charts/pull/30924))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/minio] Detect non-standard images (#30924) ([a5d33d4](https://github.com/bitnami/charts/commit/a5d33d4add1c48085781da15b5d349c79b007595)), closes [#30924](https://github.com/bitnami/charts/issues/30924)
 
 ## <small>14.8.6 (2024-12-04)</small>
 
