@@ -53,6 +53,13 @@ Return the proper Grafana Tempo query-frontend fullname
 {{- end -}}
 
 {{/*
+Return the proper Grafana Tempo scaling-monolithic fullname
+*/}}
+{{- define "grafana-tempo.scaling-monolithic.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "scaling-monolithic" -}}
+{{- end -}}
+
+{{/*
 Return the proper Grafana Tempo vulture fullname
 */}}
 {{- define "grafana-tempo.vulture.fullname" -}}
