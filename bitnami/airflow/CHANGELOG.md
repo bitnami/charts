@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.4.1 (2024-12-11)
+## 22.4.2 (2024-12-11)
 
-* [bitnami/airflow]  Fix LDAP configuration ([#30911](https://github.com/bitnami/charts/pull/30911))
+* [bitnami/airflow] Fix wrong protocol for metrics network policy ([#30990](https://github.com/bitnami/charts/pull/30990))
+
+## <small>22.4.1 (2024-12-11)</small>
+
+* [bitnami/airflow]  Fix LDAP configuration (#30911) ([70544cb](https://github.com/bitnami/charts/commit/70544cbb60d0a30393062c1cffe5d935cb3edcfb)), closes [#30911](https://github.com/bitnami/charts/issues/30911)
 
 ## 22.4.0 (2024-12-10)
 
