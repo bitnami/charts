@@ -3,6 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if eq .Values.tempo.deploymentMode "microservices" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -18,3 +19,4 @@ metadata:
 data:
   tempo-query.yaml: |-
     {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.configuration "context" $) | nindent 4 }}
+{{- end }}

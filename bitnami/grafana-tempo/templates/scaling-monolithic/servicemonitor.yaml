@@ -3,16 +3,16 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if eq .Values.tempo.deploymentMode "microservices" }}
-{{- if and .Values.compactor.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- if eq .Values.tempo.deploymentMode "scalingMonolithic" }}
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "grafana-tempo.compactor.fullname" . }}
+  name: {{ template "grafana-tempo.scaling-monolithic.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: compactor
+    app.kubernetes.io/component: scaling-monolithic
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -25,7 +25,7 @@ spec:
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
-      app.kubernetes.io/component: compactor
+      app.kubernetes.io/component: scaling-monolithic
   endpoints:
     - port: http
       {{- if .Values.metrics.serviceMonitor.interval }}

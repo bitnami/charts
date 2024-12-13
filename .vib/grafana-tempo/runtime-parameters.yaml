@@ -1,4 +1,5 @@
 tempo:
+  deploymentMode: "microservices"
   dataDir: /bitnami/grafana-tempo/data
   traces:
     otlp:

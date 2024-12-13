@@ -28,17 +28,22 @@ In order to replicate the container startup execute this command:
 
 Installed components:
 
+  {{- if eq .Values.tempo.deploymentMode "microservices" }}
   * ingester
   * distributor
   * querier
   * query-frontend
   * compactor
+  {{- else if eq .Values.tempo.deploymentMode "scalingMonolithic" }}
+  * scaling-monolithic
+  {{- end }}
   {{- if .Values.vulture.enabled }}
   * vulture
   {{- end }}
 
 1. Get the query-frontend URL by running these commands:
 
+{{- if eq .Values.tempo.deploymentMode "microservices" }}
 {{- if contains "NodePort" .Values.queryFrontend.service.type }}
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-tempo.query-frontend.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
@@ -52,10 +57,26 @@ Installed components:
     echo "The Query Frontend is available at http://127.0.0.1:{{ .Values.queryFrontend.service.ports.http }}"
     kubectl port-forward svc/{{ template "grafana-tempo.query-frontend.fullname" . }} {{ .Values.queryFrontend.service.ports.http }}:{{ .Values.queryFrontend.service.ports.http }} &
 {{- end }}
+{{- else if eq .Values.tempo.deploymentMode "scalingMonolithic" }}
+{{- if contains "NodePort" .Values.scalingMonolithic.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-tempo.scaling-monolithic.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.scalingMonolithic.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ template "common.names.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo http://$SERVICE_IP:{{ .Values.scalingMonolithic.service.ports.http }}
+{{- else if contains "ClusterIP" .Values.scalingMonolithic.service.type }}
+    echo "The Query Frontend is available at http://127.0.0.1:{{ .Values.scalingMonolithic.service.ports.http }}"
+    kubectl port-forward svc/{{ template "grafana-tempo.scaling-monolithic.fullname" . }} {{ .Values.scalingMonolithic.service.ports.http }}:{{ .Values.scalingMonolithic.service.ports.http }} &
+{{- end }}
+{{- end }}
+
 {{- end }}
 
 {{- include "grafana-tempo.checkRollingTags" . }}
 {{- include "grafana-tempo.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "compactor" "distributor" "ingester" "metricsGenerator" "querier" "queryFrontend.query" "queryFrontend" "volumePermissions" "vulture") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.tempo.image .Values.queryFrontend.query.image .Values.vulture.image .Values.volumePermissions.image) "context" $) }}
-{{- include "common.errors.insecureImages" (dict "images" (list .Values.tempo.image .Values.queryFrontend.query.image .Values.vulture.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "compactor" "distributor" "ingester" "metricsGenerator" "querier" "queryFrontend.query" "queryFrontend" "scalingMonolithic.query" "scalingMonolithic" "volumePermissions" "vulture") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.tempo.image .Values.queryFrontend.query.image .Values.scalingMonolithic.query.image  .Values.vulture.image .Values.volumePermissions.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.tempo.image .Values.queryFrontend.query.image .Values.scalingMonolithic.query.image  .Values.vulture.image .Values.volumePermissions.image) "context" $) }}
