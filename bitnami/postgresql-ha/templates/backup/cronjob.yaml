@@ -96,8 +96,8 @@ spec:
                 mountPath: /tmp
                 subPath: tmp-dir
               {{- if .Values.postgresql.tls.enabled }}
-              - name: certs
-                mountPath: /certs
+              - name: raw-certificates
+                mountPath: /tmp/certs
               {{- end }}
               - name: datadir
                 mountPath: {{ .Values.backup.cronjob.storage.mountPath }}
@@ -114,6 +114,11 @@ spec:
             fsGroup: {{ .Values.backup.cronjob.podSecurityContext.fsGroup }}
           {{- end }}
           volumes:
+            {{- if .Values.postgresql.tls.enabled }}
+            - name: raw-certificates
+              secret:
+                secretName: {{include "postgresql-ha.tlsSecretName" .}}
+            {{- end }}
             - name: empty-dir
               emptyDir: {}
             {{- if .Values.backup.cronjob.storage.existingClaim }}
