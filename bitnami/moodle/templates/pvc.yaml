@@ -24,7 +24,7 @@ spec:
     - {{ . | quote }}
   {{- end }}
   {{- else }}
-    - {{ .Values.persistence.accessMode | quote }}
+    - {{ .Values.persistence.accessModes | quote }}
   {{- end }}
   resources:
     requests:
