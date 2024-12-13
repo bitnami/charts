@@ -1,8 +1,17 @@
 # Changelog
 
-## 16.2.5 (2024-12-03)
+## 16.3.1 (2024-12-12)
 
-* [bitnami/postgresql] Release 16.2.5 ([#30733](https://github.com/bitnami/charts/pull/30733))
+* [bitnami/postgresql] Add Storage Class Configuration to Templates ([#30858](https://github.com/bitnami/charts/pull/30858))
+
+## 16.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/postgresql] Detect non-standard images (#30936) ([ac96151](https://github.com/bitnami/charts/commit/ac96151bdbe5e99b00dcde62a4d72f1827fa46b2)), closes [#30936](https://github.com/bitnami/charts/issues/30936)
+
+## <small>16.2.5 (2024-12-03)</small>
+
+* [bitnami/postgresql] Release 16.2.5 (#30733) ([34606c1](https://github.com/bitnami/charts/commit/34606c10dedd06431182d0563fb61703e691ddf1)), closes [#30733](https://github.com/bitnami/charts/issues/30733)
 
 ## <small>16.2.4 (2024-12-03)</small>
 

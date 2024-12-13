@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.28 (2024-11-28)
+## 13.5.0 (2024-12-10)
 
-* [bitnami/jenkins] Release 13.4.28 ([#30664](https://github.com/bitnami/charts/pull/30664))
+* [bitnami/jenkins] Detect non-standard images ([#30905](https://github.com/bitnami/charts/pull/30905))
+
+## <small>13.4.28 (2024-11-28)</small>
+
+* [bitnami/jenkins] Release 13.4.28 (#30664) ([4b3a80d](https://github.com/bitnami/charts/commit/4b3a80d615308fddf33150c42e35da20dfad6ebb)), closes [#30664](https://github.com/bitnami/charts/issues/30664)
 
 ## <small>13.4.27 (2024-11-04)</small>
 

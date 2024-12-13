@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.6.25 (2024-12-05)
+## 4.7.0 (2024-12-10)
 
-* [bitnami/grafana-loki] Release 4.6.25 ([#30793](https://github.com/bitnami/charts/pull/30793))
+* [bitnami/grafana-loki] Detect non-standard images ([#30876](https://github.com/bitnami/charts/pull/30876))
+
+## <small>4.6.25 (2024-12-05)</small>
+
+* [bitnami/grafana-loki] Release 4.6.25 (#30793) ([6be9a41](https://github.com/bitnami/charts/commit/6be9a41c3c51a3fb33956354c6e07164d8dd05e5)), closes [#30793](https://github.com/bitnami/charts/issues/30793)
 
 ## <small>4.6.24 (2024-12-03)</small>
 

@@ -1,8 +1,8 @@
 # Changelog
 
-## 18.2.7 (2024-12-06)
+## 18.3.0 (2024-12-10)
 
-* [bitnami/nginx] fix nginx init containers with writable file system ([#30810](https://github.com/bitnami/charts/pull/30810))
+* [bitnami/nginx] Detect non-standard images ([#30907](https://github.com/bitnami/charts/pull/30907))
 
 ## <small>18.2.6 (2024-11-26)</small>
 

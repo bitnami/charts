@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.4.18 (2024-12-04)
+## 4.5.0 (2024-12-10)
 
-* [bitnami/node-exporter] Release 4.4.18 ([#30769](https://github.com/bitnami/charts/pull/30769))
+* [bitnami/node-exporter] Detect non-standard images ([#30932](https://github.com/bitnami/charts/pull/30932))
+
+## <small>4.4.18 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/node-exporter] Release 4.4.18 (#30769) ([4d95e2d](https://github.com/bitnami/charts/commit/4d95e2d019f0c4800e8bd291179da70b0ba431df)), closes [#30769](https://github.com/bitnami/charts/issues/30769)
 
 ## <small>4.4.17 (2024-11-07)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 15.0.4 (2024-12-03)
+## 15.1.1 (2024-12-12)
 
-* [bitnami/postgresql-ha] Release 15.0.4 ([#30732](https://github.com/bitnami/charts/pull/30732))
+* [bitnami/postgresql-ha]Add Storage Class Configuration to Templates ([#30993](https://github.com/bitnami/charts/pull/30993))
+
+## 15.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/postgresql-ha] Detect non-standard images (#30937) ([5149845](https://github.com/bitnami/charts/commit/51498454247984c12b9b60ba51bad0b7e72ac36c)), closes [#30937](https://github.com/bitnami/charts/issues/30937)
+
+## <small>15.0.4 (2024-12-03)</small>
+
+* [bitnami/postgresql-ha] Release 15.0.4 (#30732) ([dd65642](https://github.com/bitnami/charts/commit/dd6564295a9a3bf1e56ba16663ee6b6e92ff4721)), closes [#30732](https://github.com/bitnami/charts/issues/30732)
 
 ## <small>15.0.3 (2024-12-03)</small>
 

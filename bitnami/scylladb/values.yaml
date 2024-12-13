@@ -21,6 +21,11 @@ global:
   imagePullSecrets: []
   defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -84,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/scylladb
-  tag: 6.2.1-debian-12-r0
+  tag: 6.2.1-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -132,7 +137,7 @@ initDBConfigMap: ""
 ## @param initDBSecret Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data
 ##
 initDBSecret: ""
-## @param existingConfiguration ConfigMap with custom scylladb configuration files. This overrides any other Scylladb configuration set in the chart
+## @param existingConfiguration ConfigMap with custom scylla.yaml configuration file. This overrides any other Scylladb configuration set in the chart
 ##
 existingConfiguration: ""
 ## Cluster parameters
@@ -930,7 +935,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1095,7 +1100,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

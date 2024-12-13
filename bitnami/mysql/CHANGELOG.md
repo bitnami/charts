@@ -1,8 +1,12 @@
 # Changelog
 
+## 12.2.0 (2024-12-10)
+
+* [bitnami/mysql] Detect non-standard images ([#30929](https://github.com/bitnami/charts/pull/30929))
+
 ## 12.1.0 (2024-11-27)
 
-* [bitnami/mysql] feat: :sparkles: Add TLS support ([#30640](https://github.com/bitnami/charts/pull/30640))
+* [bitnami/mysql] feat: :sparkles: Add TLS support (#30640) ([151c51c](https://github.com/bitnami/charts/commit/151c51cc2f297cf639d27b8eefbe5e98965cd3d5)), closes [#30640](https://github.com/bitnami/charts/issues/30640)
 
 ## <small>12.0.1 (2024-11-25)</small>
 

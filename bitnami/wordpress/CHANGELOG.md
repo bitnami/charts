@@ -1,8 +1,29 @@
 # Changelog
 
-## 24.0.10 (2024-12-04)
+## 24.1.3 (2024-12-12)
 
-* [bitnami/wordpress] Release 24.0.10 ([#30788](https://github.com/bitnami/charts/pull/30788))
+* [bitnami/wordpress] Release 24.1.3 ([#31016](https://github.com/bitnami/charts/pull/31016))
+
+## <small>24.1.2 (2024-12-12)</small>
+
+* [bitnami/wordpress] Release 24.1.2 (#31015) ([466c686](https://github.com/bitnami/charts/commit/466c6867645488a9fda96a27c217b7cac28d81b8)), closes [#31015](https://github.com/bitnami/charts/issues/31015)
+
+## <small>24.1.1 (2024-12-11)</small>
+
+* [bitnami/wordpress] Release 24.1.1 (#30996) ([18847ae](https://github.com/bitnami/charts/commit/18847ae04d1cde44a580b5100833caa416ffd6e3)), closes [#30996](https://github.com/bitnami/charts/issues/30996)
+
+## 24.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/wordpress] Detect non-standard images (#30970) ([423508a](https://github.com/bitnami/charts/commit/423508afbe78836b00b4c672b526a576ad936bdd)), closes [#30970](https://github.com/bitnami/charts/issues/30970)
+
+## <small>24.0.11 (2024-12-09)</small>
+
+* [bitnami/wordpress] Release 24.0.11 (#30846) ([7940dc2](https://github.com/bitnami/charts/commit/7940dc2203aedd08e40afd739b749f4732f81a16)), closes [#30846](https://github.com/bitnami/charts/issues/30846)
+
+## <small>24.0.10 (2024-12-04)</small>
+
+* [bitnami/wordpress] Release 24.0.10 (#30788) ([af92a10](https://github.com/bitnami/charts/commit/af92a103ee153a2b03700c1b129a059f897998ab)), closes [#30788](https://github.com/bitnami/charts/issues/30788)
 
 ## <small>24.0.9 (2024-12-03)</small>
 

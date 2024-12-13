@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.3.29 (2024-12-04)
+## 4.4.0 (2024-12-10)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.3.29 ([#30776](https://github.com/bitnami/charts/pull/30776))
+* [bitnami/rabbitmq-cluster-operator] Detect non-standard images ([#30941](https://github.com/bitnami/charts/pull/30941))
+
+## <small>4.3.29 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.29 (#30776) ([41e2431](https://github.com/bitnami/charts/commit/41e2431f244f5660314c435d6687264be2331fe5)), closes [#30776](https://github.com/bitnami/charts/issues/30776)
 
 ## <small>4.3.28 (2024-11-29)</small>
 
