@@ -635,7 +635,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `master.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `{}`                     |
 | `master.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.                                                                    | `{}`                     |
 | `master.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis&reg; master pod(s)                                                                                                                                                               | `{}`                     |
-| `master.annotations`                                       | Additional custom annotations for Redis&reg; master resource                                                                                                                                                                    | `{}`                     |
+| `master.annotations`                                       | Additional custom annotations for Redis&reg; Master resource                                                                                                                                                                    | `{}`                     |
 
 ### Redis&reg; replicas configuration parameters
 
