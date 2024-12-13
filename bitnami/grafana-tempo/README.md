@@ -219,7 +219,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `tempo.image.digest`                   | Grafana Tempo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                                                               | `IfNotPresent`                  |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                                                                              | `[]`                            |
-| `tempo.deploymentMode`                 | decides components run in a process. (allowed values: microservices, scalingMonolithic)                      | `microservices`                 |
+| `tempo.deploymentMode`                 | decides components run in a process. (allowed values: microservices, scalingMonolithic)                       | `microservices`                 |
 | `tempo.memBallastSizeMbs`              | Tempo components memory ballast size in MB                                                                    | `1024`                          |
 | `tempo.dataDir`                        | Tempo components data directory                                                                               | `/bitnami/grafana-tempo/data`   |
 | `tempo.traces.jaeger.grpc`             | Enable Tempo to ingest Jaeger GRPC traces                                                                     | `true`                          |
