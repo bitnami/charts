@@ -1,8 +1,13 @@
 # Changelog
 
+## 25.1.1 (2024-12-13)
+
+* [bitnami/moodle] Fix moodle pv and pvc templates ([#31026](https://github.com/bitnami/charts/pull/31026))
+
 ## 25.1.0 (2024-12-10)
 
-* [bitnami/moodle] Detect non-standard images ([#30960](https://github.com/bitnami/charts/pull/30960))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/moodle] Detect non-standard images (#30960) ([3438d77](https://github.com/bitnami/charts/commit/3438d776d1fe43b64779e83fbccd69d7c67accdd)), closes [#30960](https://github.com/bitnami/charts/issues/30960)
 
 ## <small>25.0.2 (2024-12-09)</small>
 
