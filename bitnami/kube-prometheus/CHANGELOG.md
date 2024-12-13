@@ -1,8 +1,13 @@
 # Changelog
 
+## 10.2.1 (2024-12-13)
+
+* [bitnami/kube-prometheus] Release 10.2.1 ([#31040](https://github.com/bitnami/charts/pull/31040))
+
 ## 10.2.0 (2024-12-10)
 
-* [bitnami/kube-prometheus] Detect non-standard images ([#30912](https://github.com/bitnami/charts/pull/30912))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kube-prometheus] Detect non-standard images (#30912) ([b7e3175](https://github.com/bitnami/charts/commit/b7e317558b8d20e16700c96808411fe0d2c30171)), closes [#30912](https://github.com/bitnami/charts/issues/30912)
 
 ## <small>10.1.1 (2024-12-04)</small>
 
