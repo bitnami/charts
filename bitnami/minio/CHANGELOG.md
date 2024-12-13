@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.10.0 (2024-12-12)
+## 14.10.1 (2024-12-13)
 
-* [bitnami/minio]: Templating sleep sleep time so that it can be passed using values.yaml ([#30718](https://github.com/bitnami/charts/pull/30718))
+* [bitnami/minio] Fix rendering of CIDR block list for loadBalancerSourceRanges ([#31032](https://github.com/bitnami/charts/pull/31032))
+
+## 14.10.0 (2024-12-13)
+
+* [bitnami/minio]: Templating sleep sleep time so that it can be passed using values.yaml (#30718) ([ea21cb8](https://github.com/bitnami/charts/commit/ea21cb82ebb71e0d159846aaeb39786e1d577913)), closes [#30718](https://github.com/bitnami/charts/issues/30718)
 
 ## 14.9.0 (2024-12-10)
 
