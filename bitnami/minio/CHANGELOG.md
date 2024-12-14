@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.10.1 (2024-12-13)
+## 14.10.1 (2024-12-14)
 
 * [bitnami/minio] Fix rendering of CIDR block list for loadBalancerSourceRanges ([#31032](https://github.com/bitnami/charts/pull/31032))
 
