@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.3 (2024-12-14)
+## 2.1.4 (2024-12-15)
 
-* [bitnami/chainloop] Release 2.1.3 ([#31042](https://github.com/bitnami/charts/pull/31042))
+* [bitnami/chainloop] Release 2.1.4 ([#31046](https://github.com/bitnami/charts/pull/31046))
+
+## <small>2.1.3 (2024-12-14)</small>
+
+* [bitnami/chainloop] Release 2.1.3 (#31042) ([6a47b92](https://github.com/bitnami/charts/commit/6a47b925d6edb5e8e6ecb3b2a3967341472c256b)), closes [#31042](https://github.com/bitnami/charts/issues/31042)
 
 ## <small>2.1.2 (2024-12-13)</small>
 
