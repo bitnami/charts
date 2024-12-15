@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.2.1 (2024-12-15)
+
+* fixes #30606 by adding path to kubeconfig as args ([#31045](https://github.com/bitnami/charts/pull/31045))
+
 ## 2.2.0 (2024-12-10)
 
-* [bitnami/multus-cni] Detect non-standard images ([#30928](https://github.com/bitnami/charts/pull/30928))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/multus-cni] Detect non-standard images (#30928) ([4834eb7](https://github.com/bitnami/charts/commit/4834eb7ef5796a72bbcd6d6043c295892dbd4b09)), closes [#30928](https://github.com/bitnami/charts/issues/30928)
 
 ## <small>2.1.21 (2024-12-06)</small>
 
