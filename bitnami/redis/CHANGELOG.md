@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.6.0 (2024-12-13)
+## 20.6.0 (2024-12-16)
 
 * [bitname/redis] Add support for master and replicas resources to be annotated ([#31034](https://github.com/bitnami/charts/pull/31034))
 
