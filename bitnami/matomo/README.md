@@ -443,6 +443,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.taskScheduler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                       | `[]`             |
 | `cronjobs.taskScheduler.podSecurityContext.fsGroup`                        | Task scheduler cronjob pods' group ID                                                                             | `1001`           |
 | `cronjobs.taskScheduler.extraEnvVars`                                      | Extra environment variables for the taskScheduler CronJob                                                         | `[]`             |
+| `cronjobs.taskScheduler.initContainers`                                    | Additional init containers for the taskScheduler CronJob                                                          | `[]`             |
 | `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
 | `cronjobs.archive.serviceAccountName`                                      | Attach serviceAccountName to the pod of the CronJob                                                               | `""`             |
@@ -474,6 +475,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.archive.podSecurityContext.supplementalGroups`                   | Set filesystem extra groups                                                                                       | `[]`             |
 | `cronjobs.archive.podSecurityContext.fsGroup`                              | Archive cronjob pods' group ID                                                                                    | `1001`           |
 | `cronjobs.archive.extraEnvVars`                                            | Extra environment variables for the archive CronJob                                                               | `[]`             |
+| `cronjobs.archive.initContainers`                                          | Additional init containers for the archive CronJob                                                                | `[]`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
