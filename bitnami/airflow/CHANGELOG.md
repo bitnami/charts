@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.4.2 (2024-12-11)
+## 22.4.3 (2024-12-16)
 
-* [bitnami/airflow] Fix wrong protocol for metrics network policy ([#30990](https://github.com/bitnami/charts/pull/30990))
+* [bitnami/airflow] Release 22.4.3 ([#31058](https://github.com/bitnami/charts/pull/31058))
+
+## <small>22.4.2 (2024-12-13)</small>
+
+* [bitnami/airflow] Fix wrong protocol for metrics network policy (#30990) ([fc9dadc](https://github.com/bitnami/charts/commit/fc9dadcf74fda22f9be8152abe01e480c0212cc0)), closes [#30990](https://github.com/bitnami/charts/issues/30990)
 
 ## <small>22.4.1 (2024-12-11)</small>
 
