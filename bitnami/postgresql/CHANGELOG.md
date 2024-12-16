@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.3.1 (2024-12-12)
+## 16.3.2 (2024-12-16)
 
-* [bitnami/postgresql] Add Storage Class Configuration to Templates ([#30858](https://github.com/bitnami/charts/pull/30858))
+* [bitnami/postgresql] Release 16.3.2 ([#31060](https://github.com/bitnami/charts/pull/31060))
+
+## <small>16.3.1 (2024-12-13)</small>
+
+* [bitnami/postgresql] Add Storage Class Configuration to Templates (#30858) ([b0d2c2e](https://github.com/bitnami/charts/commit/b0d2c2e53c9033d3827597c561931fbb331eb99b)), closes [#30858](https://github.com/bitnami/charts/issues/30858)
 
 ## 16.3.0 (2024-12-10)
 
