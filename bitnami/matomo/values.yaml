@@ -1062,6 +1062,10 @@ cronjobs:
 
     ## @param cronjobs.taskScheduler.extraEnvVars Extra environment variables for the taskScheduler CronJob
     extraEnvVars: []
+
+    ## @param cronjobs.taskScheduler.initContainers Additional init containers for the taskScheduler CronJob
+    ##
+    initContainers: []
   archive:
     ## @param cronjobs.archive.enabled Whether to enable scheduled mail-to-task CronJob
     ##
@@ -1170,3 +1174,7 @@ cronjobs:
 
     ## @param cronjobs.archive.extraEnvVars Extra environment variables for the archive CronJob
     extraEnvVars: []
+
+    ## @param cronjobs.archive.initContainers Additional init containers for the archive CronJob
+    ##
+    initContainers: []
