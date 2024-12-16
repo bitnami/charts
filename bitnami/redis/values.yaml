@@ -640,6 +640,9 @@ master:
   ## @param master.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; master pod(s)
   ##
   extraPodSpec: {}
+  ## @param master.annotations Additional custom annotations for Redis&reg; Master resource
+  ##
+  annotations: {}
 ## @section Redis&reg; replicas configuration parameters
 ##
 replica:
@@ -1128,6 +1131,9 @@ replica:
   ## @param replica.extraPodSpec Optionally specify extra PodSpec for the Redis&reg; replicas pod(s)
   ##
   extraPodSpec: {}
+  ## @param replica.annotations Additional custom annotations for Redis&reg; replicas resource
+  ##
+  annotations: {}
 ## @section Redis&reg; Sentinel configuration parameters
 ##
 
