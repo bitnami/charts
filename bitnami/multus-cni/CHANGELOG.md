@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.1 (2024-12-15)
+## 2.2.1 (2024-12-16)
 
 * fixes #30606 by adding path to kubeconfig as args ([#31045](https://github.com/bitnami/charts/pull/31045))
 
