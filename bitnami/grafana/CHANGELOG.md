@@ -1,8 +1,16 @@
 # Changelog
 
+## 11.4.1 (2024-12-17)
+
+* [bitnami/grafana] Release 11.4.1 ([#31066](https://github.com/bitnami/charts/pull/31066))
+
 ## 11.4.0 (2024-12-10)
 
-* [bitnami/grafana] Detect non-standard images ([#30888](https://github.com/bitnami/charts/pull/30888))
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/grafana] Detect non-standard images (#30888) ([e09d7ad](https://github.com/bitnami/charts/commit/e09d7ad390e4c372cef3cf35a0f11c2305378519)), closes [#30888](https://github.com/bitnami/charts/issues/30888)
 
 ## <small>11.3.26 (2024-11-07)</small>
 
