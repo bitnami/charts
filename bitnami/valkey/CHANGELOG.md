@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.1 (2024-12-12)
+## 2.2.1 (2024-12-17)
 
 * [bitnami/valkey] fix: sentinel pdb ([#31020](https://github.com/bitnami/charts/pull/31020))
 
