@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.1.2 (2024-12-17)
+## 9.2.0 (2024-12-17)
 
 * [bitnami/matomo] add initContainers parameter to CronJob pods ([#31065](https://github.com/bitnami/charts/pull/31065))
 
