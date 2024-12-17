@@ -1,0 +1,81 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $fullname := include "common.names.fullname" . }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+  /opt/bitnami/scripts/superset/entrypoint.sh /opt/bitnami/scripts/superset/run.sh
+
+{{- else }}
+
+Superset can be accessed via port {{ .Values.web.service.ports.http }} on the following DNS name from within your cluster:
+
+    {{ printf "%s.%s.svc.%s" $fullname $releaseNamespace $clusterDomain }}
+
+To connect to Superset from outside the cluster, perform the following steps:
+
+{{- if .Values.ingress.enabled }}
+
+1. Get the Superset URL and associate its hostname to your cluster external IP:
+
+    echo "Superset URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+
+{{- else if eq .Values.web.service.type "ClusterIP" }}
+
+1.  Create a port-forward to the service:
+
+    kubectl port-forward --namespace {{ $releaseNamespace }} svc/{{ $fullname }} {{ .Values.web.service.ports.http }}:{{ .Values.web.service.ports.http }} &
+    echo "Superset URL: http://127.0.0.1:{{ .Values.web.service.ports.http }}"
+
+{{- else if eq .Values.web.service.type "NodePort" }}
+
+1. Obtain the NodePort IP and port:
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ $releaseNamespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }} -o jsonpath="{.spec.ports[0].nodePort}")
+    echo "Superset URL: http://${NODE_IP}:$NODE_PORT"
+
+{{- else if eq .Values.web.service.type "LoadBalancer" }}
+
+1. Obtain the LoadBalancer IP:
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ $fullname }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ $fullname }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    echo "Superset URL: http://${SERVICE_IP}:{{ .Values.web.service.ports.http }}"
+
+{{- end }}
+
+2. Open a browser and access Superset using the obtained URL.
+
+3. Get your Superset login credentials by running:
+
+    {{ include "common.utils.secret.getvalue" (dict "secret" (include "superset.secretName" .) "field" "superset-password" "context" $) }}
+    echo User:     {{ default "user" .Values.auth.username }}
+    echo Password: $SUPERSET_PASSWORD
+
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "superset.validateValues" . }}
