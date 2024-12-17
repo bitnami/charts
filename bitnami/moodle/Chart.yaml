@@ -36,4 +36,4 @@ maintainers:
 name: moodle
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/moodle
-version: 25.1.0
+version: 25.1.1
