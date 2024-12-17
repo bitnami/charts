@@ -1,8 +1,13 @@
 # Changelog
 
-## 10.2.1 (2024-12-17)
+## 10.2.2 (2024-12-17)
 
-* [bitnami/kube-prometheus] Release 10.2.1 ([#31040](https://github.com/bitnami/charts/pull/31040))
+* [bitnami/kube-prometheus] Release 10.2.2 ([#31071](https://github.com/bitnami/charts/pull/31071))
+
+## <small>10.2.1 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kube-prometheus] Release 10.2.1 (#31040) ([5cf957c](https://github.com/bitnami/charts/commit/5cf957c39ae9798fefa0a4cbcc19bd1e92c23219)), closes [#31040](https://github.com/bitnami/charts/issues/31040)
 
 ## 10.2.0 (2024-12-10)
 
