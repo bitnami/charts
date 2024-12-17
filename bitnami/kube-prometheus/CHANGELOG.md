@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.2.1 (2024-12-16)
+## 10.2.1 (2024-12-17)
 
 * [bitnami/kube-prometheus] Release 10.2.1 ([#31040](https://github.com/bitnami/charts/pull/31040))
 
