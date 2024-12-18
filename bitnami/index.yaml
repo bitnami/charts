@@ -1,0 +1,72 @@
+apiVersion: v1
+entries:
+  common:
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 2.28.0
+    created: "2024-12-18T15:42:20.3861734+02:00"
+    description: A Library Helm Chart for grouping common logic between bitnami charts.
+      This chart is not deployable by itself.
+    digest: d33d55c5fe4289b66e56aec9d47da9aa25f7006f0afcda26f2425978fd071dad
+    home: https://bitnami.com
+    icon: https://bitnami.com/downloads/logos/bitnami-mark.png
+    keywords:
+    - common
+    - helper
+    - template
+    - function
+    - bitnami
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: common
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/common
+    type: library
+    urls:
+    - common-2.28.0.tgz
+    version: 2.28.0
+  neo4j:
+  - annotations:
+      category: Database
+      images: |
+        - name: neo4j
+          image: docker.io/bitnami/neo4j:5.26.0-debian-12-r0
+        - name: os-shell
+          image: docker.io/bitnami/os-shell:12-debian-12-r33
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 5.26.0
+    created: "2024-12-18T15:42:20.4001307+02:00"
+    dependencies:
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Neo4j is a high performance graph store with all the features expected
+      of a mature and robust database, like a friendly query language and ACID transactions.
+    digest: 10d19bf75490e05093372f7ba9f1922bba200c1b98a0f0df6daea17869cdbe2e
+    home: https://bitnami.com
+    icon: https://bitnami.com/assets/stacks/neo4j/img/neo4j-stack-220x234.png
+    keywords:
+    - database
+    - neo4j
+    - graph
+    - graphdb
+    - graph-database
+    - nosql
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: neo4j
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/neo4j
+    - https://github.com/bitnami/containers/tree/main/bitnami/neo4j
+    - https://github.com/neo4j/neo4j
+    urls:
+    - neo4j-0.2.0.tgz
+    version: 0.2.0
+generated: "2024-12-18T15:42:20.3758866+02:00"
