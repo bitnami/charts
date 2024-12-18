@@ -1471,6 +1471,11 @@ core:
   ## `secretKey` (required),
   ##
   existingSecret: ""
+  ## @param core.generateExistingEnvVarsSecret Generate an existing envvars for core
+  ## If existingEnvVarsSecret is set, it will try to merge generated envvars with the existing secret
+  ## Which can be useful when not setting the optional fields in the existingEnvVarsSecret
+  ##
+  generateExistingEnvVarsSecret: true
   ## @param core.existingEnvVarsSecret Existing secret for core envvars
   ## The secret must contain the keys:
   ## `CSRF_KEY` (optional - alternatively auto-generated),
@@ -1892,6 +1897,11 @@ jobservice:
   ## `secret` (required),
   ##
   existingSecret: ""
+  ## @param jobservice.generateExistingEnvVarsSecret Generate an existing envvars for jobservice
+  ## If existingEnvVarsSecret is set, it will try to merge generated envvars with the existing secret
+  ## Which can be useful when not setting the optional fields in the existingEnvVarsSecret
+  ##
+  generateExistingEnvVarsSecret: true
   ## @param jobservice.existingEnvVarsSecret Existing secret for jobservice envvars
   ## The secret must contain the keys:
   ## `REGISTRY_CREDENTIAL_PASSWORD` (optional),
@@ -2252,6 +2262,10 @@ registry:
   ## Must be a string of 16 chars.
   ##
   secret: ""
+  ## @param registry.generateExistingSecret Generate an existing secret for registry
+  ## If existingSecret is set, it will try to merge generated secret with the existing secret
+  ## Which can be useful when not setting the optional fields in the existing secret
+  generateExistingSecret: true
   ## @param registry.existingSecret Existing secret for registry
   ## The secret must contain the keys:
   ## `REGISTRY_HTPASSWD` (required - replaces insecure defaults),
@@ -2886,6 +2900,11 @@ trivy:
   ## @param trivy.insecure The flag to skip verifying registry certificate
   ##
   insecure: false
+  ## @param trivy.generateExistingEnvVarsSecret Generate an existing envvars secret for trivy
+  ## If existingEnvVarsSecret is set, it will try to merge generated envvars with the existing secret
+  ## Which can be useful when not setting the optional fields in the existingEnvVarsSecret
+  ##
+  generateExistingEnvVarsSecret: true
   ## @param trivy.existingEnvVarsSecret Existing secret for trivy
   ## The secret must contain the keys:
   ## `SCANNER_TRIVY_GITHUB_TOKEN` (optional)
