@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
-# Version: 0.79.0
+# Version: 0.79.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.5
-    operator.prometheus.io/version: 0.79.0
+    operator.prometheus.io/version: 0.79.1
   name: prometheusagents.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -6857,18 +6857,6 @@ spec:
                     type: object
                 type: object
                 x-kubernetes-map-type: atomic
-              scrapeFallbackProtocol:
-                description: |-
-                  The protocol to use if a scrape returns blank, unparseable, or otherwise invalid Content-Type.
-
-                  It requires Prometheus >= v3.0.0.
-                enum:
-                - PrometheusProto
-                - OpenMetricsText0.0.1
-                - OpenMetricsText1.0.0
-                - PrometheusText0.0.4
-                - PrometheusText1.0.0
-                type: string
               scrapeInterval:
                 default: 30s
                 description: |-
