@@ -66,5 +66,5 @@ data:
 
     set -e
 
-    aws s3 sync {{ .Values.backup.directory }} {{ .Values.backup.uploadProviders.aws.bucketName }}
+    aws s3 sync --delete {{ .Values.backup.directory }} {{ .Values.backup.uploadProviders.aws.bucketName }}
 {{ end }}
