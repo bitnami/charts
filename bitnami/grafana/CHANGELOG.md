@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.4.1 (2024-12-17)
+## 11.4.2 (2024-12-18)
 
-* [bitnami/grafana] Release 11.4.1 ([#31066](https://github.com/bitnami/charts/pull/31066))
+* [bitnami/grafana] Release 11.4.2 ([#31091](https://github.com/bitnami/charts/pull/31091))
+
+## <small>11.4.1 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/grafana] Release 11.4.1 (#31066) ([fb58a54](https://github.com/bitnami/charts/commit/fb58a54eb763f4320640745419567f9a286f1ce3)), closes [#31066](https://github.com/bitnami/charts/issues/31066)
 
 ## 11.4.0 (2024-12-10)
 
